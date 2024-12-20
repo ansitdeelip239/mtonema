@@ -1,0 +1,36 @@
+// Live Link
+let url1 = 'https://dncrpropertyapi.azurewebsites.net'; 
+
+//Dev Link
+// let url1 = 'https://devdncrbe.azurewebsites.net';
+
+// Test Previous
+// let url1='http://dncrproperties01-001-site1.ftempurl.com'
+
+export default {
+    //Authentication
+    SignUp: url1 + '/api/v1/Account/signup',
+    VerifyOTP: url1 + '/api/v1/Account/CheckOTP',
+    GetUserByToken: url1 + '/api/v1/Account/GetUserByToken?token=',
+    ValidateEmail: url1 + '/api/v1/User/varifyUserbyEmail?email=',
+    Login: url1 + '/api/v1/Account/loginUser',
+    ForgotPassword: url1 + '/api/v1/Account/ForgetPasword',
+    ChangePassword: url1 + '/api/v1/Account/ChangePassword',
+    //Property
+    FilterSearch: url1 + '/api/v1/property/filterProperty',
+    RecommendedProperty: url1 + '/api/v1/property/GetAllFeaturedProperty?pageNumber=1&pageSize=10',
+    // RecommendedProperty: url1 + '/api/v1/property/getAllProperty?pageNumber=1&pageSize=10',
+    ContactProperty: url1 + '/api/v1/contactProperty/Contact',
+    getListOfContactedProperty: url1 + '/api/v1/contactProperty/getAllContactByuserID?',
+    //Seller
+    RegisterSeller: url1 + '/api/v1/Account/registerseller',
+    AddProperty: url1 + '/api/v1/property/addProperty',
+    GetProperty: url1 + '/api/v1/property/getPropertyByUserid?id=',
+    UpdateProperty: url1 + '/api/v1/property/updateProperty',
+    deleteProperty: url1 + '/api/v1/property/removeProperty?id=',
+    GetInTouch: url1 + '/api/v1/contactProperty/GetinTouch',
+    //Master Detail
+    getMasterDetail: url1 + '/api/v1/MasterDetail/getMasterDetailsByMasterName?MasterDetailName=',
+    getPlaces: url1 + '/api/v1/MasterDetail/getgoogleplaces',
+    deleteUser: url1 + '/api/v1/User/DeleteUserByUserId'
+};
