@@ -6,10 +6,11 @@ import MainNavigator from './MainNavigator';
 import SellerNavigator from './SellerNavigator';
 import { navigationRef } from './NavigationRef';
 import AuthNavigator from './AuthNavigator';
+import { useAuth } from '../hooks/useAuth';
 
 const RootStack = createNativeStackNavigator();
 export default function RootNavigator() {
-    const isAuthenticated =false;
+    const {isAuthenticated}=useAuth()
     return (
       <NavigationContainer ref={navigationRef}>
         <RootStack.Navigator screenOptions={{headerShown: false}}>

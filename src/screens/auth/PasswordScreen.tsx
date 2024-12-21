@@ -3,14 +3,16 @@ import React, { useState } from 'react'
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { AuthStackParamList } from '../../navigator/AuthNavigator';
 import AuthService from '../../services/AuthService';
+import { useAuth } from '../../hooks/useAuth';
 
 
 type Props = NativeStackScreenProps<AuthStackParamList, 'PasswordScreen'>;
 
 const PasswordScreen :React.FC<Props>=({navigation ,route})=> {
   const {email} = route.params;
+  const {storeToken,login} =useAuth();
   const [password,setPassword] =useState('');
-  const onContinue =()=>{}
+
 
   const handleContinue = async () => {
     console.log("Sign In button pressed");
@@ -20,6 +22,11 @@ const PasswordScreen :React.FC<Props>=({navigation ,route})=> {
     try {
       const response = await AuthService.verifyPassword(email, password);
       console.log("Response:", response); // Check the response from the AuthService
+      if(response.Success)
+      {
+        storeToken(response.data)
+        login();
+      }
     } catch (error) {
       console.error("Error during sign-in:", error);
     }

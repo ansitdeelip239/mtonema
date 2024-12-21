@@ -106,7 +106,9 @@ const storeToken=(token:string) =>{
 //       console.error('Logout failed', error);
 //     }
 //   }, [user]);
-function login()  {}
+function login()  {
+  setIsAuthenticated(true);
+}
 function logout() {}
 
   // Render loading screen if checking auth status
