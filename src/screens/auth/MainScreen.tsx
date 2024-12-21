@@ -59,7 +59,7 @@ export const MainScreen:React.FC<Props> =({navigation}) =>{
       borderBottomRightRadius: 60,
     },
     lowerPart: {
-      flex: 4,
+      flex: 5,
       justifyContent: 'center',
       backgroundColor: '#ffffff', // White background for lower part
       borderTopLeftRadius: 70,
@@ -71,7 +71,8 @@ export const MainScreen:React.FC<Props> =({navigation}) =>{
       height: '30%',
     },
     spacing: {
-      marginBottom: 40, // Adds space below each button
+      marginTop:5,
+      marginBottom: 45, // Adds space below each button
     },
     promptText: {
       fontSize: 16,
@@ -92,7 +93,6 @@ export const MainScreen:React.FC<Props> =({navigation}) =>{
       shadowOpacity: 0.25,
       shadowRadius: 3.84,
       elevation: 5,
-
     },
     buttonText: {
       color: '#ffffff',
@@ -100,7 +100,7 @@ export const MainScreen:React.FC<Props> =({navigation}) =>{
       fontWeight: 'bold',
     },
     listPropertyText: {
-      marginTop: 20,
+      marginTop: 80,
       fontSize: 16,
       color: '#cc0e74',
       fontWeight: 'bold',

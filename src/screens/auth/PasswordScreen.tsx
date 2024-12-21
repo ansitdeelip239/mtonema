@@ -1,14 +1,32 @@
 import { View, Text, Button, TextInput, StyleSheet, TouchableOpacity, Image } from 'react-native'
-import React from 'react'
+import React, { useState } from 'react'
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { AuthStackParamList } from '../../navigator/AuthNavigator';
+import AuthService from '../../services/AuthService';
 
 
 type Props = NativeStackScreenProps<AuthStackParamList, 'PasswordScreen'>;
 
-const PasswordScreen :React.FC<Props>=({navigation})=> {
-const onContinue =()=>{}
-const handleContinue=() =>{}
+const PasswordScreen :React.FC<Props>=({navigation ,route})=> {
+  const {email} = route.params;
+  const [password,setPassword] =useState('');
+  const onContinue =()=>{}
+
+  const handleContinue = async () => {
+    console.log("Sign In button pressed");
+    console.log("Email:", email);
+    console.log("Password:", password);
+  
+    try {
+      const response = await AuthService.verifyPassword(email, password);
+      console.log("Response:", response); // Check the response from the AuthService
+    } catch (error) {
+      console.error("Error during sign-in:", error);
+    }
+  };
+  
+
+  
 return (
   <View style={styles.mainScreen}>
     {/* Logo Section */}
@@ -25,6 +43,9 @@ return (
     <View style={styles.txtpadding}>
       <Text style={[styles.label]}>Password</Text>
       <TextInput
+      value={password}
+      onChangeText={setPassword}
+      secureTextEntry={true}
         placeholder="Password"
         style={[styles.input,styles.spacing1]}
       />
