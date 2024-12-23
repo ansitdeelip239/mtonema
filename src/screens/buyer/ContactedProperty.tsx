@@ -1,12 +1,10 @@
 import { View, Text } from 'react-native'
 import React from 'react'
 
-const BuyerHomeScreen = () => {
+export default function ContactedProperty() {
   return (
     <View>
-      <Text>BuyerHomeScreen</Text>
+      <Text>ContactedProperty</Text>
     </View>
   )
 }
-
-export default BuyerHomeScreen

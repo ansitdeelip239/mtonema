@@ -86,30 +86,24 @@ const storeToken=(token:string) =>{
   // };
 
   // Logout method
-//   const logout = useCallback(async () => {
-//     try {
-//       const storedUser = await AuthService.getUserData();
-//       console.log('Clearing FCM');
-//       await AuthService.updateFCMToken(
-//         storedUser?.phoneNumber ?? '',
-//         storedUser?.auth ?? '',
-//         '',
-//       );
-//       console.log('Removing User Data');
-//       await AuthService.removeUserData();
-//       console.log('Setting User Null');
-//       setUser(null);
-//       console.log('Setting Auth Token Null');
-//       setAuthToken(null);
-//       setIsAuthenticated(false);
-//     } catch (error) {
-//       console.error('Logout failed', error);
-//     }
-//   }, [user]);
+  const logout = useCallback(async () => {
+    try {
+      const storedUser = await AuthService.getUserData();
+      console.log('Removing User Data');
+      await AuthService.removeUserData();
+      console.log('Setting User Null');
+      setUser(null);
+      console.log('Setting Auth Token Null');
+      setAuthToken(null);
+      setIsAuthenticated(false);
+    } catch (error) {
+      console.error('Logout failed', error);
+    }
+  }, [user]);
 function login()  {
   setIsAuthenticated(true);
 }
-function logout() {}
+// function logout() {}
 
   // Render loading screen if checking auth status
   return (

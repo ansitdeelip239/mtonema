@@ -10,5 +10,10 @@ export default {
     ligthGray:'#c4c3c2',
     iconGray:'#e0e0de',
     icon:"#a1a19f",
+    PRIMARY_1: '#2f2f7f',
+    PRIMARY_2: '#127dc2',
+    SECONDARY_1: '#231f20',
+    SECONDARY_2: '#484848',
+    SECONDARY_3: '#ffffff',
     black:"#050000"
 };
