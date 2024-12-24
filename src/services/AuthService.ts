@@ -11,12 +11,12 @@ class AuthService {
         throw new Error('Email or phone number is required');
       }
 
-      const response = await fetch(api.ValidateEmail +loginInput, {
+      const response = await fetch(api.ValidateEmail + loginInput, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
         },
-    });
+      });
 
       const result: Response<User | null> = await response.json();
 
@@ -41,19 +41,18 @@ class AuthService {
     }
   }
 
-static async verifyPassword(
-  email: string,
+  static async verifyPassword(
+    email: string,
     password: string,
   ): Promise<Response<string>> {
     try {
-      
       const response = await fetch(api.Login, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-      body: JSON.stringify({email,password})
-    });
+        body: JSON.stringify({email, password}),
+      });
 
       const result: Response<string> = await response.json();
 
@@ -61,8 +60,7 @@ static async verifyPassword(
         return result;
       } else {
         throw new Error(
-          result.Message ||
-            'An error occurred while validating the password',
+          result.Message || 'An error occurred while validating the password',
         );
       }
     } catch (error) {
@@ -78,10 +76,9 @@ static async verifyPassword(
     }
   }
   // Store user data
-  static async storeUserData(user: User): Promise<void> {
+  static async storeUserData(token: string): Promise<void> {
     try {
-      await AsyncStorage.setItem('user', JSON.stringify(user));
-
+      await AsyncStorage.setItem('token', JSON.stringify(token));
     } catch (error) {
       console.error('Error storing user data', error);
     }

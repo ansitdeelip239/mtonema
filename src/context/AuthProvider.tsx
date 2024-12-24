@@ -33,57 +33,48 @@ export const AuthProvider = ({children}: any) => {
     checkAuthStatus();
   }, []);
 
-const storeUser=(user:User) =>{
+const storeUser=async(user:User) =>{
+  await AsyncStorage.setItem('user',JSON.stringify(user))
   setUser(user);
 }
-const storeToken=(token:string) =>{
+const storeToken= (token:string) =>{
+
   setAuthToken(token);
 }
 
 
 
-//   const handleTokenExpiry = (token: string) => {
-//     try {
-//       const decodedToken: any = jwtDecode(token);
-//       const expiryTime = decodedToken.exp * 1000 - Date.now();
+  const handleTokenExpiry = (token: string) => {
+    try {
+      const decodedToken: any = jwtDecode(token);
+      const expiryTime = decodedToken.exp * 1000 - Date.now();
       
-//       if (expiryTime > 0) {
-//         setTimeout(() => {
-//           logout();
-//         }, expiryTime);
-//       } else {
-//         logout();
-//       }
-//     } catch (error) {
-//       console.error('Failed to decode token', error);
-//       logout();
-//     }
-//   };
+      if (expiryTime > 0) {
+        setTimeout(() => {
+          logout();
+        }, expiryTime);
+      } else {
+        logout();
+      }
+    } catch (error) {
+      console.error('Failed to decode token', error);
+      logout();
+    }
+  };
 
   // Login method
-  // const login = async (userData: User) => {
-  //   try {
-  //     // Store user data
-  //     await AuthService.storeUserData(userData);
-  //     setAuthToken(userData.auth);
-  //     setUser(userData);
-  //     setIsAuthenticated(true);
-  //     handleTokenExpiry(userData.auth);
-  //     const fcmToken = (await AsyncStorage.getItem('fcmToken')) || null;
-  //     if (fcmToken) {
-  //       await AuthService.updateFCMToken(
-  //         userData.phoneNumber,
-  //         userData.auth,
-  //         fcmToken,
-  //       );
-  //     } else {
-  //       console.warn('FCM Token not found');
-  //     }
-  //   } catch (error) {
-  //     console.error('Login failed', error);
-  //     throw error;
-  //   }
-  // };
+  const login = async (token:string) => {
+    try {
+      // Store user data
+      await AuthService.storeUserData(token);
+      setAuthToken(token);
+      setIsAuthenticated(true);
+      handleTokenExpiry(token);
+    } catch (error) {
+      console.error('Login failed',error);
+      throw error;
+    }
+  };
 
   // Logout method
   const logout = useCallback(async () => {
@@ -100,9 +91,9 @@ const storeToken=(token:string) =>{
       console.error('Logout failed', error);
     }
   }, [user]);
-function login()  {
-  setIsAuthenticated(true);
-}
+// function login()  {
+//   setIsAuthenticated(true);
+// }
 // function logout() {}
 
   // Render loading screen if checking auth status

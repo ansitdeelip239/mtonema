@@ -4,15 +4,20 @@ import {
   DrawerContentScrollView,
   DrawerItemList,
 } from '@react-navigation/drawer';
+import {Avatar, Title, Drawer, TouchableRipple, Icon} from 'react-native-paper';
 import {
   ActivityIndicator,
   Image,
+  Linking,
   Modal,
   StyleSheet,
   Text,
+  TouchableHighlight,
   TouchableOpacity,
   View,
 } from 'react-native';
+import Strings from '../constants/Strings';
+import Colors from '../constants/Colors';
 
 const CustomDrawerContent = (props: any) => {
   const {logout} = useAuth();
@@ -34,6 +39,11 @@ const CustomDrawerContent = (props: any) => {
     setLoadingModalVisible(false);
     console.log('Logged Out Successfully');
   };
+  const openURL = (url: any) => {
+    Linking.openURL(url).catch(err =>
+      console.error('Failed to open URL:', err),
+    );
+  };
 
   return (
     <DrawerContentScrollView {...props} contentContainerStyle={{flex: 1}}>
@@ -47,6 +57,28 @@ const CustomDrawerContent = (props: any) => {
 
       {/* Existing Drawer Items */}
       <DrawerItemList {...props} />
+      <View style={styles.linkdesign}>
+        <TouchableHighlight
+          style={{
+            borderRadius: 50,
+            overflow: 'hidden',
+          }}
+          underlayColor={Colors.main}
+          onPress={() => Linking.openURL(Strings.About_Us_Url)}>
+          <Drawer.Item label="About" />
+        </TouchableHighlight>
+
+
+        <TouchableHighlight
+          style={{
+            borderRadius: 50,
+            overflow: 'hidden',
+          }}
+          underlayColor={Colors.main}
+          onPress={() => Linking.openURL(Strings.FAQ_Url)}>
+          <Drawer.Item label="FAQ" />
+        </TouchableHighlight>
+      </View>
 
       {/* Custom Button */}
       <View style={styles.flexGrow} />
@@ -106,6 +138,7 @@ const styles = StyleSheet.create({
   flexGrow: {
     flex: 1,
   },
+  linkdesign: {},
   logout: {
     backgroundColor: '#cc0e74',
     padding: 10,
@@ -115,7 +148,6 @@ const styles = StyleSheet.create({
   },
   name: {
     fontSize: 16,
-    // position: 'absolute',
     top: 115,
     left: 67,
   },
@@ -128,7 +160,7 @@ const styles = StyleSheet.create({
     color: 'black',
   },
   p15: {
-    padding: 15,
+    padding: 16,
   },
   logo: {
     width: 100,
@@ -153,7 +185,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   modalText: {
-    marginBottom: 20,
+    marginBottom: 10,
     fontSize: 18,
     textAlign: 'center',
   },
