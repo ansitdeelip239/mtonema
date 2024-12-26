@@ -19,7 +19,7 @@ export const MainScreen:React.FC<Props> =({navigation}) =>{
         {/* Upper Part: Logo and Title */}
         <View style={styles.upperPart}>
           <Image
-            source={require('../../assets/Images/houselogo1.png')}
+            source={require('../../assets/Images/houselogo.png')}
             style={styles.image}
             resizeMode="contain"
           />
@@ -67,8 +67,8 @@ export const MainScreen:React.FC<Props> =({navigation}) =>{
       paddingLeft:10,
     },
     image: {
-      width: '70%',
-      height: '30%',
+      width: '80%',
+      height: '100%',
     },
     spacing: {
       marginTop:5,

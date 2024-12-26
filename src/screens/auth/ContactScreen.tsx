@@ -13,7 +13,7 @@ return (
     {/* Logo Section */}
     <View style={styles.upperPart}>
       <Image
-         source={require('../../assets/Images/houselogo1.png')} 
+         source={require('../../assets/Images/houselogo.png')} 
           style={styles.image}
         resizeMode="contain"
       />
@@ -91,8 +91,8 @@ lowerPart:{
   
 },
 image:{
-  width: '70%',
-  height: '30%',
+  width: '100%',
+  height: '100%',
 },
 label: {
   fontSize: 20,

@@ -69,7 +69,7 @@ const EmailScreen: React.FC<Props> = ({ navigation }) => {
       {/* Logo Section */}
       <View style={styles.upperPart}>
         <Image
-          source={require('../../assets/Images/houselogo1.png')}
+          source={require('../../assets/Images/houselogo.png')}
           style={styles.image}
           resizeMode="contain"
         />
@@ -133,7 +133,7 @@ const styles = StyleSheet.create({
   },
   image: {
     width: '70%',
-    height: '30%',
+    height: '100%',
   },
   label: {
     fontSize: 16,
