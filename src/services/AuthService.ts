@@ -29,15 +29,7 @@ class AuthService {
         );
       }
     } catch (error) {
-      return {
-        Message:
-          error instanceof Error
-            ? error.message
-            : 'An unexpected error occurred',
-        Success: false,
-        data: null,
-        httpStatus: 500,
-      };
+      throw error;
     }
   }
 
@@ -64,21 +56,13 @@ class AuthService {
         );
       }
     } catch (error) {
-      return {
-        Message:
-          error instanceof Error
-            ? error.message
-            : 'An unexpected error occurred',
-        Success: false,
-        data: 'invalid password',
-        httpStatus: 500,
-      };
+      throw error;
     }
   }
   // Store user data
   static async storeUserData(token: string): Promise<void> {
     try {
-      await AsyncStorage.setItem('token', JSON.stringify(token));
+      await AsyncStorage.setItem('token',token);
     } catch (error) {
       console.error('Error storing user data', error);
     }

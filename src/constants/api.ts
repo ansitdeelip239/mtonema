@@ -1,5 +1,5 @@
 //let url1 = 'https://dncrpropertyapi.azurewebsites.net'; //Dev Url
-let url1 = 'https://devdncrbe.azurewebsites.net';
+export let url1 = 'https://devdncrbe.azurewebsites.net';
 // let url1='https://dncrpropertyapi.azurewebsites.net'
 
 export default {
@@ -15,7 +15,9 @@ export default {
     //Property
 
     FilterSearch: url1 + '/api/v1/property/filterProperty',
-    RecommendedProperty: url1 + '/api/v1/property/getAllProperty?pageNumber=1&pageSize=10',
+    // RecommendedProperty: url1 + '/api/v1/property/getAllProperty?pageNumber=1&pageSize=10',
+    RecommendedProperty: url1 + '/api/v1/property/getAllProperty',
+
     ContactProperty: url1 + '/api/v1/contactProperty/Contact',
     getListOfContactedProperty: url1 + '/api/v1/contactProperty/getAllContactByuserID?',
 

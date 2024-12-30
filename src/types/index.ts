@@ -9,6 +9,14 @@ export interface AuthContextType {
     dataUpdated: boolean;
     setDataUpdated: (value: boolean) => void;  
   }
+
+  export interface Response<T> {
+    success: boolean;
+    message: string;
+    data: T;
+    httpStatus: number;
+  }
+
   export interface User {
     ID: number;
     Name: string;
@@ -30,9 +38,92 @@ export interface AuthContextType {
   }
 
 export interface Response<T> {
-    Message: string;
-    Success: boolean;
-    data: T;
-    httpStatus : number;
+  Success: boolean;
+  Message: string;
+  data: T;
+  httpStatus: number;
 }
+export interface PropertyModel {
+  ID: number;
+  UserId: number;
+  ImageURL: {
+    ImageUrl: string;
+    Type: number;
+    toggle: boolean;
+  }[];
+  ImageURLType: any | null;
+  Image: any | null;
+  Tags: any[];
+  Tag: any | null;
+  VideoURL: string | null;
+  VideoUrl: any | null;
+  Video: any | null;
+  Location: string;
+  Price: number;
+  Discription: string;
+  ShortDiscription: string | null;
+  SellerType: {
+    MasterDetailName: string;
+    ID: number;
+  };
+  Country: any | null;
+  State: any | null;
+  PropertyType: {
+    MasterDetailName: string;
+    ID: number;
+  };
+  PropertyFor: {
+    MasterDetailName: string;
+    ID: number;
+  };
+  CreatedOn: string;
+  UpdatedOn: string;
+  CreatedBy: string;
+  UpdatedBy: string;
+  Status: number;
+  BhkType: any | null;
+  Furnishing: any | null;
+  Locality: string;
+  ZipCode: string;
+  Area: number;
+  IsFeatured: boolean;
+  floor: any | null;
+  readyToMove: any | null;
+  SellerName: string;
+  SellerEmail: string;
+  SellerPhone: string;
+  ApprovedBy: string;
+  City: {
+    MasterDetailName: string;
+    ID: number;
+  };
+  Size: {
+    MasterDetailName: string;
+    ID: number;
+  };
+  Rate: {
+    MasterDetailName: string;
+    ID: number;
+  };
+  otherCity: any | null;
+  Facing: {
+    MasterDetailName: string;
+    ID: number;
+  };
+  OpenSide: string;
+  BoundaryWall: string;
+  ConstructionDone: string;
+  Parking: any | null;
+  Lifts: any | null;
+  PropertyForType: string;
+  PropertyAge: any | null;
+  AlarmSystem: any | null;
+  SurveillanceCameras: any | null;
+  GatedSecurity: any | null;
+  CeilingHeight: any | null;
+  Pantry: any | null;
+  ListedBy: string;
+}
+
+
   
