@@ -7,7 +7,7 @@ async function fetchAPI<T>(endpoint: string, options: RequestInit = {}) {
 
   let token: string | null=await AsyncStorage.getItem('token');
 
-console.log('**tokennnnnnn',token)
+// console.log('**tokennnnnnn',token)
   const defaultHeaders = {
     "Content-Type": "application/json",
     ...(token && { Authorization: `Bearer ${token}` }),
@@ -22,7 +22,7 @@ console.log('**tokennnnnnn',token)
   };
 
   try {
-    console.log(url,config);
+    // console.log(url,config);
     const response = await fetch(url, config);
 
     const data: Response<T> = await response.json();
@@ -63,6 +63,9 @@ export const api: API = {
   post: <T>(endpoint: string, data: any) =>
     fetchAPI<T>(endpoint, {
       method: "POST",
+      headers:{
+        'Content-Type': "application/json",
+      },
       body: JSON.stringify(data),
     }),
   put: <T>(endpoint: string, data: any) =>

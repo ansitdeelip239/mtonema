@@ -19,7 +19,7 @@ export default {
     RecommendedProperty: url1 + '/api/v1/property/getAllProperty',
 
     ContactProperty: url1 + '/api/v1/contactProperty/Contact',
-    getListOfContactedProperty: url1 + '/api/v1/contactProperty/getAllContactByuserID?',
+    getListOfContactedProperty: url1 + '/api/v1/contactProperty/getAllContactByuserID',
 
     //Seller
 
