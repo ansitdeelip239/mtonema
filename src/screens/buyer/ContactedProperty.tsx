@@ -59,7 +59,7 @@ const ContactedProperty = () => {
      // Handle the response
      const responseData = response?.data;
      
-     console.log(responseData);
+   
 
      console.log(response)
      // console.log('API Response:', JSON.stringify(responseData, null, 2));
@@ -70,9 +70,9 @@ const ContactedProperty = () => {
      }
 
 
-     if (responseData?.propertyModels) {
-       const newProperties = responseData.propertyModels;
-
+     if (responseData?.contactedPropertyModels) {
+       const newProperties = responseData.contactedPropertyModels;
+console.log('*****new propertties**********',newProperties)
 
        // Update properties state based on page number
        setProperties(prevProperties =>
@@ -124,7 +124,7 @@ const ContactedProperty = () => {
  const renderPropertyItem = ({ item }: { item: PropertyModel }) => (
    <View key={item.ID} style={styles.propertyCard}>
      <Text style={styles.locationText}>
-       {item.Location || item.City?.MasterDetailName || 'Location not specified'}
+       {item.PropertyLocation || item.City?.MasterDetailName || 'Location not specified'}
      </Text>
      <Text style={styles.propertyType}>
        {item.PropertyType?.MasterDetailName || 'N/A'} for {item.PropertyFor?.MasterDetailName || 'N/A'}

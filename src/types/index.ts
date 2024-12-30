@@ -123,6 +123,7 @@ export interface PropertyModel {
   CeilingHeight: any | null;
   Pantry: any | null;
   ListedBy: string;
+  PropertyLocation?:string;
 }
 
 
