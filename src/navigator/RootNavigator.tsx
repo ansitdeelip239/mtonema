@@ -1,9 +1,9 @@
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import { View, Text } from 'react-native'
+// import { View, Text } from 'react-native'
 import React from 'react'
 import MainNavigator from './MainNavigator';
-import SellerNavigator from './SellerNavigator';
+// import SellerNavigator from './SellerNavigator';
 import { navigationRef } from './NavigationRef';
 import AuthNavigator from './AuthNavigator';
 import { useAuth } from '../hooks/useAuth';

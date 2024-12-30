@@ -1,44 +1,54 @@
-import React, { useEffect, useState } from 'react';
-import { FlatList, View, Text, StyleSheet, ActivityIndicator } from 'react-native';
-import { api } from '../../utils/api';
+import React, {useEffect, useState} from 'react';
+import {
+  FlatList,
+  View,
+  Text,
+  StyleSheet,
+  ActivityIndicator,
+  TouchableOpacity,
+} from 'react-native';
+import {api} from '../../utils/api';
 import url from '../../constants/api';
-import { PropertyModel } from '../../types';
+import {PropertyModel} from '../../types';
+import PropertyModal from './PropertyModal';
 
 const BuyerHomeScreen = () => {
   const [properties, setProperties] = useState<PropertyModel[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [pageNo, setPageNo] = useState(1); 
-  const [hasMore, setHasMore] = useState(true); 
-  const [isFetchingMore, setIsFetchingMore] = useState(false); 
+  const [pageNo, setPageNo] = useState(1);
+  const [hasMore, setHasMore] = useState(true);
+  const [isFetchingMore, setIsFetchingMore] = useState(false);
+  const [selectedProperty, setSelectedProperty] =
+    useState<PropertyModel | null>(null);
+  const [modalVisible, setModalVisible] = useState(false);
 
   const pageSize = 10;
 
   const getAllProperty = async (page: number) => {
     try {
       if (!isFetchingMore) {
-        setLoading(page === 1); 
+        setLoading(page === 1);
         setIsFetchingMore(page !== 1);
       }
 
       const response = await api.get<any>(
-        `${url.RecommendedProperty}?pageNumber=${page}&pageSize=${pageSize}`
+        `${url.RecommendedProperty}?pageNumber=${page}&pageSize=${pageSize}`,
       );
 
       if (response.data?.propertyModels) {
         const newProperties = response.data.propertyModels;
-
-        setProperties((prevProperties) =>
-          page === 1 ? newProperties : [...prevProperties, ...newProperties]
+        setProperties(prevProperties =>
+          page === 1 ? newProperties : [...prevProperties, ...newProperties],
         );
 
-       
         if (newProperties.length < pageSize) {
           setHasMore(false);
         }
       } else {
         setError('No properties found');
       }
+    // eslint-disable-next-line no-catch-shadow
     } catch (error) {
       setError('Failed to fetch properties');
       console.error('Error fetching properties:', error);
@@ -48,47 +58,57 @@ const BuyerHomeScreen = () => {
     }
   };
 
+  const handlePropertyPress = (property: PropertyModel) => {
+    setSelectedProperty(property);
+    setModalVisible(true);
+  };
+
   useEffect(() => {
     getAllProperty(pageNo);
-  }, [pageNo]);
+  }, []);
 
   const loadMore = () => {
     if (hasMore && !isFetchingMore) {
-      setPageNo((prevPage) => prevPage + 1);
+      setPageNo(prevPage => prevPage + 1);
     }
   };
 
-  const renderPropertyItem = ({ item }: { item: PropertyModel }) => (
-    <View key={item.ID} style={styles.propertyCard}>
-      <Text style={styles.locationText}>
-        {item.Location || item.City?.MasterDetailName || 'Location not specified'}
-      </Text>
-      <Text style={styles.propertyType}>
-        {item.PropertyType?.MasterDetailName} for {item.PropertyFor?.MasterDetailName}
-      </Text>
-      <View style={styles.detailsRow}>
-        <Text style={styles.price}>
-          ₹{item.Price} {item.Rate?.MasterDetailName}
+  const renderPropertyItem = ({item}: {item: PropertyModel}) => (
+    <TouchableOpacity onPress={() => handlePropertyPress(item)}>
+      <View key={item.ID} style={styles.propertyCard}>
+        <Text style={styles.locationText}>
+          {item.Location ||
+            item.City?.MasterDetailName ||
+            'Location not specified'}
         </Text>
-        <Text style={styles.area}>
-          {item.Area} {item.Size?.MasterDetailName}
+        <Text style={styles.propertyType}>
+          {item.PropertyType?.MasterDetailName} for{' '}
+          {item.PropertyFor?.MasterDetailName}
         </Text>
-      </View>
-      <View style={styles.additionalDetails}>
-        {item.Furnishing && (
-          <Text style={styles.detailText}>
-            Furnishing: {item.Furnishing.MasterDetailName}
+        <View style={styles.detailsRow}>
+          <Text style={styles.price}>
+            ₹{item.Price} {item.Rate?.MasterDetailName}
           </Text>
-        )}
-        <Text style={styles.detailText}>
-          Ready to Move: {item.readyToMove || 'Not specified'}
-        </Text>
+          <Text style={styles.area}>
+            {item.Area} {item.Size?.MasterDetailName}
+          </Text>
+        </View>
+        <View style={styles.additionalDetails}>
+          {item.Furnishing && (
+            <Text style={styles.detailText}>
+              Furnishing: {item.Furnishing.MasterDetailName}
+            </Text>
+          )}
+          <Text style={styles.detailText}>
+            Ready to Move: {item.readyToMove || 'Not specified'}
+          </Text>
+        </View>
+        <View style={styles.sellerDetails}>
+          <Text style={styles.sellerName}>Listed by: {item.SellerName}</Text>
+          <Text style={styles.sellerPhone}>Contact: {item.SellerPhone}</Text>
+        </View>
       </View>
-      <View style={styles.sellerDetails}>
-        <Text style={styles.sellerName}>Listed by: {item.SellerName}</Text>
-        <Text style={styles.sellerPhone}>Contact: {item.SellerPhone}</Text>
-      </View>
-    </View>
+    </TouchableOpacity>
   );
 
   if (loading && pageNo === 1) {
@@ -108,26 +128,33 @@ const BuyerHomeScreen = () => {
   }
 
   return (
-    <FlatList
-      style={styles.container}
-      data={properties}
-      keyExtractor={(item) => item.ID.toString()}
-      renderItem={renderPropertyItem}
-      onEndReached={loadMore} 
-      onEndReachedThreshold={0.5} 
-      ListFooterComponent={
-        isFetchingMore ? (
-          <View style={styles.footer}>
-            <ActivityIndicator size="small" color="#0066cc" />
+    <>
+      <FlatList
+        style={styles.container}
+        data={properties}
+        keyExtractor={item => item.ID.toString()}
+        renderItem={renderPropertyItem}
+        onEndReached={loadMore}
+        onEndReachedThreshold={0.5}
+        ListFooterComponent={
+          isFetchingMore ? (
+            <View style={styles.footer}>
+              <ActivityIndicator size="small" color="#0066cc" />
+            </View>
+          ) : null
+        }
+        ListEmptyComponent={
+          <View style={styles.centerContainer}>
+            <Text style={styles.noDataText}>No properties available</Text>
           </View>
-        ) : null
-      }
-      ListEmptyComponent={
-        <View style={styles.centerContainer}>
-          <Text style={styles.noDataText}>No properties available</Text>
-        </View>
-      }
-    />
+        }
+      />
+      <PropertyModal
+        property={selectedProperty}
+        visible={modalVisible}
+        onClose={() => setModalVisible(false)}
+      />
+    </>
   );
 };
 
