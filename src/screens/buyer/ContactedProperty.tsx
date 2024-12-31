@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { FlatList, View, Text, StyleSheet, ActivityIndicator } from 'react-native';
+import { FlatList, View, Text, StyleSheet, ActivityIndicator, TouchableOpacity } from 'react-native';
 import { api } from '../../utils/api';
 import url from '../../constants/api';
 import { PropertyModel } from '../../types';
 import { useAuth } from '../../hooks/useAuth';
+import PropertyModal from './PropertyModal';
 
 
 const ContactedProperty = () => {
@@ -15,6 +16,9 @@ const ContactedProperty = () => {
  const [isFetchingMore, setIsFetchingMore] = useState(false);
  const { user } = useAuth();
  const pageSize = 10;
+   const [selectedProperty, setSelectedProperty] =
+     useState<PropertyModel | null>(null);
+   const [modalVisible, setModalVisible] = useState(false);
 
  const getcontactedProperty = async (pageNumber: number, pageSize: number) => {
    if (isFetchingMore) return;
@@ -62,7 +66,7 @@ const ContactedProperty = () => {
    
 
      console.log(response)
-     // console.log('API Response:', JSON.stringify(responseData, null, 2));
+     console.log('API Response:', JSON.stringify(responseData, null, 2));
 
 
      if (!responseData) {
@@ -72,7 +76,7 @@ const ContactedProperty = () => {
 
      if (responseData?.contactedPropertyModels) {
        const newProperties = responseData.contactedPropertyModels;
-console.log('*****new propertties**********',newProperties)
+// console.log('*****new propertties**********',newProperties)
 
        // Update properties state based on page number
        setProperties(prevProperties =>
@@ -107,6 +111,10 @@ console.log('*****new propertties**********',newProperties)
    setHasMore(true);
  }, [user?.ID]);
 
+   const handlePropertyPress = (property: PropertyModel) => {
+     setSelectedProperty(property);
+     setModalVisible(true);
+   };
 
  // Fetch properties when page changes
  useEffect(() => {
@@ -122,6 +130,7 @@ console.log('*****new propertties**********',newProperties)
    }
  };
  const renderPropertyItem = ({ item }: { item: PropertyModel }) => (
+  <TouchableOpacity onPress={() => handlePropertyPress(item)}>
    <View key={item.ID} style={styles.propertyCard}>
      <Text style={styles.locationText}>
        {item.PropertyLocation || item.City?.MasterDetailName || 'Location not specified'}
@@ -152,6 +161,7 @@ console.log('*****new propertties**********',newProperties)
        <Text style={styles.sellerPhone}>Contact: {item.SellerPhone || 'N/A'}</Text>
      </View>
    </View>
+   </TouchableOpacity>
  );
 
 
@@ -174,20 +184,18 @@ console.log('*****new propertties**********',newProperties)
 
 
  return (
-   <FlatList
+   <><FlatList
      style={styles.container}
      data={properties}
      keyExtractor={(item) => item.ID?.toString() || Math.random().toString()}
      renderItem={renderPropertyItem}
      onEndReached={loadMore}
      onEndReachedThreshold={0.5}
-     ListFooterComponent={
-       isFetchingMore ? (
-         <View style={styles.footer}>
-           <ActivityIndicator size="small" color="#0066cc" />
-         </View>
-       ) : null
-     }
+     ListFooterComponent={isFetchingMore ? (
+       <View style={styles.footer}>
+         <ActivityIndicator size="small" color="#0066cc" />
+       </View>
+     ) : null}
      ListEmptyComponent={() => {
        if (loading) return null;
        return (
@@ -195,8 +203,10 @@ console.log('*****new propertties**********',newProperties)
            <Text style={styles.noDataText}>No properties available</Text>
          </View>
        );
-     }}
-   />
+     } } /><PropertyModal
+       property={selectedProperty}
+       visible={modalVisible}
+       onClose={() => setModalVisible(false)} /></>
  );
 };
 

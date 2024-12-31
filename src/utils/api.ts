@@ -22,7 +22,7 @@ async function fetchAPI<T>(endpoint: string, options: RequestInit = {}) {
   };
 
   try {
-    // console.log(url,config);
+    console.log(url,config);
     const response = await fetch(url, config);
 
     const data: Response<T> = await response.json();

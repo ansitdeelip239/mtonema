@@ -10,6 +10,11 @@ import {
 } from 'react-native';
 import {PropertyModel} from '../../types';
 
+// Utility function to strip HTML tags
+const stripHtmlTags = (html: string): string => {
+  return html.replace(/<\/?[^>]+(>|$)/g, '').trim();
+};
+
 interface PropertyModalProps {
   property: PropertyModel | null;
   visible: boolean;
@@ -18,6 +23,10 @@ interface PropertyModalProps {
 
 const PropertyModal = ({property, visible, onClose}: PropertyModalProps) => {
   if (!property) return null;
+
+  const sanitizedDescription = property.Discription
+    ? stripHtmlTags(property.Discription)
+    : 'Not available';
 
   return (
     <Modal visible={visible} animationType="slide" onRequestClose={onClose}>
@@ -63,9 +72,7 @@ const PropertyModal = ({property, visible, onClose}: PropertyModalProps) => {
             <Text style={styles.detail}>
               Ready to Move: {property.readyToMove}
             </Text>
-            <Text style={styles.detail}>
-              Description: {property.Discription || 'Not available'}
-            </Text>
+            <Text style={styles.detail}>Description: {sanitizedDescription}</Text>
           </View>
 
           <View style={styles.section}>

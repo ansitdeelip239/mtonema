@@ -65,7 +65,7 @@ const BuyerHomeScreen = () => {
 
   useEffect(() => {
     getAllProperty(pageNo);
-  }, []);
+  }, [pageNo]);
 
   const loadMore = () => {
     if (hasMore && !isFetchingMore) {
