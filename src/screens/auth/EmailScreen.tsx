@@ -1,19 +1,26 @@
-import { View, Text, TextInput, StyleSheet, Image, TouchableOpacity, Alert } from 'react-native';
-import React, { useState } from 'react';
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { AuthStackParamList } from '../../navigator/AuthNavigator';
-import Colors from '../../constants/Colors';
+import {
+  View,
+  Text,
+  TextInput,
+  StyleSheet,
+  Image,
+  TouchableOpacity,
+} from 'react-native';
+import React, {useState} from 'react';
+import {NativeStackScreenProps} from '@react-navigation/native-stack';
+import {AuthStackParamList} from '../../navigator/AuthNavigator';
+// import Colors from '../../constants/Colors';
 import AuthService from '../../services/AuthService';
 import Toast from 'react-native-toast-message';
-import { useAuth } from '../../hooks/useAuth';
-import { User } from '../../types';
+import {useAuth} from '../../hooks/useAuth';
+import {User} from '../../types';
 
 type Props = NativeStackScreenProps<AuthStackParamList, 'EmailScreen'>;
 
-const EmailScreen: React.FC<Props> = ({ navigation }) => {
+const EmailScreen: React.FC<Props> = ({navigation}) => {
   const [email, setEmail] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const {storeUser}=useAuth();
+  const {storeUser} = useAuth();
 
   const handleContinue = async () => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -25,19 +32,19 @@ const EmailScreen: React.FC<Props> = ({ navigation }) => {
         position: 'top',
         text1: 'Invalid Email',
         text2: 'Please enter a valid email address.',
-        visibilityTime: 3000,  
+        visibilityTime: 3000,
         autoHide: true,
       });
       return;
     }
-    
+
     try {
       setIsLoading(true);
       const response = await AuthService.verifyLoginInput(email);
       console.log('response', response);
       storeUser(response.data as User);
       if (response.Success) {
-        navigation.navigate('PasswordScreen', { email });
+        navigation.navigate('PasswordScreen', {email});
       } else {
         Toast.show({
           type: 'error',
@@ -49,7 +56,6 @@ const EmailScreen: React.FC<Props> = ({ navigation }) => {
         });
       }
     } catch (error) {
-     
       console.error(error);
       Toast.show({
         type: 'error',
@@ -87,11 +93,16 @@ const EmailScreen: React.FC<Props> = ({ navigation }) => {
         </View>
         {/* Buttons Section */}
         <View style={styles.btnsection}>
-          <TouchableOpacity style={[styles.button, styles.spacing]} onPress={handleContinue} disabled={isLoading}>
+          <TouchableOpacity
+            style={[styles.button, styles.spacing]}
+            onPress={handleContinue}
+            disabled={isLoading}>
             <Text style={styles.buttonText}>Continue</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity style={[styles.button, styles.spacing, styles.color]} onPress={navigation.goBack}>
+          <TouchableOpacity
+            style={[styles.button, styles.spacing, styles.color]}
+            onPress={navigation.goBack}>
             <Text style={styles.buttonText}>Back</Text>
           </TouchableOpacity>
         </View>
@@ -115,19 +126,19 @@ const styles = StyleSheet.create({
     width: '95%',
   },
   btnsection: {
-    justifyContent: 'center', 
+    justifyContent: 'center',
     alignItems: 'center',
   },
   upperPart: {
     flex: 2,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#cc0e74', 
+    backgroundColor: '#cc0e74',
     borderBottomRightRadius: 60,
   },
   lowerPart: {
     flex: 3,
-    backgroundColor: '#ffffff', 
+    backgroundColor: '#ffffff',
     borderTopLeftRadius: 70,
     paddingVertical: 60,
   },
@@ -137,7 +148,7 @@ const styles = StyleSheet.create({
   },
   label: {
     fontSize: 16,
-    color: '#880e4f', 
+    color: '#880e4f',
     marginBottom: 10,
     fontWeight: 'bold',
   },
@@ -148,7 +159,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   button: {
-    backgroundColor: '#cc0e74', 
+    backgroundColor: '#cc0e74',
     padding: 15,
     borderRadius: 30,
     marginVertical: 10,
@@ -156,7 +167,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
+    shadowOffset: {width: 0, height: 2},
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
     elevation: 5,
