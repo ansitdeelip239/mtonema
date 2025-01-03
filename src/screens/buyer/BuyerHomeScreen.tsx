@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useState, useRef} from 'react';
 import {
   FlatList,
   View,
@@ -22,59 +22,83 @@ const BuyerHomeScreen = () => {
   const [selectedProperty, setSelectedProperty] =
     useState<PropertyModel | null>(null);
   const [modalVisible, setModalVisible] = useState(false);
+  // Add a loading ref to prevent multiple simultaneous requests
+  const isLoadingRef = useRef(false);
 
   const pageSize = 10;
 
-  const getAllProperty = useCallback(async (page: number) => {
-    try {
-      if (!isFetchingMore) {
-        setLoading(page === 1);
-        setIsFetchingMore(page !== 1);
-      }
+  const getAllProperty = useCallback(
+    async (page: number) => {
+      if (isLoadingRef.current) return;
 
-      const response = await api.get<any>(
-        `${url.RecommendedProperty}?pageNumber=${page}&pageSize=${pageSize}`,
-      );
+      try {
+        isLoadingRef.current = true;
+        console.log(`Fetching page ${page}`); // Debug log
 
-      if (response.data?.propertyModels) {
-        const newProperties = response.data.propertyModels;
-        setProperties(prevProperties =>
-          page === 1 ? newProperties : [...prevProperties, ...newProperties],
+        const response = await api.get<any>(
+          `${url.RecommendedProperty}?pageNumber=${page}&pageSize=${pageSize}`,
         );
 
-        if (newProperties.length < pageSize) {
-          setHasMore(false);
-        }
-      } else {
-        setError('No properties found');
-      }
-    } catch (err) {
-      setError('Failed to fetch properties');
-      console.error('Error fetching properties:', (err as Error).message);
-    } finally {
-      setLoading(false);
-      setIsFetchingMore(false);
-    }
-  }, [isFetchingMore, pageSize]);
+        const newProperties = response.data?.propertyModels || [];
+        console.log(`Received ${newProperties.length} properties`); // Debug log
 
+        setProperties(prevProperties => {
+          if (page === 1) return newProperties;
+
+          const existingIds = new Set(prevProperties.map(p => p.ID));
+            const uniqueNewProperties: PropertyModel[] = newProperties.filter(
+            (p: PropertyModel) => !existingIds.has(p.ID),
+            );
+
+          console.log(
+            `Found ${uniqueNewProperties.length} unique new properties`,
+          ); // Debug log
+
+          // Only update hasMore after we check the actual new data
+          const hasNewData = uniqueNewProperties.length > 0;
+          setHasMore(hasNewData && newProperties.length === pageSize);
+
+          return hasNewData
+            ? [...prevProperties, ...uniqueNewProperties]
+            : prevProperties;
+        });
+      } catch (err) {
+        console.error('Error:', err);
+        setError('Failed to fetch properties');
+        setHasMore(false);
+      } finally {
+        isLoadingRef.current = false;
+        setLoading(false);
+        setIsFetchingMore(false);
+      }
+    },
+    [pageSize],
+  );
   const handlePropertyPress = (property: PropertyModel) => {
     setSelectedProperty(property);
     setModalVisible(true);
   };
-
+  // Update loadMore with debouncing
+  const loadMore = useCallback(() => {
+    const debouncedLoadMore = debounce(() => {
+      console.log('LoadMore triggered', {
+        hasMore,
+        isLoadingRef: isLoadingRef.current,
+      }); // Debug log
+      if (hasMore && !isLoadingRef.current) {
+        setPageNo(prev => prev + 1);
+      }
+    }, 300);
+    debouncedLoadMore();
+  }, [hasMore]);
   useEffect(() => {
+    console.log('Page changed to:', pageNo);
     getAllProperty(pageNo);
   }, [pageNo, getAllProperty]);
 
-  const loadMore = () => {
-    if (hasMore && !isFetchingMore) {
-      setPageNo(prevPage => prevPage + 1);
-    }
-  };
-
   const renderPropertyItem = ({item}: {item: PropertyModel}) => (
     <TouchableOpacity onPress={() => handlePropertyPress(item)}>
-      <View key={item.ID} style={styles.propertyCard}>
+      <View style={styles.propertyCard}>
         <Text style={styles.locationText}>
           {item.Location ||
             item.City?.MasterDetailName ||
@@ -118,7 +142,7 @@ const BuyerHomeScreen = () => {
     );
   }
 
-  if (error) {
+  if (error && properties.length === 0) {
     return (
       <View style={styles.centerContainer}>
         <Text style={styles.errorText}>{error}</Text>
@@ -131,7 +155,7 @@ const BuyerHomeScreen = () => {
       <FlatList
         style={styles.container}
         data={properties}
-        keyExtractor={item => item.ID.toString()}
+        keyExtractor={item => `property-${item.ID}`}
         renderItem={renderPropertyItem}
         onEndReached={loadMore}
         onEndReachedThreshold={0.5}
@@ -252,3 +276,14 @@ const styles = StyleSheet.create({
 });
 
 export default BuyerHomeScreen;
+function debounce(func: (...args: any[]) => void, wait: number) {
+  let timeout: NodeJS.Timeout | null = null;
+  return function (...args: any[]) {
+    if (timeout) {
+      clearTimeout(timeout);
+    }
+    timeout = setTimeout(() => {
+      func.apply(null, args);
+    }, wait);
+  };
+}
