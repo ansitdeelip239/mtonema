@@ -50,7 +50,7 @@ const CustomDrawerContent = (props: any) => {
       <View>
         <Text style={styles.name}>{user?.Email} </Text>
         <Image
-          source={require('../assets/Images/propaty.png')}
+          source={require('../assets/Images/dncrlogo.png')}
           style={styles.logo}
         />
       </View>
@@ -144,8 +144,9 @@ const styles = StyleSheet.create({
   },
   name: {
     fontSize: 16,
-    top: 120,
-    left: 25,
+    top: 155,
+    left: 28,
+    fontWeight: 'bold',
   },
 
   textWhite: {
@@ -159,12 +160,12 @@ const styles = StyleSheet.create({
     padding: 16,
   },
   logo: {
-    width: 100,
-    height: 110,
+    width: '80%',
+    height: 120,
     margin: 1,
-    resizeMode: 'contain',
+    // resizeMode: 'contain',
     alignSelf: 'center',
-    marginBottom: 30,
+    marginBottom: 70,
   },
 
   modalContainer: {

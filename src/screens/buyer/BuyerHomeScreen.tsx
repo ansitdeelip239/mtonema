@@ -29,7 +29,9 @@ const BuyerHomeScreen = () => {
 
   const getAllProperty = useCallback(
     async (page: number) => {
-      if (isLoadingRef.current) return;
+      if (isLoadingRef.current) {
+        return;
+      }
 
       try {
         isLoadingRef.current = true;
@@ -43,7 +45,9 @@ const BuyerHomeScreen = () => {
         console.log(`Received ${newProperties.length} properties`); // Debug log
 
         setProperties(prevProperties => {
-          if (page === 1) return newProperties;
+          if (page === 1) {
+            return newProperties;
+          }
 
           const existingIds = new Set(prevProperties.map(p => p.ID));
             const uniqueNewProperties: PropertyModel[] = newProperties.filter(
