@@ -1,39 +1,103 @@
 import React, {useState} from 'react';
-import {View, Text, TextInput, StyleSheet, TouchableOpacity, Image} from 'react-native';
+import {
+  View,
+  Text,
+  TextInput,
+  StyleSheet,
+  TouchableOpacity,
+  Image,
+  Alert,
+  ActivityIndicator,
+} from 'react-native';
+import {api} from '../../utils/api';
+import url from '../../constants/api';
+import {useAuth} from '../../hooks/useAuth';
 
 const ChangePasswordScreen = () => {
+  const [loading, setLoading] = useState(false);
   const [oldPassword, setOldPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-  const [errorMessage, setErrorMessage] = useState('');
+  const [oldPasswordError, setOldPasswordError] = useState('');
+  const [newPasswordError, setNewPasswordError] = useState('');
+  const [confirmPasswordError, setConfirmPasswordError] = useState('');
   const [showOldPassword, setShowOldPassword] = useState(false);
   const [showNewPassword, setShowNewPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const {user} = useAuth();
 
-  const handleSubmit = () => {
-    if (!oldPassword || !newPassword || !confirmPassword) {
-      setErrorMessage('All fields are required');
-    } else if (newPassword !== confirmPassword) {
-      setErrorMessage('New passwords do not match');
+  const handleSubmit = async () => {
+    let hasError = false;
+
+    if (!oldPassword) {
+      setOldPasswordError('Old password is required');
+      hasError = true;
     } else {
-      setErrorMessage('');
-      console.log('Password changed');
+      setOldPasswordError('');
+    }
+
+    if (!newPassword) {
+      setNewPasswordError('New password is required');
+      hasError = true;
+    } else {
+      setNewPasswordError('');
+    }
+
+    if (!confirmPassword) {
+      setConfirmPasswordError('Confirm password is required');
+      hasError = true;
+    } else if (newPassword !== confirmPassword) {
+      setConfirmPasswordError('New passwords do not match');
+      hasError = true;
+    } else {
+      setConfirmPasswordError('');
+    }
+
+    if (hasError) {
+      return;
+    }
+
+    try {
+      setLoading(true);
+      const response = await api.post(url.ChangePassword, {
+        Email: user?.Email,
+        oldPassword: oldPassword,
+        Password: newPassword,
+      });
+      console.log('Response:', response);
+      if (response.Success) {
+        Alert.alert('Success', 'Password changed successfully');
+        setOldPassword('');
+        setNewPassword('');
+        setConfirmPassword('');
+      } else if (response.httpStatus === 404) {
+        setOldPasswordError('Old password does not match');
+      } else {
+        setConfirmPasswordError(response.Message || 'Failed to change password');
+      }
+    } catch (error) {
+      console.error('Error changing password:', error);
+      setConfirmPasswordError((error as any).message || 'Failed to change password');
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
     <View style={styles.container}>
       <Text style={styles.header}>Change Password</Text>
-      {errorMessage ? <Text style={styles.error}>{errorMessage}</Text> : null}
 
       {/* Old Password Input */}
-      <View style={styles.inputContainer}>
+      <View style={[styles.inputContainer, oldPasswordError ? styles.errorBorder : null]}>
         <TextInput
           style={styles.input}
           placeholder="Old Password"
           secureTextEntry={!showOldPassword}
           value={oldPassword}
-          onChangeText={setOldPassword}
+          onChangeText={(text) => {
+            setOldPassword(text);
+            setOldPasswordError('');
+          }}
         />
         <TouchableOpacity
           style={styles.icon}
@@ -48,15 +112,19 @@ const ChangePasswordScreen = () => {
           />
         </TouchableOpacity>
       </View>
+      {oldPasswordError && <Text style={styles.error}>{oldPasswordError}</Text>}
 
       {/* New Password Input */}
-      <View style={styles.inputContainer}>
+      <View style={[styles.inputContainer, newPasswordError ? styles.errorBorder : null]}>
         <TextInput
           style={styles.input}
           placeholder="New Password"
           secureTextEntry={!showNewPassword}
           value={newPassword}
-          onChangeText={setNewPassword}
+          onChangeText={(text) => {
+            setNewPassword(text);
+            setNewPasswordError('');
+          }}
         />
         <TouchableOpacity
           style={styles.icon}
@@ -64,22 +132,26 @@ const ChangePasswordScreen = () => {
           <Image
             source={
               showNewPassword
-              ? require('../../assets/Icon/eye.png')
+                ? require('../../assets/Icon/eye.png')
                 : require('../../assets/Icon/eye-slash.png')
             }
             style={styles.iconImage}
           />
         </TouchableOpacity>
       </View>
+      {newPasswordError && <Text style={styles.error}>{newPasswordError}</Text>}
 
       {/* Confirm Password Input */}
-      <View style={styles.inputContainer}>
+      <View style={[styles.inputContainer, confirmPasswordError ? styles.errorBorder : null]}>
         <TextInput
           style={styles.input}
           placeholder="Confirm New Password"
           secureTextEntry={!showConfirmPassword}
           value={confirmPassword}
-          onChangeText={setConfirmPassword}
+          onChangeText={(text) => {
+            setConfirmPassword(text);
+            setConfirmPasswordError('');
+          }}
         />
         <TouchableOpacity
           style={styles.icon}
@@ -87,17 +159,22 @@ const ChangePasswordScreen = () => {
           <Image
             source={
               showConfirmPassword
-              ? require('../../assets/Icon/eye.png')
-              : require('../../assets/Icon/eye-slash.png')
+                ? require('../../assets/Icon/eye.png')
+                : require('../../assets/Icon/eye-slash.png')
             }
             style={styles.iconImage}
           />
         </TouchableOpacity>
       </View>
+      {confirmPasswordError && <Text style={styles.error}>{confirmPasswordError}</Text>}
 
       {/* Submit Button */}
-      <TouchableOpacity style={styles.Button} onPress={handleSubmit}>
-        <Text style={styles.btntxt}>Submit</Text>
+      <TouchableOpacity style={styles.Button} onPress={handleSubmit} disabled={loading}>
+        {loading ? (
+          <ActivityIndicator size="small" color="#ffffff" />
+        ) : (
+          <Text style={styles.btntxt}>Submit</Text>
+        )}
       </TouchableOpacity>
     </View>
   );
@@ -151,6 +228,9 @@ const styles = StyleSheet.create({
     color: 'red',
     marginBottom: 10,
     textAlign: 'center',
+  },
+  errorBorder: {
+    borderColor: 'red',
   },
 });
 

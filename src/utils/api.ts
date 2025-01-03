@@ -1,16 +1,15 @@
-import { Response } from "../types";
-import { url1 } from "../constants/api";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import {Response} from '../types';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 async function fetchAPI<T>(endpoint: string, options: RequestInit = {}) {
   const url = `${endpoint}`;
 
-  let token: string | null=await AsyncStorage.getItem('token');
+  let token: string | null = await AsyncStorage.getItem('token');
 
-// console.log('**tokennnnnnn',token)
+  // console.log('**tokennnnnnn',token)
   const defaultHeaders = {
-    "Content-Type": "application/json",
-    ...(token && { Authorization: `Bearer ${token}` }),
+    'Content-Type': 'application/json',
+    ...(token && {Authorization: `Bearer ${token}`}),
   };
 
   const config = {
@@ -22,33 +21,29 @@ async function fetchAPI<T>(endpoint: string, options: RequestInit = {}) {
   };
 
   try {
-    console.log(url,config);
+    console.log(url, config);
     const response = await fetch(url, config);
 
     const data: Response<T> = await response.json();
 
     if (data.success === false) {
-      throw new Error(data.message || "API request failed");
+      throw new Error(data.message || 'API request failed');
     }
 
     if (!response.ok) {
       const errorData = await response.json();
-      throw new Error(errorData.message || "API request failed");
+      throw new Error(errorData.message || 'API request failed');
     }
 
     return data;
   } catch (error) {
     if (error instanceof Error) {
-      console.error("API Error:", error.message);
+      console.error('API Error:', error.message);
     } else {
-      console.error("API Error:", error);
+      console.error('API Error:', error);
     }
     throw error;
   }
-}
-
-interface FetchAPIOptions extends RequestInit {
-  headers?: Record<string, string>;
 }
 
 interface API {
@@ -59,19 +54,19 @@ interface API {
 }
 
 export const api: API = {
-  get: <T>(endpoint: string) => fetchAPI<T>(endpoint, { method: "GET" }),
+  get: <T>(endpoint: string) => fetchAPI<T>(endpoint, {method: 'GET'}),
   post: <T>(endpoint: string, data: any) =>
     fetchAPI<T>(endpoint, {
-      method: "POST",
-      headers:{
-        'Content-Type': "application/json",
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify(data),
     }),
   put: <T>(endpoint: string, data: any) =>
     fetchAPI<T>(endpoint, {
-      method: "PUT",
+      method: 'PUT',
       body: JSON.stringify(data),
     }),
-  delete: <T>(endpoint: string) => fetchAPI<T>(endpoint, { method: "DELETE" }),
+  delete: <T>(endpoint: string) => fetchAPI<T>(endpoint, {method: 'DELETE'}),
 };

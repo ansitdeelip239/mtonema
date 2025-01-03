@@ -4,7 +4,7 @@ import {
   DrawerContentScrollView,
   DrawerItemList,
 } from '@react-navigation/drawer';
-import {Avatar, Title, Drawer, TouchableRipple, Icon} from 'react-native-paper';
+import { Drawer} from 'react-native-paper';
 import {
   ActivityIndicator,
   Image,
@@ -20,7 +20,7 @@ import Strings from '../constants/Strings';
 import Colors from '../constants/Colors';
 
 const CustomDrawerContent = (props: any) => {
-  const {logout} = useAuth();
+  const {user,logout} = useAuth();
   const [isLoggingOut, setIsLoggingOut] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
   const [loadingModalVisible, setLoadingModalVisible] = useState(false);
@@ -39,16 +39,16 @@ const CustomDrawerContent = (props: any) => {
     setLoadingModalVisible(false);
     console.log('Logged Out Successfully');
   };
-  const openURL = (url: any) => {
-    Linking.openURL(url).catch(err =>
-      console.error('Failed to open URL:', err),
-    );
-  };
+  // const openURL = (url: any) => {
+  //   Linking.openURL(url).catch(err =>
+  //     console.error('Failed to open URL:', err),
+  //   );
+  // };
 
   return (
-    <DrawerContentScrollView {...props} contentContainerStyle={{flex: 1}}>
+    <DrawerContentScrollView {...props} contentContainerStyle={styles.flexOne}>
       <View>
-        <Text style={styles.name}>{props.username} </Text>
+        <Text style={styles.name}>{user?.Email} </Text>
         <Image
           source={require('../assets/Images/propaty.png')}
           style={styles.logo}
@@ -59,21 +59,14 @@ const CustomDrawerContent = (props: any) => {
       <DrawerItemList {...props} />
       <View style={styles.linkdesign}>
         <TouchableHighlight
-          style={{
-            borderRadius: 50,
-            overflow: 'hidden',
-          }}
+          style={styles.touchableHighlight}
           underlayColor={Colors.main}
           onPress={() => Linking.openURL(Strings.About_Us_Url)}>
           <Drawer.Item label="About" />
         </TouchableHighlight>
 
-
         <TouchableHighlight
-          style={{
-            borderRadius: 50,
-            overflow: 'hidden',
-          }}
+          style={styles.touchableHighlight}
           underlayColor={Colors.main}
           onPress={() => Linking.openURL(Strings.FAQ_Url)}>
           <Drawer.Item label="FAQ" />
@@ -135,10 +128,13 @@ const CustomDrawerContent = (props: any) => {
 };
 
 const styles = StyleSheet.create({
+  flexOne: {
+    flex: 1,
+  },
   flexGrow: {
     flex: 1,
   },
-  linkdesign: {},
+  linkdesign: {  },
   logout: {
     backgroundColor: '#cc0e74',
     padding: 10,
@@ -148,8 +144,8 @@ const styles = StyleSheet.create({
   },
   name: {
     fontSize: 16,
-    top: 115,
-    left: 67,
+    top: 120,
+    left: 25,
   },
 
   textWhite: {
@@ -210,7 +206,7 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 10,
     margin: 5,
-    backgroundColor: '#EE0000',
+    backgroundColor: '#cc0e74',
     borderRadius: 5,
     alignItems: 'center',
   },
@@ -224,6 +220,11 @@ const styles = StyleSheet.create({
     borderColor: 'black',
     borderWidth: 1,
   },
+  touchableHighlight: {
+    borderRadius: 50,
+    overflow: 'hidden',
+    marginLeft: -10,
+    width: '100%',
+  },
 });
-
 export default CustomDrawerContent;

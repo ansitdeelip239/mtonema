@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {
   FlatList,
   View,
@@ -25,7 +25,7 @@ const BuyerHomeScreen = () => {
 
   const pageSize = 10;
 
-  const getAllProperty = async (page: number) => {
+  const getAllProperty = useCallback(async (page: number) => {
     try {
       if (!isFetchingMore) {
         setLoading(page === 1);
@@ -48,15 +48,14 @@ const BuyerHomeScreen = () => {
       } else {
         setError('No properties found');
       }
-    // eslint-disable-next-line no-catch-shadow
-    } catch (error) {
+    } catch (err) {
       setError('Failed to fetch properties');
-      console.error('Error fetching properties:', error);
+      console.error('Error fetching properties:', (err as Error).message);
     } finally {
       setLoading(false);
       setIsFetchingMore(false);
     }
-  };
+  }, [isFetchingMore, pageSize]);
 
   const handlePropertyPress = (property: PropertyModel) => {
     setSelectedProperty(property);
@@ -65,7 +64,7 @@ const BuyerHomeScreen = () => {
 
   useEffect(() => {
     getAllProperty(pageNo);
-  }, [pageNo]);
+  }, [pageNo, getAllProperty]);
 
   const loadMore = () => {
     if (hasMore && !isFetchingMore) {

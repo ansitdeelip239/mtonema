@@ -13,6 +13,14 @@ import {PropertyModel} from '../../types';
 import {useAuth} from '../../hooks/useAuth';
 import PropertyModal from './PropertyModal';
 
+const EmptyComponent = () => {
+  return (
+    <View style={styles.centerContainer}>
+      <Text style={styles.noDataText}>No properties available</Text>
+    </View>
+  );
+};
+
 const ContactedProperty = () => {
   const [properties, setProperties] = useState<PropertyModel[]>([]);
   const [loading, setLoading] = useState(true);
@@ -113,9 +121,9 @@ const ContactedProperty = () => {
             setProperties([]);
           }
         }
-      } catch (error) {
-        console.error('Error details:', error);
-        setError('Failed to fetch properties');
+      } catch (err) {
+        console.error('Error details:', (err as Error).message);
+        setError((err as Error).message || 'Failed to fetch properties');
         setHasMore(false);
       } finally {
         setLoading(false);
@@ -132,6 +140,7 @@ const ContactedProperty = () => {
       setPageNo(prev => prev + 1);
     }
   };
+
   const renderPropertyItem = ({item}: {item: PropertyModel}) => (
     <TouchableOpacity onPress={() => handlePropertyPress(item)}>
       <View key={item.ID} style={styles.propertyCard}>
@@ -206,14 +215,7 @@ const ContactedProperty = () => {
             </View>
           ) : null
         }
-        ListEmptyComponent={() => {
-          if (loading) return null;
-          return (
-            <View style={styles.centerContainer}>
-              <Text style={styles.noDataText}>No properties available</Text>
-            </View>
-          );
-        }}
+        ListEmptyComponent={<EmptyComponent />}
       />
       <PropertyModal
         property={selectedProperty}

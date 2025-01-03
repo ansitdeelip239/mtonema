@@ -1,6 +1,6 @@
 import {createDrawerNavigator} from '@react-navigation/drawer';
 // import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import {memo} from 'react';
+import React,{memo} from 'react';
 import Colors from '../constants/Colors';
 // import CustomDrawerContent from '../components/CustomDrawerContent';
 import BuyerHomeScreen from '../screens/buyer/BuyerHomeScreen';
@@ -17,12 +17,11 @@ const Drawer = createDrawerNavigator();
 
 const BuyerNavigator = memo(() => {
   return (
-    // eslint-disable-next-line react/react-in-jsx-scope
+
     <Drawer.Navigator
       // eslint-disable-next-line react/no-unstable-nested-components
       drawerContent={props => (
-        // eslint-disable-next-line react/react-in-jsx-scope
-        <CustomDrawerContent {...props} username="DemoBuyer" />
+        <CustomDrawerContent {...props} />
       )}
       initialRouteName="Home"
       screenOptions={{
