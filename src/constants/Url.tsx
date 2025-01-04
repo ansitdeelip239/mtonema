@@ -1,5 +1,5 @@
 // Live Link
-// let url1 = 'https://dncrpropertyapi.azurewebsites.net'; 
+// let url1 = 'https://dncrpropertyapi.azurewebsites.net';
 
 //Dev Link
 let url1 = 'https://devdncrbe.azurewebsites.net';
@@ -32,5 +32,5 @@ export default {
     //Master Detail
     getMasterDetail: url1 + '/api/v1/MasterDetail/getMasterDetailsByMasterName?MasterDetailName=',
     getPlaces: url1 + '/api/v1/MasterDetail/getgoogleplaces',
-    deleteUser: url1 + '/api/v1/User/DeleteUserByUserId'
+    deleteUser: url1 + '/api/v1/User/DeleteUserByUserId',
 };
