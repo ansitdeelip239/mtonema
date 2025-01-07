@@ -4,6 +4,7 @@ import {
   TextInput,
   StyleSheet,
   Image,
+  ActivityIndicator,
   TouchableOpacity,
 } from 'react-native';
 import React, {useState} from 'react';
@@ -19,6 +20,7 @@ type Props = NativeStackScreenProps<AuthStackParamList, 'EmailScreen'>;
 
 const EmailScreen: React.FC<Props> = ({navigation}) => {
   const [email, setEmail] = useState('');
+  const [, setLoading] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
   const {storeUser} = useAuth();
 
@@ -39,6 +41,7 @@ const EmailScreen: React.FC<Props> = ({navigation}) => {
     }
 
     try {
+      setLoading(true);
       setIsLoading(true);
       const response = await AuthService.verifyLoginInput(email);
       console.log('response', response);
@@ -67,6 +70,7 @@ const EmailScreen: React.FC<Props> = ({navigation}) => {
       });
     } finally {
       setIsLoading(false);
+      setLoading(false);
     }
   };
 
@@ -93,12 +97,16 @@ const EmailScreen: React.FC<Props> = ({navigation}) => {
         </View>
         {/* Buttons Section */}
         <View style={styles.btnsection}>
-          <TouchableOpacity
-            style={[styles.button, styles.spacing]}
-            onPress={handleContinue}
-            disabled={isLoading}>
-            <Text style={styles.buttonText}>Continue</Text>
-          </TouchableOpacity>
+        <TouchableOpacity
+  style={[styles.button, styles.spacing]}
+  onPress={handleContinue}
+  disabled={isLoading}>
+  {isLoading ? (
+    <ActivityIndicator size="small" color="#ffffff" />
+  ) : (
+    <Text style={styles.buttonText}>Continue</Text>
+  )}
+</TouchableOpacity>
 
           <TouchableOpacity
             style={[styles.button, styles.spacing, styles.color]}
@@ -117,6 +125,21 @@ const styles = StyleSheet.create({
   mainScreen: {
     flex: 1,
     backgroundColor: '#cc0e74', // Pinkish Background
+  },
+  button: {
+    backgroundColor: '#cc0e74',
+    padding: 15,
+    borderRadius: 30,
+    marginVertical: 10,
+    width: '95%',
+    alignItems: 'center',
+    justifyContent: 'center',
+    shadowColor: '#000',
+    shadowOffset: {width: 0, height: 2},
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+    minHeight: 50, // Add this to maintain consistent height
   },
   color: {
     backgroundColor: '#790c5a',
@@ -158,20 +181,20 @@ const styles = StyleSheet.create({
     padding: 5,
     fontSize: 16,
   },
-  button: {
-    backgroundColor: '#cc0e74',
-    padding: 15,
-    borderRadius: 30,
-    marginVertical: 10,
-    width: '95%',
-    alignItems: 'center',
-    justifyContent: 'center',
-    shadowColor: '#000',
-    shadowOffset: {width: 0, height: 2},
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 5,
-  },
+  // button:{
+  //   backgroundColor: '#cc0e74',
+  //   padding: 15,
+  //   borderRadius: 30,
+  //   marginVertical: 10,
+  //   width: '95%',
+  //   alignItems: 'center',
+  //   justifyContent: 'center',
+  //   shadowColor: '#000',
+  //   shadowOffset: {width: 0, height: 2},
+  //   shadowOpacity: 0.25,
+  //   shadowRadius: 3.84,
+  //   elevation: 5,
+  // },
   spacing: {
     marginBottom: 10, // Adds space below each button
   },

@@ -18,6 +18,7 @@ import {
 import {Button} from 'react-native-paper';
 import { PermissionsAndroid, Platform } from 'react-native';
 const PostProperty = () => {
+  const [errors, setErrors] = useState<Record<string, boolean>>({});
   const [images, setImages] = useState<Asset[]>([]);
   const [sellerType, setSellerType] = useState('');
   const [city, setCity] = useState('');
@@ -58,6 +59,25 @@ const PostProperty = () => {
       return true; // Permissions are not required on iOS
     }
   };
+  const validateForm = () => {
+    const newErrors: Record<string, boolean> = {};
+    // Validate formData fields
+    Object.keys(formData).forEach(key => {
+      if (!formData[key as keyof typeof formData]) {
+        newErrors[key] = true;
+      }
+    });
+    // Validate picker fields
+    if (!sellerType) {newErrors.sellerType = true;}
+    if (!city) {newErrors.city = true;}
+    if (!propertyFor) {newErrors.propertyFor = true;}
+    if (!propertyType) {newErrors.propertyType = true;}
+    if (images.length === 0) {newErrors.images = true;}
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
 
   const handleImagePicker = async (type?: 'camera' | 'gallery') => {
     const options = {
@@ -122,7 +142,10 @@ const PostProperty = () => {
   };
 
   const handleSubmit = () => {
-    // TODO: Implement form submission
+    if (!validateForm()) {
+      Alert.alert('Error', 'Please fill in all required fields');
+      return;
+    }
     console.log({
       images,
       ...formData,
@@ -141,9 +164,10 @@ const PostProperty = () => {
         <Button
           mode="contained"
           onPress={showImagePickerOptions}
-          style={styles.addImageButton}>
+          style={[styles.addImageButton, errors.images && styles.errorButton]}>
          + Add Images
         </Button>
+        {errors.images && <Text style={styles.errorText}>Image are required</Text>}
 
         <ScrollView horizontal style={styles.imageScrollView}>
           {images.map((image, index) => (
@@ -166,20 +190,20 @@ const PostProperty = () => {
         onChangeText={value => handleInputChange('video', value)}
       />
       <TextInput
-        style={styles.input}
+      style={[styles.input, errors.name && styles.inputError]}
         placeholder="Name"
         value={formData.name}
         onChangeText={value => handleInputChange('name', value)}
       />
       <TextInput
-        style={styles.input}
+        style={[styles.input, errors.email && styles.inputError]}
         placeholder="Email"
         keyboardType="email-address"
         value={formData.email}
         onChangeText={value => handleInputChange('email', value)}
       />
       <TextInput
-        style={styles.input}
+        style={[styles.input, errors.email && styles.inputError]}
         placeholder="Mobile no."
         keyboardType="phone-pad"
         value={formData.mobile}
@@ -231,7 +255,7 @@ const PostProperty = () => {
       </View>
 
       <TextInput
-        style={[styles.input, styles.textArea]}
+         style={[styles.input, errors.email && styles.inputError]}
         placeholder="Property Description"
         multiline
         numberOfLines={5}
@@ -262,6 +286,24 @@ const styles = StyleSheet.create({
     flexGrow: 1,
     backgroundColor: '#f8f9fa',
     padding: 20,
+  },
+  inputError: {
+    borderColor: 'red',
+    borderWidth: 1,
+  },
+  pickerContainerError: {
+    borderColor: 'red',
+    borderWidth: 1,
+  },
+  errorText: {
+    color: 'red',
+    fontSize: 12,
+    marginTop: -10,
+    marginBottom: 10,
+  },
+  errorButton: {
+    borderColor: 'red',
+    borderWidth: 1,
   },
   title: {
     fontSize: 24,

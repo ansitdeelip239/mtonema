@@ -4,6 +4,7 @@ import {
   TextInput,
   StyleSheet,
   TouchableOpacity,
+  ActivityIndicator,
   Image,
 } from 'react-native';
 import React, {useState} from 'react';
@@ -15,6 +16,7 @@ import {useAuth} from '../../hooks/useAuth';
 type Props = NativeStackScreenProps<AuthStackParamList, 'PasswordScreen'>;
 
 const PasswordScreen: React.FC<Props> = ({navigation, route}) => {
+  const [isLoading, setIsLoading] = useState(false);
   const {email} = route.params;
   const {storeToken, login} = useAuth();
   const [password, setPassword] = useState('');
@@ -25,6 +27,7 @@ const PasswordScreen: React.FC<Props> = ({navigation, route}) => {
     console.log('Password:', password);
 
     try {
+      setIsLoading(true);
       const response = await AuthService.verifyPassword(email, password);
       console.log('Response:', response); // Check the response from the AuthService
       if (response.Success) {
@@ -33,6 +36,9 @@ const PasswordScreen: React.FC<Props> = ({navigation, route}) => {
       }
     } catch (error) {
       console.error('Error during sign-in:', error);
+    }
+    finally {
+      setIsLoading(false);
     }
   };
   return (
@@ -64,11 +70,16 @@ const PasswordScreen: React.FC<Props> = ({navigation, route}) => {
 
         {/* Buttons Section */}
         <View style={styles.btnsection}>
-          <TouchableOpacity
-            style={[styles.button, styles.spacing]}
-            onPress={handleContinue}>
-            <Text style={styles.buttonText}>Sign In</Text>
-          </TouchableOpacity>
+        <TouchableOpacity
+  style={[styles.button, styles.spacing]}
+  onPress={handleContinue}
+  disabled={isLoading}>
+  {isLoading ? (
+    <ActivityIndicator size="small" color="#ffffff" />
+  ) : (
+    <Text style={styles.buttonText}>Sign In</Text>
+  )}
+</TouchableOpacity>
 
           <TouchableOpacity
             style={[styles.button, styles.spacing, styles.color]}
@@ -134,7 +145,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   button: {
-    backgroundColor: '#cc0e74', // Matching pink button
+    backgroundColor: '#cc0e74',
     padding: 15,
     borderRadius: 30,
     marginVertical: 10,
@@ -146,6 +157,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
     elevation: 5,
+    minHeight: 50,
   },
   spacing: {
     marginBottom: 10, // Adds space below each button
