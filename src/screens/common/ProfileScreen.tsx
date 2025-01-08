@@ -12,6 +12,9 @@ import {
 } from 'react-native';
 import {useAuth} from '../../hooks/useAuth';
 import {ActivityIndicator} from 'react-native-paper';
+import {api} from '../../utils/api';
+import url from '../../constants/api';
+import { User } from '../../types';
 const ProfileScreen = () => {
   const [loadingModalVisible, setLoadingModalVisible] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
@@ -40,8 +43,38 @@ const ProfileScreen = () => {
   const [showPassword, setShowPassword] = useState(false);
 
   // Function to handle profile update
-  const handleUpdateProfile = () => {
-    Alert.alert('Success', 'Profile updated successfully!');
+  const handleUpdateProfile = async() => {
+try {
+    const request = {
+        Name:users.name,
+        Email:users.email,
+        Phone:users.mobile,
+        password:users.password,
+        Location:users.location,
+        ID:user?.ID,
+        CreatedBy:null,
+        CreatedOn:null,
+        Role:null,
+        Status:null,
+        UpdatedOn:null,
+    };
+    const response = await api.post<User>(
+              `${url.UpdateProfile}`,request
+            );
+    if(response.Success)
+    {
+        Alert.alert('Success', 'Profile updated successfully!');
+    }
+    else
+    {
+        throw new Error(response.Message);
+    }
+} catch (error) {
+    if(error instanceof Error)
+    {
+        Alert.alert('Error', error.message);
+    }
+}
     setEditMode({
       name: false,
       email: false,
@@ -224,7 +257,7 @@ const ProfileScreen = () => {
         <TouchableOpacity
           style={styles.saveButton}
           onPress={handleUpdateProfile}>
-          <Text style={styles.saveButtonText}>Update Profile</Text>
+          <Text style={styles.saveButtonText}>Save Changes</Text>
         </TouchableOpacity>
       )}
 
