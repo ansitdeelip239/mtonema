@@ -6,7 +6,7 @@ import CustomDrawerContent from '../components/CustomDrawerContent';
 import ChangePasswordScreen from '../screens/auth/ChangePasswordScreen';
 import PostPropertyScreen from '../screens/seller/PostPropertyScreen';
 import PropertyListScreen from '../screens/seller/PropertyListScreen';
-
+import ProfileScreen from '../screens/common/ProfileScreen';
 
 const Drawer = createDrawerNavigator();
 
@@ -35,6 +35,7 @@ const SellerNavigator = memo(() => {
       <Drawer.Screen name="Listed Property" component={PropertyListScreen} />
       <Drawer.Screen name="Change Password" component={ChangePasswordScreen} />
       <Drawer.Screen name="Contact Us" component={ContactScreen} />
+      <Drawer.Screen name="ProfileScreen" component={ProfileScreen} options={{ drawerItemStyle: { display: 'none' } }} />
     </Drawer.Navigator>
   );
 });

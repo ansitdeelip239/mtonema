@@ -19,6 +19,7 @@ import {
 import Strings from '../constants/Strings';
 import Colors from '../constants/Colors';
 
+
 const CustomDrawerContent = (props: any) => {
   const {user,logout} = useAuth();
   const [isLoggingOut, setIsLoggingOut] = useState(false);
@@ -44,16 +45,21 @@ const CustomDrawerContent = (props: any) => {
   //     console.error('Failed to open URL:', err),
   //   );
   // };
+  const navigateToProfile = () => {
+    props.navigation.navigate('ProfileScreen');
+  };
 
   return (
     <DrawerContentScrollView {...props} contentContainerStyle={styles.flexOne}>
-      <View>
-        <Text style={styles.name}>{user?.Email} </Text>
-        <Image
-          source={require('../assets/Images/dncrlogo.png')}
-          style={styles.logo}
-        />
-      </View>
+      <TouchableOpacity onPress={navigateToProfile}>
+        <View>
+          <Text style={styles.name}>{user?.Email} </Text>
+          <Image
+            source={require('../assets/Images/dncrlogo.png')}
+            style={styles.logo}
+          />
+        </View>
+      </TouchableOpacity>
 
       {/* Existing Drawer Items */}
       <DrawerItemList {...props} />

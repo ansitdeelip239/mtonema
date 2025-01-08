@@ -29,8 +29,8 @@ export default {
     deleteProperty: url1 + '/api/v1/property/removeProperty?id=',
     GetInTouch: url1 + '/api/v1/contactProperty/GetinTouch',
 
-    //Master Detail
-
-    getMasterDetail: url1 + '/api/v1/MasterDetail/getMasterDetailsByMasterID?id=',
-    getPlaces:url1 + '/api/v1/MasterDetail/getgoogleplaces',
+//Master Detail
+getMasterDetail: url1 + '/api/v1/MasterDetail/getMasterDetailsByMasterName?MasterDetailName=',
+getPlaces: url1 + '/api/v1/MasterDetail/getgoogleplaces',
+deleteUser: url1 + '/api/v1/User/DeleteUserByUserId',
 };

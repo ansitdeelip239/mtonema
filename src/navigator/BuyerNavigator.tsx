@@ -6,6 +6,7 @@ import ContactScreen from '../screens/buyer/ContactScreen';
 import ContactedProperty from '../screens/buyer/ContactedProperty';
 import CustomDrawerContent from '../components/CustomDrawerContent';
 import ChangePasswordScreen from '../screens/auth/ChangePasswordScreen';
+import ProfileScreen from '../screens/common/ProfileScreen';
 
 const Drawer = createDrawerNavigator();
 const BuyerNavigator = memo(() => {
@@ -33,6 +34,7 @@ const BuyerNavigator = memo(() => {
       <Drawer.Screen name="Contacted Property" component={ContactedProperty} />
       <Drawer.Screen name="Change Password" component={ChangePasswordScreen} />
       <Drawer.Screen name="Contact Us" component={ContactScreen} />
+      <Drawer.Screen name="ProfileScreen" component={ProfileScreen} options={{ drawerItemStyle: { display: 'none' } }} />
     </Drawer.Navigator>
   );
 });
