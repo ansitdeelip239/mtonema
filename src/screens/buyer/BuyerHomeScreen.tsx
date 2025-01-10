@@ -6,6 +6,10 @@ import {
   StyleSheet,
   ActivityIndicator,
   TouchableOpacity,
+  TextInput,
+  RefreshControl,
+  Platform,
+  SafeAreaView,
 } from 'react-native';
 import {api} from '../../utils/api';
 import url from '../../constants/api';
@@ -14,51 +18,44 @@ import PropertyModal from './PropertyModal';
 
 const BuyerHomeScreen = () => {
   const [properties, setProperties] = useState<PropertyModel[]>([]);
+  const [filteredProperties, setFilteredProperties] = useState<PropertyModel[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [pageNo, setPageNo] = useState(1);
   const [hasMore, setHasMore] = useState(true);
   const [isFetchingMore, setIsFetchingMore] = useState(false);
-  const [selectedProperty, setSelectedProperty] =
-    useState<PropertyModel | null>(null);
+  const [refreshing, setRefreshing] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [selectedProperty, setSelectedProperty] = useState<PropertyModel | null>(null);
   const [modalVisible, setModalVisible] = useState(false);
-  // Add a loading ref to prevent multiple simultaneous requests
   const isLoadingRef = useRef(false);
 
   const pageSize = 10;
 
   const getAllProperty = useCallback(
-    async (page: number) => {
-      if (isLoadingRef.current) {
+    async (page: number, isRefreshing: boolean = false) => {
+      if (isLoadingRef.current && !isRefreshing) {
         return;
       }
 
       try {
         isLoadingRef.current = true;
-        console.log(`Fetching page ${page}`); // Debug log
-
         const response = await api.get<any>(
           `${url.RecommendedProperty}?pageNumber=${page}&pageSize=${pageSize}`,
         );
 
         const newProperties = response.data?.propertyModels || [];
-        console.log(`Received ${newProperties.length} properties`); // Debug log
 
         setProperties(prevProperties => {
-          if (page === 1) {
+          if (page === 1 || isRefreshing) {
             return newProperties;
           }
 
           const existingIds = new Set(prevProperties.map(p => p.ID));
-            const uniqueNewProperties: PropertyModel[] = newProperties.filter(
+          const uniqueNewProperties = newProperties.filter(
             (p: PropertyModel) => !existingIds.has(p.ID),
-            );
+          );
 
-          console.log(
-            `Found ${uniqueNewProperties.length} unique new properties`,
-          ); // Debug log
-
-          // Only update hasMore after we check the actual new data
           const hasNewData = uniqueNewProperties.length > 0;
           setHasMore(hasNewData && newProperties.length === pageSize);
 
@@ -74,43 +71,74 @@ const BuyerHomeScreen = () => {
         isLoadingRef.current = false;
         setLoading(false);
         setIsFetchingMore(false);
+        setRefreshing(false);
       }
     },
     [pageSize],
   );
+
+  // Handle search
+  useEffect(() => {
+    const filtered = properties.filter(property =>
+      property.Location?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      property.PropertyType?.MasterDetailName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      property.City?.MasterDetailName.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+    setFilteredProperties(filtered);
+  }, [searchQuery, properties]);
+
+  const onRefresh = useCallback(() => {
+    setRefreshing(true);
+    setPageNo(1);
+    getAllProperty(1, true);
+  }, [getAllProperty]);
+
   const handlePropertyPress = (property: PropertyModel) => {
     setSelectedProperty(property);
     setModalVisible(true);
   };
-  // Update loadMore with debouncing
+
   const loadMore = useCallback(() => {
     const debouncedLoadMore = debounce(() => {
-      console.log('LoadMore triggered', {
-        hasMore,
-        isLoadingRef: isLoadingRef.current,
-      }); // Debug log
-      if (hasMore && !isLoadingRef.current) {
+      if (hasMore && !isLoadingRef.current && searchQuery.length === 0) {
         setPageNo(prev => prev + 1);
       }
     }, 300);
     debouncedLoadMore();
-  }, [hasMore]);
+  }, [hasMore, searchQuery]);
+
   useEffect(() => {
-    console.log('Page changed to:', pageNo);
     getAllProperty(pageNo);
   }, [pageNo, getAllProperty]);
+
+  const renderHeader = () => (
+    <View style={styles.searchContainer}>
+      <TextInput
+        style={styles.searchInput}
+        placeholder="Search properties..."
+        value={searchQuery}
+        onChangeText={setSearchQuery}
+        placeholderTextColor="#666"
+      />
+      {searchQuery.length > 0 && (
+        <TouchableOpacity
+          style={styles.clearButton}
+          onPress={() => setSearchQuery('')}
+        >
+          <Text style={styles.clearButtonText}>✕</Text>
+        </TouchableOpacity>
+      )}
+    </View>
+  );
 
   const renderPropertyItem = ({item}: {item: PropertyModel}) => (
     <TouchableOpacity onPress={() => handlePropertyPress(item)}>
       <View style={styles.propertyCard}>
         <Text style={styles.locationText}>
-          {item.Location ||
-            item.City?.MasterDetailName ||
-            'Location not specified'}
+          {item.Location || item.City?.MasterDetailName || 'Location not specified'}
         </Text>
         <Text style={styles.propertyType}>
-          {item.PropertyType?.MasterDetailName} for{' '}
-          {item.PropertyFor?.MasterDetailName}
+          {item.PropertyType?.MasterDetailName} for {item.PropertyFor?.MasterDetailName}
         </Text>
         <View style={styles.detailsRow}>
           <Text style={styles.price}>
@@ -155,16 +183,24 @@ const BuyerHomeScreen = () => {
   }
 
   return (
-    <>
+    <SafeAreaView style={styles.container}>
+      {renderHeader()}
       <FlatList
-        style={styles.container}
-        data={properties}
+        data={searchQuery ? filteredProperties : properties}
         keyExtractor={item => `property-${item.ID}`}
         renderItem={renderPropertyItem}
         onEndReached={loadMore}
         onEndReachedThreshold={0.5}
+        refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={onRefresh}
+            colors={['#0066cc']}
+            tintColor="#0066cc"
+          />
+        }
         ListFooterComponent={
-          isFetchingMore ? (
+          isFetchingMore && !searchQuery ? (
             <View style={styles.footer}>
               <ActivityIndicator size="small" color="#0066cc" />
             </View>
@@ -172,7 +208,9 @@ const BuyerHomeScreen = () => {
         }
         ListEmptyComponent={
           <View style={styles.centerContainer}>
-            <Text style={styles.noDataText}>No properties available</Text>
+            <Text style={styles.noDataText}>
+              {searchQuery ? 'No matching properties found' : 'No properties available'}
+            </Text>
           </View>
         }
       />
@@ -181,7 +219,7 @@ const BuyerHomeScreen = () => {
         visible={modalVisible}
         onClose={() => setModalVisible(false)}
       />
-    </>
+    </SafeAreaView>
   );
 };
 
@@ -190,6 +228,42 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#f5f5f5',
     padding: 10,
+  },
+  searchContainer: {
+    padding: 10,
+    backgroundColor: 'white',
+    borderBottomWidth: 1,
+    borderBottomColor: '#e1e1e1',
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  searchInput: {
+    flex: 1,
+    height: 40,
+    backgroundColor: '#f5f5f5',
+    borderRadius: 20,
+    paddingHorizontal: 15,
+    fontSize: 16,
+    color: '#333',
+    ...Platform.select({
+      ios: {
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 1 },
+        shadowOpacity: 0.2,
+        shadowRadius: 1,
+      },
+      android: {
+        elevation: 2,
+      },
+    }),
+  },
+  clearButton: {
+    padding: 8,
+    marginLeft: 8,
+  },
+  clearButtonText: {
+    color: '#666',
+    fontSize: 16,
   },
   centerContainer: {
     flex: 1,
