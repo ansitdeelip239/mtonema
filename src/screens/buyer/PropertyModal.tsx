@@ -7,13 +7,20 @@ import {
   ScrollView,
   TouchableOpacity,
   Image,
+  Alert,
 } from 'react-native';
 import {PropertyModel} from '../../types';
+// import {ActivityIndicator} from 'react-native-paper';
+import {api} from '../../utils/api';
+import url from '../../constants/api';
+import { User } from '../../types';
+import { useAuth } from '../../hooks/useAuth';
 
 // Utility function to strip HTML tags
 const stripHtmlTags = (html: string): string => {
   return html.replace(/<\/?[^>]+(>|$)/g, '').trim();
 };
+
 
 interface PropertyModalProps {
   property: PropertyModel | null;
@@ -21,12 +28,40 @@ interface PropertyModalProps {
   onClose: () => void;
 }
 
+
 const PropertyModal = ({property, visible, onClose}: PropertyModalProps) => {
-  if (!property) return null;
+  const {user,setDataUpdated,dataUpdated} = useAuth();
+  if (!property) {return null; }
 
   const sanitizedDescription = property.Discription
     ? stripHtmlTags(property.Discription)
     : 'Not available';
+
+    const enquiryNow = async() => {
+      try {
+          const request = {
+             UserID:user?.ID,
+              PropertyID:property.ID,
+          };
+          const response = await api.post<User>(
+                    `${url.ContactProperty}`,request
+                  );
+          if(response.Success)
+          {
+              Alert.alert('Success', 'Our Team contact you soon');
+              setDataUpdated(!dataUpdated);
+          }
+          else
+          {
+              throw new Error(response.Message);
+          }
+      } catch (error) {
+          if(error instanceof Error)
+          {
+              Alert.alert('Error', error.message);
+          }
+      }
+        };
 
   return (
     <Modal visible={visible} animationType="slide" onRequestClose={onClose}>
@@ -84,6 +119,13 @@ const PropertyModal = ({property, visible, onClose}: PropertyModalProps) => {
             </Text>
           </View>
         </View>
+          {/* Enquiry Now Button */}
+    {/* Enquiry Now Button */}
+    <View style={styles.buttonContainer}>
+      <TouchableOpacity style={styles.enquiryButton} onPress={enquiryNow}>
+        <Text style={styles.enquiryButtonText}>Enquiry Now</Text>
+      </TouchableOpacity>
+    </View>
       </ScrollView>
     </Modal>
   );
@@ -93,6 +135,23 @@ const styles = StyleSheet.create({
   modalContainer: {
     flex: 1,
     backgroundColor: '#fff',
+  },
+  buttonContainer: {
+    alignItems: 'center', // Center the button horizontally
+    marginBottom: 16, // Add some space at the bottom
+  },
+  enquiryButton: {
+    backgroundColor: '#cc0e74',
+    padding: 15,
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: '80%', // 80% of the modal width
+    borderRadius: 8, // Optional: Add rounded corners
+  },
+  enquiryButtonText: {
+    color: '#fff',
+    fontSize: 18,
+    fontWeight: 'bold',
   },
   closeButton: {
     position: 'absolute',

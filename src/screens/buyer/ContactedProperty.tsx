@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {
   FlatList,
   View,
@@ -28,11 +28,12 @@ const ContactedProperty = () => {
   const [pageNo, setPageNo] = useState(1);
   const [hasMore, setHasMore] = useState(true);
   const [isFetchingMore, setIsFetchingMore] = useState(false);
-  const {user} = useAuth();
+  const {user, dataUpdated} = useAuth();
   const pageSize = 10;
   const [selectedProperty, setSelectedProperty] =
     useState<PropertyModel | null>(null);
   const [modalVisible, setModalVisible] = useState(false);
+  const [refreshing, setRefreshing] = useState(false);
 
   // Reset pagination when user changes
   useEffect(() => {
@@ -46,12 +47,8 @@ const ContactedProperty = () => {
     setModalVisible(true);
   };
 
-  // Fetch properties when page changes
-  useEffect(() => {
-    const getcontactedProperty = async (
-      pageNumber: number,
-      pageSizes: number,
-    ) => {
+  const getcontactedProperty = useCallback(
+    async (pageNumber: number, pageSizes: number) => {
       if (isFetchingMore) {
         return;
       }
@@ -129,11 +126,22 @@ const ContactedProperty = () => {
         setLoading(false);
         setIsFetchingMore(false);
       }
-    };
+    },
+    [isFetchingMore, user?.ID, pageSize],
+  );
+  const onRefresh = useCallback(() => {
+    setRefreshing(true);
+    // Fetch new data and update state
+    getcontactedProperty(pageNo, pageSize).then(() => {
+      setRefreshing(false);
+    });
+  }, [getcontactedProperty, pageNo]);
+  // Fetch properties when page changes
+  useEffect(() => {
     if (user?.ID) {
       getcontactedProperty(pageNo, pageSize);
     }
-  }, [pageNo, user?.ID, isFetchingMore]);
+  }, [pageNo, user?.ID, isFetchingMore, dataUpdated, getcontactedProperty]);
 
   const loadMore = () => {
     if (hasMore && !isFetchingMore && !loading) {
@@ -216,6 +224,8 @@ const ContactedProperty = () => {
           ) : null
         }
         ListEmptyComponent={<EmptyComponent />}
+        refreshing={refreshing}
+        onRefresh={onRefresh}
       />
       <PropertyModal
         property={selectedProperty}
