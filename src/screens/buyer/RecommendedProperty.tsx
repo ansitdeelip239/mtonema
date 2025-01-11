@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useState, useRef} from 'react';
+import React, { useCallback, useEffect, useState, useRef } from 'react';
 import {
   FlatList,
   View,
@@ -6,26 +6,23 @@ import {
   StyleSheet,
   ActivityIndicator,
   TouchableOpacity,
-  TextInput,
   RefreshControl,
-  Platform,
   SafeAreaView,
+  Image,
 } from 'react-native';
-import {api} from '../../utils/api';
+import { api } from '../../utils/api';
 import url from '../../constants/api';
-import {PropertyModel} from '../../types';
+import { PropertyModel } from '../../types';
 import PropertyModal from './PropertyModal';
 
-const BuyerHomeScreen = () => {
+const RecommendedProperty = () => {
   const [properties, setProperties] = useState<PropertyModel[]>([]);
-  const [filteredProperties, setFilteredProperties] = useState<PropertyModel[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [pageNo, setPageNo] = useState(1);
   const [hasMore, setHasMore] = useState(true);
   const [isFetchingMore, setIsFetchingMore] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
-  const [searchQuery, setSearchQuery] = useState('');
   const [selectedProperty, setSelectedProperty] = useState<PropertyModel | null>(null);
   const [modalVisible, setModalVisible] = useState(false);
   const isLoadingRef = useRef(false);
@@ -40,11 +37,13 @@ const BuyerHomeScreen = () => {
 
       try {
         isLoadingRef.current = true;
+        setIsFetchingMore(true); // Set fetching more to true
         const response = await api.get<any>(
           `${url.RecommendedProperty}?pageNumber=${page}&pageSize=${pageSize}`,
         );
 
         const newProperties = response.data?.propertyModels || [];
+        // const totalCount=response.data.
 
         setProperties(prevProperties => {
           if (page === 1 || isRefreshing) {
@@ -70,22 +69,12 @@ const BuyerHomeScreen = () => {
       } finally {
         isLoadingRef.current = false;
         setLoading(false);
-        setIsFetchingMore(false);
+        setIsFetchingMore(false); // Reset fetching more to false
         setRefreshing(false);
       }
     },
     [pageSize],
   );
-
-  // Handle search
-  useEffect(() => {
-    const filtered = properties.filter(property =>
-      property.Location?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      property.PropertyType?.MasterDetailName.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      property.City?.MasterDetailName.toLowerCase().includes(searchQuery.toLowerCase())
-    );
-    setFilteredProperties(filtered);
-  }, [searchQuery, properties]);
 
   const onRefresh = useCallback(() => {
     setRefreshing(true);
@@ -100,67 +89,59 @@ const BuyerHomeScreen = () => {
 
   const loadMore = useCallback(() => {
     const debouncedLoadMore = debounce(() => {
-      if (hasMore && !isLoadingRef.current && searchQuery.length === 0) {
+      if (hasMore && !isLoadingRef.current) {
         setPageNo(prev => prev + 1);
       }
     }, 300);
     debouncedLoadMore();
-  }, [hasMore, searchQuery]);
+  }, [hasMore]);
 
   useEffect(() => {
     getAllProperty(pageNo);
   }, [pageNo, getAllProperty]);
 
-  const renderHeader = () => (
-    <View style={styles.searchContainer}>
-      <TextInput
-        style={styles.searchInput}
-        placeholder="Search properties..."
-        value={searchQuery}
-        onChangeText={setSearchQuery}
-        placeholderTextColor="#666"
-      />
-      {searchQuery.length > 0 && (
-        <TouchableOpacity
-          style={styles.clearButton}
-          onPress={() => setSearchQuery('')}
-        >
-          <Text style={styles.clearButtonText}>✕</Text>
-        </TouchableOpacity>
-      )}
-    </View>
-  );
-
-  const renderPropertyItem = ({item}: {item: PropertyModel}) => (
+  const renderPropertyItem = ({ item }: { item: PropertyModel }) => (
     <TouchableOpacity onPress={() => handlePropertyPress(item)}>
       <View style={styles.propertyCard}>
-        <Text style={styles.locationText}>
-          {item.Location || item.City?.MasterDetailName || 'Location not specified'}
-        </Text>
-        <Text style={styles.propertyType}>
-          {item.PropertyType?.MasterDetailName} for {item.PropertyFor?.MasterDetailName}
-        </Text>
-        <View style={styles.detailsRow}>
-          <Text style={styles.price}>
-            ₹{item.Price} {item.Rate?.MasterDetailName}
+        {/* Property Image */}
+        {item.ImageURL && item.ImageURL.length > 0 && (
+          <Image
+            source={{ uri: item.ImageURL[0].ImageUrl }} // Dynamically load the first image
+            style={styles.propertyImage}
+            resizeMode="cover"
+          />
+        )}
+
+        {/* Property Details */}
+        <View style={styles.detailsContainer}>
+          <Text style={styles.locationText}>
+            {item.Location || item.City?.MasterDetailName || 'Location not specified'}
           </Text>
-          <Text style={styles.area}>
-            {item.Area} {item.Size?.MasterDetailName}
+          <Text style={styles.propertyType}>
+            {item.PropertyType?.MasterDetailName} for {item.PropertyFor?.MasterDetailName}
           </Text>
-        </View>
-        <View style={styles.additionalDetails}>
-          {item.Furnishing && (
-            <Text style={styles.detailText}>
-              Furnishing: {item.Furnishing.MasterDetailName}
+          <View style={styles.detailsRow}>
+            <Text style={styles.price}>
+              ₹{item.Price} {item.Rate?.MasterDetailName}
             </Text>
-          )}
-          <Text style={styles.detailText}>
-            Ready to Move: {item.readyToMove || 'Not specified'}
-          </Text>
-        </View>
-        <View style={styles.sellerDetails}>
-          <Text style={styles.sellerName}>Listed by: {item.SellerName}</Text>
-          <Text style={styles.sellerPhone}>Contact: {item.SellerPhone}</Text>
+            <Text style={styles.area}>
+              {item.Area} {item.Size?.MasterDetailName}
+            </Text>
+          </View>
+          <View style={styles.additionalDetails}>
+            {item.Furnishing && (
+              <Text style={styles.detailText}>
+                Furnishing: {item.Furnishing.MasterDetailName}
+              </Text>
+            )}
+            <Text style={styles.detailText}>
+              Ready to Move: {item.readyToMove || 'Not specified'}
+            </Text>
+          </View>
+          <View style={styles.sellerDetails}>
+            <Text style={styles.sellerName}>Listed by: {item.SellerName}</Text>
+            <Text style={styles.sellerPhone}>Contact: {item.SellerPhone}</Text>
+          </View>
         </View>
       </View>
     </TouchableOpacity>
@@ -184,9 +165,8 @@ const BuyerHomeScreen = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      {renderHeader()}
       <FlatList
-        data={searchQuery ? filteredProperties : properties}
+        data={properties}
         keyExtractor={item => `property-${item.ID}`}
         renderItem={renderPropertyItem}
         onEndReached={loadMore}
@@ -200,7 +180,7 @@ const BuyerHomeScreen = () => {
           />
         }
         ListFooterComponent={
-          isFetchingMore && !searchQuery ? (
+          isFetchingMore ? ( // Show loader only when fetching more data
             <View style={styles.footer}>
               <ActivityIndicator size="small" color="#0066cc" />
             </View>
@@ -208,9 +188,7 @@ const BuyerHomeScreen = () => {
         }
         ListEmptyComponent={
           <View style={styles.centerContainer}>
-            <Text style={styles.noDataText}>
-              {searchQuery ? 'No matching properties found' : 'No properties available'}
-            </Text>
+            <Text style={styles.noDataText}>No properties available</Text>
           </View>
         }
       />
@@ -229,42 +207,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#f5f5f5',
     padding: 10,
   },
-  searchContainer: {
-    padding: 10,
-    backgroundColor: 'white',
-    borderBottomWidth: 1,
-    borderBottomColor: '#e1e1e1',
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  searchInput: {
-    flex: 1,
-    height: 40,
-    backgroundColor: '#f5f5f5',
-    borderRadius: 20,
-    paddingHorizontal: 15,
-    fontSize: 16,
-    color: '#333',
-    ...Platform.select({
-      ios: {
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 1 },
-        shadowOpacity: 0.2,
-        shadowRadius: 1,
-      },
-      android: {
-        elevation: 2,
-      },
-    }),
-  },
-  clearButton: {
-    padding: 8,
-    marginLeft: 8,
-  },
-  clearButtonText: {
-    color: '#666',
-    fontSize: 16,
-  },
   centerContainer: {
     flex: 1,
     justifyContent: 'center',
@@ -273,17 +215,21 @@ const styles = StyleSheet.create({
   },
   propertyCard: {
     backgroundColor: 'white',
-    borderRadius: 8,
-    padding: 15,
+    borderRadius: 12, // Rounded corners
     marginBottom: 15,
-    elevation: 3,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
+    elevation: 5, // Shadow for Android
+    shadowColor: '#000', // Shadow for iOS
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 4,
+    overflow: 'hidden', // Ensure the image corners are rounded
+  },
+  propertyImage: {
+    width: '100%',
+    height: 200, // Fixed height for the image
+  },
+  detailsContainer: {
+    padding: 15,
   },
   locationText: {
     fontSize: 18,
@@ -353,7 +299,8 @@ const styles = StyleSheet.create({
   },
 });
 
-export default BuyerHomeScreen;
+export default RecommendedProperty;
+
 function debounce(func: (...args: any[]) => void, wait: number) {
   let timeout: NodeJS.Timeout | null = null;
   return function (...args: any[]) {

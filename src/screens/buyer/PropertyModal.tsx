@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useRef } from 'react';
 import {
   Modal,
   View,
@@ -8,10 +8,12 @@ import {
   TouchableOpacity,
   Image,
   Alert,
+  Dimensions,
+  NativeSyntheticEvent,
+  NativeScrollEvent,
 } from 'react-native';
-import {PropertyModel} from '../../types';
-// import {ActivityIndicator} from 'react-native-paper';
-import {api} from '../../utils/api';
+import { PropertyModel } from '../../types';
+import { api } from '../../utils/api';
 import url from '../../constants/api';
 import { User } from '../../types';
 import { useAuth } from '../../hooks/useAuth';
@@ -21,47 +23,62 @@ const stripHtmlTags = (html: string): string => {
   return html.replace(/<\/?[^>]+(>|$)/g, '').trim();
 };
 
-
 interface PropertyModalProps {
   property: PropertyModel | null;
   visible: boolean;
   onClose: () => void;
 }
 
+const PropertyModal = ({ property, visible, onClose }: PropertyModalProps) => {
+  const { user, setDataUpdated, dataUpdated } = useAuth();
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const scrollViewRef = useRef<ScrollView>(null);
 
-const PropertyModal = ({property, visible, onClose}: PropertyModalProps) => {
-  const {user,setDataUpdated,dataUpdated} = useAuth();
-  if (!property) {return null; }
+  if (!property) {
+    return null;
+  }
 
   const sanitizedDescription = property.Discription
     ? stripHtmlTags(property.Discription)
     : 'Not available';
 
-    const enquiryNow = async() => {
-      try {
-          const request = {
-             UserID:user?.ID,
-              PropertyID:property.ID,
-          };
-          const response = await api.post<User>(
-                    `${url.ContactProperty}`,request
-                  );
-          if(response.Success)
-          {
-              Alert.alert('Success', 'Our Team contact you soon');
-              setDataUpdated(!dataUpdated);
-          }
-          else
-          {
-              throw new Error(response.Message);
-          }
-      } catch (error) {
-          if(error instanceof Error)
-          {
-              Alert.alert('Error', error.message);
-          }
+  const enquiryNow = async () => {
+    try {
+      const request = {
+        UserID: user?.ID,
+        PropertyID: property.ID,
+      };
+      const response = await api.post<User>(`${url.ContactProperty}`, request);
+      if (response.Success) {
+        Alert.alert('Success', 'Our Team will contact you soon');
+        setDataUpdated(!dataUpdated);
+      } else {
+        throw new Error(response.Message);
       }
-        };
+    } catch (error) {
+      if (error instanceof Error) {
+        Alert.alert('Error', error.message);
+      }
+    }
+  };
+
+  const handleNextImage = () => {
+    const nextIndex = currentImageIndex < property.ImageURL.length - 1 ? currentImageIndex + 1 : 0;
+    setCurrentImageIndex(nextIndex);
+    scrollViewRef.current?.scrollTo({ x: Dimensions.get('window').width * nextIndex, animated: true });
+  };
+
+  const handlePreviousImage = () => {
+    const prevIndex = currentImageIndex > 0 ? currentImageIndex - 1 : property.ImageURL.length - 1;
+    setCurrentImageIndex(prevIndex);
+    scrollViewRef.current?.scrollTo({ x: Dimensions.get('window').width * prevIndex, animated: true });
+  };
+
+  const handleScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
+    const contentOffsetX = event.nativeEvent.contentOffset.x;
+    const newIndex = Math.round(contentOffsetX / Dimensions.get('window').width);
+    setCurrentImageIndex(newIndex);
+  };
 
   return (
     <Modal visible={visible} animationType="slide" onRequestClose={onClose}>
@@ -70,12 +87,47 @@ const PropertyModal = ({property, visible, onClose}: PropertyModalProps) => {
           <Text style={styles.closeButtonText}>✕</Text>
         </TouchableOpacity>
 
-        {property.ImageURL && (
-          <Image
-            source={{uri: property.ImageURL[0].ImageUrl}}
-            style={styles.propertyImage}
-            resizeMode="cover"
-          />
+        {property.ImageURL && property.ImageURL.length > 0 && (
+          <View style={styles.imageContainer}>
+            <ScrollView
+              ref={scrollViewRef}
+              horizontal
+              pagingEnabled
+              showsHorizontalScrollIndicator={false}
+              onMomentumScrollEnd={handleScroll}
+            >
+              {property.ImageURL.map((image, index) => (
+                <Image
+                  key={index}
+                  source={{ uri: image.ImageUrl }}
+                  style={styles.propertyImage}
+                  resizeMode="cover"
+                />
+              ))}
+            </ScrollView>
+
+            <View style={styles.navigationButtons}>
+              <TouchableOpacity style={styles.navButton} onPress={handlePreviousImage}>
+                <Text style={styles.navButtonText}>‹</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.navButton} onPress={handleNextImage}>
+                <Text style={styles.navButtonText}>›</Text>
+              </TouchableOpacity>
+            </View>
+
+            {/* Dot Indicators */}
+            <View style={styles.dotContainer}>
+              {property.ImageURL.map((_, index) => (
+                <View
+                  key={index}
+                  style={[
+                    styles.dot,
+                    index === currentImageIndex ? styles.activeDot : styles.inactiveDot,
+                  ]}
+                />
+              ))}
+            </View>
+          </View>
         )}
 
         <View style={styles.contentContainer}>
@@ -119,13 +171,13 @@ const PropertyModal = ({property, visible, onClose}: PropertyModalProps) => {
             </Text>
           </View>
         </View>
-          {/* Enquiry Now Button */}
-    {/* Enquiry Now Button */}
-    <View style={styles.buttonContainer}>
-      <TouchableOpacity style={styles.enquiryButton} onPress={enquiryNow}>
-        <Text style={styles.enquiryButtonText}>Enquiry Now</Text>
-      </TouchableOpacity>
-    </View>
+
+        {/* Enquiry Now Button */}
+        <View style={styles.buttonContainer}>
+          <TouchableOpacity style={styles.enquiryButton} onPress={enquiryNow}>
+            <Text style={styles.enquiryButtonText}>Enquiry Now</Text>
+          </TouchableOpacity>
+        </View>
       </ScrollView>
     </Modal>
   );
@@ -136,17 +188,66 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#fff',
   },
+  imageContainer: {
+    position: 'relative',
+    height: 250,
+  },
+  propertyImage: {
+    width: Dimensions.get('window').width,
+    height: 250,
+  },
+  navigationButtons: {
+    position: 'absolute',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    width: '100%',
+    top: '50%',
+    transform: [{ translateY: -25 }],
+  },
+  navButton: {
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    borderRadius: 20,
+    width: 40,
+    height: 40,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  navButtonText: {
+    color: '#fff',
+    fontSize: 24,
+    fontWeight: 'bold',
+  },
+  dotContainer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    position: 'absolute',
+    bottom: 10,
+    width: '100%',
+  },
+  dot: {
+    width: 8,
+    height: 8,
+    borderRadius: 4,
+    marginHorizontal: 4,
+  },
+  activeDot: {
+    backgroundColor: '#cc0e74', // Highlight color for active dot
+  },
+  inactiveDot: {
+    backgroundColor: '#ccc', // Default color for inactive dots
+  },
   buttonContainer: {
-    alignItems: 'center', // Center the button horizontally
-    marginBottom: 16, // Add some space at the bottom
+    alignItems: 'center',
+    marginBottom: 16,
   },
   enquiryButton: {
     backgroundColor: '#cc0e74',
     padding: 15,
     alignItems: 'center',
     justifyContent: 'center',
-    width: '80%', // 80% of the modal width
-    borderRadius: 8, // Optional: Add rounded corners
+    width: '80%',
+    borderRadius: 8,
   },
   enquiryButtonText: {
     color: '#fff',
@@ -169,10 +270,6 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 18,
     fontWeight: 'bold',
-  },
-  propertyImage: {
-    width: '100%',
-    height: 250,
   },
   contentContainer: {
     padding: 20,

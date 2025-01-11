@@ -16,7 +16,7 @@ import DropDown from '../common/DropDown'; // Import the reusable dropdown
 const PostProperty = () => {
   const [errors, setErrors] = useState<Record<string, boolean>>({});
   const [sellerType, setSellerType] = useState('');
-  const [city, setCity] = useState('');
+  const [city,_setCity] = useState('');
   const [propertyFor, setPropertyFor] = useState('');
   const [propertyType, setPropertyType] = useState('');
   const [formData, setFormData] = useState({
@@ -29,7 +29,7 @@ const PostProperty = () => {
   const [images, setImages] = useState<string[]>([]);
   const { masterData } = useMaster();
 
-  const masterName = ['PropertyType', 'SellerType', 'PropertyFor']; // Add more as needed
+  // const masterName = ['PropertyType', 'SellerType', 'PropertyFor']; // Add more as needed
 
   const validateForm = () => {
     const newErrors: Record<string, boolean> = {};
@@ -38,10 +38,10 @@ const PostProperty = () => {
         newErrors[key] = true;
       }
     });
-    if (!sellerType) newErrors.sellerType = true;
-    if (!city) newErrors.city = true;
-    if (!propertyFor) newErrors.propertyFor = true;
-    if (!propertyType) newErrors.propertyType = true;
+    if (!sellerType) {newErrors.sellerType = true;}
+    if (!city) {newErrors.city = true;}
+    if (!propertyFor) {newErrors.propertyFor = true;}
+    if (!propertyType) {newErrors.propertyType = true;}
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
