@@ -12,7 +12,7 @@ import BuyerService from '../../services/BuyerService';
 
 const SearchProperty = () => {
   const [searchText, setSearchText] = useState('');
-  const [selectedLocation, setSelectedLocation] = useState(null);
+  const [selectedLocation, setSelectedLocation] = useState<string | null>(null);
   const [showAllLocations, setShowAllLocations] = useState(false);
   const [predictions, setPredictions] = useState<{ place_id: string; description: string }[]>([]);
 
@@ -23,7 +23,8 @@ const SearchProperty = () => {
   };
 
   const handleLocationSelect = (location: any) => {
-    setSelectedLocation(location);
+    setSelectedLocation(location); // Update the selected location state
+    console.log('Selected Location:', location); // Log the selected location
   };
 
   const toggleShowAllLocations = () => {
@@ -36,9 +37,8 @@ const SearchProperty = () => {
 
   const getSearch = async (text: string) => {
     setSearchText(text); // Update the search text state
-    const city = 'delhi'; // Replace with your city logic or state
     try {
-      const response = await BuyerService.getPlaces(text, city);
+      const response = await BuyerService.getPlaces(text, selectedLocation as string);
 
       console.log('Full API Response:', response?.predictions);
 
