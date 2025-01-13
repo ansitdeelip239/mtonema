@@ -42,6 +42,7 @@ export interface Response<T> {
   Message: string;
   data: T;
   httpStatus: number;
+  predictions?:any;
 }
 export interface PropertyModel {
   ID: number;
