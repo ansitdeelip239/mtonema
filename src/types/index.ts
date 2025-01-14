@@ -125,7 +125,6 @@ export interface PropertyModel {
   Pantry: any | null;
   ListedBy: string;
   PropertyLocation?:string;
+  propertyModels?:any[];
 }
 
-
-  

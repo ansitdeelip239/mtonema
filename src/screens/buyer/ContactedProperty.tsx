@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useState} from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import {
   FlatList,
   View,
@@ -6,11 +6,12 @@ import {
   StyleSheet,
   ActivityIndicator,
   TouchableOpacity,
+  Image,
 } from 'react-native';
-import {api} from '../../utils/api';
+import { api } from '../../utils/api';
 import url from '../../constants/api';
-import {PropertyModel} from '../../types';
-import {useAuth} from '../../hooks/useAuth';
+import { PropertyModel } from '../../types';
+import { useAuth } from '../../hooks/useAuth';
 import PropertyModal from './PropertyModal';
 
 const EmptyComponent = () => {
@@ -28,10 +29,9 @@ const ContactedProperty = () => {
   const [pageNo, setPageNo] = useState(1);
   const [hasMore, setHasMore] = useState(true);
   const [isFetchingMore, setIsFetchingMore] = useState(false);
-  const {user, dataUpdated} = useAuth();
+  const { user, dataUpdated } = useAuth();
   const pageSize = 10;
-  const [selectedProperty, setSelectedProperty] =
-    useState<PropertyModel | null>(null);
+  const [selectedProperty, setSelectedProperty] = useState<PropertyModel | null>(null);
   const [modalVisible, setModalVisible] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
 
@@ -58,6 +58,7 @@ const ContactedProperty = () => {
         } else {
           setIsFetchingMore(true);
         }
+
         const requestBody = {
           Address: '',
           BhkType: '',
@@ -81,18 +82,17 @@ const ContactedProperty = () => {
           throw new Error('User ID is required');
         }
 
-        // Make the API call with explicit typing
-
+        // Make the API call
         const response = await api.post<any>(
           `${url.getListOfContactedProperty}?pageNumber=${pageNumber}&pageSize=${pageSize}&id=${user.ID}`,
           requestBody,
         );
 
+        // Log the full response for debugging
+        console.log('API Response:', JSON.stringify(response, null, 2));
+
         // Handle the response
         const responseData = response?.data;
-
-        console.log(response);
-        console.log('API Response:', JSON.stringify(responseData, null, 2));
 
         if (!responseData) {
           throw new Error('No data received from server');
@@ -100,13 +100,10 @@ const ContactedProperty = () => {
 
         if (responseData?.contactedPropertyModels) {
           const newProperties = responseData.contactedPropertyModels;
-          // console.log('*****new propertties**********',newProperties)
 
           // Update properties state based on page number
           setProperties(prevProperties =>
-            pageNumber === 1
-              ? newProperties
-              : [...prevProperties, ...newProperties],
+            pageNumber === 1 ? newProperties : [...prevProperties, ...newProperties],
           );
 
           // Update hasMore state
@@ -129,13 +126,15 @@ const ContactedProperty = () => {
     },
     [isFetchingMore, user?.ID, pageSize],
   );
+
   const onRefresh = useCallback(() => {
     setRefreshing(true);
     // Fetch new data and update state
-    getcontactedProperty(pageNo, pageSize).then(() => {
+    getcontactedProperty(1, pageSize).then(() => {
       setRefreshing(false);
     });
-  }, [getcontactedProperty, pageNo]);
+  }, [getcontactedProperty, pageSize]);
+
   // Fetch properties when page changes
   useEffect(() => {
     if (user?.ID) {
@@ -149,43 +148,48 @@ const ContactedProperty = () => {
     }
   };
 
-  const renderPropertyItem = ({item}: {item: PropertyModel}) => (
+  const renderPropertyItem = ({ item }: { item: PropertyModel }) => (
     <TouchableOpacity onPress={() => handlePropertyPress(item)}>
-      <View key={item.ID} style={styles.propertyCard}>
-        <Text style={styles.locationText}>
-          {item.PropertyLocation ||
-            item.City?.MasterDetailName ||
-            'Location not specified'}
-        </Text>
-        <Text style={styles.propertyType}>
-          {item.PropertyType?.MasterDetailName || 'N/A'} for{' '}
-          {item.PropertyFor?.MasterDetailName || 'N/A'}
-        </Text>
-        <View style={styles.detailsRow}>
-          <Text style={styles.price}>
-            ₹{item.Price || 'N/A'} {item.Rate?.MasterDetailName || ''}
+      <View style={styles.propertyCard}>
+        {/* Display the first image if available */}
+        {item.ImageURL && item.ImageURL.length > 0 && (
+          <Image
+            source={{ uri: item.ImageURL[0].ImageUrl }} // Dynamically load the first image
+            style={styles.propertyImage}
+            resizeMode="cover"
+          />
+        )}
+
+        {/* Property Details */}
+        <View style={styles.detailsContainer}>
+          <Text style={styles.locationText}>
+            {item.Location || item.City?.MasterDetailName || 'Location not specified'}
           </Text>
-          <Text style={styles.area}>
-            {item.Area || 'N/A'} {item.Size?.MasterDetailName || ''}
+          <Text style={styles.propertyType}>
+            {item.PropertyType?.MasterDetailName} for {item.PropertyFor?.MasterDetailName}
           </Text>
-        </View>
-        <View style={styles.additionalDetails}>
-          {item.Furnishing && (
-            <Text style={styles.detailText}>
-              Furnishing: {item.Furnishing.MasterDetailName}
+          <View style={styles.detailsRow}>
+            <Text style={styles.price}>
+              ₹{item.Price} {item.Rate?.MasterDetailName}
             </Text>
-          )}
-          <Text style={styles.detailText}>
-            Ready to Move: {item.readyToMove || 'Not specified'}
-          </Text>
-        </View>
-        <View style={styles.sellerDetails}>
-          <Text style={styles.sellerName}>
-            Listed by: {item.SellerName || 'N/A'}
-          </Text>
-          <Text style={styles.sellerPhone}>
-            Contact: {item.SellerPhone || 'N/A'}
-          </Text>
+            <Text style={styles.area}>
+              {item.Area} {item.Size?.MasterDetailName}
+            </Text>
+          </View>
+          <View style={styles.additionalDetails}>
+            {item.Furnishing && (
+              <Text style={styles.detailText}>
+                Furnishing: {item.Furnishing.MasterDetailName}
+              </Text>
+            )}
+            <Text style={styles.detailText}>
+              Ready to Move: {item.readyToMove || 'Not specified'}
+            </Text>
+          </View>
+          <View style={styles.sellerDetails}>
+            <Text style={styles.sellerName}>Listed by: {item.SellerName}</Text>
+            <Text style={styles.sellerPhone}>Contact: {item.SellerPhone}</Text>
+          </View>
         </View>
       </View>
     </TouchableOpacity>
@@ -251,7 +255,6 @@ const styles = StyleSheet.create({
   propertyCard: {
     backgroundColor: 'white',
     borderRadius: 8,
-    padding: 15,
     marginBottom: 15,
     elevation: 3,
     shadowColor: '#000',
@@ -261,6 +264,16 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
+  },
+  propertyImage: {
+    width: '100%',
+    height: 200,
+    borderTopLeftRadius: 8,
+    borderTopRightRadius: 8,
+    resizeMode: 'cover',
+  },
+  detailsContainer: {
+    padding: 15,
   },
   locationText: {
     fontSize: 18,

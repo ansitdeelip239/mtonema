@@ -90,12 +90,12 @@ try {
   };
 
   // Function to handle profile picture change
-  const handleChangeProfilePicture = () => {
-    Alert.alert(
-      'Info',
-      'Feature to change profile picture is under development.',
-    );
-  };
+  // const handleChangeProfilePicture = () => {
+  //   Alert.alert(
+  //     'Info',
+  //     'Feature to change profile picture is under development.',
+  //   );
+  // };
 
   const confirmLogout = async () => {
     setIsLoggingOut(true);
@@ -112,14 +112,14 @@ try {
       {/* Profile Image with Edit Icon */}
       <View style={styles.profileImageContainer}>
         <Image source={users.profileImage} style={styles.profileImage} />
-        <TouchableOpacity
+        {/* <TouchableOpacity
           onPress={handleChangeProfilePicture}
           style={styles.profileEditIcon}>
           <Image
             source={require('../../assets/Icon/Edit.png')}
             style={styles.iconImage}
           />
-        </TouchableOpacity>
+        </TouchableOpacity> */}
       </View>
 
       {/* Name Field */}

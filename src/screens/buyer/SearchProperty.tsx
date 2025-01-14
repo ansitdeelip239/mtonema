@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import {
   View,
   Text,
@@ -9,8 +9,10 @@ import {
   ActivityIndicator,
   Image,
 } from 'react-native';
-import {useMaster} from '../../context/MasterProvider';
+import { useMaster } from '../../context/MasterProvider';
 import BuyerService from '../../services/BuyerService';
+import PropertyModal from './PropertyModal'; // Import the PropertyModal component
+import { PropertyModel } from '../../types';
 
 // Define the Property interface
 interface Property {
@@ -18,13 +20,13 @@ interface Property {
   Location: string;
   Price: number;
   ShortDiscription: string;
-  ImageURLType: {ImageUrl: string; Type: string; ID: number}[];
-  PropertyType: {MasterDetailName: string; ID: number};
-  Furnishing: {MasterDetailName: string; ID: number};
+  ImageURLType: { ImageUrl: string; Type: string; ID: number }[];
+  PropertyType: { MasterDetailName: string; ID: number };
+  Furnishing: { MasterDetailName: string; ID: number };
   Area: number;
   Parking: string;
   readyToMove: string;
-  Rate: {MasterDetailName: string; ID: number};
+  Rate: { MasterDetailName: string; ID: number };
 }
 
 const SearchProperty = () => {
@@ -33,7 +35,7 @@ const SearchProperty = () => {
   const [selectedLocation, setSelectedLocation] = useState<string | null>(null);
   const [showAllLocations, setShowAllLocations] = useState(false);
   const [predictions, setPredictions] = useState<
-    {place_id: string; description: string}[]
+    { place_id: string; description: string }[]
   >([]);
   const [searchResults, setSearchResults] = useState<Property[]>([]);
   const [loading, setLoading] = useState(false);
@@ -42,8 +44,10 @@ const SearchProperty = () => {
     totalPages: 0,
     pageSize: 12,
   });
+  const [selectedProperty, setSelectedProperty] = useState<Property | null>(null); // State for selected property
+  const [modalVisible, setModalVisible] = useState(false); // State for modal visibility
 
-  const {masterData} = useMaster();
+  const { masterData } = useMaster();
 
   // Create an array of all locations
   const allLocations = masterData?.ProjectLocation.map(
@@ -149,9 +153,15 @@ const SearchProperty = () => {
 
   const handleLoadMore = () => {
     if (pagination.currentPage < pagination.totalPages) {
-      setPagination(prev => ({...prev, currentPage: prev.currentPage + 1}));
+      setPagination(prev => ({ ...prev, currentPage: prev.currentPage + 1 }));
       handleSearch();
     }
+  };
+
+  // Handle property card click
+  const handlePropertyPress = (property: Property) => {
+    setSelectedProperty(property);
+    setModalVisible(true);
   };
 
   // Filter visible locations based on showAllLocations state
@@ -161,32 +171,34 @@ const SearchProperty = () => {
 
   // Property Card Component
   // eslint-disable-next-line react/no-unstable-nested-components
-  const PropertyCard = ({item}: {item: Property}) => (
-    <View style={styles.card}>
-      {/* Display the first image if available */}
-      {item.ImageURLType && item.ImageURLType.length > 0 && (
-        <Image
-          source={{uri: item.ImageURLType[0].ImageUrl}}
-          style={styles.cardImage}
-        />
-      )}
-      <View style={styles.cardContent}>
-        <Text style={styles.cardTitle}>{item.Location}</Text>
-        <Text style={styles.cardPrice}>
-          ₹{item.Price} {item.Rate?.MasterDetailName}
-        </Text>
-        <Text style={styles.cardDescription}>{item.ShortDiscription}</Text>
-        <Text style={styles.cardInfo}>
-          Property Type: {item.PropertyType?.MasterDetailName}
-        </Text>
-        <Text style={styles.cardInfo}>
-          Furnishing: {item.Furnishing?.MasterDetailName}
-        </Text>
-        <Text style={styles.cardInfo}>Area: {item.Area} sq ft</Text>
-        <Text style={styles.cardInfo}>Parking: {item.Parking}</Text>
-        <Text style={styles.cardInfo}>Ready to Move: {item.readyToMove}</Text>
+  const PropertyCard = ({ item }: { item: Property }) => (
+    <TouchableOpacity onPress={() => handlePropertyPress(item)}>
+      <View style={styles.card}>
+        {/* Display the first image if available */}
+        {item.ImageURLType && item.ImageURLType.length > 0 && (
+          <Image
+            source={{ uri: item.ImageURLType[0].ImageUrl }}
+            style={styles.cardImage}
+          />
+        )}
+        <View style={styles.cardContent}>
+          <Text style={styles.cardTitle}>{item.Location}</Text>
+          <Text style={styles.cardPrice}>
+            ₹{item.Price} {item.Rate?.MasterDetailName}
+          </Text>
+          <Text style={styles.cardDescription}>{item.ShortDiscription}</Text>
+          <Text style={styles.cardInfo}>
+            Property Type: {item.PropertyType?.MasterDetailName}
+          </Text>
+          <Text style={styles.cardInfo}>
+            Furnishing: {item.Furnishing?.MasterDetailName}
+          </Text>
+          <Text style={styles.cardInfo}>Area: {item.Area} sq ft</Text>
+          <Text style={styles.cardInfo}>Parking: {item.Parking}</Text>
+          <Text style={styles.cardInfo}>Ready to Move: {item.readyToMove}</Text>
+        </View>
       </View>
-    </View>
+    </TouchableOpacity>
   );
 
   return (
@@ -225,7 +237,7 @@ const SearchProperty = () => {
           <FlatList
             data={predictions}
             keyExtractor={item => item.place_id}
-            renderItem={({item}) => {
+            renderItem={({ item }) => {
               console.log('Rendering Item:', item);
               return (
                 <TouchableOpacity
@@ -303,7 +315,7 @@ const SearchProperty = () => {
           <FlatList
             data={searchResults}
             keyExtractor={item => item.ID.toString()}
-            renderItem={({item}) => <PropertyCard item={item} />}
+            renderItem={({ item }) => <PropertyCard item={item} />}
             ListFooterComponent={
               pagination.currentPage < pagination.totalPages ? (
                 <TouchableOpacity
@@ -316,6 +328,13 @@ const SearchProperty = () => {
           />
         </View>
       )}
+
+      {/* Property Modal */}
+      <PropertyModal
+        property={selectedProperty as PropertyModel}
+        visible={modalVisible}
+        onClose={() => setModalVisible(false)}
+      />
     </View>
   );
 };
@@ -463,7 +482,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     marginBottom: 16,
     shadowColor: '#000',
-    shadowOffset: {width: 0, height: 2},
+    shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 4,
     elevation: 3,

@@ -42,6 +42,9 @@ const PropertyModal = ({ property, visible, onClose }: PropertyModalProps) => {
     ? stripHtmlTags(property.Discription)
     : 'Not available';
 
+  // Determine which image array to use
+  const images = property.ImageURLType || property.ImageURL || [];
+
   const enquiryNow = async () => {
     try {
       const request = {
@@ -63,15 +66,21 @@ const PropertyModal = ({ property, visible, onClose }: PropertyModalProps) => {
   };
 
   const handleNextImage = () => {
-    const nextIndex = currentImageIndex < property.ImageURL.length - 1 ? currentImageIndex + 1 : 0;
+    const nextIndex = currentImageIndex < images.length - 1 ? currentImageIndex + 1 : 0;
     setCurrentImageIndex(nextIndex);
-    scrollViewRef.current?.scrollTo({ x: Dimensions.get('window').width * nextIndex, animated: true });
+    scrollViewRef.current?.scrollTo({
+      x: Dimensions.get('window').width * nextIndex,
+      animated: true,
+    });
   };
 
   const handlePreviousImage = () => {
-    const prevIndex = currentImageIndex > 0 ? currentImageIndex - 1 : property.ImageURL.length - 1;
+    const prevIndex = currentImageIndex > 0 ? currentImageIndex - 1 : images.length - 1;
     setCurrentImageIndex(prevIndex);
-    scrollViewRef.current?.scrollTo({ x: Dimensions.get('window').width * prevIndex, animated: true });
+    scrollViewRef.current?.scrollTo({
+      x: Dimensions.get('window').width * prevIndex,
+      animated: true,
+    });
   };
 
   const handleScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
@@ -87,7 +96,7 @@ const PropertyModal = ({ property, visible, onClose }: PropertyModalProps) => {
           <Text style={styles.closeButtonText}>✕</Text>
         </TouchableOpacity>
 
-        {property.ImageURL && property.ImageURL.length > 0 && (
+        {images.length > 0 && (
           <View style={styles.imageContainer}>
             <ScrollView
               ref={scrollViewRef}
@@ -96,10 +105,10 @@ const PropertyModal = ({ property, visible, onClose }: PropertyModalProps) => {
               showsHorizontalScrollIndicator={false}
               onMomentumScrollEnd={handleScroll}
             >
-              {property.ImageURL.map((image, index) => (
+              {images.map((image:any, index:any) => (
                 <Image
                   key={index}
-                  source={{ uri: image.ImageUrl }}
+                  source={{ uri: image.ImageUrl || image }} // Handle both cases
                   style={styles.propertyImage}
                   resizeMode="cover"
                 />
@@ -117,7 +126,7 @@ const PropertyModal = ({ property, visible, onClose }: PropertyModalProps) => {
 
             {/* Dot Indicators */}
             <View style={styles.dotContainer}>
-              {property.ImageURL.map((_, index) => (
+              {images.map((_:any, index:any) => (
                 <View
                   key={index}
                   style={[
