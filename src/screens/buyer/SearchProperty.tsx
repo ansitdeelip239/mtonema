@@ -59,25 +59,34 @@ const SearchProperty = () => {
     console.log('Selected Location:', selectedLocation);
     console.log('Split Search Text:', splitSearchText);
     setLoading(true);
-
-    // If "All Location" is selected, use the allLocations array
-    const placeArray =
-      selectedLocation === 'All Location'
-        ? allLocations
-        : selectedLocation
-        ? [selectedLocation, ...splitSearchText]
-        : splitSearchText;
-
+    // Determine the place array and city based on selection
+    let placeArray: string[] = [];
+    let cityParam = '';
+    if (selectedLocation === 'All Location') {
+      // When "All Location" is selected, use all locations for place array
+      // and keep city parameter as empty string
+      placeArray = allLocations || [];
+      cityParam = '';
+    } else if (selectedLocation) {
+      // When a specific location is selected
+      placeArray = [selectedLocation, ...splitSearchText];
+      cityParam = selectedLocation;
+    } else {
+      // When no location is selected
+      placeArray = splitSearchText;
+      cityParam = '';
+    }
     try {
       const response = await BuyerService.filterProperties({
         Address: searchText,
-        City: selectedLocation || '',
+        City: cityParam,
         pageNumber: pagination.currentPage,
         place: placeArray,
         PropertyFor: 'Sale',
         Relevance: 'Relevance',
         pageSize: pagination.pageSize,
       });
+
       console.log('API Response:', response.data);
       if (response.Success && response.data && response.data.propertyModels) {
         setSearchResults(response.data.propertyModels);
@@ -340,7 +349,6 @@ const SearchProperty = () => {
 };
 
 export default SearchProperty;
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
