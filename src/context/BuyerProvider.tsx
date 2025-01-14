@@ -24,7 +24,6 @@ export const BuyerProvider: React.FC<BuyerProviderProps> = ({children}) => {
       const response = await BuyerService.RecommendedProperty(1, 10);
       const recommendedProperties = response.data?.propertyModels || [];
       const totalCount = response.data?.responsePagingModel.TotalCount || 0;
-
       setBuyerData({
         recommendedProperties,
         totalCount,

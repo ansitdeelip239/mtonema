@@ -23,5 +23,31 @@ class BuyerService {
       console.log('Error in getplaces', error);
     }
   }
+  static async filterProperties(filterCriteria: {
+    Address?: string;
+    place:string[];
+    City: string;
+    Price?: string;
+    PropertyType?: string;
+    PropertyFor?: string;
+    SellerType?: string;
+    MinPrice?: number;
+    MaxPrice?: number;
+    BhkType?: string;
+    FurnishType?: string;
+    ZipCode?: string;
+    pageNumber?: number;
+    pageSize?: number;
+    Relevance?: string;
+  }) {
+    try {
+      const response = await api.post<any>(url1.FilterSearch, filterCriteria);
+      return response;
+    } catch (error) {
+      console.error('Error in filterProperties', error);
+      throw error;
+    }
+  }
 }
+
 export default BuyerService;
