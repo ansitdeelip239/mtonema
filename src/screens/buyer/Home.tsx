@@ -1,36 +1,42 @@
-import { View, Text, TouchableOpacity, StyleSheet,ActivityIndicator } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, ActivityIndicator } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { NavigationProp } from '@react-navigation/native';
 import { useBuyer } from '../../context/BuyerProvider';
+
 type HomeProps = {
   navigation: NavigationProp<any>;
 };
 
 const Home = ({ navigation }: HomeProps) => {
-const { buyerData } = useBuyer();
-const [isLoading, setIsLoading] = useState(true);
-console.log(buyerData);
-useEffect(() => {
+  const { buyerData } = useBuyer();
+  const [isLoading, setIsLoading] = useState(true);
+
+  console.log(buyerData);
+
+  useEffect(() => {
     if (buyerData) {
       setIsLoading(false);
     }
   }, [buyerData]);
-   const goToRecomendedProperty = () => {
-       navigation.navigate('RecomendedProperty', {
-           title: 'Recommended Properties',
-           description: 'Explore the best properties recommended for you.',
-        });
-    };
-    const goToSearchProperty = () => {
-        navigation.navigate('SearchProperty', {
-            title: 'Search Properties',
-            description: 'Find properties based on your preferences.',
-        });
-    };
-    return (
-        <View style={styles.container}>
-        {/* Card for Recommended Property */}
-        <TouchableOpacity
+
+  const goToRecomendedProperty = () => {
+    navigation.navigate('RecomendedProperty', {
+      title: 'Recommended Properties',
+      description: 'Explore the best properties recommended for you.',
+    });
+  };
+
+  const goToSearchProperty = () => {
+    navigation.navigate('SearchProperty', {
+      title: 'Search Properties',
+      description: 'Find properties based on your preferences.',
+    });
+  };
+
+  return (
+    <View style={styles.container}>
+      {/* Card for Recommended Property */}
+      <TouchableOpacity
         style={styles.card}
         onPress={goToRecomendedProperty}
       >
@@ -45,16 +51,23 @@ useEffect(() => {
           </View>
         </View>
       </TouchableOpacity>
-        {/* Card for Search Property */}
-        <TouchableOpacity
-          style={styles.card}
-          onPress={goToSearchProperty}
-        >
+
+      {/* Card for Search Property */}
+      <TouchableOpacity
+        style={[styles.card, isLoading && styles.disabledCard]} // Apply disabled style
+        onPress={goToSearchProperty}
+        disabled={isLoading} // Disable the button
+      >
+        {isLoading ? (
+          <ActivityIndicator size="small" color="#cc0e74" /> // Show loader while loading
+        ) : (
           <Text style={styles.cardText}>Search Property</Text>
-        </TouchableOpacity>
-      </View>
+        )}
+      </TouchableOpacity>
+    </View>
   );
 };
+
 // Styles for the component
 const styles = StyleSheet.create({
   container: {
@@ -95,6 +108,9 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.2,
     shadowRadius: 4,
+  },
+  disabledCard: {
+    opacity: 0.5, // Reduce opacity for disabled state
   },
   cardText: {
     fontSize: 18,

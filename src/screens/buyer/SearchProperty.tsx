@@ -33,6 +33,7 @@ const SearchProperty = () => {
   const [splitSearchText, setSplitSearchText] = useState<string[]>([]);
   const [selectedLocation, setSelectedLocation] = useState<string | null>(null);
   const [showAllLocations, setShowAllLocations] = useState(false);
+  const [isSearchButtonPressed,setIsSearchButtonPressed] = useState<boolean>(false);
   const [predictions, setPredictions] = useState<
     {place_id: string; description: string}[]
   >([]);
@@ -63,6 +64,7 @@ const SearchProperty = () => {
     console.log('Selected Location:', selectedLocation);
     console.log('Split Search Text:', splitSearchText);
     setLoading(true);
+    setIsSearchButtonPressed(true);
     setHasMoreData(true);
     setPagination({
       currentPage: 1,
@@ -270,7 +272,8 @@ const SearchProperty = () => {
       return null;
     }
 
-    if (searchResults.length === 0 && searchText) {
+    if (isSearchButtonPressed && searchResults.length === 0) {
+      console.log('Rendering No Properties Message');
       return (
         <View style={styles.noPropertiesContainer}>
           <Text style={styles.noPropertiesText}>
@@ -290,7 +293,7 @@ const SearchProperty = () => {
     }
 
     return null;
-  },[loading, isLoadingMore, searchResults.length, searchText, hasMoreData]);
+  },[loading, isLoadingMore, searchResults.length,hasMoreData,isSearchButtonPressed]);
 
   return (
     <View style={styles.container}>
