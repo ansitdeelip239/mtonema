@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, {useState, useCallback} from 'react';
 import {
   View,
   Text,
@@ -9,24 +9,23 @@ import {
   ActivityIndicator,
   Image,
 } from 'react-native';
-import { useMaster } from '../../context/MasterProvider';
+import {useMaster} from '../../context/MasterProvider';
 import BuyerService from '../../services/BuyerService';
-import PropertyModal from './PropertyModal'; // Import the PropertyModal component
-import { PropertyModel } from '../../types';
+import PropertyModal from './PropertyModal';
+import {PropertyModel} from '../../types';
 
-// Define the Property interface
 interface Property {
   ID: number;
   Location: string;
   Price: number;
   ShortDiscription: string;
-  ImageURLType: { ImageUrl: string; Type: string; ID: number }[];
-  PropertyType: { MasterDetailName: string; ID: number };
-  Furnishing: { MasterDetailName: string; ID: number };
+  ImageURLType: {ImageUrl: string; Type: string; ID: number}[];
+  PropertyType: {MasterDetailName: string; ID: number};
+  Furnishing: {MasterDetailName: string; ID: number};
   Area: number;
   Parking: string;
   readyToMove: string;
-  Rate: { MasterDetailName: string; ID: number };
+  Rate: {MasterDetailName: string; ID: number};
 }
 
 const SearchProperty = () => {
@@ -35,59 +34,66 @@ const SearchProperty = () => {
   const [selectedLocation, setSelectedLocation] = useState<string | null>(null);
   const [showAllLocations, setShowAllLocations] = useState(false);
   const [predictions, setPredictions] = useState<
-    { place_id: string; description: string }[]
+    {place_id: string; description: string}[]
   >([]);
   const [searchResults, setSearchResults] = useState<Property[]>([]);
   const [loading, setLoading] = useState(false);
+  const [isLoadingMore, setIsLoadingMore] = useState(false);
+  const [hasMoreData, setHasMoreData] = useState(true);
   const [pagination, setPagination] = useState({
     currentPage: 1,
     totalPages: 0,
     pageSize: 12,
   });
-  const [selectedProperty, setSelectedProperty] = useState<Property | null>(null); // State for selected property
-  const [modalVisible, setModalVisible] = useState(false); // State for modal visibility
+  const [selectedProperty, setSelectedProperty] = useState<Property | null>(
+    null,
+  );
+  const [modalVisible, setModalVisible] = useState(false);
 
-  const { masterData } = useMaster();
+  const {masterData} = useMaster();
 
-  // Create an array of all locations
   const allLocations = masterData?.ProjectLocation.map(
     (location: any) => location.MasterDetailName,
   );
-
+  const stripHtmlTags = (html: string): string => {
+    return html.replace(/<\/?[^>]+(>|$)/g, '').trim();
+  };
   const handleSearch = async () => {
     console.log('Search Text:', searchText);
     console.log('Selected Location:', selectedLocation);
     console.log('Split Search Text:', splitSearchText);
     setLoading(true);
-    // Determine the place array and city based on selection
+    setHasMoreData(true);
+    setPagination({
+      currentPage: 1,
+      totalPages: 0,
+      pageSize: 12,
+    });
+
     let placeArray: string[] = [];
     let cityParam = '';
     if (selectedLocation === 'All Location') {
-      // When "All Location" is selected, use all locations for place array
-      // and keep city parameter as empty string
       placeArray = allLocations || [];
       cityParam = '';
     } else if (selectedLocation) {
-      // When a specific location is selected
       placeArray = [selectedLocation, ...splitSearchText];
       cityParam = selectedLocation;
     } else {
-      // When no location is selected
       placeArray = splitSearchText;
       cityParam = '';
     }
+
     try {
       const response = await BuyerService.filterProperties({
         Address: searchText,
         City: cityParam,
-        pageNumber: pagination.currentPage,
+        pageNumber: 1,
         place: placeArray,
         PropertyFor: 'Sale',
         Relevance: 'Relevance',
         pageSize: pagination.pageSize,
       });
 
-      console.log('API Response:', response.data);
       if (response.Success && response.data && response.data.propertyModels) {
         setSearchResults(response.data.propertyModels);
         setPagination({
@@ -95,14 +101,74 @@ const SearchProperty = () => {
           totalPages: response.data.responsePagingModel.TotalPage,
           pageSize: pagination.pageSize,
         });
+        setHasMoreData(
+          response.data.responsePagingModel.CurrentPage <
+            response.data.responsePagingModel.TotalPage,
+        );
       } else {
         setSearchResults([]);
+        setHasMoreData(false);
       }
     } catch (error) {
       console.error('Error fetching data:', error);
       setSearchResults([]);
+      setHasMoreData(false);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const loadMoreProperties = async () => {
+    if (!hasMoreData || isLoadingMore) {
+      return;
+    }
+
+    setIsLoadingMore(true);
+    const nextPage = pagination.currentPage + 1;
+
+    let placeArray: string[] = [];
+    let cityParam = '';
+    if (selectedLocation === 'All Location') {
+      placeArray = allLocations || [];
+      cityParam = '';
+    } else if (selectedLocation) {
+      placeArray = [selectedLocation, ...splitSearchText];
+      cityParam = selectedLocation;
+    } else {
+      placeArray = splitSearchText;
+      cityParam = '';
+    }
+
+    try {
+      const response = await BuyerService.filterProperties({
+        Address: searchText,
+        City: cityParam,
+        pageNumber: nextPage,
+        place: placeArray,
+        PropertyFor: 'Sale',
+        Relevance: 'Relevance',
+        pageSize: pagination.pageSize,
+      });
+
+      if (response.Success && response.data && response.data.propertyModels) {
+        setSearchResults(prev => [...prev, ...response.data.propertyModels]);
+        setPagination({
+          currentPage: response.data.responsePagingModel.CurrentPage,
+          totalPages: response.data.responsePagingModel.TotalPage,
+          pageSize: pagination.pageSize,
+        });
+        setHasMoreData(
+          response.data.responsePagingModel.CurrentPage <
+            response.data.responsePagingModel.TotalPage,
+        );
+      } else {
+        setHasMoreData(false);
+      }
+    } catch (error) {
+      console.error('Error loading more properties:', error);
+      setHasMoreData(false);
+    } finally {
+      setIsLoadingMore(false);
     }
   };
 
@@ -122,12 +188,10 @@ const SearchProperty = () => {
   const getSearch = async (text: string) => {
     setSearchText(text);
 
-    // Split the search text into words
     const stringWithoutCommas = text.replace(/,/g, '');
     const wordsArray = stringWithoutCommas.split(' ');
     const filteredWordsArray = wordsArray.filter(word => word.length > 0);
 
-    // Update the splitSearchText state
     setSplitSearchText(filteredWordsArray);
 
     try {
@@ -160,33 +224,22 @@ const SearchProperty = () => {
     setPredictions([]);
   };
 
-  const handleLoadMore = () => {
-    if (pagination.currentPage < pagination.totalPages) {
-      setPagination(prev => ({ ...prev, currentPage: prev.currentPage + 1 }));
-      handleSearch();
-    }
-  };
-
-  // Handle property card click
   const handlePropertyPress = (property: Property) => {
     setSelectedProperty(property);
     setModalVisible(true);
   };
 
-  // Filter visible locations based on showAllLocations state
   const visibleLocations = showAllLocations
     ? masterData?.ProjectLocation
     : masterData?.ProjectLocation.slice(0, 3);
 
-  // Property Card Component
   // eslint-disable-next-line react/no-unstable-nested-components
-  const PropertyCard = ({ item }: { item: Property }) => (
+  const PropertyCard = ({item}: {item: Property}) => (
     <TouchableOpacity onPress={() => handlePropertyPress(item)}>
       <View style={styles.card}>
-        {/* Display the first image if available */}
         {item.ImageURLType && item.ImageURLType.length > 0 && (
           <Image
-            source={{ uri: item.ImageURLType[0].ImageUrl }}
+            source={{uri: item.ImageURLType[0].ImageUrl}}
             style={styles.cardImage}
           />
         )}
@@ -195,7 +248,9 @@ const SearchProperty = () => {
           <Text style={styles.cardPrice}>
             ₹{item.Price} {item.Rate?.MasterDetailName}
           </Text>
-          <Text style={styles.cardDescription}>{item.ShortDiscription}</Text>
+          <Text style={styles.cardDescription}>
+            {stripHtmlTags(item.ShortDiscription)}
+          </Text>
           <Text style={styles.cardInfo}>
             Property Type: {item.PropertyType?.MasterDetailName}
           </Text>
@@ -210,9 +265,35 @@ const SearchProperty = () => {
     </TouchableOpacity>
   );
 
+  const ListFooterComponent = useCallback(() => {
+    if (loading) {
+      return null;
+    }
+
+    if (searchResults.length === 0 && searchText) {
+      return (
+        <View style={styles.noPropertiesContainer}>
+          <Text style={styles.noPropertiesText}>
+            No properties available in this location
+          </Text>
+        </View>
+      );
+    }
+
+    if (isLoadingMore && hasMoreData) {
+      return (
+        <View style={styles.loadingMoreContainer}>
+          <ActivityIndicator size="small" color="#cc0e74" />
+          <Text style={styles.loadingMoreText}>Loading more properties...</Text>
+        </View>
+      );
+    }
+
+    return null;
+  },[loading, isLoadingMore, searchResults.length, searchText, hasMoreData]);
+
   return (
     <View style={styles.container}>
-      {/* Search Input and Button */}
       <View style={styles.searchContainer}>
         <View style={styles.inputContainer}>
           <TextInput
@@ -234,35 +315,23 @@ const SearchProperty = () => {
         </TouchableOpacity>
       </View>
 
-      {/* Display Split Search Text */}
-      <View style={styles.splitTextContainer}>
-        <Text style={styles.splitTextTitle}>Split Search Text:</Text>
-        <Text style={styles.splitText}>{splitSearchText.join(', ')}</Text>
-      </View>
-
-      {/* Display Predictions as Suggestions */}
       {predictions.length > 0 && (
         <View style={styles.suggestionsContainer}>
           <FlatList
             data={predictions}
             keyExtractor={item => item.place_id}
-            renderItem={({ item }) => {
-              console.log('Rendering Item:', item);
-              return (
-                <TouchableOpacity
-                  style={styles.suggestionItem}
-                  onPress={() => handleSuggestionSelect(item.description)}>
-                  <Text style={styles.suggestionText}>{item.description}</Text>
-                </TouchableOpacity>
-              );
-            }}
+            renderItem={({item}) => (
+              <TouchableOpacity
+                style={styles.suggestionItem}
+                onPress={() => handleSuggestionSelect(item.description)}>
+                <Text style={styles.suggestionText}>{item.description}</Text>
+              </TouchableOpacity>
+            )}
           />
         </View>
       )}
 
-      {/* Location Row */}
       <View style={styles.locationRow}>
-        {/* Add "All Location" Button */}
         <TouchableOpacity
           style={[
             styles.locationItem,
@@ -272,7 +341,8 @@ const SearchProperty = () => {
           <Text
             style={[
               styles.locationText,
-              selectedLocation === 'All Location' && styles.selectedLocationText,
+              selectedLocation === 'All Location' &&
+                styles.selectedLocationText,
             ]}>
             All Location
           </Text>
@@ -316,29 +386,21 @@ const SearchProperty = () => {
         )}
       </View>
 
-      {/* Display Search Results */}
       {loading ? (
         <ActivityIndicator size="large" color="#cc0e74" style={styles.loader} />
       ) : (
         <View style={styles.resultsContainer}>
           <FlatList
             data={searchResults}
-            keyExtractor={item => item.ID.toString()}
-            renderItem={({ item }) => <PropertyCard item={item} />}
-            ListFooterComponent={
-              pagination.currentPage < pagination.totalPages ? (
-                <TouchableOpacity
-                  style={styles.loadMoreButton}
-                  onPress={handleLoadMore}>
-                  <Text style={styles.loadMoreText}>Load More</Text>
-                </TouchableOpacity>
-              ) : null
-            }
+            keyExtractor={item => `${item.ID}-${item.Location}`}
+            renderItem={({item}) => <PropertyCard item={item} />}
+            onEndReached={loadMoreProperties}
+            onEndReachedThreshold={0.5}
+            ListFooterComponent={ListFooterComponent}
           />
         </View>
       )}
 
-      {/* Property Modal */}
       <PropertyModal
         property={selectedProperty as PropertyModel}
         visible={modalVisible}
@@ -355,6 +417,10 @@ const styles = StyleSheet.create({
     padding: 16,
     backgroundColor: '#f5f5f5',
   },
+  noPropertiesContainer: {},
+  noPropertiesText: {},
+  loadingMoreContainer: {},
+  loadingMoreText: {},
   searchContainer: {
     flexDirection: 'row',
     marginBottom: 20,
@@ -484,13 +550,14 @@ const styles = StyleSheet.create({
   },
   resultsContainer: {
     marginTop: 20,
+    paddingBottom: 140,
   },
   card: {
     backgroundColor: '#fff',
     borderRadius: 8,
     marginBottom: 16,
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
+    shadowOffset: {width: 0, height: 2},
     shadowOpacity: 0.1,
     shadowRadius: 4,
     elevation: 3,
