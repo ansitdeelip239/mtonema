@@ -1,4 +1,4 @@
-import {Response, User} from '../types';
+import {Response, SignUpRequest, User} from '../types';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import api from '../constants/api';
 
@@ -32,7 +32,22 @@ class AuthService {
       throw error;
     }
   }
+static async signUp(body:SignUpRequest)
+{
+  try {
+    const response = await fetch(api.SignUp,{
+      method:'POST',
+      headers:{
+        'Content-Type': 'application/json',
+      },
+      body:JSON.stringify(body),
+    });
+    return response.json();
+  } catch (error) {
+    throw error;
+  }
 
+}
   static async verifyPassword(
     email: string,
     password: string,

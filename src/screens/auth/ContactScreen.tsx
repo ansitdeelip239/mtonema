@@ -37,7 +37,7 @@ const ContactScreen: React.FC<Props> = ({navigation}) => {
         <View style={styles.txtpadding}>
           <Text style={[styles.label]}>Mobile</Text>
           <TextInput
-            placeholder="Mobile"
+            placeholder=""
             style={[styles.input, styles.spacing1]}
           />
         </View>
