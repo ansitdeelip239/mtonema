@@ -56,13 +56,15 @@ const SearchProperty = () => {
   const allLocations = masterData?.ProjectLocation.map(
     (location: any) => location.MasterDetailName,
   );
-  const stripHtmlTags = (html: string): string => {
-    return html.replace(/<\/?[^>]+(>|$)/g, '').trim();
+  const stripHtmlTags = (html: string | null | undefined): string => {
+    if (!html) {return '';}
+    return html.replace(/<\/?[^>]+(>|$)/g, '').trim(); // Remove HTML tags
   };
   const handleSearch = async () => {
     console.log('Search Text:', searchText);
     console.log('Selected Location:', selectedLocation);
     console.log('Split Search Text:', splitSearchText);
+  
     setLoading(true);
     setIsSearchButtonPressed(true);
     setHasMoreData(true);
@@ -71,9 +73,10 @@ const SearchProperty = () => {
       totalPages: 0,
       pageSize: 12,
     });
-
+  
     let placeArray: string[] = [];
     let cityParam = '';
+  
     if (selectedLocation === 'All Location') {
       placeArray = allLocations || [];
       cityParam = '';
@@ -84,7 +87,10 @@ const SearchProperty = () => {
       placeArray = splitSearchText;
       cityParam = '';
     }
-
+  
+    console.log('Place Array:', placeArray);
+    console.log('City Param:', cityParam);
+  
     try {
       const response = await BuyerService.filterProperties({
         Address: searchText,
@@ -95,7 +101,7 @@ const SearchProperty = () => {
         Relevance: 'Relevance',
         pageSize: pagination.pageSize,
       });
-
+      console.log('API Response:', response);
       if (response.Success && response.data && response.data.propertyModels) {
         setSearchResults(response.data.propertyModels);
         setPagination({
@@ -251,7 +257,7 @@ const SearchProperty = () => {
             ₹{item.Price} {item.Rate?.MasterDetailName}
           </Text>
           <Text style={styles.cardDescription}>
-            {stripHtmlTags(item.ShortDiscription)}
+            {stripHtmlTags(item.ShortDiscription || '')} {/* Ensure it's a string */}
           </Text>
           <Text style={styles.cardInfo}>
             Property Type: {item.PropertyType?.MasterDetailName}

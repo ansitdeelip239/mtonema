@@ -87,7 +87,7 @@ const [loading, setLoading] = useState(false);
     try {
       const response = await api.post<any>(`${url.GetInTouch}`, formData);
       console.log(response.data);
-      Alert.alert('Form Submitted', `Thank you, ${formData.name}!`);
+      Alert.alert('Form Submitted',`Thank you, ${formData.name}!`);
       setFormData({name: '', email: '', mobile: '', message: ''});
       setErrors({name: '', email: '', mobile: '', message: ''});
     } catch (error) {

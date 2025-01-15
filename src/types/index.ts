@@ -1,48 +1,48 @@
 export interface AuthContextType {
-    isAuthenticated: boolean;
-    user: User | null;
-    login: (token: string) =>void;
-    logout: () => void;
-    storeUser: (user:User) => void;
-    storeToken: (token:string) => void
-    authToken: string | null;
-    dataUpdated: boolean;
-    setDataUpdated: (value: boolean) => void;  
-  }
+  isAuthenticated: boolean;
+  user: User | null;
+  login: (token: string) => void;
+  logout: () => void;
+  storeUser: (user: User) => void;
+  storeToken: (token: string) => void;
+  authToken: string | null;
+  dataUpdated: boolean;
+  setDataUpdated: (value: boolean) => void;
+}
 
-  export interface Response<T> {
-    success: boolean;
-    message: string;
-    data: T;
-    httpStatus: number;
-  }
+export interface Response<T> {
+  success: boolean;
+  message: string;
+  data: T;
+  httpStatus: number;
+}
 
-  export interface User {
-    ID: number;
-    Name: string;
-    Email: string;
-    Password: string;
-    Location: string;
-    Phone: string;
-    Role: string;
-    CreatedOn: Date | null;
-    UpdatedOn: Date | null;
-    CreatedBy: string | null;
-    UpdatedBy: string | null;
-    Status: number;
-    varificationlink: string | null;
-    LogoPath: string;
-    ColorTheme: string;
-    PropertyListed: number;
-    sellerStatus: string | null;
-  }
+export interface User {
+  ID: number;
+  Name: string;
+  Email: string;
+  Password: string;
+  Location: string;
+  Phone: string;
+  Role: string;
+  CreatedOn: Date | null;
+  UpdatedOn: Date | null;
+  CreatedBy: string | null;
+  UpdatedBy: string | null;
+  Status: number;
+  varificationlink: string | null;
+  LogoPath: string;
+  ColorTheme: string;
+  PropertyListed: number;
+  sellerStatus: string | null;
+}
 
 export interface Response<T> {
   Success: boolean;
   Message: string;
   data: T;
   httpStatus: number;
-  predictions?:any;
+  predictions?: any;
 }
 export interface PropertyModel {
   ID: number;
@@ -124,7 +124,24 @@ export interface PropertyModel {
   CeilingHeight: any | null;
   Pantry: any | null;
   ListedBy: string;
-  PropertyLocation?:string;
-  propertyModels?:any[];
+  PropertyLocation?: string;
+  propertyModels?: any[];
 }
-
+// export interface SignUpRequest {
+//   Name: string;
+//   Email: string;
+//   Location: string;
+//   Phone: string;
+//   URL: string;
+//   Password: string;
+//   TermsChecked: true;
+// }
+export interface SignUpRequest  {
+  Name: string;
+  Email: string;
+  Location: string;
+  Phone: string;
+  Password?: string;
+  TermsChecked?: true;
+  URL?: string;
+}
