@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, {useState, useRef} from 'react';
 import {
   Modal,
   View,
@@ -7,16 +7,12 @@ import {
   ScrollView,
   TouchableOpacity,
   Image,
-  Alert,
   Dimensions,
   NativeSyntheticEvent,
   NativeScrollEvent,
 } from 'react-native';
-import { PropertyModel } from '../../types';
-import { api } from '../../utils/api';
-import url from '../../constants/api';
-import { User } from '../../types';
-import { useAuth } from '../../hooks/useAuth';
+import {PropertyModel} from '../../types';
+import EnquiryButton from '../common/EnquiryButton';
 
 // Utility function to strip HTML tags
 const stripHtmlTags = (html: string): string => {
@@ -29,8 +25,7 @@ interface PropertyModalProps {
   onClose: () => void;
 }
 
-const PropertyModal = ({ property, visible, onClose }: PropertyModalProps) => {
-  const { user, setDataUpdated, dataUpdated } = useAuth();
+const PropertyModal = ({property, visible, onClose}: PropertyModalProps) => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const scrollViewRef = useRef<ScrollView>(null);
 
@@ -45,28 +40,9 @@ const PropertyModal = ({ property, visible, onClose }: PropertyModalProps) => {
   // Determine which image array to use
   const images = property.ImageURLType || property.ImageURL || [];
 
-  const enquiryNow = async () => {
-    try {
-      const request = {
-        UserID: user?.ID,
-        PropertyID: property.ID,
-      };
-      const response = await api.post<User>(`${url.ContactProperty}`, request);
-      if (response.Success) {
-        Alert.alert('Success', 'Our Team will contact you soon');
-        setDataUpdated(!dataUpdated);
-      } else {
-        throw new Error(response.Message);
-      }
-    } catch (error) {
-      if (error instanceof Error) {
-        Alert.alert('Error', error.message);
-      }
-    }
-  };
-
   const handleNextImage = () => {
-    const nextIndex = currentImageIndex < images.length - 1 ? currentImageIndex + 1 : 0;
+    const nextIndex =
+      currentImageIndex < images.length - 1 ? currentImageIndex + 1 : 0;
     setCurrentImageIndex(nextIndex);
     scrollViewRef.current?.scrollTo({
       x: Dimensions.get('window').width * nextIndex,
@@ -75,7 +51,8 @@ const PropertyModal = ({ property, visible, onClose }: PropertyModalProps) => {
   };
 
   const handlePreviousImage = () => {
-    const prevIndex = currentImageIndex > 0 ? currentImageIndex - 1 : images.length - 1;
+    const prevIndex =
+      currentImageIndex > 0 ? currentImageIndex - 1 : images.length - 1;
     setCurrentImageIndex(prevIndex);
     scrollViewRef.current?.scrollTo({
       x: Dimensions.get('window').width * prevIndex,
@@ -85,7 +62,9 @@ const PropertyModal = ({ property, visible, onClose }: PropertyModalProps) => {
 
   const handleScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
     const contentOffsetX = event.nativeEvent.contentOffset.x;
-    const newIndex = Math.round(contentOffsetX / Dimensions.get('window').width);
+    const newIndex = Math.round(
+      contentOffsetX / Dimensions.get('window').width,
+    );
     setCurrentImageIndex(newIndex);
   };
 
@@ -103,12 +82,11 @@ const PropertyModal = ({ property, visible, onClose }: PropertyModalProps) => {
               horizontal
               pagingEnabled
               showsHorizontalScrollIndicator={false}
-              onMomentumScrollEnd={handleScroll}
-            >
-              {images.map((image:any, index:any) => (
+              onMomentumScrollEnd={handleScroll}>
+              {images.map((image: any, index: any) => (
                 <Image
                   key={index}
-                  source={{ uri: image.ImageUrl || image }} // Handle both cases
+                  source={{uri: image.ImageUrl || image}} // Handle both cases
                   style={styles.propertyImage}
                   resizeMode="cover"
                 />
@@ -116,22 +94,28 @@ const PropertyModal = ({ property, visible, onClose }: PropertyModalProps) => {
             </ScrollView>
 
             <View style={styles.navigationButtons}>
-              <TouchableOpacity style={styles.navButton} onPress={handlePreviousImage}>
+              <TouchableOpacity
+                style={styles.navButton}
+                onPress={handlePreviousImage}>
                 <Text style={styles.navButtonText}>‹</Text>
               </TouchableOpacity>
-              <TouchableOpacity style={styles.navButton} onPress={handleNextImage}>
+              <TouchableOpacity
+                style={styles.navButton}
+                onPress={handleNextImage}>
                 <Text style={styles.navButtonText}>›</Text>
               </TouchableOpacity>
             </View>
 
             {/* Dot Indicators */}
             <View style={styles.dotContainer}>
-              {images.map((_:any, index:any) => (
+              {images.map((_: any, index: any) => (
                 <View
                   key={index}
                   style={[
                     styles.dot,
-                    index === currentImageIndex ? styles.activeDot : styles.inactiveDot,
+                    index === currentImageIndex
+                      ? styles.activeDot
+                      : styles.inactiveDot,
                   ]}
                 />
               ))}
@@ -168,7 +152,9 @@ const PropertyModal = ({ property, visible, onClose }: PropertyModalProps) => {
             <Text style={styles.detail}>
               Ready to Move: {property.readyToMove}
             </Text>
-            <Text style={styles.detail}>Description: {sanitizedDescription}</Text>
+            <Text style={styles.detail}>
+              Description: {sanitizedDescription}
+            </Text>
           </View>
 
           <View style={styles.section}>
@@ -183,9 +169,7 @@ const PropertyModal = ({ property, visible, onClose }: PropertyModalProps) => {
 
         {/* Enquiry Now Button */}
         <View style={styles.buttonContainer}>
-          <TouchableOpacity style={styles.enquiryButton} onPress={enquiryNow}>
-            <Text style={styles.enquiryButtonText}>Enquiry Now</Text>
-          </TouchableOpacity>
+          <EnquiryButton property={property} />
         </View>
       </ScrollView>
     </Modal>
@@ -211,7 +195,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     width: '100%',
     top: '50%',
-    transform: [{ translateY: -25 }],
+    transform: [{translateY: -25}],
   },
   navButton: {
     backgroundColor: 'rgba(0, 0, 0, 0.5)',

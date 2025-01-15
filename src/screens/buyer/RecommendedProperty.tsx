@@ -14,6 +14,7 @@ import { api } from '../../utils/api';
 import url from '../../constants/api';
 import { PropertyModel } from '../../types';
 import PropertyModal from './PropertyModal';
+import EnquiryButton from '../common/EnquiryButton';
 
 const RecommendedProperty = () => {
   const [properties, setProperties] = useState<PropertyModel[]>([]);
@@ -100,52 +101,76 @@ const RecommendedProperty = () => {
     getAllProperty(pageNo);
   }, [pageNo, getAllProperty]);
 
-  const renderPropertyItem = ({ item }: { item: PropertyModel }) => (
-    <TouchableOpacity onPress={() => handlePropertyPress(item)}>
-      <View style={styles.propertyCard}>
-        {/* Property Image */}
-        {item.ImageURL && item.ImageURL.length > 0 && (
-          <Image
-            source={{ uri: item.ImageURL[0].ImageUrl }} // Dynamically load the first image
-            style={styles.propertyImage}
-            resizeMode="cover"
-          />
-        )}
+ const renderPropertyItem = ({item}: {item: PropertyModel}) => (
+   <TouchableOpacity onPress={() => handlePropertyPress(item)}>
+     <View style={styles.propertyCard}>
+       {/* Property Image */}
+       {item.ImageURL && item.ImageURL.length > 0 && (
+         <Image
+           source={{uri: item.ImageURL[0].ImageUrl}}
+           style={styles.propertyImage}
+           resizeMode="cover"
+         />
+       )}
 
-        {/* Property Details */}
-        <View style={styles.detailsContainer}>
-          <Text style={styles.locationText}>
-            {item.Location || item.City?.MasterDetailName || 'Location not specified'}
-          </Text>
-          <Text style={styles.propertyType}>
-            {item.PropertyType?.MasterDetailName} for {item.PropertyFor?.MasterDetailName}
-          </Text>
-          <View style={styles.detailsRow}>
-            <Text style={styles.price}>
-              ₹{item.Price} {item.Rate?.MasterDetailName}
-            </Text>
-            <Text style={styles.area}>
-              {item.Area} {item.Size?.MasterDetailName}
-            </Text>
-          </View>
-          <View style={styles.additionalDetails}>
-            {item.Furnishing && (
-              <Text style={styles.detailText}>
-                Furnishing: {item.Furnishing.MasterDetailName}
-              </Text>
-            )}
-            <Text style={styles.detailText}>
-              Ready to Move: {item.readyToMove || 'Not specified'}
-            </Text>
-          </View>
-          <View style={styles.sellerDetails}>
-            <Text style={styles.sellerName}>Listed by: {item.SellerName}</Text>
-            <Text style={styles.sellerPhone}>Contact: {item.SellerPhone}</Text>
-          </View>
-        </View>
-      </View>
-    </TouchableOpacity>
-  );
+       {/* Property Details */}
+       <View style={styles.detailsContainer}>
+         <Text style={styles.locationText}>
+           {item.Location ||
+             item.City?.MasterDetailName ||
+             'Location not specified'}
+         </Text>
+         <Text style={styles.propertyType}>
+           {item.PropertyType?.MasterDetailName} for{' '}
+           {item.PropertyFor?.MasterDetailName}
+         </Text>
+         <View style={styles.detailsRow}>
+           <Text style={styles.price}>
+             ₹{item.Price} {item.Rate?.MasterDetailName}
+           </Text>
+           <Text style={styles.area}>
+             {item.Area} {item.Size?.MasterDetailName}
+           </Text>
+         </View>
+         <View style={styles.additionalDetails}>
+           {item.Furnishing && (
+             <Text style={styles.detailText}>
+               Furnishing: {item.Furnishing.MasterDetailName}
+             </Text>
+           )}
+           <Text style={styles.detailText}>
+             Ready to Move: {item.readyToMove || 'Not specified'}
+           </Text>
+         </View>
+
+         {/* Seller Details and Enquiry Button in the same row */}
+         <View style={styles.sellerEnquiryRow}>
+           <View style={styles.sellerDetails}>
+             <Text style={styles.sellerName}>Listed by: {item.SellerName}</Text>
+             <Text style={styles.sellerPhone}>Contact: {item.SellerPhone}</Text>
+           </View>
+           <View>
+             <EnquiryButton
+               property={item}
+               // eslint-disable-next-line react-native/no-inline-styles
+               buttonStyle={{
+                 width: '100%', // Custom width
+                 paddingVertical: 8, // Custom padding
+                 backgroundColor: '#cc0e74',
+                 // Custom background color
+               }}
+               // eslint-disable-next-line react-native/no-inline-styles
+               textStyle={{
+                 fontSize: 13, // Custom font size
+                 fontWeight: '600', // Custom font weight
+               }}
+             />
+           </View>
+         </View>
+       </View>
+     </View>
+   </TouchableOpacity>
+ );
 
   if (loading && pageNo === 1) {
     return (
@@ -215,18 +240,18 @@ const styles = StyleSheet.create({
   },
   propertyCard: {
     backgroundColor: 'white',
-    borderRadius: 12, // Rounded corners
+    borderRadius: 12,
     marginBottom: 15,
-    elevation: 5, // Shadow for Android
-    shadowColor: '#000', // Shadow for iOS
-    shadowOffset: { width: 0, height: 2 },
+    elevation: 5,
+    shadowColor: '#000',
+    shadowOffset: {width: 0, height: 2},
     shadowOpacity: 0.2,
     shadowRadius: 4,
-    overflow: 'hidden', // Ensure the image corners are rounded
+    overflow: 'hidden',
   },
   propertyImage: {
     width: '100%',
-    height: 200, // Fixed height for the image
+    height: 200,
   },
   detailsContainer: {
     padding: 15,
@@ -267,11 +292,18 @@ const styles = StyleSheet.create({
     color: '#666',
     marginBottom: 5,
   },
-  sellerDetails: {
+  sellerEnquiryRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center', // Align items vertically in the center
     marginTop: 10,
     paddingTop: 10,
     borderTopWidth: 1,
     borderTopColor: '#eee',
+  },
+  sellerDetails: {
+    flex: 1, // Take up remaining space
+    marginRight: 10, // Add some space between seller details and the button
   },
   sellerName: {
     fontSize: 14,
@@ -283,6 +315,12 @@ const styles = StyleSheet.create({
     color: '#2c5282',
     fontWeight: '500',
   },
+  // enquiryButtonContainer: {
+  //   width: 120,
+  //   marginLeft: 10,
+  //   height: 60, // Adjust the width of the button container
+  //   alignItems: 'flex-end', // Align the button to the right
+  // },
   errorText: {
     color: 'red',
     fontSize: 16,
