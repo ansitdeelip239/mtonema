@@ -1,5 +1,5 @@
 import {createDrawerNavigator} from '@react-navigation/drawer';
-import React,{memo} from 'react';
+import React, {memo} from 'react';
 import Colors from '../constants/Colors';
 import ContactScreen from '../screens/buyer/ContactScreen';
 import CustomDrawerContent from '../components/CustomDrawerContent';
@@ -7,17 +7,15 @@ import ChangePasswordScreen from '../screens/auth/ChangePasswordScreen';
 import PostPropertyScreen from '../screens/seller/PostPropertyScreen';
 import PropertyListScreen from '../screens/seller/PropertyListScreen';
 import ProfileScreen from '../screens/common/ProfileScreen';
+import PostProperty from '../screens/seller/PostProperty';
 
 const Drawer = createDrawerNavigator();
 
 const SellerNavigator = memo(() => {
   return (
-
     <Drawer.Navigator
       // eslint-disable-next-line react/no-unstable-nested-components
-      drawerContent={props => (
-        <CustomDrawerContent {...props} />
-      )}
+      drawerContent={props => <CustomDrawerContent {...props} />}
       initialRouteName="Home"
       screenOptions={{
         drawerType: 'front',
@@ -33,9 +31,14 @@ const SellerNavigator = memo(() => {
       }}>
       <Drawer.Screen name="Home" component={PostPropertyScreen} />
       <Drawer.Screen name="Listed Property" component={PropertyListScreen} />
+      <Drawer.Screen name="Post Property" component={PostProperty} />
       <Drawer.Screen name="Change Password" component={ChangePasswordScreen} />
       <Drawer.Screen name="Contact Us" component={ContactScreen} />
-      <Drawer.Screen name="ProfileScreen" component={ProfileScreen} options={{ drawerItemStyle: { display: 'none' } }} />
+      <Drawer.Screen
+        name="ProfileScreen"
+        component={ProfileScreen}
+        options={{drawerItemStyle: {display: 'none'}}}
+      />
     </Drawer.Navigator>
   );
 });
