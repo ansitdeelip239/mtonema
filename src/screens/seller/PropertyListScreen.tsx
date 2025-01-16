@@ -6,12 +6,15 @@ import {
   StyleSheet,
   ActivityIndicator,
   TouchableOpacity,
+  Image,
+  SafeAreaView,
 } from 'react-native';
 import {api} from '../../utils/api';
 import url from '../../constants/api';
 import {PropertyModel} from '../../types';
 import PropertyModal from '../buyer/PropertyModal';
-import { useAuth } from '../../hooks/useAuth';
+import {useAuth} from '../../hooks/useAuth';
+// import EnquiryButton from '../common/EnquiryButton';
 
 const PropertyListScreen = () => {
   const [properties, setProperties] = useState<PropertyModel[]>([]);
@@ -23,9 +26,8 @@ const PropertyListScreen = () => {
   const [selectedProperty, setSelectedProperty] =
     useState<PropertyModel | null>(null);
   const [modalVisible, setModalVisible] = useState(false);
-  // Add a loading ref to prevent multiple simultaneous requests
   const isLoadingRef = useRef(false);
-    const {user} = useAuth();
+  const {user} = useAuth();
 
   const pageSize = 10;
 
@@ -50,12 +52,10 @@ const PropertyListScreen = () => {
           `${url.GetProperty}?id=${user.ID}&pageNumber=${page}&pageSize=${pageSize}`,
         );
 
-        // Check if response exists and has data
         if (!response || !response.data) {
           throw new Error('Invalid response format');
         }
 
-        // Safely access the property models
         const newProperties = response.data.propertyModels ?? [];
         console.log(`Received ${newProperties.length} properties`);
 
@@ -64,13 +64,14 @@ const PropertyListScreen = () => {
             return newProperties;
           }
 
-          // Create new array for unique properties
           const existingIds = new Set(prevProperties.map(p => p.ID));
           const uniqueNewProperties = newProperties.filter(
             (p: PropertyModel) => !existingIds.has(p.ID),
           );
 
-          console.log(`Found ${uniqueNewProperties.length} unique new properties`);
+          console.log(
+            `Found ${uniqueNewProperties.length} unique new properties`,
+          );
 
           const hasNewData = uniqueNewProperties.length > 0;
           setHasMore(hasNewData && newProperties.length === pageSize);
@@ -79,7 +80,6 @@ const PropertyListScreen = () => {
             ? [...prevProperties, ...uniqueNewProperties]
             : prevProperties;
         });
-
       } catch (err) {
         console.error('Error fetching properties:', err);
         setError('Failed to fetch properties');
@@ -92,23 +92,25 @@ const PropertyListScreen = () => {
     },
     [pageSize, user],
   );
+
   const handlePropertyPress = (property: PropertyModel) => {
     setSelectedProperty(property);
     setModalVisible(true);
   };
-  // Update loadMore with debouncing
+
   const loadMore = useCallback(() => {
     const debouncedLoadMore = debounce(() => {
       console.log('LoadMore triggered', {
         hasMore,
         isLoadingRef: isLoadingRef.current,
-      }); // Debug log
+      });
       if (hasMore && !isLoadingRef.current) {
         setPageNo(prev => prev + 1);
       }
     }, 300);
     debouncedLoadMore();
   }, [hasMore]);
+
   useEffect(() => {
     console.log('Page changed to:', pageNo);
     getAllProperty(pageNo);
@@ -117,36 +119,77 @@ const PropertyListScreen = () => {
   const renderPropertyItem = ({item}: {item: PropertyModel}) => (
     <TouchableOpacity onPress={() => handlePropertyPress(item)}>
       <View style={styles.propertyCard}>
-        <Text style={styles.locationText}>
-          {item.Location ||
-            item.City?.MasterDetailName ||
-            'Location not specified'}
-        </Text>
-        <Text style={styles.propertyType}>
-          {item.PropertyType?.MasterDetailName} for{' '}
-          {item.PropertyFor?.MasterDetailName}
-        </Text>
-        <View style={styles.detailsRow}>
-          <Text style={styles.price}>
-            ₹{item.Price} {item.Rate?.MasterDetailName}
+        {/* Property Image */}
+        {item.ImageURL && item.ImageURL.length > 0 && (
+          <Image
+            source={{uri: item.ImageURL[0].ImageUrl}}
+            style={styles.propertyImage}
+            resizeMode="cover"
+          />
+        )}
+
+        {/* Property Details */}
+        <View style={styles.detailsContainer}>
+          {/* Location and Property Type */}
+          <Text style={styles.locationText}>
+            {item.Location ||
+              item.City?.MasterDetailName ||
+              'Location not specified'}
           </Text>
-          <Text style={styles.area}>
-            {item.Area} {item.Size?.MasterDetailName}
+          <Text style={styles.propertyType}>
+            {item.PropertyType?.MasterDetailName} for{' '}
+            {item.PropertyFor?.MasterDetailName}
           </Text>
-        </View>
-        <View style={styles.additionalDetails}>
-          {item.Furnishing && (
-            <Text style={styles.detailText}>
-              Furnishing: {item.Furnishing.MasterDetailName}
+
+          {/* Price and Area */}
+          <View style={styles.detailsRow}>
+            <Text style={styles.price}>
+              Amount: ₹{item.Price} {item.Rate?.MasterDetailName}
             </Text>
-          )}
-          <Text style={styles.detailText}>
-            Ready to Move: {item.readyToMove || 'Not specified'}
-          </Text>
-        </View>
-        <View style={styles.sellerDetails}>
-          <Text style={styles.sellerName}>Listed by: {item.SellerName}</Text>
-          <Text style={styles.sellerPhone}>Contact: {item.SellerPhone}</Text>
+            <Text style={styles.area}>
+              Area: {item.Area} {item.Size?.MasterDetailName}
+            </Text>
+          </View>
+
+          {/* Additional Details */}
+          <View style={styles.additionalDetails}>
+            {item.Furnishing && (
+              <Text style={styles.detailText}>
+                Furnishing: {item.Furnishing.MasterDetailName}
+              </Text>
+            )}
+            <Text style={styles.detailText}>
+              Ready to Move: {item.readyToMove || 'Not specified'}
+            </Text>
+          </View>
+
+          {/* Seller Details and Enquiry Button */}
+          <View style={styles.sellerEnquiryRow}>
+            <View style={styles.sellerDetails}>
+              <Text style={styles.sellerName}>
+                Listed by: {item.SellerName}
+              </Text>
+              <Text style={styles.sellerPhone}>
+                Contact: {item.SellerPhone}
+              </Text>
+            </View>
+            {/* <View>
+              <EnquiryButton
+                property={item}
+                // eslint-disable-next-line react-native/no-inline-styles
+                buttonStyle={{
+                  width: '100%',
+                  paddingVertical: 8,
+                  backgroundColor: '#cc0e74',
+                }}
+                // eslint-disable-next-line react-native/no-inline-styles
+                textStyle={{
+                  fontSize: 13,
+                  fontWeight: '600',
+                }}
+              />
+            </View> */}
+          </View>
         </View>
       </View>
     </TouchableOpacity>
@@ -169,9 +212,8 @@ const PropertyListScreen = () => {
   }
 
   return (
-    <>
+    <SafeAreaView style={styles.container}>
       <FlatList
-        style={styles.container}
         data={properties}
         keyExtractor={item => `property-${item.ID}`}
         renderItem={renderPropertyItem}
@@ -195,7 +237,7 @@ const PropertyListScreen = () => {
         visible={modalVisible}
         onClose={() => setModalVisible(false)}
       />
-    </>
+    </SafeAreaView>
   );
 };
 
@@ -213,33 +255,36 @@ const styles = StyleSheet.create({
   },
   propertyCard: {
     backgroundColor: 'white',
-    borderRadius: 8,
-    padding: 15,
+    borderRadius: 12,
     marginBottom: 15,
-    elevation: 3,
+    elevation: 5,
     shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
+    shadowOffset: {width: 0, height: 2},
+    shadowOpacity: 0.2,
+    shadowRadius: 4,
+    overflow: 'hidden',
+  },
+  propertyImage: {
+    width: '100%',
+    height: 200,
+  },
+  detailsContainer: {
+    padding: 15,
   },
   locationText: {
     fontSize: 18,
     fontWeight: 'bold',
     color: '#333',
-    marginBottom: 5,
+    marginBottom: 8, // Adjusted margin
   },
   propertyType: {
-    fontSize: 16,
+    fontSize: 14,
     color: '#666',
-    marginBottom: 10,
+    marginBottom: 12, // Adjusted margin
   },
   detailsRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginBottom: 10,
+    flexDirection: 'column',
+    gap:4,
   },
   price: {
     fontSize: 16,
@@ -259,18 +304,25 @@ const styles = StyleSheet.create({
   detailText: {
     fontSize: 14,
     color: '#666',
-    marginBottom: 5,
+    marginBottom: 6, // Adjusted margin
   },
-  sellerDetails: {
-    marginTop: 10,
-    paddingTop: 10,
+  sellerEnquiryRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginTop: 12, // Adjusted margin
+    paddingTop: 12,
     borderTopWidth: 1,
     borderTopColor: '#eee',
+  },
+  sellerDetails: {
+    flex: 1,
+    marginRight: 10,
   },
   sellerName: {
     fontSize: 14,
     color: '#4a5568',
-    marginBottom: 3,
+    marginBottom: 4, // Adjusted margin
   },
   sellerPhone: {
     fontSize: 14,
@@ -294,6 +346,7 @@ const styles = StyleSheet.create({
 });
 
 export default PropertyListScreen;
+
 function debounce(func: (...args: any[]) => void, wait: number) {
   let timeout: NodeJS.Timeout | null = null;
   return function (...args: any[]) {
