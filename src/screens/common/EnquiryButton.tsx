@@ -11,6 +11,7 @@ import url from '../../constants/api';
 import {useAuth} from '../../hooks/useAuth';
 import {PropertyModel} from '../../types';
 
+
 interface EnquiryButtonProps {
   property: PropertyModel;
   buttonStyle?: object; // Add this prop for custom button styles

@@ -13,6 +13,7 @@ import {
 } from 'react-native';
 import {PropertyModel} from '../../types';
 import EnquiryButton from '../common/EnquiryButton';
+import {useAuth} from '../../hooks/useAuth';
 
 // Utility function to strip HTML tags
 const stripHtmlTags = (html: string): string => {
@@ -26,6 +27,7 @@ interface PropertyModalProps {
 }
 
 const PropertyModal = ({property, visible, onClose}: PropertyModalProps) => {
+  const {user} = useAuth();
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const scrollViewRef = useRef<ScrollView>(null);
 
@@ -168,9 +170,11 @@ const PropertyModal = ({property, visible, onClose}: PropertyModalProps) => {
         </View>
 
         {/* Enquiry Now Button */}
-        <View style={styles.buttonContainer}>
-          <EnquiryButton property={property} />
-        </View>
+        {user?.Role === 'User' ? (
+          <View style={styles.buttonContainer}>
+            <EnquiryButton property={property} />
+          </View>
+        ) : null}
       </ScrollView>
     </Modal>
   );
