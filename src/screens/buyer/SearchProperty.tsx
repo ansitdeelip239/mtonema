@@ -13,6 +13,7 @@ import {useMaster} from '../../context/MasterProvider';
 import BuyerService from '../../services/BuyerService';
 import PropertyModal from './PropertyModal';
 import {PropertyModel} from '../../types';
+import EnquiryButton from '../common/EnquiryButton';
 
 interface Property {
   ID: number;
@@ -33,7 +34,8 @@ const SearchProperty = () => {
   const [splitSearchText, setSplitSearchText] = useState<string[]>([]);
   const [selectedLocation, setSelectedLocation] = useState<string | null>(null);
   const [showAllLocations, setShowAllLocations] = useState(false);
-  const [isSearchButtonPressed,setIsSearchButtonPressed] = useState<boolean>(false);
+  const [isSearchButtonPressed, setIsSearchButtonPressed] =
+    useState<boolean>(false);
   const [predictions, setPredictions] = useState<
     {place_id: string; description: string}[]
   >([]);
@@ -57,14 +59,16 @@ const SearchProperty = () => {
     (location: any) => location.MasterDetailName,
   );
   const stripHtmlTags = (html: string | null | undefined): string => {
-    if (!html) {return '';}
+    if (!html) {
+      return '';
+    }
     return html.replace(/<\/?[^>]+(>|$)/g, '').trim(); // Remove HTML tags
   };
   const handleSearch = async () => {
     console.log('Search Text:', searchText);
     console.log('Selected Location:', selectedLocation);
     console.log('Split Search Text:', splitSearchText);
-  
+
     setLoading(true);
     setIsSearchButtonPressed(true);
     setHasMoreData(true);
@@ -73,10 +77,10 @@ const SearchProperty = () => {
       totalPages: 0,
       pageSize: 12,
     });
-  
+
     let placeArray: string[] = [];
     let cityParam = '';
-  
+
     if (selectedLocation === 'All Location') {
       placeArray = allLocations || [];
       cityParam = '';
@@ -87,10 +91,10 @@ const SearchProperty = () => {
       placeArray = splitSearchText;
       cityParam = '';
     }
-  
+
     console.log('Place Array:', placeArray);
     console.log('City Param:', cityParam);
-  
+
     try {
       const response = await BuyerService.filterProperties({
         Address: searchText,
@@ -242,12 +246,12 @@ const SearchProperty = () => {
     : masterData?.ProjectLocation.slice(0, 3);
 
   // eslint-disable-next-line react/no-unstable-nested-components
-  const PropertyCard = ({item}: {item: Property}) => (
+  const PropertyCard = ({ item }: { item: Property }) => (
     <TouchableOpacity onPress={() => handlePropertyPress(item)}>
       <View style={styles.card}>
         {item.ImageURLType && item.ImageURLType.length > 0 && (
           <Image
-            source={{uri: item.ImageURLType[0].ImageUrl}}
+            source={{ uri: item.ImageURLType[0].ImageUrl }}
             style={styles.cardImage}
           />
         )}
@@ -257,7 +261,8 @@ const SearchProperty = () => {
             ₹{item.Price} {item.Rate?.MasterDetailName}
           </Text>
           <Text style={styles.cardDescription}>
-            {stripHtmlTags(item.ShortDiscription || '')} {/* Ensure it's a string */}
+            {stripHtmlTags(item.ShortDiscription || '')}{' '}
+            {/* Ensure it's a string */}
           </Text>
           <Text style={styles.cardInfo}>
             Property Type: {item.PropertyType?.MasterDetailName}
@@ -266,8 +271,17 @@ const SearchProperty = () => {
             Furnishing: {item.Furnishing?.MasterDetailName}
           </Text>
           <Text style={styles.cardInfo}>Area: {item.Area} sq ft</Text>
-          <Text style={styles.cardInfo}>Parking: {item.Parking}</Text>
-          <Text style={styles.cardInfo}>Ready to Move: {item.readyToMove}</Text>
+          <View style={styles.bottomRow}>
+            <View style={styles.details}>
+              <Text style={styles.cardInfo}>Parking: {item.Parking}</Text>
+              <Text style={styles.cardInfo}>Ready to Move: {item.readyToMove}</Text>
+            </View>
+            <EnquiryButton
+              property={item as PropertyModel}
+              buttonStyle={styles.enquiryButton}
+              textStyle={styles.enquiryButtonText}
+            />
+          </View>
         </View>
       </View>
     </TouchableOpacity>
@@ -299,7 +313,13 @@ const SearchProperty = () => {
     }
 
     return null;
-  },[loading, isLoadingMore, searchResults.length,hasMoreData,isSearchButtonPressed]);
+  }, [
+    loading,
+    isLoadingMore,
+    searchResults.length,
+    hasMoreData,
+    isSearchButtonPressed,
+  ]);
 
   return (
     <View style={styles.container}>
@@ -574,31 +594,52 @@ const styles = StyleSheet.create({
   cardImage: {
     width: '100%',
     height: 150,
-    borderTopLeftRadius: 8,
-    borderTopRightRadius: 8,
   },
   cardContent: {
     padding: 16,
   },
   cardTitle: {
-    fontSize: 16,
+    fontSize: 20,
     fontWeight: 'bold',
+    marginBottom: 8,
     color: '#333',
   },
   cardPrice: {
-    fontSize: 14,
+    fontSize: 18,
     color: '#cc0e74',
-    marginTop: 8,
+    fontWeight: '600',
+    marginBottom: 12,
   },
   cardDescription: {
     fontSize: 14,
     color: '#666',
-    marginTop: 8,
+    marginBottom: 12,
   },
   cardInfo: {
-    fontSize: 12,
-    color: '#666',
-    marginTop: 4,
+    fontSize: 14,
+    color: '#555',
+    marginBottom: 8,
+  },
+  bottomRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginTop: 12,
+  },
+  details: {
+    flex: 1,
+  },
+  enquiryButton: {
+    width: 105,
+    paddingVertical: 8,
+    backgroundColor: '#cc0e74',
+    borderRadius: 8,
+    alignItems: 'center',
+  },
+  enquiryButtonText: {
+    fontSize: 13,
+    fontWeight: '600',
+    color: '#fff',
   },
   loader: {
     marginTop: 20,
