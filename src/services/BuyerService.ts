@@ -23,6 +23,17 @@ class BuyerService {
       console.log('Error in getplaces', error);
     }
   }
+  static async deleteProperty(id:number)
+  {
+    try {
+      const response = await api.get<any>(
+        `${url1.deleteProperty}?id=${id}`,
+      );
+      return response;
+    } catch (error) {
+      console.log('Error in deleteProperty', error);
+    }
+  }
   static async filterProperties(filterCriteria: {
     Address?: string;
     place:string[];

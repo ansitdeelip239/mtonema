@@ -1,4 +1,4 @@
-import React, {useState, useRef} from 'react';
+import React, { useState, useRef } from 'react';
 import {
   Modal,
   View,
@@ -11,9 +11,10 @@ import {
   NativeSyntheticEvent,
   NativeScrollEvent,
 } from 'react-native';
-import {PropertyModel} from '../../types';
+import { PropertyModel } from '../../types';
 import EnquiryButton from '../common/EnquiryButton';
-import {useAuth} from '../../hooks/useAuth';
+import { useAuth } from '../../hooks/useAuth';
+import BuyerService from '../../services/BuyerService';
 
 // Utility function to strip HTML tags
 const stripHtmlTags = (html: string): string => {
@@ -26,9 +27,38 @@ interface PropertyModalProps {
   onClose: () => void;
 }
 
-const PropertyModal = ({property, visible, onClose}: PropertyModalProps) => {
-  const {user} = useAuth();
+interface ConfirmationModalProps {
+  visible: boolean;
+  onConfirm: () => void;
+  onCancel: () => void;
+}
+
+const ConfirmationModal: React.FC<ConfirmationModalProps> = ({ visible, onConfirm, onCancel }) => {
+  return (
+    <Modal visible={visible} transparent animationType="fade">
+  <View style={styles.confirmationModalContainer}>
+    <View style={styles.confirmationModalContent}>
+      <Text style={styles.confirmationModalText}>
+        Are you sure you want to delete your property?
+      </Text>
+      <View style={styles.confirmationModalButtons}>
+        <TouchableOpacity onPress={onConfirm} style={[styles.confirmationModalButton, styles.yesButton]}>
+          <Text style={styles.yesButtonText}>Yes</Text>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={onCancel} style={[styles.confirmationModalButton, styles.noButton]}>
+          <Text style={styles.noButtonText}>No</Text>
+        </TouchableOpacity>
+      </View>
+    </View>
+  </View>
+</Modal>
+  );
+};
+
+const PropertyModal = ({ property, visible, onClose }: PropertyModalProps) => {
+  const { user, dataUpdated, setDataUpdated } = useAuth();
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [isConfirmationModalVisible, setConfirmationModalVisible] = useState(false);
   const scrollViewRef = useRef<ScrollView>(null);
 
   if (!property) {
@@ -70,6 +100,25 @@ const PropertyModal = ({property, visible, onClose}: PropertyModalProps) => {
     setCurrentImageIndex(newIndex);
   };
 
+  const handleDeleteConfirmation = () => {
+    setConfirmationModalVisible(true);
+  };
+
+  const handleDelete = async () => {
+    try {
+      const response = await BuyerService.deleteProperty(property.ID);
+      if (response?.Success) {
+        setDataUpdated(!dataUpdated);
+        onClose();
+        console.log('Property deleted successfully');
+      }
+    } catch (error) {
+      console.error((error as Error).message);
+    } finally {
+      setConfirmationModalVisible(false);
+    }
+  };
+
   return (
     <Modal visible={visible} animationType="slide" onRequestClose={onClose}>
       <ScrollView style={styles.modalContainer}>
@@ -88,7 +137,7 @@ const PropertyModal = ({property, visible, onClose}: PropertyModalProps) => {
               {images.map((image: any, index: any) => (
                 <Image
                   key={index}
-                  source={{uri: image.ImageUrl || image}} // Handle both cases
+                  source={{ uri: image.ImageUrl || image }} // Handle both cases
                   style={styles.propertyImage}
                   resizeMode="cover"
                 />
@@ -175,15 +224,52 @@ const PropertyModal = ({property, visible, onClose}: PropertyModalProps) => {
             <EnquiryButton property={property} />
           </View>
         ) : null}
+        {user?.Role === 'Seller' ? (
+          <View style={styles.buttonContainer2}>
+            <Text onPress={handleDeleteConfirmation} style={styles.enquiryButtonText2}>
+              DELETE PROPERTY
+            </Text>
+          </View>
+        ) : null}
       </ScrollView>
+
+      <ConfirmationModal
+        visible={isConfirmationModalVisible}
+        onConfirm={handleDelete}
+        onCancel={() => setConfirmationModalVisible(false)}
+      />
     </Modal>
   );
 };
+
 
 const styles = StyleSheet.create({
   modalContainer: {
     flex: 1,
     backgroundColor: '#fff',
+  },
+  enquiryButtonText2: {
+    color: 'white', // White text color
+    fontSize: 16, // Font size
+    fontWeight: 'bold', // Bold text
+    textAlign: 'center', // Center text
+  },
+  buttonContainer2: {
+    backgroundColor: 'red',
+    borderRadius: 8,
+    paddingVertical: 2,
+    padding:5,
+    alignItems: 'center',
+    justifyContent: 'center',
+    elevation: 3,
+    shadowColor: 'black',
+    shadowOffset: { width: 2, height: 6 },
+    shadowOpacity: 0.2,
+    shadowRadius: 4,
+    width:140,
+    position:'absolute',
+    top:'33%',
+    right:'3%',
   },
   imageContainer: {
     position: 'relative',
@@ -239,6 +325,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: 16,
   },
+
   enquiryButton: {
     backgroundColor: '#cc0e74',
     padding: 15,
@@ -290,6 +377,57 @@ const styles = StyleSheet.create({
     fontSize: 16,
     marginBottom: 8,
     color: '#4a5568',
+  },
+ confirmationModalContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)', // Semi-transparent background
+  },
+  confirmationModalContent: {
+    width: '90%',
+    height:'25%',
+    padding: 20,
+    backgroundColor: 'white',
+    borderRadius: 10,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  confirmationModalText: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    marginBottom: 35,
+    textAlign: 'center',
+  },
+  confirmationModalButtons: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    width: '100%',
+  },
+  confirmationModalButton: {
+    width: '44%', // Adjust width to make buttons larger
+    paddingVertical: 10,
+    borderRadius: 10,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  yesButton: {
+    backgroundColor: 'red',
+  },
+  noButton: {
+    backgroundColor: 'white', // White background for No button
+    borderWidth: 1,
+    borderColor: '#ccc', // Light border for No button
+  },
+  yesButtonText: {
+    color: 'white', // White text for Yes button
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+  noButtonText: {
+    color: 'black', // Black text for No button
+    fontSize: 16,
+    fontWeight: 'bold',
   },
 });
 

@@ -26,11 +26,14 @@ export default {
     AddProperty: url1 + '/api/v1/property/addProperty',
     GetProperty: url1 + '/api/v1/property/getPropertyByUserid',
     UpdateProperty: url1 + '/api/v1/property/updateProperty',
-    deleteProperty: url1 + '/api/v1/property/removeProperty?id=',
+    deleteProperty: url1 + '/api/v1/property/removeProperty',
     GetInTouch: url1 + '/api/v1/contactProperty/GetinTouch',
 
 //updateprofile
 UpdateProfile: url1 + '/api/v1/User/UpdateUser',
+
+//cloudnary
+imageUpload : url1 + 'https://api.cloudinary.com/v1_1/dncrproperty-com/image/upload',
 
 //Master Detail
 getMasterDetail: url1 + '/api/v1/MasterDetail/getMasterDetailsByMasterName?MasterDetailName=',

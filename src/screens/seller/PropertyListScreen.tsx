@@ -8,13 +8,13 @@ import {
   TouchableOpacity,
   Image,
   SafeAreaView,
+  RefreshControl, // Import RefreshControl
 } from 'react-native';
 import {api} from '../../utils/api';
 import url from '../../constants/api';
 import {PropertyModel} from '../../types';
 import PropertyModal from '../buyer/PropertyModal';
 import {useAuth} from '../../hooks/useAuth';
-// import EnquiryButton from '../common/EnquiryButton';
 
 const PropertyListScreen = () => {
   const [properties, setProperties] = useState<PropertyModel[]>([]);
@@ -26,8 +26,9 @@ const PropertyListScreen = () => {
   const [selectedProperty, setSelectedProperty] =
     useState<PropertyModel | null>(null);
   const [modalVisible, setModalVisible] = useState(false);
+  const [refreshing, setRefreshing] = useState(false); // State for pull-to-refresh
   const isLoadingRef = useRef(false);
-  const {user} = useAuth();
+  const {user, dataUpdated} = useAuth();
 
   const pageSize = 10;
 
@@ -88,10 +89,19 @@ const PropertyListScreen = () => {
         isLoadingRef.current = false;
         setLoading(false);
         setIsFetchingMore(false);
+        setRefreshing(false); // Stop refreshing after fetching data
       }
     },
     [pageSize, user],
   );
+
+  // Handle pull-to-refresh
+  const handleRefresh = useCallback(() => {
+    setRefreshing(true); // Start refreshing
+    setPageNo(1); // Reset to the first page
+    setProperties([]); // Clear existing data
+    getAllProperty(1); // Fetch fresh data
+  }, [getAllProperty]);
 
   const handlePropertyPress = (property: PropertyModel) => {
     setSelectedProperty(property);
@@ -115,6 +125,10 @@ const PropertyListScreen = () => {
     console.log('Page changed to:', pageNo);
     getAllProperty(pageNo);
   }, [pageNo, getAllProperty]);
+
+  useEffect(() => {
+    getAllProperty(1);
+  }, [getAllProperty, dataUpdated]);
 
   const renderPropertyItem = ({item}: {item: PropertyModel}) => (
     <TouchableOpacity onPress={() => handlePropertyPress(item)}>
@@ -173,22 +187,6 @@ const PropertyListScreen = () => {
                 Contact: {item.SellerPhone}
               </Text>
             </View>
-            {/* <View>
-              <EnquiryButton
-                property={item}
-                // eslint-disable-next-line react-native/no-inline-styles
-                buttonStyle={{
-                  width: '100%',
-                  paddingVertical: 8,
-                  backgroundColor: '#cc0e74',
-                }}
-                // eslint-disable-next-line react-native/no-inline-styles
-                textStyle={{
-                  fontSize: 13,
-                  fontWeight: '600',
-                }}
-              />
-            </View> */}
           </View>
         </View>
       </View>
@@ -219,6 +217,14 @@ const PropertyListScreen = () => {
         renderItem={renderPropertyItem}
         onEndReached={loadMore}
         onEndReachedThreshold={0.5}
+        refreshControl={ // Add RefreshControl
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={handleRefresh}
+            colors={['#0066cc']} // Customize the loading spinner color
+            tintColor="#0066cc" // Customize the loading spinner color (iOS)
+          />
+        }
         ListFooterComponent={
           isFetchingMore ? (
             <View style={styles.footer}>
@@ -275,16 +281,16 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold',
     color: '#333',
-    marginBottom: 8, // Adjusted margin
+    marginBottom: 8,
   },
   propertyType: {
     fontSize: 14,
     color: '#666',
-    marginBottom: 12, // Adjusted margin
+    marginBottom: 12,
   },
   detailsRow: {
     flexDirection: 'column',
-    gap:4,
+    gap: 4,
   },
   price: {
     fontSize: 16,
@@ -304,13 +310,13 @@ const styles = StyleSheet.create({
   detailText: {
     fontSize: 14,
     color: '#666',
-    marginBottom: 6, // Adjusted margin
+    marginBottom: 6,
   },
   sellerEnquiryRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginTop: 12, // Adjusted margin
+    marginTop: 12,
     paddingTop: 12,
     borderTopWidth: 1,
     borderTopColor: '#eee',
@@ -322,7 +328,7 @@ const styles = StyleSheet.create({
   sellerName: {
     fontSize: 14,
     color: '#4a5568',
-    marginBottom: 4, // Adjusted margin
+    marginBottom: 4,
   },
   sellerPhone: {
     fontSize: 14,
