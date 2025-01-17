@@ -1,9 +1,9 @@
-import React, { useState, useEffect, useCallback, useRef } from 'react';
+import React, {useState, useEffect, useCallback, useRef} from 'react';
 import AuthService from '../services/AuthService';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { jwtDecode } from 'jwt-decode';
+import {jwtDecode} from 'jwt-decode';
 import AuthContext from './AuthContext';
-import { User } from '../types';
+import {User} from '../types';
 
 interface AuthProviderProps {
   children: React.ReactNode;
@@ -13,7 +13,7 @@ interface DecodedToken {
   exp: number;
   [key: string]: any;
 }
-export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
+export const AuthProvider: React.FC<AuthProviderProps> = ({children}) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [user, setUser] = useState<User | null>(null);
   const [authToken, setAuthToken] = useState<string | null>(null);
@@ -23,6 +23,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const logout = useCallback(async () => {
     try {
       await AuthService.removeUserData();
+      await AsyncStorage.removeItem('tokenExpiry');
       setUser(null);
       setAuthToken(null);
       setIsAuthenticated(false);
@@ -38,59 +39,64 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       setIsAuthenticated(false);
     }
   }, []);
-  const handleTokenExpiry = useCallback((token: string) => {
-    if (!token) {
-      console.error('Invalid token provided');
-      logout();
-      return;
-    }
-    try {
-      const decodedToken = jwtDecode<DecodedToken>(token);
-      // Validate token structure
-      if (!decodedToken || typeof decodedToken.exp !== 'number') {
-        console.error('Invalid token structure');
+  const handleTokenExpiry = useCallback(
+    (token: string) => {
+      if (!token) {
+        console.error('Invalid token provided');
         logout();
         return;
       }
 
-      const currentTime = Date.now();
-      const expiryTime = decodedToken.exp * 1000;
-     console.log('Expiry time token:-***',expiryTime);
-      const timeUntilExpiry = expiryTime - currentTime;
-      console.log('Expiry timeUntilExpiry token:-***',timeUntilExpiry);
-      // const timeUntilExpiry = 120000;  //check for token is working fine or not.
-      // Clear any existing timer
-      if (tokenExpiryTimer.current) {
-        clearTimeout(tokenExpiryTimer.current);
-        tokenExpiryTimer.current = undefined;
-      }
+      try {
+        const decodedToken = jwtDecode<DecodedToken>(token);
 
-      // Check if token is already expired
-      if (timeUntilExpiry <= 0) {
-        console.warn('Token has already expired');
+        // Validate token structure
+        if (!decodedToken || typeof decodedToken.exp !== 'number') {
+          console.error('Invalid token structure');
+          logout();
+          return;
+        }
+
+        const expiryTime = decodedToken.exp * 1000; // Convert to milliseconds
+        const currentTime = Date.now();
+        const timeUntilExpiry = expiryTime - currentTime;
+        // const timeUntilExpiry = 70000;   //this is for testing time its workign or not
+        console.log('Expiry time token:', expiryTime);
+        console.log('Time until expiry:', timeUntilExpiry);
+
+        // Check if token is already expired
+        if (timeUntilExpiry <= 0) {
+          console.warn('Token has already expired');
+          logout();
+          return;
+        }
+
+        // Clear any existing timer
+        if (tokenExpiryTimer.current) {
+          clearTimeout(tokenExpiryTimer.current);
+        }
+
+        // Set buffer time (1 minute) before expiry to ensure smooth logout
+        const bufferTime = 1 * 60 * 1000; // 1 minute in milliseconds
+        const timerDuration = Math.max(0, timeUntilExpiry - bufferTime);
+
+        // Set new timer with buffer time
+        tokenExpiryTimer.current = setTimeout(() => {
+          console.log('Token expiring soon, logging out');
+          logout();
+        }, timerDuration);
+      } catch (error) {
+        console.error(
+          'Token decode failed:',
+          (error as any)?.message || 'Unexpected error during token handling',
+        );
         logout();
-        return;
       }
+    },
+    [logout],
+  );
 
-      // Set buffer time (5 minutes) before expiry to ensure smooth logout
-      const bufferTime = 1 * 60 * 1000; // 1 minutes in milliseconds
-      const timerDuration = Math.max(0, timeUntilExpiry - bufferTime);
-      // Set new timer
-      tokenExpiryTimer.current = setTimeout(() => {
-        console.log('Token expiring soon, logging out');
-        logout();
-      }, timerDuration);
-    } catch (error) {
-      if (error instanceof Error) {
-        console.error('Token decode failed:', error.message);
-      } else {
-        console.error('Unexpected error during token handling');
-      }
-      logout();
-    }
-  }, [logout]);
-    const storeUser = useCallback(async (userData: User) => {
-
+  const storeUser = useCallback(async (userData: User) => {
     try {
       await AsyncStorage.setItem('user', JSON.stringify(userData));
       setUser(userData);
@@ -104,20 +110,21 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     setAuthToken(token);
   }, []);
 
-
-
-  const login = useCallback(async (token: string) => {
-    try {
-      console.log('************',token);
-      await AuthService.storeUserData(token);
-      setAuthToken(token);
-      setIsAuthenticated(true);
-      handleTokenExpiry(token);
-    } catch (error) {
-      console.error('Login failed:', error);
-      throw error;
-    }
-  }, [handleTokenExpiry]);
+  const login = useCallback(
+    async (token: string) => {
+      try {
+        console.log('************', token);
+        await AuthService.storeUserData(token);
+        setAuthToken(token);
+        setIsAuthenticated(true);
+        handleTokenExpiry(token);
+      } catch (error) {
+        console.error('Login failed:', error);
+        throw error;
+      }
+    },
+    [handleTokenExpiry],
+  );
 
   useEffect(() => {
     const checkAuthStatus = async () => {
@@ -161,8 +168,6 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={contextValue}>
-      {children}
-    </AuthContext.Provider>
+    <AuthContext.Provider value={contextValue}>{children}</AuthContext.Provider>
   );
 };
