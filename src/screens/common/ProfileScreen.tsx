@@ -27,7 +27,7 @@ const ProfileScreen = () => {
     password: user?.Password,
     mobile: user?.Phone,
     location: user?.Location,
-    profileImage: require('../../assets/Images/dncrlogo.png'), // Local image
+    profileImage: require('../../assets/Images/dncrlogo.png'),
   });
 
   // State for edit mode of each field

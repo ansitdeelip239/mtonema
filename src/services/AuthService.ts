@@ -32,22 +32,20 @@ class AuthService {
       throw error;
     }
   }
-static async signUp(body:SignUpRequest)
-{
-  try {
-    const response = await fetch(api.SignUp,{
-      method:'POST',
-      headers:{
-        'Content-Type': 'application/json',
-      },
-      body:JSON.stringify(body),
-    });
-    return response.json();
-  } catch (error) {
-    throw error;
+  static async signUp(body: SignUpRequest) {
+    try {
+      const response = await fetch(api.SignUp, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(body),
+      });
+      return response.json();
+    } catch (error) {
+      throw error;
+    }
   }
-
-}
   static async verifyPassword(
     email: string,
     password: string,
@@ -77,7 +75,7 @@ static async signUp(body:SignUpRequest)
   // Store user data
   static async storeUserData(token: string): Promise<void> {
     try {
-      await AsyncStorage.setItem('token',token);
+      await AsyncStorage.setItem('token', token);
     } catch (error) {
       console.error('Error storing user data', error);
     }
@@ -90,6 +88,16 @@ static async signUp(body:SignUpRequest)
       return userData ? JSON.parse(userData) : null;
     } catch (error) {
       console.error('Error retrieving user data', error);
+      return null;
+    }
+  }
+
+  static async getToken(): Promise<string | null> {
+    try {
+      const token = await AsyncStorage.getItem('token');
+      return token ? token : null;
+    } catch (error) {
+      console.error('Error retrieving token', error);
       return null;
     }
   }

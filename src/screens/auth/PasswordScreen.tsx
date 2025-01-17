@@ -29,13 +29,17 @@ const PasswordScreen: React.FC<Props> = ({navigation, route}) => {
     try {
       setIsLoading(true);
       const response = await AuthService.verifyPassword(email, password);
-      console.log('Response:', response); // Check the response from the AuthService
+      // console.log('Response:', response); // Check the response from the AuthService
       if (response.Success) {
         storeToken(response.data);
         login(response.data);
       }
+      else
+      {
+        throw response.Message;
+      }
     } catch (error) {
-      console.error('Error during sign-in:', error);
+      console.error('Error during sign-in:',(error as Error).message);
     }
     finally {
       setIsLoading(false);

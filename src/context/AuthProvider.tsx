@@ -55,9 +55,10 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
       const currentTime = Date.now();
       const expiryTime = decodedToken.exp * 1000;
-
+     console.log('Expiry time token:-***',expiryTime);
       const timeUntilExpiry = expiryTime - currentTime;
-      // const timeUntilExpiry = 120000;
+      console.log('Expiry timeUntilExpiry token:-***',timeUntilExpiry);
+      // const timeUntilExpiry = 120000;  //check for token is working fine or not.
       // Clear any existing timer
       if (tokenExpiryTimer.current) {
         clearTimeout(tokenExpiryTimer.current);
@@ -89,6 +90,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     }
   }, [logout]);
     const storeUser = useCallback(async (userData: User) => {
+
     try {
       await AsyncStorage.setItem('user', JSON.stringify(userData));
       setUser(userData);
@@ -106,6 +108,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
   const login = useCallback(async (token: string) => {
     try {
+      console.log('************',token);
       await AuthService.storeUserData(token);
       setAuthToken(token);
       setIsAuthenticated(true);
@@ -120,7 +123,8 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     const checkAuthStatus = async () => {
       try {
         const storedUser = await AuthService.getUserData();
-        if (storedUser) {
+        const token = await AuthService.getToken();
+        if (storedUser && token) {
           setUser(storedUser);
           setIsAuthenticated(true);
           if (authToken) {

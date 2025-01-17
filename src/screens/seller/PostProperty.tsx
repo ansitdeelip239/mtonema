@@ -140,7 +140,6 @@ const PropertyListingForm = () => {
                 onChangeText={text => handleInputChange('name', text)}
               />
             </View>
-
             <View style={styles.inputGroup}>
               <Text style={styles.label}>Email</Text>
               <TextInput

@@ -9,15 +9,15 @@ import {
   KeyboardAvoidingView,
   Platform,
 } from 'react-native';
-import React, { useState } from 'react';
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { AuthStackParamList } from '../../navigator/AuthNavigator';
+import React, {useState} from 'react';
+import {NativeStackScreenProps} from '@react-navigation/native-stack';
+import {AuthStackParamList} from '../../navigator/AuthNavigator';
 import AuthService from '../../services/AuthService'; // Import the AuthService
 import Toast from 'react-native-toast-message'; // Import Toast
 
 type Props = NativeStackScreenProps<AuthStackParamList, 'SignUpScreen'>;
 
-const SignUpScreen: React.FC<Props> = ({ navigation }) => {
+const SignUpScreen: React.FC<Props> = ({navigation}) => {
   const [signupData, setSignupData] = useState({
     Name: '',
     Email: '',
@@ -36,15 +36,15 @@ const SignUpScreen: React.FC<Props> = ({ navigation }) => {
 
   // Handle input changes dynamically
   const handleInputChange = (key: string, value: string) => {
-    setSignupData({ ...signupData, [key]: value });
+    setSignupData({...signupData, [key]: value});
     // Clear errors when the user starts typing
-    setErrors({ ...errors, [key]: false });
+    setErrors({...errors, [key]: false});
   };
 
   // Validate the form
   const validateForm = () => {
     let valid = true;
-    const newErrors = { ...errors };
+    const newErrors = {...errors};
 
     if (!signupData.Name.trim()) {
       newErrors.Name = true;
@@ -85,9 +85,20 @@ const SignUpScreen: React.FC<Props> = ({ navigation }) => {
         Toast.show({
           type: 'success',
           text1: 'Registration Success',
-          text2: response.Message || 'Check your Mail for next step', // Use the message from the API
+          text2: response.Message || 'Check your Mail for next step',
         });
-        return; // Exit the function after showing the success toast
+
+        // Clear the form data
+        setSignupData({
+          Name: '',
+          Email: '',
+          Location: '',
+          Phone: '',
+        });
+
+        // Navigate to the home screen
+        navigation.navigate('EmailScreen');
+        return;
       }
 
       // Show error toast for other cases
@@ -98,7 +109,6 @@ const SignUpScreen: React.FC<Props> = ({ navigation }) => {
       });
     } catch (error) {
       console.error('API Error:', error);
-      // Show error toast for unexpected errors
       Toast.show({
         type: 'error',
         text1: 'Error',
@@ -111,7 +121,7 @@ const SignUpScreen: React.FC<Props> = ({ navigation }) => {
 
   return (
     <KeyboardAvoidingView
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'} // Adjust behavior based on platform
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       style={styles.mainScreen}>
       {/* Logo Section */}
       <View style={styles.upperPart}>
@@ -131,7 +141,7 @@ const SignUpScreen: React.FC<Props> = ({ navigation }) => {
               errors.Name && styles.inputError, // Apply red border if error
             ]}
             value={signupData.Name}
-            onChangeText={(text) => handleInputChange('Name', text)}
+            onChangeText={text => handleInputChange('Name', text)}
           />
         </View>
         <View style={styles.txtpadding}>
@@ -142,7 +152,7 @@ const SignUpScreen: React.FC<Props> = ({ navigation }) => {
               errors.Email && styles.inputError, // Apply red border if error
             ]}
             value={signupData.Email}
-            onChangeText={(text) => handleInputChange('Email', text)}
+            onChangeText={text => handleInputChange('Email', text)}
             keyboardType="email-address"
           />
         </View>
@@ -154,7 +164,7 @@ const SignUpScreen: React.FC<Props> = ({ navigation }) => {
               errors.Location && styles.inputError, // Apply red border if error
             ]}
             value={signupData.Location}
-            onChangeText={(text) => handleInputChange('Location', text)}
+            onChangeText={text => handleInputChange('Location', text)}
           />
         </View>
         <View style={styles.txtpadding}>
@@ -165,7 +175,7 @@ const SignUpScreen: React.FC<Props> = ({ navigation }) => {
               errors.Phone && styles.inputError, // Apply red border if error
             ]}
             value={signupData.Phone}
-            onChangeText={(text) => handleInputChange('Phone', text)}
+            onChangeText={text => handleInputChange('Phone', text)}
             keyboardType="phone-pad"
           />
         </View>
@@ -195,13 +205,13 @@ const SignUpScreen: React.FC<Props> = ({ navigation }) => {
 
 // Custom Toast Configuration
 const toastConfig = {
-  success: ({ text1, text2 }: { text1?: string; text2?: string }) => (
+  success: ({text1, text2}: {text1?: string; text2?: string}) => (
     <View style={styles.customToastSuccess}>
       <Text style={styles.customToastText1}>{text1}</Text>
       <Text style={styles.customToastText2}>{text2}</Text>
     </View>
   ),
-  error: ({ text1, text2 }: { text1?: string; text2?: string }) => (
+  error: ({text1, text2}: {text1?: string; text2?: string}) => (
     <View style={styles.customToastError}>
       <Text style={styles.customToastText1}>{text1}</Text>
       <Text style={styles.customToastText2}>{text2}</Text>
@@ -269,7 +279,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
+    shadowOffset: {width: 0, height: 2},
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
     elevation: 5,
