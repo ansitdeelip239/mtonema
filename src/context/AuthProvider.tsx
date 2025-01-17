@@ -24,6 +24,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({children}) => {
     try {
       await AuthService.removeUserData();
       await AsyncStorage.removeItem('tokenExpiry');
+      await AsyncStorage.removeItem('token');
       setUser(null);
       setAuthToken(null);
       setIsAuthenticated(false);

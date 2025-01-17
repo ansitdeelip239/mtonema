@@ -1,6 +1,6 @@
 //let url1 = 'https://dncrpropertyapi.azurewebsites.net'; //Dev Url
-// export let url1 = 'https://devdncrbe.azurewebsites.net';
-let url1 = 'https://dncrpropertyapi.azurewebsites.net';
+export let url1 = 'https://devdncrbe.azurewebsites.net';
+// let url1 = 'https://dncrpropertyapi.azurewebsites.net';
 
 export default {
     //Authentication
@@ -34,6 +34,7 @@ UpdateProfile: url1 + '/api/v1/User/UpdateUser',
 
 //cloudnary
 imageUpload : url1 + 'https://api.cloudinary.com/v1_1/dncrproperty-com/image/upload',
+videoUpload :url1 + 'https://api.cloudinary.com/v1_1/proplisting/video/upload',
 
 //Master Detail
 getMasterDetail: url1 + '/api/v1/MasterDetail/getMasterDetailsByMasterName?MasterDetailName=',
