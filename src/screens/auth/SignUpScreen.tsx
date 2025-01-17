@@ -80,8 +80,20 @@ const SignUpScreen: React.FC<Props> = ({navigation}) => {
       const response = await AuthService.signUp(signupData);
       console.log('API Response:', response);
 
-      if (response.Success) {
-        // Show success toast
+      // Check if the message is "Email already exist"
+      const isEmailExists = response.Message === 'Email already exist';
+
+      if (isEmailExists) {
+        // Show error toast for "Email already exist"
+        Toast.show({
+          type: 'error', // Use 'error' type for red background
+          text1: 'Error',
+          text2:
+            response.Message ||
+            'Email already exists. Please use a different email.',
+        });
+      } else if (response.Success) {
+        // Show success toast for successful registration
         Toast.show({
           type: 'success',
           text1: 'Registration Success',
@@ -96,17 +108,18 @@ const SignUpScreen: React.FC<Props> = ({navigation}) => {
           Phone: '',
         });
 
-        // Navigate to the home screen
-        navigation.navigate('EmailScreen');
-        return;
+        // Delay navigation by 4 seconds
+        setTimeout(() => {
+          navigation.navigate('EmailScreen');
+        }, 4000); // 4 seconds delay
+      } else {
+        // Show error toast for other errors
+        Toast.show({
+          type: 'error',
+          text1: 'Error',
+          text2: response.Message || 'Sign up failed. Please try again.',
+        });
       }
-
-      // Show error toast for other cases
-      Toast.show({
-        type: 'error',
-        text1: 'Error',
-        text2: response.Message || 'Sign up failed. Please try again.',
-      });
     } catch (error) {
       console.error('API Error:', error);
       Toast.show({
@@ -118,7 +131,6 @@ const SignUpScreen: React.FC<Props> = ({navigation}) => {
       setLoading(false);
     }
   };
-
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
