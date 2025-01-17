@@ -19,7 +19,7 @@ export const MainScreen: React.FC<Props> = ({navigation}) => {
       {/* Upper Part: Logo and Title */}
       <View style={styles.upperPart}>
         <Image
-          source={require('../../assets/Images/houselogo.png')}
+          source={require('../../assets/Images/dncr_pink.png')}
           style={styles.image}
           resizeMode="contain"
         />
@@ -56,13 +56,13 @@ export const MainScreen: React.FC<Props> = ({navigation}) => {
 const styles = StyleSheet.create({
   mainScreen: {
     flex: 2,
-    backgroundColor: '#cc0e74', // Pinkish Background
+    backgroundColor: '#fff', // Pinkish Background
   },
   upperPart: {
     flex: 4,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#cc0e74', // Same as main background
+    backgroundColor: '#fff', // Same as main background
     borderBottomRightRadius: 60,
   },
   lowerPart: {

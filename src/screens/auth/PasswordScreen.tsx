@@ -20,6 +20,7 @@ const PasswordScreen: React.FC<Props> = ({navigation, route}) => {
   const {email} = route.params;
   const {storeToken, login} = useAuth();
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleContinue = async () => {
     console.log('Sign In button pressed');
@@ -29,22 +30,19 @@ const PasswordScreen: React.FC<Props> = ({navigation, route}) => {
     try {
       setIsLoading(true);
       const response = await AuthService.verifyPassword(email, password);
-      // console.log('Response:', response); // Check the response from the AuthService
       if (response.Success) {
         storeToken(response.data);
         login(response.data);
-      }
-      else
-      {
+      } else {
         throw response.Message;
       }
     } catch (error) {
-      console.error('Error during sign-in:',(error as Error).message);
-    }
-    finally {
+      console.error('Error during sign-in:', (error as Error).message);
+    } finally {
       setIsLoading(false);
     }
   };
+
   return (
     <View style={styles.mainScreen}>
       {/* Logo Section */}
@@ -57,33 +55,49 @@ const PasswordScreen: React.FC<Props> = ({navigation, route}) => {
       </View>
       {/* Input Section / Lower Part */}
 
-      <View style={[styles.lowerPart]}>
+      <View style={styles.lowerPart}>
         <View style={styles.txtpadding}>
-          <Text style={[styles.label]}>Password</Text>
-          <TextInput
-            value={password}
-            onChangeText={setPassword}
-            secureTextEntry={true}
-            placeholder="Password"
-            style={[styles.input, styles.spacing1]}
-          />
+          <Text style={styles.label}>Password</Text>
+          <View style={styles.passwordContainer}>
+            <TextInput
+              value={password}
+              onChangeText={setPassword}
+              secureTextEntry={!showPassword}
+              placeholder="Password"
+              style={styles.input}
+            />
+            <TouchableOpacity
+              style={styles.eyeIcon}
+              onPress={() => setShowPassword(!showPassword)}>
+              <Image
+                source={
+                  showPassword
+                    ? require('../../assets/Icon/eye.png')
+                    : require('../../assets/Icon/eye-slash.png')
+                }
+                style={styles.iconImage}
+              />
+            </TouchableOpacity>
+          </View>
         </View>
+
+        {/* Forget Password Link */}
         <TouchableOpacity style={styles.forgotPassword}>
           <Text style={styles.forgotText}>Forget Password?</Text>
         </TouchableOpacity>
 
         {/* Buttons Section */}
         <View style={styles.btnsection}>
-        <TouchableOpacity
-  style={[styles.button, styles.spacing]}
-  onPress={handleContinue}
-  disabled={isLoading}>
-  {isLoading ? (
-    <ActivityIndicator size="small" color="#ffffff" />
-  ) : (
-    <Text style={styles.buttonText}>Sign In</Text>
-  )}
-</TouchableOpacity>
+          <TouchableOpacity
+            style={[styles.button, styles.spacing]}
+            onPress={handleContinue}
+            disabled={isLoading}>
+            {isLoading ? (
+              <ActivityIndicator size="small" color="#ffffff" />
+            ) : (
+              <Text style={styles.buttonText}>Sign In</Text>
+            )}
+          </TouchableOpacity>
 
           <TouchableOpacity
             style={[styles.button, styles.spacing, styles.color]}
@@ -102,22 +116,22 @@ const styles = StyleSheet.create({
     backgroundColor: '#cc0e74', // Pinkish Background
   },
   forgotPassword: {
-    position: 'absolute',
-    right: '5%',
-    top: 135,
-    fontSize: 20,
+    alignSelf: 'flex-end', // Align to the right
+    marginTop: 10, // Add space above the "Forget Password" link
+    marginRight: 15, // Add some right margin
   },
   forgotText: {
     fontSize: 16,
     color: '#cc0e74',
   },
   txtpadding: {
-    paddingLeft: 10,
+    paddingLeft: 15,
     width: '95%',
   },
   btnsection: {
     justifyContent: 'center', // Centers vertically
     alignItems: 'center',
+    marginTop: 30, // Add space above the buttons
   },
   upperPart: {
     flex: 2,
@@ -130,10 +144,11 @@ const styles = StyleSheet.create({
     flex: 3,
     backgroundColor: '#ffffff', // White background for lower part
     borderTopLeftRadius: 70,
-    paddingVertical: 60,
+    paddingVertical: 50, // Reduce padding to create more space
+    paddingHorizontal: 5, // Add horizontal padding
   },
   image: {
-     width: '100%',
+    width: '100%',
     height: '100%',
   },
   label: {
@@ -143,10 +158,23 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   input: {
+    flex: 1,
+    fontSize: 16,
+    paddingVertical: 8, // Adjust padding to avoid extra space
+  },
+  passwordContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
     borderBottomWidth: 1,
     borderBottomColor: '#880e4f',
-    padding: 5,
-    fontSize: 16,
+    paddingBottom: 8, // Add padding to the container instead of the input
+  },
+  eyeIcon: {
+    padding: 10,
+  },
+  iconImage: {
+    width: 24,
+    height: 24,
   },
   button: {
     backgroundColor: '#cc0e74',
@@ -165,9 +193,6 @@ const styles = StyleSheet.create({
   },
   spacing: {
     marginBottom: 10, // Adds space below each button
-  },
-  spacing1: {
-    marginBottom: 55, // Adds space below each button
   },
   buttonText: {
     color: '#ffffff',
