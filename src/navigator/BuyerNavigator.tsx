@@ -35,6 +35,7 @@ const BuyerNavigator = memo(() => {
         drawerType: 'front',
         drawerActiveTintColor: 'white',
         drawerActiveBackgroundColor: Colors.main,
+        headerShown:false,
         drawerStyle: {
           width: 240,
         },
