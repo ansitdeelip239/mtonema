@@ -46,6 +46,60 @@ class AuthService {
       throw error;
     }
   }
+static async  RegisterSeller(
+ Email: string,
+  Name:string,
+  Phone:string,
+  Location:string,
+ TermsChecked: true,
+):Promise<Response<string>>{
+  try {
+    const response = await fetch(api.RegisterSeller,{
+      method : 'POST',
+      headers :{
+        'Content-Type' : 'application/json',
+      },
+      body:JSON.stringify({Email,Name,Phone,Location,TermsChecked}),
+    });
+    const result: Response<string> = await response.json();
+    if(response.ok) {
+      return result;
+    } else
+    {
+      throw new Error(result.Message || 'An Error Ocured While signup',);
+    }
+  } catch (error) {
+    throw error;
+  }
+}
+
+static async VerifyOTP(
+  Email: string,
+  OTP: string,
+): Promise<Response<string>> {
+  try {
+    const response = await fetch(api.VerifyOTP, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({Email,OTP }),
+    });
+
+    const result: Response<string> = await response.json();
+
+    if (response.ok) {
+      return result;
+    } else {
+      throw new Error(
+        result.Message || 'An error occurred while validating the Register',
+      );
+    }
+  } catch (error) {
+    throw error;
+  }
+}
+
   static async verifyPassword(
     email: string,
     password: string,

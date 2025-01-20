@@ -17,7 +17,7 @@ export const MainScreen: React.FC<Props> = ({ navigation }) => {
   };
 
   const onListProperty = () => {
-    navigation.navigate('ContactScreen');
+    navigation.navigate('SellerSignupScreen');
   };
 
   const onLoginAsPartner = () => {

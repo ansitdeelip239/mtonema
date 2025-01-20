@@ -52,14 +52,14 @@ const CustomDrawerContent = (props: any) => {
   return (
     <DrawerContentScrollView {...props} contentContainerStyle={styles.flexOne}>
       <TouchableOpacity onPress={navigateToProfile}>
-        <View>
-          <Text style={styles.name}>{user?.Email} </Text>
-          <Image
-            source={require('../assets/Images/dncrlogo.png')}
-            style={styles.logo}
-          />
-        </View>
-      </TouchableOpacity>
+  <View style={styles.profileContainer}>
+    <Image
+      source={require('../assets/Images/dncrlogo.png')}
+      style={styles.logo}
+    />
+    <Text style={styles.name}>{user?.Name}</Text>
+  </View>
+</TouchableOpacity>
 
       {/* Existing Drawer Items */}
       <DrawerItemList {...props} />
@@ -137,6 +137,23 @@ const styles = StyleSheet.create({
   flexOne: {
     flex: 1,
   },
+  profileContainer: {
+    alignItems: 'center', // Center align items horizontally
+    justifyContent: 'center', // Center align items vertically
+  },
+  name: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginTop: 1, // Space between image and text
+    textAlign: 'center', // Center align text
+    marginBottom: 50, // Space between image and text
+  },
+  logo: {
+    width: '90%',
+    height: 150,
+    resizeMode: 'contain', // Ensure the image scales properly
+    alignSelf: 'center', // Center align image
+  },
   flexGrow: {
     flex: 1,
   },
@@ -148,12 +165,12 @@ const styles = StyleSheet.create({
     borderRadius: 50,
     alignItems: 'center',
   },
-  name: {
-    fontSize: 16,
-    top: 155,
-    left: 28,
-    fontWeight: 'bold',
-  },
+  // name: {
+  //   fontSize: 16,
+  //   top: 155,
+  //   left: '38%',
+  //   fontWeight: 'bold',
+  // },
 
   textWhite: {
     color: 'white',
@@ -165,14 +182,14 @@ const styles = StyleSheet.create({
   p15: {
     padding: 16,
   },
-  logo: {
-    width: '80%',
-    height: 120,
-    margin: 1,
-    // resizeMode: 'contain',
-    alignSelf: 'center',
-    marginBottom: 70,
-  },
+  // logo: {
+  //   width: '80%',
+  //   height: 120,
+  //   margin: 1,
+  //   // resizeMode: 'contain',
+  //   alignSelf: 'center',
+  //   marginBottom: 70,
+  // },
 
   modalContainer: {
     flex: 1,

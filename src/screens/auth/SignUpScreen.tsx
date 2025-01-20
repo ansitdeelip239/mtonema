@@ -110,7 +110,7 @@ const SignUpScreen: React.FC<Props> = ({navigation}) => {
 
         // Delay navigation by 4 seconds
         setTimeout(() => {
-          navigation.navigate('EmailScreen');
+          navigation.navigate('MainScreen');
         }, 4000); // 4 seconds delay
       } else {
         // Show error toast for other errors
