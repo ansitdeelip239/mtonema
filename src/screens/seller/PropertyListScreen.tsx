@@ -31,8 +31,6 @@ const PropertyListScreen = () => {
   const {user, dataUpdated, authToken} = useAuth();
 
   const pageSize = 10;
-
-
   const getAllProperty = useCallback(
     async (page: number) => {
       if (isLoadingRef.current) {

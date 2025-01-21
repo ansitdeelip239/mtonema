@@ -25,6 +25,7 @@ export interface User {
   Location: string;
   Phone: string;
   Role: string;
+  Token: string;
   CreatedOn: Date | null;
   UpdatedOn: Date | null;
   CreatedBy: string | null;
