@@ -28,9 +28,10 @@ const PropertyListScreen = () => {
   const [modalVisible, setModalVisible] = useState(false);
   const [refreshing, setRefreshing] = useState(false); // State for pull-to-refresh
   const isLoadingRef = useRef(false);
-  const {user, dataUpdated} = useAuth();
+  const {user, dataUpdated, authToken} = useAuth();
 
   const pageSize = 10;
+
 
   const getAllProperty = useCallback(
     async (page: number) => {
@@ -53,11 +54,25 @@ const PropertyListScreen = () => {
           `${url.GetProperty}?id=${user.ID}&pageNumber=${page}&pageSize=${pageSize}`,
         );
 
-        if (!response || !response.data) {
-          throw new Error('Invalid response format');
+        console.log('API Response:', response); // Log the response for debugging
+
+        // Handle invalid or missing response
+        if (!response) {
+          throw new Error('No response from server');
         }
 
-        const newProperties = response.data.propertyModels ?? [];
+        // Check if the request was successful
+        if (response.Success === false) {
+          console.log('No data found:', response.Message);
+          setProperties([]); // Clear existing properties
+          setHasMore(false); // No more data to load
+          setError(null); // Clear any previous errors
+          return;
+        }
+
+        // Extract propertyModels from the response
+        const newProperties = response.data?.propertyModels ?? [];
+
         console.log(`Received ${newProperties.length} properties`);
 
         setProperties(prevProperties => {
@@ -99,10 +114,8 @@ const PropertyListScreen = () => {
   const handleRefresh = useCallback(() => {
     setRefreshing(true); // Start refreshing
     setPageNo(1); // Reset to the first page
-    setProperties([]); // Clear existing data
     getAllProperty(1); // Fetch fresh data
   }, [getAllProperty]);
-
   const handlePropertyPress = (property: PropertyModel) => {
     setSelectedProperty(property);
     setModalVisible(true);
@@ -129,6 +142,10 @@ const PropertyListScreen = () => {
   useEffect(() => {
     getAllProperty(1);
   }, [getAllProperty, dataUpdated]);
+
+  useEffect(()=>{
+console.log(authToken);
+  },[authToken]);
 
   const renderPropertyItem = ({item}: {item: PropertyModel}) => (
     <TouchableOpacity onPress={() => handlePropertyPress(item)}>
@@ -217,12 +234,12 @@ const PropertyListScreen = () => {
         renderItem={renderPropertyItem}
         onEndReached={loadMore}
         onEndReachedThreshold={0.5}
-        refreshControl={ // Add RefreshControl
+        refreshControl={
           <RefreshControl
             refreshing={refreshing}
             onRefresh={handleRefresh}
-            colors={['#0066cc']} // Customize the loading spinner color
-            tintColor="#0066cc" // Customize the loading spinner color (iOS)
+            colors={['#0066cc']}
+            tintColor="#0066cc"
           />
         }
         ListFooterComponent={
@@ -233,9 +250,17 @@ const PropertyListScreen = () => {
           ) : null
         }
         ListEmptyComponent={
-          <View style={styles.centerContainer}>
-            <Text style={styles.noDataText}>No properties available</Text>
-          </View>
+          refreshing ? null : ( // Hide the message while refreshing
+            error ? (
+              <View style={styles.centerContainer}>
+                <Text style={styles.errorText}>{error}</Text>
+              </View>
+            ) : (
+              <View style={styles.centerContainer}>
+                <Text style={styles.noDataText}>No listed Properties</Text>
+              </View>
+            )
+          )
         }
       />
       <PropertyModal
