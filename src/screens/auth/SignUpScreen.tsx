@@ -8,12 +8,14 @@ import {
   ActivityIndicator,
   KeyboardAvoidingView,
   Platform,
+  FlatList,
 } from 'react-native';
 import React, {useState} from 'react';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {AuthStackParamList} from '../../navigator/AuthNavigator';
-import AuthService from '../../services/AuthService'; // Import the AuthService
-import Toast from 'react-native-toast-message'; // Import Toast
+import AuthService from '../../services/AuthService';
+import Toast from 'react-native-toast-message';
+import BuyerService from '../../services/BuyerService';
 
 type Props = NativeStackScreenProps<AuthStackParamList, 'SignUpScreen'>;
 
@@ -34,11 +36,81 @@ const SignUpScreen: React.FC<Props> = ({navigation}) => {
 
   const [loading, setLoading] = useState(false);
 
+  const [locationSuggestions, setLocationSuggestions] = useState<string[]>([]);
+  const [showSuggestions, setShowSuggestions] = useState(false);
+
+  // Fetch location suggestions from your backend API
+  const searchLocationSuggestion = async (keyword: string) => {
+    try {
+      const response = await BuyerService.getPlaces(keyword, 'India');
+      console.log(response);
+
+      // Check if response is defined and has the expected structure
+      if (response && response.predictions) {
+        // Extract the descriptions from the predictions array
+        const suggestions = response.predictions.map(
+          (prediction: {description: string}) => prediction.description,
+        );
+        setLocationSuggestions(suggestions); // Update location suggestions
+        setShowSuggestions(true); // Show the dropdown
+      } else {
+        setLocationSuggestions([]);
+        setShowSuggestions(false);
+      }
+    } catch (error) {
+      console.error(error);
+      setLocationSuggestions([]);
+      setShowSuggestions(false);
+    }
+  };
+
   // Handle input changes dynamically
   const handleInputChange = (key: string, value: string) => {
-    setSignupData({...signupData, [key]: value});
+    if (key === 'Phone') {
+      // Allow only numeric values
+      const numericValue = value.replace(/[^0-9]/g, ''); // Remove non-numeric characters
+
+      // Check if the length exceeds 10 digits
+      if (numericValue.length > 10) {
+        Toast.show({
+          type: 'error',
+          text1: 'Warning',
+          text2: 'Mobile number cannot be greater than 10 digits.',
+        });
+        return; // Stop further processing
+      }
+
+      // Update the state if the length is valid
+      setSignupData({...signupData, [key]: numericValue});
+    } else if (key === 'Location') {
+      setSignupData({...signupData, [key]: value}); // Update the Location field
+      if (value.length > 2) {
+        searchLocationSuggestion(value); // Fetch suggestions
+      } else {
+        setLocationSuggestions([]); // Clear suggestions
+        setShowSuggestions(false); // Hide the dropdown
+      }
+    } else {
+      setSignupData({...signupData, [key]: value});
+    }
+
     // Clear errors when the user starts typing
     setErrors({...errors, [key]: false});
+  };
+
+  // Handle location suggestion selection
+  const handleSuggestionSelect = (suggestion: string) => {
+    setSignupData({...signupData, Location: suggestion}); // Update the Location field
+    setShowSuggestions(false); // Hide the dropdown
+  };
+
+  // Clear input field
+  const clearInputField = (key: string) => {
+    setSignupData({...signupData, [key]: ''});
+    if (key === 'Location') {
+      setLocationSuggestions([]);
+      setShowSuggestions(false);
+    }
   };
 
   // Validate the form
@@ -108,10 +180,14 @@ const SignUpScreen: React.FC<Props> = ({navigation}) => {
           Phone: '',
         });
 
+        // Clear location suggestions
+        setLocationSuggestions([]);
+        setShowSuggestions(false);
+
         // Delay navigation by 4 seconds
         setTimeout(() => {
           navigation.navigate('MainScreen');
-        }, 4000); // 4 seconds delay
+        }, 2000); // 4 seconds delay
       } else {
         // Show error toast for other errors
         Toast.show({
@@ -131,9 +207,11 @@ const SignUpScreen: React.FC<Props> = ({navigation}) => {
       setLoading(false);
     }
   };
+
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      keyboardVerticalOffset={Platform.OS === 'ios' ? 60 : 0}
       style={styles.mainScreen}>
       {/* Logo Section */}
       <View style={styles.upperPart}>
@@ -147,49 +225,100 @@ const SignUpScreen: React.FC<Props> = ({navigation}) => {
       <View style={[styles.lowerPart]}>
         <View style={styles.txtpadding}>
           <Text style={[styles.label]}>Name</Text>
-          <TextInput
-            style={[
-              styles.input,
-              errors.Name && styles.inputError, // Apply red border if error
-            ]}
-            value={signupData.Name}
-            onChangeText={text => handleInputChange('Name', text)}
-          />
+          <View style={styles.inputContainer}>
+            <TextInput
+              style={[
+                styles.input,
+                errors.Name && styles.inputError, // Apply red border if error
+              ]}
+              value={signupData.Name}
+              onChangeText={text => handleInputChange('Name', text)}
+            />
+            {signupData.Name !== '' && (
+              <TouchableOpacity
+                style={styles.clearButton}
+                onPress={() => clearInputField('Name')}>
+                <Text style={styles.clearButtonText}>X</Text>
+              </TouchableOpacity>
+            )}
+          </View>
         </View>
         <View style={styles.txtpadding}>
           <Text style={[styles.label]}>Email</Text>
-          <TextInput
-            style={[
-              styles.input,
-              errors.Email && styles.inputError, // Apply red border if error
-            ]}
-            value={signupData.Email}
-            onChangeText={text => handleInputChange('Email', text)}
-            keyboardType="email-address"
-          />
+          <View style={styles.inputContainer}>
+            <TextInput
+              style={[
+                styles.input,
+                errors.Email && styles.inputError, // Apply red border if error
+              ]}
+              value={signupData.Email}
+              onChangeText={text => handleInputChange('Email', text)}
+              keyboardType="email-address"
+            />
+            {signupData.Email !== '' && (
+              <TouchableOpacity
+                style={styles.clearButton}
+                onPress={() => clearInputField('Email')}>
+                <Text style={styles.clearButtonText}>X</Text>
+              </TouchableOpacity>
+            )}
+          </View>
         </View>
         <View style={styles.txtpadding}>
           <Text style={[styles.label]}>Location</Text>
-          <TextInput
-            style={[
-              styles.input,
-              errors.Location && styles.inputError, // Apply red border if error
-            ]}
-            value={signupData.Location}
-            onChangeText={text => handleInputChange('Location', text)}
-          />
+          <View style={styles.inputContainer}>
+            <TextInput
+              style={[
+                styles.input,
+                errors.Location && styles.inputError, // Apply red border if error
+              ]}
+              value={signupData.Location} // Use signupData.Location
+              onChangeText={text => handleInputChange('Location', text)}
+              placeholder="Search Location"
+            />
+            {signupData.Location !== '' && (
+              <TouchableOpacity
+                style={styles.clearButton}
+                onPress={() => clearInputField('Location')}>
+                <Text style={styles.clearButtonText}>X</Text>
+              </TouchableOpacity>
+            )}
+          </View>
+          {showSuggestions && (
+            <FlatList
+              data={locationSuggestions}
+              keyExtractor={(item, index) => index.toString()}
+              renderItem={({item}) => (
+                <TouchableOpacity
+                  style={styles.suggestionItem}
+                  onPress={() => handleSuggestionSelect(item)}>
+                  <Text>{item}</Text>
+                </TouchableOpacity>
+              )}
+              style={styles.suggestionsContainer}
+            />
+          )}
         </View>
         <View style={styles.txtpadding}>
           <Text style={[styles.label]}>Phone</Text>
-          <TextInput
-            style={[
-              styles.input,
-              errors.Phone && styles.inputError, // Apply red border if error
-            ]}
-            value={signupData.Phone}
-            onChangeText={text => handleInputChange('Phone', text)}
-            keyboardType="phone-pad"
-          />
+          <View style={styles.inputContainer}>
+            <TextInput
+              style={[
+                styles.input,
+                errors.Phone && styles.inputError, // Apply red border if error
+              ]}
+              value={signupData.Phone}
+              onChangeText={text => handleInputChange('Phone', text)}
+              keyboardType="phone-pad"
+            />
+            {signupData.Phone !== '' && (
+              <TouchableOpacity
+                style={styles.clearButton}
+                onPress={() => clearInputField('Phone')}>
+                <Text style={styles.clearButtonText}>X</Text>
+              </TouchableOpacity>
+            )}
+          </View>
         </View>
         <View style={styles.btnsection}>
           <TouchableOpacity
@@ -247,7 +376,7 @@ const styles = StyleSheet.create({
     flex: 4, // Take up 4/5th of the screen
     backgroundColor: '#ffffff', // White background for the form
     borderTopLeftRadius: 70, // Rounded corner
-    paddingVertical: 60, // Add vertical padding
+    paddingVertical: 20, // Reduced vertical padding to avoid overlap
   },
   image: {
     width: 150, // Adjust as needed
@@ -272,7 +401,12 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     fontWeight: 'bold',
   },
+  inputContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
   input: {
+    flex: 1,
     borderWidth: 1,
     borderColor: '#880e4f',
     borderRadius: 10,
@@ -282,6 +416,15 @@ const styles = StyleSheet.create({
   },
   inputError: {
     borderColor: 'red', // Red border for errors
+  },
+  clearButton: {
+    position: 'absolute',
+    right: 10,
+    padding: 10,
+  },
+  clearButtonText: {
+    fontSize: 16,
+    color: '#880e4f', // Dark pink
   },
   button: {
     backgroundColor: '#cc0e74', // Matching pink button
@@ -304,6 +447,19 @@ const styles = StyleSheet.create({
   },
   color: {
     backgroundColor: '#790c5a', // Darker pink for the back button
+  },
+  suggestionsContainer: {
+    maxHeight: 150,
+    borderWidth: 1,
+    borderColor: '#880e4f',
+    borderRadius: 10,
+    marginTop: 5,
+    backgroundColor: '#FFFFFF',
+  },
+  suggestionItem: {
+    padding: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: '#ccc',
   },
   customToastSuccess: {
     width: '90%',
