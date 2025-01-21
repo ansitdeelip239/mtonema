@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from 'react';
+import React, {useEffect, useState, useCallback} from 'react';
 import {
   View,
   Text,
@@ -10,11 +10,11 @@ import {
   Modal,
 } from 'react-native';
 import Toast from 'react-native-toast-message';
-import { useAuth } from '../../hooks/useAuth';
-import { ActivityIndicator } from 'react-native-paper';
-import { api } from '../../utils/api';
+import {useAuth} from '../../hooks/useAuth';
+import {ActivityIndicator} from 'react-native-paper';
+import {api} from '../../utils/api';
 import url from '../../constants/api';
-import { User } from '../../types';
+import {User} from '../../types';
 import CommonService from '../../services/CommonService';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -40,7 +40,7 @@ const INITIAL_USER_DATA: UserData = {
 };
 
 const ProfileScreen = () => {
-  const { user, logout } = useAuth();
+  const {user, logout} = useAuth();
   const [isLoading, setIsLoading] = useState(false);
   const [showLogoutModal, setShowLogoutModal] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
@@ -68,16 +68,19 @@ const ProfileScreen = () => {
     return password.length >= 6;
   };
 
-  const showToast = useCallback((type: 'success' | 'error' | 'info', message: string) => {
-    Toast.show({
-      type,
-      text1: type.charAt(0).toUpperCase() + type.slice(1),
-      text2: message,
-      position: 'top',
-      visibilityTime: 3000,
-      autoHide: true,
-    });
-  }, []);
+  const showToast = useCallback(
+    (type: 'success' | 'error' | 'info', message: string) => {
+      Toast.show({
+        type,
+        text1: type.charAt(0).toUpperCase() + type.slice(1),
+        text2: message,
+        position: 'top',
+        visibilityTime: 3000,
+        autoHide: true,
+      });
+    },
+    [],
+  );
 
   // Fetch user profile
   const fetchUserProfile = useCallback(async () => {
@@ -145,7 +148,7 @@ const ProfileScreen = () => {
   // Handle profile update
   const handleUpdateProfile = async () => {
     try {
-      if (!validateFields()) return;
+      if (!validateFields()) {return;}
 
       setIsLoading(true);
       const request = {
@@ -177,7 +180,10 @@ const ProfileScreen = () => {
         throw new Error(response.Message || 'Update failed');
       }
     } catch (error) {
-      showToast('error', error instanceof Error ? error.message : 'Failed to update profile');
+      showToast(
+        'error',
+        error instanceof Error ? error.message : 'Failed to update profile',
+      );
     } finally {
       setIsLoading(false);
     }
@@ -198,6 +204,7 @@ const ProfileScreen = () => {
   };
 
   // Reusable field component with validation
+  // eslint-disable-next-line react/no-unstable-nested-components
   const ProfileField = ({
     label,
     field,
@@ -223,7 +230,7 @@ const ProfileScreen = () => {
             editMode[field] && styles.editInput,
           ]}
           value={value}
-          onChangeText={(text) => setUserData(prev => ({ ...prev, [field]: text }))}
+          onChangeText={text => setUserData(prev => ({...prev, [field]: text}))}
           editable={editMode[field]}
           keyboardType={keyboardType}
           multiline={multiline}
@@ -237,15 +244,19 @@ const ProfileScreen = () => {
             onPress={() => setShowPassword(!showPassword)}
             style={styles.iconButton}>
             <Image
-              source={showPassword 
-                ? require('../../assets/Icon/eye.png')
-                : require('../../assets/Icon/eye-slash.png')}
+              source={
+                showPassword
+                  ? require('../../assets/Icon/eye.png')
+                  : require('../../assets/Icon/eye-slash.png')
+              }
               style={styles.icon}
             />
           </TouchableOpacity>
         )}
         <TouchableOpacity
-          onPress={() => setEditMode(prev => ({ ...prev, [field]: !prev[field] }))}
+          onPress={() =>
+            setEditMode(prev => ({...prev, [field]: !prev[field]}))
+          }
           style={styles.iconButton}>
           <Image
             source={require('../../assets/Icon/Edit.png')}
@@ -272,34 +283,34 @@ const ProfileScreen = () => {
         </View>
 
         <ProfileField label="Name" field="name" value={userData.name} />
-        <ProfileField 
-          label="Email" 
-          field="email" 
-          value={userData.email} 
-          keyboardType="email-address" 
+        <ProfileField
+          label="Email"
+          field="email"
+          value={userData.email}
+          keyboardType="email-address"
         />
-        <ProfileField 
-          label="Password" 
-          field="password" 
-          value={userData.password} 
-          secureTextEntry 
+        <ProfileField
+          label="Password"
+          field="password"
+          value={userData.password}
+          secureTextEntry
         />
-        <ProfileField 
-          label="Mobile" 
-          field="mobile" 
-          value={userData.mobile} 
-          keyboardType="phone-pad" 
+        <ProfileField
+          label="Mobile"
+          field="mobile"
+          value={userData.mobile}
+          keyboardType="phone-pad"
         />
-        <ProfileField 
-          label="Location" 
-          field="location" 
-          value={userData.location} 
-          multiline 
+        <ProfileField
+          label="Location"
+          field="location"
+          value={userData.location}
+          multiline
         />
 
         {Object.values(editMode).some(Boolean) && (
-          <TouchableOpacity 
-            style={styles.button} 
+          <TouchableOpacity
+            style={styles.button}
             onPress={handleUpdateProfile}
             disabled={isLoading}>
             <Text style={styles.buttonText}>Save Changes</Text>
@@ -321,7 +332,9 @@ const ProfileScreen = () => {
         onRequestClose={() => setShowLogoutModal(false)}>
         <View style={styles.modalContainer}>
           <View style={styles.modalContent}>
-            <Text style={styles.modalText}>Are you sure you want to logout?</Text>
+            <Text style={styles.modalText}>
+              Are you sure you want to logout?
+            </Text>
             <View style={styles.modalButtons}>
               <TouchableOpacity
                 style={[styles.modalButton, styles.cancelButton]}
@@ -372,7 +385,7 @@ const styles = StyleSheet.create({
     padding: 8,
     elevation: 2,
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
+    shadowOffset: {width: 0, height: 1},
     shadowOpacity: 0.2,
     shadowRadius: 2,
   },
@@ -416,7 +429,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     elevation: 3,
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
+    shadowOffset: {width: 0, height: 2},
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
   },
@@ -444,7 +457,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     elevation: 5,
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
+    shadowOffset: {width: 0, height: 2},
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
   },
