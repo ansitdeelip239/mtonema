@@ -123,7 +123,7 @@ static async VerifyOTP(
         );
       }
     } catch (error) {
-      throw error;
+      throw new Error('Failed to verify password');
     }
   }
   // Store user data

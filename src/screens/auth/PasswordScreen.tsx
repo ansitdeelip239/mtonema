@@ -1,3 +1,4 @@
+import React, {useState} from 'react';
 import {
   View,
   Text,
@@ -7,11 +8,11 @@ import {
   ActivityIndicator,
   Image,
 } from 'react-native';
-import React, {useState} from 'react';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {AuthStackParamList} from '../../navigator/AuthNavigator';
 import AuthService from '../../services/AuthService';
 import {useAuth} from '../../hooks/useAuth';
+import Toast from 'react-native-toast-message';
 
 type Props = NativeStackScreenProps<AuthStackParamList, 'PasswordScreen'>;
 
@@ -22,22 +23,76 @@ const PasswordScreen: React.FC<Props> = ({navigation, route}) => {
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
 
-  const handleContinue = async () => {
-    console.log('Sign In button pressed');
-    console.log('Email:', email);
-    console.log('Password:', password);
+  const showToast = (type: 'success' | 'error' | 'info', message: string) => {
+    Toast.show({
+      type,
+      text1: type === 'error' ? 'Error' : 'Success',
+      text2: message,
+      position: 'top',
+      visibilityTime: 3000,
+      autoHide: true,
+      topOffset: 50,
+    });
+  };
 
+  const validatePassword = (pass: string): boolean => {
+    return pass.length >= 6; // Basic validation - password should be at least 6 characters
+  };
+
+  const handleContinue = async () => {
     try {
+      // First validate password
+      if (!password.trim()) {
+        showToast('error', 'Please enter your password');
+        return;
+      }
+
+      if (!validatePassword(password)) {
+        showToast('error', 'Password must be at least 6 characters long');
+        return;
+      }
+
       setIsLoading(true);
       const response = await AuthService.verifyPassword(email, password);
+
       if (response.Success) {
-        storeToken(response.data);
-        login(response.data);
+        await storeToken(response.data);
+        await login(response.data);
+        showToast('success', 'Login successful!');
       } else {
-        throw response.Message;
+        // Handle specific error messages from API
+        if (
+          response.Message?.toLowerCase().includes('unauthorized') ||
+          response.Message?.toLowerCase().includes('invalid')
+        ) {
+          showToast('error', 'Incorrect password. Please try again.');
+        } else {
+          showToast(
+            'error',
+            response.Message || 'Login failed. Please try again.',
+          );
+        }
       }
     } catch (error) {
-      console.error('Error during sign-in:', (error as Error).message);
+      console.error('Error during sign-in:', error);
+
+      // Handle different types of errors
+      if (error instanceof Error) {
+        if (
+          error.message.toLowerCase().includes('unauthorized') ||
+          error.message.toLowerCase().includes('invalid')
+        ) {
+          showToast('error', 'Incorrect password. Please try again.');
+        } else if (error.message.toLowerCase().includes('network')) {
+          showToast('error', 'Network error. Please check your connection.');
+        } else if (error.message.toLowerCase().includes('timeout')) {
+          showToast('error', 'Request timed out. Please try again.');
+        } else {
+          showToast('error', 'Unable to sign in. Please try again.');
+        }
+      } else {
+        showToast('error', 'An unexpected error occurred. Please try again.');
+      }
     } finally {
       setIsLoading(false);
     }
@@ -53,8 +108,8 @@ const PasswordScreen: React.FC<Props> = ({navigation, route}) => {
           resizeMode="contain"
         />
       </View>
-      {/* Input Section / Lower Part */}
 
+      {/* Input Section / Lower Part */}
       <View style={styles.lowerPart}>
         <View style={styles.txtpadding}>
           <Text style={styles.label}>Password</Text>
@@ -63,8 +118,12 @@ const PasswordScreen: React.FC<Props> = ({navigation, route}) => {
               value={password}
               onChangeText={setPassword}
               secureTextEntry={!showPassword}
-              placeholder="Password"
+              placeholder="Enter your password"
               style={styles.input}
+              onSubmitEditing={handleContinue}
+              returnKeyType="done"
+              autoCapitalize="none"
+              autoCorrect={false}
             />
             <TouchableOpacity
               style={styles.eyeIcon}
@@ -101,24 +160,29 @@ const PasswordScreen: React.FC<Props> = ({navigation, route}) => {
 
           <TouchableOpacity
             style={[styles.button, styles.spacing, styles.color]}
-            onPress={navigation.goBack}>
+            onPress={navigation.goBack}
+            disabled={isLoading}>
             <Text style={styles.buttonText}>Back</Text>
           </TouchableOpacity>
         </View>
       </View>
+
+      {/* Toast Message Component */}
+      <Toast />
     </View>
   );
 };
 
 const styles = StyleSheet.create({
+  // ... existing styles remain the same
   mainScreen: {
     flex: 1,
-    backgroundColor: '#cc0e74', // Pinkish Background
+    backgroundColor: '#cc0e74',
   },
   forgotPassword: {
-    alignSelf: 'flex-end', // Align to the right
-    marginTop: 10, // Add space above the "Forget Password" link
-    marginRight: 15, // Add some right margin
+    alignSelf: 'flex-end',
+    marginTop: 10,
+    marginRight: 15,
   },
   forgotText: {
     fontSize: 16,
@@ -129,23 +193,23 @@ const styles = StyleSheet.create({
     width: '95%',
   },
   btnsection: {
-    justifyContent: 'center', // Centers vertically
+    justifyContent: 'center',
     alignItems: 'center',
-    marginTop: 30, // Add space above the buttons
+    marginTop: 30,
   },
   upperPart: {
     flex: 2,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#cc0e74', // Same as main background
+    backgroundColor: '#cc0e74',
     borderBottomRightRadius: 60,
   },
   lowerPart: {
     flex: 3,
-    backgroundColor: '#ffffff', // White background for lower part
+    backgroundColor: '#ffffff',
     borderTopLeftRadius: 70,
-    paddingVertical: 50, // Reduce padding to create more space
-    paddingHorizontal: 5, // Add horizontal padding
+    paddingVertical: 50,
+    paddingHorizontal: 5,
   },
   image: {
     width: '100%',
@@ -153,21 +217,21 @@ const styles = StyleSheet.create({
   },
   label: {
     fontSize: 20,
-    color: '#880e4f', // Dark pink
+    color: '#880e4f',
     marginBottom: 10,
     fontWeight: 'bold',
   },
   input: {
     flex: 1,
     fontSize: 16,
-    paddingVertical: 8, // Adjust padding to avoid extra space
+    paddingVertical: 8,
   },
   passwordContainer: {
     flexDirection: 'row',
     alignItems: 'center',
     borderBottomWidth: 1,
     borderBottomColor: '#880e4f',
-    paddingBottom: 8, // Add padding to the container instead of the input
+    paddingBottom: 8,
   },
   eyeIcon: {
     padding: 10,
@@ -192,7 +256,7 @@ const styles = StyleSheet.create({
     minHeight: 50,
   },
   spacing: {
-    marginBottom: 10, // Adds space below each button
+    marginBottom: 10,
   },
   buttonText: {
     color: '#ffffff',
