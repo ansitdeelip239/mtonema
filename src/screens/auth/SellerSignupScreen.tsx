@@ -6,15 +6,16 @@ import {
   TouchableOpacity,
   StyleSheet,
   ActivityIndicator,
-  KeyboardAvoidingView, // Import KeyboardAvoidingView
-  ScrollView, // Import ScrollView
-  Platform, // Import Platform to handle iOS/Android differences
+  KeyboardAvoidingView,
+  Platform,
+  FlatList,
 } from 'react-native';
 import React, {useState} from 'react';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {AuthStackParamList} from '../../navigator/AuthNavigator';
 import AuthService from '../../services/AuthService';
 import Toast from 'react-native-toast-message';
+import BuyerService from '../../services/BuyerService';
 
 type Props = NativeStackScreenProps<AuthStackParamList, 'SellerSignupScreen'>;
 
@@ -35,10 +36,85 @@ const SellerSignupScreen: React.FC<Props> = ({navigation}) => {
     Location: false,
   });
 
+  const [locationQuery, setLocationQuery] = useState('');
+  const [locationSuggestions, setLocationSuggestions] = useState<string[]>([]);
+  const [showSuggestions, setShowSuggestions] = useState(false);
+
+  // Fetch location suggestions from your backend API
+  const searchLocationSuggestion = async (keyword: string) => {
+    try {
+      const response = await BuyerService.getPlaces(keyword, 'India');
+      console.log(response);
+
+      // Check if response is defined and has the expected structure
+      if (response && response.predictions) {
+        // Extract the descriptions from the predictions array
+        const suggestions = response.predictions.map(
+          (prediction: {description: string}) => prediction.description,
+        );
+        setLocationSuggestions(suggestions); // Update location suggestions
+        setShowSuggestions(true); // Show the dropdown
+      } else {
+        setLocationSuggestions([]);
+        setShowSuggestions(false);
+      }
+    } catch (error) {
+      console.error(error);
+      setLocationSuggestions([]);
+      setShowSuggestions(false);
+    }
+  };
+
+  // Handle input changes for the Location field
   const handleInputChange = (key: string, value: string) => {
-    setSellerData({...sellerData, [key]: value});
+    if (key === 'Phone') {
+      // Allow only numeric values
+      const numericValue = value.replace(/[^0-9]/g, ''); // Remove non-numeric characters
+
+      // Check if the length exceeds 14 digits
+      if (numericValue.length > 10) {
+        Toast.show({
+          type: 'error',
+          text1: 'Warning',
+          text2: 'Mobile number cannot be greater than 10 digits.',
+        });
+        return; // Stop further processing
+      }
+
+      // Update the state if the length is valid
+      setSellerData({...sellerData, [key]: numericValue});
+    } else if (key === 'Location') {
+      setLocationQuery(value); // Update the search query
+      setSellerData({...sellerData, [key]: value}); // Update the Location field
+      if (value.length > 2) {
+        searchLocationSuggestion(value); // Fetch suggestions
+      } else {
+        setLocationSuggestions([]); // Clear suggestions
+        setShowSuggestions(false); // Hide the dropdown
+      }
+    } else {
+      setSellerData({...sellerData, [key]: value});
+    }
+
     // Clear errors when the user starts typing
     setErrors({...errors, [key]: false});
+  };
+
+  // Handle location suggestion selection
+  const handleSuggestionSelect = (suggestion: string) => {
+    setSellerData({...sellerData, Location: suggestion}); // Update the Location field
+    setLocationQuery(suggestion); // Update the search query
+    setShowSuggestions(false); // Hide the dropdown
+  };
+
+  // Clear input field
+  const clearInputField = (key: string) => {
+    setSellerData({...sellerData, [key]: ''});
+    if (key === 'Location') {
+      setLocationQuery('');
+      setLocationSuggestions([]);
+      setShowSuggestions(false);
+    }
   };
 
   const validateForm = () => {
@@ -113,96 +189,136 @@ const SellerSignupScreen: React.FC<Props> = ({navigation}) => {
 
   return (
     <KeyboardAvoidingView
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'} // Adjust behavior based on platform
-      style={styles.mainScreen} // Take up the full screen
-      keyboardVerticalOffset={Platform.OS === 'ios' ? 100 : 0} // Adjust offset if needed
-    >
-      <ScrollView
-        contentContainerStyle={styles.scrollContainer} // Make the content scrollable
-        keyboardShouldPersistTaps="handled" // Ensure taps outside the keyboard dismiss it
-      >
-        {/* Logo Section */}
-        <View style={styles.upperPart}>
-          <Image
-            source={require('../../assets/Images/houselogo.png')}
-            style={styles.image}
-            resizeMode="contain"
-          />
-        </View>
-        {/* Input Section / Lower Part */}
-        <View style={[styles.lowerPart]}>
-          <View style={styles.txtpadding}>
-            <Text style={[styles.label]}>Name</Text>
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      style={styles.mainScreen}>
+      {/* Logo Section */}
+      <View style={styles.upperPart}>
+        <Image
+          source={require('../../assets/Images/houselogo.png')}
+          style={styles.image}
+          resizeMode="contain"
+        />
+      </View>
+      {/* Input Section / Lower Part */}
+      <View style={[styles.lowerPart]}>
+        <View style={styles.txtpadding}>
+          <Text style={[styles.label]}>Name</Text>
+          <View style={styles.inputContainer}>
             <TextInput
               style={[
                 styles.input,
-                styles.spacing1,
                 errors.Name && styles.inputError, // Apply red border if error
               ]}
               value={sellerData.Name}
               onChangeText={text => handleInputChange('Name', text)}
             />
+            {sellerData.Name !== '' && (
+              <TouchableOpacity
+                style={styles.clearButton}
+                onPress={() => clearInputField('Name')}>
+                <Text style={styles.clearButtonText}>X</Text>
+              </TouchableOpacity>
+            )}
           </View>
-          <View style={styles.txtpadding}>
-            <Text style={[styles.label]}>Email</Text>
+        </View>
+        <View style={styles.txtpadding}>
+          <Text style={[styles.label]}>Email</Text>
+          <View style={styles.inputContainer}>
             <TextInput
               style={[
                 styles.input,
-                styles.spacing1,
                 errors.Email && styles.inputError, // Apply red border if error
               ]}
               value={sellerData.Email}
               onChangeText={text => handleInputChange('Email', text)}
               keyboardType="email-address"
             />
+            {sellerData.Email !== '' && (
+              <TouchableOpacity
+                style={styles.clearButton}
+                onPress={() => clearInputField('Email')}>
+                <Text style={styles.clearButtonText}>X</Text>
+              </TouchableOpacity>
+            )}
           </View>
-          <View style={styles.txtpadding}>
-            <Text style={[styles.label]}>Location</Text>
+        </View>
+        <View style={styles.txtpadding}>
+          <Text style={[styles.label]}>Location</Text>
+          <View style={styles.inputContainer}>
             <TextInput
               style={[
                 styles.input,
-                styles.spacing1,
                 errors.Location && styles.inputError, // Apply red border if error
               ]}
-              value={sellerData.Location}
+              value={locationQuery}
               onChangeText={text => handleInputChange('Location', text)}
+              placeholder="Search Location"
             />
+            {locationQuery !== '' && (
+              <TouchableOpacity
+                style={styles.clearButton}
+                onPress={() => clearInputField('Location')}>
+                <Text style={styles.clearButtonText}>X</Text>
+              </TouchableOpacity>
+            )}
           </View>
-          <View style={styles.txtpadding}>
-            <Text style={[styles.label]}>Mobile</Text>
+          {showSuggestions && (
+            <FlatList
+              data={locationSuggestions}
+              keyExtractor={(item, index) => index.toString()}
+              renderItem={({item}) => (
+                <TouchableOpacity
+                  style={styles.suggestionItem}
+                  onPress={() => handleSuggestionSelect(item)}>
+                  <Text>{item}</Text>
+                </TouchableOpacity>
+              )}
+              style={styles.suggestionsContainer}
+            />
+          )}
+        </View>
+        <View style={styles.txtpadding}>
+          <Text style={[styles.label]}>Mobile</Text>
+          <View style={styles.inputContainer}>
             <TextInput
               style={[
                 styles.input,
-                styles.spacing1,
                 errors.Phone && styles.inputError, // Apply red border if error
               ]}
               value={sellerData.Phone}
               onChangeText={text => handleInputChange('Phone', text)}
               keyboardType="phone-pad"
             />
-          </View>
-          {/* Buttons Section */}
-          <View style={styles.btnsection}>
-            <TouchableOpacity
-              style={[styles.button, styles.spacing]}
-              onPress={handleContinue}
-              disabled={isLoading}>
-              {isLoading ? (
-                <ActivityIndicator color="#ffffff" />
-              ) : (
-                <Text style={styles.buttonText}>Continue</Text>
-              )}
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={[styles.button, styles.spacing, styles.color]}
-              onPress={navigation.goBack}>
-              <Text style={styles.buttonText}>Back</Text>
-            </TouchableOpacity>
+            {sellerData.Phone !== '' && (
+              <TouchableOpacity
+                style={styles.clearButton}
+                onPress={() => clearInputField('Phone')}>
+                <Text style={styles.clearButtonText}>X</Text>
+              </TouchableOpacity>
+            )}
           </View>
         </View>
-        {/* Toast Component */}
-        <Toast />
-      </ScrollView>
+        {/* Buttons Section */}
+        <View style={styles.btnsection}>
+          <TouchableOpacity
+            style={[styles.button, styles.spacing]}
+            onPress={handleContinue}
+            disabled={isLoading}>
+            {isLoading ? (
+              <ActivityIndicator color="#ffffff" />
+            ) : (
+              <Text style={styles.buttonText}>Continue</Text>
+            )}
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={[styles.button, styles.spacing, styles.color]}
+            onPress={navigation.goBack}>
+            <Text style={styles.buttonText}>Back</Text>
+          </TouchableOpacity>
+        </View>
+      </View>
+      {/* Toast Component */}
+      <Toast />
     </KeyboardAvoidingView>
   );
 };
@@ -212,57 +328,72 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#cc0e74', // Pinkish Background
   },
-  scrollContainer: {
-    flexGrow: 1, // Allow the content to grow and make the screen scrollable
+  upperPart: {
+    flex: 1, // Take up 1/5th of the screen
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#cc0e74', // Same as main background
+    borderBottomRightRadius: 60, // Rounded corner
+  },
+  lowerPart: {
+    flex: 4, // Take up 4/5th of the screen
+    backgroundColor: '#ffffff', // White background for the form
+    borderTopLeftRadius: 70, // Rounded corner
+    paddingVertical: 60, // Add vertical padding
+  },
+  image: {
+    width: 150, // Adjust as needed
+    height: 150, // Adjust as needed
+  },
+  spacing: {
+    marginBottom: 10, // Add space below each button
   },
   txtpadding: {
-    paddingLeft: 15,
-    width: '95%',
+    paddingLeft: 20,
+    paddingRight: 20,
+    marginBottom: 20, // Add spacing between fields
   },
   btnsection: {
     justifyContent: 'center', // Centers vertically
     alignItems: 'center',
-    paddingBottom: 20, // Add padding to ensure buttons are visible
-  },
-  upperPart: {
-    height: 150, // Set a fixed height for the upper section
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#cc0e74', // Same as main background
-    borderBottomRightRadius: 60,
-  },
-  lowerPart: {
-    flex: 1, // Take up remaining space
-    backgroundColor: '#ffffff', // White background for lower part
-    borderTopLeftRadius: 70,
-    paddingVertical: 40, // Add padding to the lower part
-  },
-  image: {
-    width: 150, // Set a fixed width for the logo
-    height: 150, // Set a fixed height for the logo
+    marginTop: 20, // Add spacing above the buttons
   },
   label: {
-    fontSize: 20,
+    fontSize: 18,
     color: '#880e4f', // Dark pink
-    marginBottom: 0,
+    marginBottom: 10,
     fontWeight: 'bold',
   },
+  inputContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
   input: {
-    borderWidth: 1, // Add border to all sides
-    borderColor: '#880e4f', // Default border color
-    borderRadius: 10, // Optional: Add rounded corners
-    padding: 15, // Increase padding for better appearance
+    flex: 1,
+    borderWidth: 1,
+    borderColor: '#880e4f',
+    borderRadius: 10,
+    padding: 15,
     fontSize: 16,
     backgroundColor: '#FFFFFF', // White background for input
   },
   inputError: {
     borderColor: 'red', // Red border for errors
   },
+  clearButton: {
+    position: 'absolute',
+    right: 10,
+    padding: 10,
+  },
+  clearButtonText: {
+    fontSize: 16,
+    color: '#880e4f', // Dark pink
+  },
   button: {
     backgroundColor: '#cc0e74', // Matching pink button
     padding: 15,
     borderRadius: 30,
-    width: '95%',
+    width: '90%',
     alignItems: 'center',
     justifyContent: 'center',
     shadowColor: '#000',
@@ -270,20 +401,28 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
     elevation: 5,
-  },
-  spacing: {
-    marginBottom: 10, // Adds space below each button
-  },
-  color: {
-    backgroundColor: '#790c5a',
-  },
-  spacing1: {
-    marginBottom: 35, // Adds space below each button
+    marginBottom: 15, // Add spacing between buttons
   },
   buttonText: {
-    color: '#ffffff',
-    fontSize: 17,
+    color: '#FFFFFF',
+    fontSize: 18,
     fontWeight: 'bold',
+  },
+  color: {
+    backgroundColor: '#790c5a', // Darker pink for the back button
+  },
+  suggestionsContainer: {
+    maxHeight: 150,
+    borderWidth: 1,
+    borderColor: '#880e4f',
+    borderRadius: 10,
+    marginTop: 5,
+    backgroundColor: '#FFFFFF',
+  },
+  suggestionItem: {
+    padding: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: '#ccc',
   },
 });
 
