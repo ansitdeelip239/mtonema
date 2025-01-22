@@ -78,19 +78,18 @@ const SellerSignupScreen: React.FC<Props> = ({navigation}) => {
           text1: 'Warning',
           text2: 'Mobile number cannot be greater than 10 digits.',
         });
-        return; // Stop further processing
+        return;
       }
 
-      // Update the state if the length is valid
       setSellerData({...sellerData, [key]: numericValue});
     } else if (key === 'Location') {
-      setLocationQuery(value); // Update the search query
-      setSellerData({...sellerData, [key]: value}); // Update the Location field
-      if (value.length > 2) {
-        searchLocationSuggestion(value); // Fetch suggestions
+      setLocationQuery(value);
+      setSellerData({...sellerData, [key]: value});
+      if (value.length >= 1) {
+        searchLocationSuggestion(value);
       } else {
-        setLocationSuggestions([]); // Clear suggestions
-        setShowSuggestions(false); // Hide the dropdown
+        setLocationSuggestions([]);
+        setShowSuggestions(false);
       }
     } else {
       setSellerData({...sellerData, [key]: value});
@@ -190,6 +189,7 @@ const SellerSignupScreen: React.FC<Props> = ({navigation}) => {
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      keyboardVerticalOffset={Platform.OS === 'ios' ? 60 : 0}
       style={styles.mainScreen}>
       {/* Logo Section */}
       <View style={styles.upperPart}>

@@ -143,6 +143,7 @@ export interface SignUpRequest  {
   Location: string;
   Phone: string;
   Password?: string;
-  TermsChecked?: true;
+  TermsChecked?: boolean;
   URL?: string;
+  IsMobileApp?: boolean;
 }

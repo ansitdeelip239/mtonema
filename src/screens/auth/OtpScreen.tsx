@@ -87,14 +87,14 @@ const OtpScreen: React.FC<Props> = ({ route }) => {
           <Text style={styles.subtitle}>Please enter the OTP sent to your Email</Text>
 
           <TextInput
-            style={styles.otpInput}
-            placeholder="Enter OTP"
-            placeholderTextColor="#999"
-            keyboardType="numeric"
-            maxLength={6}
-            value={OTP}
-            onChangeText={setOtp}
-          />
+  style={styles.otpInput}
+  placeholder="Enter OTP"
+  placeholderTextColor="#999"
+  keyboardType="numeric"
+  maxLength={6}
+  value={OTP}
+  onChangeText={setOtp}
+/>
 
           <TouchableOpacity
             style={[styles.submitButton]}
@@ -164,24 +164,24 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     textAlign: 'center',
   },
-  otpInput: {
-    width: '100%',
-    height: 50,
-    borderColor: '#ccc',
-    borderWidth: 1,
-    borderRadius: 5,
-    paddingHorizontal: 10,
-    marginBottom: 20,
-    fontSize: 18,
-    textAlign: 'center',
-    textAlignVertical: 'center',
-    color: '#333',
-    backgroundColor: '#fff',
-  },
+otpInput: {
+  width: '100%',
+  height: 50,
+  borderColor: '#ccc',
+  borderWidth: 1,
+  borderRadius: 5,
+  paddingHorizontal: 10,
+  marginBottom: 20,
+  fontSize: 18,
+  color: '#333',
+  backgroundColor: '#fff',
+  textAlign: 'left', // Remove textAlign: 'center'
+  paddingLeft: 20, // Add padding to visually center the text
+},
   submitButton: {
     width: '100%',
     height: 50,
-    backgroundColor: '#007BFF',
+    backgroundColor: '#cc0e74',
     borderRadius: 5,
     justifyContent: 'center',
     alignItems: 'center',
@@ -202,7 +202,7 @@ const styles = StyleSheet.create({
     width: '80%',
     backgroundColor: '#fff', // Pink background
     borderRadius: 15,
-    padding: 40,
+    padding: 30,
     alignItems: 'center',
   },
   alertTitle: {
@@ -213,16 +213,16 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   alertMessage: {
-    fontSize: 16,
+    fontSize: 18,
     color: '#000',
     textAlign: 'center',
-    marginBottom: 20,
+    marginBottom: 30,
   },
   alertButton: {
     backgroundColor: '#FF1493', // Darker pink for the button
     borderRadius: 5,
-    paddingVertical: 10,
-    paddingHorizontal: 20,
+    paddingVertical: 15,
+    paddingHorizontal: 25,
   },
   alertButtonText: {
     color: '#FFF',
