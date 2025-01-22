@@ -211,6 +211,7 @@ const SellerSignupScreen: React.FC<Props> = ({navigation}) => {
               ]}
               value={sellerData.Name}
               onChangeText={text => handleInputChange('Name', text)}
+              placeholder="Enter Your Name"
             />
             {sellerData.Name !== '' && (
               <TouchableOpacity
@@ -232,6 +233,7 @@ const SellerSignupScreen: React.FC<Props> = ({navigation}) => {
               value={sellerData.Email}
               onChangeText={text => handleInputChange('Email', text)}
               keyboardType="email-address"
+               placeholder="Enter Your E-mail"
             />
             {sellerData.Email !== '' && (
               <TouchableOpacity
@@ -288,6 +290,7 @@ const SellerSignupScreen: React.FC<Props> = ({navigation}) => {
               value={sellerData.Phone}
               onChangeText={text => handleInputChange('Phone', text)}
               keyboardType="phone-pad"
+               placeholder="Enter Your Mobile Number"
             />
             {sellerData.Phone !== '' && (
               <TouchableOpacity
@@ -307,7 +310,7 @@ const SellerSignupScreen: React.FC<Props> = ({navigation}) => {
             {isLoading ? (
               <ActivityIndicator color="#ffffff" />
             ) : (
-              <Text style={styles.buttonText}>Continue</Text>
+              <Text style={styles.buttonText}>Sign Up</Text>
             )}
           </TouchableOpacity>
           <TouchableOpacity
@@ -409,7 +412,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   color: {
-    backgroundColor: '#790c5a', // Darker pink for the back button
+    backgroundColor: '#cc0e74', // Darker pink for the back button
   },
   suggestionsContainer: {
     maxHeight: 150,

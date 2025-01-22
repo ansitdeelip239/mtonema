@@ -233,6 +233,7 @@ const SignUpScreen: React.FC<Props> = ({navigation}) => {
               ]}
               value={signupData.Name}
               onChangeText={text => handleInputChange('Name', text)}
+              placeholder="Enter Your Name"
             />
             {signupData.Name !== '' && (
               <TouchableOpacity
@@ -254,6 +255,7 @@ const SignUpScreen: React.FC<Props> = ({navigation}) => {
               value={signupData.Email}
               onChangeText={text => handleInputChange('Email', text)}
               keyboardType="email-address"
+              placeholder="Enter Your E-mail"
             />
             {signupData.Email !== '' && (
               <TouchableOpacity
@@ -310,6 +312,7 @@ const SignUpScreen: React.FC<Props> = ({navigation}) => {
               value={signupData.Phone}
               onChangeText={text => handleInputChange('Phone', text)}
               keyboardType="phone-pad"
+              placeholder="Enter Your Phone Number"
             />
             {signupData.Phone !== '' && (
               <TouchableOpacity
@@ -446,7 +449,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   color: {
-    backgroundColor: '#790c5a', // Darker pink for the back button
+    backgroundColor: '#cc0e74', // Darker pink for the back button
   },
   suggestionsContainer: {
     maxHeight: 150,
