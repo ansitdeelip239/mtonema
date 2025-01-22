@@ -9,8 +9,9 @@ import {
   KeyboardAvoidingView,
   Platform,
   FlatList,
+  Keyboard,
 } from 'react-native';
-import React, {useState} from 'react';
+import React, {useState,useEffect} from 'react';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {AuthStackParamList} from '../../navigator/AuthNavigator';
 import AuthService from '../../services/AuthService';
@@ -35,11 +36,31 @@ const SignUpScreen: React.FC<Props> = ({navigation}) => {
   });
 
   const [loading, setLoading] = useState(false);
+    const [isKeyboardVisible, setKeyboardVisible] = useState(false);
   const [locationSuggestions, setLocationSuggestions] = useState<string[]>([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
 
   // Track focus state for each input field
   const [focusedInput, setFocusedInput] = useState<string | null>(null);
+
+  useEffect(() => {
+      const keyboardDidShowListener = Keyboard.addListener(
+        'keyboardDidShow',
+        () => {
+          setKeyboardVisible(true);
+        },
+      );
+      const keyboardDidHideListener = Keyboard.addListener(
+        'keyboardDidHide',
+        () => {
+          setKeyboardVisible(false);
+        },
+      );
+      return () => {
+        keyboardDidShowListener.remove();
+        keyboardDidHideListener.remove();
+      };
+    }, []);
 
   const searchLocationSuggestion = async (keyword: string) => {
     try {
@@ -64,7 +85,7 @@ const SignUpScreen: React.FC<Props> = ({navigation}) => {
   const handleInputChange = (key: string, value: string) => {
     if (key === 'Name') {
       // Check for special characters using a regular expression
-      const specialCharacterRegex = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+/;
+      const specialCharacterRegex = /[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]+/;
       if (specialCharacterRegex.test(value)) {
         // Show a warning if special characters are found
         Toast.show({
@@ -184,6 +205,7 @@ const SignUpScreen: React.FC<Props> = ({navigation}) => {
       keyboardVerticalOffset={Platform.OS === 'ios' ? 60 : 0}
       style={styles.mainScreen}>
       {/* Logo Section */}
+      {!isKeyboardVisible && (
       <View style={styles.upperPart}>
         <Image
           source={require('../../assets/Images/houselogo.png')}
@@ -191,22 +213,28 @@ const SignUpScreen: React.FC<Props> = ({navigation}) => {
           resizeMode="contain"
         />
       </View>
+      )}
       {/* Input Section / Lower Part */}
       <View style={[styles.lowerPart]}>
-        <View style={styles.txtpadding}>
+        <View style={[
+                styles.lowerPart,
+                isKeyboardVisible && styles.lowerPartKeyboardVisible,
+              ]}>
+       {/* Name Input */}
+       <View style={styles.txtpadding}>
           <Text style={[styles.label]}>Name</Text>
           <View style={styles.inputContainer}>
             <TextInput
               style={[
                 styles.input,
                 errors.Name && styles.inputError,
-                focusedInput === 'Name' && styles.inputFocused, // Apply black border when focused
+                focusedInput === 'Name' && styles.inputFocused,
               ]}
               value={signupData.Name}
               onChangeText={text => handleInputChange('Name', text)}
               placeholder="Enter Your Name"
-              onFocus={() => setFocusedInput('Name')} // Set focus state
-              onBlur={() => setFocusedInput(null)} // Clear focus state
+              onFocus={() => setFocusedInput('Name')}
+              onBlur={() => setFocusedInput(null)}
             />
             {signupData.Name !== '' && (
               <TouchableOpacity
@@ -323,6 +351,7 @@ const SignUpScreen: React.FC<Props> = ({navigation}) => {
           </TouchableOpacity>
         </View>
       </View>
+      </View>
       <Toast />
     </KeyboardAvoidingView>
   );
@@ -332,6 +361,9 @@ const styles = StyleSheet.create({
   mainScreen: {
     flex: 1,
     backgroundColor: '#cc0e74',
+  },
+  lowerPartKeyboardVisible: {
+    paddingTop: 20,
   },
   upperPart: {
     flex: 1,

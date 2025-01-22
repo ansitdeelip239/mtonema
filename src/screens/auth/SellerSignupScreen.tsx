@@ -9,8 +9,9 @@ import {
   KeyboardAvoidingView,
   Platform,
   FlatList,
+  Keyboard,
 } from 'react-native';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {AuthStackParamList} from '../../navigator/AuthNavigator';
 import AuthService from '../../services/AuthService';
@@ -21,6 +22,7 @@ type Props = NativeStackScreenProps<AuthStackParamList, 'SellerSignupScreen'>;
 
 const SellerSignupScreen: React.FC<Props> = ({navigation}) => {
   const [isLoading, setIsLoading] = useState(false);
+  const [isKeyboardVisible, setKeyboardVisible] = useState(false);
   const [sellerData, setSellerData] = useState({
     Name: '',
     Email: '',
@@ -41,6 +43,26 @@ const SellerSignupScreen: React.FC<Props> = ({navigation}) => {
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [focusedInput, setFocusedInput] = useState<string | null>(null);
 
+
+  useEffect(() => {
+    const keyboardDidShowListener = Keyboard.addListener(
+      'keyboardDidShow',
+      () => {
+        setKeyboardVisible(true);
+      },
+    );
+    const keyboardDidHideListener = Keyboard.addListener(
+      'keyboardDidHide',
+      () => {
+        setKeyboardVisible(false);
+      },
+    );
+
+    return () => {
+      keyboardDidShowListener.remove();
+      keyboardDidHideListener.remove();
+    };
+  }, []);
   // Fetch location suggestions from your backend API
   const searchLocationSuggestion = async (keyword: string) => {
     try {
@@ -70,7 +92,7 @@ const SellerSignupScreen: React.FC<Props> = ({navigation}) => {
   const handleInputChange = (key: string, value: string) => {
      if (key === 'Name') {
           // Check for special characters using a regular expression
-          const specialCharacterRegex = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+/;
+          const specialCharacterRegex = /[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]+/;
           if (specialCharacterRegex.test(value)) {
             // Show a warning if special characters are found
             Toast.show({
@@ -206,15 +228,20 @@ const SellerSignupScreen: React.FC<Props> = ({navigation}) => {
       keyboardVerticalOffset={Platform.OS === 'ios' ? 60 : 0}
       style={styles.mainScreen}>
       {/* Logo Section */}
-      <View style={styles.upperPart}>
-        <Image
-          source={require('../../assets/Images/houselogo.png')}
-          style={styles.image}
-          resizeMode="contain"
-        />
-      </View>
+      {!isKeyboardVisible && (
+        <View style={styles.upperPart}>
+          <Image
+            source={require('../../assets/Images/houselogo.png')}
+            style={styles.image}
+            resizeMode="contain"
+          />
+        </View>
+      )}
       {/* Input Section / Lower Part */}
-      <View style={[styles.lowerPart]}>
+      <View style={[
+        styles.lowerPart,
+        isKeyboardVisible && styles.lowerPartKeyboardVisible,
+      ]}>
         {/* Name Input */}
         <View style={styles.txtpadding}>
           <Text style={[styles.label]}>Name</Text>
@@ -222,14 +249,14 @@ const SellerSignupScreen: React.FC<Props> = ({navigation}) => {
             <TextInput
               style={[
                 styles.input,
-                errors.Name && styles.inputError, // Apply red border if error
-                focusedInput === 'Name' && styles.inputFocused, // Apply black border when focused
+                errors.Name && styles.inputError,
+                focusedInput === 'Name' && styles.inputFocused,
               ]}
               value={sellerData.Name}
               onChangeText={text => handleInputChange('Name', text)}
               placeholder="Enter Your Name"
-              onFocus={() => setFocusedInput('Name')} // Set focus state
-              onBlur={() => setFocusedInput(null)} // Clear focus state
+              onFocus={() => setFocusedInput('Name')}
+              onBlur={() => setFocusedInput(null)}
             />
             {sellerData.Name !== '' && (
               <TouchableOpacity
@@ -248,15 +275,15 @@ const SellerSignupScreen: React.FC<Props> = ({navigation}) => {
             <TextInput
               style={[
                 styles.input,
-                errors.Email && styles.inputError, // Apply red border if error
-                focusedInput === 'Email' && styles.inputFocused, // Apply black border when focused
+                errors.Email && styles.inputError,
+                focusedInput === 'Email' && styles.inputFocused,
               ]}
               value={sellerData.Email}
               onChangeText={text => handleInputChange('Email', text)}
               keyboardType="email-address"
               placeholder="Enter Your E-mail"
-              onFocus={() => setFocusedInput('Email')} // Set focus state
-              onBlur={() => setFocusedInput(null)} // Clear focus state
+              onFocus={() => setFocusedInput('Email')}
+              onBlur={() => setFocusedInput(null)}
             />
             {sellerData.Email !== '' && (
               <TouchableOpacity
@@ -275,14 +302,14 @@ const SellerSignupScreen: React.FC<Props> = ({navigation}) => {
             <TextInput
               style={[
                 styles.input,
-                errors.Location && styles.inputError, // Apply red border if error
-                focusedInput === 'Location' && styles.inputFocused, // Apply black border when focused
+                errors.Location && styles.inputError,
+                focusedInput === 'Location' && styles.inputFocused,
               ]}
               value={locationQuery}
               onChangeText={text => handleInputChange('Location', text)}
               placeholder="Search Location"
-              onFocus={() => setFocusedInput('Location')} // Set focus state
-              onBlur={() => setFocusedInput(null)} // Clear focus state
+              onFocus={() => setFocusedInput('Location')}
+              onBlur={() => setFocusedInput(null)}
             />
             {locationQuery !== '' && (
               <TouchableOpacity
@@ -315,15 +342,15 @@ const SellerSignupScreen: React.FC<Props> = ({navigation}) => {
             <TextInput
               style={[
                 styles.input,
-                errors.Phone && styles.inputError, // Apply red border if error
-                focusedInput === 'Phone' && styles.inputFocused, // Apply black border when focused
+                errors.Phone && styles.inputError,
+                focusedInput === 'Phone' && styles.inputFocused,
               ]}
               value={sellerData.Phone}
               onChangeText={text => handleInputChange('Phone', text)}
               keyboardType="phone-pad"
               placeholder="Enter Your Mobile Number"
-              onFocus={() => setFocusedInput('Phone')} // Set focus state
-              onBlur={() => setFocusedInput(null)} // Clear focus state
+              onFocus={() => setFocusedInput('Phone')}
+              onBlur={() => setFocusedInput(null)}
             />
             {sellerData.Phone !== '' && (
               <TouchableOpacity
@@ -354,7 +381,6 @@ const SellerSignupScreen: React.FC<Props> = ({navigation}) => {
           </TouchableOpacity>
         </View>
       </View>
-      {/* Toast Component */}
       <Toast />
     </KeyboardAvoidingView>
   );
@@ -364,6 +390,9 @@ const styles = StyleSheet.create({
   mainScreen: {
     flex: 1,
     backgroundColor: '#cc0e74', // Pinkish Background
+  },
+  lowerPartKeyboardVisible: {
+    paddingTop: 20,
   },
   upperPart: {
     flex: 1, // Take up 1/5th of the screen
