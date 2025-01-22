@@ -6,7 +6,6 @@ async function fetchAPI<T>(endpoint: string, options: RequestInit = {}) {
 
   let token: string | null = await AsyncStorage.getItem('token');
 
-  // console.log('**tokennnnnnn',token)
   const defaultHeaders = {
     'Content-Type': 'application/json',
     ...(token && {Authorization: `Bearer ${token}`}),

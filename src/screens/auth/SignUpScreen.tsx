@@ -38,6 +38,9 @@ const SignUpScreen: React.FC<Props> = ({navigation}) => {
   const [locationSuggestions, setLocationSuggestions] = useState<string[]>([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
 
+  // Track focus state for each input field
+  const [focusedInput, setFocusedInput] = useState<string | null>(null);
+
   const searchLocationSuggestion = async (keyword: string) => {
     try {
       const response = await BuyerService.getPlaces(keyword, 'India');
@@ -59,6 +62,20 @@ const SignUpScreen: React.FC<Props> = ({navigation}) => {
   };
 
   const handleInputChange = (key: string, value: string) => {
+    if (key === 'Name') {
+      // Check for special characters using a regular expression
+      const specialCharacterRegex = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+/;
+      if (specialCharacterRegex.test(value)) {
+        // Show a warning if special characters are found
+        Toast.show({
+          type: 'error',
+          text1: 'Warning',
+          text2: 'Special characters are not allowed in the Name field.',
+        });
+        return; // Prevent updating the state
+      }
+    }
+
     if (key === 'Phone') {
       const numericValue = value.replace(/[^0-9]/g, '');
       if (numericValue.length > 10) {
@@ -180,10 +197,16 @@ const SignUpScreen: React.FC<Props> = ({navigation}) => {
           <Text style={[styles.label]}>Name</Text>
           <View style={styles.inputContainer}>
             <TextInput
-              style={[styles.input, errors.Name && styles.inputError]}
+              style={[
+                styles.input,
+                errors.Name && styles.inputError,
+                focusedInput === 'Name' && styles.inputFocused, // Apply black border when focused
+              ]}
               value={signupData.Name}
               onChangeText={text => handleInputChange('Name', text)}
               placeholder="Enter Your Name"
+              onFocus={() => setFocusedInput('Name')} // Set focus state
+              onBlur={() => setFocusedInput(null)} // Clear focus state
             />
             {signupData.Name !== '' && (
               <TouchableOpacity
@@ -198,11 +221,17 @@ const SignUpScreen: React.FC<Props> = ({navigation}) => {
           <Text style={[styles.label]}>Email</Text>
           <View style={styles.inputContainer}>
             <TextInput
-              style={[styles.input, errors.Email && styles.inputError]}
+              style={[
+                styles.input,
+                errors.Email && styles.inputError,
+                focusedInput === 'Email' && styles.inputFocused, // Apply black border when focused
+              ]}
               value={signupData.Email}
               onChangeText={text => handleInputChange('Email', text)}
               keyboardType="email-address"
               placeholder="Enter Your E-mail"
+              onFocus={() => setFocusedInput('Email')} // Set focus state
+              onBlur={() => setFocusedInput(null)} // Clear focus state
             />
             {signupData.Email !== '' && (
               <TouchableOpacity
@@ -217,10 +246,16 @@ const SignUpScreen: React.FC<Props> = ({navigation}) => {
           <Text style={[styles.label]}>Location</Text>
           <View style={styles.inputContainer}>
             <TextInput
-              style={[styles.input, errors.Location && styles.inputError]}
+              style={[
+                styles.input,
+                errors.Location && styles.inputError,
+                focusedInput === 'Location' && styles.inputFocused, // Apply black border when focused
+              ]}
               value={signupData.Location}
               onChangeText={text => handleInputChange('Location', text)}
               placeholder="Search Location"
+              onFocus={() => setFocusedInput('Location')} // Set focus state
+              onBlur={() => setFocusedInput(null)} // Clear focus state
             />
             {signupData.Location !== '' && (
               <TouchableOpacity
@@ -249,11 +284,17 @@ const SignUpScreen: React.FC<Props> = ({navigation}) => {
           <Text style={[styles.label]}>Phone</Text>
           <View style={styles.inputContainer}>
             <TextInput
-              style={[styles.input, errors.Phone && styles.inputError]}
+              style={[
+                styles.input,
+                errors.Phone && styles.inputError,
+                focusedInput === 'Phone' && styles.inputFocused, // Apply black border when focused
+              ]}
               value={signupData.Phone}
               onChangeText={text => handleInputChange('Phone', text)}
               keyboardType="phone-pad"
               placeholder="Enter Your Phone Number"
+              onFocus={() => setFocusedInput('Phone')} // Set focus state
+              onBlur={() => setFocusedInput(null)} // Clear focus state
             />
             {signupData.Phone !== '' && (
               <TouchableOpacity
@@ -343,6 +384,10 @@ const styles = StyleSheet.create({
   },
   inputError: {
     borderColor: 'red',
+  },
+  inputFocused: {
+    borderColor: '#cc0e74', // Black border when focused
+    borderWidth: 1.9,
   },
   clearButton: {
     position: 'absolute',

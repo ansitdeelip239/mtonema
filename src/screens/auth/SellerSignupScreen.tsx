@@ -39,6 +39,7 @@ const SellerSignupScreen: React.FC<Props> = ({navigation}) => {
   const [locationQuery, setLocationQuery] = useState('');
   const [locationSuggestions, setLocationSuggestions] = useState<string[]>([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
+  const [focusedInput, setFocusedInput] = useState<string | null>(null);
 
   // Fetch location suggestions from your backend API
   const searchLocationSuggestion = async (keyword: string) => {
@@ -67,6 +68,19 @@ const SellerSignupScreen: React.FC<Props> = ({navigation}) => {
 
   // Handle input changes for the Location field
   const handleInputChange = (key: string, value: string) => {
+     if (key === 'Name') {
+          // Check for special characters using a regular expression
+          const specialCharacterRegex = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+/;
+          if (specialCharacterRegex.test(value)) {
+            // Show a warning if special characters are found
+            Toast.show({
+              type: 'error',
+              text1: 'Warning',
+              text2: 'Special characters are not allowed in the Name field.',
+            });
+            return; // Prevent updating the state
+          }
+        }
     if (key === 'Phone') {
       // Allow only numeric values
       const numericValue = value.replace(/[^0-9]/g, ''); // Remove non-numeric characters
@@ -201,6 +215,7 @@ const SellerSignupScreen: React.FC<Props> = ({navigation}) => {
       </View>
       {/* Input Section / Lower Part */}
       <View style={[styles.lowerPart]}>
+        {/* Name Input */}
         <View style={styles.txtpadding}>
           <Text style={[styles.label]}>Name</Text>
           <View style={styles.inputContainer}>
@@ -208,10 +223,13 @@ const SellerSignupScreen: React.FC<Props> = ({navigation}) => {
               style={[
                 styles.input,
                 errors.Name && styles.inputError, // Apply red border if error
+                focusedInput === 'Name' && styles.inputFocused, // Apply black border when focused
               ]}
               value={sellerData.Name}
               onChangeText={text => handleInputChange('Name', text)}
               placeholder="Enter Your Name"
+              onFocus={() => setFocusedInput('Name')} // Set focus state
+              onBlur={() => setFocusedInput(null)} // Clear focus state
             />
             {sellerData.Name !== '' && (
               <TouchableOpacity
@@ -222,6 +240,8 @@ const SellerSignupScreen: React.FC<Props> = ({navigation}) => {
             )}
           </View>
         </View>
+
+        {/* Email Input */}
         <View style={styles.txtpadding}>
           <Text style={[styles.label]}>Email</Text>
           <View style={styles.inputContainer}>
@@ -229,11 +249,14 @@ const SellerSignupScreen: React.FC<Props> = ({navigation}) => {
               style={[
                 styles.input,
                 errors.Email && styles.inputError, // Apply red border if error
+                focusedInput === 'Email' && styles.inputFocused, // Apply black border when focused
               ]}
               value={sellerData.Email}
               onChangeText={text => handleInputChange('Email', text)}
               keyboardType="email-address"
-               placeholder="Enter Your E-mail"
+              placeholder="Enter Your E-mail"
+              onFocus={() => setFocusedInput('Email')} // Set focus state
+              onBlur={() => setFocusedInput(null)} // Clear focus state
             />
             {sellerData.Email !== '' && (
               <TouchableOpacity
@@ -244,6 +267,8 @@ const SellerSignupScreen: React.FC<Props> = ({navigation}) => {
             )}
           </View>
         </View>
+
+        {/* Location Input */}
         <View style={styles.txtpadding}>
           <Text style={[styles.label]}>Location</Text>
           <View style={styles.inputContainer}>
@@ -251,10 +276,13 @@ const SellerSignupScreen: React.FC<Props> = ({navigation}) => {
               style={[
                 styles.input,
                 errors.Location && styles.inputError, // Apply red border if error
+                focusedInput === 'Location' && styles.inputFocused, // Apply black border when focused
               ]}
               value={locationQuery}
               onChangeText={text => handleInputChange('Location', text)}
               placeholder="Search Location"
+              onFocus={() => setFocusedInput('Location')} // Set focus state
+              onBlur={() => setFocusedInput(null)} // Clear focus state
             />
             {locationQuery !== '' && (
               <TouchableOpacity
@@ -279,6 +307,8 @@ const SellerSignupScreen: React.FC<Props> = ({navigation}) => {
             />
           )}
         </View>
+
+        {/* Mobile Input */}
         <View style={styles.txtpadding}>
           <Text style={[styles.label]}>Mobile</Text>
           <View style={styles.inputContainer}>
@@ -286,11 +316,14 @@ const SellerSignupScreen: React.FC<Props> = ({navigation}) => {
               style={[
                 styles.input,
                 errors.Phone && styles.inputError, // Apply red border if error
+                focusedInput === 'Phone' && styles.inputFocused, // Apply black border when focused
               ]}
               value={sellerData.Phone}
               onChangeText={text => handleInputChange('Phone', text)}
               keyboardType="phone-pad"
-               placeholder="Enter Your Mobile Number"
+              placeholder="Enter Your Mobile Number"
+              onFocus={() => setFocusedInput('Phone')} // Set focus state
+              onBlur={() => setFocusedInput(null)} // Clear focus state
             />
             {sellerData.Phone !== '' && (
               <TouchableOpacity
@@ -301,6 +334,7 @@ const SellerSignupScreen: React.FC<Props> = ({navigation}) => {
             )}
           </View>
         </View>
+
         {/* Buttons Section */}
         <View style={styles.btnsection}>
           <TouchableOpacity
@@ -426,6 +460,10 @@ const styles = StyleSheet.create({
     padding: 10,
     borderBottomWidth: 1,
     borderBottomColor: '#ccc',
+  },
+  inputFocused: {
+    borderColor: '#cc0e74', // color border when focused
+    borderWidth:1.9,
   },
 });
 
