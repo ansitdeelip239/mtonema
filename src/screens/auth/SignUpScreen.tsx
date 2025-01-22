@@ -11,16 +11,16 @@ import {
   FlatList,
   Keyboard,
 } from 'react-native';
-import React, {useState,useEffect} from 'react';
-import {NativeStackScreenProps} from '@react-navigation/native-stack';
-import {AuthStackParamList} from '../../navigator/AuthNavigator';
+import React, { useState, useEffect, useCallback } from 'react';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { AuthStackParamList } from '../../navigator/AuthNavigator';
 import AuthService from '../../services/AuthService';
 import Toast from 'react-native-toast-message';
 import BuyerService from '../../services/BuyerService';
 
 type Props = NativeStackScreenProps<AuthStackParamList, 'SignUpScreen'>;
 
-const SignUpScreen: React.FC<Props> = ({navigation}) => {
+const SignUpScreen: React.FC<Props> = ({ navigation }) => {
   const [signupData, setSignupData] = useState({
     Name: '',
     Email: '',
@@ -36,38 +36,42 @@ const SignUpScreen: React.FC<Props> = ({navigation}) => {
   });
 
   const [loading, setLoading] = useState(false);
-    const [isKeyboardVisible, setKeyboardVisible] = useState(false);
+  const [isKeyboardVisible, setKeyboardVisible] = useState(false);
+  // const [_isSelectingSuggestion, _setIsSelectingSuggestion] = useState(false);
   const [locationSuggestions, setLocationSuggestions] = useState<string[]>([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
-
-  // Track focus state for each input field
   const [focusedInput, setFocusedInput] = useState<string | null>(null);
 
   useEffect(() => {
-      const keyboardDidShowListener = Keyboard.addListener(
-        'keyboardDidShow',
-        () => {
-          setKeyboardVisible(true);
-        },
-      );
-      const keyboardDidHideListener = Keyboard.addListener(
-        'keyboardDidHide',
-        () => {
-          setKeyboardVisible(false);
-        },
-      );
-      return () => {
-        keyboardDidShowListener.remove();
-        keyboardDidHideListener.remove();
-      };
-    }, []);
+    const keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', () => {
+      setKeyboardVisible(true);
+    });
+    const keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', () => {
+      setKeyboardVisible(false);
+    });
 
-  const searchLocationSuggestion = async (keyword: string) => {
+    return () => {
+      keyboardDidShowListener.remove();
+      keyboardDidHideListener.remove();
+    };
+  }, []);
+
+  // Debounce function
+  const debounce = useCallback((func: (...args: any[]) => void, wait: number) => {
+    let timeout: NodeJS.Timeout;
+    return (...args: any[]) => {
+      clearTimeout(timeout);
+      timeout = setTimeout(() => func(...args), wait);
+    };
+  }, []);
+
+  // Fetch location suggestions
+  const searchLocationSuggestion = useCallback(async (keyword: string) => {
     try {
       const response = await BuyerService.getPlaces(keyword, 'India');
       if (response?.predictions) {
         const suggestions = response.predictions.map(
-          (prediction: {description: string}) => prediction.description,
+          (prediction: { description: string }) => prediction.description,
         );
         setLocationSuggestions(suggestions);
         setShowSuggestions(true);
@@ -80,20 +84,32 @@ const SignUpScreen: React.FC<Props> = ({navigation}) => {
       setLocationSuggestions([]);
       setShowSuggestions(false);
     }
-  };
+  }, []);
+
+  // Debounced search function
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const debouncedSearchLocationSuggestion = useCallback(
+    debounce((keyword: string) => {
+      if (keyword.length > 0) {
+        searchLocationSuggestion(keyword);
+      } else {
+        setLocationSuggestions([]);
+        setShowSuggestions(false);
+      }
+    }, 300),
+    [searchLocationSuggestion],
+  );
 
   const handleInputChange = (key: string, value: string) => {
     if (key === 'Name') {
-      // Check for special characters using a regular expression
       const specialCharacterRegex = /[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]+/;
       if (specialCharacterRegex.test(value)) {
-        // Show a warning if special characters are found
         Toast.show({
           type: 'error',
           text1: 'Warning',
           text2: 'Special characters are not allowed in the Name field.',
         });
-        return; // Prevent updating the state
+        return;
       }
     }
 
@@ -107,28 +123,24 @@ const SignUpScreen: React.FC<Props> = ({navigation}) => {
         });
         return;
       }
-      setSignupData({...signupData, [key]: numericValue});
+      setSignupData({ ...signupData, [key]: numericValue });
     } else if (key === 'Location') {
-      setSignupData({...signupData, [key]: value});
-      if (value.length >= 1) {
-        searchLocationSuggestion(value);
-      } else {
-        setLocationSuggestions([]);
-        setShowSuggestions(false);
-      }
+      setSignupData({ ...signupData, [key]: value });
+      debouncedSearchLocationSuggestion(value);
     } else {
-      setSignupData({...signupData, [key]: value});
+      setSignupData({ ...signupData, [key]: value });
     }
-    setErrors({...errors, [key]: false});
+    setErrors({ ...errors, [key]: false });
   };
 
   const handleSuggestionSelect = (suggestion: string) => {
-    setSignupData({...signupData, Location: suggestion});
+    setSignupData({ ...signupData, Location: suggestion });
     setShowSuggestions(false);
+    Keyboard.dismiss();
   };
 
   const clearInputField = (key: string) => {
-    setSignupData({...signupData, [key]: ''});
+    setSignupData({ ...signupData, [key]: '' });
     if (key === 'Location') {
       setLocationSuggestions([]);
       setShowSuggestions(false);
@@ -137,16 +149,13 @@ const SignUpScreen: React.FC<Props> = ({navigation}) => {
 
   const validateForm = () => {
     let valid = true;
-    const newErrors = {...errors};
+    const newErrors = { ...errors };
 
     if (!signupData.Name.trim()) {
       newErrors.Name = true;
       valid = false;
     }
-    if (
-      !signupData.Email.trim() ||
-      !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(signupData.Email)
-    ) {
+    if (!signupData.Email.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(signupData.Email)) {
       newErrors.Email = true;
       valid = false;
     }
@@ -177,10 +186,8 @@ const SignUpScreen: React.FC<Props> = ({navigation}) => {
       console.log('API Response:', response);
 
       if (response.Success && response.Message !== 'Email already exist') {
-        // Navigate to OTP screen with email
-        navigation.navigate('OtpScreen', {email: signupData.Email});
+        navigation.navigate('OtpScreen', { email: signupData.Email });
       } else {
-        // Show error message if email exists or signup fails
         Toast.show({
           type: 'error',
           text1: 'Error',
@@ -206,22 +213,18 @@ const SignUpScreen: React.FC<Props> = ({navigation}) => {
       style={styles.mainScreen}>
       {/* Logo Section */}
       {!isKeyboardVisible && (
-      <View style={styles.upperPart}>
-        <Image
-          source={require('../../assets/Images/houselogo.png')}
-          style={styles.image}
-          resizeMode="contain"
-        />
-      </View>
+        <View style={styles.upperPart}>
+          <Image
+            source={require('../../assets/Images/houselogo.png')}
+            style={styles.image}
+            resizeMode="contain"
+          />
+        </View>
       )}
       {/* Input Section / Lower Part */}
-      <View style={[styles.lowerPart]}>
-        <View style={[
-                styles.lowerPart,
-                isKeyboardVisible && styles.lowerPartKeyboardVisible,
-              ]}>
-       {/* Name Input */}
-       <View style={styles.txtpadding}>
+      <View style={[styles.lowerPart, isKeyboardVisible && styles.lowerPartKeyboardVisible]}>
+        {/* Name Input */}
+        <View style={styles.txtpadding}>
           <Text style={[styles.label]}>Name</Text>
           <View style={styles.inputContainer}>
             <TextInput
@@ -245,6 +248,7 @@ const SignUpScreen: React.FC<Props> = ({navigation}) => {
             )}
           </View>
         </View>
+        {/* Email Input */}
         <View style={styles.txtpadding}>
           <Text style={[styles.label]}>Email</Text>
           <View style={styles.inputContainer}>
@@ -252,14 +256,14 @@ const SignUpScreen: React.FC<Props> = ({navigation}) => {
               style={[
                 styles.input,
                 errors.Email && styles.inputError,
-                focusedInput === 'Email' && styles.inputFocused, // Apply black border when focused
+                focusedInput === 'Email' && styles.inputFocused,
               ]}
               value={signupData.Email}
               onChangeText={text => handleInputChange('Email', text)}
               keyboardType="email-address"
               placeholder="Enter Your E-mail"
-              onFocus={() => setFocusedInput('Email')} // Set focus state
-              onBlur={() => setFocusedInput(null)} // Clear focus state
+              onFocus={() => setFocusedInput('Email')}
+              onBlur={() => setFocusedInput(null)}
             />
             {signupData.Email !== '' && (
               <TouchableOpacity
@@ -270,6 +274,7 @@ const SignUpScreen: React.FC<Props> = ({navigation}) => {
             )}
           </View>
         </View>
+        {/* Location Input */}
         <View style={styles.txtpadding}>
           <Text style={[styles.label]}>Location</Text>
           <View style={styles.inputContainer}>
@@ -277,13 +282,13 @@ const SignUpScreen: React.FC<Props> = ({navigation}) => {
               style={[
                 styles.input,
                 errors.Location && styles.inputError,
-                focusedInput === 'Location' && styles.inputFocused, // Apply black border when focused
+                focusedInput === 'Location' && styles.inputFocused,
               ]}
               value={signupData.Location}
               onChangeText={text => handleInputChange('Location', text)}
               placeholder="Search Location"
-              onFocus={() => setFocusedInput('Location')} // Set focus state
-              onBlur={() => setFocusedInput(null)} // Clear focus state
+              onFocus={() => setFocusedInput('Location')}
+              onBlur={() => setFocusedInput(null)}
             />
             {signupData.Location !== '' && (
               <TouchableOpacity
@@ -293,11 +298,11 @@ const SignUpScreen: React.FC<Props> = ({navigation}) => {
               </TouchableOpacity>
             )}
           </View>
-          {showSuggestions && (
+          {showSuggestions && locationSuggestions.length > 0 && (
             <FlatList
               data={locationSuggestions}
               keyExtractor={(item, index) => index.toString()}
-              renderItem={({item}) => (
+              renderItem={({ item }) => (
                 <TouchableOpacity
                   style={styles.suggestionItem}
                   onPress={() => handleSuggestionSelect(item)}>
@@ -308,6 +313,7 @@ const SignUpScreen: React.FC<Props> = ({navigation}) => {
             />
           )}
         </View>
+        {/* Phone Input */}
         <View style={styles.txtpadding}>
           <Text style={[styles.label]}>Phone</Text>
           <View style={styles.inputContainer}>
@@ -315,14 +321,14 @@ const SignUpScreen: React.FC<Props> = ({navigation}) => {
               style={[
                 styles.input,
                 errors.Phone && styles.inputError,
-                focusedInput === 'Phone' && styles.inputFocused, // Apply black border when focused
+                focusedInput === 'Phone' && styles.inputFocused,
               ]}
               value={signupData.Phone}
               onChangeText={text => handleInputChange('Phone', text)}
               keyboardType="phone-pad"
               placeholder="Enter Your Phone Number"
-              onFocus={() => setFocusedInput('Phone')} // Set focus state
-              onBlur={() => setFocusedInput(null)} // Clear focus state
+              onFocus={() => setFocusedInput('Phone')}
+              onBlur={() => setFocusedInput(null)}
             />
             {signupData.Phone !== '' && (
               <TouchableOpacity
@@ -333,6 +339,7 @@ const SignUpScreen: React.FC<Props> = ({navigation}) => {
             )}
           </View>
         </View>
+        {/* Buttons Section */}
         <View style={styles.btnsection}>
           <TouchableOpacity
             style={[styles.button, styles.spacing]}
@@ -350,7 +357,6 @@ const SignUpScreen: React.FC<Props> = ({navigation}) => {
             <Text style={styles.buttonText}>Back</Text>
           </TouchableOpacity>
         </View>
-      </View>
       </View>
       <Toast />
     </KeyboardAvoidingView>
@@ -418,7 +424,7 @@ const styles = StyleSheet.create({
     borderColor: 'red',
   },
   inputFocused: {
-    borderColor: '#cc0e74', // Black border when focused
+    borderColor: '#cc0e74',
     borderWidth: 1.9,
   },
   clearButton: {
@@ -438,7 +444,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     shadowColor: '#000',
-    shadowOffset: {width: 0, height: 2},
+    shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
     elevation: 5,

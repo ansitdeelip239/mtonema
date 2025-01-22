@@ -1,28 +1,17 @@
-import {
-  View,
-  Text,
-  Image,
-  TextInput,
-  TouchableOpacity,
-  StyleSheet,
-  ActivityIndicator,
-  KeyboardAvoidingView,
-  Platform,
-  FlatList,
-  Keyboard,
-} from 'react-native';
-import React, {useEffect, useState} from 'react';
-import {NativeStackScreenProps} from '@react-navigation/native-stack';
-import {AuthStackParamList} from '../../navigator/AuthNavigator';
+import React, { useEffect, useState, useCallback } from 'react';
+import { View, Text, Image, TextInput, TouchableOpacity, StyleSheet, ActivityIndicator, KeyboardAvoidingView, Platform, FlatList, Keyboard } from 'react-native';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { AuthStackParamList } from '../../navigator/AuthNavigator';
 import AuthService from '../../services/AuthService';
 import Toast from 'react-native-toast-message';
 import BuyerService from '../../services/BuyerService';
 
 type Props = NativeStackScreenProps<AuthStackParamList, 'SellerSignupScreen'>;
 
-const SellerSignupScreen: React.FC<Props> = ({navigation}) => {
+const SellerSignupScreen: React.FC<Props> = ({ navigation }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [isKeyboardVisible, setKeyboardVisible] = useState(false);
+  const [isSelectingSuggestion, setIsSelectingSuggestion] = useState(false);
   const [sellerData, setSellerData] = useState({
     Name: '',
     Email: '',
@@ -43,26 +32,29 @@ const SellerSignupScreen: React.FC<Props> = ({navigation}) => {
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [focusedInput, setFocusedInput] = useState<string | null>(null);
 
-
   useEffect(() => {
-    const keyboardDidShowListener = Keyboard.addListener(
-      'keyboardDidShow',
-      () => {
-        setKeyboardVisible(true);
-      },
-    );
-    const keyboardDidHideListener = Keyboard.addListener(
-      'keyboardDidHide',
-      () => {
-        setKeyboardVisible(false);
-      },
-    );
+    const keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', () => {
+      setKeyboardVisible(true);
+    });
+    const keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', () => {
+      setKeyboardVisible(false);
+    });
 
     return () => {
       keyboardDidShowListener.remove();
       keyboardDidHideListener.remove();
     };
   }, []);
+
+  // Debounce function
+  const debounce = (func: (...args: any[]) => void, wait: number) => {
+    let timeout: NodeJS.Timeout;
+    return (...args: any[]) => {
+      clearTimeout(timeout);
+      timeout = setTimeout(() => func(...args), wait);
+    };
+  };
+
   // Fetch location suggestions from your backend API
   const searchLocationSuggestion = async (keyword: string) => {
     try {
@@ -72,9 +64,7 @@ const SellerSignupScreen: React.FC<Props> = ({navigation}) => {
       // Check if response is defined and has the expected structure
       if (response && response.predictions) {
         // Extract the descriptions from the predictions array
-        const suggestions = response.predictions.map(
-          (prediction: {description: string}) => prediction.description,
-        );
+        const suggestions = response.predictions.map((prediction: { description: string }) => prediction.description);
         setLocationSuggestions(suggestions); // Update location suggestions
         setShowSuggestions(true); // Show the dropdown
       } else {
@@ -88,21 +78,25 @@ const SellerSignupScreen: React.FC<Props> = ({navigation}) => {
     }
   };
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const debouncedSearchLocationSuggestion = useCallback(
+    debounce(searchLocationSuggestion, 300), [searchLocationSuggestion]);
+
   // Handle input changes for the Location field
   const handleInputChange = (key: string, value: string) => {
-     if (key === 'Name') {
-          // Check for special characters using a regular expression
-          const specialCharacterRegex = /[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]+/;
-          if (specialCharacterRegex.test(value)) {
-            // Show a warning if special characters are found
-            Toast.show({
-              type: 'error',
-              text1: 'Warning',
-              text2: 'Special characters are not allowed in the Name field.',
-            });
-            return; // Prevent updating the state
-          }
-        }
+    if (key === 'Name') {
+      // Check for special characters using a regular expression
+      const specialCharacterRegex = /[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]+/;
+      if (specialCharacterRegex.test(value)) {
+        // Show a warning if special characters are found
+        Toast.show({
+          type: 'error',
+          text1: 'Warning',
+          text2: 'Special characters are not allowed in the Name field.',
+        });
+        return; // Prevent updating the state
+      }
+    }
     if (key === 'Phone') {
       // Allow only numeric values
       const numericValue = value.replace(/[^0-9]/g, ''); // Remove non-numeric characters
@@ -117,34 +111,35 @@ const SellerSignupScreen: React.FC<Props> = ({navigation}) => {
         return;
       }
 
-      setSellerData({...sellerData, [key]: numericValue});
+      setSellerData({ ...sellerData, [key]: numericValue });
     } else if (key === 'Location') {
       setLocationQuery(value);
-      setSellerData({...sellerData, [key]: value});
-      if (value.length >= 1) {
-        searchLocationSuggestion(value);
+      setSellerData({ ...sellerData, [key]: value });
+      if (value.length > 0) {
+        debouncedSearchLocationSuggestion(value);
       } else {
         setLocationSuggestions([]);
         setShowSuggestions(false);
       }
     } else {
-      setSellerData({...sellerData, [key]: value});
+      setSellerData({ ...sellerData, [key]: value });
     }
 
     // Clear errors when the user starts typing
-    setErrors({...errors, [key]: false});
+    setErrors({ ...errors, [key]: false });
   };
 
   // Handle location suggestion selection
   const handleSuggestionSelect = (suggestion: string) => {
-    setSellerData({...sellerData, Location: suggestion}); // Update the Location field
+    setSellerData({ ...sellerData, Location: suggestion }); // Update the Location field
     setLocationQuery(suggestion); // Update the search query
     setShowSuggestions(false); // Hide the dropdown
+    Keyboard.dismiss();
   };
 
   // Clear input field
   const clearInputField = (key: string) => {
-    setSellerData({...sellerData, [key]: ''});
+    setSellerData({ ...sellerData, [key]: '' });
     if (key === 'Location') {
       setLocationQuery('');
       setLocationSuggestions([]);
@@ -154,16 +149,13 @@ const SellerSignupScreen: React.FC<Props> = ({navigation}) => {
 
   const validateForm = () => {
     let valid = true;
-    const newErrors = {...errors};
+    const newErrors = { ...errors };
 
     if (!sellerData.Name.trim()) {
       newErrors.Name = true;
       valid = false;
     }
-    if (
-      !sellerData.Email.trim() ||
-      !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(sellerData.Email)
-    ) {
+    if (!sellerData.Email.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(sellerData.Email)) {
       newErrors.Email = true;
       valid = false;
     }
@@ -201,7 +193,7 @@ const SellerSignupScreen: React.FC<Props> = ({navigation}) => {
 
       if (response.Success && response.Message !== 'Email already exist') {
         // Navigate to OTP screen only if the API call is successful and email does not exist
-        navigation.navigate('OtpScreen', {email: sellerData.Email});
+        navigation.navigate('OtpScreen', { email: sellerData.Email });
       } else {
         // Show error message if email already exists or signup fails
         Toast.show({
@@ -308,8 +300,20 @@ const SellerSignupScreen: React.FC<Props> = ({navigation}) => {
               value={locationQuery}
               onChangeText={text => handleInputChange('Location', text)}
               placeholder="Search Location"
-              onFocus={() => setFocusedInput('Location')}
-              onBlur={() => setFocusedInput(null)}
+              onFocus={() => {
+                setFocusedInput('Location');
+                if (locationQuery.length > 0) {
+                  setShowSuggestions(true);
+                }
+              }}
+              onBlur={() => {
+                if (!isSelectingSuggestion) {
+                  setFocusedInput(null);
+                  setTimeout(() => {
+                    setShowSuggestions(false);
+                  }, 200);
+                }
+              }}
             />
             {locationQuery !== '' && (
               <TouchableOpacity
@@ -319,22 +323,27 @@ const SellerSignupScreen: React.FC<Props> = ({navigation}) => {
               </TouchableOpacity>
             )}
           </View>
-          {showSuggestions && (
-            <FlatList
-              data={locationSuggestions}
-              keyExtractor={(item, index) => index.toString()}
-              renderItem={({item}) => (
-                <TouchableOpacity
-                  style={styles.suggestionItem}
-                  onPress={() => handleSuggestionSelect(item)}>
-                  <Text>{item}</Text>
-                </TouchableOpacity>
-              )}
-              style={styles.suggestionsContainer}
-            />
+          {showSuggestions && locationQuery.length > 0 && locationSuggestions.length > 0 && (
+            <View style={styles.suggestionsContainer}>
+              <FlatList
+                keyboardShouldPersistTaps="always"
+                data={locationSuggestions}
+                keyExtractor={(item, index) => index.toString()}
+                renderItem={({ item }) => (
+                  <TouchableOpacity
+                    style={styles.suggestionItem}
+                    onPressIn={() => setIsSelectingSuggestion(true)}
+                    onPress={() => {
+                      handleSuggestionSelect(item);
+                      setIsSelectingSuggestion(false);
+                    }}>
+                    <Text>{item}</Text>
+                  </TouchableOpacity>
+                )}
+              />
+            </View>
           )}
         </View>
-
         {/* Mobile Input */}
         <View style={styles.txtpadding}>
           <Text style={[styles.label]}>Mobile</Text>
@@ -463,7 +472,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     shadowColor: '#000',
-    shadowOffset: {width: 0, height: 2},
+    shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
     elevation: 5,
@@ -492,7 +501,7 @@ const styles = StyleSheet.create({
   },
   inputFocused: {
     borderColor: '#cc0e74', // color border when focused
-    borderWidth:1.9,
+    borderWidth: 1.9,
   },
 });
 
