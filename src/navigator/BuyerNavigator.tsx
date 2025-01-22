@@ -10,6 +10,7 @@ import Home from '../screens/buyer/Home';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import SearchProperty from '../screens/buyer/SearchProperty';
 import RecommendedProperty from '../screens/buyer/RecommendedProperty';
+import SignupForm from '../screens/common/SignupForm';
 
 const Drawer = createDrawerNavigator();
 const Stack = createNativeStackNavigator();
@@ -35,7 +36,7 @@ const BuyerNavigator = memo(() => {
         drawerType: 'front',
         drawerActiveTintColor: 'white',
         drawerActiveBackgroundColor: Colors.main,
-        headerShown:false,
+        headerShown: false,
         drawerStyle: {
           width: 240,
         },
@@ -48,6 +49,7 @@ const BuyerNavigator = memo(() => {
       <Drawer.Screen name="Contacted Property" component={ContactedProperty} />
       <Drawer.Screen name="Change Password" component={ChangePasswordScreen} />
       <Drawer.Screen name="Contact Us" component={ContactScreen} />
+      <Drawer.Screen name="form testing" component={SignupForm} />
       <Drawer.Screen
         name="ProfileScreen"
         component={ProfileScreen}
