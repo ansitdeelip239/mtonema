@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import {
   View,
   Text,
@@ -10,14 +10,18 @@ import {
   FlatList,
   Keyboard,
 } from 'react-native';
-import {validateName, validateEmail , validatePhone ,validateLocation} from '../../utils/formvalidation';
-
+import {
+  validateName,
+  validateEmail,
+  validatePhone,
+  validateLocation,
+} from '../../utils/formvalidation';
 
 const SignupForm = () => {
   const [sellerData, setSellerData] = useState({
     Name: '',
     Email: '',
-    Phone: '+91-', // Initialize with prefix
+    Phone: '+91-', // Initialize the prefix value
     Location: '',
   });
 
@@ -33,87 +37,86 @@ const SignupForm = () => {
   });
 
   const handleInputChange = (key: string, value: string) => {
-    setSellerData({...sellerData, [key]: value});
+    setSellerData({ ...sellerData, [key]: value });
     if (key === 'Phone') {
-      const numbers = value.replace(/[^0-9]/g, '');
-      const formattedPhone = `+91-${numbers.slice(0, 10)}`; // Limit to 10 digits
-      setSellerData(prev => ({...prev, [key]: formattedPhone}));
-      setErrors(prev => ({
+      if (!value.startsWith('+91-')) {
+        setSellerData((prev) => ({ ...prev, [key]: '+91-' }));
+        return;
+      }
+
+      // Edit only after the prefix
+      const numbers = value
+        .slice(4)
+        .replace(/[^0-9]/g, '')
+        .slice(0, 10);
+      const formattedPhone = `+91-${numbers}`;
+      setSellerData((prev) => ({ ...prev, [key]: formattedPhone }));
+      setErrors((prev) => ({
         ...prev,
         Phone: validatePhone(formattedPhone) ? '' : 'Invalid phone number',
       }));
       return;
     }
+    setSellerData({ ...sellerData, [key]: value });
     if (key === 'Location') {
       setLocationQuery(value);
     }
 
-    // Validate input
+    // Validate input only if the field is not empty
     let errorMessage = '';
-    switch (key) {
-      case 'Name':
-        if (value.trim() === '') {
-          errorMessage = 'Name is required';
-        } else if (!/^[a-zA-Z\s]+$/.test(value)) {
-          errorMessage = 'Special characters not allowed';
-        }
-        break;
-      case 'Email':
-        if (!validateEmail(value)) {
-          errorMessage = 'Invalid email address';
-        }
-        break;
-      case 'Phone':
-        if (!validatePhone(value)) {
-          errorMessage = 'Invalid phone number';
-        }
-        break;
-      case 'Location':
-        if (!validateLocation(value)) {
-          errorMessage = 'Location is required';
-        }
-        break;
-      default:
-        break;
+    if (value.trim() === '') {
+      errorMessage = 'This field is required';
+    } else {
+      switch (key) {
+        case 'Name':
+          errorMessage = validateName(value) ? '' : 'Name contains invalid characters';
+          break;
+        case 'Email':
+          errorMessage = validateEmail(value) ? '' : 'Invalid email address';
+          break;
+        case 'Phone':
+          errorMessage = validatePhone(value) ? '' : 'Invalid phone number';
+          break;
+        case 'Location':
+          errorMessage = validateLocation(value) ? '' : 'Invalid location';
+          break;
+        default:
+          break;
+      }
     }
 
-    setErrors({...errors, [key]: errorMessage});
+    setErrors({ ...errors, [key]: errorMessage });
   };
 
   const handleSuggestionSelect = (suggestion: string) => {
-    setSellerData({...sellerData, Location: suggestion});
+    setSellerData({ ...sellerData, Location: suggestion });
     setLocationQuery(suggestion);
     setShowSuggestions(false);
     Keyboard.dismiss();
   };
 
   const clearInputField = (key: string) => {
-    setSellerData({...sellerData, [key]: key === 'Phone' ? '+91-' : ''});
+    setSellerData({ ...sellerData, [key]: key === 'Phone' ? '+91-' : '' });
     if (key === 'Location') {
       setLocationQuery('');
       setLocationSuggestions([]);
       setShowSuggestions(false);
     }
-    setErrors({...errors, [key]: ''});
+    setErrors({ ...errors, [key]: '' });
   };
 
   const handleSignUp = () => {
-   const isNameValid =
-     sellerData.Name.trim().length > 0 && validateName(sellerData.Name);
-    const isEmailValid = validateEmail(sellerData.Email);
-    const isPhoneValid = validatePhone(sellerData.Phone);
-    const isLocationValid = validateLocation(sellerData.Location);
+    const isNameValid = sellerData.Name.trim() !== '' && validateName(sellerData.Name);
+    const isEmailValid = sellerData.Email.trim() !== '' && validateEmail(sellerData.Email);
+    const isPhoneValid = sellerData.Phone.trim() !== '' && validatePhone(sellerData.Phone);
+    const isLocationValid = sellerData.Location.trim() !== '' && validateLocation(sellerData.Location);
 
     if (!isNameValid || !isEmailValid || !isPhoneValid || !isLocationValid) {
       setErrors({
-        Name: !sellerData.Name.trim()
-          ? 'Name is required'
-          : !isNameValid
-          ? 'Special characters not allowed'
-          : '',
-        Email: isEmailValid ? '' : 'Invalid email address',
-        Phone: isPhoneValid ? '' : 'Invalid phone number',
-        Location: isLocationValid ? '' : 'Location is required',
+        Name: sellerData.Name.trim() === '' ? 'Name is required' : !validateName(sellerData.Name) ? 'Name contains invalid characters' : '',
+        Email: sellerData.Email.trim() === '' ? 'Email is required' : !validateEmail(sellerData.Email) ? 'Invalid email address' : '',
+        Phone: sellerData.Phone.trim() === '' ? 'Phone is required' : !validatePhone(sellerData.Phone) ? 'Invalid phone number' : '',
+        Location: sellerData.Location.trim() === '' ? 'Location is required' : !validateLocation(sellerData.Location) ? 'Invalid location' : '',
       });
       return;
     }
@@ -134,9 +137,10 @@ const SignupForm = () => {
             style={[
               styles.input,
               focusedInput === 'Name' && styles.inputFocused,
+              errors.Name !== '' && styles.inputError, // Apply error style if there's an error
             ]}
             value={sellerData.Name}
-            onChangeText={text => handleInputChange('Name', text)}
+            onChangeText={(text) => handleInputChange('Name', text)}
             placeholder="Enter Your Name"
             onFocus={() => setFocusedInput('Name')}
             onBlur={() => setFocusedInput(null)}
@@ -149,9 +153,7 @@ const SignupForm = () => {
             </TouchableOpacity>
           )}
         </View>
-        {errors.Name !== '' && (
-          <Text style={styles.errorText}>{errors.Name}</Text>
-        )}
+        {errors.Name !== '' && <Text style={styles.errorText}>{errors.Name}</Text>}
       </View>
 
       {/* Email Input */}
@@ -162,9 +164,10 @@ const SignupForm = () => {
             style={[
               styles.input,
               focusedInput === 'Email' && styles.inputFocused,
+              errors.Email !== '' && styles.inputError, // Apply error style if there's an error
             ]}
             value={sellerData.Email}
-            onChangeText={text => handleInputChange('Email', text)}
+            onChangeText={(text) => handleInputChange('Email', text)}
             keyboardType="email-address"
             placeholder="Enter Your E-mail"
             onFocus={() => setFocusedInput('Email')}
@@ -178,9 +181,7 @@ const SignupForm = () => {
             </TouchableOpacity>
           )}
         </View>
-        {errors.Email !== '' && (
-          <Text style={styles.errorText}>{errors.Email}</Text>
-        )}
+        {errors.Email !== '' && <Text style={styles.errorText}>{errors.Email}</Text>}
       </View>
 
       {/* Location Input */}
@@ -191,9 +192,10 @@ const SignupForm = () => {
             style={[
               styles.input,
               focusedInput === 'Location' && styles.inputFocused,
+              errors.Location !== '' && styles.inputError, // Apply error style if there's an error
             ]}
             value={locationQuery}
-            onChangeText={text => handleInputChange('Location', text)}
+            onChangeText={(text) => handleInputChange('Location', text)}
             placeholder="Search Location"
             onFocus={() => {
               setFocusedInput('Location');
@@ -214,27 +216,23 @@ const SignupForm = () => {
             </TouchableOpacity>
           )}
         </View>
-        {showSuggestions &&
-          locationQuery.length > 0 &&
-          locationSuggestions.length > 0 && (
-            <View style={styles.suggestionsContainer}>
-              <FlatList
-                keyboardShouldPersistTaps="always"
-                data={locationSuggestions}
-                keyExtractor={(item, index) => index.toString()}
-                renderItem={({item}) => (
-                  <TouchableOpacity
-                    style={styles.suggestionItem}
-                    onPress={() => handleSuggestionSelect(item)}>
-                    <Text>{item}</Text>
-                  </TouchableOpacity>
-                )}
-              />
-            </View>
-          )}
-        {errors.Location !== '' && (
-          <Text style={styles.errorText}>{errors.Location}</Text>
+        {showSuggestions && locationQuery.length > 0 && locationSuggestions.length > 0 && (
+          <View style={styles.suggestionsContainer}>
+            <FlatList
+              keyboardShouldPersistTaps="always"
+              data={locationSuggestions}
+              keyExtractor={(item, index) => index.toString()}
+              renderItem={({ item }) => (
+                <TouchableOpacity
+                  style={styles.suggestionItem}
+                  onPress={() => handleSuggestionSelect(item)}>
+                  <Text>{item}</Text>
+                </TouchableOpacity>
+              )}
+            />
+          </View>
         )}
+        {errors.Location !== '' && <Text style={styles.errorText}>{errors.Location}</Text>}
       </View>
 
       {/* Mobile Input */}
@@ -245,17 +243,18 @@ const SignupForm = () => {
             style={[
               styles.input,
               focusedInput === 'Phone' && styles.inputFocused,
+              errors.Phone !== '' && styles.inputError, // Apply error style if there's an error
             ]}
             value={sellerData.Phone}
-            onChangeText={text => handleInputChange('Phone', text)}
+            onChangeText={(text) => handleInputChange('Phone', text)}
             keyboardType="number-pad"
-            placeholder="+91-1234567890"
+            placeholder="+91-"
             placeholderTextColor="#888"
             onFocus={() => setFocusedInput('Phone')}
             onBlur={() => setFocusedInput(null)}
             maxLength={14} // +91- + 10 digits = 14 characters
           />
-          {sellerData.Phone !== '' && (
+          {sellerData.Phone !== '+91-' && (
             <TouchableOpacity
               style={styles.clearButton}
               onPress={() => clearInputField('Phone')}>
@@ -263,9 +262,7 @@ const SignupForm = () => {
             </TouchableOpacity>
           )}
         </View>
-        {errors.Phone !== '' && (
-          <Text style={styles.errorText}>{errors.Phone}</Text>
-        )}
+        {errors.Phone !== '' && <Text style={styles.errorText}>{errors.Phone}</Text>}
       </View>
 
       {/* Buttons Section */}
@@ -274,7 +271,7 @@ const SignupForm = () => {
           <Text style={styles.buttonText}>Sign Up</Text>
         </TouchableOpacity>
         <TouchableOpacity
-          style={[styles.button, styles.backButton]}
+          style={[styles.button, styles.button]}
           onPress={() => console.log('Back Pressed')}>
           <Text style={styles.buttonText}>Back</Text>
         </TouchableOpacity>
@@ -314,6 +311,9 @@ const styles = StyleSheet.create({
     borderColor: '#cc0e74',
     borderWidth: 1.5,
   },
+  inputError: {
+    borderColor: 'red', // Apply red border for errors
+  },
   clearButton: {
     position: 'absolute',
     right: 10,
@@ -345,9 +345,6 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     alignItems: 'center',
     marginBottom: 10,
-  },
-  backButton: {
-    backgroundColor: '#999',
   },
   buttonText: {
     color: '#fff',

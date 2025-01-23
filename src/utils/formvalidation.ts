@@ -17,7 +17,3 @@ export const validateLocation = (location: string): boolean => {
   return location.trim().length > 0; // Ensures the location is not empty
 };
 
-export const validateNumber = (value: string): boolean => {
-  const numberRegex = /^\d+$/; // Accepts only numeric values
-  return numberRegex.test(value);
-};
