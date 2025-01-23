@@ -137,7 +137,7 @@ export interface PropertyModel {
 //   Password: string;
 //   TermsChecked: true;
 // }
-export interface SignUpRequest  {
+export interface SignUpRequest {
   Name: string;
   Email: string;
   Location: string;
@@ -145,4 +145,30 @@ export interface SignUpRequest  {
   Password?: string;
   TermsChecked?: boolean;
   URL?: string;
+}
+
+export interface MasterDetailModel {
+  MasterDetailName: string;
+  ID: number;
+}
+
+export interface AgentData {
+  Id: number;
+  AgentContactNo: string;
+  AgentName: string;
+  DemandPrice: string;
+  PropertyLocation: string;
+  PropertyNotes: string;
+  SecurityDepositAmount: string;
+  Negotiable: boolean;
+  CreatedOn: string;
+  FlatSize: MasterDetailModel;
+}
+
+export interface PagingModel {
+  CurrentPage: number;
+  NextPage: boolean;
+  PageSize: number;
+  TotalCount: number;
+  TotalPage: number;
 }
