@@ -1,17 +1,47 @@
-import React, {useState} from 'react';
-import {NativeStackScreenProps} from '@react-navigation/native-stack';
-import {AuthStackParamList} from '../../navigator/AuthNavigator';
+import React, { useState, useEffect } from 'react';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { AuthStackParamList } from '../../navigator/AuthNavigator';
 import SignupForm from '../../components/SignupForm';
-import {SignUpRequest} from '../../types';
+import { SignUpRequest } from '../../types';
 import AuthService from '../../services/AuthService';
 import Toast from 'react-native-toast-message';
-import { ImageBackground, KeyboardAvoidingView, Platform, StyleSheet ,View ,Image} from 'react-native';
+import {
+  ImageBackground,
+  KeyboardAvoidingView,
+  Platform,
+  StyleSheet,
+  View,
+  Image,
+  FlatList,
+  Keyboard,
+} from 'react-native';
 
 type Props = NativeStackScreenProps<AuthStackParamList, 'SignUpScreen'>;
 
-const SignUpScreen: React.FC<Props> = ({navigation, route}) => {
-  const {role} = route.params;
+const SignUpScreen: React.FC<Props> = ({ navigation, route }) => {
+  const { role } = route.params;
   const [loading, setLoading] = useState(false);
+  const [isKeyboardVisible, setKeyboardVisible] = useState(false);
+
+  useEffect(() => {
+    const keyboardDidShowListener = Keyboard.addListener(
+      'keyboardDidShow',
+      () => {
+        setKeyboardVisible(true);
+      }
+    );
+    const keyboardDidHideListener = Keyboard.addListener(
+      'keyboardDidHide',
+      () => {
+        setKeyboardVisible(false);
+      }
+    );
+
+    return () => {
+      keyboardDidShowListener.remove();
+      keyboardDidHideListener.remove();
+    };
+  }, []);
 
   const handleSignup = async (formData: SignUpRequest, isSeller: boolean) => {
     try {
@@ -22,7 +52,7 @@ const SignUpScreen: React.FC<Props> = ({navigation, route}) => {
       console.log('API Response:', response);
 
       if (response.Success && response.Message !== 'Email already exists') {
-        navigation.navigate('OtpScreen', {email: formData.Email});
+        navigation.navigate('OtpScreen', { email: formData.Email });
       } else {
         Toast.show({
           type: 'error',
@@ -51,34 +81,52 @@ const SignUpScreen: React.FC<Props> = ({navigation, route}) => {
       <KeyboardAvoidingView
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         style={styles.container}
+        keyboardVerticalOffset={Platform.OS === 'ios' ? 64 : 0} // Adjust this value as needed
       >
-          {/* Upper Part: Logo */}
-          <View style={styles.upperPart}>
-            <Image
-              source={require('../../assets/Images/dncr_pink.png')}
-              style={styles.image}
-              resizeMode="contain"
-            />
-          </View>
-          {/* Form */}
-          <SignupForm
-            handleSignup={(formData: SignUpRequest) =>
-              handleSignup(formData, role !== 'User')
-            }
-            loading={loading}
-          />
+        <FlatList
+          data={[]} // No data since we're not rendering a list
+          ListHeaderComponent={
+            <>
+              {/* Upper Part: Logo */}
+              {!isKeyboardVisible && (
+                <View style={styles.upperPart}>
+                  <Image
+                    source={require('../../assets/Images/dncr_pink.png')}
+                    style={styles.image}
+                    resizeMode="contain"
+                  />
+                </View>
+              )}
+              {/* Form */}
+              <SignupForm
+                handleSignup={(formData: SignUpRequest) =>
+                  handleSignup(formData, role !== 'User')
+                }
+                loading={loading}
+              />
+            </>
+          }
+          renderItem={null} // No items to render
+          keyExtractor={(item, index) => index.toString()} // Fixed keyExtractor
+          contentContainerStyle={styles.contentContainer}
+          keyboardShouldPersistTaps="handled" // Ensure taps outside the keyboard dismiss it
+        />
       </KeyboardAvoidingView>
     </ImageBackground>
   );
 };
 
-
 export default SignUpScreen;
+
 const styles = StyleSheet.create({
   backgroundImage: {
     flex: 1,
     width: '100%',
     height: '100%',
+  },
+  contentContainer: {
+    flexGrow: 1, // Ensure the container expands to fill the available space
+    overflow: 'hidden',
   },
   container: {
     flex: 1,

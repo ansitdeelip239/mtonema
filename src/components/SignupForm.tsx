@@ -298,7 +298,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#ccc',
     borderRadius: 8,
-    padding: 12,
+    padding: 14,
     fontSize: 16,
     backgroundColor: '#f9f9f9',
   },
@@ -323,7 +323,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#ccc',
     borderRadius: 8,
-    marginTop: 5,
+    marginTop: 1,
     backgroundColor: '#f9f9f9',
   },
   suggestionItem: {
