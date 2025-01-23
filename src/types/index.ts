@@ -145,5 +145,4 @@ export interface SignUpRequest  {
   Password?: string;
   TermsChecked?: boolean;
   URL?: string;
-  IsMobileApp?: boolean;
 }

@@ -34,7 +34,6 @@ class AuthService {
   }
   static async signUp(body: SignUpRequest) {
     try {
-      body.IsMobileApp = true;
       const response = await fetch(api.SignUp, {
         method: 'POST',
         headers: {

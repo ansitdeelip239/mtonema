@@ -4,7 +4,7 @@ export let url1 = 'https://devdncrbe.azurewebsites.net';
 
 export default {
     //Authentication
-    SignUp: url1 + '/api/v1/Account/signup',
+    SignUp: url1 + '/api/v1/Account/GenerateOtp',
     VerifyOTP: url1 + '/api/v1/Account/CheckOTP',
     GetUserByToken: url1 + '/api/v1/Account/GetUserByToken?token=',
     ValidateEmail: url1 + '/api/v1/User/varifyUserbyEmail?email=',

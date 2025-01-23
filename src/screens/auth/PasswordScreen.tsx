@@ -225,6 +225,7 @@ const styles = StyleSheet.create({
     flex: 1,
     fontSize: 16,
     paddingVertical: 8,
+    color: '#000',
   },
   passwordContainer: {
     flexDirection: 'row',
