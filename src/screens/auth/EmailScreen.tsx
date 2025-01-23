@@ -1,3 +1,4 @@
+import React, {useCallback, useState} from 'react';
 import {
   View,
   Text,
@@ -6,60 +7,103 @@ import {
   Image,
   ActivityIndicator,
   TouchableOpacity,
+  KeyboardAvoidingView,
+  Platform,
 } from 'react-native';
-import React, {useState} from 'react';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
-import {AuthStackParamList} from '../../navigator/AuthNavigator';
-// import Colors from '../../constants/Colors';
-import AuthService from '../../services/AuthService';
 import Toast from 'react-native-toast-message';
+
+import {AuthStackParamList} from '../../navigator/AuthNavigator';
+import AuthService from '../../services/AuthService';
 import {useAuth} from '../../hooks/useAuth';
 import {User} from '../../types';
 
 type Props = NativeStackScreenProps<AuthStackParamList, 'EmailScreen'>;
 
-const EmailScreen: React.FC<Props> = ({navigation}) => {
-  const [email, setEmail] = useState('');
-  const [, setLoading] = useState(true);
-  const [isLoading, setIsLoading] = useState(false);
-  const {storeUser} = useAuth();
+const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-  const handleContinue = async () => {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    // Check if the email is valid
-    if (!emailRegex.test(email)) {
-      // Show toast if email is invalid
-      Toast.show({
-        type: 'error',
-        position: 'top',
-        text1: 'Invalid Email',
-        text2: 'Please enter a valid email address.',
-        visibilityTime: 3000,
-        autoHide: true,
-      });
+const EmailScreen: React.FC<Props> = ({navigation, route}) => {
+  const [email, setEmail] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const [emailError, setEmailError] = useState('');
+  const {storeUser} = useAuth();
+  const {role} = route.params;
+
+  const validateEmail = useCallback((emailToValidate: string) => {
+    if (!emailToValidate) {
+      setEmailError('Email is required');
+      return false;
+    }
+
+    if (!EMAIL_REGEX.test(emailToValidate)) {
+      setEmailError('Invalid email format');
+      return false;
+    }
+
+    setEmailError('');
+    return true;
+  }, []);
+
+  const checkEmail = useCallback(
+    async (emailToCheck: string) => {
+      try {
+        // Clear previous errors
+        setEmailError('');
+
+        // Validate email format first
+        if (!validateEmail(emailToCheck)) {
+          return false;
+        }
+
+        const response = await AuthService.verifyLoginInput(emailToCheck);
+
+        // Check if email matches the expected role
+        if (response && response.data?.Role !== role) {
+          console.log('response', response.data, role);
+
+          setEmailError('*Email not found');
+          return false;
+        }
+
+        console.log('response', response);
+        console.log('response.data', response.data);
+
+        if (!response.Success) {
+          setEmailError(response.Message || 'Email verification failed');
+          return false;
+        }
+
+        return true;
+      } catch (error) {
+        const errorMessage =
+          error instanceof Error
+            ? error.message
+            : 'An unexpected error occurred';
+
+        setEmailError(errorMessage);
+        return false;
+      }
+    },
+    [role, validateEmail],
+  );
+
+  const handleContinue = useCallback(async () => {
+    // Validate email before proceeding
+    if (!validateEmail(email)) {
       return;
     }
 
     try {
-      setLoading(true);
       setIsLoading(true);
-      const response = await AuthService.verifyLoginInput(email);
-      console.log('response', response);
-      storeUser(response.data as User);
-      if (response.Success) {
+      const isValidEmail = await checkEmail(email);
+
+      if (isValidEmail) {
+        // Store user data and navigate to password screen
+        const response = await AuthService.verifyLoginInput(email);
+        storeUser(response.data as User);
         navigation.navigate('PasswordScreen', {email});
-      } else {
-        Toast.show({
-          type: 'error',
-          position: 'top',
-          text1: 'Error',
-          text2: 'Invalid email. Please try again.',
-          visibilityTime: 3000,
-          autoHide: true,
-        });
       }
     } catch (error) {
-      console.error(error);
       Toast.show({
         type: 'error',
         position: 'top',
@@ -70,13 +114,24 @@ const EmailScreen: React.FC<Props> = ({navigation}) => {
       });
     } finally {
       setIsLoading(false);
-      setLoading(false);
     }
-  };
+  }, [email, validateEmail, checkEmail, storeUser, navigation]);
+
+  const onChangeHandler = useCallback(
+    async (value: string) => {
+      setEmail(value);
+      // Optionally validate on each change
+      validateEmail(value);
+      // Call checkEmail on each change
+      await checkEmail(value);
+    },
+    [validateEmail, checkEmail],
+  );
 
   return (
-    <View style={styles.mainScreen}>
-      {/* Logo Section */}
+    <KeyboardAvoidingView
+      style={styles.mainScreen}
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
       <View style={styles.upperPart}>
         <Image
           source={require('../../assets/Images/houselogo.png')}
@@ -84,29 +139,35 @@ const EmailScreen: React.FC<Props> = ({navigation}) => {
           resizeMode="contain"
         />
       </View>
-      {/* Input Section / Lower Part */}
+
       <View style={styles.lowerPart}>
         <View style={styles.txtpadding}>
           <Text style={styles.label}>Email or Mobile</Text>
           <TextInput
             placeholder="Email or Mobile"
             value={email}
-            onChangeText={setEmail}
-            style={[styles.input, styles.spacing1]}
+            onChangeText={onChangeHandler}
+            style={[styles.input]}
+            keyboardType="email-address"
+            autoCapitalize="none"
+            autoCorrect={false}
           />
+          {emailError ? (
+            <Text style={styles.errorText}>{emailError}</Text>
+          ) : null}
         </View>
-        {/* Buttons Section */}
+
         <View style={styles.btnsection}>
-        <TouchableOpacity
-  style={[styles.button, styles.spacing]}
-  onPress={handleContinue}
-  disabled={isLoading}>
-  {isLoading ? (
-    <ActivityIndicator size="small" color="#ffffff" />
-  ) : (
-    <Text style={styles.buttonText}>Continue</Text>
-  )}
-</TouchableOpacity>
+          <TouchableOpacity
+            style={[styles.button, styles.spacing]}
+            onPress={handleContinue}
+            disabled={isLoading || !email}>
+            {isLoading ? (
+              <ActivityIndicator size="small" color="#ffffff" />
+            ) : (
+              <Text style={styles.buttonText}>Continue</Text>
+            )}
+          </TouchableOpacity>
 
           <TouchableOpacity
             style={[styles.button, styles.spacing, styles.color]}
@@ -115,9 +176,9 @@ const EmailScreen: React.FC<Props> = ({navigation}) => {
           </TouchableOpacity>
         </View>
       </View>
-      {/* Toast Component */}
+
       <Toast />
-    </View>
+    </KeyboardAvoidingView>
   );
 };
 
@@ -181,6 +242,10 @@ const styles = StyleSheet.create({
     padding: 5,
     fontSize: 16,
   },
+  errorText: {
+    color: 'red',
+    marginTop: 5,
+  },
   // button:{
   //   backgroundColor: '#cc0e74',
   //   padding: 15,
@@ -198,9 +263,9 @@ const styles = StyleSheet.create({
   spacing: {
     marginBottom: 10, // Adds space below each button
   },
-  spacing1: {
-    marginBottom: 45, // Adds space below the input
-  },
+  // spacing1: {
+  //   marginBottom: 45, // Adds space below the input
+  // },
   buttonText: {
     color: '#ffffff',
     fontSize: 16,

@@ -1,22 +1,18 @@
 import {createDrawerNavigator} from '@react-navigation/drawer';
 import React, {memo} from 'react';
 import Colors from '../constants/Colors';
-import ContactScreen from '../screens/buyer/ContactScreen';
 import CustomDrawerContent from '../components/CustomDrawerContent';
-import ChangePasswordScreen from '../screens/auth/ChangePasswordScreen';
-import PostPropertyScreen from '../screens/seller/PostPropertyScreen';
-import PropertyListScreen from '../screens/seller/PropertyListScreen';
 import ProfileScreen from '../screens/common/ProfileScreen';
-import PostProperty from '../screens/seller/PostProperty';
+import ClientScreen from '../screens/partner/ClientScreen';
+import AgentDataScreen from '../screens/partner/AgentDataScreen';
 
 const Drawer = createDrawerNavigator();
 
-const SellerNavigator = memo(() => {
+const PartnerNavigator = memo(() => {
   return (
     <Drawer.Navigator
-      // eslint-disable-next-line react/no-unstable-nested-components
       drawerContent={props => <CustomDrawerContent {...props} />}
-      initialRouteName="Home"
+      initialRouteName="Client"
       screenOptions={{
         drawerType: 'front',
         drawerActiveTintColor: 'white',
@@ -29,11 +25,8 @@ const SellerNavigator = memo(() => {
         },
         headerTintColor: Colors.SECONDARY_3,
       }}>
-      <Drawer.Screen name="Home" component={PostPropertyScreen} />
-      <Drawer.Screen name="Listed Property" component={PropertyListScreen} />
-      <Drawer.Screen name="Post Property" component={PostProperty} />
-      <Drawer.Screen name="Change Password" component={ChangePasswordScreen} />
-      <Drawer.Screen name="Contact Us" component={ContactScreen} />
+      <Drawer.Screen name="Client" component={ClientScreen} />
+      <Drawer.Screen name="Agent Data" component={AgentDataScreen} />
       <Drawer.Screen
         name="Profile Screen"
         component={ProfileScreen}
@@ -43,4 +36,4 @@ const SellerNavigator = memo(() => {
   );
 });
 
-export default SellerNavigator;
+export default PartnerNavigator;

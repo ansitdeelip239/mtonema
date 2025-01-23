@@ -369,7 +369,7 @@ const SellerSignupScreen: React.FC<Props> = ({ navigation }) => {
               </TouchableOpacity>
             )}
           </View>
-        </View>
+        </View> 
 
         {/* Buttons Section */}
         <View style={styles.btnsection}>
@@ -380,7 +380,7 @@ const SellerSignupScreen: React.FC<Props> = ({ navigation }) => {
             {isLoading ? (
               <ActivityIndicator color="#ffffff" />
             ) : (
-              <Text style={styles.buttonText}>Sign Up</Text>
+              <Text style={styles.buttonText}>Continue</Text>
             )}
           </TouchableOpacity>
           <TouchableOpacity

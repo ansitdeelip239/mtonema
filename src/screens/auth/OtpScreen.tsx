@@ -103,7 +103,7 @@ const OtpScreen: React.FC<Props> = ({ route }) => {
             {isLoading ? (
               <ActivityIndicator size="small" color="#ffffff" />
             ) : (
-              <Text style={styles.submitButtonText}>Sign In</Text>
+              <Text style={styles.submitButtonText}>Next</Text>
             )}
           </TouchableOpacity>
         </View>

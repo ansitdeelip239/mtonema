@@ -7,6 +7,7 @@ import AuthNavigator from './AuthNavigator';
 import { useAuth } from '../hooks/useAuth';
 
 const RootStack = createNativeStackNavigator();
+
 export default function RootNavigator() {
     const {isAuthenticated} = useAuth();
     return (

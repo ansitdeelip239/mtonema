@@ -9,7 +9,7 @@ export const MainScreen: React.FC<Props> = ({ navigation }) => {
   const [isPopupVisible, setPopupVisible] = useState(false);
 
   const onLogin = () => {
-    navigation.navigate('EmailScreen');
+    navigation.navigate('EmailScreen', { role: 'User' });
   };
 
   const onSignup = () => {
@@ -21,7 +21,8 @@ export const MainScreen: React.FC<Props> = ({ navigation }) => {
   };
 
   const onLoginAsPartner = () => {
-    setPopupVisible(true); // Show the popup
+    // setPopupVisible(true); // Show the popup
+    navigation.navigate('EmailScreen', { role: 'Partner' });
   };
 
   const closePopup = () => {
@@ -47,7 +48,7 @@ export const MainScreen: React.FC<Props> = ({ navigation }) => {
         {/* Lower Part: Buttons */}
         <View style={styles.lowerPart}>
           {/* "Already Have an Account?" Text and Login Button */}
-          <Text style={styles.promptText}>Already Have an Account?</Text>
+          <Text style={styles.promptText}>Already have an account?</Text>
           <TouchableOpacity
             style={[styles.button, styles.spacing]}
             onPress={onLogin}>
@@ -55,7 +56,7 @@ export const MainScreen: React.FC<Props> = ({ navigation }) => {
           </TouchableOpacity>
 
           {/* "New Here? Create an Account!" Text and Sign Up Button */}
-          <Text style={styles.promptText}>New Here? Create an Account!</Text>
+          <Text style={styles.promptText}>New here? Create an account!</Text>
           <TouchableOpacity
             style={[styles.button, styles.spacing]}
             onPress={onSignup}>
@@ -67,13 +68,13 @@ export const MainScreen: React.FC<Props> = ({ navigation }) => {
             <TouchableOpacity
               style={styles.listPropertyButton}
               onPress={onListProperty}>
-              <Text style={styles.listPropertyText}>Want to List your Property?</Text>
+              <Text style={styles.listPropertyText}>Want to list your property?</Text>
             </TouchableOpacity>
             <View>
               <TouchableOpacity
                 style={styles.button2}
                 onPress={onLoginAsPartner}>
-                <Text style={styles.buttonText2}>Login As Partner</Text>
+                <Text style={styles.buttonText2}>Login as partner</Text>
               </TouchableOpacity>
             </View>
           </View>

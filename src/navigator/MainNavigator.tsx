@@ -5,6 +5,7 @@ import BuyerNavigator from './BuyerNavigator';
 import {useAuth} from '../hooks/useAuth';
 import {BuyerProvider} from '../context/BuyerProvider';
 import {MasterProvider} from '../context/MasterProvider';
+import PartnerNavigator from './PartnerNavigator';
 
 const MainNavigator = () => {
   const {user} = useAuth();
@@ -26,6 +27,8 @@ const MainNavigator = () => {
         </BuyerProvider>
       ) : user?.Role === 'Seller' ? (
         <SellerNavigator />
+      ) : user?.Role === 'Partner' ? (
+        <PartnerNavigator />
       ) : null}
     </MasterProvider>
   );

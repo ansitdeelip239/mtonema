@@ -49,7 +49,7 @@ const BuyerNavigator = memo(() => {
       <Drawer.Screen name="Change Password" component={ChangePasswordScreen} />
       <Drawer.Screen name="Contact Us" component={ContactScreen} />
       <Drawer.Screen
-        name="ProfileScreen"
+        name="Profile Screen"
         component={ProfileScreen}
         options={{drawerItemStyle: {display: 'none'}}}
       />

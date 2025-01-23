@@ -10,7 +10,7 @@ import OtpScreen from '../screens/auth/OtpScreen';
 import PostProperty from '../screens/seller/PostPropertyScreen';
 
 export type AuthStackParamList = {
-    EmailScreen: undefined;
+    EmailScreen: {role: string};
     SignUpScreen: undefined;
     MainScreen : undefined;
     ChangePasswordScreen : undefined;
