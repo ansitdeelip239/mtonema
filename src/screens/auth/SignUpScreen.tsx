@@ -5,6 +5,7 @@ import SignupForm from '../../components/SignupForm';
 import {SignUpRequest} from '../../types';
 import AuthService from '../../services/AuthService';
 import Toast from 'react-native-toast-message';
+import { ImageBackground, KeyboardAvoidingView, Platform, StyleSheet ,View ,Image} from 'react-native';
 
 type Props = NativeStackScreenProps<AuthStackParamList, 'SignUpScreen'>;
 
@@ -42,13 +43,56 @@ const SignUpScreen: React.FC<Props> = ({navigation, route}) => {
   };
 
   return (
-    <SignupForm
-      handleSignup={(formData: SignUpRequest) =>
-        handleSignup(formData, role !== 'User')
-      }
-      loading={loading}
-    />
+    <ImageBackground
+      source={require('../../assets/Images/bgimg1.png')} // Path to your background image
+      style={styles.backgroundImage}
+      resizeMode="cover" // Adjust the resizeMode as needed
+    >
+      <KeyboardAvoidingView
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        style={styles.container}
+      >
+          {/* Upper Part: Logo */}
+          <View style={styles.upperPart}>
+            <Image
+              source={require('../../assets/Images/dncr_pink.png')}
+              style={styles.image}
+              resizeMode="contain"
+            />
+          </View>
+          {/* Form */}
+          <SignupForm
+            handleSignup={(formData: SignUpRequest) =>
+              handleSignup(formData, role !== 'User')
+            }
+            loading={loading}
+          />
+      </KeyboardAvoidingView>
+    </ImageBackground>
   );
 };
 
+
 export default SignUpScreen;
+const styles = StyleSheet.create({
+  backgroundImage: {
+    flex: 1,
+    width: '100%',
+    height: '100%',
+  },
+  container: {
+    flex: 1,
+  },
+  scrollContainer: {
+    flexGrow: 1,
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+  },
+  upperPart: {
+    alignItems: 'center',
+  },
+  image: {
+    width: 180, // Adjust the width as needed
+    height: 180, // Adjust the height as needed
+  },
+});

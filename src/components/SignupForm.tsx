@@ -277,8 +277,9 @@ const SignupForm = ({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 20,
-    backgroundColor: '#ffffff',
+    padding: 15,
+    // backgroundColor: '#ffffff',
+    width: '100%',
   },
   inputGroup: {
     marginBottom: 20,
