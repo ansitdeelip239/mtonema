@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, {useState} from 'react';
 import {
   View,
   Text,
@@ -7,17 +7,26 @@ import {
   StyleSheet,
   KeyboardAvoidingView,
   Platform,
+  ActivityIndicator,
 } from 'react-native';
 import {
-  validateName,
   validateEmail,
-  validatePhone,
   validateLocation,
-} from '../../utils/formvalidation';
-import LocationComponent from '../../components/LocationComponenet';
+  validateName,
+  validatePhone,
+} from '../utils/formvalidation';
+import LocationComponent from './LocationComponenet';
+import {SignUpRequest} from '../types';
+import Colors from '../constants/Colors';
+import { navigationRef } from '../navigator/NavigationRef';
 
-
-const SignupForm = () => {
+const SignupForm = ({
+  handleSignup,
+  loading,
+}: {
+  handleSignup: (formData: SignUpRequest) => void;
+  loading: boolean;
+}) => {
   const [sellerData, setSellerData] = useState({
     Name: '',
     Email: '',
@@ -36,10 +45,10 @@ const SignupForm = () => {
   });
 
   const handleInputChange = (key: string, value: string) => {
-    setSellerData({ ...sellerData, [key]: value });
+    setSellerData({...sellerData, [key]: value});
     if (key === 'Phone') {
       if (!value.startsWith('+91-')) {
-        setSellerData((prev) => ({ ...prev, [key]: '+91-' }));
+        setSellerData(prev => ({...prev, [key]: '+91-'}));
         return;
       }
 
@@ -49,14 +58,14 @@ const SignupForm = () => {
         .replace(/[^0-9]/g, '')
         .slice(0, 10);
       const formattedPhone = `+91-${numbers}`;
-      setSellerData((prev) => ({ ...prev, [key]: formattedPhone }));
-      setErrors((prev) => ({
+      setSellerData(prev => ({...prev, [key]: formattedPhone}));
+      setErrors(prev => ({
         ...prev,
         Phone: validatePhone(formattedPhone) ? '' : 'Invalid phone number',
       }));
       return;
     }
-    setSellerData({ ...sellerData, [key]: value });
+    setSellerData({...sellerData, [key]: value});
 
     // Validate input only if the field is not empty
     let errorMessage = '';
@@ -65,7 +74,9 @@ const SignupForm = () => {
     } else {
       switch (key) {
         case 'Name':
-          errorMessage = validateName(value) ? '' : 'Name contains invalid characters';
+          errorMessage = validateName(value)
+            ? ''
+            : 'Name contains invalid characters';
           break;
         case 'Email':
           errorMessage = validateEmail(value) ? '' : 'Invalid email address';
@@ -81,34 +92,65 @@ const SignupForm = () => {
       }
     }
 
-    setErrors({ ...errors, [key]: errorMessage });
+    setErrors({...errors, [key]: errorMessage});
   };
 
   const clearInputField = (key: string) => {
-    setSellerData({ ...sellerData, [key]: key === 'Phone' ? '+91-' : '' });
-    setErrors({ ...errors, [key]: '' });
+    setSellerData({...sellerData, [key]: key === 'Phone' ? '+91-' : ''});
+    setErrors({...errors, [key]: ''});
   };
   const handleLocationChange = (location: string) => {
-    setSellerData({ ...sellerData, Location: location });
-    setErrors({ ...errors, Location: validateLocation(location) ? '' : 'Invalid location' });
+    setSellerData({...sellerData, Location: location});
+    setErrors({
+      ...errors,
+      Location: validateLocation(location) ? '' : 'Invalid location',
+    });
   };
-  const handleSignUp = () => {
-    const isNameValid = sellerData.Name.trim() !== '' && validateName(sellerData.Name);
-    const isEmailValid = sellerData.Email.trim() !== '' && validateEmail(sellerData.Email);
-    const isPhoneValid = sellerData.Phone.trim() !== '' && validatePhone(sellerData.Phone);
-    const isLocationValid = sellerData.Location.trim() !== '' && validateLocation(sellerData.Location);
+  // Update the handleSignUp function
+  const onSignUp = () => {
+    // Check for empty values first
+    const emptyFields = Object.entries(sellerData).reduce(
+      (acc, [key, value]) => {
+        if (value.trim() === '' || (key === 'Phone' && value === '+91-')) {
+          acc[key] = `${key} is required`;
+        }
+        return acc;
+      },
+      {} as Record<string, string>,
+    );
+
+    if (Object.keys(emptyFields).length > 0) {
+      setErrors({...errors, ...emptyFields});
+      return;
+    }
+
+    // Proceed with validation checks
+    const isNameValid = validateName(sellerData.Name);
+    const isEmailValid = validateEmail(sellerData.Email);
+    const isPhoneValid = validatePhone(sellerData.Phone);
+    const isLocationValid = validateLocation(sellerData.Location);
 
     if (!isNameValid || !isEmailValid || !isPhoneValid || !isLocationValid) {
       setErrors({
-        Name: sellerData.Name.trim() === '' ? 'Name is required' : !validateName(sellerData.Name) ? 'Name contains invalid characters' : '',
-        Email: sellerData.Email.trim() === '' ? 'Email is required' : !validateEmail(sellerData.Email) ? 'Invalid email address' : '',
-        Phone: sellerData.Phone.trim() === '' ? 'Phone is required' : !validatePhone(sellerData.Phone) ? 'Invalid phone number' : '',
-        Location: sellerData.Location.trim() === '' ? 'Location is required' : !validateLocation(sellerData.Location) ? 'Invalid location' : '',
+        Name: !isNameValid ? 'Name contains invalid characters' : '',
+        Email: !isEmailValid ? 'Invalid email address' : '',
+        Phone: !isPhoneValid ? 'Invalid phone number' : '',
+        Location: !isLocationValid ? 'Invalid location' : '',
       });
       return;
     }
 
-    console.log('Sign Up Pressed', sellerData);
+    const formDataToSubmit = {
+      ...sellerData,
+      Phone: stripPhonePrefix(sellerData.Phone),
+    };
+
+    // If all validations pass, proceed with signup
+    handleSignup(formDataToSubmit);
+  };
+
+  const stripPhonePrefix = (phone: string): string => {
+    return phone.replace('+91-', '');
   };
 
   return (
@@ -127,8 +169,9 @@ const SignupForm = () => {
               errors.Name !== '' && styles.inputError, // Apply error style if there's an error
             ]}
             value={sellerData.Name}
-            onChangeText={(text) => handleInputChange('Name', text)}
+            onChangeText={text => handleInputChange('Name', text)}
             placeholder="Enter Your Name"
+            placeholderTextColor={Colors.placeholderColor}
             onFocus={() => setFocusedInput('Name')}
             onBlur={() => setFocusedInput(null)}
           />
@@ -140,7 +183,9 @@ const SignupForm = () => {
             </TouchableOpacity>
           )}
         </View>
-        {errors.Name !== '' && <Text style={styles.errorText}>{errors.Name}</Text>}
+        {errors.Name !== '' && (
+          <Text style={styles.errorText}>{errors.Name}</Text>
+        )}
       </View>
 
       {/* Email Input */}
@@ -154,9 +199,10 @@ const SignupForm = () => {
               errors.Email !== '' && styles.inputError, // Apply error style if there's an error
             ]}
             value={sellerData.Email}
-            onChangeText={(text) => handleInputChange('Email', text)}
+            onChangeText={text => handleInputChange('Email', text)}
             keyboardType="email-address"
             placeholder="Enter Your E-mail"
+            placeholderTextColor={Colors.placeholderColor}
             onFocus={() => setFocusedInput('Email')}
             onBlur={() => setFocusedInput(null)}
           />
@@ -168,61 +214,12 @@ const SignupForm = () => {
             </TouchableOpacity>
           )}
         </View>
-        {errors.Email !== '' && <Text style={styles.errorText}>{errors.Email}</Text>}
+        {errors.Email !== '' && (
+          <Text style={styles.errorText}>{errors.Email}</Text>
+        )}
       </View>
 
-      <LocationComponent onLocationChange={handleLocationChange}/>
-
-      {/* Location Input
-      <View style={styles.inputGroup}>
-        <Text style={styles.label}>Location</Text>
-        <View style={styles.inputContainer}>
-          <TextInput
-            style={[
-              styles.input,
-              focusedInput === 'Location' && styles.inputFocused,
-              errors.Location !== '' && styles.inputError, // Apply error style if there's an error
-            ]}
-            value={locationQuery}
-            onChangeText={(text) => handleInputChange('Location', text)}
-            placeholder="Search Location"
-            onFocus={() => {
-              setFocusedInput('Location');
-              if (locationQuery.length > 0) {
-                setShowSuggestions(true);
-              }
-            }}
-            onBlur={() => {
-              setFocusedInput(null);
-              setShowSuggestions(false);
-            }}
-          />
-          {locationQuery !== '' && (
-            <TouchableOpacity
-              style={styles.clearButton}
-              onPress={() => clearInputField('Location')}>
-              <Text style={styles.clearButtonText}>X</Text>
-            </TouchableOpacity>
-          )}
-        </View>
-        {showSuggestions && locationQuery.length > 0 && locationSuggestions.length > 0 && (
-          <View style={styles.suggestionsContainer}>
-            <FlatList
-              keyboardShouldPersistTaps="always"
-              data={locationSuggestions}
-              keyExtractor={(item, index) => index.toString()}
-              renderItem={({ item }) => (
-                <TouchableOpacity
-                  style={styles.suggestionItem}
-                  onPress={() => handleSuggestionSelect(item)}>
-                  <Text>{item}</Text>
-                </TouchableOpacity>
-              )}
-            />
-          </View>
-        )}
-        {errors.Location !== '' && <Text style={styles.errorText}>{errors.Location}</Text>}
-      </View> */}
+      <LocationComponent onLocationChange={handleLocationChange} />
 
       {/* Mobile Input */}
       <View style={styles.inputGroup}>
@@ -232,13 +229,13 @@ const SignupForm = () => {
             style={[
               styles.input,
               focusedInput === 'Phone' && styles.inputFocused,
-              errors.Phone !== '' && styles.inputError, // Apply error style if there's an error
+              errors.Phone !== '' && styles.inputError,
             ]}
             value={sellerData.Phone}
-            onChangeText={(text) => handleInputChange('Phone', text)}
+            onChangeText={text => handleInputChange('Phone', text)}
             keyboardType="number-pad"
             placeholder="+91-"
-            placeholderTextColor="#888"
+            placeholderTextColor={Colors.placeholderColor}
             onFocus={() => setFocusedInput('Phone')}
             onBlur={() => setFocusedInput(null)}
             maxLength={14} // +91- + 10 digits = 14 characters
@@ -251,17 +248,25 @@ const SignupForm = () => {
             </TouchableOpacity>
           )}
         </View>
-        {errors.Phone !== '' && <Text style={styles.errorText}>{errors.Phone}</Text>}
+        {errors.Phone !== '' && (
+          <Text style={styles.errorText}>{errors.Phone}</Text>
+        )}
       </View>
 
       {/* Buttons Section */}
       <View style={styles.buttonContainer}>
-        <TouchableOpacity style={styles.button} onPress={handleSignUp}>
-          <Text style={styles.buttonText}>Sign Up</Text>
-        </TouchableOpacity>
+        {loading ? (
+          <View style={styles.button}>
+            <ActivityIndicator size="small" color="#fff" />
+          </View>
+        ) : (
+          <TouchableOpacity style={styles.button} onPress={onSignUp}>
+            <Text style={styles.buttonText}>Sign Up</Text>
+          </TouchableOpacity>
+        )}
         <TouchableOpacity
           style={[styles.button, styles.button]}
-          onPress={() => console.log('Back Pressed')}>
+          onPress={() => navigationRef.current?.goBack()}>
           <Text style={styles.buttonText}>Back</Text>
         </TouchableOpacity>
       </View>
@@ -301,7 +306,7 @@ const styles = StyleSheet.create({
     borderWidth: 1.5,
   },
   inputError: {
-    borderColor: 'red', // Apply red border for errors
+    borderColor: 'red',
   },
   clearButton: {
     position: 'absolute',

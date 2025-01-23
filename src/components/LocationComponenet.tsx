@@ -9,6 +9,7 @@ import {
   Keyboard,
 } from 'react-native';
 import BuyerService from '../services/BuyerService';
+import Colors from '../constants/Colors';
 
 const LocationComponent = ({onLocationChange} : { onLocationChange: (value:string) => void
 }) => {
@@ -98,6 +99,7 @@ const LocationComponent = ({onLocationChange} : { onLocationChange: (value:strin
             value={locationQuery}
             onChangeText={text => handleInputChange(text)}
             placeholder="Search Location"
+            placeholderTextColor={Colors.placeholderColor}
             onFocus={() => {
               setFocusedInput('Location');
               if (locationQuery.length > 0) {

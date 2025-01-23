@@ -10,7 +10,7 @@ import Home from '../screens/buyer/Home';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import SearchProperty from '../screens/buyer/SearchProperty';
 import RecommendedProperty from '../screens/buyer/RecommendedProperty';
-import SignupForm from '../screens/common/SignupForm';
+import SignupForm from '../components/SignupForm';
 
 const Drawer = createDrawerNavigator();
 const Stack = createNativeStackNavigator();

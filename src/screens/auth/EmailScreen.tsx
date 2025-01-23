@@ -1,4 +1,4 @@
-import React, {useCallback, useState} from 'react';
+import React, {useCallback, useState, useMemo} from 'react';
 import {
   View,
   Text,
@@ -17,10 +17,9 @@ import {AuthStackParamList} from '../../navigator/AuthNavigator';
 import AuthService from '../../services/AuthService';
 import {useAuth} from '../../hooks/useAuth';
 import {User} from '../../types';
+import {validateEmail} from '../../utils/formvalidation';
 
 type Props = NativeStackScreenProps<AuthStackParamList, 'EmailScreen'>;
-
-const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 const EmailScreen: React.FC<Props> = ({navigation, route}) => {
   const [email, setEmail] = useState('');
@@ -29,20 +28,7 @@ const EmailScreen: React.FC<Props> = ({navigation, route}) => {
   const {storeUser} = useAuth();
   const {role} = route.params;
 
-  const validateEmail = useCallback((emailToValidate: string) => {
-    if (!emailToValidate) {
-      setEmailError('Email is required');
-      return false;
-    }
-
-    if (!EMAIL_REGEX.test(emailToValidate)) {
-      setEmailError('Invalid email format');
-      return false;
-    }
-
-    setEmailError('');
-    return true;
-  }, []);
+  const isEmailValid = useMemo(() => validateEmail(email), [email]);
 
   const checkEmail = useCallback(
     async (emailToCheck: string) => {
@@ -51,22 +37,18 @@ const EmailScreen: React.FC<Props> = ({navigation, route}) => {
         setEmailError('');
 
         // Validate email format first
-        if (!validateEmail(emailToCheck)) {
+        if (!isEmailValid) {
+          setEmailError('Invalid email format');
           return false;
         }
 
         const response = await AuthService.verifyLoginInput(emailToCheck);
 
         // Check if email matches the expected role
-        if (response && response.data?.Role !== role) {
-          console.log('response', response.data, role);
-
+        if (response && !role.includes(response.data?.Role as string)) {
           setEmailError('*Email not found');
           return false;
         }
-
-        console.log('response', response);
-        console.log('response.data', response.data);
 
         if (!response.Success) {
           setEmailError(response.Message || 'Email verification failed');
@@ -84,12 +66,12 @@ const EmailScreen: React.FC<Props> = ({navigation, route}) => {
         return false;
       }
     },
-    [role, validateEmail],
+    [role, isEmailValid],
   );
 
   const handleContinue = useCallback(async () => {
-    // Validate email before proceeding
-    if (!validateEmail(email)) {
+    if (!isEmailValid) {
+      setEmailError('Invalid email format');
       return;
     }
 
@@ -100,6 +82,8 @@ const EmailScreen: React.FC<Props> = ({navigation, route}) => {
       if (isValidEmail) {
         // Store user data and navigate to password screen
         const response = await AuthService.verifyLoginInput(email);
+        console.log('API Response:', response.data, 'Role: ', role);
+
         storeUser(response.data as User);
         navigation.navigate('PasswordScreen', {email});
       }
@@ -115,18 +99,7 @@ const EmailScreen: React.FC<Props> = ({navigation, route}) => {
     } finally {
       setIsLoading(false);
     }
-  }, [email, validateEmail, checkEmail, storeUser, navigation]);
-
-  const onChangeHandler = useCallback(
-    async (value: string) => {
-      setEmail(value);
-      // Optionally validate on each change
-      validateEmail(value);
-      // Call checkEmail on each change
-      await checkEmail(value);
-    },
-    [validateEmail, checkEmail],
-  );
+  }, [email, isEmailValid, checkEmail, storeUser, navigation, role]);
 
   return (
     <KeyboardAvoidingView
@@ -146,8 +119,8 @@ const EmailScreen: React.FC<Props> = ({navigation, route}) => {
           <TextInput
             placeholder="Email or Mobile"
             value={email}
-            onChangeText={onChangeHandler}
-            style={[styles.input]}
+            onChangeText={setEmail}
+            style={[styles.input, !isEmailValid && styles.inputError]}
             keyboardType="email-address"
             autoCapitalize="none"
             autoCorrect={false}
@@ -161,7 +134,7 @@ const EmailScreen: React.FC<Props> = ({navigation, route}) => {
           <TouchableOpacity
             style={[styles.button, styles.spacing]}
             onPress={handleContinue}
-            disabled={isLoading || !email}>
+            disabled={isLoading || !isEmailValid}>
             {isLoading ? (
               <ActivityIndicator size="small" color="#ffffff" />
             ) : (
@@ -245,6 +218,9 @@ const styles = StyleSheet.create({
   errorText: {
     color: 'red',
     marginTop: 5,
+  },
+  inputError: {
+    borderBottomColor: 'red',
   },
   // button:{
   //   backgroundColor: '#cc0e74',

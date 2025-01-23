@@ -46,20 +46,14 @@ class AuthService {
       throw error;
     }
   }
-static async  RegisterSeller(
- Email: string,
-  Name:string,
-  Phone:string,
-  Location:string,
- TermsChecked: true,
-):Promise<Response<string>>{
+static async  RegisterSeller(formData: SignUpRequest):Promise<Response<string>>{
   try {
     const response = await fetch(api.RegisterSeller,{
       method : 'POST',
       headers :{
         'Content-Type' : 'application/json',
       },
-      body:JSON.stringify({Email,Name,Phone,Location,TermsChecked}),
+      body:JSON.stringify(formData),
     });
     const result: Response<string> = await response.json();
     if(response.ok) {

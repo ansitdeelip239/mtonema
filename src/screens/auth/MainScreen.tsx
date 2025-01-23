@@ -1,32 +1,39 @@
-import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, Image, Modal, ImageBackground } from 'react-native';
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { AuthStackParamList } from '../../navigator/AuthNavigator';
+import React, {useState} from 'react';
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  StyleSheet,
+  Image,
+  Modal,
+  ImageBackground,
+} from 'react-native';
+import {NativeStackScreenProps} from '@react-navigation/native-stack';
+import {AuthStackParamList} from '../../navigator/AuthNavigator';
 
 type Props = NativeStackScreenProps<AuthStackParamList, 'MainScreen'>;
 
-export const MainScreen: React.FC<Props> = ({ navigation }) => {
+export const MainScreen: React.FC<Props> = ({navigation}) => {
   const [isPopupVisible, setPopupVisible] = useState(false);
 
-  const onLogin = () => {
-    navigation.navigate('EmailScreen', { role: 'User' });
+  const onLogin = (role: string[]) => {
+    navigation.navigate('EmailScreen', {role});
   };
 
-  const onSignup = () => {
-    navigation.navigate('SignUpScreen');
+  const onBuyerSignup = () => {
+    navigation.navigate('SignUpScreen', {
+      role: 'User',
+    });
   };
 
-  const onListProperty = () => {
-    navigation.navigate('SellerSignupScreen');
-  };
-
-  const onLoginAsPartner = () => {
-    // setPopupVisible(true); // Show the popup
-    navigation.navigate('EmailScreen', { role: 'Partner' });
+  const onSellerSignup = () => {
+    navigation.navigate('SignUpScreen', {
+      role: 'Seller',
+    });
   };
 
   const closePopup = () => {
-    setPopupVisible(false); // Hide the popup
+    setPopupVisible(false);
   };
 
   return (
@@ -51,7 +58,7 @@ export const MainScreen: React.FC<Props> = ({ navigation }) => {
           <Text style={styles.promptText}>Already have an account?</Text>
           <TouchableOpacity
             style={[styles.button, styles.spacing]}
-            onPress={onLogin}>
+            onPress={() => onLogin(['User', 'Seller'])}>
             <Text style={styles.buttonText}>Log In</Text>
           </TouchableOpacity>
 
@@ -59,7 +66,7 @@ export const MainScreen: React.FC<Props> = ({ navigation }) => {
           <Text style={styles.promptText}>New here? Create an account!</Text>
           <TouchableOpacity
             style={[styles.button, styles.spacing]}
-            onPress={onSignup}>
+            onPress={onBuyerSignup}>
             <Text style={styles.buttonText}>Sign Up</Text>
           </TouchableOpacity>
 
@@ -67,13 +74,15 @@ export const MainScreen: React.FC<Props> = ({ navigation }) => {
           <View style={styles.combinedButtonContainer}>
             <TouchableOpacity
               style={styles.listPropertyButton}
-              onPress={onListProperty}>
-              <Text style={styles.listPropertyText}>Want to list your property?</Text>
+              onPress={onSellerSignup}>
+              <Text style={styles.listPropertyText}>
+                Want to list your property?
+              </Text>
             </TouchableOpacity>
             <View>
               <TouchableOpacity
                 style={styles.button2}
-                onPress={onLoginAsPartner}>
+                onPress={() => onLogin(['Partner'])}>
                 <Text style={styles.buttonText2}>Login as partner</Text>
               </TouchableOpacity>
             </View>
@@ -148,7 +157,7 @@ const styles = StyleSheet.create({
     width: '100%', // Full width
     alignItems: 'center',
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
+    shadowOffset: {width: 0, height: 2},
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
     elevation: 5,
@@ -184,7 +193,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginTop: 10, // No gap between buttons
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
+    shadowOffset: {width: 0, height: 2},
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
     elevation: 5,
