@@ -9,6 +9,7 @@ class PartnerService {
     agentName: string,
     areaLocality: string,
     propertyType: string,
+    flatSize: string,
   ) {
     try {
       const params = new URLSearchParams({
@@ -18,6 +19,7 @@ class PartnerService {
         agentName,
         areaLocality,
         propertyType,
+        flatSize,
       }).toString();
       const response = await api.get<any>(
         `${url.getAgentImportData}?${params}`,

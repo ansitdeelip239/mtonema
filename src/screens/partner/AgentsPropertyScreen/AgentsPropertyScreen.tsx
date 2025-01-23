@@ -1,15 +1,11 @@
-import React, {useState, useEffect, useCallback} from 'react';
-import {
-  View,
-  StyleSheet,
-  FlatList,
-  RefreshControl,
-} from 'react-native';
+import React, {useState, useEffect, useCallback, useMemo} from 'react';
+import {View, StyleSheet, FlatList, RefreshControl} from 'react-native';
 import PartnerService from '../../../services/PartnerService';
 import {useAuth} from '../../../hooks/useAuth';
-import {AgentData, PagingModel} from '../../../types';
+import {AgentData, FilterValues, PagingModel} from '../../../types';
 import renderItem from './components/RenderItem';
 import renderFooter from './components/RenderFooter';
+import SearchHeader from './components/SearchHeader';
 
 export default function AgentDataScreen() {
   const [agentData, setAgentData] = useState<AgentData[]>([]);
@@ -17,8 +13,36 @@ export default function AgentDataScreen() {
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [hasMoreData, setHasMoreData] = useState(true);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [filters, setFilters] = useState<FilterValues>({
+    propertyLocation: null,
+    propertyType: null,
+    bhkType: null,
+  });
   const {user} = useAuth();
   const PAGE_SIZE = 10;
+
+  const handleSearch = (text: string) => {
+    setSearchQuery(text);
+    fetchAgentData(1, true);
+  };
+
+  const handleFilter = (newFilters: FilterValues) => {
+    setFilters(newFilters);
+    fetchAgentData(1, true);
+  };
+
+  const DEFAULT_PAGING_MODEL: PagingModel = useMemo(
+    () => ({
+      CurrentPage: 1,
+      NextPage: false,
+      PageSize: 10,
+      PreviousPage: false,
+      TotalCount: 0,
+      TotalPage: 1,
+    }),
+    [],
+  );
 
   const fetchAgentData = useCallback(
     async (page: number, shouldRefresh = false) => {
@@ -28,13 +52,16 @@ export default function AgentDataScreen() {
           page,
           PAGE_SIZE,
           user?.Email || '',
-          '',
-          '',
-          '',
+          searchQuery,
+          filters.propertyLocation || '',
+          filters.propertyType || '',
+          filters.bhkType || '',
         );
 
-        const newData = response.data.AgentDataModel;
-        const pagingInfo: PagingModel = response.data.responsePagingModel;
+        // Safe null checks for response data
+        const newData = response?.data?.AgentDataModel ?? [];
+        const pagingInfo: PagingModel =
+          response?.data?.responsePagingModel ?? DEFAULT_PAGING_MODEL;
 
         if (shouldRefresh) {
           setAgentData(newData);
@@ -42,16 +69,27 @@ export default function AgentDataScreen() {
           setAgentData(prev => [...prev, ...newData]);
         }
 
-        setHasMoreData(pagingInfo.CurrentPage < pagingInfo.TotalPage);
-        setCurrentPage(pagingInfo.CurrentPage);
+        // Safe checks for paging info
+        const hasMore = Boolean(
+          pagingInfo?.CurrentPage &&
+            pagingInfo?.TotalPage &&
+            pagingInfo.CurrentPage < pagingInfo.TotalPage,
+        );
+
+        setHasMoreData(hasMore);
+        setCurrentPage(pagingInfo?.CurrentPage ?? 1);
       } catch (error) {
         console.error('Error fetching agent data:', error);
+        if (shouldRefresh) {
+          setAgentData([]);
+        }
+        setHasMoreData(false);
       } finally {
         setIsLoading(false);
         setIsRefreshing(false);
       }
     },
-    [user?.Email],
+    [user?.Email, searchQuery, filters, DEFAULT_PAGING_MODEL],
   );
 
   useEffect(() => {
@@ -72,6 +110,7 @@ export default function AgentDataScreen() {
 
   return (
     <View style={styles.container}>
+      <SearchHeader initialFilters={filters} onSearch={handleSearch} onFilter={handleFilter} />
       <FlatList
         data={agentData}
         renderItem={renderItem}

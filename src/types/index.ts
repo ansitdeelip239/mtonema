@@ -171,4 +171,11 @@ export interface PagingModel {
   PageSize: number;
   TotalCount: number;
   TotalPage: number;
+  PreviousPage: boolean;
+}
+
+export interface FilterValues {
+  propertyLocation: string | null;
+  propertyType: string | null;
+  bhkType: string | null;
 }
