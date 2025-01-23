@@ -5,6 +5,7 @@ import { AuthStackParamList } from '../../navigator/AuthNavigator';
 import AuthService from '../../services/AuthService';
 import Toast from 'react-native-toast-message';
 import BuyerService from '../../services/BuyerService';
+import Colors from '../../constants/Colors';
 
 type Props = NativeStackScreenProps<AuthStackParamList, 'SellerSignupScreen'>;
 
@@ -247,6 +248,7 @@ const SellerSignupScreen: React.FC<Props> = ({ navigation }) => {
               value={sellerData.Name}
               onChangeText={text => handleInputChange('Name', text)}
               placeholder="Enter Your Name"
+              placeholderTextColor={Colors.placeholderColor}
               onFocus={() => setFocusedInput('Name')}
               onBlur={() => setFocusedInput(null)}
             />
@@ -274,6 +276,7 @@ const SellerSignupScreen: React.FC<Props> = ({ navigation }) => {
               onChangeText={text => handleInputChange('Email', text)}
               keyboardType="email-address"
               placeholder="Enter Your E-mail"
+              placeholderTextColor={Colors.placeholderColor}
               onFocus={() => setFocusedInput('Email')}
               onBlur={() => setFocusedInput(null)}
             />
@@ -300,6 +303,7 @@ const SellerSignupScreen: React.FC<Props> = ({ navigation }) => {
               value={locationQuery}
               onChangeText={text => handleInputChange('Location', text)}
               placeholder="Search Location"
+              placeholderTextColor={Colors.placeholderColor}
               onFocus={() => {
                 setFocusedInput('Location');
                 if (locationQuery.length > 0) {
@@ -358,6 +362,7 @@ const SellerSignupScreen: React.FC<Props> = ({ navigation }) => {
               onChangeText={text => handleInputChange('Phone', text)}
               keyboardType="phone-pad"
               placeholder="Enter Your Mobile Number"
+              placeholderTextColor={Colors.placeholderColor}
               onFocus={() => setFocusedInput('Phone')}
               onBlur={() => setFocusedInput(null)}
             />
