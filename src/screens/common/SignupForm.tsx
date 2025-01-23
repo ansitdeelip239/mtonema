@@ -7,8 +7,6 @@ import {
   StyleSheet,
   KeyboardAvoidingView,
   Platform,
-  FlatList,
-  Keyboard,
 } from 'react-native';
 import {
   validateName,
@@ -16,6 +14,8 @@ import {
   validatePhone,
   validateLocation,
 } from '../../utils/formvalidation';
+import LocationComponent from '../../components/LocationComponenet';
+
 
 const SignupForm = () => {
   const [sellerData, setSellerData] = useState({
@@ -24,10 +24,9 @@ const SignupForm = () => {
     Phone: '+91-', // Initialize the prefix value
     Location: '',
   });
-
-  const [locationQuery, setLocationQuery] = useState('');
-  const [locationSuggestions, setLocationSuggestions] = useState<string[]>([]);
-  const [showSuggestions, setShowSuggestions] = useState(false);
+  // const [locationQuery, setLocationQuery] = useState('');
+  // const [locationSuggestions, setLocationSuggestions] = useState<string[]>([]);
+  // const [showSuggestions, setShowSuggestions] = useState(false);
   const [focusedInput, setFocusedInput] = useState<string | null>(null);
   const [errors, setErrors] = useState({
     Name: '',
@@ -58,9 +57,6 @@ const SignupForm = () => {
       return;
     }
     setSellerData({ ...sellerData, [key]: value });
-    if (key === 'Location') {
-      setLocationQuery(value);
-    }
 
     // Validate input only if the field is not empty
     let errorMessage = '';
@@ -88,23 +84,14 @@ const SignupForm = () => {
     setErrors({ ...errors, [key]: errorMessage });
   };
 
-  const handleSuggestionSelect = (suggestion: string) => {
-    setSellerData({ ...sellerData, Location: suggestion });
-    setLocationQuery(suggestion);
-    setShowSuggestions(false);
-    Keyboard.dismiss();
-  };
-
   const clearInputField = (key: string) => {
     setSellerData({ ...sellerData, [key]: key === 'Phone' ? '+91-' : '' });
-    if (key === 'Location') {
-      setLocationQuery('');
-      setLocationSuggestions([]);
-      setShowSuggestions(false);
-    }
     setErrors({ ...errors, [key]: '' });
   };
-
+  const handleLocationChange = (location: string) => {
+    setSellerData({ ...sellerData, Location: location });
+    setErrors({ ...errors, Location: validateLocation(location) ? '' : 'Invalid location' });
+  };
   const handleSignUp = () => {
     const isNameValid = sellerData.Name.trim() !== '' && validateName(sellerData.Name);
     const isEmailValid = sellerData.Email.trim() !== '' && validateEmail(sellerData.Email);
@@ -184,7 +171,9 @@ const SignupForm = () => {
         {errors.Email !== '' && <Text style={styles.errorText}>{errors.Email}</Text>}
       </View>
 
-      {/* Location Input */}
+      <LocationComponent onLocationChange={handleLocationChange}/>
+
+      {/* Location Input
       <View style={styles.inputGroup}>
         <Text style={styles.label}>Location</Text>
         <View style={styles.inputContainer}>
@@ -233,7 +222,7 @@ const SignupForm = () => {
           </View>
         )}
         {errors.Location !== '' && <Text style={styles.errorText}>{errors.Location}</Text>}
-      </View>
+      </View> */}
 
       {/* Mobile Input */}
       <View style={styles.inputGroup}>
