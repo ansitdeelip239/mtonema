@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useEffect, useState, useCallback, useRef } from 'react';
 import {
   View,
   Text,
@@ -6,32 +6,141 @@ import {
   StyleSheet,
   TouchableOpacity,
   TextInput,
-  Alert,
   ScrollView,
   Modal,
 } from 'react-native';
-import {useAuth} from '../../hooks/useAuth';
-import {ActivityIndicator} from 'react-native-paper';
-import {api} from '../../utils/api';
+import Toast from 'react-native-toast-message';
+import { useAuth } from '../../hooks/useAuth';
+import { ActivityIndicator } from 'react-native-paper';
+import { api } from '../../utils/api';
 import url from '../../constants/api';
 import { User } from '../../types';
-const ProfileScreen = () => {
-  const [loadingModalVisible, setLoadingModalVisible] = useState(false);
-  const [modalVisible, setModalVisible] = useState(false);
-  const [isLoggingOut, setIsLoggingOut] = useState(false);
-  // State for user data
-  const {user,logout} = useAuth();
-  const [users, setUser] = useState({
-    name: user?.Name,
-    email: user?.Email,
-    password: user?.Password,
-    mobile: user?.Phone,
-    location: user?.Location,
-    profileImage: require('../../assets/Images/dncrlogo.png'),
-  });
+import CommonService from '../../services/CommonService';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-  // State for edit mode of each field
-  const [editMode, setEditMode] = useState({
+type FieldName = 'name' | 'email' | 'password' | 'mobile' | 'location';
+type EditableFields = Record<FieldName, boolean>;
+
+interface UserData {
+  name: string;
+  email: string;
+  password: string;
+  mobile: string;
+  location: string;
+  profileImage: any;
+}
+
+const INITIAL_USER_DATA: UserData = {
+  name: '',
+  email: '',
+  password: '',
+  mobile: '',
+  location: '',
+  profileImage: require('../../assets/Images/dncrlogo.png'),
+};
+
+// Define ProfileField props interface
+interface ProfileFieldProps {
+  label: string;
+  field: FieldName;
+  value: string;
+  keyboardType?: 'default' | 'email-address' | 'phone-pad';
+  multiline?: boolean;
+  secureTextEntry?: boolean;
+  inputRef: React.RefObject<TextInput>;
+  editMode: EditableFields;
+  setEditMode: React.Dispatch<React.SetStateAction<EditableFields>>;
+  setUserData: React.Dispatch<React.SetStateAction<UserData>>;
+  showPassword?: boolean;
+  setShowPassword?: React.Dispatch<React.SetStateAction<boolean>>; // Marked as optional
+}
+
+// ProfileField component (moved outside of ProfileScreen)
+const ProfileField = React.memo(
+  ({
+    label,
+    field,
+    value,
+    keyboardType = 'default',
+    multiline = false,
+    secureTextEntry = false,
+    inputRef,
+    editMode,
+    setEditMode,
+    setUserData,
+    showPassword,
+    setShowPassword,
+  }: ProfileFieldProps) => {
+    useEffect(() => {
+      if (editMode[field] && inputRef.current) {
+        inputRef.current.focus();
+      }
+    }, [editMode, field, inputRef]);
+
+    return (
+      <View style={styles.fieldContainer}>
+        <Text style={styles.label}>{label}</Text>
+        <View style={styles.inputContainer}>
+          <TextInput
+            ref={inputRef}
+            style={[
+              styles.input,
+              multiline && styles.multilineInput,
+              editMode[field] && styles.editInput,
+            ]}
+            value={value}
+            onChangeText={(text) =>
+              setUserData((prev) => ({ ...prev, [field]: text }))
+            }
+            editable={editMode[field]}
+            keyboardType={keyboardType}
+            multiline={multiline}
+            secureTextEntry={secureTextEntry && !showPassword}
+            placeholder={`Enter ${label.toLowerCase()}`}
+            autoCapitalize={field === 'email' ? 'none' : 'sentences'}
+            autoCorrect={false}
+          />
+          {field === 'password' && (
+            <TouchableOpacity
+              onPress={() => {
+                if (setShowPassword) {
+                  setShowPassword(!showPassword);
+                }
+              }}
+              style={styles.iconButton}>
+              <Image
+                source={
+                  showPassword
+                    ? require('../../assets/Icon/eye.png')
+                    : require('../../assets/Icon/eye-slash.png')
+                }
+                style={styles.icon}
+              />
+            </TouchableOpacity>
+          )}
+          <TouchableOpacity
+            onPress={() =>
+              setEditMode((prev) => ({ ...prev, [field]: !prev[field] }))
+            }
+            style={styles.iconButton}>
+            <Image
+              source={require('../../assets/Icon/Edit.png')}
+              style={styles.icon}
+            />
+          </TouchableOpacity>
+        </View>
+      </View>
+    );
+  },
+);
+// ProfileScreen component
+const ProfileScreen = () => {
+  const { user, logout } = useAuth();
+  const [isLoading, setIsLoading] = useState(false);
+  const [showLogoutModal, setShowLogoutModal] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [userData, setUserData] = useState<UserData>(INITIAL_USER_DATA);
+  const [editMode, setEditMode] = useState<EditableFields>({
     name: false,
     email: false,
     password: false,
@@ -39,240 +148,254 @@ const ProfileScreen = () => {
     location: false,
   });
 
-  // State for password visibility
-  const [showPassword, setShowPassword] = useState(false);
+  // Refs for TextInput fields
+  const nameInputRef = useRef(null);
+  const emailInputRef = useRef(null);
+  const passwordInputRef = useRef(null);
+  const mobileInputRef = useRef(null);
+  const locationInputRef = useRef(null);
 
-  // Function to handle profile update
-  const handleUpdateProfile = async() => {
-try {
-    const request = {
-        Name:users.name,
-        Email:users.email,
-        Phone:users.mobile,
-        password:users.password,
-        Location:users.location,
-        ID:user?.ID,
-        CreatedBy:null,
-        CreatedOn:null,
-        Role:null,
-        Status:null,
-        UpdatedOn:null,
-    };
-    const response = await api.post<User>(
-              `${url.UpdateProfile}`,request
-            );
-    if(response.Success)
-    {
-        Alert.alert('Success', 'Profile updated successfully!');
-    }
-    else
-    {
-        throw new Error(response.Message);
-    }
-} catch (error) {
-    if(error instanceof Error)
-    {
-        Alert.alert('Error', error.message);
-    }
-}
-    setEditMode({
-      name: false,
-      email: false,
-      password: false,
-      mobile: false,
-      location: false,
-    }); // Exit edit mode for all fields
+  // Validation functions
+  const validateEmail = (email: string): boolean => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
   };
 
-  // Function to toggle edit mode for a specific field
-  const toggleEditMode = (field: keyof typeof editMode) => {
-    setEditMode({...editMode, [field]: !editMode[field]});
+  const validateMobile = (mobile: string): boolean => {
+    const mobileRegex = /^\d{10}$/;
+    return mobileRegex.test(mobile);
   };
 
-  // Function to handle profile picture change
-  // const handleChangeProfilePicture = () => {
-  //   Alert.alert(
-  //     'Info',
-  //     'Feature to change profile picture is under development.',
-  //   );
-  // };
-
-  const confirmLogout = async () => {
-    setIsLoggingOut(true);
-    setModalVisible(false);
-    setLoadingModalVisible(true);
-    await logout();
-    setIsLoggingOut(false);
-    setLoadingModalVisible(false);
-    console.log('Logged Out Successfully');
+  const validatePassword = (password: string): boolean => {
+    return password.length >= 6;
   };
+
+  const showToast = useCallback(
+    (type: 'success' | 'error' | 'info', message: string) => {
+      Toast.show({
+        type,
+        text1: type.charAt(0).toUpperCase() + type.slice(1),
+        text2: message,
+        position: 'top',
+        visibilityTime: 3000,
+        autoHide: true,
+      });
+    },
+    [],
+  );
+
+  // Fetch user profile
+  const fetchUserProfile = useCallback(async () => {
+    try {
+      setIsLoading(true);
+      const token = await AsyncStorage.getItem('token');
+      if (!token) {
+        showToast('error', 'Authentication token not found');
+        return;
+      }
+
+      const response = await CommonService.getUserByToken(token);
+      if (response?.data) {
+        setUserData((prevData) => ({
+          ...prevData,
+          name: response.data.Name || '',
+          email: response.data.Email || '',
+          password: response.data.Password || '',
+          mobile: response.data.Phone || '',
+          location: response.data.Location || '',
+        }));
+      }
+    } catch (error) {
+      showToast('error', 'Failed to fetch profile data');
+      console.error('Profile fetch error:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  }, [showToast]);
+
+  useEffect(() => {
+    fetchUserProfile();
+  }, [fetchUserProfile]);
+
+  // Validate all fields before update
+  const validateFields = (): boolean => {
+    if (!userData.name.trim()) {
+      showToast('error', 'Name cannot be empty');
+      return false;
+    }
+
+    if (!validateEmail(userData.email)) {
+      showToast('error', 'Please enter a valid email address');
+      return false;
+    }
+
+    if (editMode.password && !validatePassword(userData.password)) {
+      showToast('error', 'Password must be at least 6 characters long');
+      return false;
+    }
+
+    if (!validateMobile(userData.mobile)) {
+      showToast('error', 'Please enter a valid 10-digit mobile number');
+      return false;
+    }
+
+    if (!userData.location.trim()) {
+      showToast('error', 'Location cannot be empty');
+      return false;
+    }
+
+    return true;
+  };
+
+  // Handle profile update
+  const handleUpdateProfile = async () => {
+    try {
+      if (!validateFields()) {
+        return;
+      }
+
+      setIsLoading(true);
+      const request = {
+        Name: userData.name,
+        Email: userData.email,
+        Phone: userData.mobile,
+        password: userData.password,
+        Location: userData.location,
+        ID: user?.ID,
+        CreatedBy: null,
+        CreatedOn: null,
+        Role: null,
+        Status: null,
+        UpdatedOn: null,
+      };
+
+      const response = await api.post<User>(`${url.UpdateProfile}`, request);
+      if (response.Success) {
+        showToast('success', 'Profile updated successfully');
+        setEditMode({
+          name: false,
+          email: false,
+          password: false,
+          mobile: false,
+          location: false,
+        });
+        await fetchUserProfile(); // Refresh profile data
+      } else {
+        throw new Error(response.Message || 'Update failed');
+      }
+    } catch (error) {
+      showToast(
+        'error',
+        error instanceof Error ? error.message : 'Failed to update profile',
+      );
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  // Handle logout
+  const handleLogout = async () => {
+    try {
+      setIsLoading(true);
+      await logout();
+      showToast('success', 'Logged out successfully');
+    } catch (error) {
+      showToast('error', 'Failed to logout');
+    } finally {
+      setIsLoading(false);
+      setShowLogoutModal(false);
+    }
+  };
+
+  if (isLoading) {
+    return (
+      <View style={styles.loadingContainer}>
+        <ActivityIndicator size="large" color="#cc0e74" />
+      </View>
+    );
+  }
 
   return (
-    <ScrollView contentContainerStyle={styles.scrollContainer}>
-      {/* Profile Image with Edit Icon */}
-      <View style={styles.profileImageContainer}>
-        <Image source={users.profileImage} style={styles.profileImage} />
-        {/* <TouchableOpacity
-          onPress={handleChangeProfilePicture}
-          style={styles.profileEditIcon}>
-          <Image
-            source={require('../../assets/Icon/Edit.png')}
-            style={styles.iconImage}
-          />
-        </TouchableOpacity> */}
-      </View>
-
-      {/* Name Field */}
-      <View style={styles.fieldContainer}>
-        <Text style={styles.label}>Name</Text>
-        <View style={styles.inputContainer}>
-          <TextInput
-            style={[styles.input, editMode.name && styles.editInput]} // Change background color only for this field
-            value={users.name}
-            onChangeText={text => setUser({...users, name: text})}
-            editable={editMode.name}
-          />
-          <TouchableOpacity
-            onPress={() => toggleEditMode('name')}
-            style={styles.editIcon}>
-            <Image
-              source={require('../../assets/Icon/Edit.png')}
-              style={styles.iconImage}
-            />
-          </TouchableOpacity>
+    <>
+      <ScrollView contentContainerStyle={styles.scrollContainer}>
+        <View style={styles.profileImageContainer}>
+          <Image source={userData.profileImage} style={styles.profileImage} />
         </View>
-      </View>
 
-      {/* Email Field */}
-      <View style={styles.fieldContainer}>
-        <Text style={styles.label}>Email</Text>
-        <View style={styles.inputContainer}>
-          <TextInput
-            style={[styles.input, editMode.email && styles.editInput]} // Change background color only for this field
-            value={users.email}
-            onChangeText={text => setUser({...users, email: text})}
-            editable={editMode.email}
-            keyboardType="email-address"
-          />
-          <TouchableOpacity
-            onPress={() => toggleEditMode('email')}
-            style={styles.editIcon}>
-            <Image
-              source={require('../../assets/Icon/Edit.png')}
-              style={styles.iconImage}
-            />
-          </TouchableOpacity>
-        </View>
-      </View>
+        <ProfileField
+          label="Name"
+          field="name"
+          value={userData.name}
+          inputRef={nameInputRef}
+          editMode={editMode}
+          setEditMode={setEditMode}
+          setUserData={setUserData}
+        />
+        <ProfileField
+          label="Email"
+          field="email"
+          value={userData.email}
+          keyboardType="email-address"
+          inputRef={emailInputRef}
+          editMode={editMode}
+          setEditMode={setEditMode}
+          setUserData={setUserData}
+        />
+        <ProfileField
+  label="Password"
+  field="password"
+  value={userData.password}
+  secureTextEntry
+  inputRef={passwordInputRef}
+  editMode={editMode}
+  setEditMode={setEditMode}
+  setUserData={setUserData}
+  showPassword={showPassword}
+  setShowPassword={setShowPassword} // Passed only for password field
+/>
+        <ProfileField
+          label="Mobile"
+          field="mobile"
+          value={userData.mobile}
+          keyboardType="phone-pad"
+          inputRef={mobileInputRef}
+          editMode={editMode}
+          setEditMode={setEditMode}
+          setUserData={setUserData}
+        />
+        <ProfileField
+          label="Location"
+          field="location"
+          value={userData.location}
+          multiline
+          inputRef={locationInputRef}
+          editMode={editMode}
+          setEditMode={setEditMode}
+          setUserData={setUserData}
+        />
 
-      {/* Password Field */}
-      <View style={styles.fieldContainer}>
-        <Text style={styles.label}>Password</Text>
-        <View style={styles.inputContainer}>
-          <TextInput
-            style={[styles.input, editMode.password && styles.editInput]} // Change background color only for this field
-            value={users.password}
-            onChangeText={text => setUser({...users, password: text})}
-            secureTextEntry={!showPassword}
-            editable={editMode.password}
-          />
+        {Object.values(editMode).some(Boolean) && (
           <TouchableOpacity
-            onPress={() => setShowPassword(!showPassword)}
-            style={styles.eyeIcon}>
-            <Image
-              source={
-                showPassword
-                  ? require('../../assets/Icon/eye.png')
-                  : require('../../assets/Icon/eye-slash.png')
-              }
-              style={styles.iconImage}
-            />
+            style={styles.button}
+            onPress={handleUpdateProfile}
+            disabled={isLoading}>
+            <Text style={styles.buttonText}>Save Changes</Text>
           </TouchableOpacity>
-          <TouchableOpacity
-            onPress={() => toggleEditMode('password')}
-            style={styles.editIcon}>
-            <Image
-              source={require('../../assets/Icon/Edit.png')}
-              style={styles.iconImage}
-            />
-          </TouchableOpacity>
-        </View>
-      </View>
+        )}
 
-      {/* Mobile Field */}
-      <View style={styles.fieldContainer}>
-        <Text style={styles.label}>Mobile</Text>
-        <View style={styles.inputContainer}>
-          <TextInput
-            style={[styles.input, editMode.mobile && styles.editInput]} // Change background color only for this field
-            value={users.mobile}
-            onChangeText={text => setUser({...users, mobile: text})}
-            editable={editMode.mobile}
-            keyboardType="phone-pad"
-          />
-          <TouchableOpacity
-            onPress={() => toggleEditMode('mobile')}
-            style={styles.editIcon}>
-            <Image
-              source={require('../../assets/Icon/Edit.png')}
-              style={styles.iconImage}
-            />
-          </TouchableOpacity>
-        </View>
-      </View>
-
-      {/* Location Field */}
-      <View style={styles.fieldContainer}>
-        <Text style={styles.label}>Location</Text>
-        <View style={styles.inputContainer}>
-          <TextInput
-            style={[
-              styles.input,
-              styles.locationInput,
-              editMode.location && styles.editInput,
-            ]}
-            value={users.location}
-            onChangeText={text => setUser({...users, location: text})}
-            editable={editMode.location}
-            multiline={true}
-            numberOfLines={4}
-          />
-          <TouchableOpacity
-            onPress={() => toggleEditMode('location')}
-            style={styles.editIcon}>
-            <Image
-              source={require('../../assets/Icon/Edit.png')}
-              style={styles.iconImage}
-            />
-          </TouchableOpacity>
-        </View>
-      </View>
-
-      {/* Save Profile Button (Visible if any field is in edit mode) */}
-      {(editMode.name ||
-        editMode.email ||
-        editMode.password ||
-        editMode.mobile ||
-        editMode.location) && (
         <TouchableOpacity
-          style={styles.saveButton}
-          onPress={handleUpdateProfile}>
-          <Text style={styles.saveButtonText}>Save Changes</Text>
+          style={[styles.button, styles.logoutButton]}
+          onPress={() => setShowLogoutModal(true)}
+          disabled={isLoading}>
+          <Text style={styles.buttonText}>Log Out</Text>
         </TouchableOpacity>
-      )}
-
-      {/* Logout Button */}
-      <TouchableOpacity
-        style={styles.logoutButton}
-        onPress={() => setModalVisible(true)}>
-        <Text style={styles.logoutButtonText}>Log Out</Text>
-      </TouchableOpacity>
+      </ScrollView>
 
       <Modal
         animationType="fade"
-        transparent={true}
-        visible={modalVisible}
-        onRequestClose={() => setModalVisible(false)}>
+        transparent
+        visible={showLogoutModal}
+        onRequestClose={() => setShowLogoutModal(false)}>
         <View style={styles.modalContainer}>
           <View style={styles.modalContent}>
             <Text style={styles.modalText}>
@@ -280,141 +403,63 @@ try {
             </Text>
             <View style={styles.modalButtons}>
               <TouchableOpacity
-                style={styles.whiteButton}
-                onPress={() => setModalVisible(false)}>
-                <Text style={styles.textBlack}>Cancel</Text>
+                style={[styles.modalButton, styles.cancelButton]}
+                onPress={() => setShowLogoutModal(false)}>
+                <Text style={styles.cancelButtonText}>Cancel</Text>
               </TouchableOpacity>
               <TouchableOpacity
-                style={styles.redButton}
-                onPress={confirmLogout}
-                disabled={isLoggingOut}>
-                <Text style={styles.textWhite}>Log out</Text>
+                style={[styles.modalButton, styles.confirmButton]}
+                onPress={handleLogout}
+                disabled={isLoading}>
+                <Text style={styles.buttonText}>Log out</Text>
               </TouchableOpacity>
             </View>
           </View>
         </View>
       </Modal>
-      <Modal
-        animationType="fade"
-        transparent={true}
-        visible={loadingModalVisible}
-        onRequestClose={() => setLoadingModalVisible(false)}>
-        <View style={styles.loadingModalContainer}>
-          <ActivityIndicator size="large" color="#ffffff" />
-          <Text style={styles.loadingText}>Logging out...</Text>
-        </View>
-      </Modal>
-    </ScrollView>
+
+      <Toast />
+    </>
   );
 };
 
 const styles = StyleSheet.create({
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#f5f5f5',
+  },
   scrollContainer: {
     flexGrow: 1,
     padding: 20,
     backgroundColor: '#f5f5f5',
   },
-  loadingModalContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.5)', // Dim background
-  },
-  loadingText: {
-    marginTop: 10,
-    fontSize: 18,
-    color: 'white',
-    textAlign: 'center',
-  },
   profileImageContainer: {
-    position: 'relative',
     alignSelf: 'center',
     marginBottom: 20,
-  },
-  locationInput: {
-    maxHeight: 100, // Set a maximum height for the location input
   },
   profileImage: {
     width: 150,
     height: 200,
     borderRadius: 50,
   },
-  modalContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
-  },
-
-  modalContent: {
-    width: 300,
-    padding: 20,
-    backgroundColor: 'white',
-    borderRadius: 10,
-    alignItems: 'center',
-  },
-  redButton: {
-    flex: 1,
-    padding: 10,
-    margin: 5,
-    backgroundColor: '#cc0e74',
-    borderRadius: 5,
-    alignItems: 'center',
-  },
-  textBlack: {
-    color: 'black',
-  },
-  textWhite: {
-    color: 'white',
-    fontWeight: 'bold',
-  },
-  whiteButton: {
-    flex: 1,
-    padding: 10,
-    margin: 5,
-    backgroundColor: '#FFF',
-    borderRadius: 5,
-    alignItems: 'center',
-    borderColor: 'black',
-    borderWidth: 1,
-  },
-  modalText: {
-    marginBottom: 10,
-    fontSize: 18,
-    textAlign: 'center',
-  },
-  modalButtons: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    width: '100%',
-  },
-  profileEditIcon: {
-    position: 'absolute',
-    right: 4,
-    bottom: 18,
-    backgroundColor: '#fff',
-    borderRadius: 20,
-    padding: 5,
-    elevation: 4, // Shadow for Android
-    shadowColor: '#000', // Shadow for iOS
-    shadowOffset: {width: 0, height: 2},
-    shadowOpacity: 0.2,
-    shadowRadius: 1,
-  },
-  iconImage: {
-    width: 20,
-    height: 20,
-    alignContent: 'center',
-  },
   fieldContainer: {
     marginBottom: 10,
     backgroundColor: '#fff',
     borderRadius: 10,
     padding: 8,
+    elevation: 2,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.2,
+    shadowRadius: 2,
   },
   label: {
     fontSize: 14,
     color: '#777',
+    marginBottom: 4,
+    fontWeight: '500',
   },
   inputContainer: {
     flexDirection: 'row',
@@ -424,42 +469,94 @@ const styles = StyleSheet.create({
     flex: 1,
     fontSize: 16,
     color: '#333',
-    borderRadius: 5,
-    borderColor: '#ccc',
+    padding: 8,
+    borderRadius: 4,
+  },
+  multilineInput: {
+    maxHeight: 100,
+    textAlignVertical: 'top',
   },
   editInput: {
-    backgroundColor: '#e3f2fd', // Light blue background in edit mode
+    backgroundColor: '#e3f2fd',
   },
-  editIcon: {
-    marginLeft: 10,
+  iconButton: {
+    padding: 8,
+    marginLeft: 8,
   },
-  eyeIcon: {
-    marginLeft: 10,
+  icon: {
+    width: 20,
+    height: 20,
   },
-  saveButton: {
-    marginTop: 20,
+  button: {
+    marginTop: 16,
     padding: 15,
     backgroundColor: '#4f772d',
     borderRadius: 10,
     alignItems: 'center',
+    elevation: 3,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
   },
-  saveButtonText: {
+  buttonText: {
     color: '#fff',
     fontSize: 16,
     fontWeight: 'bold',
   },
   logoutButton: {
-    marginTop: 10,
-    marginBottom: 20,
-    padding: 15,
     backgroundColor: '#cc0e74',
+    marginTop: 16,
+    marginBottom: 20,
+  },
+  modalContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  },
+  modalContent: {
+    width: 300,
+    padding: 20,
+    backgroundColor: 'white',
     borderRadius: 10,
     alignItems: 'center',
+    elevation: 5,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
   },
-  logoutButtonText: {
-    color: '#fff',
+  modalText: {
+    marginBottom: 20,
+    fontSize: 18,
+    textAlign: 'center',
+    color: '#333',
+  },
+  modalButtons: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    width: '100%',
+  },
+  modalButton: {
+    flex: 1,
+    padding: 12,
+    margin: 5,
+    borderRadius: 5,
+    alignItems: 'center',
+  },
+  cancelButton: {
+    backgroundColor: '#fff',
+    borderWidth: 1,
+    borderColor: '#000',
+  },
+  confirmButton: {
+    backgroundColor: '#cc0e74',
+  },
+  cancelButtonText: {
+    color: '#000',
     fontSize: 16,
-    fontWeight: 'bold',
+    fontWeight: '500',
   },
 });
 
