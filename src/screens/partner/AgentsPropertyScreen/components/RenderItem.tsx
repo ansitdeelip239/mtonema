@@ -3,33 +3,43 @@ import {StyleSheet, Text, View} from 'react-native';
 import {AgentData} from '../../../../types';
 
 const renderItem = ({item}: {item: AgentData}) => {
-  const formatCurrency = (value: string) => {
-    const num = parseFloat(value.replace(/,/g, ''));
-    if (isNaN(num)) {
-      return value;
+  const formatCurrency = (value: string | null | undefined) => {
+    if (!value) {
+      return 'N/A';
     }
 
-    if (num >= 10000000) {
-      return `₹${(num / 10000000).toFixed(2)} Cr`;
-    } else if (num >= 100000) {
-      return `₹${(num / 100000).toFixed(2)} Lacs`;
-    } else if (num >= 1000) {
-      return `₹${(num / 1000).toFixed(2)} K`;
-    } else {
-      return `₹${num.toFixed(2)}`;
+    try {
+      const num = parseFloat(value.replace(/,/g, ''));
+      if (isNaN(num)) {
+        return value;
+      }
+      if (num >= 10000000) {
+        return `₹${(num / 10000000).toFixed(2)} Cr`;
+      } else if (num >= 100000) {
+        return `₹${(num / 100000).toFixed(2)} Lacs`;
+      } else if (num >= 1000) {
+        return `₹${(num / 1000).toFixed(2)} K`;
+      } else {
+        return `₹${num.toFixed(2)}`;
+      }
+    } catch (error) {
+      console.error('Currency formatting error:', error);
+      return value || '';
     }
   };
 
   return (
     <View style={styles.card}>
-      <Text style={styles.name}>{item.AgentName}</Text>
+      <Text style={styles.name}>{item.AgentName || 'N/A'}</Text>
       <View style={styles.row}>
         <Text style={styles.label}>BHK Type:</Text>
-        <Text style={styles.value}>{item.FlatSize.MasterDetailName}</Text>
+        <Text style={styles.value}>
+          {item.FlatSize?.MasterDetailName || 'Not Specified'}
+        </Text>
       </View>
       <View style={styles.row}>
         <Text style={styles.label}>Location:</Text>
-        <Text style={styles.value}>{item.PropertyLocation}</Text>
+        <Text style={styles.value}>{item.PropertyLocation || 'N/A'}</Text>
       </View>
       <View style={styles.row}>
         <Text style={styles.label}>Demand Price:</Text>
@@ -43,7 +53,13 @@ const renderItem = ({item}: {item: AgentData}) => {
       </View>
       <View style={styles.row}>
         <Text style={styles.label}>Negotiable:</Text>
-        <Text style={styles.value}>{item.Negotiable ? 'Yes' : 'No'}</Text>
+        <Text style={styles.value}>
+          {item.Negotiable !== undefined
+            ? item.Negotiable
+              ? 'Yes'
+              : 'No'
+            : 'N/A'}
+        </Text>
       </View>
       {item.PropertyNotes && (
         <View style={styles.notes}>

@@ -64,10 +64,14 @@ export default function AgentDataScreen() {
         const pagingInfo: PagingModel =
           response?.data?.responsePagingModel ?? DEFAULT_PAGING_MODEL;
 
+        const filteredData = newData.filter(
+          (item: any) => item !== null && item !== undefined,
+        );
+
         if (shouldRefresh) {
-          setAgentData(newData);
+          setAgentData(filteredData);
         } else {
-          setAgentData(prev => [...prev, ...newData]);
+          setAgentData(prev => [...prev, ...filteredData]);
         }
 
         const hasMore = Boolean(
@@ -132,7 +136,9 @@ export default function AgentDataScreen() {
       <FlatList
         data={agentData}
         renderItem={renderItem}
-        keyExtractor={item => item.Id.toString()}
+        keyExtractor={(item, index) =>
+          `${item.Id?.toString() || 'item'}-${index}`
+        }
         contentContainerStyle={styles.listContainer}
         refreshControl={
           <RefreshControl refreshing={isRefreshing} onRefresh={handleRefresh} />
