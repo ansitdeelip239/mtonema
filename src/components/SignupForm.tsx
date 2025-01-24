@@ -4,6 +4,7 @@ import {
   StyleSheet,
   KeyboardAvoidingView,
   Platform,
+  Image,
 } from 'react-native';
 import {TextInput, Button, HelperText} from 'react-native-paper';
 import {
@@ -46,8 +47,8 @@ const SignupForm = ({
         processedValue = '+91';
       } else {
         processedValue = value
-          .slice(4)
-          .replace(/[^0-9]/g, '')
+          .slice(3)
+          .replace(/[^0-9]/g,'')
           .slice(0, 10);
         processedValue = `+91${processedValue}`;
       }
@@ -68,7 +69,7 @@ const SignupForm = ({
         case 'Name':
           errorMessage = validateName(processedValue)
             ? ''
-            : 'Name must contain only letters and spaces';
+            : 'Name must contain only letters';
           break;
         case 'Email':
           errorMessage = validateEmail(processedValue)
@@ -79,11 +80,6 @@ const SignupForm = ({
           errorMessage = validatePhone(processedValue)
             ? ''
             : 'Invalid phone number (10 digits required)';
-          break;
-        case 'Location':
-          errorMessage = validateLocation(processedValue)
-            ? ''
-            : 'Please enter a valid location';
           break;
       }
     }
@@ -159,7 +155,11 @@ const SignupForm = ({
           right={
             sellerData.Name !== '' && (
               <TextInput.Icon
-                icon="close"
+                // eslint-disable-next-line react/no-unstable-nested-components
+                icon={()=>(
+                  <Image style={styles.crossicon}
+                  source={require('../assets/Icon/crossicon.png')}/>
+                )}
                 onPress={() => clearInputField('Name')}
               />
             )
@@ -182,9 +182,14 @@ const SignupForm = ({
           right={
             sellerData.Email !== '' && (
               <TextInput.Icon
-                icon="close"
-                onPress={() => clearInputField('Email')}
-              />
+  // eslint-disable-next-line react/no-unstable-nested-components
+  icon={()=> (
+    <Image style={styles.crossicon}
+      source={require('../assets/Icon/crossicon.png')}
+    />
+  )}
+  onPress={() => clearInputField('Email')}
+/>
             )
           }
         />
@@ -214,7 +219,12 @@ const SignupForm = ({
           right={
             sellerData.Phone !== '+91' && (
               <TextInput.Icon
-                icon="close"
+              // eslint-disable-next-line react/no-unstable-nested-components
+              icon={()=> (
+                <Image style={styles.crossicon}
+                  source={require('../assets/Icon/crossicon.png')}
+                />
+              )}
                 onPress={() => clearInputField('Phone')}
               />
             )
@@ -228,6 +238,7 @@ const SignupForm = ({
       {/* Button Section */}
       <View style={styles.buttonContainer}>
         <Button
+          labelStyle={styles.buttonLabel}
           mode="contained"
           onPress={onSignUp}
           loading={loading}
@@ -235,7 +246,8 @@ const SignupForm = ({
           Sign Up
         </Button>
         <Button
-          mode="outlined"
+        labelStyle={styles.buttonLabel}
+          mode="contained"
           onPress={() => navigationRef.current?.goBack()}
           style={styles.button}>
           Back
@@ -251,6 +263,14 @@ const styles = StyleSheet.create({
     padding: 15,
     width: '100%',
   },
+  buttonLabel:{
+    fontSize: 18, // Increase font size
+    fontWeight: 'bold', // Apply font weight
+  },
+  crossicon:{
+    width: 24,
+    height: 24,
+  },
   inputGroup: {
     marginBottom: 10,
   },
@@ -263,8 +283,10 @@ const styles = StyleSheet.create({
   },
   button: {
     justifyContent: 'center',
+    backgroundColor:'#cc0e74',
     width: '100%',
     height:'30%',
+    fontWeight:'bold',
   },
 });
 

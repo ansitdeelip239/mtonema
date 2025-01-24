@@ -28,7 +28,7 @@ export const validatePhone = (phone: string | undefined | null): boolean => {
   if (trimmedPhone.length === 0) {
     return false;
   }
-  const phoneRegex = /^\+91-\d{10}$/;
+  const phoneRegex = /^\+91\d{10}$/;
   return phoneRegex.test(trimmedPhone);
 };
 

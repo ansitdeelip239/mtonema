@@ -1,17 +1,12 @@
 import React, {useState, useCallback} from 'react';
-import {
-  View,
-  FlatList,
-  Keyboard,
-  StyleSheet,
-} from 'react-native';
-import {
-  TextInput,
-  Text,
-} from 'react-native-paper';
+import {View, FlatList, Keyboard, StyleSheet, Image} from 'react-native';
+import {TextInput, Text} from 'react-native-paper';
 import BuyerService from '../services/BuyerService';
 
-const LocationComponent = ({onLocationChange} : { onLocationChange: (value:string) => void
+const LocationComponent = ({
+  onLocationChange,
+}: {
+  onLocationChange: (value: string) => void;
 }) => {
   const [isSelectingSuggestion, setIsSelectingSuggestion] = useState(false);
   const [locationQuery, setLocationQuery] = useState('');
@@ -54,7 +49,7 @@ const LocationComponent = ({onLocationChange} : { onLocationChange: (value:strin
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const debouncedSearchLocationSuggestion = useCallback(
-    debounce(searchLocationSuggestion, 300),
+    debounce(searchLocationSuggestion, 200),
     [searchLocationSuggestion],
   );
 
@@ -94,7 +89,6 @@ const LocationComponent = ({onLocationChange} : { onLocationChange: (value:strin
           value={locationQuery}
           onChangeText={text => handleInputChange(text)}
           mode="outlined"
-          placeholder="Search Location"
           onFocus={() => {
             if (locationQuery.length > 0) {
               setShowSuggestions(true);
@@ -110,7 +104,13 @@ const LocationComponent = ({onLocationChange} : { onLocationChange: (value:strin
           right={
             locationQuery !== '' && (
               <TextInput.Icon
-                icon="close"
+                // eslint-disable-next-line react/no-unstable-nested-components
+                icon={() => (
+                  <Image
+                    style={styles.crossicon}
+                    source={require('../assets/Icon/crossicon.png')}
+                  />
+                )}
                 onPress={clearInputField}
               />
             )
@@ -120,10 +120,11 @@ const LocationComponent = ({onLocationChange} : { onLocationChange: (value:strin
         {showSuggestions &&
           locationQuery.length > 0 &&
           locationSuggestions.length > 0 && (
-            <View style={[
-              styles.suggestionsContainer,
-              locationSuggestions.length > 5 && styles.scrollableSuggestions,
-            ]}>
+            <View
+              style={[
+                styles.suggestionsContainer,
+                locationSuggestions.length > 5 && styles.scrollableSuggestions,
+              ]}>
               <FlatList
                 keyboardShouldPersistTaps="always"
                 data={locationSuggestions}
@@ -135,8 +136,7 @@ const LocationComponent = ({onLocationChange} : { onLocationChange: (value:strin
                         setIsSelectingSuggestion(true);
                         handleSuggestionSelect(item);
                         setIsSelectingSuggestion(false);
-                      }}
-                    >
+                      }}>
                       {item}
                     </Text>
                   </View>
@@ -152,9 +152,10 @@ const LocationComponent = ({onLocationChange} : { onLocationChange: (value:strin
 const styles = StyleSheet.create({
   container: {
     backgroundColor: '#fff',
+    marginBottom: 10,
   },
   txtpadding: {
-    marginBottom: 30,
+    marginBottom: 28,
   },
   suggestionsContainer: {
     borderWidth: 1,
@@ -164,12 +165,16 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFFFFF',
   },
   scrollableSuggestions: {
-    maxHeight: 200, // Adjust this value as needed
+    maxHeight: 200,
   },
   suggestionItem: {
     padding: 10,
     borderBottomWidth: 1,
     borderBottomColor: '#ccc',
+  },
+  crossicon: {
+    width: 24,
+    height: 24,
   },
 });
 
