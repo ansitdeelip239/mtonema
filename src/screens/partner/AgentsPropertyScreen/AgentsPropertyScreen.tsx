@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useCallback, useMemo} from 'react';
+import React, {useState, useEffect, useCallback, useMemo, useRef} from 'react';
 import {View, StyleSheet, FlatList, RefreshControl} from 'react-native';
 import PartnerService from '../../../services/PartnerService';
 import {useAuth} from '../../../hooks/useAuth';
@@ -22,6 +22,9 @@ export default function AgentDataScreen() {
   const {user} = useAuth();
   const PAGE_SIZE = 10;
 
+  const isInitialRender = useRef(true);
+  const lastAppliedFilters = useRef<FilterValues>(filters);
+
   const handleSearch = (text: string) => {
     setSearchQuery(text);
     fetchAgentData(1, true);
@@ -29,7 +32,6 @@ export default function AgentDataScreen() {
 
   const handleFilter = (newFilters: FilterValues) => {
     setFilters(newFilters);
-    fetchAgentData(1, true);
   };
 
   const DEFAULT_PAGING_MODEL: PagingModel = useMemo(
@@ -58,7 +60,6 @@ export default function AgentDataScreen() {
           filters.bhkType || '',
         );
 
-        // Safe null checks for response data
         const newData = response?.data?.AgentDataModel ?? [];
         const pagingInfo: PagingModel =
           response?.data?.responsePagingModel ?? DEFAULT_PAGING_MODEL;
@@ -69,7 +70,6 @@ export default function AgentDataScreen() {
           setAgentData(prev => [...prev, ...newData]);
         }
 
-        // Safe checks for paging info
         const hasMore = Boolean(
           pagingInfo?.CurrentPage &&
             pagingInfo?.TotalPage &&
@@ -93,6 +93,20 @@ export default function AgentDataScreen() {
   );
 
   useEffect(() => {
+    if (isInitialRender.current) {
+      isInitialRender.current = false;
+      return;
+    }
+
+    if (
+      JSON.stringify(lastAppliedFilters.current) !== JSON.stringify(filters)
+    ) {
+      lastAppliedFilters.current = filters;
+      fetchAgentData(1, true);
+    }
+  }, [filters, fetchAgentData]);
+
+  useEffect(() => {
     fetchAgentData(1, true);
   }, [user?.Email, fetchAgentData]);
 
@@ -110,7 +124,11 @@ export default function AgentDataScreen() {
 
   return (
     <View style={styles.container}>
-      <SearchHeader initialFilters={filters} onSearch={handleSearch} onFilter={handleFilter} />
+      <SearchHeader
+        initialFilters={filters}
+        onSearch={handleSearch}
+        onFilter={handleFilter}
+      />
       <FlatList
         data={agentData}
         renderItem={renderItem}

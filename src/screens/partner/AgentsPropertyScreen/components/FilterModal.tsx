@@ -1,10 +1,9 @@
-import React, {useCallback, useEffect, useMemo} from 'react';
-import {useState} from 'react';
-import {FilterValues} from '../../../../types';
+import React, {useCallback, useEffect, useMemo, useState} from 'react';
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import Colors from '../../../../constants/Colors';
 import {useMaster} from '../../../../context/MasterProvider';
 import FilterOption from './FilterOption';
+import {FilterValues} from '../../../../types';
 
 const FilterModal = ({
   initialFilters,
@@ -28,10 +27,21 @@ const FilterModal = ({
   );
   const bhkTypes = useMemo(() => masterData?.BhkType || [], [masterData]);
 
+  // Track if filters have changed
+  const haveFiltersChanged = useMemo(() => {
+    return (
+      filters.propertyLocation !== initialFilters.propertyLocation ||
+      filters.propertyType !== initialFilters.propertyType ||
+      filters.bhkType !== initialFilters.bhkType
+    );
+  }, [filters, initialFilters]);
+
   const handleApplyFilter = useCallback(() => {
-    onFilter(filters);
+    if (haveFiltersChanged) {
+      onFilter(filters);
+    }
     onClose();
-  }, [filters, onFilter, onClose]);
+  }, [filters, onFilter, onClose, haveFiltersChanged]);
 
   const handleSelect = useCallback((key: keyof FilterValues, value: string) => {
     setFilters(prev => ({
