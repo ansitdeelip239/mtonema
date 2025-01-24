@@ -2,9 +2,9 @@ import React, {useCallback, useEffect, useMemo} from 'react';
 import {useState} from 'react';
 import {FilterValues} from '../../../../types';
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
-import BubbleSelect from './BubbleSelect';
 import Colors from '../../../../constants/Colors';
 import {useMaster} from '../../../../context/MasterProvider';
+import FilterOption from './FilterOption';
 
 const FilterModal = ({
   initialFilters,
@@ -16,7 +16,6 @@ const FilterModal = ({
   onClose: () => void;
 }) => {
   const [filters, setFilters] = useState<FilterValues>(initialFilters);
-
   const {masterData} = useMaster();
 
   const locations = useMemo(
@@ -48,19 +47,19 @@ const FilterModal = ({
   return (
     <View style={styles.modalContent}>
       <Text style={styles.modalTitle}>Filter Properties</Text>
-      <BubbleSelect
+      <FilterOption
         label="Location"
         options={locations}
         selectedValue={filters.propertyLocation}
         onSelect={value => handleSelect('propertyLocation', value)}
       />
-      <BubbleSelect
+      <FilterOption
         label="Property Type"
         options={propertyTypes}
         selectedValue={filters.propertyType}
         onSelect={value => handleSelect('propertyType', value)}
       />
-      <BubbleSelect
+      <FilterOption
         label="BHK Type"
         options={bhkTypes}
         selectedValue={filters.bhkType}
