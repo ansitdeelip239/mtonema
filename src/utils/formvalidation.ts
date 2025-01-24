@@ -19,18 +19,22 @@ export const validateEmail = (email: string | undefined | null): boolean => {
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   return emailRegex.test(trimmedEmail);
 };
-
 export const validatePhone = (phone: string | undefined | null): boolean => {
   if (!phone) {
-    return false;
+    return false; // Return false if phone is undefined or null
   }
-  const trimmedPhone = phone.trim();
+
+  const trimmedPhone = phone.trim(); // Remove leading/trailing spaces
   if (trimmedPhone.length === 0) {
-    return false;
+    return false; // Return false if phone is empty
   }
-  const phoneRegex = /^\+91\d{10}$/;
-  return phoneRegex.test(trimmedPhone);
+
+  const phoneRegex = /^\d{10}$/; // Regex to match exactly 10 digits
+  return phoneRegex.test(trimmedPhone); // Test the phone number against the regex
 };
+
+
+
 
 export const validateLocation = (
   location: string | undefined | null,

@@ -5,6 +5,7 @@ import {
   KeyboardAvoidingView,
   Platform,
   Image,
+  Text,
 } from 'react-native';
 import {TextInput, Button, HelperText} from 'react-native-paper';
 import {
@@ -27,7 +28,7 @@ const SignupForm = ({
   const [sellerData, setSellerData] = useState({
     Name: '',
     Email: '',
-    Phone: '+91',
+    Phone: '',
     Location: '',
   });
 
@@ -43,16 +44,10 @@ const SignupForm = ({
 
     // Special handling for Phone input
     if (key === 'Phone') {
-      if (!value.startsWith('+91')) {
-        processedValue = '+91';
-      } else {
-        processedValue = value
-          .slice(3)
-          .replace(/[^0-9]/g,'')
-          .slice(0, 10);
-        processedValue = `+91${processedValue}`;
-      }
+      // Remove non-numeric characters and limit to 10 digits
+      processedValue = value.replace(/[^0-9]/g, '').slice(0, 10);
     }
+
 
     // Update seller data
     setSellerData(prev => ({...prev, [key]: processedValue}));
@@ -61,7 +56,7 @@ const SignupForm = ({
     let errorMessage = '';
     if (
       processedValue.trim() === '' ||
-      (key === 'Phone' && processedValue === '+91')
+      (key === 'Phone' && processedValue === '')
     ) {
       errorMessage = 'This field is required';
     } else {
@@ -76,11 +71,11 @@ const SignupForm = ({
             ? ''
             : 'Invalid email address';
           break;
-        case 'Phone':
-          errorMessage = validatePhone(processedValue)
-            ? ''
-            : 'Invalid phone number (10 digits required)';
-          break;
+          case 'Phone':
+        errorMessage = processedValue.length === 10
+          ? ''
+          : 'Phone number must be 10 digits';
+        break;
       }
     }
 
@@ -89,8 +84,8 @@ const SignupForm = ({
   };
 
   const clearInputField = (key: string) => {
-    setSellerData(prev => ({...prev, [key]: key === 'Phone' ? '+91' : ''}));
-    setErrors(prev => ({...prev, [key]: ''}));
+    setSellerData(prev => ({ ...prev, [key]: '' }));
+    setErrors(prev => ({ ...prev, [key]: '' }));
   };
 
   const handleLocationChange = (location: string) => {
@@ -110,8 +105,8 @@ const SignupForm = ({
         : !validateEmail(sellerData.Email)
         ? 'Invalid email address'
         : '',
-      Phone:
-        sellerData.Phone === '+91'
+        Phone:
+        sellerData.Phone === ''
           ? 'Phone is required'
           : !validatePhone(sellerData.Phone)
           ? 'Invalid phone number'
@@ -128,12 +123,14 @@ const SignupForm = ({
 
     // Check if there are any errors
     const hasErrors = Object.values(newErrors).some(error => error !== '');
-    if (hasErrors) {return;}
+    if (hasErrors) {
+      return;
+    }
 
     // Prepare data for submission
     const formDataToSubmit = {
       ...sellerData,
-      Phone: sellerData.Phone.replace('+91', ''),
+      Phone: sellerData.Phone,
     };
 
     // Submit form
@@ -152,13 +149,24 @@ const SignupForm = ({
           onChangeText={text => handleInputChange('Name', text)}
           mode="outlined"
           error={!!errors.Name}
+          theme={{
+            colors: {
+              primary: '#cc0e74', // Label color when focused
+              onSurfaceVariant: 'gray', // Label color when not focused
+              background: '#f0f0f0', // Background color of the input field
+              text: 'black', // Text color of the input field
+              error: 'red', // Error message and error state color
+            },
+          }}
           right={
             sellerData.Name !== '' && (
               <TextInput.Icon
                 // eslint-disable-next-line react/no-unstable-nested-components
-                icon={()=>(
-                  <Image style={styles.crossicon}
-                  source={require('../assets/Icon/crossicon.png')}/>
+                icon={() => (
+                  <Image
+                    style={styles.crossicon}
+                    source={require('../assets/Icon/crossicon.png')}
+                  />
                 )}
                 onPress={() => clearInputField('Name')}
               />
@@ -179,17 +187,27 @@ const SignupForm = ({
           mode="outlined"
           keyboardType="email-address"
           error={!!errors.Email}
+          theme={{
+            colors: {
+              primary: '#cc0e74', // Label color when focused
+              onSurfaceVariant: 'gray', // Label color when not focused
+              background: '#f0f0f0', // Background color of the input field
+              text: 'black', // Text color of the input field
+              error: 'red', // Error message and error state color
+            },
+          }}
           right={
             sellerData.Email !== '' && (
               <TextInput.Icon
-  // eslint-disable-next-line react/no-unstable-nested-components
-  icon={()=> (
-    <Image style={styles.crossicon}
-      source={require('../assets/Icon/crossicon.png')}
-    />
-  )}
-  onPress={() => clearInputField('Email')}
-/>
+                // eslint-disable-next-line react/no-unstable-nested-components
+                icon={() => (
+                  <Image
+                    style={styles.crossicon}
+                    source={require('../assets/Icon/crossicon.png')}
+                  />
+                )}
+                onPress={() => clearInputField('Email')}
+              />
             )
           }
         />
@@ -206,34 +224,54 @@ const SignupForm = ({
         </HelperText>
       )}
 
-      {/* Phone Input */}
-      <View style={styles.inputGroup}>
-        <TextInput
-          label="Phone"
-          value={sellerData.Phone}
-          onChangeText={text => handleInputChange('Phone', text)}
-          mode="outlined"
-          keyboardType="number-pad"
-          maxLength={14}
-          error={!!errors.Phone}
-          right={
-            sellerData.Phone !== '+91' && (
-              <TextInput.Icon
-              // eslint-disable-next-line react/no-unstable-nested-components
-              icon={()=> (
-                <Image style={styles.crossicon}
-                  source={require('../assets/Icon/crossicon.png')}
-                />
-              )}
-                onPress={() => clearInputField('Phone')}
+<View style={styles.inputGroup}>
+  <View style={styles.phoneInputContainer}>
+    <View style={styles.flagContainer}>
+      <Image
+        source={require('../assets/Images/IndianFlag.png')}
+        style={styles.flagImage}
+      />
+      <Text style={styles.countryCodeText}>+91</Text>
+    </View>
+    <TextInput
+      label="Mobile"
+      value={sellerData.Phone}
+      onChangeText={text => handleInputChange('Phone', text)}
+      mode="outlined"
+      keyboardType="number-pad"
+      maxLength={10}
+      error={!!errors.Phone}
+      style={styles.phoneInput}
+      placeholder="10 Digit Mobile Number" // Placeholder text
+      theme={{
+        colors: {
+          primary: '#cc0e74', // Label color when focused
+          onSurfaceVariant: 'gray', // Label color when not focused
+          background: '#f0f0f0', // Background color of the input field
+          text: 'black', // Text color of the input field
+          error: 'red', // Error message and error state color
+        },
+      }}
+      right={
+        sellerData.Phone.length > 0 && (
+          <TextInput.Icon
+            // eslint-disable-next-line react/no-unstable-nested-components
+            icon={() => (
+              <Image
+                style={styles.crossicon}
+                source={require('../assets/Icon/crossicon.png')}
               />
-            )
-          }
-        />
-        <HelperText type="error" visible={!!errors.Phone}>
-          {errors.Phone}
-        </HelperText>
-      </View>
+            )}
+            onPress={() => clearInputField('Phone')}
+          />
+        )
+      }
+    />
+  </View>
+  <HelperText type="error" visible={!!errors.Phone}>
+    {errors.Phone}
+  </HelperText>
+</View>
 
       {/* Button Section */}
       <View style={styles.buttonContainer}>
@@ -246,7 +284,7 @@ const SignupForm = ({
           Sign Up
         </Button>
         <Button
-        labelStyle={styles.buttonLabel}
+          labelStyle={styles.buttonLabel}
           mode="contained"
           onPress={() => navigationRef.current?.goBack()}
           style={styles.button}>
@@ -263,11 +301,11 @@ const styles = StyleSheet.create({
     padding: 15,
     width: '100%',
   },
-  buttonLabel:{
+  buttonLabel: {
     fontSize: 18, // Increase font size
     fontWeight: 'bold', // Apply font weight
   },
-  crossicon:{
+  crossicon: {
     width: 24,
     height: 24,
   },
@@ -277,16 +315,47 @@ const styles = StyleSheet.create({
   buttonContainer: {
     marginTop: 5,
     gap: 15,
-    padding:10,
+    padding: 10,
     height: 200,
     width: '100%',
   },
   button: {
     justifyContent: 'center',
-    backgroundColor:'#cc0e74',
+    backgroundColor: '#cc0e74',
     width: '100%',
-    height:'30%',
-    fontWeight:'bold',
+    height: '30%',
+    fontWeight: 'bold',
+  },
+  phoneInputContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    position: 'relative',
+  },
+  flagContainer: {
+    position: 'absolute',
+    left: 10,
+    top: 21,
+    flexDirection: 'row',
+    alignItems: 'center',
+    zIndex: 1,
+  },
+  flagImage: {
+    width: 20,
+    height: 16,
+    marginRight: 5,
+  },
+  countryCodeText: {
+    fontSize: 16,
+    color: 'black',
+  },
+  phoneInput: {
+    flex: 1,
+    backgroundColor: '#f0f0f0',
+    paddingLeft: 52, // Adjust to make space for flag and country code
+  },
+  crossIcon: {
+    width: 20,
+    height: 20,
   },
 });
 

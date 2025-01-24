@@ -101,6 +101,15 @@ const LocationComponent = ({
               }, 200);
             }
           }}
+          theme={{
+            colors: {
+              primary: '#cc0e74', // Label color when focused
+              onSurfaceVariant: 'gray', // Label color when not focused
+              background: '#f0f0f0', // Background color of the input field
+              text: 'black', // Text color of the input field
+              error: 'red', // Error message and error state color
+            },
+          }}
           right={
             locationQuery !== '' && (
               <TextInput.Icon
