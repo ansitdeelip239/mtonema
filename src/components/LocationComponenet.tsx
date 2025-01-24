@@ -1,15 +1,15 @@
 import React, {useState, useCallback} from 'react';
 import {
   View,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  StyleSheet,
   FlatList,
   Keyboard,
+  StyleSheet,
 } from 'react-native';
+import {
+  TextInput,
+  Text,
+} from 'react-native-paper';
 import BuyerService from '../services/BuyerService';
-import Colors from '../constants/Colors';
 
 const LocationComponent = ({onLocationChange} : { onLocationChange: (value:string) => void
 }) => {
@@ -17,7 +17,6 @@ const LocationComponent = ({onLocationChange} : { onLocationChange: (value:strin
   const [locationQuery, setLocationQuery] = useState('');
   const [locationSuggestions, setLocationSuggestions] = useState<string[]>([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
-  const [focusedInput, setFocusedInput] = useState<string | null>(null);
 
   // Debounce function
   const debounce = (func: (...args: any[]) => void, wait: number) => {
@@ -74,6 +73,7 @@ const LocationComponent = ({onLocationChange} : { onLocationChange: (value:strin
   // Handle location suggestion selection
   const handleSuggestionSelect = (suggestion: string) => {
     setLocationQuery(suggestion); // Update the search query
+    onLocationChange(suggestion); // Notify parent component
     setShowSuggestions(false); // Hide the dropdown
     Keyboard.dismiss();
   };
@@ -81,66 +81,65 @@ const LocationComponent = ({onLocationChange} : { onLocationChange: (value:strin
   // Clear input field
   const clearInputField = () => {
     setLocationQuery('');
+    onLocationChange('');
     setLocationSuggestions([]);
     setShowSuggestions(false);
   };
 
   return (
     <View style={styles.container}>
-      {/* Location Input */}
       <View style={styles.txtpadding}>
-        {/* <Text style={[styles.label]}>Location</Text> */}
-        <View style={styles.inputContainer}>
-          <TextInput
-            style={[
-              styles.input,
-              focusedInput === 'Location' && styles.inputFocused,
-            ]}
-            value={locationQuery}
-            onChangeText={text => handleInputChange(text)}
-            placeholder="Search Location"
-            placeholderTextColor={Colors.placeholderColor}
-            onFocus={() => {
-              setFocusedInput('Location');
-              if (locationQuery.length > 0) {
-                setShowSuggestions(true);
-              }
-            }}
-            onBlur={() => {
-              if (!isSelectingSuggestion) {
-                setFocusedInput(null);
-                setTimeout(() => {
-                  setShowSuggestions(false);
-                }, 200);
-              }
-            }}
-          />
-          {locationQuery !== '' && (
-            <TouchableOpacity
-              style={styles.clearButton}
-              onPress={() => clearInputField()}>
-              <Text style={styles.clearButtonText}>X</Text>
-            </TouchableOpacity>
-          )}
-        </View>
+        <TextInput
+          label="Location"
+          value={locationQuery}
+          onChangeText={text => handleInputChange(text)}
+          mode="outlined"
+          placeholder="Search Location"
+          onFocus={() => {
+            if (locationQuery.length > 0) {
+              setShowSuggestions(true);
+            }
+          }}
+          onBlur={() => {
+            if (!isSelectingSuggestion) {
+              setTimeout(() => {
+                setShowSuggestions(false);
+              }, 200);
+            }
+          }}
+          right={
+            locationQuery !== '' && (
+              <TextInput.Icon
+                icon="close"
+                onPress={clearInputField}
+              />
+            )
+          }
+        />
+
         {showSuggestions &&
           locationQuery.length > 0 &&
           locationSuggestions.length > 0 && (
-            <View style={styles.suggestionsContainer}>
+            <View style={[
+              styles.suggestionsContainer,
+              locationSuggestions.length > 5 && styles.scrollableSuggestions,
+            ]}>
               <FlatList
                 keyboardShouldPersistTaps="always"
                 data={locationSuggestions}
                 keyExtractor={(item, index) => index.toString()}
                 renderItem={({item}) => (
-                  <TouchableOpacity
-                    style={styles.suggestionItem}
-                    onPressIn={() => setIsSelectingSuggestion(true)}
-                    onPress={() => {
-                      handleSuggestionSelect(item);
-                      setIsSelectingSuggestion(false);
-                    }}>
-                    <Text>{item}</Text>
-                  </TouchableOpacity>
+                  <View style={styles.suggestionItem}>
+                    <Text
+                      onPress={() => {
+                        setIsSelectingSuggestion(true);
+                        handleSuggestionSelect(item);
+                        setIsSelectingSuggestion(false);
+                      }}
+                    >
+                      {item}
+                    </Text>
+                  </View>
                 )}
               />
             </View>
@@ -152,55 +151,25 @@ const LocationComponent = ({onLocationChange} : { onLocationChange: (value:strin
 
 const styles = StyleSheet.create({
   container: {
-    // flex: 1,
     backgroundColor: '#fff',
   },
   txtpadding: {
-    marginBottom: 20,
-  },
-  label: {fontSize: 16, color: '#333', marginBottom: 8},
-  inputContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  input: {
-    flex: 1,
-    borderWidth: 1,
-    borderColor: '#ccc',
-    borderRadius: 10,
-    padding: 14,
-    fontSize: 16,
-    backgroundColor: '#FFFFFF',
-  },
-  inputError: {
-    borderColor: 'red', // Red border for errors
-  },
-  clearButton: {
-    position: 'absolute',
-    right: 10,
-    padding: 10,
-  },
-  clearButtonText: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    color: '#880e4f', // Dark pink
+    marginBottom: 30,
   },
   suggestionsContainer: {
-    maxHeight: 150,
     borderWidth: 1,
     borderColor: '#880e4f',
     borderRadius: 5,
-    marginTop: 6,
+    marginTop: 1,
     backgroundColor: '#FFFFFF',
+  },
+  scrollableSuggestions: {
+    maxHeight: 200, // Adjust this value as needed
   },
   suggestionItem: {
     padding: 10,
     borderBottomWidth: 1,
     borderBottomColor: '#ccc',
-  },
-  inputFocused: {
-    borderColor: '#cc0e74', // color border when focused
-    borderWidth: 1.9,
   },
 });
 
