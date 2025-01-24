@@ -17,7 +17,9 @@ import {AuthStackParamList} from '../../navigator/AuthNavigator';
 import AuthService from '../../services/AuthService';
 import {useAuth} from '../../hooks/useAuth';
 import {User} from '../../types';
-import {validateEmail} from '../../utils/formvalidation';
+import { validateEmail } from '../../utils/formvalidation';
+
+// import OtpModel from '../../components/OtpModel
 type Props = NativeStackScreenProps<AuthStackParamList, 'EmailScreen'>;
 
 const EmailScreen: React.FC<Props> = ({navigation, route}) => {
@@ -74,41 +76,40 @@ const EmailScreen: React.FC<Props> = ({navigation, route}) => {
     [role, isEmailValid],
   );
 
-  const handleContinue = useCallback(async () => {
-    if (!isEmailValid) {
-      setEmailError({ message: 'Invalid email format', isClickable: false });
-      return;
+const handleContinue = useCallback(async () => {
+  if (!isEmailValid) {
+    setEmailError({message: 'Invalid email format', isClickable: false});
+    return;
+  }
+
+  try {
+    setIsLoading(true);
+    const isValidEmail = await checkEmail(email);
+
+    if (isValidEmail) {
+      // Store user data and navigate to password screen
+      const response = await AuthService.verifyLoginInput(email);
+      console.log('API Response:', response.data, 'Role: ', role);
+
+      storeUser(response.data as User);
+      navigation.navigate('PasswordScreen', {email});
+    } else if (emailError.isClickable) {
+      // If email is unverified, navigate to OTP screen
+      navigation.navigate('OtpModel', {email});
     }
-
-    try {
-      setIsLoading(true);
-      const isValidEmail = await checkEmail(email);
-
-      if (isValidEmail) {
-        // Store user data and navigate to password screen
-        const response = await AuthService.verifyLoginInput(email);
-        console.log('API Response:', response.data, 'Role: ', role);
-
-        storeUser(response.data as User);
-        navigation.navigate('PasswordScreen', {email});
-      }
-    } catch (error) {
-      Toast.show({
-        type: 'error',
-        position: 'top',
-        text1: 'Error',
-        text2: 'Something went wrong. Please try again.',
-        visibilityTime: 3000,
-        autoHide: true,
-      });
-    } finally {
-      setIsLoading(false);
-    }
-  }, [email, isEmailValid, checkEmail, storeUser, navigation, role]);
-
-  const navigateToOTPScreen = () => {
-    navigation.navigate('OtpScreen', {email}); // Assuming you have an OTPScreen in your navigator
-  };
+  } catch (error) {
+    Toast.show({
+      type: 'error',
+      position: 'top',
+      text1: 'Error',
+      text2: 'Something went wrong. Please try again.',
+      visibilityTime: 3000,
+      autoHide: true,
+    });
+  } finally {
+    setIsLoading(false);
+  }
+}, [email, isEmailValid, checkEmail, storeUser, navigation, role, emailError]);
 
   return (
     <KeyboardAvoidingView
@@ -137,11 +138,7 @@ const EmailScreen: React.FC<Props> = ({navigation, route}) => {
           {emailError.message ? (
             <Text style={styles.errorText}>
               {emailError.message}
-              {emailError.isClickable && (
-                <TouchableOpacity onPress={navigateToOTPScreen}>
-                  <Text style={styles.verifyNowText}> Verify your email</Text>
-                </TouchableOpacity>
-              )}
+              {emailError.isClickable}
             </Text>
           ) : null}
         </View>
@@ -154,7 +151,11 @@ const EmailScreen: React.FC<Props> = ({navigation, route}) => {
             {isLoading ? (
               <ActivityIndicator size="small" color="#ffffff" />
             ) : (
-              <Text style={styles.buttonText}>Continue</Text>
+              <Text style={styles.buttonText}>
+                {emailError.message && emailError.isClickable
+                  ? 'Verify Email Now'
+                  : 'Continue'}
+              </Text>
             )}
           </TouchableOpacity>
 
