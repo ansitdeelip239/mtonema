@@ -160,7 +160,7 @@ const SignupForm = ({
       style={styles.container}>
       {/* Name Input */}
       <View style={styles.inputGroup}>
-        <Text style={styles.label}>Name</Text>
+        {/* <Text style={styles.label}>Name</Text> */}
         <View style={styles.inputContainer}>
           <TextInput
             style={[
@@ -190,7 +190,7 @@ const SignupForm = ({
 
       {/* Email Input */}
       <View style={styles.inputGroup}>
-        <Text style={styles.label}>Email</Text>
+        {/* <Text style={styles.label}>Email</Text> */}
         <View style={styles.inputContainer}>
           <TextInput
             style={[
@@ -223,7 +223,7 @@ const SignupForm = ({
 
       {/* Mobile Input */}
       <View style={styles.inputGroup}>
-        <Text style={styles.label}>Mobile</Text>
+        {/* <Text style={styles.label}>Mobile</Text> */}
         <View style={styles.inputContainer}>
           <TextInput
             style={[

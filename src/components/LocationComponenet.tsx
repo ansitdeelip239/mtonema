@@ -89,7 +89,7 @@ const LocationComponent = ({onLocationChange} : { onLocationChange: (value:strin
     <View style={styles.container}>
       {/* Location Input */}
       <View style={styles.txtpadding}>
-        <Text style={[styles.label]}>Location</Text>
+        {/* <Text style={[styles.label]}>Location</Text> */}
         <View style={styles.inputContainer}>
           <TextInput
             style={[

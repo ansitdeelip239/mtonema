@@ -49,6 +49,11 @@ const EmailScreen: React.FC<Props> = ({navigation, route}) => {
           setEmailError('*Email not found');
           return false;
         }
+        if(response && response.data?.Status === 2)
+        {
+          setEmailError('Email is not verfied please verfiy your email');
+          return false;
+        }
 
         if (!response.Success) {
           setEmailError(response.Message || 'Email verification failed');
