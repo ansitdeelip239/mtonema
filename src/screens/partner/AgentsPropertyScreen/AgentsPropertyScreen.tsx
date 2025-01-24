@@ -1,5 +1,5 @@
 import React, {useState, useEffect, useCallback, useMemo, useRef} from 'react';
-import {View, StyleSheet, FlatList, RefreshControl} from 'react-native';
+import {View, StyleSheet, FlatList, RefreshControl, Text} from 'react-native';
 import PartnerService from '../../../services/PartnerService';
 import {useAuth} from '../../../hooks/useAuth';
 import {AgentData, FilterValues, PagingModel} from '../../../types';
@@ -126,6 +126,12 @@ export default function AgentDataScreen() {
     }
   };
 
+  const renderEmptyComponent = () => (
+    <View style={styles.emptyContainer}>
+      <Text style={styles.emptyText}>No properties available</Text>
+    </View>
+  );
+
   return (
     <View style={styles.container}>
       <SearchHeader
@@ -146,6 +152,7 @@ export default function AgentDataScreen() {
         onEndReached={handleLoadMore}
         onEndReachedThreshold={0.5}
         ListFooterComponent={renderFooter({isLoading})}
+        ListEmptyComponent={renderEmptyComponent}
       />
     </View>
   );
@@ -158,5 +165,15 @@ const styles = StyleSheet.create({
   },
   listContainer: {
     padding: 16,
+    flexGrow: 1,
+  },
+  emptyContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  emptyText: {
+    fontSize: 16,
+    color: '#888',
   },
 });
