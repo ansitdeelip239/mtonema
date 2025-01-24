@@ -5,8 +5,8 @@ import PasswordScreen from '../screens/auth/PasswordScreen';
 import ChangePasswordScreen from '../screens/auth/ChangePasswordScreen';
 import SignUpScreen from '../screens/auth/SignUpScreen';
 import { MainScreen } from '../screens/auth/MainScreen';
-import OtpScreen from '../screens/auth/OtpScreen';
 import PostProperty from '../screens/seller/PostPropertyScreen';
+import OtpScreen from '../screens/auth/OtpScreen';
 
 export type AuthStackParamList = {
     EmailScreen: {role: string[]};

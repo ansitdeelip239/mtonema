@@ -18,13 +18,12 @@ import AuthService from '../../services/AuthService';
 import {useAuth} from '../../hooks/useAuth';
 import {User} from '../../types';
 import {validateEmail} from '../../utils/formvalidation';
-
 type Props = NativeStackScreenProps<AuthStackParamList, 'EmailScreen'>;
 
 const EmailScreen: React.FC<Props> = ({navigation, route}) => {
   const [email, setEmail] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const [emailError, setEmailError] = useState('');
+  const [emailError, setEmailError] = useState<{ message: string; isClickable?: boolean }>({ message: '', isClickable: false });
   const {storeUser} = useAuth();
   const {role} = route.params;
 
@@ -34,11 +33,11 @@ const EmailScreen: React.FC<Props> = ({navigation, route}) => {
     async (emailToCheck: string) => {
       try {
         // Clear previous errors
-        setEmailError('');
+        setEmailError({ message: '', isClickable: false });
 
         // Validate email format first
         if (!isEmailValid) {
-          setEmailError('Invalid email format');
+          setEmailError({ message: 'Invalid email format', isClickable: false });
           return false;
         }
 
@@ -46,12 +45,18 @@ const EmailScreen: React.FC<Props> = ({navigation, route}) => {
 
         // Check if email matches the expected role
         if (response && !role.includes(response.data?.Role as string)) {
-          setEmailError('*Email not found');
+          setEmailError({ message: '*Email not found', isClickable: false });
+          return false;
+        }
+
+        // Check if email is not verified
+        if (response && response.data?.Status === 2) {
+          setEmailError({ message: 'Email is not verified. Please verify your email.', isClickable: true });
           return false;
         }
 
         if (!response.Success) {
-          setEmailError(response.Message || 'Email verification failed');
+          setEmailError({ message: response.Message || 'Email verification failed', isClickable: false });
           return false;
         }
 
@@ -62,7 +67,7 @@ const EmailScreen: React.FC<Props> = ({navigation, route}) => {
             ? error.message
             : 'An unexpected error occurred';
 
-        setEmailError(errorMessage);
+        setEmailError({ message: errorMessage, isClickable: false });
         return false;
       }
     },
@@ -71,7 +76,7 @@ const EmailScreen: React.FC<Props> = ({navigation, route}) => {
 
   const handleContinue = useCallback(async () => {
     if (!isEmailValid) {
-      setEmailError('Invalid email format');
+      setEmailError({ message: 'Invalid email format', isClickable: false });
       return;
     }
 
@@ -101,6 +106,10 @@ const EmailScreen: React.FC<Props> = ({navigation, route}) => {
     }
   }, [email, isEmailValid, checkEmail, storeUser, navigation, role]);
 
+  const navigateToOTPScreen = () => {
+    navigation.navigate('OtpScreen', {email}); // Assuming you have an OTPScreen in your navigator
+  };
+
   return (
     <KeyboardAvoidingView
       style={styles.mainScreen}
@@ -125,8 +134,15 @@ const EmailScreen: React.FC<Props> = ({navigation, route}) => {
             autoCapitalize="none"
             autoCorrect={false}
           />
-          {emailError ? (
-            <Text style={styles.errorText}>{emailError}</Text>
+          {emailError.message ? (
+            <Text style={styles.errorText}>
+              {emailError.message}
+              {emailError.isClickable && (
+                <TouchableOpacity onPress={navigateToOTPScreen}>
+                  <Text style={styles.verifyNowText}> Verify your email</Text>
+                </TouchableOpacity>
+              )}
+            </Text>
           ) : null}
         </View>
 
@@ -222,30 +238,18 @@ const styles = StyleSheet.create({
   inputError: {
     borderBottomColor: 'red',
   },
-  // button:{
-  //   backgroundColor: '#cc0e74',
-  //   padding: 15,
-  //   borderRadius: 30,
-  //   marginVertical: 10,
-  //   width: '95%',
-  //   alignItems: 'center',
-  //   justifyContent: 'center',
-  //   shadowColor: '#000',
-  //   shadowOffset: {width: 0, height: 2},
-  //   shadowOpacity: 0.25,
-  //   shadowRadius: 3.84,
-  //   elevation: 5,
-  // },
   spacing: {
     marginBottom: 10, // Adds space below each button
   },
-  // spacing1: {
-  //   marginBottom: 45, // Adds space below the input
-  // },
   buttonText: {
     color: '#ffffff',
     fontSize: 16,
     fontWeight: 'bold',
+  },
+  verifyNowText: {
+    color: 'blue',
+    fontWeight: 'bold',
+    textDecorationLine: 'underline',
   },
 });
 
