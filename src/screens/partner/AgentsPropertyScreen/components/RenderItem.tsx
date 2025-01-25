@@ -1,33 +1,9 @@
 import React from 'react';
 import {StyleSheet, Text, View} from 'react-native';
 import {AgentData} from '../../../../types';
+import formatCurrency from '../../../../utils/currency';
 
 const renderItem = ({item}: {item: AgentData}) => {
-  const formatCurrency = (value: string | null | undefined) => {
-    if (!value) {
-      return 'N/A';
-    }
-
-    try {
-      const num = parseFloat(value.replace(/,/g, ''));
-      if (isNaN(num)) {
-        return value;
-      }
-      if (num >= 10000000) {
-        return `₹${(num / 10000000).toFixed(2)} Cr`;
-      } else if (num >= 100000) {
-        return `₹${(num / 100000).toFixed(2)} Lacs`;
-      } else if (num >= 1000) {
-        return `₹${(num / 1000).toFixed(2)} K`;
-      } else {
-        return `₹${num.toFixed(2)}`;
-      }
-    } catch (error) {
-      console.error('Currency formatting error:', error);
-      return value || '';
-    }
-  };
-
   return (
     <View style={styles.card}>
       <Text style={styles.name}>{item.AgentName || 'N/A'}</Text>
@@ -43,12 +19,12 @@ const renderItem = ({item}: {item: AgentData}) => {
       </View>
       <View style={styles.row}>
         <Text style={styles.label}>Demand Price:</Text>
-        <Text style={styles.value}>{formatCurrency(item.DemandPrice)}</Text>
+        <Text style={styles.value}>{formatCurrency(item.DemandPrice) || 'N/A'}</Text>
       </View>
       <View style={styles.row}>
         <Text style={styles.label}>Security Deposit:</Text>
         <Text style={styles.value}>
-          {formatCurrency(item.SecurityDepositAmount)}
+          {formatCurrency(item.SecurityDepositAmount) || 'N/A'}
         </Text>
       </View>
       <View style={styles.row}>

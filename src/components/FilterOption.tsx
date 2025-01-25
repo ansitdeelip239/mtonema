@@ -1,8 +1,8 @@
 import React, {useState} from 'react';
 import {StyleSheet, Text, View, TouchableOpacity} from 'react-native';
-import {MasterDetailModel} from '../../../../types';
+import {MasterDetailModel} from '../types';
 import {Chip} from 'react-native-paper';
-import Colors from '../../../../constants/Colors';
+import Colors from '../constants/Colors';
 
 const FilterOption = ({
   label,

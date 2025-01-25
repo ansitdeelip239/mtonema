@@ -6,12 +6,14 @@ interface MaterialTextInputProps<T> extends TextInputProps {
   field: keyof T;
   formInput: T;
   setFormInput: (field: keyof T, value: string | boolean) => void;
+  rightComponent?: React.ReactNode;
 }
 
 export const MaterialTextInput = <T,>({
   field,
   formInput,
   setFormInput,
+  rightComponent,
   ...props
 }: MaterialTextInputProps<T>) => {
   const CrossButton = useCallback(() => {
@@ -33,7 +35,11 @@ export const MaterialTextInput = <T,>({
       value={formInput[field] as string}
       onChangeText={(text: string) => setFormInput(field, text)}
       right={
-        formInput[field] ? <TextInput.Icon icon={() => CrossButton()} /> : null
+        rightComponent ? (
+          <TextInput.Affix text={rightComponent as string} />
+        ) : formInput[field] ? (
+          <TextInput.Icon icon={() => CrossButton()} />
+        ) : null
       }
       outlineStyle={styles.textInput}
     />

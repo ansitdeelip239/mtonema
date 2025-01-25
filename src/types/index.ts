@@ -191,3 +191,19 @@ export interface AgentPropertyForm {
   negotiable: boolean;
   propertyNotes: string;
 }
+
+export interface AgentPropertyRequestModel {
+  AgentContactNo: string;
+  AgentName: string;
+  DemandPrice: string;
+  EmailId: string;
+  FlatSize: string;
+  Negotiable: boolean;
+  PriceUnit: string | null;
+  PropertyLocation: string;
+  PropertyNotes: string;
+  PropertyType: string;
+  SecurityDepositAmount: string;
+  Id: number;
+  Status: number;
+}

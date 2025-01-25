@@ -49,4 +49,5 @@ export default {
 
   //Partner
   getAgentImportData: url1 + '/api/v1/partner/GetAgentImportDataUserId',
+  updateAgentProperty: url1 + '/api/v1/partner/UpdateAgentProperty',
 };

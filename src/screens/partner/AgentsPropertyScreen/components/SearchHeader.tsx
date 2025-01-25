@@ -4,6 +4,7 @@ import {Searchbar} from 'react-native-paper';
 import {FilterValues} from '../../../../types';
 import Colors from '../../../../constants/Colors';
 import FilterModal from './FilterModal';
+import GetIcon from '../../../../components/GetIcon';
 
 const SearchHeader = ({
   initialFilters,
@@ -29,22 +30,8 @@ const SearchHeader = ({
             onSearch(text);
           }}
           style={styles.searchInput}
-          icon={() => (
-            <Image
-              source={require('../../../../assets/Icon/search.png')}
-              style={styles.searchIcon}
-            />
-          )}
-          clearIcon={
-            searchText
-              ? () => (
-                  <Image
-                    source={require('../../../../assets/Icon/crossicon.png')}
-                    style={styles.clearIcon}
-                  />
-                )
-              : undefined // Hide clear icon when searchText is empty
-          }
+          icon={() => GetIcon('search')}
+          clearIcon={searchText ? () => GetIcon('clear') : undefined}
           inputStyle={styles.searchInputText}
           elevation={5}
         />
@@ -55,7 +42,7 @@ const SearchHeader = ({
         onPress={() => setModalVisible(!modalVisible)}>
         <Image
           source={require('../../../../assets/Icon/filter.png')}
-          style={styles.filterIcon} // Use a separate style for the filter icon
+          style={styles.filterIcon}
         />
       </TouchableOpacity>
 
@@ -100,10 +87,6 @@ const styles = StyleSheet.create({
   },
   searchInputText: {
     color: Colors.placeholderColor,
-  },
-  searchIcon: {
-    height: 20,
-    width: 20,
   },
   clearIcon: {
     height: 20,

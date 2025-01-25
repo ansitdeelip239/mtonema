@@ -2,7 +2,7 @@ import React, {useCallback, useEffect, useMemo, useState, useRef} from 'react';
 import {StyleSheet, Text, TouchableOpacity, View, Animated} from 'react-native';
 import Colors from '../../../../constants/Colors';
 import {useMaster} from '../../../../context/MasterProvider';
-import FilterOption from './FilterOption';
+import FilterOption from '../../../../components/FilterOption';
 import {FilterValues} from '../../../../types';
 
 const FilterModal = ({

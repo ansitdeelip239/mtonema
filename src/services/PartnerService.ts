@@ -1,4 +1,5 @@
 import url from '../constants/api';
+import { AgentPropertyRequestModel } from '../types';
 import {api} from '../utils/api';
 
 class PartnerService {
@@ -27,6 +28,16 @@ class PartnerService {
       return response;
     } catch (error) {
       console.error('Error in getMasterDetails', error);
+      throw error;
+    }
+  }
+
+  static async updateAgentProperty(body: AgentPropertyRequestModel) {
+    try {
+      const response = await api.post<null>(`${url.updateAgentProperty}`, body);
+      return response;
+    } catch (error) {
+      console.error('Error in updateAgentProperty', error);
       throw error;
     }
   }

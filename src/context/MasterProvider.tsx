@@ -1,14 +1,23 @@
-import React, { useState, useEffect, useCallback, createContext } from 'react';
+import React, {useState, useEffect, useCallback, createContext} from 'react';
 import MasterService from '../services/MasterService';
-
+import { MasterDetailModel } from '../types';
 
 interface MasterProviderProps {
   children: React.ReactNode;
 }
 
 interface MasterData {
-  // Define the structure of your master data here
-  [key: string]: any;
+  PropertyType: MasterDetailModel[];
+  SellerType: MasterDetailModel[];
+  PropertyFor: MasterDetailModel[];
+  ImageType: MasterDetailModel[];
+  BhkType: MasterDetailModel[];
+  ProjectLocation: MasterDetailModel[];
+  AmountUnit: MasterDetailModel[];
+  AreaUnit: MasterDetailModel[];
+  FurnishType: MasterDetailModel[];
+  Facing: MasterDetailModel[];
+  AgentPropertyType: MasterDetailModel[];
 }
 
 interface MasterContextProps {
@@ -17,25 +26,34 @@ interface MasterContextProps {
 }
 
 const MasterContext = createContext<MasterContextProps | undefined>(undefined);
-const masterName = ['PropertyType','SellerType','PropertyFor','ImageType','BhkType','ProjectLocation','AmountUnit','AreaUnit','FurnishType','Facing','ProjectLocation', 'AgentPropertyType'];
-export const MasterProvider: React.FC<MasterProviderProps> = ({ children }) => {
+
+const masterName = [
+  'PropertyType',
+  'SellerType',
+  'PropertyFor',
+  'ImageType',
+  'BhkType',
+  'ProjectLocation',
+  'AmountUnit',
+  'AreaUnit',
+  'FurnishType',
+  'Facing',
+  'AgentPropertyType',
+];
+
+export const MasterProvider: React.FC<MasterProviderProps> = ({children}) => {
   const [masterData, setMasterData] = useState<MasterData | null>(null);
 
   const fetchMasterData = useCallback(async () => {
     try {
-      // const PropertyTypeResponse = await MasterService.getMasterDetails('PropertyType');
-      // const SellerTypeResponse = await MasterService.getMasterDetails('SellerType');
-      // const PropertyForResponse = await MasterService.getMasterDetails('PropertyFor');
-      // const ImageTypeResponse = await MasterService.getMasterDetails('ImageType');
-      // const BhkTypeResponse = await MasterService.getMasterDetails('BhkType');
-      // const ProjectLocationResponse = await MasterService.getMasterDetails('Project Location');
-      masterName.map(async (master)=>{
-        const response = await MasterService.getMasterDetails(master);
-        setMasterData((prevData) => ({
-          ...prevData,
-          [master]: response.data,
-        }));
-      });
+      const newMasterData: Partial<MasterData> = {};
+      await Promise.all(
+        masterName.map(async master => {
+          const response = await MasterService.getMasterDetails(master);
+          newMasterData[master as keyof MasterData] = response.data;
+        }),
+      );
+      setMasterData(newMasterData as MasterData);
     } catch (error) {
       console.error('Failed to fetch master data:', error);
     }
