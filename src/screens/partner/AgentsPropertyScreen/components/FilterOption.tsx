@@ -110,6 +110,7 @@ const styles = StyleSheet.create({
   chip: {
     marginRight: 8,
     borderRadius: 20,
+    backgroundColor: 'white',
   },
   selectedChip: {
     backgroundColor: Colors.PRIMARY_1,

@@ -61,6 +61,12 @@ const renderItem = ({item}: {item: AgentData}) => {
             : 'N/A'}
         </Text>
       </View>
+      <View style={styles.row}>
+        <Text style={styles.label}>Date Added:</Text>
+        <Text style={styles.value}>
+            {item.CreatedOn ? new Date(item.CreatedOn).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }) : 'N/A'}
+        </Text>
+      </View>
       {item.PropertyNotes && (
         <View style={styles.notes}>
           <Text style={styles.label}>Notes:</Text>

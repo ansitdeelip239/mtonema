@@ -46,6 +46,7 @@ const SearchHeader = ({
               : undefined // Hide clear icon when searchText is empty
           }
           inputStyle={styles.searchInputText}
+          elevation={5}
         />
       </View>
 
@@ -86,7 +87,7 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
     padding: 16,
-    backgroundColor: 'white',
+    // backgroundColor: 'white',
   },
   searchContainer: {
     flex: 1,

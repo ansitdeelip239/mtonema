@@ -179,3 +179,15 @@ export interface FilterValues {
   propertyType: string | null;
   bhkType: string | null;
 }
+
+export interface AgentPropertyForm {
+  agentName: string;
+  agentContactNo: string;
+  propertyLocation: string;
+  propertyType: string;
+  bhkType: string;
+  demandPrice: string;
+  securityDepositAmount: string;
+  negotiable: boolean;
+  propertyNotes: string;
+}

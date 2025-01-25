@@ -1,13 +1,19 @@
 import React, {useState, useEffect, useCallback, useMemo, useRef} from 'react';
 import {View, StyleSheet, FlatList, RefreshControl, Text} from 'react-native';
+import {FAB, Portal, PaperProvider} from 'react-native-paper'; // Import FAB.Group and related components
 import PartnerService from '../../../services/PartnerService';
 import {useAuth} from '../../../hooks/useAuth';
 import {AgentData, FilterValues, PagingModel} from '../../../types';
 import renderItem from './components/RenderItem';
 import renderFooter from './components/RenderFooter';
 import SearchHeader from './components/SearchHeader';
+import Colors from '../../../constants/Colors';
+import {NativeStackScreenProps} from '@react-navigation/native-stack';
+import {AgentStackParamList} from '../../../navigator/PartnerNavigator';
 
-export default function AgentDataScreen() {
+type Props = NativeStackScreenProps<AgentStackParamList, 'AgentPropertyList'>;
+
+const AgentDataScreen: React.FC<Props> = ({navigation}: any) => {
   const [agentData, setAgentData] = useState<AgentData[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isRefreshing, setIsRefreshing] = useState(false);
@@ -19,6 +25,7 @@ export default function AgentDataScreen() {
     propertyType: null,
     bhkType: null,
   });
+  const [fabOpen, setFabOpen] = useState(false); // State for FAB.Group open/close
   const {user} = useAuth();
   const PAGE_SIZE = 10;
 
@@ -132,31 +139,73 @@ export default function AgentDataScreen() {
     </View>
   );
 
+  const handleAddProperty = () => {
+    navigation.navigate('AddAgentProperty'); // Navigate to the Add Property screen
+    console.log('Navigate to Add Property screen');
+  };
+
   return (
-    <View style={styles.container}>
-      <SearchHeader
-        initialFilters={filters}
-        onSearch={handleSearch}
-        onFilter={handleFilter}
-      />
-      <FlatList
-        data={agentData}
-        renderItem={renderItem}
-        keyExtractor={(item, index) =>
-          `${item.Id?.toString() || 'item'}-${index}`
-        }
-        contentContainerStyle={styles.listContainer}
-        refreshControl={
-          <RefreshControl refreshing={isRefreshing} onRefresh={handleRefresh} />
-        }
-        onEndReached={handleLoadMore}
-        onEndReachedThreshold={0.5}
-        ListFooterComponent={renderFooter({isLoading})}
-        ListEmptyComponent={renderEmptyComponent}
-      />
-    </View>
+    <PaperProvider>
+      <View style={styles.container}>
+        <SearchHeader
+          initialFilters={filters}
+          onSearch={handleSearch}
+          onFilter={handleFilter}
+        />
+        <FlatList
+          data={agentData}
+          renderItem={renderItem}
+          keyExtractor={(item, index) =>
+            `${item.Id?.toString() || 'item'}-${index}`
+          }
+          contentContainerStyle={styles.listContainer}
+          refreshControl={
+            <RefreshControl
+              refreshing={isRefreshing}
+              onRefresh={handleRefresh}
+            />
+          }
+          onEndReached={handleLoadMore}
+          onEndReachedThreshold={0.5}
+          ListFooterComponent={renderFooter({isLoading})}
+          ListEmptyComponent={renderEmptyComponent}
+        />
+        {/* FAB Group */}
+        <Portal>
+          <FAB.Group
+            open={fabOpen}
+            visible
+            icon={fabOpen ? require('../../../assets/Icon/crossicon.png') : require('../../../assets/Icon/add.png')} // Custom icon for the FAB
+            actions={[
+              {
+                icon: require('../../../assets/Icon/add.png'), // Custom icon for the "Add Property" action
+                label: 'Add Property',
+                onPress: handleAddProperty,
+              },
+              // {
+              //   icon: 'star',
+              //   label: 'Star',
+              //   onPress: () => console.log('Pressed star'),
+              // },
+              // {
+              //   icon: 'email',
+              //   label: 'Email',
+              //   onPress: () => console.log('Pressed email'),
+              // },
+            ]}
+            onStateChange={({open}) => setFabOpen(open)}
+            onPress={() => {
+              if (fabOpen) {
+                // Do something if the FAB group is open
+              }
+            }}
+            fabStyle={styles.fabStyle} // Custom style for the FAB
+          />
+        </Portal>
+      </View>
+    </PaperProvider>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -176,4 +225,9 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: '#888',
   },
+  fabStyle: {
+    backgroundColor: Colors.main, // Use your primary color
+  },
 });
+
+export default AgentDataScreen;
