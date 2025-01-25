@@ -36,7 +36,6 @@ const SearchHeader = ({
           elevation={5}
         />
       </View>
-
       <TouchableOpacity
         style={styles.filterButton}
         onPress={() => setModalVisible(!modalVisible)}>
@@ -45,7 +44,6 @@ const SearchHeader = ({
           style={styles.filterIcon}
         />
       </TouchableOpacity>
-
       <Modal
         visible={modalVisible}
         transparent={true}
@@ -73,37 +71,54 @@ const SearchHeader = ({
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
-    padding: 16,
-    // backgroundColor: 'white',
+    alignItems: 'center',
+    paddingHorizontal: 16,
+    paddingVertical: 10,
+    backgroundColor: 'transparent',
   },
   searchContainer: {
     flex: 1,
     marginRight: 12,
   },
   searchInput: {
-    backgroundColor: '#f5f5f5',
+    backgroundColor: 'white',
     borderRadius: 50,
     elevation: 5,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.15,
+    shadowRadius: 4,
   },
   searchInputText: {
     color: Colors.placeholderColor,
   },
-  clearIcon: {
-    height: 20,
-    width: 20,
-    tintColor: Colors.placeholderColor,
-  },
   filterButton: {
-    padding: 0,
+    backgroundColor: 'white',
+    width: 48,
+    height: 48,
+    borderRadius: 24,
     justifyContent: 'center',
+    alignItems: 'center',
+    elevation: 5,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.15,
+    shadowRadius: 4,
   },
   filterIcon: {
-    height: 24, // Increased size
-    width: 24, // Increased size
+    height: 24,
+    width: 24,
   },
   modalContainer: {
     flex: 1,
     justifyContent: 'flex-end',
+    // backgroundColor: 'rgba(0, 0, 0, 0.5)',
   },
 });
 

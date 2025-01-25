@@ -140,8 +140,7 @@ const AgentDataScreen: React.FC<Props> = ({navigation}: any) => {
   );
 
   const handleAddProperty = () => {
-    navigation.navigate('AddAgentProperty'); // Navigate to the Add Property screen
-    console.log('Navigate to Add Property screen');
+    navigation.navigate('AddAgentProperty');
   };
 
   return (
@@ -182,16 +181,6 @@ const AgentDataScreen: React.FC<Props> = ({navigation}: any) => {
                 label: 'Add Property',
                 onPress: handleAddProperty,
               },
-              // {
-              //   icon: 'star',
-              //   label: 'Star',
-              //   onPress: () => console.log('Pressed star'),
-              // },
-              // {
-              //   icon: 'email',
-              //   label: 'Email',
-              //   onPress: () => console.log('Pressed email'),
-              // },
             ]}
             onStateChange={({open}) => setFabOpen(open)}
             onPress={() => {
