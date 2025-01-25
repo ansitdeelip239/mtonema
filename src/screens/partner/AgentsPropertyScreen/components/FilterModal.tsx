@@ -25,7 +25,7 @@ const FilterModal = ({
     [masterData],
   );
   const propertyTypes = useMemo(
-    () => masterData?.PropertyType || [],
+    () => masterData?.AgentPropertyType || [],
     [masterData],
   );
   const bhkTypes = useMemo(() => masterData?.BhkType || [], [masterData]);

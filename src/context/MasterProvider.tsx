@@ -17,7 +17,7 @@ interface MasterContextProps {
 }
 
 const MasterContext = createContext<MasterContextProps | undefined>(undefined);
-const masterName = ['PropertyType','SellerType','PropertyFor','ImageType','BhkType','ProjectLocation','AmountUnit','AreaUnit','FurnishType','Facing','ProjectLocation'];
+const masterName = ['PropertyType','SellerType','PropertyFor','ImageType','BhkType','ProjectLocation','AmountUnit','AreaUnit','FurnishType','Facing','ProjectLocation', 'AgentPropertyType'];
 export const MasterProvider: React.FC<MasterProviderProps> = ({ children }) => {
   const [masterData, setMasterData] = useState<MasterData | null>(null);
 
