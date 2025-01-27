@@ -10,7 +10,6 @@ import Home from '../screens/buyer/Home';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import SearchProperty from '../screens/buyer/SearchProperty';
 import RecommendedProperty from '../screens/buyer/RecommendedProperty';
-import SignupForm from '../components/SignupForm';
 
 const Drawer = createDrawerNavigator();
 const Stack = createNativeStackNavigator();
@@ -49,7 +48,6 @@ const BuyerNavigator = memo(() => {
       <Drawer.Screen name="Contacted Property" component={ContactedProperty} />
       <Drawer.Screen name="Change Password" component={ChangePasswordScreen} />
       <Drawer.Screen name="Contact Us" component={ContactScreen} />
-      <Drawer.Screen name="form testing" component={SignupForm} />
       <Drawer.Screen
         name="Profile Screen"
         component={ProfileScreen}

@@ -7,11 +7,27 @@ import {
   ImageBackground,
   Image,
 } from 'react-native';
-import {OtpInput} from 'react-native-otp-entry';
-import React, {useEffect, useRef, useState} from 'react';
+import { OtpInput } from 'react-native-otp-entry';
+import React, { useEffect, useRef, useState } from 'react';
+import Toast from 'react-native-toast-message';
 
-const OtpModel = () => {
-  const [otp, setOtp] = useState('');
+interface OtpModelProps {
+  value: string; // OTP value
+  onChangeText: (text: string) => void; // Function to update OTP
+  onPress: () => void; // Function to handle OTP submission
+  isLoading?: boolean; // Loading state
+  apiError?: string; // API error message
+  successMessage?:string;
+}
+
+const OtpModel: React.FC<OtpModelProps> = ({
+  value,
+  onChangeText,
+  onPress,
+  isLoading = false,
+  apiError = '',
+  successMessage = '',
+}) => {
   const [resendTime, setResendTime] = useState(30);
   const otpInputRef = useRef(null);
 
@@ -25,15 +41,43 @@ const OtpModel = () => {
     return () => clearInterval(interval);
   }, [resendTime]);
 
-  const handleSubmit = () => {
-    if (otp.length === 6) {
-      Alert.alert('OTP Submitted', `Your OTP: ${otp}`);
+  useEffect(() => {
+    // Show toast message if there's an API error
+    if (apiError) {
+      Toast.show({
+        type: 'error',
+        text1: 'Invalid OTP',
+        text2: apiError,
+      });
     }
-  };
+  }, [apiError]);
+  useEffect(() => {
+    if (successMessage) {
+      Toast.show({
+        type: 'success',
+        text1: 'Verification Successful',
+        text2: successMessage,
+      });
+    }
+  }, [successMessage]);
 
   const handleResend = () => {
     setResendTime(30);
-    Alert.alert('New OTP Sent', 'Check your registered mobile number');
+    Alert.alert('New OTP Sent', 'Check your registered Email Address');
+  };
+
+  const handleSubmit = () => {
+    if (value.length !== 6) {
+      // Show toast message if OTP is invalid
+      Toast.show({
+        type: 'error',
+        text1: 'Invalid OTP',
+        text2: 'Please enter a valid 6-digit OTP.',
+      });
+      return;
+    }
+    // Call the onPress function if OTP is valid
+    onPress();
   };
 
   return (
@@ -59,8 +103,8 @@ const OtpModel = () => {
           <OtpInput
             ref={otpInputRef}
             numberOfDigits={6}
-            onTextChange={text => setOtp(text)}
-            onFilled={text => setOtp(text)}
+            onTextChange={onChangeText} // Use the onChangeText prop
+            onFilled={onChangeText} // Use the onChangeText prop
             theme={{
               pinCodeContainerStyle: styles.otpBox,
               focusedPinCodeContainerStyle: styles.activeOtpBox,
@@ -71,11 +115,15 @@ const OtpModel = () => {
           <TouchableOpacity
             style={[
               styles.submitButton,
-              otp.length !== 6 && styles.disabledButton,
+              (value.length !== 6 || isLoading) && styles.disabledButton,
             ]}
-            onPress={handleSubmit}
-            disabled={otp.length !== 6}>
-            <Text style={styles.buttonText}>Verify OTP</Text>
+            onPress={handleSubmit} // Use the handleSubmit function
+            disabled={value.length !== 6 || isLoading}>
+            {isLoading ? (
+              <Text style={styles.buttonText}>Verifying...</Text>
+            ) : (
+              <Text style={styles.buttonText}>Verify OTP</Text>
+            )}
           </TouchableOpacity>
 
           <View style={styles.resendContainer}>
@@ -102,12 +150,9 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    // justifyContent: 'center',
     alignItems: 'center',
-    // backgroundColor: 'rgba(0,0,0,0.5)', // Semi-dark overlay
   },
   otpModelContainer: {
-    // backgroundColor: 'rgba(255, 255, 255, 0.9)',
     padding: 25,
     borderRadius: 15,
     borderWidth: 2,

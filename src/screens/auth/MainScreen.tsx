@@ -1,11 +1,10 @@
-import React, {useState} from 'react';
+import React from 'react';
 import {
   View,
   Text,
   TouchableOpacity,
   StyleSheet,
   Image,
-  Modal,
   ImageBackground,
 } from 'react-native';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
@@ -14,7 +13,6 @@ import {AuthStackParamList} from '../../navigator/AuthNavigator';
 type Props = NativeStackScreenProps<AuthStackParamList, 'MainScreen'>;
 
 export const MainScreen: React.FC<Props> = ({navigation}) => {
-  const [isPopupVisible, setPopupVisible] = useState(false);
 
   const onLogin = (role: string[]) => {
     navigation.navigate('EmailScreen', {role});
@@ -30,10 +28,6 @@ export const MainScreen: React.FC<Props> = ({navigation}) => {
     navigation.navigate('SignUpScreen', {
       role: 'Seller',
     });
-  };
-
-  const closePopup = () => {
-    setPopupVisible(false);
   };
 
   return (
@@ -88,22 +82,6 @@ export const MainScreen: React.FC<Props> = ({navigation}) => {
             </View>
           </View>
         </View>
-
-        {/* Popup Modal */}
-        <Modal
-          visible={isPopupVisible}
-          transparent={true}
-          animationType="fade"
-          onRequestClose={closePopup}>
-          <View style={styles.modalOverlay}>
-            <View style={styles.modalContent}>
-              <Text style={styles.modalText}>This is under development</Text>
-              <TouchableOpacity style={styles.modalButton} onPress={closePopup}>
-                <Text style={styles.modalButtonText}>Close</Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-        </Modal>
       </View>
     </ImageBackground>
   );

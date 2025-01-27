@@ -7,7 +7,7 @@ import SignUpScreen from '../screens/auth/SignUpScreen';
 import { MainScreen } from '../screens/auth/MainScreen';
 import PostProperty from '../screens/seller/PostPropertyScreen';
 import OtpScreen from '../screens/auth/OtpScreen';
-import OtpModel from '../components/OtpModel';
+// import OtpModel from '../components/OtpModel';
 
 export type AuthStackParamList = {
   EmailScreen: {role: string[]};
@@ -39,7 +39,7 @@ export default function AuthNavigator() {
         <Stack.Screen name="SignUpScreen" component={SignUpScreen} />
         <Stack.Screen name="OtpScreen" component={OtpScreen} />
         <Stack.Screen name="PostProperty" component={PostProperty} />
-        <Stack.Screen name="OtpModel" component={OtpModel}        />
+        {/* <Stack.Screen name="OtpModel" component={OtpModel}/> */}
       </Stack.Navigator>
     );
 }

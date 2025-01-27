@@ -44,7 +44,7 @@ const EmailScreen: React.FC<Props> = ({navigation, route}) => {
         }
 
         const response = await AuthService.verifyLoginInput(emailToCheck);
-
+ console.log(response.Message);
         // Check if email matches the expected role
         if (response && !role.includes(response.data?.Role as string)) {
           setEmailError({ message: '*Email not found', isClickable: false });
@@ -95,7 +95,7 @@ const handleContinue = useCallback(async () => {
       navigation.navigate('PasswordScreen', {email});
     } else if (emailError.isClickable) {
       // If email is unverified, navigate to OTP screen
-      navigation.navigate('OtpModel', {email});
+      navigation.navigate('OtpScreen', {email});
     }
   } catch (error) {
     Toast.show({

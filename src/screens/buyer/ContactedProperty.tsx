@@ -13,7 +13,7 @@ import url from '../../constants/api';
 import { PropertyModel } from '../../types';
 import { useAuth } from '../../hooks/useAuth';
 import PropertyModal from './PropertyModal';
-
+import Colors from '../../constants/Colors';
 const EmptyComponent = () => {
   return (
     <View style={styles.centerContainer}>
@@ -213,6 +213,7 @@ const ContactedProperty = () => {
 
   return (
     <>
+    <Text style={styles.contactText}>Contacted Property</Text>
       <FlatList
         style={styles.container}
         data={properties}
@@ -245,6 +246,14 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#f5f5f5',
     padding: 10,
+  },
+  contactText:{
+    fontSize: 25,
+    fontWeight:'bold',
+    marginBottom:15,
+    color:Colors.primary,
+    padding:10,
+    // textAlign: 'center',
   },
   centerContainer: {
     flex: 1,
