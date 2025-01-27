@@ -11,6 +11,7 @@ import PropertyListScreen from '../../screens/seller/PropertyListScreen';
 import TestingScreen from '../../screens/common/TestingScreen';
 import PropertyListingForm from '../../screens/seller/PostProperty';
 import { Text } from 'react-native-paper';
+import SellerProfileScreen from '../../screens/seller/SellerProfileScreen';
 
 
 const Tab = createBottomTabNavigator<SellerBottomTabParamList>();
@@ -41,9 +42,9 @@ const tabScreens: Array<{
     icon: 'client',
   },
   {
-    name: 'Test',
-    component: TestingScreen,
-    icon: 'delete',
+    name: 'Profile',
+    component: SellerProfileScreen,
+    icon: 'user',
   },
 ] as const;
 
