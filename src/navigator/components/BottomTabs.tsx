@@ -21,12 +21,12 @@ const tabScreens: Array<{
   {
     name: 'Home',
     component: HomeScreen,
-    icon: 'edit',
+    icon: 'home',
   },
   {
     name: 'Property',
     component: AgentDataScreen,
-    icon: 'delete',
+    icon: 'realEstate',
   },
   {
     name: 'AddProperty',
@@ -111,7 +111,7 @@ const CustomBottomBar = memo(
                 key={route.key}
                 style={[
                   styles.tab,
-                  state.index === index + middleIndex + 1 && styles.activeTab,
+                  state.index === index + middleIndex + 1 && [styles.activeTab, styles.activeTabColor],
                 ]}
                 onPress={() => {
                   const event = navigation.emit({
@@ -201,9 +201,11 @@ const styles = StyleSheet.create({
     padding: 8,
   },
   activeTab: {
-    backgroundColor: Colors.main + '20', // 20 is opacity
-    borderRadius: 16,
-    margin: 6,
+    // borderRadius: 16,
+    // margin: 2,
+  },
+  activeTabColor: {
+    color: Colors.main + '20', // 20 is opacity
   },
   tabContent: {
     alignItems: 'center',

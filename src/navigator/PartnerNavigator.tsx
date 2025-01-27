@@ -4,9 +4,9 @@ import ProfileScreen from '../screens/common/ProfileScreen';
 import BottomTabs from './components/BottomTabs';
 import CustomDrawerContent from '../components/CustomDrawerContent';
 import Colors from '../constants/Colors';
-import {DrawerParamList} from '../types/navigation';
+import {PartnerDrawerParamList} from '../types/navigation';
 
-const Drawer = createDrawerNavigator<DrawerParamList>();
+const Drawer = createDrawerNavigator<PartnerDrawerParamList>();
 
 const drawerStyles = {
   drawerType: 'front' as const,

@@ -13,7 +13,7 @@ export type BottomTabParamList = {
   Test: undefined;
 };
 
-export type DrawerParamList = {
+export type PartnerDrawerParamList = {
   'Home Screen': NavigatorScreenParams<BottomTabParamList>;
   'Profile Screen': undefined;
 };
