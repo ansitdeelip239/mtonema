@@ -104,7 +104,7 @@ const AddAgentPropertyScreen: React.FC<Props> = ({navigation}) => {
           setFormInput={handleInputChange}
           mode="outlined"
           placeholder="1234567890"
-          keyboardType="numeric"
+          keyboardType="number-pad"
         />
 
         <MaterialTextInput<AgentPropertyForm>
@@ -139,7 +139,7 @@ const AddAgentPropertyScreen: React.FC<Props> = ({navigation}) => {
           setFormInput={handleInputChange}
           mode="outlined"
           placeholder="Enter amount"
-          keyboardType="numeric"
+          keyboardType="number-pad"
           rightComponent={<Text>{formatCurrency(formInput.demandPrice)}</Text>}
           maxLength={10}
         />
@@ -152,7 +152,7 @@ const AddAgentPropertyScreen: React.FC<Props> = ({navigation}) => {
           setFormInput={handleInputChange}
           mode="outlined"
           placeholder="Enter deposit amount"
-          keyboardType="numeric"
+          keyboardType="number-pad"
           onFocus={() => scrollToEnd()}
           rightComponent={
             <Text>{formatCurrency(formInput.securityDepositAmount)}</Text>
