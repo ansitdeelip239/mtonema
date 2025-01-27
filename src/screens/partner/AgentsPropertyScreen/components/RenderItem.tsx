@@ -28,14 +28,14 @@ const renderItem = ({item}: {item: AgentData}) => {
         </View>
         <View style={styles.actions}>
           <IconButton
-            icon={() => GetIcon('edit')}
+            icon={() => GetIcon({iconName: 'edit', color: Colors.main})}
             size={20}
             onPress={() => onEdit(item.Id)}
             iconColor={Colors.main}
             style={styles.actionButton}
           />
           <IconButton
-            icon={() => GetIcon('delete')}
+            icon={() => GetIcon({iconName: 'delete', color: Colors.red})}
             size={20}
             onPress={() => onDelete(item.Id)}
             iconColor={Colors.red || '#ff4444'}

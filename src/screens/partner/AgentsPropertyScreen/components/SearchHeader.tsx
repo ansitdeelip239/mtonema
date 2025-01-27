@@ -30,8 +30,8 @@ const SearchHeader = ({
             onSearch(text);
           }}
           style={styles.searchInput}
-          icon={() => GetIcon('search')}
-          clearIcon={searchText ? () => GetIcon('clear') : undefined}
+          icon={() => GetIcon({iconName: 'search', color: Colors.placeholderColor})}
+          clearIcon={searchText ? () => GetIcon({iconName: 'clear', color: '#000'}) : undefined}
           inputStyle={styles.searchInputText}
           elevation={5}
         />
