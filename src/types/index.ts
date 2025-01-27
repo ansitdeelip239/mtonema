@@ -228,7 +228,7 @@ export interface Group {
   GroupColor: string;
 }
 
-export interface ClientRequestModel {
+export interface Client {
   Id: number;
   PartnerId: number;
   ClientName: string;
@@ -242,4 +242,9 @@ export interface ClientRequestModel {
   CreatedOn: string;
   Activity: string;
   Status: number;
+}
+
+export interface ClientResponseModel {
+  responsePagingModel: PagingModel;
+  clientDataModel: Client[];
 }
