@@ -20,7 +20,7 @@ import PartnerService from '../../../services/PartnerService';
 import {useAuth} from '../../../hooks/useAuth';
 import useForm from '../../../hooks/useForm';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
-import {AgentStackParamList} from '../../../navigator/PartnerNavigator';
+import {AgentStackParamList} from '../../../types/navigation';
 
 type Props = NativeStackScreenProps<AgentStackParamList, 'AddAgentProperty'>;
 

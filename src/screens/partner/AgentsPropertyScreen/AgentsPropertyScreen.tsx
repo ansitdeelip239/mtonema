@@ -1,6 +1,6 @@
 import React, {useState, useEffect, useCallback, useMemo, useRef} from 'react';
 import {View, StyleSheet, FlatList, RefreshControl, Text} from 'react-native';
-import {FAB, Portal, PaperProvider} from 'react-native-paper'; // Import FAB.Group and related components
+import {PaperProvider} from 'react-native-paper'; // Import FAB.Group and related components
 import PartnerService from '../../../services/PartnerService';
 import {useAuth} from '../../../hooks/useAuth';
 import {AgentData, FilterValues, PagingModel} from '../../../types';
@@ -9,11 +9,11 @@ import renderFooter from './components/RenderFooter';
 import SearchHeader from './components/SearchHeader';
 import Colors from '../../../constants/Colors';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
-import {AgentStackParamList} from '../../../navigator/PartnerNavigator';
+import {AgentStackParamList} from '../../../types/navigation';
 
 type Props = NativeStackScreenProps<AgentStackParamList, 'AgentPropertyList'>;
 
-const AgentDataScreen: React.FC<Props> = ({navigation}: any) => {
+const AgentDataScreen: React.FC<Props> = () => {
   const [agentData, setAgentData] = useState<AgentData[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isRefreshing, setIsRefreshing] = useState(false);
@@ -25,7 +25,6 @@ const AgentDataScreen: React.FC<Props> = ({navigation}: any) => {
     propertyType: null,
     bhkType: null,
   });
-  const [fabOpen, setFabOpen] = useState(false); // State for FAB.Group open/close
   const {user} = useAuth();
   const PAGE_SIZE = 10;
 
@@ -139,10 +138,6 @@ const AgentDataScreen: React.FC<Props> = ({navigation}: any) => {
     </View>
   );
 
-  const handleAddProperty = () => {
-    navigation.navigate('AddAgentProperty');
-  };
-
   return (
     <PaperProvider>
       <View style={styles.container}>
@@ -169,28 +164,6 @@ const AgentDataScreen: React.FC<Props> = ({navigation}: any) => {
           ListFooterComponent={renderFooter({isLoading})}
           ListEmptyComponent={renderEmptyComponent}
         />
-        {/* FAB Group */}
-        <Portal>
-          <FAB.Group
-            open={fabOpen}
-            visible
-            icon={fabOpen ? require('../../../assets/Icon/crossicon.png') : require('../../../assets/Icon/add.png')} // Custom icon for the FAB
-            actions={[
-              {
-                icon: require('../../../assets/Icon/add.png'), // Custom icon for the "Add Property" action
-                label: 'Add Property',
-                onPress: handleAddProperty,
-              },
-            ]}
-            onStateChange={({open}) => setFabOpen(open)}
-            onPress={() => {
-              if (fabOpen) {
-                // Do something if the FAB group is open
-              }
-            }}
-            fabStyle={styles.fabStyle} // Custom style for the FAB
-          />
-        </Portal>
       </View>
     </PaperProvider>
   );
