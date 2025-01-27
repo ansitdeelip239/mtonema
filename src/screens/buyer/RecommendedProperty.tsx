@@ -15,7 +15,7 @@ import url from '../../constants/api';
 import { PropertyModel } from '../../types';
 import PropertyModal from './PropertyModal';
 import EnquiryButton from '../common/EnquiryButton';
-
+import Colors from '../../constants/Colors';
 const RecommendedProperty = () => {
   const [properties, setProperties] = useState<PropertyModel[]>([]);
   const [loading, setLoading] = useState(true);
@@ -190,6 +190,7 @@ const RecommendedProperty = () => {
 
   return (
     <SafeAreaView style={styles.container}>
+      <Text style={styles.recomProeprty}>Recommended Property</Text>
       <FlatList
         data={properties}
         keyExtractor={item => `property-${item.ID}`}
@@ -231,6 +232,13 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#f5f5f5',
     padding: 10,
+  },
+  recomProeprty:{
+    fontSize: 25,
+        fontWeight:'bold',
+        marginBottom:15,
+        color:Colors.primary,
+        padding:10,
   },
   centerContainer: {
     flex: 1,

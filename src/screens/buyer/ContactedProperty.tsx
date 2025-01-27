@@ -13,7 +13,12 @@ import url from '../../constants/api';
 import { PropertyModel } from '../../types';
 import { useAuth } from '../../hooks/useAuth';
 import PropertyModal from './PropertyModal';
-import Colors from '../../constants/Colors';
+import { DrawerNavigationProp } from '@react-navigation/drawer';
+// import Colors from '../../constants/Colors';
+
+type HomeProps = {
+  navigation: DrawerNavigationProp<any>;
+};
 const EmptyComponent = () => {
   return (
     <View style={styles.centerContainer}>
@@ -22,7 +27,7 @@ const EmptyComponent = () => {
   );
 };
 
-const ContactedProperty = () => {
+const ContactedProperty = ({navigation}: HomeProps) => {
   const [properties, setProperties] = useState<PropertyModel[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -213,7 +218,15 @@ const ContactedProperty = () => {
 
   return (
     <>
-    <Text style={styles.contactText}>Contacted Property</Text>
+   <View style={styles.topBar}>
+  <TouchableOpacity onPress={() => navigation.toggleDrawer()}>
+    <Image
+      source={require('../../assets/Images/menu.png')}
+      style={styles.menuIcon}
+    />
+  </TouchableOpacity>
+  <Text style={styles.contactText}>Contacted Property</Text>
+</View>
       <FlatList
         style={styles.container}
         data={properties}
@@ -247,13 +260,25 @@ const styles = StyleSheet.create({
     backgroundColor: '#f5f5f5',
     padding: 10,
   },
-  contactText:{
-    fontSize: 25,
-    fontWeight:'bold',
-    marginBottom:15,
-    color:Colors.primary,
-    padding:10,
-    // textAlign: 'center',
+  topBar: {
+    flexDirection: 'row', // Align items horizontally
+    alignItems: 'center', // Center items vertically
+    paddingHorizontal: 10, // Add horizontal padding
+    paddingVertical: 12, // Add vertical padding
+    // backgroundColor: 'rgba(255, 182, 193, 0.6)', // Light pink with low opacity
+    borderRadius: 15, // Rounded corners
+    // marginHorizontal: '1%', // 5% space on both sides
+    marginTop: 20, // Add some top margin
+  },
+  menuIcon: {
+    width: 24,
+    height: 24,
+    marginRight: 20, // Add gap between icon and text
+  },
+  contactText: {
+    fontSize: 20, // Adjust font size
+    fontWeight: 'bold',
+    // color: Colors.primary,
   },
   centerContainer: {
     flex: 1,
