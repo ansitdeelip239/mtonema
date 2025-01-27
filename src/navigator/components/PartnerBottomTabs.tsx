@@ -10,6 +10,7 @@ import ClientScreen from '../../screens/partner/ClientScreen/ClientScreen';
 import {PartnerBottomTabParamList} from '../../types/navigation';
 import AddAgentPropertyScreen from '../../screens/partner/AddAgentPropertyScreen/AddAgentPropertyScreen';
 import AgentDataScreen from '../../screens/partner/AgentsPropertyScreen/AgentsPropertyScreen';
+import PartnerProfileScreen from '../../screens/partner/ProfileScreen/ProfileScreen';
 
 const Tab = createBottomTabNavigator<PartnerBottomTabParamList>();
 
@@ -40,8 +41,8 @@ const tabScreens: Array<{
   },
   {
     name: 'Test',
-    component: ClientScreen,
-    icon: 'delete',
+    component: PartnerProfileScreen,
+    icon: 'user',
   },
 ] as const;
 

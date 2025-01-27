@@ -10,7 +10,7 @@ import SearchHeader from './components/SearchHeader';
 import Colors from '../../../constants/Colors';
 import {BottomTabScreenProps} from '@react-navigation/bottom-tabs';
 import Header from '../../../components/Header';
-import {PartnerBottomTabParamList} from '../../../types/navigation';
+import {PartnerBottomTabParamList, PartnerDrawerParamList} from '../../../types/navigation';
 
 // type Props = NativeStackScreenProps<AgentStackParamList, 'AgentPropertyList'>;
 
@@ -144,7 +144,7 @@ const AgentDataScreen: React.FC<Props> = () => {
   return (
     <PaperProvider>
       <View style={styles.container}>
-        <Header title="Agent's Property" />
+        <Header<PartnerDrawerParamList> title="Agent's Property" />
         <SearchHeader
           initialFilters={filters}
           onSearch={handleSearch}

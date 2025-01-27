@@ -3,10 +3,14 @@ import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import GetIcon from './GetIcon';
 import Colors from '../constants/Colors';
 import {useDrawer} from '../hooks/useDrawer';
-import {PartnerDrawerParamList} from '../types/navigation';
+import {ParamListBase} from '@react-navigation/native';
 
-export default function Header({title}: {title: string}) {
-  const {openDrawer} = useDrawer<PartnerDrawerParamList>();
+export default function Header<T extends ParamListBase>({
+  title,
+}: {
+  title: string;
+}) {
+  const {openDrawer} = useDrawer<T>();
 
   return (
     <View style={styles.headerContainer}>
@@ -17,6 +21,7 @@ export default function Header({title}: {title: string}) {
     </View>
   );
 }
+
 const styles = StyleSheet.create({
   headerText: {
     fontSize: 26,
@@ -28,8 +33,6 @@ const styles = StyleSheet.create({
   headerContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    // justifyContent: 'space-between',
-    // padding: 16,
     paddingLeft: 16,
   },
   menuButton: {

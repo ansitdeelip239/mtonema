@@ -12,6 +12,7 @@ export type IconEnum =
   | 'realEstate'
   | 'home'
   | 'client'
+  | 'user'
   ;
 
 type IconProps = {
@@ -34,6 +35,7 @@ const GetIcon = ({iconName, color}: IconProps) => {
     realEstate: require('../assets/Icon/real-estate.png'),
     home: require('../assets/Icon/home.png'),
     client: require('../assets/Icon/customer.png'),
+    user: require('../assets/Icon/user.png'),
   };
 
   const imageStyle = [styles.searchIcon, color ? {tintColor: color} : null];
