@@ -17,4 +17,5 @@ export default {
   SECONDARY_3: '#ffffff',
   black: '#050000',
   placeholderColor: '#a1a19f',
+  red: '#ff0000',
 };
