@@ -22,7 +22,7 @@ const SearchHeader = ({
     <View style={styles.container}>
       <View style={styles.searchContainer}>
         <Searchbar
-          placeholder="Search agents..."
+          placeholder="Search properties..."
           placeholderTextColor={Colors.placeholderColor}
           value={searchText}
           onChangeText={text => {
@@ -34,6 +34,9 @@ const SearchHeader = ({
           clearIcon={searchText ? () => GetIcon({iconName: 'clear', color: '#000'}) : undefined}
           inputStyle={styles.searchInputText}
           elevation={5}
+          theme={{
+            mode: 'adaptive',
+          }}
         />
       </View>
       <TouchableOpacity
@@ -84,6 +87,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     borderRadius: 50,
     elevation: 5,
+    height: 50,
     shadowColor: '#000',
     shadowOffset: {
       width: 0,

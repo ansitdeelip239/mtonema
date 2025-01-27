@@ -3,12 +3,12 @@ import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {BottomTabBarProps} from '@react-navigation/bottom-tabs';
 import {CommonActions} from '@react-navigation/native';
 import {StyleSheet, TouchableOpacity, View} from 'react-native';
-import GetIcon from '../components/GetIcon';
-import Colors from '../constants/Colors';
-import HomeScreen from '../screens/partner/HomeScreen/HomeScreen';
-import ClientScreen from '../screens/partner/ClientScreen/ClientScreen';
-import AgentPropertyStack from './AgentPropertyStack';
-import {BottomTabParamList} from '../types/navigation';
+import GetIcon from '../../components/GetIcon';
+import Colors from '../../constants/Colors';
+import HomeScreen from '../../screens/partner/HomeScreen/HomeScreen';
+import ClientScreen from '../../screens/partner/ClientScreen/ClientScreen';
+import {BottomTabParamList} from '../../types/navigation';
+import AgentPropertyStack from '../AgentPropertyStack';
 
 const Tab = createBottomTabNavigator<BottomTabParamList>();
 
@@ -50,7 +50,7 @@ const CustomBottomBar = memo(
             {state.routes.slice(0, 2).map((route, index) => (
               <TouchableOpacity
                 key={route.key}
-                style={styles.tab}
+                style={[styles.tab, state.index === index && styles.activeTab]}
                 onPress={() => {
                   const event = navigation.emit({
                     type: 'tabPress',
@@ -65,11 +65,13 @@ const CustomBottomBar = memo(
                     });
                   }
                 }}>
-                {descriptors[route.key].options.tabBarIcon?.({
-                  focused: state.index === index,
-                  color: state.index === index ? Colors.main : '#666',
-                  size: 24,
-                })}
+                <View style={styles.tabContent}>
+                  {descriptors[route.key].options.tabBarIcon?.({
+                    focused: state.index === index,
+                    color: state.index === index ? Colors.main : '#666',
+                    size: 24,
+                  })}
+                </View>
               </TouchableOpacity>
             ))}
           </View>
@@ -87,7 +89,10 @@ const CustomBottomBar = memo(
             {state.routes.slice(2).map((route, index) => (
               <TouchableOpacity
                 key={route.key}
-                style={styles.tab}
+                style={[
+                  styles.tab,
+                  state.index === index + 2 && styles.activeTab,
+                ]}
                 onPress={() => {
                   const event = navigation.emit({
                     type: 'tabPress',
@@ -102,11 +107,13 @@ const CustomBottomBar = memo(
                     });
                   }
                 }}>
-                {descriptors[route.key].options.tabBarIcon?.({
-                  focused: state.index === index + 2,
-                  color: state.index === index + 2 ? Colors.main : '#666',
-                  size: 24,
-                })}
+                <View style={styles.tabContent}>
+                  {descriptors[route.key].options.tabBarIcon?.({
+                    focused: state.index === index + 2,
+                    color: state.index === index + 2 ? Colors.main : '#666',
+                    size: 24,
+                  })}
+                </View>
               </TouchableOpacity>
             ))}
           </View>
@@ -164,6 +171,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
+    padding: 8,
   },
   fabContainer: {
     width: 64,
@@ -185,6 +193,14 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
+  },
+  activeTab: {
+    backgroundColor: Colors.main + '20', // 20 is opacity
+    borderRadius: 16,
+  },
+  tabContent: {
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 });
 

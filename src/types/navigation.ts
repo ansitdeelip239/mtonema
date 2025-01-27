@@ -7,7 +7,7 @@ export type AgentStackParamList = {
 
 export type BottomTabParamList = {
   Home: undefined;
-  Property: NavigatorScreenParams<AgentStackParamList>;
+  Property: undefined;
   Clients: undefined;
   Test: undefined;
 };

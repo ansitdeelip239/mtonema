@@ -1,7 +1,7 @@
 import React, {memo} from 'react';
 import {createDrawerNavigator} from '@react-navigation/drawer';
 import ProfileScreen from '../screens/common/ProfileScreen';
-import BottomTabs from './BottomTabs';
+import BottomTabs from './components/BottomTabs';
 import CustomDrawerContent from '../components/CustomDrawerContent';
 import Colors from '../constants/Colors';
 import {DrawerParamList} from '../types/navigation';
