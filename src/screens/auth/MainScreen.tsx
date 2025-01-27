@@ -14,7 +14,6 @@ import GetIcon from '../../components/GetIcon';
 type Props = NativeStackScreenProps<AuthStackParamList, 'MainScreen'>;
 
 export const MainScreen: React.FC<Props> = ({navigation}) => {
-
   const onLogin = (role: string[]) => {
     navigation.navigate('EmailScreen', {role});
   };
@@ -81,7 +80,7 @@ export const MainScreen: React.FC<Props> = ({navigation}) => {
               <TouchableOpacity
                 style={styles.button2}
                 onPress={() => onLogin(['Partner'])}>
-                <GetIcon iconName="partner" color="white" size='45' />
+                <GetIcon iconName="partner" color="white" size="45" />
                 <Text style={styles.buttonText2}>Login as partner</Text>
               </TouchableOpacity>
             </View>
@@ -185,7 +184,7 @@ const styles = StyleSheet.create({
     marginLeft: 10, // Add spacing between icon and text
     alignItems: 'center', // Center icon and text vertically
     justifyContent: 'center', // Center the entire group horizontally
-    marginEnd:20,
+    marginEnd: 20,
   },
   modalOverlay: {
     flex: 1,
