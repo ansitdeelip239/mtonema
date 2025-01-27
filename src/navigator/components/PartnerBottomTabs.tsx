@@ -3,30 +3,40 @@ import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {BottomTabBarProps} from '@react-navigation/bottom-tabs';
 import {CommonActions} from '@react-navigation/native';
 import {StyleSheet, TouchableOpacity, View} from 'react-native';
-import GetIcon from '../../components/GetIcon';
+import GetIcon, {IconEnum} from '../../components/GetIcon';
 import Colors from '../../constants/Colors';
 import HomeScreen from '../../screens/partner/HomeScreen/HomeScreen';
 import ClientScreen from '../../screens/partner/ClientScreen/ClientScreen';
-import {BottomTabParamList} from '../../types/navigation';
-import AgentPropertyStack from '../AgentPropertyStack';
+import {PartnerBottomTabParamList} from '../../types/navigation';
+import AddAgentPropertyScreen from '../../screens/partner/AddAgentPropertyScreen/AddAgentPropertyScreen';
+import AgentDataScreen from '../../screens/partner/AgentsPropertyScreen/AgentsPropertyScreen';
 
-const Tab = createBottomTabNavigator<BottomTabParamList>();
+const Tab = createBottomTabNavigator<PartnerBottomTabParamList>();
 
-const tabScreens = [
+const tabScreens: Array<{
+  name: keyof PartnerBottomTabParamList;
+  component: React.FC<any>;
+  icon: IconEnum;
+}> = [
   {
     name: 'Home',
     component: HomeScreen,
-    icon: 'edit',
+    icon: 'home',
   },
   {
     name: 'Property',
-    component: AgentPropertyStack,
-    icon: 'delete',
+    component: AgentDataScreen,
+    icon: 'realEstate',
+  },
+  {
+    name: 'AddProperty',
+    component: AddAgentPropertyScreen,
+    icon: 'property',
   },
   {
     name: 'Clients',
     component: ClientScreen,
-    icon: 'delete',
+    icon: 'client',
   },
   {
     name: 'Test',
@@ -37,17 +47,13 @@ const tabScreens = [
 
 const CustomBottomBar = memo(
   ({navigation, state, descriptors}: BottomTabBarProps) => {
-    const handleAddPress = () => {
-      navigation.navigate('Property', {
-        screen: 'AddAgentProperty',
-      });
-    };
+    const middleIndex = Math.floor(tabScreens.length / 2);
 
     return (
       <View style={styles.bottomBarContainer}>
         <View style={styles.bottomBar}>
           <View style={styles.tabSection}>
-            {state.routes.slice(0, 2).map((route, index) => (
+            {state.routes.slice(0, middleIndex).map((route, index) => (
               <TouchableOpacity
                 key={route.key}
                 style={[styles.tab, state.index === index && styles.activeTab]}
@@ -76,22 +82,36 @@ const CustomBottomBar = memo(
             ))}
           </View>
 
-          <View style={styles.fabContainer}>
-            <TouchableOpacity
-              style={styles.fabButton}
-              onPress={handleAddPress}
-              activeOpacity={0.8}>
-              <GetIcon iconName="property" color="#fff" />
-            </TouchableOpacity>
-          </View>
+          <TouchableOpacity
+            key={state.routes[middleIndex].key}
+            style={[
+              styles.centerTab,
+              state.index === middleIndex && styles.activeCenterTab,
+            ]}
+            onPress={() => {
+              const event = navigation.emit({
+                type: 'tabPress',
+                target: state.routes[middleIndex].key,
+                canPreventDefault: true,
+              });
+
+              if (!event.defaultPrevented) {
+                navigation.dispatch({
+                  ...CommonActions.navigate(state.routes[middleIndex].name),
+                  target: state.key,
+                });
+              }
+            }}>
+            <GetIcon iconName="property" color="#fff" />
+          </TouchableOpacity>
 
           <View style={styles.tabSection}>
-            {state.routes.slice(2).map((route, index) => (
+            {state.routes.slice(middleIndex + 1).map((route, index) => (
               <TouchableOpacity
                 key={route.key}
                 style={[
                   styles.tab,
-                  state.index === index + 2 && styles.activeTab,
+                  state.index === index + middleIndex + 1 && [styles.activeTab, styles.activeTabColor],
                 ]}
                 onPress={() => {
                   const event = navigation.emit({
@@ -109,8 +129,11 @@ const CustomBottomBar = memo(
                 }}>
                 <View style={styles.tabContent}>
                   {descriptors[route.key].options.tabBarIcon?.({
-                    focused: state.index === index + 2,
-                    color: state.index === index + 2 ? Colors.main : '#666',
+                    focused: state.index === index + middleIndex + 1,
+                    color:
+                      state.index === index + middleIndex + 1
+                        ? Colors.main
+                        : '#666',
                     size: 24,
                   })}
                 </View>
@@ -123,12 +146,13 @@ const CustomBottomBar = memo(
   },
 );
 
-const BottomTabs = memo(() => (
+const PartnerBottomTabs = memo(() => (
   <Tab.Navigator
     screenOptions={{
       headerShown: false,
       tabBarHideOnKeyboard: true,
     }}
+    // eslint-disable-next-line react/no-unstable-nested-components
     tabBar={props => <CustomBottomBar {...props} />}>
     {tabScreens.map(({name, component, icon}) => (
       <Tab.Screen
@@ -137,7 +161,10 @@ const BottomTabs = memo(() => (
         component={component}
         options={{
           tabBarLabel: name,
-          tabBarIcon: () => <GetIcon iconName={icon} color="#000" />,
+          // eslint-disable-next-line react/no-unstable-nested-components
+          tabBarIcon: ({focused, color}) => (
+            <GetIcon iconName={icon} color={focused ? Colors.main : color} />
+          ),
         }}
       />
     ))}
@@ -173,12 +200,18 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     padding: 8,
   },
-  fabContainer: {
-    width: 64,
+  activeTab: {
+    // borderRadius: 16,
+    // margin: 2,
+  },
+  activeTabColor: {
+    color: Colors.main + '20', // 20 is opacity
+  },
+  tabContent: {
     alignItems: 'center',
     justifyContent: 'center',
   },
-  fabButton: {
+  centerTab: {
     backgroundColor: Colors.main,
     width: 48,
     height: 48,
@@ -194,14 +227,10 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
   },
-  activeTab: {
-    backgroundColor: Colors.main + '20', // 20 is opacity
-    borderRadius: 16,
-  },
-  tabContent: {
-    alignItems: 'center',
-    justifyContent: 'center',
+  activeCenterTab: {
+    backgroundColor: Colors.main,
+    transform: [{scale: 1.1}],
   },
 });
 
-export default BottomTabs;
+export default PartnerBottomTabs;

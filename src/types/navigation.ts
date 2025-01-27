@@ -5,15 +5,16 @@ export type AgentStackParamList = {
   AddAgentProperty: undefined;
 };
 
-export type BottomTabParamList = {
+export type PartnerBottomTabParamList = {
   Home: undefined;
   Property: undefined;
+  AddProperty: undefined;
   Clients: undefined;
   Test: undefined;
 };
 
-export type DrawerParamList = {
-  'Home Screen': NavigatorScreenParams<BottomTabParamList>;
+export type PartnerDrawerParamList = {
+  'Home Screen': NavigatorScreenParams<PartnerBottomTabParamList>;
   'Profile Screen': undefined;
 };
 

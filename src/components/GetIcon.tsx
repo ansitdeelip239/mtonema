@@ -1,8 +1,21 @@
 import React from 'react';
 import {Image, StyleSheet} from 'react-native';
 
+export type IconEnum =
+  | 'search'
+  | 'clear'
+  | 'filter'
+  | 'edit'
+  | 'delete'
+  | 'property'
+  | 'hamburgerMenu'
+  | 'realEstate'
+  | 'home'
+  | 'client'
+  ;
+
 type IconProps = {
-  iconName: 'search' | 'clear' | 'filter' | 'edit' | 'delete' | 'property';
+  iconName: IconEnum;
   color?: string;
 };
 
@@ -17,6 +30,10 @@ const GetIcon = ({iconName, color}: IconProps) => {
     edit: require('../assets/Icon/Edit.png'),
     delete: require('../assets/Icon/recycle-bin.png'),
     property: require('../assets/Icon/add.png'),
+    hamburgerMenu: require('../assets/Icon/menu.png'),
+    realEstate: require('../assets/Icon/real-estate.png'),
+    home: require('../assets/Icon/home.png'),
+    client: require('../assets/Icon/customer.png'),
   };
 
   const imageStyle = [styles.searchIcon, color ? {tintColor: color} : null];

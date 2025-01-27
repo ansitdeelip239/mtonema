@@ -8,10 +8,13 @@ import renderItem from './components/RenderItem';
 import renderFooter from './components/RenderFooter';
 import SearchHeader from './components/SearchHeader';
 import Colors from '../../../constants/Colors';
-import {NativeStackScreenProps} from '@react-navigation/native-stack';
-import {AgentStackParamList} from '../../../types/navigation';
+import {BottomTabScreenProps} from '@react-navigation/bottom-tabs';
+import Header from '../../../components/Header';
+import {PartnerBottomTabParamList} from '../../../types/navigation';
 
-type Props = NativeStackScreenProps<AgentStackParamList, 'AgentPropertyList'>;
+// type Props = NativeStackScreenProps<AgentStackParamList, 'AgentPropertyList'>;
+
+type Props = BottomTabScreenProps<PartnerBottomTabParamList, 'Property'>;
 
 const AgentDataScreen: React.FC<Props> = () => {
   const [agentData, setAgentData] = useState<AgentData[]>([]);
@@ -141,7 +144,7 @@ const AgentDataScreen: React.FC<Props> = () => {
   return (
     <PaperProvider>
       <View style={styles.container}>
-        <Text style={styles.headerText}>Agent's Property</Text>
+        <Header title="Agent's Property" />
         <SearchHeader
           initialFilters={filters}
           onSearch={handleSearch}
@@ -178,6 +181,7 @@ const styles = StyleSheet.create({
   listContainer: {
     padding: 16,
     paddingTop: 0,
+    paddingBottom: 100,
     flexGrow: 1,
   },
   emptyContainer: {
@@ -191,13 +195,6 @@ const styles = StyleSheet.create({
   },
   fabStyle: {
     backgroundColor: Colors.main,
-  },
-  headerText: {
-    fontSize: 26,
-    fontWeight: '600',
-    color: Colors.black,
-    padding: 16,
-    paddingBottom: 8,
   },
 });
 
