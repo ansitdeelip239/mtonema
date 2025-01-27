@@ -137,7 +137,7 @@ export interface PropertyModel {
 //   Password: string;
 //   TermsChecked: true;
 // }
-export interface SignUpRequest  {
+export interface SignUpRequest {
   Name: string;
   Email: string;
   Location: string;
@@ -145,4 +145,65 @@ export interface SignUpRequest  {
   Password?: string;
   TermsChecked?: boolean;
   URL?: string;
+}
+
+export interface MasterDetailModel {
+  MasterDetailName: string;
+  ID: number;
+}
+
+export interface AgentData {
+  Id: number;
+  AgentContactNo: string;
+  AgentName: string;
+  DemandPrice: string;
+  PropertyLocation: string;
+  PropertyNotes: string;
+  SecurityDepositAmount: string;
+  Negotiable: boolean;
+  CreatedOn: string;
+  FlatSize: MasterDetailModel;
+}
+
+export interface PagingModel {
+  CurrentPage: number;
+  NextPage: boolean;
+  PageSize: number;
+  TotalCount: number;
+  TotalPage: number;
+  PreviousPage: boolean;
+}
+
+export interface FilterValues {
+  propertyLocation: string | null;
+  propertyType: string | null;
+  bhkType: string | null;
+}
+
+export interface AgentPropertyForm {
+  agentName: string;
+  agentContactNo: string;
+  propertyLocation: string;
+  propertyType: string;
+  bhkType: string;
+  demandPrice: string;
+  securityDepositAmount: string;
+  negotiable: boolean;
+  propertyNotes: string;
+}
+
+export interface AgentPropertyRequestModel {
+  AgentContactNo: string;
+  AgentName: string;
+  DemandPrice: string;
+  EmailId: string;
+  FlatSize: string;
+  Negotiable: boolean;
+  PriceUnit: string | null;
+  PropertyLocation: string;
+  PropertyNotes: string;
+  PropertyType: string;
+  SecurityDepositAmount: string;
+  Id: number;
+  Status: number;
 }

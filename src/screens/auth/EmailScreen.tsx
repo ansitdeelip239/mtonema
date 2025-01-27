@@ -17,9 +17,8 @@ import {AuthStackParamList} from '../../navigator/AuthNavigator';
 import AuthService from '../../services/AuthService';
 import {useAuth} from '../../hooks/useAuth';
 import {User} from '../../types';
-import { validateEmail } from '../../utils/formvalidation';
-
-// import OtpModel from '../../components/OtpModel
+import {validateEmail} from '../../utils/formvalidation';
+import Colors from '../../constants/Colors';
 type Props = NativeStackScreenProps<AuthStackParamList, 'EmailScreen'>;
 
 const EmailScreen: React.FC<Props> = ({navigation, route}) => {
@@ -128,6 +127,7 @@ const handleContinue = useCallback(async () => {
           <Text style={styles.label}>Email or Mobile</Text>
           <TextInput
             placeholder="Email or Mobile"
+            placeholderTextColor={Colors.placeholderColor}
             value={email}
             onChangeText={setEmail}
             style={[styles.input, !isEmailValid && styles.inputError]}
@@ -231,6 +231,7 @@ const styles = StyleSheet.create({
     borderBottomColor: '#880e4f',
     padding: 5,
     fontSize: 16,
+    color: '#000000',
   },
   errorText: {
     color: 'red',

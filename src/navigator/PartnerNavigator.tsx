@@ -1,39 +1,40 @@
-import {createDrawerNavigator} from '@react-navigation/drawer';
 import React, {memo} from 'react';
-import Colors from '../constants/Colors';
-import CustomDrawerContent from '../components/CustomDrawerContent';
+import {createDrawerNavigator} from '@react-navigation/drawer';
 import ProfileScreen from '../screens/common/ProfileScreen';
-import ClientScreen from '../screens/partner/ClientScreen';
-import AgentDataScreen from '../screens/partner/AgentDataScreen';
+import BottomTabs from './components/BottomTabs';
+import CustomDrawerContent from '../components/CustomDrawerContent';
+import Colors from '../constants/Colors';
+import {DrawerParamList} from '../types/navigation';
 
-const Drawer = createDrawerNavigator();
+const Drawer = createDrawerNavigator<DrawerParamList>();
 
-const PartnerNavigator = memo(() => {
-  return (
-    <Drawer.Navigator
-      drawerContent={props => <CustomDrawerContent {...props} />}
-      initialRouteName="Client"
-      screenOptions={{
-        drawerType: 'front',
-        drawerActiveTintColor: 'white',
-        drawerActiveBackgroundColor: Colors.main,
-        drawerStyle: {
-          width: 240,
-        },
-        headerStyle: {
-          backgroundColor: Colors.main,
-        },
-        headerTintColor: Colors.SECONDARY_3,
-      }}>
-      <Drawer.Screen name="Client" component={ClientScreen} />
-      <Drawer.Screen name="Agent Data" component={AgentDataScreen} />
-      <Drawer.Screen
-        name="Profile Screen"
-        component={ProfileScreen}
-        options={{drawerItemStyle: {display: 'none'}}}
-      />
-    </Drawer.Navigator>
-  );
-});
+const drawerStyles = {
+  drawerType: 'front' as const,
+  drawerActiveTintColor: 'white',
+  drawerActiveBackgroundColor: Colors.main,
+  drawerStyle: {width: 240},
+  headerStyle: {backgroundColor: Colors.main},
+  headerTintColor: Colors.SECONDARY_3,
+};
+
+const PartnerNavigator = memo(() => (
+  <Drawer.Navigator
+    drawerContent={props => <CustomDrawerContent {...props} />}
+    screenOptions={drawerStyles}
+    initialRouteName="Home Screen">
+    <Drawer.Screen
+      name="Home Screen"
+      component={BottomTabs}
+      options={{
+        headerShown: false,
+      }}
+    />
+    <Drawer.Screen
+      name="Profile Screen"
+      component={ProfileScreen}
+      options={{drawerItemStyle: {display: 'none'}}}
+    />
+  </Drawer.Navigator>
+));
 
 export default PartnerNavigator;

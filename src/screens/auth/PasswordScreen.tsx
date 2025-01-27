@@ -13,6 +13,7 @@ import {AuthStackParamList} from '../../navigator/AuthNavigator';
 import AuthService from '../../services/AuthService';
 import {useAuth} from '../../hooks/useAuth';
 import Toast from 'react-native-toast-message';
+import Colors from '../../constants/Colors';
 
 type Props = NativeStackScreenProps<AuthStackParamList, 'PasswordScreen'>;
 
@@ -119,6 +120,7 @@ const PasswordScreen: React.FC<Props> = ({navigation, route}) => {
               onChangeText={setPassword}
               secureTextEntry={!showPassword}
               placeholder="Enter your password"
+              placeholderTextColor={Colors.placeholderColor}
               style={styles.input}
               onSubmitEditing={handleContinue}
               returnKeyType="done"
