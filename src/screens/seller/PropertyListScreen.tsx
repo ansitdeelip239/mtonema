@@ -15,6 +15,7 @@ import url from '../../constants/api';
 import {PropertyModel} from '../../types';
 import PropertyModal from '../buyer/PropertyModal';
 import {useAuth} from '../../hooks/useAuth';
+import Header from '../../components/Header';
 
 const PropertyListScreen = () => {
   const [properties, setProperties] = useState<PropertyModel[]>([]);
@@ -226,6 +227,7 @@ console.log(authToken);
 
   return (
     <SafeAreaView style={styles.container}>
+      <Header title="Listed Property"/>
       <FlatList
         data={properties}
         keyExtractor={item => `property-${item.ID}`}

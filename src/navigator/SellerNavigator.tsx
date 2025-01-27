@@ -14,7 +14,7 @@ const SellerNavigator = memo(() => {
     <Drawer.Navigator
       // eslint-disable-next-line react/no-unstable-nested-components
       drawerContent={props => <CustomDrawerContent {...props} />}
-      initialRouteName="Home"
+      initialRouteName="HomeScreen"
       screenOptions={{
         drawerType: 'front',
         drawerActiveTintColor: 'white',
@@ -27,7 +27,10 @@ const SellerNavigator = memo(() => {
         },
         headerTintColor: Colors.SECONDARY_3,
       }}>
-      <Drawer.Screen name="Home" component={SellerbottomTabs} />
+      <Drawer.Screen name="HomeScreen" component={SellerbottomTabs}
+      options={{
+        headerShown:false,
+      }}/>
       {/* <Drawer.Screen name="Listed Property" component={PropertyListScreen} /> */}
       {/* <Drawer.Screen name="Post Property" component={PostProperty} /> */}
       <Drawer.Screen name="Change Password" component={ChangePasswordScreen} />
