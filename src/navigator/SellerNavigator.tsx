@@ -4,10 +4,8 @@ import Colors from '../constants/Colors';
 import ContactScreen from '../screens/buyer/ContactScreen';
 import CustomDrawerContent from '../components/CustomDrawerContent';
 import ChangePasswordScreen from '../screens/auth/ChangePasswordScreen';
-import PostPropertyScreen from '../screens/seller/PostPropertyScreen';
-import PropertyListScreen from '../screens/seller/PropertyListScreen';
 import ProfileScreen from '../screens/common/ProfileScreen';
-import PostProperty from '../screens/seller/PostProperty';
+import SellerbottomTabs from './components/SellerBottomTabs';
 
 const Drawer = createDrawerNavigator();
 
@@ -29,9 +27,9 @@ const SellerNavigator = memo(() => {
         },
         headerTintColor: Colors.SECONDARY_3,
       }}>
-      <Drawer.Screen name="Home" component={PostPropertyScreen} />
-      <Drawer.Screen name="Listed Property" component={PropertyListScreen} />
-      <Drawer.Screen name="Post Property" component={PostProperty} />
+      <Drawer.Screen name="Home" component={SellerbottomTabs} />
+      {/* <Drawer.Screen name="Listed Property" component={PropertyListScreen} /> */}
+      {/* <Drawer.Screen name="Post Property" component={PostProperty} /> */}
       <Drawer.Screen name="Change Password" component={ChangePasswordScreen} />
       <Drawer.Screen name="Contact Us" component={ContactScreen} />
       <Drawer.Screen

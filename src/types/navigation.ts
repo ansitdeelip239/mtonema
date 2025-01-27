@@ -13,6 +13,14 @@ export type PartnerBottomTabParamList = {
   Test: undefined;
 };
 
+export type SellerBottomTabParamList = {
+  Home: undefined;
+  Property: undefined;
+  AddProperty: undefined;
+  Clients: undefined;
+  Test: undefined;
+};
+
 export type PartnerDrawerParamList = {
   'Home Screen': NavigatorScreenParams<PartnerBottomTabParamList>;
   'Profile Screen': undefined;

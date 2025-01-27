@@ -11,18 +11,15 @@ export type IconEnum =
   | 'hamburgerMenu'
   | 'realEstate'
   | 'home'
-  | 'client'
-  ;
+  | 'client';
 
 type IconProps = {
   iconName: IconEnum;
   color?: string;
+  size?: string;
 };
 
-const GetIcon = ({iconName, color}: IconProps) => {
-  // For debugging
-  console.log('Color received:', color);
-
+const GetIcon = ({iconName, color, size}: IconProps) => {
   const iconMap = {
     search: require('../assets/Icon/search.png'),
     clear: require('../assets/Icon/crossicon.png'),
@@ -36,10 +33,11 @@ const GetIcon = ({iconName, color}: IconProps) => {
     client: require('../assets/Icon/customer.png'),
   };
 
-  const imageStyle = [styles.searchIcon, color ? {tintColor: color} : null];
-
-  // For debugging
-  console.log('Applied styles:', imageStyle);
+  const imageStyle = [
+    styles.searchIcon,
+    color ? {tintColor: color} : null,
+    size ? {width: Number(size), height:Number(size)} : null,
+  ];
 
   return <Image source={iconMap[iconName]} style={imageStyle} />;
 };
