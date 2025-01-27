@@ -18,7 +18,12 @@ export type IconEnum =
   | 'changepassword'
   | 'faq'
   | 'logout'
-  | 'ContactedProperty';
+  | 'ContactedProperty'
+  | 'listproperty'
+  | 'login'
+  | 'partner'
+  | 'password'
+  | 'signup';
 
 type IconProps = {
   iconName: IconEnum;
@@ -45,6 +50,11 @@ const GetIcon = ({iconName, color, size}: IconProps) => {
     faq: require('../assets/Icon/faq.png'),
     logout: require('../assets/Icon/logout.png'),
     ContactedProperty: require('../assets/Icon/contactedproperty.png'),
+    listproperty: require('../assets/Icon/listproperty.png'),
+    login: require('../assets/Icon/log-in.png'),
+    partner: require('../assets/Icon/partner.png'),
+    password: require('../assets/Icon/password.png'),
+    signup: require('../assets/Icon/signup.png'),
   };
 
   const imageStyle = [
