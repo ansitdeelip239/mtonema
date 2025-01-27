@@ -113,7 +113,7 @@ const CustomBottomBar = memo(
                 });
               }
             }}>
-            <GetIcon iconName="property" color="#fff" size="36" />
+            <GetIcon iconName="property" color="#fff" size="38" />
           </TouchableOpacity>
 
           <View style={styles.tabSection}>
@@ -246,7 +246,7 @@ const styles = StyleSheet.create({
   centerTab: {
     backgroundColor: Colors.main,
     width: 55,
-    height: 55,
+    height: 54,
     borderRadius: 24,
     justifyContent: 'center',
     alignItems: 'center',

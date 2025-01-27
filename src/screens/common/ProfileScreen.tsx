@@ -17,6 +17,7 @@ import url from '../../constants/api';
 import { User } from '../../types';
 import CommonService from '../../services/CommonService';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import GetIcon from '../../components/GetIcon';
 
 type FieldName = 'name' | 'email' | 'password' | 'mobile' | 'location';
 type EditableFields = Record<FieldName, boolean>;
@@ -392,6 +393,7 @@ const ProfileScreen = () => {
           style={[styles.button, styles.logoutButton]}
           onPress={() => setShowLogoutModal(true)}
           disabled={isLoading}>
+          <GetIcon iconName="logout" color="white" size="20" />
           <Text style={styles.buttonText}>Log Out</Text>
         </TouchableOpacity>
       </ScrollView>
@@ -513,6 +515,11 @@ const styles = StyleSheet.create({
     backgroundColor: '#cc0e74',
     marginTop: 16,
     marginBottom: 20,
+    flex: 1,
+    flexDirection: 'row',
+    textAlign: 'center',
+    justifyContent: 'center',
+    gap:10,
   },
   modalContainer: {
     flex: 1,

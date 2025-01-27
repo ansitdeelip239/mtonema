@@ -10,6 +10,7 @@ import Home from '../screens/buyer/Home';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import SearchProperty from '../screens/buyer/SearchProperty';
 import RecommendedProperty from '../screens/buyer/RecommendedProperty';
+import GetIcon from '../components/GetIcon';
 
 const Drawer = createDrawerNavigator();
 const Stack = createNativeStackNavigator();
@@ -44,10 +45,48 @@ const BuyerNavigator = memo(() => {
         },
         headerTintColor: Colors.SECONDARY_3,
       }}>
-      <Drawer.Screen name="Home" component={HomeStackNavigator} />
-      <Drawer.Screen name="Contacted Property" component={ContactedProperty} />
-      <Drawer.Screen name="Change Password" component={ChangePasswordScreen} />
-      <Drawer.Screen name="Contact Us" component={ContactScreen} />
+      <Drawer.Screen
+        name="Home"
+        component={HomeStackNavigator}
+        options={{
+          headerShown: false,
+          // eslint-disable-next-line react/no-unstable-nested-components
+          drawerIcon: ({color}) => (
+            <GetIcon iconName="home" color={color} size="23" /> // Use GetIcon here
+          ),
+        }}
+      />
+      <Drawer.Screen
+        name="Contacted Property"
+        component={ContactedProperty}
+        options={{
+          headerShown: false,
+          // eslint-disable-next-line react/no-unstable-nested-components
+          drawerIcon: ({color}) => (
+            <GetIcon iconName="ContactedProperty" color={color} size="23" /> // Use GetIcon here
+          ),
+        }}
+      />
+      <Drawer.Screen
+        name="Change Password"
+        component={ChangePasswordScreen}
+        options={{
+          // eslint-disable-next-line react/no-unstable-nested-components
+          drawerIcon: ({color}) => (
+            <GetIcon iconName="changepassword" color={color} size="29" /> // Use GetIcon here
+          ),
+        }}
+      />
+      <Drawer.Screen
+        name="Contact Us"
+        component={ContactScreen}
+        options={{
+          // eslint-disable-next-line react/no-unstable-nested-components
+          drawerIcon: ({color}) => (
+            <GetIcon iconName="contactus" color={color} size="26" /> // Use GetIcon here
+          ),
+        }}
+      />
       <Drawer.Screen
         name="Profile Screen"
         component={ProfileScreen}

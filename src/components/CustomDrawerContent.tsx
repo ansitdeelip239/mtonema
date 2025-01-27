@@ -4,7 +4,7 @@ import {
   DrawerContentScrollView,
   DrawerItemList,
 } from '@react-navigation/drawer';
-import { Drawer} from 'react-native-paper';
+// import { Drawer} from 'react-native-paper';
 import {
   ActivityIndicator,
   Image,
@@ -18,10 +18,11 @@ import {
 } from 'react-native';
 import Strings from '../constants/Strings';
 import Colors from '../constants/Colors';
-
+import GetIcon from './GetIcon';
+import {Drawer} from 'react-native-paper';
 
 const CustomDrawerContent = (props: any) => {
-  const {user,logout} = useAuth();
+  const {user, logout} = useAuth();
   const [isLoggingOut, setIsLoggingOut] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
   const [loadingModalVisible, setLoadingModalVisible] = useState(false);
@@ -52,14 +53,14 @@ const CustomDrawerContent = (props: any) => {
   return (
     <DrawerContentScrollView {...props} contentContainerStyle={styles.flexOne}>
       <TouchableOpacity onPress={navigateToProfile}>
-  <View style={styles.profileContainer}>
-    <Image
-      source={require('../assets/Images/dncrlogo.png')}
-      style={styles.logo}
-    />
-    <Text style={styles.name}>{user?.Name}</Text>
-  </View>
-</TouchableOpacity>
+        <View style={styles.profileContainer}>
+          <Image
+            source={require('../assets/Images/dncrlogo.png')}
+            style={styles.logo}
+          />
+          <Text style={styles.name}>{user?.Name}</Text>
+        </View>
+      </TouchableOpacity>
 
       {/* Existing Drawer Items */}
       <DrawerItemList {...props} />
@@ -68,14 +69,28 @@ const CustomDrawerContent = (props: any) => {
           style={styles.touchableHighlight}
           underlayColor={Colors.main}
           onPress={() => Linking.openURL(Strings.About_Us_Url)}>
-          <Drawer.Item label="About" />
+          <Drawer.Item
+            label="About"
+            // eslint-disable-next-line react/no-unstable-nested-components
+            icon={({color}) => (
+              <GetIcon iconName="about" color={color} size="25" />
+            )}
+            onPress={() => Linking.openURL(Strings.About_Us_Url)}
+          />
         </TouchableHighlight>
 
         <TouchableHighlight
           style={styles.touchableHighlight}
           underlayColor={Colors.main}
           onPress={() => Linking.openURL(Strings.FAQ_Url)}>
-          <Drawer.Item label="FAQ" />
+          <Drawer.Item
+            label="FAQ"
+            // eslint-disable-next-line react/no-unstable-nested-components
+            icon={({color}) => (
+              <GetIcon iconName="faq" color={color} size="25" />
+            )}
+            onPress={() => Linking.openURL(Strings.About_Us_Url)}
+          />
         </TouchableHighlight>
       </View>
 
@@ -86,7 +101,11 @@ const CustomDrawerContent = (props: any) => {
           onPress={handleCustomButtonPress}
           style={styles.logout}
           disabled={isLoggingOut}>
-          <Text style={styles.textWhite}>Logout</Text>
+          <View style={styles.drawerItem}>
+            <GetIcon iconName="logout" color={Colors.white} size="25" />
+            <Text style={styles.logouttxt}>Logout</Text>
+          </View>
+          {/* <Text style={styles.textWhite}>Logout</Text> */}
         </TouchableOpacity>
       </View>
 
@@ -137,9 +156,25 @@ const styles = StyleSheet.create({
   flexOne: {
     flex: 1,
   },
+  drawerItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingVertical: 10,
+    paddingHorizontal: 16,
+  },
+  drawerItemText: {
+    marginLeft: 16,
+    fontSize: 16,
+    color: Colors.main,
+  },
   profileContainer: {
     alignItems: 'center', // Center align items horizontally
     justifyContent: 'center', // Center align items vertically
+  },
+  logouttxt: {
+    color: '#fff',
+    marginLeft: 10,
+    fontWeight: 'bold',
   },
   name: {
     fontSize: 18,
@@ -157,11 +192,11 @@ const styles = StyleSheet.create({
   flexGrow: {
     flex: 1,
   },
-  linkdesign: {  },
+  linkdesign: {},
   logout: {
     backgroundColor: '#cc0e74',
-    padding: 10,
-    paddingVertical: 15,
+    padding: 8,
+    paddingVertical: 8,
     borderRadius: 50,
     alignItems: 'center',
   },
