@@ -7,14 +7,14 @@ import GetIcon, {IconEnum} from '../../components/GetIcon';
 import Colors from '../../constants/Colors';
 import HomeScreen from '../../screens/partner/HomeScreen/HomeScreen';
 import ClientScreen from '../../screens/partner/ClientScreen/ClientScreen';
-import {BottomTabParamList} from '../../types/navigation';
+import {PartnerBottomTabParamList} from '../../types/navigation';
 import AddAgentPropertyScreen from '../../screens/partner/AddAgentPropertyScreen/AddAgentPropertyScreen';
 import AgentDataScreen from '../../screens/partner/AgentsPropertyScreen/AgentsPropertyScreen';
 
-const Tab = createBottomTabNavigator<BottomTabParamList>();
+const Tab = createBottomTabNavigator<PartnerBottomTabParamList>();
 
 const tabScreens: Array<{
-  name: keyof BottomTabParamList;
+  name: keyof PartnerBottomTabParamList;
   component: React.FC<any>;
   icon: IconEnum;
 }> = [
@@ -36,7 +36,7 @@ const tabScreens: Array<{
   {
     name: 'Clients',
     component: ClientScreen,
-    icon: 'delete',
+    icon: 'client',
   },
   {
     name: 'Test',
@@ -146,7 +146,7 @@ const CustomBottomBar = memo(
   },
 );
 
-const BottomTabs = memo(() => (
+const PartnerBottomTabs = memo(() => (
   <Tab.Navigator
     screenOptions={{
       headerShown: false,
@@ -233,4 +233,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default BottomTabs;
+export default PartnerBottomTabs;

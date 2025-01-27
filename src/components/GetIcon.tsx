@@ -10,7 +10,9 @@ export type IconEnum =
   | 'property'
   | 'hamburgerMenu'
   | 'realEstate'
-  | 'home';
+  | 'home'
+  | 'client'
+  ;
 
 type IconProps = {
   iconName: IconEnum;
@@ -31,6 +33,7 @@ const GetIcon = ({iconName, color}: IconProps) => {
     hamburgerMenu: require('../assets/Icon/menu.png'),
     realEstate: require('../assets/Icon/real-estate.png'),
     home: require('../assets/Icon/home.png'),
+    client: require('../assets/Icon/customer.png'),
   };
 
   const imageStyle = [styles.searchIcon, color ? {tintColor: color} : null];

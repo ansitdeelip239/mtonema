@@ -1,10 +1,10 @@
 import React, {memo} from 'react';
 import {createDrawerNavigator} from '@react-navigation/drawer';
 import ProfileScreen from '../screens/common/ProfileScreen';
-import BottomTabs from './components/BottomTabs';
 import CustomDrawerContent from '../components/CustomDrawerContent';
 import Colors from '../constants/Colors';
 import {PartnerDrawerParamList} from '../types/navigation';
+import PartnerBottomTabs from './components/PartnerBottomTabs';
 
 const Drawer = createDrawerNavigator<PartnerDrawerParamList>();
 
@@ -25,7 +25,7 @@ const PartnerNavigator = memo(() => (
     initialRouteName="Home Screen">
     <Drawer.Screen
       name="Home Screen"
-      component={BottomTabs}
+      component={PartnerBottomTabs}
       options={{
         headerShown: false,
       }}

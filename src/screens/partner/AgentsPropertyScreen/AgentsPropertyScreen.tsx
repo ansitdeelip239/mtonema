@@ -1,12 +1,5 @@
 import React, {useState, useEffect, useCallback, useMemo, useRef} from 'react';
-import {
-  View,
-  StyleSheet,
-  FlatList,
-  RefreshControl,
-  Text,
-  TouchableOpacity,
-} from 'react-native';
+import {View, StyleSheet, FlatList, RefreshControl, Text} from 'react-native';
 import {PaperProvider} from 'react-native-paper';
 import PartnerService from '../../../services/PartnerService';
 import {useAuth} from '../../../hooks/useAuth';
@@ -16,16 +9,12 @@ import renderFooter from './components/RenderFooter';
 import SearchHeader from './components/SearchHeader';
 import Colors from '../../../constants/Colors';
 import {BottomTabScreenProps} from '@react-navigation/bottom-tabs';
-import {
-  BottomTabParamList,
-  PartnerDrawerParamList,
-} from '../../../types/navigation';
-import {useDrawer} from '../../../hooks/useDrawer';
-import GetIcon from '../../../components/GetIcon';
+import Header from '../../../components/Header';
+import {PartnerBottomTabParamList} from '../../../types/navigation';
 
 // type Props = NativeStackScreenProps<AgentStackParamList, 'AgentPropertyList'>;
 
-type Props = BottomTabScreenProps<BottomTabParamList, 'Property'>;
+type Props = BottomTabScreenProps<PartnerBottomTabParamList, 'Property'>;
 
 const AgentDataScreen: React.FC<Props> = () => {
   const [agentData, setAgentData] = useState<AgentData[]>([]);
@@ -40,7 +29,6 @@ const AgentDataScreen: React.FC<Props> = () => {
     bhkType: null,
   });
   const {user} = useAuth();
-  const {openDrawer} = useDrawer<PartnerDrawerParamList>();
   const PAGE_SIZE = 10;
 
   const isInitialRender = useRef(true);
@@ -156,12 +144,7 @@ const AgentDataScreen: React.FC<Props> = () => {
   return (
     <PaperProvider>
       <View style={styles.container}>
-        <View style={styles.headerContainer}>
-          <TouchableOpacity onPress={openDrawer} style={styles.menuButton}>
-            <GetIcon iconName="hamburgerMenu" color={Colors.black} />
-          </TouchableOpacity>
-          <Text style={styles.headerText}>Agent's Property</Text>
-        </View>
+        <Header title="Agent's Property" />
         <SearchHeader
           initialFilters={filters}
           onSearch={handleSearch}
@@ -212,23 +195,6 @@ const styles = StyleSheet.create({
   },
   fabStyle: {
     backgroundColor: Colors.main,
-  },
-  headerText: {
-    fontSize: 26,
-    fontWeight: '600',
-    color: Colors.black,
-    padding: 16,
-    paddingBottom: 8,
-  },
-  headerContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    // justifyContent: 'space-between',
-    // padding: 16,
-    paddingLeft: 16,
-  },
-  menuButton: {
-    paddingTop: 8,
   },
 });
 

@@ -20,9 +20,10 @@ import PartnerService from '../../../services/PartnerService';
 import {useAuth} from '../../../hooks/useAuth';
 import useForm from '../../../hooks/useForm';
 import { BottomTabScreenProps } from '@react-navigation/bottom-tabs';
-import { BottomTabParamList } from '../../../types/navigation';
+import Header from '../../../components/Header';
+import { PartnerBottomTabParamList } from '../../../types/navigation';
 
-type Props = BottomTabScreenProps<BottomTabParamList, 'AddProperty'>;
+type Props = BottomTabScreenProps<PartnerBottomTabParamList, 'AddProperty'>;
 
 const AddAgentPropertyScreen: React.FC<Props> = () => {
   const scrollViewRef = useRef<ScrollView>(null);
@@ -86,6 +87,7 @@ const AddAgentPropertyScreen: React.FC<Props> = () => {
   const renderPropertyInputs = useMemo(
     () => (
       <>
+        <Header title="Add Agent's Property" />
         <MaterialTextInput<AgentPropertyForm>
           style={styles.input}
           label="Agent Name"
