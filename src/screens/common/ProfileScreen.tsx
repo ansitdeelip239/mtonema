@@ -39,7 +39,6 @@ const INITIAL_USER_DATA: UserData = {
   profileImage: require('../../assets/Images/dncrlogo.png'),
 };
 
-// Define ProfileField props interface
 interface ProfileFieldProps {
   label: string;
   field: FieldName;
@@ -52,10 +51,9 @@ interface ProfileFieldProps {
   setEditMode: React.Dispatch<React.SetStateAction<EditableFields>>;
   setUserData: React.Dispatch<React.SetStateAction<UserData>>;
   showPassword?: boolean;
-  setShowPassword?: React.Dispatch<React.SetStateAction<boolean>>; // Marked as optional
+  setShowPassword?: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-// ProfileField component (moved outside of ProfileScreen)
 const ProfileField = React.memo(
   ({
     label,
@@ -71,11 +69,25 @@ const ProfileField = React.memo(
     showPassword,
     setShowPassword,
   }: ProfileFieldProps) => {
-    useEffect(() => {
-      if (editMode[field] && inputRef.current) {
-        inputRef.current.focus();
-      }
-    }, [editMode, field, inputRef]);
+    const handleEditPress = () => {
+      setEditMode((prev) => {
+        const newEditMode = { ...prev };
+        // First, disable all other fields
+        Object.keys(newEditMode).forEach((key) => {
+          newEditMode[key as FieldName] = false;
+        });
+        // Then enable the current field
+        newEditMode[field] = true;
+        return newEditMode;
+      });
+
+      // Use setTimeout to ensure the field becomes editable before focusing
+      setTimeout(() => {
+        if (inputRef.current) {
+          inputRef.current.focus();
+        }
+      }, 100);
+    };
 
     return (
       <View style={styles.fieldContainer}>
@@ -119,9 +131,7 @@ const ProfileField = React.memo(
             </TouchableOpacity>
           )}
           <TouchableOpacity
-            onPress={() =>
-              setEditMode((prev) => ({ ...prev, [field]: !prev[field] }))
-            }
+            onPress={handleEditPress}
             style={styles.iconButton}>
             <Image
               source={require('../../assets/Icon/Edit.png')}
@@ -133,7 +143,7 @@ const ProfileField = React.memo(
     );
   },
 );
-// ProfileScreen component
+
 const ProfileScreen = () => {
   const { user, logout } = useAuth();
   const [isLoading, setIsLoading] = useState(false);
@@ -149,13 +159,12 @@ const ProfileScreen = () => {
   });
 
   // Refs for TextInput fields
-  const nameInputRef = useRef(null);
-  const emailInputRef = useRef(null);
-  const passwordInputRef = useRef(null);
-  const mobileInputRef = useRef(null);
-  const locationInputRef = useRef(null);
+  const nameInputRef = useRef<TextInput>(null);
+  const emailInputRef = useRef<TextInput>(null);
+  const passwordInputRef = useRef<TextInput>(null);
+  const mobileInputRef = useRef<TextInput>(null);
+  const locationInputRef = useRef<TextInput>(null);
 
-  // Validation functions
   const validateEmail = (email: string): boolean => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return emailRegex.test(email);
@@ -184,7 +193,6 @@ const ProfileScreen = () => {
     [],
   );
 
-  // Fetch user profile
   const fetchUserProfile = useCallback(async () => {
     try {
       setIsLoading(true);
@@ -217,7 +225,6 @@ const ProfileScreen = () => {
     fetchUserProfile();
   }, [fetchUserProfile]);
 
-  // Validate all fields before update
   const validateFields = (): boolean => {
     if (!userData.name.trim()) {
       showToast('error', 'Name cannot be empty');
@@ -247,7 +254,6 @@ const ProfileScreen = () => {
     return true;
   };
 
-  // Handle profile update
   const handleUpdateProfile = async () => {
     try {
       if (!validateFields()) {
@@ -279,7 +285,7 @@ const ProfileScreen = () => {
           mobile: false,
           location: false,
         });
-        await fetchUserProfile(); // Refresh profile data
+        await fetchUserProfile();
       } else {
         throw new Error(response.Message || 'Update failed');
       }
@@ -293,7 +299,6 @@ const ProfileScreen = () => {
     }
   };
 
-  // Handle logout
   const handleLogout = async () => {
     try {
       setIsLoading(true);
@@ -342,17 +347,17 @@ const ProfileScreen = () => {
           setUserData={setUserData}
         />
         <ProfileField
-  label="Password"
-  field="password"
-  value={userData.password}
-  secureTextEntry
-  inputRef={passwordInputRef}
-  editMode={editMode}
-  setEditMode={setEditMode}
-  setUserData={setUserData}
-  showPassword={showPassword}
-  setShowPassword={setShowPassword} // Passed only for password field
-/>
+          label="Password"
+          field="password"
+          value={userData.password}
+          secureTextEntry
+          inputRef={passwordInputRef}
+          editMode={editMode}
+          setEditMode={setEditMode}
+          setUserData={setUserData}
+          showPassword={showPassword}
+          setShowPassword={setShowPassword}
+        />
         <ProfileField
           label="Mobile"
           field="mobile"

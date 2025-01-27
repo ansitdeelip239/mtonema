@@ -14,6 +14,12 @@ import BuyerService from '../../services/BuyerService';
 import PropertyModal from './PropertyModal';
 import {PropertyModel} from '../../types';
 import EnquiryButton from '../common/EnquiryButton';
+import Colors from '../../constants/Colors';
+import { DrawerNavigationProp } from '@react-navigation/drawer';
+
+type HomeProps = {
+  navigation: DrawerNavigationProp<any>;
+};
 
 interface Property {
   ID: number;
@@ -29,7 +35,7 @@ interface Property {
   Rate: {MasterDetailName: string; ID: number};
 }
 
-const SearchProperty = () => {
+const SearchProperty =  ({navigation}: HomeProps) => {
   const [searchText, setSearchText] = useState('');
   const [splitSearchText, setSplitSearchText] = useState<string[]>([]);
   const [selectedLocation, setSelectedLocation] = useState<string | null>(null);
@@ -323,6 +329,15 @@ const SearchProperty = () => {
 
   return (
     <View style={styles.container}>
+        <View style={styles.topBar}>
+        <TouchableOpacity onPress={() => navigation.toggleDrawer()}>
+          <Image
+            source={require('../../assets/Images/menu.png')}
+            style={styles.menuIcon}
+          />
+        </TouchableOpacity>
+        <Text style={styles.contactText}>Search Property</Text>
+      </View>
       <View style={styles.searchContainer}>
         <View style={styles.inputContainer}>
           <TextInput
@@ -404,7 +419,7 @@ const SearchProperty = () => {
             )}
           </View>
         ))}
-        {masterData?.ProjectLocation.length > 3 && (
+        {masterData?.ProjectLocation && masterData?.ProjectLocation.length > 3 && (
           <TouchableOpacity
             style={styles.moreItem}
             onPress={toggleShowAllLocations}>
@@ -441,6 +456,27 @@ const SearchProperty = () => {
 
 export default SearchProperty;
 const styles = StyleSheet.create({
+  topBar: {
+      flexDirection: 'row', // Align items horizontally
+      alignItems: 'center', // Center items vertically
+      paddingHorizontal: 1, // Add horizontal padding
+      paddingVertical: 1, // Add vertical padding
+      // backgroundColor: 'rgba(255, 182, 193, 0.6)', // Light pink with low opacity
+      borderRadius: 15, // Rounded corners
+      // marginHorizontal: '1%', // 5% space on both sides
+      marginBottom: 20, // Add some top margin
+    },
+    menuIcon: {
+      width: 24,
+      height: 24,
+      color: Colors.primary,
+      marginRight: 20, // Add gap between icon and text
+    },
+    contactText: {
+      fontSize: 20, // Adjust font size
+      fontWeight: 'bold',
+      color: Colors.primary,
+    },
   container: {
     flex: 1,
     padding: 16,
@@ -506,6 +542,7 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
     alignItems: 'center',
     marginTop: 10,
+    gap:5,
   },
   locationItemContainer: {
     position: 'relative',
@@ -513,8 +550,8 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   locationItem: {
-    paddingHorizontal: 12,
-    paddingVertical: 8,
+    paddingHorizontal: 10,
+    paddingVertical: 4,
     borderRadius: 20,
     backgroundColor: '#e0e0e0',
   },
@@ -522,9 +559,15 @@ const styles = StyleSheet.create({
     backgroundColor: '#cc0e74',
   },
   locationText: {
-    fontSize: 14,
+    fontSize: 13,
     color: '#333',
   },
+  // locationText2: {
+  //   fontSize: 12,
+  //   color: '#333',
+  //   gap:5,
+  //   width:65,
+  // },
   selectedLocationText: {
     color: '#fff',
   },

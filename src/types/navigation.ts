@@ -16,3 +16,4 @@ export type DrawerParamList = {
   'Home Screen': NavigatorScreenParams<BottomTabParamList>;
   'Profile Screen': undefined;
 };
+
