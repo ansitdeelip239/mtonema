@@ -207,3 +207,39 @@ export interface AgentPropertyRequestModel {
   Id: number;
   Status: number;
 }
+
+export interface MasterDataModel {
+  ID: number;
+  Name: string;
+}
+
+export interface ClientActivityDataModel {
+  Id: number;
+  ActivityType: MasterDataModel;
+  AssignedTo: MasterDataModel;
+  Description: string;
+  CreatedOn: string;
+  UpdatedOn: string;
+}
+
+export interface Group {
+  Id: number;
+  Name: string;
+  GroupColor: string;
+}
+
+export interface ClientRequestModel {
+  Id: number;
+  PartnerId: number;
+  ClientName: string;
+  DisplayName: string;
+  MobileNumber: string;
+  WhatsappNumber: string;
+  EmailId: string;
+  Notes: string;
+  ClientActivityDataModels: ClientActivityDataModel[];
+  Groups: Group[];
+  CreatedOn: string;
+  Activity: string;
+  Status: number;
+}

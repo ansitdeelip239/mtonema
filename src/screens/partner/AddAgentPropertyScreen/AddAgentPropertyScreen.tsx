@@ -19,9 +19,9 @@ import Colors from '../../../constants/Colors';
 import PartnerService from '../../../services/PartnerService';
 import {useAuth} from '../../../hooks/useAuth';
 import useForm from '../../../hooks/useForm';
-import { BottomTabScreenProps } from '@react-navigation/bottom-tabs';
+import {BottomTabScreenProps} from '@react-navigation/bottom-tabs';
 import Header from '../../../components/Header';
-import { PartnerBottomTabParamList } from '../../../types/navigation';
+import {PartnerBottomTabParamList, PartnerDrawerParamList} from '../../../types/navigation';
 
 type Props = BottomTabScreenProps<PartnerBottomTabParamList, 'AddProperty'>;
 
@@ -87,7 +87,6 @@ const AddAgentPropertyScreen: React.FC<Props> = () => {
   const renderPropertyInputs = useMemo(
     () => (
       <>
-        <Header title="Add Agent's Property" />
         <MaterialTextInput<AgentPropertyForm>
           style={styles.input}
           label="Agent Name"
@@ -188,36 +187,39 @@ const AddAgentPropertyScreen: React.FC<Props> = () => {
   );
 
   return (
-    <KeyboardAvoidingView
-      style={styles.container}
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-      keyboardVerticalOffset={Platform.OS === 'ios' ? 64 : 0}>
-      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-        <ScrollView
-          ref={scrollViewRef}
-          contentContainerStyle={styles.scrollContainer}
-          keyboardShouldPersistTaps="handled"
-          showsVerticalScrollIndicator={false}
-          nestedScrollEnabled={true}>
-          {renderPropertyInputs}
+    <>
+      <Header<PartnerDrawerParamList> title="Add Agent's Property" />
+      <KeyboardAvoidingView
+        style={styles.container}
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        keyboardVerticalOffset={Platform.OS === 'ios' ? 64 : 0}>
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+          <ScrollView
+            ref={scrollViewRef}
+            contentContainerStyle={styles.scrollContainer}
+            keyboardShouldPersistTaps="handled"
+            showsVerticalScrollIndicator={false}
+            nestedScrollEnabled={true}>
+            {renderPropertyInputs}
 
-          <Button
-            mode="contained"
-            onPress={handleSubmit}
-            buttonColor={Colors.main}
-            loading={loading}>
-            Submit
-          </Button>
-        </ScrollView>
-      </TouchableWithoutFeedback>
-    </KeyboardAvoidingView>
+            <Button
+              mode="contained"
+              onPress={handleSubmit}
+              buttonColor={Colors.main}
+              loading={loading}>
+              Submit
+            </Button>
+          </ScrollView>
+        </TouchableWithoutFeedback>
+      </KeyboardAvoidingView>
+    </>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'white',
+    backgroundColor: '#f5f5f5',
   },
   scrollContainer: {
     padding: 16,
