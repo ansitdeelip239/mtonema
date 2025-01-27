@@ -112,7 +112,10 @@ const CustomBottomBar = memo(
                 key={route.key}
                 style={[
                   styles.tab,
-                  state.index === index + middleIndex + 1 && [styles.activeTab, styles.activeTabColor],
+                  state.index === index + middleIndex + 1 && [
+                    styles.activeTab,
+                    styles.activeTabColor,
+                  ],
                 ]}
                 onPress={() => {
                   const event = navigation.emit({
@@ -149,6 +152,7 @@ const CustomBottomBar = memo(
 
 const PartnerBottomTabs = memo(() => (
   <Tab.Navigator
+    initialRouteName="Property"
     screenOptions={{
       headerShown: false,
       tabBarHideOnKeyboard: true,
