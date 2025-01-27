@@ -8,6 +8,7 @@ export type AgentStackParamList = {
 export type BottomTabParamList = {
   Home: undefined;
   Property: undefined;
+  AddProperty: undefined;
   Clients: undefined;
   Test: undefined;
 };

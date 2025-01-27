@@ -8,10 +8,12 @@ import renderItem from './components/RenderItem';
 import renderFooter from './components/RenderFooter';
 import SearchHeader from './components/SearchHeader';
 import Colors from '../../../constants/Colors';
-import {NativeStackScreenProps} from '@react-navigation/native-stack';
-import {AgentStackParamList} from '../../../types/navigation';
+import { BottomTabScreenProps } from '@react-navigation/bottom-tabs';
+import { BottomTabParamList } from '../../../types/navigation';
 
-type Props = NativeStackScreenProps<AgentStackParamList, 'AgentPropertyList'>;
+// type Props = NativeStackScreenProps<AgentStackParamList, 'AgentPropertyList'>;
+
+type Props = BottomTabScreenProps<BottomTabParamList, 'Property'>;
 
 const AgentDataScreen: React.FC<Props> = () => {
   const [agentData, setAgentData] = useState<AgentData[]>([]);

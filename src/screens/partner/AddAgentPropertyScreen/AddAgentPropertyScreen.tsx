@@ -19,12 +19,12 @@ import Colors from '../../../constants/Colors';
 import PartnerService from '../../../services/PartnerService';
 import {useAuth} from '../../../hooks/useAuth';
 import useForm from '../../../hooks/useForm';
-import {NativeStackScreenProps} from '@react-navigation/native-stack';
-import {AgentStackParamList} from '../../../types/navigation';
+import { BottomTabScreenProps } from '@react-navigation/bottom-tabs';
+import { BottomTabParamList } from '../../../types/navigation';
 
-type Props = NativeStackScreenProps<AgentStackParamList, 'AddAgentProperty'>;
+type Props = BottomTabScreenProps<BottomTabParamList, 'AddProperty'>;
 
-const AddAgentPropertyScreen: React.FC<Props> = ({navigation}) => {
+const AddAgentPropertyScreen: React.FC<Props> = () => {
   const scrollViewRef = useRef<ScrollView>(null);
   const {user} = useAuth();
   const {masterData} = useMaster();
@@ -67,7 +67,7 @@ const AddAgentPropertyScreen: React.FC<Props> = ({navigation}) => {
       try {
         const response = await PartnerService.updateAgentProperty(request);
         if (response.Success) {
-          navigation.navigate('AgentPropertyList');
+          // navigation.navigate('AgentPropertyList');
         } else {
           throw new Error('Failed to update agent property');
         }

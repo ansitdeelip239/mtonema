@@ -19,6 +19,7 @@ const drawerStyles = {
 
 const PartnerNavigator = memo(() => (
   <Drawer.Navigator
+    // eslint-disable-next-line react/no-unstable-nested-components
     drawerContent={props => <CustomDrawerContent {...props} />}
     screenOptions={drawerStyles}
     initialRouteName="Home Screen">

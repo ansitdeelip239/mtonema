@@ -1,8 +1,10 @@
 import React from 'react';
 import {Image, StyleSheet} from 'react-native';
 
+export type IconEnum = 'search' | 'clear' | 'filter' | 'edit' | 'delete' | 'property';
+
 type IconProps = {
-  iconName: 'search' | 'clear' | 'filter' | 'edit' | 'delete' | 'property';
+  iconName: IconEnum;
   color?: string;
 };
 
