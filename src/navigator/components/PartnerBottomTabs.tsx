@@ -2,7 +2,7 @@ import React, {memo} from 'react';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {BottomTabBarProps} from '@react-navigation/bottom-tabs';
 import {CommonActions} from '@react-navigation/native';
-import {StyleSheet, TouchableOpacity, View} from 'react-native';
+import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import GetIcon, {IconEnum} from '../../components/GetIcon';
 import Colors from '../../constants/Colors';
 import HomeScreen from '../../screens/partner/HomeScreen/HomeScreen';
@@ -40,7 +40,7 @@ const tabScreens: Array<{
     icon: 'client',
   },
   {
-    name: 'Test',
+    name: 'Profile',
     component: PartnerProfileScreen,
     icon: 'user',
   },
@@ -78,6 +78,13 @@ const CustomBottomBar = memo(
                     color: state.index === index ? Colors.main : '#666',
                     size: 24,
                   })}
+                  <Text
+                    style={[
+                      styles.tabLabel,
+                      state.index === index && styles.activeTabLabel,
+                    ]}>
+                    {route.name}
+                  </Text>
                 </View>
               </TouchableOpacity>
             ))}
@@ -140,6 +147,13 @@ const CustomBottomBar = memo(
                         : '#666',
                     size: 24,
                   })}
+                  <Text
+                    style={[
+                      styles.tabLabel,
+                      state.index === index + middleIndex + 1 && styles.activeTabLabel,
+                    ]}>
+                    {route.name}
+                  </Text>
                 </View>
               </TouchableOpacity>
             ))}
@@ -189,10 +203,23 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     borderRadius: 24,
     elevation: 15,
-    height: 64,
+    height: 80,
     flexDirection: 'row',
     alignItems: 'center',
     paddingHorizontal: 16,
+  },
+  tabContent: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: 8,
+  },
+  tabLabel: {
+    fontSize: 12,
+    color: '#666',
+    marginTop: 4,
+  },
+  activeTabLabel: {
+    color: Colors.main,
   },
   tabSection: {
     flex: 1,
@@ -211,10 +238,6 @@ const styles = StyleSheet.create({
   },
   activeTabColor: {
     color: Colors.main + '20', // 20 is opacity
-  },
-  tabContent: {
-    alignItems: 'center',
-    justifyContent: 'center',
   },
   centerTab: {
     backgroundColor: Colors.main,
