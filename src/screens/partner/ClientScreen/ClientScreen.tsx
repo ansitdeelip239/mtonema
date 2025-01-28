@@ -1,4 +1,3 @@
-import {BottomTabScreenProps} from '@react-navigation/bottom-tabs';
 import React from 'react';
 import {
   ActivityIndicator,
@@ -7,18 +6,19 @@ import {
   View,
   FlatList,
   RefreshControl,
+  TouchableOpacity,
 } from 'react-native';
-import {
-  PartnerBottomTabParamList,
-  PartnerDrawerParamList,
-} from '../../../types/navigation';
+import {PartnerDrawerParamList} from '../../../types/navigation';
 import Header from '../../../components/Header';
-import { useClientData } from '../../../hooks/useClientData';
-import { ClientCard } from './components/ClientCard';
+import {useClientData} from '../../../hooks/useClientData';
+import {ClientCard} from './components/ClientCard';
+import Colors from '../../../constants/Colors';
+import {NativeStackScreenProps} from '@react-navigation/native-stack';
+import {ClientStackParamList} from '../../../navigator/components/ClientScreenStack';
 
-type Props = BottomTabScreenProps<PartnerBottomTabParamList, 'Clients'>;
+type Props = NativeStackScreenProps<ClientStackParamList, 'ClientScreen'>;
 
-const ClientScreen: React.FC<Props> = () => {
+const ClientScreen: React.FC<Props> = ({navigation}) => {
   const {clients, isLoading, error, refreshing, onRefresh} = useClientData();
 
   const renderContent = () => {
@@ -64,7 +64,15 @@ const ClientScreen: React.FC<Props> = () => {
 
   return (
     <View style={styles.container}>
-      <Header<PartnerDrawerParamList> title="Clients" />
+      <Header<PartnerDrawerParamList> title="Clients">
+        <TouchableOpacity
+          style={styles.addButton}
+          onPress={() => {
+            navigation.navigate('AddClientScreen');
+          }}>
+          <Text style={styles.buttonText}>Add Client</Text>
+        </TouchableOpacity>
+      </Header>
       {renderContent()}
     </View>
   );
@@ -82,6 +90,7 @@ const styles = StyleSheet.create({
   },
   listContainer: {
     padding: 16,
+    paddingBottom: 100,
   },
   errorText: {
     color: '#dc3545',
@@ -94,6 +103,19 @@ const styles = StyleSheet.create({
     margin: 16,
     color: '#666',
     fontSize: 15,
+  },
+  addButton: {
+    backgroundColor: Colors.main,
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+    borderRadius: 8,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  buttonText: {
+    color: '#fff',
+    fontSize: 14,
+    fontWeight: '600',
   },
 });
 

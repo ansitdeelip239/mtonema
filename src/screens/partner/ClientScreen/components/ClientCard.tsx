@@ -27,7 +27,7 @@ export const ClientCard: React.FC<ClientCardProps> = ({client}) => (
         <Text style={styles.clientName}>{client.ClientName}</Text>
       </View>
 
-      <View style={styles.row}>
+      <View style={styles.groupContainer}>
         <Text style={styles.label}>Groups:</Text>
         <GroupBadges groups={client.Groups} />
       </View>
@@ -101,6 +101,11 @@ const styles = StyleSheet.create({
   row: {
     flexDirection: 'row',
     alignItems: 'center',
+    marginBottom: 16,
+    flexWrap: 'wrap',
+  },
+  groupContainer: {
+    flexDirection: 'row',
     marginBottom: 16,
     flexWrap: 'wrap',
   },

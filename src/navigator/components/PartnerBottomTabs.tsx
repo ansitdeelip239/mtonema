@@ -6,11 +6,11 @@ import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import GetIcon, {IconEnum} from '../../components/GetIcon';
 import Colors from '../../constants/Colors';
 import HomeScreen from '../../screens/partner/HomeScreen/HomeScreen';
-import ClientScreen from '../../screens/partner/ClientScreen/ClientScreen';
 import {PartnerBottomTabParamList} from '../../types/navigation';
 import AddAgentPropertyScreen from '../../screens/partner/AddAgentPropertyScreen/AddAgentPropertyScreen';
 import AgentDataScreen from '../../screens/partner/AgentsPropertyScreen/AgentsPropertyScreen';
 import PartnerProfileScreen from '../../screens/partner/ProfileScreen/ProfileScreen';
+import ClientScreenStack from './ClientScreenStack';
 
 const Tab = createBottomTabNavigator<PartnerBottomTabParamList>();
 
@@ -36,7 +36,7 @@ const tabScreens: Array<{
   },
   {
     name: 'Clients',
-    component: ClientScreen,
+    component: ClientScreenStack,
     icon: 'client',
   },
   {
@@ -150,7 +150,8 @@ const CustomBottomBar = memo(
                   <Text
                     style={[
                       styles.tabLabel,
-                      state.index === index + middleIndex + 1 && styles.activeTabLabel,
+                      state.index === index + middleIndex + 1 &&
+                        styles.activeTabLabel,
                     ]}>
                     {route.name}
                   </Text>
@@ -206,7 +207,7 @@ const styles = StyleSheet.create({
     height: 80,
     flexDirection: 'row',
     alignItems: 'center',
-    paddingHorizontal: 16,
+    paddingHorizontal: 8,
   },
   tabContent: {
     alignItems: 'center',
