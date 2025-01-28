@@ -25,9 +25,9 @@ const tabScreens: Array<{
     icon: 'home',
   },
   {
-    name: 'Property',
-    component: AgentDataScreen,
-    icon: 'realEstate',
+    name: 'Clients',
+    component: ClientScreenStack,
+    icon: 'client',
   },
   {
     name: 'AddProperty',
@@ -35,9 +35,9 @@ const tabScreens: Array<{
     icon: 'property',
   },
   {
-    name: 'Clients',
-    component: ClientScreenStack,
-    icon: 'client',
+    name: 'Property',
+    component: AgentDataScreen,
+    icon: 'realEstate',
   },
   {
     name: 'Profile',
