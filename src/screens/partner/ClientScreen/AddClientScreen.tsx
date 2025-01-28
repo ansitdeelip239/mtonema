@@ -129,7 +129,7 @@ const AddClientScreen: React.FC<Props> = ({navigation}) => {
           formInput={formInput}
           setFormInput={handleInputChange}
           mode="outlined"
-          placeholder="John Doe"
+          placeholder="Eg. John Doe"
         />
 
         <MaterialTextInput<ClientForm>
@@ -139,7 +139,7 @@ const AddClientScreen: React.FC<Props> = ({navigation}) => {
           formInput={formInput}
           setFormInput={handleInputChange}
           mode="outlined"
-          placeholder="Display Name"
+          placeholder="Eg. John Doe"
         />
 
         <MaterialTextInput<ClientForm>
@@ -149,7 +149,7 @@ const AddClientScreen: React.FC<Props> = ({navigation}) => {
           formInput={formInput}
           setFormInput={handleInputChange}
           mode="outlined"
-          placeholder="1234567890"
+          placeholder="Eg. 1234567890"
           keyboardType="number-pad"
         />
 
@@ -160,7 +160,7 @@ const AddClientScreen: React.FC<Props> = ({navigation}) => {
           formInput={formInput}
           setFormInput={handleInputChange}
           mode="outlined"
-          placeholder="1234567890"
+          placeholder="Eg. 1234567890"
           keyboardType="number-pad"
         />
 
@@ -171,7 +171,7 @@ const AddClientScreen: React.FC<Props> = ({navigation}) => {
           formInput={formInput}
           setFormInput={handleInputChange}
           mode="outlined"
-          placeholder="email@example.com"
+          placeholder="Eg. email@example.com"
           keyboardType="email-address"
           autoCapitalize="none"
         />

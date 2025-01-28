@@ -1,8 +1,8 @@
 import {useState, useCallback, useEffect} from 'react';
-import { Client } from '../types';
-import { useAuth } from './useAuth';
+import {Client} from '../types';
+import {useAuth} from './useAuth';
 import PartnerService from '../services/PartnerService';
-import { usePartner } from '../context/PartnerProvider';
+import {usePartner} from '../context/PartnerProvider';
 
 export const useClientData = () => {
   const [clients, setClients] = useState<Client[]>([]);
@@ -12,19 +12,30 @@ export const useClientData = () => {
   const {user} = useAuth();
   const {dataUpdated} = usePartner();
 
-  const fetchClients = useCallback(async () => {
-    setError(null);
-    try {
-      const response = await PartnerService.getClientData(
-        user?.Email || '',
-        1,
-        20,
-      );
-      setClients(response.data.clientDataModel || []);
-    } catch (err) {
-      setError('Failed to fetch clients');
-    }
-  }, [user?.Email]);
+  const fetchClients = useCallback(
+    async (search?: string) => {
+      setError(null);
+      try {
+        const response = await PartnerService.getClientData(
+          user?.Email || '',
+          1,
+          20,
+          search,
+        );
+        setClients(response.data.clientDataModel || []);
+      } catch (err) {
+        setError('Failed to fetch clients');
+      }
+    },
+    [user?.Email],
+  );
+
+  const handleSearch = useCallback(
+    async (text: string) => {
+      await fetchClients(text);
+    },
+    [fetchClients],
+  );
 
   useEffect(() => {
     setIsLoading(true);
@@ -44,5 +55,6 @@ export const useClientData = () => {
     refreshing,
     fetchClients,
     onRefresh,
+    handleSearch,
   };
 };

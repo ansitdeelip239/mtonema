@@ -51,12 +51,14 @@ class PartnerService {
     partnerId: string,
     pageNumber: number,
     pageSize: number,
+    searchKey?: string,
   ) {
     try {
       const params = new URLSearchParams({
         partnerId,
         pageNumber: pageNumber.toString(),
         pageSize: pageSize.toString(),
+        searchKey: searchKey || '',
       }).toString();
       const response = await api.get<ClientResponseModel>(
         `${url.getClientData}?${params}`,

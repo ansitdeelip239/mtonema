@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   ActivityIndicator,
   StyleSheet,
@@ -15,14 +15,23 @@ import {ClientCard} from './components/ClientCard';
 import Colors from '../../../constants/Colors';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {ClientStackParamList} from '../../../navigator/components/ClientScreenStack';
+import SearchHeader from '../../../components/SearchHeader';
 
 type Props = NativeStackScreenProps<ClientStackParamList, 'ClientScreen'>;
 
 const ClientScreen: React.FC<Props> = ({navigation}) => {
-  const {clients, isLoading, error, refreshing, onRefresh} = useClientData();
+  const {clients, isLoading, error, refreshing, onRefresh, handleSearch} =
+    useClientData();
+  const [isSearching, setIsSearching] = useState(false);
+
+  const handleSearchWithLoading = async (text: string) => {
+    setIsSearching(true);
+    await handleSearch(text);
+    setIsSearching(false);
+  };
 
   const renderContent = () => {
-    if (isLoading) {
+    if (isLoading || isSearching) {
       return (
         <View style={styles.centerContainer}>
           <ActivityIndicator size="large" color="#0066cc" />
@@ -73,6 +82,7 @@ const ClientScreen: React.FC<Props> = ({navigation}) => {
           <Text style={styles.buttonText}>Add Client</Text>
         </TouchableOpacity>
       </Header>
+      <SearchHeader placeholder="Search Clients..." onSearch={handleSearchWithLoading} />
       {renderContent()}
     </View>
   );
@@ -91,6 +101,7 @@ const styles = StyleSheet.create({
   listContainer: {
     padding: 16,
     paddingBottom: 100,
+    paddingTop: 8,
   },
   errorText: {
     color: '#dc3545',
@@ -116,6 +127,26 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 14,
     fontWeight: '600',
+  },
+  searchContainer: {
+    flex: 1,
+    marginRight: 12,
+  },
+  searchInput: {
+    backgroundColor: 'white',
+    borderRadius: 50,
+    elevation: 5,
+    height: 50,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.15,
+    shadowRadius: 4,
+  },
+  searchInputText: {
+    color: Colors.placeholderColor,
   },
 });
 
