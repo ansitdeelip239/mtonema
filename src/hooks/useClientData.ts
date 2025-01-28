@@ -2,6 +2,7 @@ import {useState, useCallback, useEffect} from 'react';
 import { Client } from '../types';
 import { useAuth } from './useAuth';
 import PartnerService from '../services/PartnerService';
+import { usePartner } from '../context/PartnerProvider';
 
 export const useClientData = () => {
   const [clients, setClients] = useState<Client[]>([]);
@@ -9,6 +10,7 @@ export const useClientData = () => {
   const [error, setError] = useState<string | null>(null);
   const [refreshing, setRefreshing] = useState(false);
   const {user} = useAuth();
+  const {dataUpdated} = usePartner();
 
   const fetchClients = useCallback(async () => {
     setError(null);
@@ -27,7 +29,7 @@ export const useClientData = () => {
   useEffect(() => {
     setIsLoading(true);
     fetchClients().finally(() => setIsLoading(false));
-  }, [user?.Email, fetchClients]);
+  }, [user?.Email, fetchClients, dataUpdated]);
 
   const onRefresh = async () => {
     setRefreshing(true);

@@ -28,7 +28,7 @@ type Props = NativeStackScreenProps<ClientStackParamList, 'AddClientScreen'>;
 
 const AddClientScreen: React.FC<Props> = ({navigation}) => {
   const scrollViewRef = useRef<ScrollView>(null);
-  const {groups} = usePartner();
+  const {groups, dataUpdated, setDataUpdated} = usePartner();
   const {user} = useAuth();
 
   const {
@@ -55,6 +55,7 @@ const AddClientScreen: React.FC<Props> = ({navigation}) => {
             type: 'success',
             text1: 'Client added successfully',
           });
+          setDataUpdated(!dataUpdated);
           navigation.goBack();
         } else {
           Toast.show({
