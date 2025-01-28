@@ -196,8 +196,10 @@ const styles = StyleSheet.create({
   logout: {
     backgroundColor: '#cc0e74',
     padding: 8,
-    paddingVertical: 8,
+    paddingVertical: 2,
+    marginLeft: 20,
     borderRadius: 50,
+    width:'70%',
     alignItems: 'center',
   },
   // name: {

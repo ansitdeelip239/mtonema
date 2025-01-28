@@ -1,14 +1,307 @@
-import {View, Text} from 'react-native';
-import React from 'react';
-import Header from '../../components/Header';
+// import {View, Text} from 'react-native';
+// import React from 'react';
+// import Header from '../../components/Header';
+
+// const TestingScreen = () => {
+//   return (
+//     <View>
+//          <Header title="Empty Screen"/>
+//       <Text>This screen is blank screen. its only use for testing purpose.</Text>
+//     </View>
+//   );
+// };
+
+// export default TestingScreen;
+
+import React, { useState } from 'react';
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  StyleSheet,
+  ScrollView,
+  Alert,
+  Image,
+  TextInput,
+} from 'react-native';
+import ImagePicker from 'react-native-image-crop-picker';
+import { useMaster } from '../../context/MasterProvider';
+import DropDown from '../common/DropDown'; // Import the reusable dropdown
 
 const TestingScreen = () => {
+  const [errors, setErrors] = useState<Record<string, boolean>>({});
+  const [sellerType, setSellerType] = useState('');
+  const [city, _setCity] = useState('');
+  const [propertyFor, setPropertyFor] = useState('');
+  const [propertyType, setPropertyType] = useState('');
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    mobile: '',
+    description: '',
+    video: '',
+  });
+  const [images, setImages] = useState<string[]>([]);
+  const { masterData } = useMaster();
+
+  const validateForm = () => {
+    const newErrors: Record<string, boolean> = {};
+    Object.keys(formData).forEach((key) => {
+      if (!formData[key as keyof typeof formData]) {
+        newErrors[key] = true;
+      }
+    });
+    if (!sellerType) { newErrors.sellerType = true; }
+    if (!city) { newErrors.city = true; }
+    if (!propertyFor) { newErrors.propertyFor = true; }
+    if (!propertyType) { newErrors.propertyType = true; }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  const handleInputChange = (field: keyof typeof formData, value: string) => {
+    setFormData((prev) => ({ ...prev, [field]: value }));
+  };
+
+  const openCamera = () => {
+    ImagePicker.openCamera({
+      width: 300,
+      height: 400,
+      cropping: true,
+      mediaType: 'photo',
+    })
+      .then((image) => setImages((prev) => [...prev, image.path]))
+      .catch((error) => {
+        console.log('Camera Error:', error);
+        Alert.alert('Error', 'Failed to capture image');
+      });
+  };
+
+  const openGallery = () => {
+    ImagePicker.openPicker({
+      multiple: true,
+      mediaType: 'photo',
+    })
+      .then((selectedImages) => {
+        const imagePaths = selectedImages.map((image) => image.path);
+        setImages((prev) => [...prev, ...imagePaths]);
+      })
+      .catch((error) => {
+        console.log('Gallery Error:', error);
+        Alert.alert('Error', 'Failed to select images');
+      });
+  };
+
+  const handleUploadVideo = () => {
+    ImagePicker.openPicker({
+      mediaType: 'video',
+    })
+      .then((video) => {
+        setFormData((prev) => ({ ...prev, video: video.path }));
+      })
+      .catch((error) => {
+        console.log('Video Upload Error:', error);
+        Alert.alert('Error', 'Failed to upload video');
+      });
+  };
+
+  const handleSubmit = () => {
+    if (!validateForm()) {
+      Alert.alert('Error', 'Please fill in all required fields');
+      return;
+    }
+    console.log({
+      ...formData,
+      sellerType,
+      city,
+      propertyFor,
+      propertyType,
+      images,
+    });
+  };
+
   return (
-    <View>
-         <Header title="Empty Screen"/>
-      <Text>This screen is blank screen. its only use for testing purpose.</Text>
-    </View>
+    <ScrollView
+      contentContainerStyle={styles.container}
+      keyboardShouldPersistTaps="handled">
+      <Text style={styles.title}>Post Your Property</Text>
+
+      <TextInput
+        style={[styles.input, errors.name && styles.inputError]}
+        placeholder="Name"
+        value={formData.name}
+        onChangeText={(value) => handleInputChange('name', value)}
+      />
+      <TextInput
+        style={[styles.input, errors.email && styles.inputError]}
+        placeholder="Email"
+        keyboardType="email-address"
+        value={formData.email}
+        onChangeText={(value) => handleInputChange('email', value)}
+      />
+      <TextInput
+        style={[styles.input, errors.mobile && styles.inputError]}
+        placeholder="Mobile no."
+        keyboardType="phone-pad"
+        value={formData.mobile}
+        onChangeText={(value) => handleInputChange('mobile', value)}
+      />
+      <TextInput
+        style={styles.input}
+        placeholder="Video URL"
+        value={formData.video}
+        onChangeText={(value) => handleInputChange('video', value)}
+      />
+
+      {/* Reusable Dropdown for Seller Type */}
+      <DropDown
+        data={masterData?.SellerType || []}
+        selectedValue={sellerType}
+        onSelect={setSellerType}
+        placeholder="Seller Type"
+        displayKey="MasterDetailName"
+        valueKey="ID"
+      />
+
+      {/* Reusable Dropdown for Property For */}
+      <DropDown
+        data={masterData?.PropertyFor || []}
+        selectedValue={propertyFor}
+        onSelect={setPropertyFor}
+        placeholder="Property For"
+        displayKey="MasterDetailName"
+        valueKey="ID"
+      />
+
+      {/* Reusable Dropdown for Property Type */}
+      <DropDown
+        data={masterData?.PropertyType || []}
+        selectedValue={propertyType}
+        onSelect={setPropertyType}
+        placeholder="Property Type"
+        displayKey="MasterDetailName"
+        valueKey="ID"
+      />
+
+      <TextInput
+        style={[styles.input, errors.description && styles.inputError]}
+        placeholder="Property Description"
+        multiline
+        numberOfLines={5}
+        value={formData.description}
+        onChangeText={(value) => handleInputChange('description', value)}
+      />
+
+      {/* Camera Button */}
+      <TouchableOpacity
+        style={[styles.button, styles.cameraButton]}
+        onPress={openCamera}>
+        <Text style={styles.buttonText}>Open Camera</Text>
+      </TouchableOpacity>
+
+      {/* Gallery Button */}
+      <TouchableOpacity
+        style={[styles.button, styles.galleryButton]}
+        onPress={openGallery}>
+        <Text style={styles.buttonText}>Open Gallery</Text>
+      </TouchableOpacity>
+
+      {/* Video Upload Button */}
+      <TouchableOpacity
+        style={[styles.button, styles.videoButton]}
+        onPress={handleUploadVideo}>
+        <Text style={styles.buttonText}>Upload Video</Text>
+      </TouchableOpacity>
+
+      {images.map((image, index) => (
+        <Image key={index} source={{ uri: image }} style={styles.image} />
+      ))}
+
+      <View style={styles.buttonContainer}>
+        <TouchableOpacity
+          style={[styles.button, styles.cancelButton]}
+          onPress={() => Alert.alert('Cancel', 'Are you sure you want to cancel?')}>
+          <Text style={styles.buttonText}>Cancel</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={[styles.button, styles.addButton]}
+          onPress={handleSubmit}>
+          <Text style={styles.buttonText}>Add Property</Text>
+        </TouchableOpacity>
+      </View>
+    </ScrollView>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flexGrow: 1,
+    paddingHorizontal: 16,
+    paddingBottom: 20,
+  },
+  inputError: {
+    borderColor: 'red',
+    borderWidth: 1,
+  },
+  title: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    color: '#cc0e74',
+    marginBottom: 20,
+    textAlign: 'center',
+  },
+  input: {
+    width: '100%',
+    height: 50,
+    borderWidth: 1,
+    borderColor: '#ddd',
+    borderRadius: 8,
+    padding: 10,
+    marginBottom: 15,
+    backgroundColor: 'white',
+  },
+  buttonContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    width: '100%',
+    marginTop: 20,
+  },
+  button: {
+    flex: 1,
+    padding: 15,
+    borderRadius: 8,
+    alignItems: 'center',
+    marginBottom: 10,
+  },
+  cancelButton: {
+    backgroundColor: '#e74c3c',
+    marginRight: 10,
+  },
+  addButton: {
+    backgroundColor: '#cc0e74',
+    marginLeft: 10,
+  },
+  cameraButton: {
+    backgroundColor: '#3498db',
+  },
+  galleryButton: {
+    backgroundColor: '#2ecc71',
+  },
+  videoButton: {
+    backgroundColor: '#9b59b6',
+  },
+  buttonText: {
+    color: '#fff',
+    fontWeight: 'bold',
+    fontSize: 16,
+  },
+  image: {
+    width: 100,
+    height: 100,
+    marginBottom: 10,
+    borderRadius: 8,
+  },
+});
 
 export default TestingScreen;
