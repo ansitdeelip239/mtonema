@@ -97,5 +97,26 @@ class PartnerService {
       throw error;
     }
   }
+
+  static async getPartnerProperty(
+    partnerId: string,
+    pageNumber: number,
+    pageSize: number,
+  ) {
+    try {
+      const params = new URLSearchParams({
+        pageNumber: pageNumber.toString(),
+        pageSize: pageSize.toString(),
+        partnerId: partnerId,
+      });
+      const response = await api.get<any>(
+        url.getPartnerProperty + '?' + params,
+      );
+      return response;
+    } catch (error) {
+      console.error('Error in getPartnerProperty', error);
+      throw error;
+    }
+  }
 }
 export default PartnerService;
