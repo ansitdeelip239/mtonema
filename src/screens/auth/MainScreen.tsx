@@ -9,11 +9,11 @@ import {
 } from 'react-native';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {AuthStackParamList} from '../../navigator/AuthNavigator';
+import GetIcon from '../../components/GetIcon';
 
 type Props = NativeStackScreenProps<AuthStackParamList, 'MainScreen'>;
 
 export const MainScreen: React.FC<Props> = ({navigation}) => {
-
   const onLogin = (role: string[]) => {
     navigation.navigate('EmailScreen', {role});
   };
@@ -66,6 +66,7 @@ export const MainScreen: React.FC<Props> = ({navigation}) => {
 
           {/* Combined View for "Want to List your Property?" and "Login As Partner" */}
           <View style={styles.combinedButtonContainer}>
+            {/* First Button */}
             <TouchableOpacity
               style={styles.listPropertyButton}
               onPress={onSellerSignup}>
@@ -73,10 +74,13 @@ export const MainScreen: React.FC<Props> = ({navigation}) => {
                 Want to list your property?
               </Text>
             </TouchableOpacity>
+
+            {/* Second Button */}
             <View>
               <TouchableOpacity
                 style={styles.button2}
                 onPress={() => onLogin(['Partner'])}>
+                <GetIcon iconName="partner" color="white" size="45" />
                 <Text style={styles.buttonText2}>Login as partner</Text>
               </TouchableOpacity>
             </View>
@@ -146,40 +150,41 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   combinedButtonContainer: {
-    alignItems: 'center', // Center the buttons horizontally
-    marginTop: 20, // Add some space above the combined buttons
+    alignItems: 'center', // Center buttons horizontally
+    justifyContent: 'center', // Center buttons vertically
+    width: '100%', // Take full width of the parent container
   },
   listPropertyButton: {
-    backgroundColor: 'transparent', // No background color
-    padding: 10,
-    borderRadius: 30,
-    width: '70%', // Smaller width
-    alignItems: 'center',
-    borderWidth: 1, // Add border
-    borderColor: '#cc0e74', // Pink border color
+    backgroundColor: '#cc0e74', // Example button color
+    padding: 18, // Increase padding for height
+    borderRadius: 50, // Rounded corners
+    width: '80%', // Set width to 80% of the parent container
+    alignItems: 'center', // Center text horizontally
+    justifyContent: 'center', // Center text vertically
+    marginBottom: 16, // Add spacing between buttons
   },
   listPropertyText: {
-    fontSize: 16,
-    color: '#cc0e74',
-    fontWeight: 'bold',
+    color: 'white', // Text color
+    fontSize: 16, // Increase font size
+    fontWeight: 'bold', // Bold text
   },
   button2: {
-    backgroundColor: '#cc0e74',
-    padding: 10,
-    width: '70%', // Same width as the "Want to List your Property?" button
-    borderRadius: 10,
-    alignItems: 'center',
-    marginTop: 10, // No gap between buttons
-    shadowColor: '#000',
-    shadowOffset: {width: 0, height: 2},
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 5,
+    backgroundColor: '#cc0e74', // Button background color
+    padding: 8, // Increase padding for height
+    borderRadius: 50, // Rounded corners
+    width: '85%', // Set width to 80% of the parent container
+    flexDirection: 'row', // Align icon and text horizontally
+    alignItems: 'center', // Center icon and text vertically
+    justifyContent: 'center', // Center the entire group horizontally
   },
   buttonText2: {
-    color: '#ffffff',
-    fontSize: 16,
-    fontWeight: 'bold',
+    color: 'white', // Text color
+    fontSize: 18, // Increase font size
+    fontWeight: 'bold', // Bold text
+    marginLeft: 10, // Add spacing between icon and text
+    alignItems: 'center', // Center icon and text vertically
+    justifyContent: 'center', // Center the entire group horizontally
+    marginEnd: 20,
   },
   modalOverlay: {
     flex: 1,

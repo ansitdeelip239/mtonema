@@ -13,35 +13,55 @@ export type IconEnum =
   | 'home'
   | 'client'
   | 'user'
-  ;
+  | 'about'
+  | 'contactus'
+  | 'changepassword'
+  | 'faq'
+  | 'logout'
+  | 'ContactedProperty'
+  | 'listproperty'
+  | 'login'
+  | 'partner'
+  | 'password'
+  | 'signup';
 
 type IconProps = {
   iconName: IconEnum;
   color?: string;
+  size?: string;
 };
 
-const GetIcon = ({iconName, color}: IconProps) => {
-  // For debugging
-  console.log('Color received:', color);
-
+const GetIcon = ({iconName, color, size}: IconProps) => {
   const iconMap = {
     search: require('../assets/Icon/search.png'),
     clear: require('../assets/Icon/crossicon.png'),
     filter: require('../assets/Icon/filter.png'),
     edit: require('../assets/Icon/Edit.png'),
     delete: require('../assets/Icon/recycle-bin.png'),
-    property: require('../assets/Icon/add.png'),
-    hamburgerMenu: require('../assets/Icon/menu.png'),
+    property: require('../assets/Icon/addproperty.png'),
+    hamburgerMenu: require('../assets/Images/menu.png'),
     realEstate: require('../assets/Icon/real-estate.png'),
     home: require('../assets/Icon/home.png'),
     client: require('../assets/Icon/customer.png'),
     user: require('../assets/Icon/user.png'),
+    about: require('../assets/Icon/aboutus.png'),
+    contactus: require('../assets/Icon/contact-mail.png'),
+    changepassword: require('../assets/Icon/changepassword.png'),
+    faq: require('../assets/Icon/faq.png'),
+    logout: require('../assets/Icon/logout.png'),
+    ContactedProperty: require('../assets/Icon/contactedproperty.png'),
+    listproperty: require('../assets/Icon/listproperty.png'),
+    login: require('../assets/Icon/log-in.png'),
+    partner: require('../assets/Icon/partner.png'),
+    password: require('../assets/Icon/password.png'),
+    signup: require('../assets/Icon/signup.png'),
   };
 
-  const imageStyle = [styles.searchIcon, color ? {tintColor: color} : null];
-
-  // For debugging
-  console.log('Applied styles:', imageStyle);
+  const imageStyle = [
+    styles.searchIcon,
+    color ? {tintColor: color} : null,
+    size ? {width: Number(size), height:Number(size)} : null,
+  ];
 
   return <Image source={iconMap[iconName]} style={imageStyle} />;
 };

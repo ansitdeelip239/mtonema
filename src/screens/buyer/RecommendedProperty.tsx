@@ -16,7 +16,11 @@ import { PropertyModel } from '../../types';
 import PropertyModal from './PropertyModal';
 import EnquiryButton from '../common/EnquiryButton';
 import Colors from '../../constants/Colors';
-const RecommendedProperty = () => {
+import { DrawerNavigationProp } from '@react-navigation/drawer';
+type HomeProps = {
+  navigation: DrawerNavigationProp<any>;
+};
+const RecommendedProperty = ({navigation}: HomeProps) => {
   const [properties, setProperties] = useState<PropertyModel[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -27,7 +31,6 @@ const RecommendedProperty = () => {
   const [selectedProperty, setSelectedProperty] = useState<PropertyModel | null>(null);
   const [modalVisible, setModalVisible] = useState(false);
   const isLoadingRef = useRef(false);
-
   const pageSize = 10;
 
   const getAllProperty = useCallback(
@@ -190,7 +193,15 @@ const RecommendedProperty = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Text style={styles.recomProeprty}>Recommended Property</Text>
+       <View style={styles.topBar}>
+              <TouchableOpacity onPress={() => navigation.toggleDrawer()}>
+                <Image
+                  source={require('../../assets/Images/menu.png')}
+                  style={styles.menuIcon}
+                />
+              </TouchableOpacity>
+              <Text style={styles.contactText}>Recommended Property</Text>
+            </View>
       <FlatList
         data={properties}
         keyExtractor={item => `property-${item.ID}`}
@@ -233,6 +244,27 @@ const styles = StyleSheet.create({
     backgroundColor: '#f5f5f5',
     padding: 10,
   },
+   topBar: {
+        flexDirection: 'row', // Align items horizontally
+        alignItems: 'center', // Center items vertically
+        paddingHorizontal: 1, // Add horizontal padding
+        paddingVertical: 1, // Add vertical padding
+        // backgroundColor: 'rgba(255, 182, 193, 0.6)', // Light pink with low opacity
+        borderRadius: 15, // Rounded corners
+        // marginHorizontal: '1%', // 5% space on both sides
+        marginBottom: 20, // Add some top margin
+      },
+      menuIcon: {
+        width: 24,
+        height: 24,
+        color: Colors.primary,
+        marginRight: 20, // Add gap between icon and text
+      },
+      contactText: {
+        fontSize: 20, // Adjust font size
+        fontWeight: 'bold',
+        color: Colors.primary,
+      },
   recomProeprty:{
     fontSize: 25,
         fontWeight:'bold',

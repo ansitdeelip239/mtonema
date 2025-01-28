@@ -484,6 +484,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     padding: 15,
     margin: 10,
+    marginBottom: 10, // Add margin bottom here
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
@@ -589,6 +590,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     padding: 15,
+    marginBottom: 80, // Add margin bottom here for the button container
   },
   navButton: {
     flex: 1,

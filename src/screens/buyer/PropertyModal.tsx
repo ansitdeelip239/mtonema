@@ -15,6 +15,7 @@ import { PropertyModel } from '../../types';
 import EnquiryButton from '../common/EnquiryButton';
 import { useAuth } from '../../hooks/useAuth';
 import BuyerService from '../../services/BuyerService';
+import GetIcon from '../../components/GetIcon';
 
 // Utility function to strip HTML tags
 const stripHtmlTags = (html: string): string => {
@@ -226,9 +227,13 @@ const PropertyModal = ({ property, visible, onClose }: PropertyModalProps) => {
         ) : null}
         {user?.Role === 'Seller' ? (
           <View style={styles.buttonContainer2}>
-            <Text onPress={handleDeleteConfirmation} style={styles.enquiryButtonText2}>
+            <TouchableOpacity onPress={handleDeleteConfirmation}>
+
+            <GetIcon   iconName="delete" color="white" size="20" />
+            </TouchableOpacity>
+            {/* <Text  style={styles.enquiryButtonText2}>
               DELETE PROPERTY
-            </Text>
+            </Text> */}
           </View>
         ) : null}
       </ScrollView>
@@ -255,9 +260,12 @@ const styles = StyleSheet.create({
     textAlign: 'center', // Center text
   },
   buttonContainer2: {
+    flex:1,
+    flexDirection: 'row',
+    gap: 4,
     backgroundColor: 'red',
     borderRadius: 8,
-    paddingVertical: 2,
+    paddingVertical: 12,
     padding:5,
     alignItems: 'center',
     justifyContent: 'center',
@@ -266,10 +274,10 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 2, height: 6 },
     shadowOpacity: 0.2,
     shadowRadius: 4,
-    width:140,
+    width:50,
     position:'absolute',
     top:'33%',
-    right:'3%',
+    right:'22%',
   },
   imageContainer: {
     position: 'relative',

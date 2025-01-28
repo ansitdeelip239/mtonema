@@ -14,7 +14,7 @@ import { PropertyModel } from '../../types';
 import { useAuth } from '../../hooks/useAuth';
 import PropertyModal from './PropertyModal';
 import { DrawerNavigationProp } from '@react-navigation/drawer';
-// import Colors from '../../constants/Colors';
+import Colors from '../../constants/Colors';
 
 type HomeProps = {
   navigation: DrawerNavigationProp<any>;
@@ -264,21 +264,22 @@ const styles = StyleSheet.create({
     flexDirection: 'row', // Align items horizontally
     alignItems: 'center', // Center items vertically
     paddingHorizontal: 10, // Add horizontal padding
-    paddingVertical: 12, // Add vertical padding
+    paddingVertical: 10, // Add vertical padding
     // backgroundColor: 'rgba(255, 182, 193, 0.6)', // Light pink with low opacity
     borderRadius: 15, // Rounded corners
     // marginHorizontal: '1%', // 5% space on both sides
-    marginTop: 20, // Add some top margin
+    marginTop: 10, // Add some top margin
   },
   menuIcon: {
     width: 24,
     height: 24,
+    color: Colors.primary,
     marginRight: 20, // Add gap between icon and text
   },
   contactText: {
     fontSize: 20, // Adjust font size
     fontWeight: 'bold',
-    // color: Colors.primary,
+    color: Colors.primary,
   },
   centerContainer: {
     flex: 1,
