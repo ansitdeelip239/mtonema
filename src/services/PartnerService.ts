@@ -1,5 +1,5 @@
 import url from '../constants/api';
-import { AgentPropertyRequestModel } from '../types';
+import {AgentPropertyRequestModel, ClientResponseModel} from '../types';
 import {api} from '../utils/api';
 
 class PartnerService {
@@ -38,6 +38,27 @@ class PartnerService {
       return response;
     } catch (error) {
       console.error('Error in updateAgentProperty', error);
+      throw error;
+    }
+  }
+
+  static async getClientData(
+    partnerId: string,
+    pageNumber: number,
+    pageSize: number,
+  ) {
+    try {
+      const params = new URLSearchParams({
+        partnerId,
+        pageNumber: pageNumber.toString(),
+        pageSize: pageSize.toString(),
+      }).toString();
+      const response = await api.get<ClientResponseModel>(
+        `${url.getClientData}?${params}`,
+      );
+      return response;
+    } catch (error) {
+      console.error('Error in getClientData', error);
       throw error;
     }
   }

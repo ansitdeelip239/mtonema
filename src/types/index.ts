@@ -228,7 +228,7 @@ export interface Group {
   GroupColor: string;
 }
 
-export interface ClientRequestModel {
+export interface Client {
   Id: number;
   PartnerId: number;
   ClientName: string;
@@ -244,23 +244,7 @@ export interface ClientRequestModel {
   Status: number;
 }
 
-export interface PostPropertyForm {
-  sellerType: string;
-  city: string;
-  propertyFor: string;
-  furnishedType: string;
-  facing: string;
-  propertyType: string;
-  isReadyToMove: string;
-  isLiftAvailable: string;
-  isPantryAvailable: string;
-  showMoreSellerType: boolean;
-  showMoreCity: boolean;
-  showMorePropertyFor: boolean;
-  showMoreFurnishedType: boolean;
-  showMorePropertyType: boolean;
-  showMoreFacing: boolean;
-  residentialCommercial: boolean;
-  carParking: boolean;
-  propertyAddress:String;
+export interface ClientResponseModel {
+  responsePagingModel: PagingModel;
+  clientDataModel: Client[];
 }
