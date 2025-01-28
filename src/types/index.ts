@@ -243,3 +243,24 @@ export interface ClientRequestModel {
   Activity: string;
   Status: number;
 }
+
+export interface PostPropertyForm {
+  sellerType: string;
+  city: string;
+  propertyFor: string;
+  furnishedType: string;
+  facing: string;
+  propertyType: string;
+  isReadyToMove: string;
+  isLiftAvailable: string;
+  isPantryAvailable: string;
+  showMoreSellerType: boolean;
+  showMoreCity: boolean;
+  showMorePropertyFor: boolean;
+  showMoreFurnishedType: boolean;
+  showMorePropertyType: boolean;
+  showMoreFacing: boolean;
+  residentialCommercial: boolean;
+  carParking: boolean;
+  propertyAddress:String;
+}
