@@ -31,7 +31,7 @@ const AgentDataScreen: React.FC<Props> = () => {
     bhkType: null,
   });
   const {user} = useAuth();
-  const {dataUpdated} = usePartner();
+  const {dataUpdated, setDataUpdated} = usePartner();
   const PAGE_SIZE = 10;
 
   const isInitialRender = useRef(true);
@@ -155,7 +155,12 @@ const AgentDataScreen: React.FC<Props> = () => {
         />
         <FlatList
           data={agentData}
-          renderItem={renderItem}
+          renderItem={({item}) =>
+            renderItem({
+              item,
+              onDataUpdate: () => setDataUpdated(prev => !prev),
+            })
+          }
           keyExtractor={(item, index) =>
             `${item.Id?.toString() || 'item'}-${index}`
           }

@@ -55,4 +55,5 @@ export default {
   getGroupsByPartnerId: url1 + '/api/v1/partner/GetGroupByPartnerId',
   addEditClientData: url1 + '/api/v1/partner/AddEditClientData',
   getPartnerProperty: url1 + '/api/v1/partner/GetPartnerPropertyUserId',
+  deleteAgentProperty: url1 + '/api/v1/partner/DeleteAgentProperty',
 };

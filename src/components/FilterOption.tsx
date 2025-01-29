@@ -120,10 +120,10 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
   },
   selectedChip: {
-    backgroundColor: Colors.PRIMARY_1,
+    backgroundColor: Colors.main,
   },
   chipText: {
-    color: Colors.PRIMARY_1,
+    color: Colors.black,
   },
   selectedText: {
     color: 'white',

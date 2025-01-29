@@ -1,18 +1,68 @@
 import React from 'react';
-import {StyleSheet, Text, View} from 'react-native';
+import {Alert, StyleSheet, Text, View} from 'react-native';
 import {AgentData} from '../../../../types';
 import formatCurrency from '../../../../utils/currency';
 import {IconButton, Surface} from 'react-native-paper';
 import Colors from '../../../../constants/Colors';
 import GetIcon from '../../../../components/GetIcon';
+import PartnerService from '../../../../services/PartnerService';
+import Toast from 'react-native-toast-message';
 
-const renderItem = ({item}: {item: AgentData}) => {
+const renderItem = ({
+  item,
+  onDataUpdate,
+}: {
+  item: AgentData;
+  onDataUpdate: () => void;
+}) => {
   const onEdit = (id: number) => {
     console.log('Edit:', id);
   };
 
-  const onDelete = (id: number) => {
-    console.log('Delete:', id);
+  const onDelete = async (id: number) => {
+    const title = 'Delete Property';
+    const message =
+      'This action cannot be undone. Are you sure you want to delete this property?';
+
+    Alert.alert(
+      title,
+      message,
+      [
+        {
+          text: 'Cancel',
+          style: 'cancel',
+          isPreferred: true,
+        },
+        {
+          text: 'Delete',
+          style: 'destructive',
+          onPress: async () => {
+            try {
+              const response = await PartnerService.deleteAgentProperty(id);
+              if (response.Success) {
+                Toast.show({
+                  type: 'success',
+                  text1: 'Property Deleted Successfully',
+                  visibilityTime: 3000,
+                });
+                onDataUpdate();
+              }
+            } catch (error) {
+              console.error('Error in deleting property:', error);
+              Toast.show({
+                type: 'error',
+                text1: 'Error in deleting property',
+                visibilityTime: 4000,
+              });
+            }
+          },
+        },
+      ],
+      {
+        cancelable: true,
+        userInterfaceStyle: 'light',
+      },
+    );
   };
 
   return (

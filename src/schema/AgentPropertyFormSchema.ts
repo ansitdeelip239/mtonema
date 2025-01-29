@@ -23,30 +23,42 @@ const agentPropertyFormSchema = z.object({
     )
     .nonempty('Property location is required'),
 
-  propertyType: z.string().nonempty('Property type is required'),
+  propertyType: z
+    .string()
+    .refine(
+      val => val === '' || val.length > 0,
+      'Property type must not be empty if provided',
+    )
+    .optional()
+    .default(''),
 
-  bhkType: z.string().nonempty('BHK type is required'),
+  bhkType: z
+    .string()
+    .refine(
+      val => val === '' || val.length > 0,
+      'BHK type must not be empty if provided',
+    )
+    .optional()
+    .default(''),
 
   demandPrice: z
     .string()
-    .min(1, 'Demand price is required')
-    .regex(
-      /^[1-9]\d*$/,
-      'Price must be a positive number without leading zeros',
+    .refine(
+      val =>
+        val === '' || (/^[1-9]\d*$/.test(val) && parseInt(val, 10) >= 1000),
+      'If provided, price must be at least 1000',
     )
-    .refine(val => parseInt(val, 10) >= 1000, 'Price must be at least 1000'),
+    .optional()
+    .default(''),
 
   securityDepositAmount: z
     .string()
-    .min(1, 'Security deposit is required')
-    .regex(
-      /^[1-9]\d*$/,
-      'Security deposit must be a positive number without leading zeros',
-    )
     .refine(
-      val => parseInt(val, 10) >= 100,
-      'Security deposit must be at least 100',
-    ),
+      val => val === '' || (/^[1-9]\d*$/.test(val) && parseInt(val, 10) >= 100),
+      'If provided, security deposit must be at least 100',
+    )
+    .optional()
+    .default(''),
 
   negotiable: z.boolean().default(false),
 
@@ -59,8 +71,10 @@ const agentPropertyFormSchema = z.object({
 
 const apiSubmissionSchema = agentPropertyFormSchema.transform(data => ({
   ...data,
-  demandPrice: parseInt(data.demandPrice, 10),
-  securityDepositAmount: parseInt(data.securityDepositAmount, 10),
+  demandPrice: data.demandPrice ? parseInt(data.demandPrice, 10) : 0,
+  securityDepositAmount: data.securityDepositAmount
+    ? parseInt(data.securityDepositAmount, 10)
+    : 0,
 }));
 
 export type AgentPropertyFormType = z.infer<typeof agentPropertyFormSchema>;
