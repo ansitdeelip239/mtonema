@@ -44,9 +44,8 @@ const agentPropertyFormSchema = z.object({
   demandPrice: z
     .string()
     .refine(
-      val =>
-        val === '' || (/^[1-9]\d*$/.test(val) && parseInt(val, 10) >= 1000),
-      'If provided, price must be at least 1000',
+      val => val === '' || /^\d+$/.test(val),
+      'If provided, price must be a non-negative number',
     )
     .optional()
     .default(''),
@@ -54,8 +53,8 @@ const agentPropertyFormSchema = z.object({
   securityDepositAmount: z
     .string()
     .refine(
-      val => val === '' || (/^[1-9]\d*$/.test(val) && parseInt(val, 10) >= 100),
-      'If provided, security deposit must be at least 100',
+      val => val === '' || /^\d+$/.test(val),
+      'If provided, security deposit must be a non-negative number',
     )
     .optional()
     .default(''),

@@ -1,7 +1,7 @@
 import React from 'react';
 import {Alert, StyleSheet, Text, View} from 'react-native';
 import {AgentData} from '../../../../types';
-import formatCurrency from '../../../../utils/currency';
+import {formatCurrency} from '../../../../utils/currency';
 import {IconButton, Surface} from 'react-native-paper';
 import Colors from '../../../../constants/Colors';
 import GetIcon from '../../../../components/GetIcon';
@@ -11,12 +11,17 @@ import Toast from 'react-native-toast-message';
 const renderItem = ({
   item,
   onDataUpdate,
+  navigation,
 }: {
   item: AgentData;
   onDataUpdate: () => void;
+  navigation: any;
 }) => {
-  const onEdit = (id: number) => {
-    console.log('Edit:', id);
+  const onEdit = () => {
+    navigation.navigate('AddProperty', {
+      editMode: true,
+      propertyData: item,
+    });
   };
 
   const onDelete = async (id: number) => {
@@ -80,7 +85,7 @@ const renderItem = ({
           <IconButton
             icon={() => GetIcon({iconName: 'edit', color: Colors.main})}
             size={20}
-            onPress={() => onEdit(item.Id)}
+            onPress={() => onEdit()}
             iconColor={Colors.main}
             style={styles.actionButton}
           />

@@ -1,4 +1,4 @@
-import React, {useRef, useMemo, useCallback, useState} from 'react';
+import React, {useRef, useMemo, useCallback, useState, useEffect} from 'react';
 import {
   View,
   StyleSheet,
@@ -13,7 +13,7 @@ import {Button, Switch} from 'react-native-paper';
 import {MaterialTextInput} from '../../../components/MaterialTextInput';
 import {useMaster} from '../../../context/MasterProvider';
 import FilterOption from '../../../components/FilterOption';
-import formatCurrency from '../../../utils/currency';
+import {formatCurrency} from '../../../utils/currency';
 import Colors from '../../../constants/Colors';
 import PartnerService from '../../../services/PartnerService';
 import {useAuth} from '../../../hooks/useAuth';
@@ -34,7 +34,7 @@ import Toast from 'react-native-toast-message';
 
 type Props = BottomTabScreenProps<PartnerBottomTabParamList, 'AddProperty'>;
 
-const AddAgentPropertyScreen: React.FC<Props> = ({navigation}) => {
+const AddAgentPropertyScreen: React.FC<Props> = ({navigation, route}) => {
   const scrollViewRef = useRef<ScrollView>(null);
   const {user} = useAuth();
   const {masterData} = useMaster();
@@ -43,17 +43,34 @@ const AddAgentPropertyScreen: React.FC<Props> = ({navigation}) => {
   >({});
   const {dataUpdated, setDataUpdated} = usePartner();
 
-  const initialState: AgentPropertyFormType = {
-    agentName: '',
-    agentContactNo: '',
-    propertyLocation: '',
-    propertyType: '',
-    bhkType: '',
-    demandPrice: '',
-    securityDepositAmount: '',
-    negotiable: false,
-    propertyNotes: '',
-  };
+  const editMode = route.params?.editMode;
+  const propertyData = route.params?.propertyData;
+
+  const initialState: AgentPropertyFormType =
+    editMode && propertyData
+      ? {
+          agentName: propertyData.AgentName || '',
+          agentContactNo: propertyData.AgentContactNo || '',
+          propertyLocation: propertyData.PropertyLocation || '',
+          propertyType: propertyData.PropertyType?.MasterDetailName || '',
+          bhkType: propertyData.FlatSize?.MasterDetailName || '',
+          demandPrice: propertyData.DemandPrice?.toString() || '',
+          securityDepositAmount:
+            propertyData.SecurityDepositAmount?.toString() || '',
+          negotiable: propertyData.Negotiable || false,
+          propertyNotes: propertyData.PropertyNotes || '',
+        }
+      : {
+          agentName: '',
+          agentContactNo: '',
+          propertyLocation: '',
+          propertyType: '',
+          bhkType: '',
+          demandPrice: '',
+          securityDepositAmount: '',
+          negotiable: false,
+          propertyNotes: '',
+        };
 
   const validateField = useCallback(
     (field: keyof AgentPropertyFormType, value: string | boolean) => {
@@ -81,6 +98,7 @@ const AddAgentPropertyScreen: React.FC<Props> = ({navigation}) => {
     handleSelect,
     loading,
     onSubmit: handleSubmit,
+    setFormInput,
   } = useForm<AgentPropertyFormType>({
     initialState,
     onSubmit: async formData => {
@@ -100,7 +118,7 @@ const AddAgentPropertyScreen: React.FC<Props> = ({navigation}) => {
           Negotiable: validatedApiData.negotiable,
           PropertyNotes: validatedApiData.propertyNotes,
           Status: 1,
-          Id: 0,
+          Id: editMode && propertyData ? propertyData.Id : 0,
           PriceUnit: null,
           EmailId: user?.Email || '',
         };
@@ -116,7 +134,9 @@ const AddAgentPropertyScreen: React.FC<Props> = ({navigation}) => {
           setErrors({});
           Toast.show({
             type: 'success',
-            text1: 'Property added successfully',
+            text1: editMode
+              ? 'Property updated successfully'
+              : 'Property added successfully',
           });
           setDataUpdated(!dataUpdated);
           navigation.navigate('Property');
@@ -166,6 +186,25 @@ const AddAgentPropertyScreen: React.FC<Props> = ({navigation}) => {
       scrollViewRef.current?.scrollToEnd({animated: true});
     }, delay);
   }, []);
+
+  useEffect(() => {
+    if (editMode && propertyData) {
+      const updatedFormData = {
+        agentName: propertyData.AgentName || '',
+        agentContactNo: propertyData.AgentContactNo || '',
+        propertyLocation: propertyData.PropertyLocation || '',
+        propertyType: propertyData.PropertyType?.MasterDetailName || '',
+        bhkType: propertyData.FlatSize?.MasterDetailName || '',
+        demandPrice: propertyData.DemandPrice?.toString() || '',
+        securityDepositAmount:
+          propertyData.SecurityDepositAmount?.toString() || '',
+        negotiable: propertyData.Negotiable || false,
+        propertyNotes: propertyData.PropertyNotes || '',
+      };
+
+      setFormInput(updatedFormData);
+    }
+  }, [editMode, propertyData, setFormInput]);
 
   const renderPropertyInputs = useMemo(
     () => (
@@ -286,7 +325,9 @@ const AddAgentPropertyScreen: React.FC<Props> = ({navigation}) => {
 
   return (
     <>
-      <Header<PartnerDrawerParamList> title="Add Agent's Property" />
+      <Header<PartnerDrawerParamList>
+        title={editMode ? "Edit Agent's Property" : "Add Agent's Property"}
+      />
       <KeyboardAvoidingView
         style={styles.container}
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}

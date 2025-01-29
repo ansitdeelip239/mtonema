@@ -18,7 +18,7 @@ import {usePartner} from '../../../context/PartnerProvider';
 
 type Props = BottomTabScreenProps<PartnerBottomTabParamList, 'Property'>;
 
-const AgentDataScreen: React.FC<Props> = () => {
+const AgentDataScreen: React.FC<Props> = ({navigation}) => {
   const [agentData, setAgentData] = useState<AgentData[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isRefreshing, setIsRefreshing] = useState(false);
@@ -159,6 +159,7 @@ const AgentDataScreen: React.FC<Props> = () => {
             renderItem({
               item,
               onDataUpdate: () => setDataUpdated(prev => !prev),
+              navigation,
             })
           }
           keyExtractor={(item, index) =>

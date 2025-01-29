@@ -12,12 +12,19 @@ export default function useForm<T>({
   const [formInput, setFormInput] = useState<T>(initialState);
   const [loading, setLoading] = useState(false);
 
-  const handleInputChange = (field: keyof T, value: any) => {
+  const handleInputChange = useCallback((field: keyof T, value: any) => {
     setFormInput(prevState => ({
       ...prevState,
       [field]: value,
     }));
-  };
+  }, []);
+
+  const handleSetFormInput = useCallback((newState: Partial<T>) => {
+    setFormInput(prevState => ({
+      ...prevState,
+      ...newState,
+    }));
+  }, []);
 
   const handleSelect = useCallback((key: keyof T, value: string) => {
     setFormInput(prev => ({
@@ -41,5 +48,6 @@ export default function useForm<T>({
     handleSelect,
     loading,
     onSubmit: handleSubmit,
+    setFormInput: handleSetFormInput,
   };
 }
