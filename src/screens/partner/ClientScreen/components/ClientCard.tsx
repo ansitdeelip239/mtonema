@@ -1,5 +1,12 @@
 import React from 'react';
-import {View, Text, StyleSheet} from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  Image,
+  Linking,
+  TouchableOpacity,
+} from 'react-native';
 import {Client} from '../../../../types';
 import {formatDate} from '../../../../utils/dateUtils';
 import GroupBadges from './GroupBadge';
@@ -8,54 +15,79 @@ interface ClientCardProps {
   client: Client;
 }
 
-export const ClientCard: React.FC<ClientCardProps> = ({client}) => (
-  <View style={styles.clientCard}>
-    <View style={styles.cardHeader}>
-      <View style={styles.dateContainer}>
-        <View style={styles.dateBlock}>
-          <Text style={styles.dateLabel}>Date Added</Text>
-          <Text style={styles.dateText}>
-            {formatDate(client.CreatedOn, 'dd MMM yy')}
-          </Text>
+export const ClientCard: React.FC<ClientCardProps> = ({client}) => {
+  const handleWhatsapp = () => {
+    Linking.openURL(
+      `https://api.whatsapp.com/send?phone=${client.WhatsappNumber}`,
+    );
+  };
+
+  const handlePhone = () => {
+    Linking.openURL(`tel:+917303062845${client.MobileNumber}`);
+  };
+  return (
+    <View style={styles.clientCard}>
+      <View style={styles.cardHeader}>
+        <View style={styles.dateContainer}>
+          <View style={styles.dateBlock}>
+            <Text style={styles.dateLabel}>Date Added</Text>
+            <Text style={styles.dateText}>
+              {formatDate(client.CreatedOn, 'dd MMM yy')}
+            </Text>
+          </View>
+          <View style={styles.iconContainer}>
+            <TouchableOpacity onPress={handlePhone}>
+              <Image
+                source={require('../../../../assets/Icon/phone.png')}
+                style={styles.phoneIcon}
+              />
+            </TouchableOpacity>
+            <TouchableOpacity onPress={handleWhatsapp}>
+              <Image
+                source={require('../../../../assets/Icon/whatsapp.png')}
+                style={styles.whatsappIcon}
+              />
+            </TouchableOpacity>
+          </View>
         </View>
       </View>
-    </View>
 
-    <View style={styles.cardContent}>
-      <View style={styles.row}>
-        <Text style={styles.label}>Client Name:</Text>
-        <Text style={styles.clientName}>{client.ClientName}</Text>
-      </View>
-
-      <View style={styles.groupContainer}>
-        <Text style={styles.label}>Groups:</Text>
-        <GroupBadges groups={client.Groups} />
-      </View>
-
-      <View style={styles.activitySection}>
+      <View style={styles.cardContent}>
         <View style={styles.row}>
-          {client.ClientActivityDataModels?.length > 0 ? (
-            <>
-              <Text style={styles.label}>Last Activity:</Text>
-              <Text style={styles.lastActivity}>
-                {formatDate(
-                  client.ClientActivityDataModels.sort(
-                    (a, b) =>
-                      new Date(b.CreatedOn).getTime() -
-                      new Date(a.CreatedOn).getTime(),
-                  )[0].CreatedOn,
-                  'PPpp',
-                )}
-              </Text>
-            </>
-          ) : (
-            <Text style={styles.noActivity}>No activities yet</Text>
-          )}
+          <Text style={styles.label}>Client Name:</Text>
+          <Text style={styles.clientName}>{client.ClientName}</Text>
+        </View>
+
+        <View style={styles.groupContainer}>
+          <Text style={styles.label}>Groups:</Text>
+          <GroupBadges groups={client.Groups} />
+        </View>
+
+        <View style={styles.activitySection}>
+          <View style={styles.row}>
+            {client.ClientActivityDataModels?.length > 0 ? (
+              <>
+                <Text style={styles.label}>Last Activity:</Text>
+                <Text style={styles.lastActivity}>
+                  {formatDate(
+                    client.ClientActivityDataModels.sort(
+                      (a, b) =>
+                        new Date(b.CreatedOn).getTime() -
+                        new Date(a.CreatedOn).getTime(),
+                    )[0].CreatedOn,
+                    'PPpp',
+                  )}
+                </Text>
+              </>
+            ) : (
+              <Text style={styles.noActivity}>No activities yet</Text>
+            )}
+          </View>
         </View>
       </View>
     </View>
-  </View>
-);
+  );
+};
 
 const styles = StyleSheet.create({
   clientCard: {
@@ -81,6 +113,7 @@ const styles = StyleSheet.create({
   dateContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
+    alignItems: 'center',
   },
   dateBlock: {
     alignItems: 'center',
@@ -136,5 +169,18 @@ const styles = StyleSheet.create({
     fontSize: 13,
     color: '#999',
     fontStyle: 'italic',
+  },
+  iconContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 20,
+  },
+  whatsappIcon: {
+    width: 30,
+    height: 30,
+  },
+  phoneIcon: {
+    width: 20,
+    height: 20,
   },
 });
