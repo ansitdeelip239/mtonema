@@ -2,11 +2,18 @@ import React, {useState, useCallback} from 'react';
 import {View, FlatList, Keyboard, StyleSheet, Image} from 'react-native';
 import {TextInput, Text} from 'react-native-paper';
 import BuyerService from '../services/BuyerService';
+import Colors from '../constants/Colors';
 
 const LocationComponent = ({
   onLocationChange,
+  color,borderColor,backgroundcolor,label,
 }: {
   onLocationChange: (value: string) => void;
+  color?:string,
+  borderColor?:string,
+  backgroundcolor?:string,
+  label?:string,
+  height?:number,
 }) => {
   const [isSelectingSuggestion, setIsSelectingSuggestion] = useState(false);
   const [locationQuery, setLocationQuery] = useState('');
@@ -85,7 +92,7 @@ const LocationComponent = ({
     <View style={styles.container}>
       <View style={styles.txtpadding}>
         <TextInput
-          label="Location"
+          label= {label || 'Location'}
           value={locationQuery}
           onChangeText={text => handleInputChange(text)}
           mode="outlined"
@@ -103,9 +110,9 @@ const LocationComponent = ({
           }}
           theme={{
             colors: {
-              primary: '#cc0e74', // Label color when focused
-              onSurfaceVariant: 'gray', // Label color when not focused
-              background: '#f0f0f0', // Background color of the input field
+              primary: color || Colors.main, // Label color when focused
+              onSurfaceVariant: borderColor || Colors.ligthGray, // Label color when not focused
+              background: backgroundcolor || '#f0f0f0', // Background color of the input field
               text: 'black', // Text color of the input field
               error: 'red', // Error message and error state color
             },
@@ -161,10 +168,10 @@ const LocationComponent = ({
 const styles = StyleSheet.create({
   container: {
     backgroundColor: '#fff',
-    marginBottom: 10,
+    marginBottom: 0,
   },
   txtpadding: {
-    marginBottom: 28,
+    marginBottom: 0,
   },
   suggestionsContainer: {
     borderWidth: 1,

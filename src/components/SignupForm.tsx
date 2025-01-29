@@ -14,7 +14,7 @@ import {
   validateName,
   validatePhone,
 } from '../utils/formvalidation';
-import LocationComponent from './LocationComponenet';
+import LocationComponent from './LocationComponent';
 import {SignUpRequest} from '../types';
 import {navigationRef} from '../navigator/NavigationRef';
 
@@ -217,12 +217,14 @@ const SignupForm = ({
       </View>
 
       {/* Location Component */}
+    <View style={styles.locationcontainer}>
       <LocationComponent onLocationChange={handleLocationChange} />
       {errors.Location !== '' && (
         <HelperText type="error" visible={true}>
           {errors.Location}
         </HelperText>
       )}
+      </View>
 
 <View style={styles.inputGroup}>
   <View style={styles.phoneInputContainer}>
@@ -300,6 +302,9 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 15,
     width: '100%',
+  },
+  locationcontainer:{
+    marginBottom:35,
   },
   buttonLabel: {
     fontSize: 18, // Increase font size
