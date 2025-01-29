@@ -23,9 +23,4 @@ const formatCurrency = (value: string | null | undefined) => {
   }
 };
 
-const convertZeroToEmpty = (value: number | undefined | null): string => {
-  if (value === 0 || value === null || value === undefined) return '';
-  return value.toString();
-};
-
-export {formatCurrency, convertZeroToEmpty};
+export {formatCurrency};
