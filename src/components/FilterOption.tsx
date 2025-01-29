@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import {StyleSheet, Text, View, TouchableOpacity} from 'react-native';
 import {MasterDetailModel} from '../types';
-import {Chip} from 'react-native-paper';
+import {Chip, HelperText} from 'react-native-paper';
 import Colors from '../constants/Colors';
 
 const FilterOption = ({
@@ -9,11 +9,13 @@ const FilterOption = ({
   options,
   selectedValue,
   onSelect,
+  error,
 }: {
   label: string;
   options: MasterDetailModel[];
   selectedValue: string | null;
   onSelect: (value: string) => void;
+  error?: string;
 }) => {
   const [visibleLines, setVisibleLines] = useState(1);
   const buttonsPerLine = 4;
@@ -89,6 +91,11 @@ const FilterOption = ({
           </TouchableOpacity>
         )}
       </View>
+      {error && (
+        <HelperText type="error" style={styles.helperText}>
+          {error}
+        </HelperText>
+      )}
     </View>
   );
 };
@@ -123,6 +130,9 @@ const styles = StyleSheet.create({
   },
   moreLessButton: {
     alignSelf: 'flex-end',
+  },
+  helperText: {
+    marginTop: 4,
   },
 });
 

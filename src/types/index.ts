@@ -180,32 +180,20 @@ export interface FilterValues {
   bhkType: string | null;
 }
 
-export interface AgentPropertyForm {
-  agentName: string;
-  agentContactNo: string;
-  propertyLocation: string;
-  propertyType: string;
-  bhkType: string;
-  demandPrice: string;
-  securityDepositAmount: string;
-  negotiable: boolean;
-  propertyNotes: string;
-}
-
 export interface AgentPropertyRequestModel {
-  AgentContactNo: string;
   AgentName: string;
-  DemandPrice: string;
-  EmailId: string;
-  FlatSize: string;
-  Negotiable: boolean;
-  PriceUnit: string | null;
+  AgentContactNo: string;
   PropertyLocation: string;
-  PropertyNotes: string;
   PropertyType: string;
+  FlatSize: string;
+  DemandPrice: string;
   SecurityDepositAmount: string;
-  Id: number;
+  Negotiable: boolean;
+  PropertyNotes: string;
   Status: number;
+  Id: number;
+  PriceUnit: string | null;
+  EmailId: string;
 }
 
 export interface MasterDataModel {
@@ -242,7 +230,7 @@ export interface Client {
   EmailId: string;
   Notes: string;
   ClientActivityDataModels: ClientActivityDataModel[];
-  Groups: { Id: number; Name: string, GroupColor: string }[];
+  Groups: {Id: number; Name: string; GroupColor: string}[];
   CreatedOn: string;
   Activity: string;
   Status: number;

@@ -10,9 +10,11 @@ import SearchHeader from './components/SearchHeader';
 import Colors from '../../../constants/Colors';
 import {BottomTabScreenProps} from '@react-navigation/bottom-tabs';
 import Header from '../../../components/Header';
-import {PartnerBottomTabParamList, PartnerDrawerParamList} from '../../../types/navigation';
-
-// type Props = NativeStackScreenProps<AgentStackParamList, 'AgentPropertyList'>;
+import {
+  PartnerBottomTabParamList,
+  PartnerDrawerParamList,
+} from '../../../types/navigation';
+import {usePartner} from '../../../context/PartnerProvider';
 
 type Props = BottomTabScreenProps<PartnerBottomTabParamList, 'Property'>;
 
@@ -29,6 +31,7 @@ const AgentDataScreen: React.FC<Props> = () => {
     bhkType: null,
   });
   const {user} = useAuth();
+  const {dataUpdated} = usePartner();
   const PAGE_SIZE = 10;
 
   const isInitialRender = useRef(true);
@@ -121,7 +124,7 @@ const AgentDataScreen: React.FC<Props> = () => {
 
   useEffect(() => {
     fetchAgentData(1, true);
-  }, [user?.Email, fetchAgentData]);
+  }, [user?.Email, fetchAgentData, dataUpdated]);
 
   const handleRefresh = useCallback(() => {
     setIsRefreshing(true);
