@@ -46,31 +46,34 @@ const AddAgentPropertyScreen: React.FC<Props> = ({navigation, route}) => {
   const editMode = route.params?.editMode;
   const propertyData = route.params?.propertyData;
 
-  const initialState: AgentPropertyFormType =
-    editMode && propertyData
-      ? {
-          agentName: propertyData.AgentName || '',
-          agentContactNo: propertyData.AgentContactNo || '',
-          propertyLocation: propertyData.PropertyLocation || '',
-          propertyType: propertyData.PropertyType?.MasterDetailName || '',
-          bhkType: propertyData.FlatSize?.MasterDetailName || '',
-          demandPrice: propertyData.DemandPrice?.toString() || '',
-          securityDepositAmount:
-            propertyData.SecurityDepositAmount?.toString() || '',
-          negotiable: propertyData.Negotiable || false,
-          propertyNotes: propertyData.PropertyNotes || '',
-        }
-      : {
-          agentName: '',
-          agentContactNo: '',
-          propertyLocation: '',
-          propertyType: '',
-          bhkType: '',
-          demandPrice: '',
-          securityDepositAmount: '',
-          negotiable: false,
-          propertyNotes: '',
-        };
+  const initialState = useMemo(() => {
+    if (editMode && propertyData) {
+      return {
+        agentName: propertyData.AgentName || '',
+        agentContactNo: propertyData.AgentContactNo || '',
+        propertyLocation: propertyData.PropertyLocation || '',
+        propertyType: propertyData.PropertyType?.MasterDetailName || '',
+        bhkType: propertyData.FlatSize?.MasterDetailName || '',
+        demandPrice: propertyData.DemandPrice?.toString() || '',
+        securityDepositAmount:
+          propertyData.SecurityDepositAmount?.toString() || '',
+        negotiable: propertyData.Negotiable || false,
+        propertyNotes: propertyData.PropertyNotes || '',
+      };
+    }
+
+    return {
+      agentName: '',
+      agentContactNo: '',
+      propertyLocation: '',
+      propertyType: '',
+      bhkType: '',
+      demandPrice: '',
+      securityDepositAmount: '',
+      negotiable: false,
+      propertyNotes: '',
+    };
+  }, [editMode, propertyData]);
 
   const validateField = useCallback(
     (field: keyof AgentPropertyFormType, value: string | boolean) => {
@@ -99,6 +102,7 @@ const AddAgentPropertyScreen: React.FC<Props> = ({navigation, route}) => {
     loading,
     onSubmit: handleSubmit,
     setFormInput,
+    resetForm,
   } = useForm<AgentPropertyFormType>({
     initialState,
     onSubmit: async formData => {
@@ -125,12 +129,7 @@ const AddAgentPropertyScreen: React.FC<Props> = ({navigation, route}) => {
 
         const response = await PartnerService.updateAgentProperty(request);
         if (response.Success) {
-          Object.keys(initialState).forEach(key => {
-            handleInputChange(
-              key as keyof AgentPropertyFormType,
-              initialState[key as keyof AgentPropertyFormType],
-            );
-          });
+          resetForm();
           setErrors({});
           Toast.show({
             type: 'success',
@@ -160,7 +159,10 @@ const AddAgentPropertyScreen: React.FC<Props> = ({navigation, route}) => {
           });
           setErrors(newErrors);
         }
-        // console.error('Error in onSubmit:', error);
+        Toast.show({
+          type: 'error',
+          text1: 'Please check your input and try again',
+        });
       }
     },
   });
@@ -188,23 +190,15 @@ const AddAgentPropertyScreen: React.FC<Props> = ({navigation, route}) => {
   }, []);
 
   useEffect(() => {
-    if (editMode && propertyData) {
-      const updatedFormData = {
-        agentName: propertyData.AgentName || '',
-        agentContactNo: propertyData.AgentContactNo || '',
-        propertyLocation: propertyData.PropertyLocation || '',
-        propertyType: propertyData.PropertyType?.MasterDetailName || '',
-        bhkType: propertyData.FlatSize?.MasterDetailName || '',
-        demandPrice: propertyData.DemandPrice?.toString() || '',
-        securityDepositAmount:
-          propertyData.SecurityDepositAmount?.toString() || '',
-        negotiable: propertyData.Negotiable || false,
-        propertyNotes: propertyData.PropertyNotes || '',
-      };
+    setFormInput(initialState);
+  }, [setFormInput, initialState]);
 
-      setFormInput(updatedFormData);
-    }
-  }, [editMode, propertyData, setFormInput]);
+  useEffect(() => {
+    return () => {
+      setErrors({});
+      resetForm();
+    };
+  }, [resetForm]);
 
   const renderPropertyInputs = useMemo(
     () => (

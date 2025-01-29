@@ -42,6 +42,10 @@ export default function useForm<T>({
     }
   }, [formInput, onSubmit]);
 
+  const resetForm = useCallback(() => {
+    setFormInput(initialState);
+  }, [initialState]);
+
   return {
     formInput,
     handleInputChange,
@@ -49,5 +53,6 @@ export default function useForm<T>({
     loading,
     onSubmit: handleSubmit,
     setFormInput: handleSetFormInput,
+    resetForm,
   };
 }
