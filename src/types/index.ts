@@ -255,11 +255,11 @@ export interface ClientResponseModel {
 
 export interface ClientForm {
   ClientName: string;
-  DisplayName: string;
-  MobileNumber: string;
-  WhatsappNumber: string;
-  EmailId: string;
-  Notes: string;
-  Groups: number[];
+  DisplayName?: string;
+  MobileNumber?: string;
+  WhatsappNumber?: string;
+  EmailId?: string;
+  Notes?: string;
+  Groups?: number[];
   PartnerId: string;
 }

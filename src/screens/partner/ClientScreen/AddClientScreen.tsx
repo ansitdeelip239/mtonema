@@ -36,6 +36,11 @@ const AddClientScreen: React.FC<Props> = ({navigation}) => {
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
 
   const validateField = useCallback((field: keyof ClientForm, value: any) => {
+    if (field !== 'ClientName' && (!value || value === '')) {
+      setFieldErrors(prev => ({...prev, [field]: ''}));
+      return;
+    }
+
     try {
       const schema = clientFormSchema.shape[field];
       schema.parse(value);
@@ -64,24 +69,21 @@ const AddClientScreen: React.FC<Props> = ({navigation}) => {
       EmailId: '',
       Notes: '',
       Groups: [],
-      PartnerId: user?.Email as string,
+      PartnerId: user?.Email ?? '',
     },
     onSubmit: async formData => {
       try {
-        const validatedData = clientFormSchema.parse(formData);
+        const cleanedData = {
+          ...formData,
+          DisplayName: formData.DisplayName || undefined,
+          MobileNumber: formData.MobileNumber || undefined,
+          WhatsappNumber: formData.WhatsappNumber || undefined,
+          EmailId: formData.EmailId || undefined,
+          Notes: formData.Notes || '',
+          Groups: formData.Groups || [],
+        };
 
-        // Check if Groups is empty
-        if (validatedData.Groups.length === 0) {
-          setFieldErrors(prev => ({
-            ...prev,
-            Groups: 'Please select at least one group',
-          }));
-          Toast.show({
-            type: 'error',
-            text1: 'Please select at least one group',
-          });
-          return;
-        }
+        const validatedData = clientFormSchema.parse(cleanedData);
 
         const response = await PartnerService.addClient(validatedData);
         if (response.Success) {
@@ -108,7 +110,7 @@ const AddClientScreen: React.FC<Props> = ({navigation}) => {
           setFieldErrors(errors);
           Toast.show({
             type: 'error',
-            text1: 'Please fill all the required fields',
+            text1: 'Please provide a valid Client Name',
           });
         } else {
           console.error('Error in onSubmit:', err);
@@ -122,9 +124,13 @@ const AddClientScreen: React.FC<Props> = ({navigation}) => {
   });
 
   const handleFieldChange = useCallback(
-    (field: keyof ClientForm, value: string | boolean) => {
+    (field: keyof ClientForm, value: string | boolean | number[]) => {
       handleInputChange(field, value);
-      validateField(field, value);
+      if (field === 'ClientName' || (value && value !== '')) {
+        validateField(field, value);
+      } else {
+        setFieldErrors(prev => ({...prev, [field]: ''}));
+      }
     },
     [handleInputChange, validateField],
   );
@@ -137,9 +143,9 @@ const AddClientScreen: React.FC<Props> = ({navigation}) => {
 
   const toggleGroup = useCallback(
     (groupId: number) => {
-      const updatedGroups = formInput.Groups.includes(groupId)
-        ? formInput.Groups.filter(id => id !== groupId)
-        : [...formInput.Groups, groupId];
+      const updatedGroups = formInput.Groups?.includes(groupId)
+        ? formInput.Groups?.filter(id => id !== groupId)
+        : [...(formInput.Groups ?? []), groupId];
       handleInputChange('Groups', updatedGroups);
     },
     [formInput.Groups, handleInputChange],
@@ -148,16 +154,14 @@ const AddClientScreen: React.FC<Props> = ({navigation}) => {
   const renderGroupToggleButtons = useMemo(
     () => (
       <View style={styles.groupsContainer}>
-        <Text style={styles.groupsLabel}>
-          Select Groups <Text style={styles.required}>*</Text>
-        </Text>
+        <Text style={styles.groupsLabel}>Select Groups</Text>
         <View style={styles.groupButtonsContainer}>
           {groups?.map(group => (
             <TouchableOpacity
               key={group.Id}
               style={[
                 styles.groupButton,
-                formInput.Groups.some(g => g === group.Id) && {
+                formInput.Groups?.some(g => g === group.Id) && {
                   backgroundColor: group.Color.Name,
                   borderColor: group.Color.Name,
                 },
@@ -166,7 +170,7 @@ const AddClientScreen: React.FC<Props> = ({navigation}) => {
               <Text
                 style={[
                   styles.groupButtonText,
-                  formInput.Groups.some(g => g === group.Id) &&
+                  formInput.Groups?.some(g => g === group.Id) &&
                     styles.groupButtonTextSelected,
                 ]}>
                 {group.GroupName}
@@ -184,7 +188,7 @@ const AddClientScreen: React.FC<Props> = ({navigation}) => {
       <>
         <MaterialTextInput<ClientForm>
           style={styles.input}
-          label="Client Name"
+          label="Client Name*"
           field="ClientName"
           formInput={formInput}
           setFormInput={handleFieldChange}
@@ -347,15 +351,6 @@ const styles = StyleSheet.create({
   },
   groupButtonTextSelected: {
     color: '#fff',
-  },
-  required: {
-    color: 'red',
-    marginLeft: 4,
-  },
-  groupsLabelRequired: {
-    fontSize: 16,
-    marginBottom: 8,
-    color: '#000',
   },
 });
 

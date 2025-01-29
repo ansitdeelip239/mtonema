@@ -10,21 +10,18 @@ const clientFormSchema = z.object({
     .string()
     .min(2, 'Name must be at least 2 characters')
     .regex(/^[a-zA-Z\s]*$/, 'Name must contain only letters and spaces')
-    .nonempty('Display Name is required'),
+    .optional(),
   MobileNumber: z
     .string()
     .regex(/^\d{10}$/, 'Mobile number must be exactly 10 digits')
-    .nonempty('Mobile Number is required'),
+    .optional(),
   WhatsappNumber: z
     .string()
     .regex(/^\d{10}$/, 'WhatsApp number must be exactly 10 digits')
-    .nonempty('WhatsApp Number is required'),
-  EmailId: z
-    .string()
-    .email('Invalid email address')
-    .nonempty('Email is required'),
-  Notes: z.string().default(''),
-  Groups: z.array(z.number()).min(1, 'Select at least one group'),
+    .optional(),
+  EmailId: z.string().email('Invalid email address').optional(),
+  Notes: z.string().optional().default(''),
+  Groups: z.array(z.number()).optional().default([]),
   PartnerId: z.string().nonempty('Partner ID is required'),
 });
 
