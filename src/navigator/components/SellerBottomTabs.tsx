@@ -12,6 +12,7 @@ import TestingScreen from '../../screens/common/TestingScreen';
 import PropertyListingForm from '../../screens/seller/PostProperty';
 import { Text } from 'react-native-paper';
 import SellerProfileScreen from '../../screens/seller/SellerProfileScreen';
+import PostPropertyForm from '../../screens/seller/PostProperty/PostPropertyForm';
 
 
 const Tab = createBottomTabNavigator<SellerBottomTabParamList>();
@@ -28,7 +29,7 @@ const tabScreens: Array<{
   },
   {
     name: 'Property',
-    component:TestingScreen,
+    component:PostPropertyForm,
     icon: 'realEstate',
   },
   {
