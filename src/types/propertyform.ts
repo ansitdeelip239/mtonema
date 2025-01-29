@@ -9,13 +9,13 @@ export interface PropertyFormData {
   CeilingHeight: null | string;
   City: null | string;
   ConstructionDone: null | string;
-  Country:  null | string;
-  CreatedBy:  null | string;
+  Country: null | string;
+  CreatedBy: null | string;
   Discription: null | string;
   Facing: null | string;
   Furnishing: null | string;
   GatedSecurity: null | string;
-  ImageURL: { ID: string; [key: string]: any }[];
+  ImageURL: {ID: string; [key: string]: any}[];
   ImageURLType: any[];
   IsFeatured: boolean;
   Lifts: null | string;
@@ -49,6 +49,7 @@ export interface PropertyFormData {
   readyToMove: null | string;
   statusText: null | string;
   video: null | string;
+  CarParking: null | string;
 }
 
 //   sellerType: string;

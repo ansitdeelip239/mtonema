@@ -68,6 +68,7 @@ const FormScreen1: React.FC<Props> = ({navigation}) => {
     UserId: '',
     VideoURL: '',
     ZipCode: '',
+    CarParking: '', 
     floor: '',
     locality: '',
     otherCity: '',
