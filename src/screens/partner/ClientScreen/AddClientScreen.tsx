@@ -1,4 +1,4 @@
-import React, {useRef, useMemo, useCallback} from 'react';
+import React, {useRef, useMemo, useCallback, useState} from 'react';
 import {
   View,
   StyleSheet,
@@ -23,6 +23,8 @@ import PartnerService from '../../../services/PartnerService';
 import {usePartner} from '../../../context/PartnerProvider';
 import Toast from 'react-native-toast-message';
 import {useAuth} from '../../../hooks/useAuth';
+import {z} from 'zod';
+import clientFormSchema from '../../../schema/ClientFormSchema';
 
 type Props = NativeStackScreenProps<ClientStackParamList, 'AddClientScreen'>;
 
@@ -30,6 +32,23 @@ const AddClientScreen: React.FC<Props> = ({navigation}) => {
   const scrollViewRef = useRef<ScrollView>(null);
   const {groups, dataUpdated, setDataUpdated} = usePartner();
   const {user} = useAuth();
+
+  const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
+
+  const validateField = useCallback((field: keyof ClientForm, value: any) => {
+    try {
+      const schema = clientFormSchema.shape[field];
+      schema.parse(value);
+      setFieldErrors(prev => ({...prev, [field]: ''}));
+    } catch (err) {
+      if (err instanceof z.ZodError) {
+        setFieldErrors(prev => ({
+          ...prev,
+          [field]: err.errors[0].message,
+        }));
+      }
+    }
+  }, []);
 
   const {
     formInput,
@@ -49,7 +68,22 @@ const AddClientScreen: React.FC<Props> = ({navigation}) => {
     },
     onSubmit: async formData => {
       try {
-        const response = await PartnerService.addClient(formData);
+        const validatedData = clientFormSchema.parse(formData);
+
+        // Check if Groups is empty
+        if (validatedData.Groups.length === 0) {
+          setFieldErrors(prev => ({
+            ...prev,
+            Groups: 'Please select at least one group',
+          }));
+          Toast.show({
+            type: 'error',
+            text1: 'Please select at least one group',
+          });
+          return;
+        }
+
+        const response = await PartnerService.addClient(validatedData);
         if (response.Success) {
           Toast.show({
             type: 'success',
@@ -62,14 +96,38 @@ const AddClientScreen: React.FC<Props> = ({navigation}) => {
             type: 'error',
             text1: 'Failed to add client',
           });
-          throw new Error('Failed to add client');
         }
-        console.log('Client added successfully:', response);
-      } catch (error) {
-        console.error('Error in onSubmit:', error);
+      } catch (err) {
+        if (err instanceof z.ZodError) {
+          const errors: Record<string, string> = {};
+          err.errors.forEach(error => {
+            if (error.path[0]) {
+              errors[error.path[0]] = error.message;
+            }
+          });
+          setFieldErrors(errors);
+          Toast.show({
+            type: 'error',
+            text1: 'Please fill all the required fields',
+          });
+        } else {
+          console.error('Error in onSubmit:', err);
+          Toast.show({
+            type: 'error',
+            text1: 'An unexpected error occurred',
+          });
+        }
       }
     },
   });
+
+  const handleFieldChange = useCallback(
+    (field: keyof ClientForm, value: string | boolean) => {
+      handleInputChange(field, value);
+      validateField(field, value);
+    },
+    [handleInputChange, validateField],
+  );
 
   const scrollToEnd = (delay = 100) => {
     setTimeout(() => {
@@ -90,7 +148,9 @@ const AddClientScreen: React.FC<Props> = ({navigation}) => {
   const renderGroupToggleButtons = useMemo(
     () => (
       <View style={styles.groupsContainer}>
-        <Text style={styles.groupsLabel}>Select Groups</Text>
+        <Text style={styles.groupsLabel}>
+          Select Groups <Text style={styles.required}>*</Text>
+        </Text>
         <View style={styles.groupButtonsContainer}>
           {groups?.map(group => (
             <TouchableOpacity
@@ -127,9 +187,10 @@ const AddClientScreen: React.FC<Props> = ({navigation}) => {
           label="Client Name"
           field="ClientName"
           formInput={formInput}
-          setFormInput={handleInputChange}
+          setFormInput={handleFieldChange}
           mode="outlined"
           placeholder="Eg. John Doe"
+          errorMessage={fieldErrors.ClientName}
         />
 
         <MaterialTextInput<ClientForm>
@@ -137,9 +198,10 @@ const AddClientScreen: React.FC<Props> = ({navigation}) => {
           label="Display Name"
           field="DisplayName"
           formInput={formInput}
-          setFormInput={handleInputChange}
+          setFormInput={handleFieldChange}
           mode="outlined"
           placeholder="Eg. John Doe"
+          errorMessage={fieldErrors.DisplayName}
         />
 
         <MaterialTextInput<ClientForm>
@@ -147,10 +209,11 @@ const AddClientScreen: React.FC<Props> = ({navigation}) => {
           label="Mobile Number"
           field="MobileNumber"
           formInput={formInput}
-          setFormInput={handleInputChange}
+          setFormInput={handleFieldChange}
           mode="outlined"
           placeholder="Eg. 1234567890"
           keyboardType="number-pad"
+          errorMessage={fieldErrors.MobileNumber}
         />
 
         <MaterialTextInput<ClientForm>
@@ -158,10 +221,11 @@ const AddClientScreen: React.FC<Props> = ({navigation}) => {
           label="WhatsApp Number"
           field="WhatsappNumber"
           formInput={formInput}
-          setFormInput={handleInputChange}
+          setFormInput={handleFieldChange}
           mode="outlined"
           placeholder="Eg. 1234567890"
           keyboardType="number-pad"
+          errorMessage={fieldErrors.WhatsappNumber}
         />
 
         <MaterialTextInput<ClientForm>
@@ -169,11 +233,12 @@ const AddClientScreen: React.FC<Props> = ({navigation}) => {
           label="Email"
           field="EmailId"
           formInput={formInput}
-          setFormInput={handleInputChange}
+          setFormInput={handleFieldChange}
           mode="outlined"
           placeholder="Eg. email@example.com"
           keyboardType="email-address"
           autoCapitalize="none"
+          errorMessage={fieldErrors.EmailId}
         />
 
         {renderGroupToggleButtons}
@@ -183,7 +248,7 @@ const AddClientScreen: React.FC<Props> = ({navigation}) => {
           label="Notes"
           field="Notes"
           formInput={formInput}
-          setFormInput={handleInputChange}
+          setFormInput={handleFieldChange}
           mode="outlined"
           placeholder="Add additional notes"
           multiline
@@ -192,7 +257,7 @@ const AddClientScreen: React.FC<Props> = ({navigation}) => {
         />
       </>
     ),
-    [formInput, handleInputChange, renderGroupToggleButtons],
+    [formInput, handleFieldChange, renderGroupToggleButtons, fieldErrors],
   );
 
   return (
@@ -282,6 +347,15 @@ const styles = StyleSheet.create({
   },
   groupButtonTextSelected: {
     color: '#fff',
+  },
+  required: {
+    color: 'red',
+    marginLeft: 4,
+  },
+  groupsLabelRequired: {
+    fontSize: 16,
+    marginBottom: 8,
+    color: '#000',
   },
 });
 
