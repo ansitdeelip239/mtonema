@@ -109,7 +109,7 @@ const PropertyListingForm = () => {
   const renderPropertyTypeSection = () => {
     const toggleResidentialCommercial = (newValue: string) => {
       if (residentialCommercial === newValue) {
-        setResidentialCommercial(''); // Deselect if the same value is clicked again
+        setResidentialCommercial(''); //Deselect if the same value is clicked again
       } else {
         setResidentialCommercial(newValue);
       }
@@ -635,5 +635,4 @@ const styles = StyleSheet.create({
     height: 48,
   },
 });
-
 export default PropertyListingForm;
