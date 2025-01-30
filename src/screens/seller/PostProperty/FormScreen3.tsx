@@ -1,5 +1,5 @@
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import React, { useState } from 'react';
+import {NativeStackScreenProps} from '@react-navigation/native-stack';
+import React, {useState} from 'react';
 import {
   View,
   Text,
@@ -10,54 +10,144 @@ import {
   ScrollView,
   Dimensions,
 } from 'react-native';
-import { PostPropertyFormParamList } from './PostPropertyForm';
-import { SegmentedButtons } from 'react-native-paper';
+import {PostPropertyFormParamList} from './PostPropertyForm';
+import {SegmentedButtons} from 'react-native-paper';
 import ImagePicker from 'react-native-image-crop-picker';
+import {ImageType} from '../../../types/propertyform';
+import SellerService from '../../../services/SellerService';
+import {navigationRef} from '../../../navigator/NavigationRef';
+import Toast from 'react-native-toast-message';
+import {useAuth} from '../../../hooks/useAuth';
 
 type Props = NativeStackScreenProps<PostPropertyFormParamList, 'FormScreen3'>;
 
-const FormScreen3: React.FC<Props> = ({ navigation, route }) => {
+const FormScreen3: React.FC<Props> = ({navigation, route}) => {
   const [value, setValue] = useState('Images');
   const [formData, setFormData] = useState(route.params.formData);
-  const [images, setImages] = useState<string[]>(formData.images || []);
+  const [images, setImages] = useState<ImageType[]>(formData.ImageURL || []);
 
-  const openCamera = () => {
-    ImagePicker.openCamera({
-      width: 300,
-      height: 400,
-      cropping: true,
-      mediaType: 'photo',
-    })
-      .then(image => {
-        const newImages = [...images, image.path];
-        setImages(newImages);
-        setFormData({ ...formData, images: newImages });
-      })
-      .catch(error => console.log('Camera Error:', error));
+  const {dataUpdated, setDataUpdated} = useAuth();
+
+  const uploadToCloudinary = async (imagePath: string): Promise<string> => {
+    const tempformData = new FormData();
+    tempformData.append('file', {
+      uri: imagePath,
+      type: 'image/jpeg',
+      name: 'upload.jpg',
+    });
+    tempformData.append('upload_preset', 'dncrproperty');
+
+    try {
+      const response = await fetch(
+        'https://api.cloudinary.com/v1_1/dncrproperty-com/image/upload',
+        {
+          method: 'POST',
+          body: tempformData,
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        },
+      );
+      const data = await response.json();
+      return data.secure_url;
+    } catch (error) {
+      console.error('Cloudinary upload error:', error);
+      throw error;
+    }
   };
 
-  const openGallery = () => {
-    ImagePicker.openPicker({
-      multiple: true,
-      mediaType: 'photo',
-    })
-      .then(selectedImages => {
-        const imagePaths = selectedImages.map(image => image.path);
-        const newImages = [...images, ...imagePaths];
-        setImages(newImages);
-        setFormData({ ...formData, images: newImages });
-      })
-      .catch(error => console.log('Gallery Error:', error));
+  const openCamera = async () => {
+    try {
+      const image = await ImagePicker.openCamera({
+        width: 300,
+        height: 400,
+        cropping: true,
+        mediaType: 'photo',
+      });
+
+      const cloudinaryUrl = await uploadToCloudinary(image.path);
+
+      const newImage: ImageType = {
+        ID: Date.now().toString(),
+        imageNumber: images.length + 1,
+        ImageUrl: cloudinaryUrl,
+        isselected: false,
+        toggle: false,
+        Type: 1,
+      };
+
+      const updatedImages = [...images, newImage];
+      setImages(updatedImages);
+      setFormData(prev => ({
+        ...prev,
+        ImageURL: updatedImages,
+      }));
+    } catch (error) {
+      console.log('Camera Error:', error);
+    }
   };
 
-  const removeImage = (image: string) => {
-    const filteredImages = images.filter(img => img !== image);
+  const openGallery = async () => {
+    try {
+      const selectedImages = await ImagePicker.openPicker({
+        multiple: true,
+        mediaType: 'photo',
+      });
+
+      const uploadPromises = selectedImages.map(img =>
+        uploadToCloudinary(img.path),
+      );
+      const cloudinaryUrls = await Promise.all(uploadPromises);
+
+      const newImages: ImageType[] = cloudinaryUrls.map((url, index) => ({
+        ID: Date.now().toString() + index,
+        imageNumber: images.length + index + 1,
+        ImageUrl: url,
+        isselected: false,
+        toggle: false,
+        Type: 1,
+      }));
+
+      const updatedImages = [...images, ...newImages];
+      setImages(updatedImages);
+      setFormData(prev => ({
+        ...prev,
+        ImageURL: updatedImages,
+      }));
+    } catch (error) {
+      console.log('Gallery Error:', error);
+    }
+  };
+
+  const removeImage = (imageId: string) => {
+    const filteredImages = images.filter(img => img.ID !== imageId);
     setImages(filteredImages);
-    setFormData({ ...formData, images: filteredImages });
+    setFormData(prev => ({
+      ...prev,
+      ImageURL: filteredImages,
+    }));
   };
 
-  const handleSubmit = () => {
-    console.log('Complete Form Data:', formData);
+  const handleSubmit = async () => {
+    try {
+      const response = await SellerService.addProperty(formData);
+      console.log('Response:', response);
+
+      if (response.Success) {
+        Toast.show({
+          type: 'success',
+          text1: 'Property listed successfully',
+        });
+        navigationRef.current?.navigate('Home');
+        setDataUpdated(!dataUpdated);
+      }
+    } catch (err) {
+      console.log('Error in addProperty', err);
+      Toast.show({
+        type: 'error',
+        text1: 'Error in listing property',
+      });
+    }
   };
 
   return (
@@ -77,15 +167,15 @@ const FormScreen3: React.FC<Props> = ({ navigation, route }) => {
             {
               value: 'Property info',
               label: 'Property Info',
-              onPress: () => navigation.navigate('FormScreen2', { formData }),
+              onPress: () => navigation.navigate('FormScreen2', {formData}),
             },
             {
               value: 'Images',
               label: 'Image Upload',
-              onPress: () => navigation.navigate('FormScreen3', { formData }),
+              onPress: () => navigation.navigate('FormScreen3', {formData}),
             },
           ]}
-          theme={{ colors: { primary: 'green' } }}
+          theme={{colors: {primary: 'green'}}}
         />
 
         <Text style={styles.headerText}>
@@ -119,15 +209,15 @@ const FormScreen3: React.FC<Props> = ({ navigation, route }) => {
           <View style={styles.previewContainer}>
             <Text style={styles.previewTitle}>Selected Images:</Text>
             <View style={styles.imageGrid}>
-              {images.map((image, index) => (
-                <View key={index} style={styles.imageContainer}>
+              {images.map((image, _index) => (
+                <View key={image.ID} style={styles.imageContainer}>
                   <Image
-                    source={{ uri: image }}
+                    source={{uri: image.ImageUrl}}
                     style={styles.previewImage}
                   />
                   <TouchableOpacity
                     style={styles.removeIcon}
-                    onPress={() => removeImage(image)}>
+                    onPress={() => removeImage(image.ID)}>
                     <Text style={styles.removeText}>X</Text>
                   </TouchableOpacity>
                 </View>

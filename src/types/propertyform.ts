@@ -1,6 +1,5 @@
 export interface PropertyFormData {
   // Form 1 - Basic Details
-
   AlarmSystem: null | 'Yes' | 'No';
   ApprovedBy: null | string;
   Area: null | number;
@@ -15,7 +14,7 @@ export interface PropertyFormData {
   Facing: null | number;
   Furnishing: null | number;
   GatedSecurity: null | 'Yes' | 'No';
-  ImageURL: {ID: string; [key: string]: any}[];
+  ImageURL: ImageType[];
   ImageURLType: any[];
   IsFeatured: boolean;
   Lifts: null | 'Yes' | 'No';
@@ -57,6 +56,15 @@ export interface PropertyFormData {
   video: null | string;
   propertyClassification: null | string;
   CarParking: null | string;
+}
+
+export interface ImageType {
+  ID: string;
+  imageNumber: number;
+  ImageUrl: string;
+  isselected: boolean;
+  toggle: boolean;
+  Type: number;
 }
 
 //   sellerType: string;
