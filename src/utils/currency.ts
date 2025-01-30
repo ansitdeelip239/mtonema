@@ -23,4 +23,4 @@ const formatCurrency = (value: string | null | undefined) => {
   }
 };
 
-export default formatCurrency;
+export {formatCurrency};

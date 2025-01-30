@@ -135,6 +135,14 @@ const FormScreen3: React.FC<Props> = ({navigation, route}) => {
   };
 
   const handleSubmit = async () => {
+    if (images.length === 0) {
+      // Show a Toast message if no images are uploaded
+      Toast.show({
+        type: 'error',
+        text1: 'Image is required. Please add an image.',
+      });
+      return; // Prevent form submission
+    }
     setLoading(true);
     try {
       const response = await SellerService.addProperty(formData);

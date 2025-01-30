@@ -1,18 +1,73 @@
 import React from 'react';
-import {StyleSheet, Text, View} from 'react-native';
+import {Alert, StyleSheet, Text, View} from 'react-native';
 import {AgentData} from '../../../../types';
-import formatCurrency from '../../../../utils/currency';
+import {formatCurrency} from '../../../../utils/currency';
 import {IconButton, Surface} from 'react-native-paper';
 import Colors from '../../../../constants/Colors';
 import GetIcon from '../../../../components/GetIcon';
+import PartnerService from '../../../../services/PartnerService';
+import Toast from 'react-native-toast-message';
 
-const renderItem = ({item}: {item: AgentData}) => {
-  const onEdit = (id: number) => {
-    console.log('Edit:', id);
+const renderItem = ({
+  item,
+  onDataUpdate,
+  navigation,
+}: {
+  item: AgentData;
+  onDataUpdate: () => void;
+  navigation: any;
+}) => {
+  const onEdit = () => {
+    navigation.navigate('AddProperty', {
+      editMode: true,
+      propertyData: item,
+    });
   };
 
-  const onDelete = (id: number) => {
-    console.log('Delete:', id);
+  const onDelete = async (id: number) => {
+    const title = 'Delete Property';
+    const message =
+      'This action cannot be undone. Are you sure you want to delete this property?';
+
+    Alert.alert(
+      title,
+      message,
+      [
+        {
+          text: 'Cancel',
+          style: 'cancel',
+          isPreferred: true,
+        },
+        {
+          text: 'Delete',
+          style: 'destructive',
+          onPress: async () => {
+            try {
+              const response = await PartnerService.deleteAgentProperty(id);
+              if (response.Success) {
+                Toast.show({
+                  type: 'success',
+                  text1: 'Property Deleted Successfully',
+                  visibilityTime: 3000,
+                });
+                onDataUpdate();
+              }
+            } catch (error) {
+              console.error('Error in deleting property:', error);
+              Toast.show({
+                type: 'error',
+                text1: 'Error in deleting property',
+                visibilityTime: 4000,
+              });
+            }
+          },
+        },
+      ],
+      {
+        cancelable: true,
+        userInterfaceStyle: 'light',
+      },
+    );
   };
 
   return (
@@ -30,7 +85,7 @@ const renderItem = ({item}: {item: AgentData}) => {
           <IconButton
             icon={() => GetIcon({iconName: 'edit', color: Colors.main})}
             size={20}
-            onPress={() => onEdit(item.Id)}
+            onPress={() => onEdit()}
             iconColor={Colors.main}
             style={styles.actionButton}
           />

@@ -118,5 +118,17 @@ class PartnerService {
       throw error;
     }
   }
+
+  static async deleteAgentProperty(agentPropertyId: number) {
+    try {
+      const response = await api.delete<null>(
+        `${url.deleteAgentProperty}?agentPropertId=${agentPropertyId}`,
+      );
+      return response;
+    } catch (error) {
+      console.error('Error in deleteAgentProperty', error);
+      throw error;
+    }
+  }
 }
 export default PartnerService;
