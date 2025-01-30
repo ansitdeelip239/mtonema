@@ -7,14 +7,12 @@ import Toast from 'react-native-toast-message';
 
 const App = () => {
   return (
-    // <RootNavigator/>
     <AuthProvider>
       <SafeAreaProvider>
         <RootNavigator />
         <Toast/>
       </SafeAreaProvider>
     </AuthProvider>
-
   );
 };
 
