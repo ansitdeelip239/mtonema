@@ -15,6 +15,7 @@ import {Chip} from 'react-native-paper';
 import LocationComponent from '../../../components/LocationComponent';
 import { FlatList } from 'react-native-gesture-handler';
 import Colors from '../../../constants/Colors';
+import { MasterDetailModel } from '../../../types';
 type Props = NativeStackScreenProps<PostPropertyFormParamList, 'FormScreen1'>;
 const FormScreen1: React.FC<Props> = ({navigation}) => {
   const [values, setValue] = useState('Basic Info');
@@ -26,65 +27,65 @@ const FormScreen1: React.FC<Props> = ({navigation}) => {
   });
   const initialChipsToShow = 2;
   const [formData, setFormData] = useState<PropertyFormData>({
-    AlarmSystem: '',
+    AlarmSystem: null,
     ApprovedBy: '',
-    Area: '',
-    BhkType: '',
-    BoundaryWall: '',
-    CeilingHeight: '',
-    City: 0,
-    ConstructionDone: '',
-    Country: '',
-    CreatedBy: '',
-    Discription: '',
-    Facing: '',
-    Furnishing: '',
-    GatedSecurity: '',
+    Area: null,
+    BhkType: null,
+    BoundaryWall: null,
+    CeilingHeight: null,
+    City: null,
+    ConstructionDone: null,
+    Country: null,
+    CreatedBy: null,
+    Discription: null,
+    Facing: null,
+    Furnishing: null,
+    GatedSecurity: null,
     ImageURL: [],
     ImageURLType: [],
     IsFeatured: false,
-    Lifts: '',
-    Location: '',
-    OpenSide: '',
-    Pantry: '',
-    Parking: '',
-    Price: '',
-    PropertyAge: '',
-    PropertyFor: '',
-    PropertyForType: '',
-    PropertyType: '',
-    Rate: '',
-    SellerEmail: '',
-    SellerName: '',
-    SellerPhone: '',
-    SellerType: '',
-    ShortDiscription: '',
-    Size: '',
-    State: '',
-    Status: '',
-    SurveillanceCameras: '',
-    Tag: '',
+    Lifts: null,
+    Location: null,
+    OpenSide: null,
+    Pantry: null,
+    Parking: null,
+    Price: null,
+    PropertyAge: null,
+    PropertyFor: null,
+    PropertyForType: 'Residential',
+    PropertyType: null,
+    Rate: null,
+    SellerEmail: null,
+    SellerName: null,
+    SellerPhone: null,
+    SellerType: null,
+    ShortDiscription: null,
+    Size: null,
+    State: null,
+    Status: null,
+    SurveillanceCameras: null,
+    Tag: null,
     Tags: [],
-    UserId: '',
-    VideoURL: '',
-    ZipCode: '',
-    CarParking: '',
-    floor: '',
-    locality: '',
-    otherCity: '',
-    readyToMove: '',
-    statusText: '',
-    video: '',
-    propertyClassification: '',
+    UserId: null,
+    VideoURL: null,
+    ZipCode: null,
+    CarParking: null,
+    floor: null,
+    locality: null,
+    otherCity: null,
+    readyToMove: null,
+    statusText: null,
+    video: null,
+    propertyClassification: null,
 });
 
-  const handleChipPress = (key: keyof PropertyFormData, value: string) => {
+  const handleChipPress = (key: keyof PropertyFormData, value: string | number) => {
     setFormData(prevState => {
       // Check if the chip is already selected
       const currentValue = prevState[key];
       if (currentValue === value) {
         // Deselect if it's already selected
-        return {...prevState, [key]: ''};
+        return {...prevState, [key]: null};
       } else {
         // Select the chip
         return {...prevState, [key]: value};
@@ -100,7 +101,7 @@ const FormScreen1: React.FC<Props> = ({navigation}) => {
   const renderChipSection = (
     title: string,
     key: keyof PropertyFormData,
-    data: any[],
+    data: MasterDetailModel[],
   ) => {
     const displayedChips = showAll[key]
       ? data
@@ -112,14 +113,14 @@ const FormScreen1: React.FC<Props> = ({navigation}) => {
           {displayedChips?.map((item, index) => (
             <Chip
               key={index}
-              onPress={() => handleChipPress(key, item.MasterDetailName)}
+              onPress={() => handleChipPress(key, item.ID)}
               style={[
                 styles.chip,
-                formData[key] === item.MasterDetailName &&
+                formData[key] === item.ID &&
                   styles.selectedChip,
               ]}
               textStyle={
-                formData[key] === item.MasterDetailName && styles.selectedChip
+                formData[key] === item.ID && styles.selectedChip
               }>
               {item.MasterDetailName}
             </Chip>

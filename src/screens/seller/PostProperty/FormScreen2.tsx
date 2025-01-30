@@ -12,6 +12,7 @@ import {SegmentedButtons, Text, TextInput} from 'react-native-paper';
 import {useMaster} from '../../../context/MasterProvider';
 import Colors from '../../../constants/Colors';
 import {FlatList} from 'react-native-gesture-handler';
+import {MasterDetailModel} from '../../../types';
 
 type Props = NativeStackScreenProps<PostPropertyFormParamList, 'FormScreen2'>;
 type PropertyType =
@@ -38,7 +39,10 @@ const FormScreen2: React.FC<Props> = ({navigation, route}) => {
   });
   const initialChipsToShow = 2;
 
-  const handleOptionPress = (key: keyof PropertyFormData, value: string) => {
+  const handleOptionPress = (
+    key: keyof PropertyFormData,
+    value: number | string,
+  ) => {
     console.log('Handling option press:', key, value);
     setFormData(prevState => {
       const newState = {
@@ -53,7 +57,7 @@ const FormScreen2: React.FC<Props> = ({navigation, route}) => {
   const renderOptionSection = (
     title: string,
     key: keyof PropertyFormData,
-    data: any[],
+    data: MasterDetailModel[],
   ) => {
     const displayedOptions = showAll[key]
       ? data
@@ -68,15 +72,13 @@ const FormScreen2: React.FC<Props> = ({navigation, route}) => {
               key={index}
               style={[
                 styles.optionButton,
-                formData[key] === item.MasterDetailName &&
-                  styles.selectedOption,
+                formData[key] === item.ID && styles.selectedOption,
               ]}
-              onPress={() => handleOptionPress(key, item.MasterDetailName)}>
+              onPress={() => handleOptionPress(key, item.ID)}>
               <Text
                 style={[
                   styles.optionText,
-                  formData[key] === item.MasterDetailName &&
-                    styles.selectedOptionText,
+                  formData[key] === item.ID && styles.selectedOptionText,
                 ]}>
                 {item.MasterDetailName}
               </Text>
@@ -304,11 +306,14 @@ const FormScreen2: React.FC<Props> = ({navigation, route}) => {
   };
 
   const getFieldsToShow = () => {
-    const selectedPropertyType = formData.PropertyType;
-    console.log('Selected Property Type:', selectedPropertyType);
+    const selectedPropertyId = formData.PropertyType;
+    const selectedProperty = masterData?.PropertyType?.find(
+      item => item.ID === selectedPropertyId,
+    );
+    const propertyTypeName = selectedProperty?.MasterDetailName || '';
 
-    const fields =
-      propertyTypeFields[selectedPropertyType as PropertyType] ?? [];
+    console.log('Selected Property Name:', propertyTypeName);
+    const fields = propertyTypeFields[propertyTypeName as PropertyType] ?? [];
     console.log('Fields to show:', fields);
 
     return fields;
@@ -378,21 +383,14 @@ const FormScreen2: React.FC<Props> = ({navigation, route}) => {
                   'Yes',
                   'No',
                 ])}
-              {fieldsToShow.includes('Age of Property') && (
-                <View style={styles.section}>
-                  <Text style={styles.sectionTitle}>Age of Property</Text>
-                  <TextInput
-                    mode="outlined"
-                    style={styles.input}
-                    value={formData.PropertyAge || ''}
-                    onChangeText={value =>
-                      setFormData({...formData, PropertyAge: value})
-                    }
-                    placeholder="Property Age"
-                    keyboardType="number-pad"
-                  />
-                </View>
-              )}
+              {fieldsToShow.includes('Age of Property') &&
+                renderSimpleOptionButtons('Age of Property', 'PropertyAge', [
+                  '0-5 Yrs',
+                  '5-10 Yrs',
+                  '10-15 Yrs',
+                  '15-20 Yrs',
+                  '20+ Yrs',
+                ])}
               {fieldsToShow.includes('Security Personal') &&
                 renderSimpleOptionButtons(
                   'Security Personal',
@@ -537,9 +535,9 @@ const FormScreen2: React.FC<Props> = ({navigation, route}) => {
                   <TextInput
                     mode="outlined"
                     style={styles.input}
-                    value={formData.Area || ''}
+                    value={String(formData.Area || '')}
                     onChangeText={value =>
-                      setFormData({...formData, Area: value})
+                      setFormData({...formData, Area: Number(value)})
                     }
                     placeholder="Property Area"
                     keyboardType="number-pad"
