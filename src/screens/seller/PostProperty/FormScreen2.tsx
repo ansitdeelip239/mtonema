@@ -627,6 +627,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     minWidth: 100,
     alignItems: 'center',
+    justifyContent: 'center', // Ensure text is centered vertically
   },
   selectedOption: {
     backgroundColor: Colors.main,
@@ -647,15 +648,15 @@ const styles = StyleSheet.create({
     backgroundColor: 'transparent',
   },
   moreButton: {
-    margin: 4,
-    height: 50,
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: 8,
+    paddingHorizontal: 16,
+    paddingVertical: 12,
     borderRadius: 8,
-    borderWidth: 1.5,
-    borderColor: '#e0e0e0',
-    backgroundColor: '#ffffff',
+    borderWidth: 1,
+    borderColor: '#ddd',
+    backgroundColor: '#fff',
+    minWidth: 100,
+    alignItems: 'center',
+    justifyContent: 'center', // Ensure text is centered vertically
   },
   moreButtonText: {
     fontSize: 14,

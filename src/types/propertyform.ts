@@ -67,37 +67,56 @@ export interface ImageType {
   Type: number;
 }
 
-//   sellerType: string;
-//   city: string;
-//   propertyFor: string;
-//   propertyType: string;
-//   residentialCommercial: string;
-//   address: string;
-//   zipCode: string;
-//   isReadyToMove: string;
-//   isLiftAvailable: string;
-//   isPantryAvailable: string;
-//   furnishedType: string;
-//   carParking: string;
-//   facing: string;
-//   amount: string;
-//   amountUnit: string;
-//   propertyArea: string;
-//   areaUnit: string;
-//   description: string;
 
-//   // Form 2 - Property Details
-//   bedrooms: string;
-//   bathrooms: string;
-//   balconies: string;
-//   totalFloors: string;
-//   floorNumber: string;
-//   propertyAge: string;
-//   expectedPrice: string;
-//   priceUnit: string;
-
-//   // Form 3 - Additional Details
-//   amenities: string[];
-//   images: string[];
-//   videos: string[];
-// }
+export const initialFormData: PropertyFormData = {
+  AlarmSystem: null,
+  ApprovedBy: null,
+  Area: null,
+  BhkType: null,
+  BoundaryWall: null,
+  CeilingHeight: null,
+  City: null,
+  ConstructionDone: null,
+  Country: null,
+  CreatedBy: null,
+  Discription: null,
+  Facing: null,
+  Furnishing: null,
+  GatedSecurity: null,
+  ImageURL: [],
+  ImageURLType: [],
+  IsFeatured: false,
+  Lifts: null,
+  Location: null,
+  OpenSide: null,
+  Pantry: null,
+  Parking: null,
+  Price: null,
+  PropertyAge: null,
+  PropertyFor: null,
+  PropertyForType: null,
+  PropertyType: null,
+  Rate: null,
+  SellerType: null,
+  ShortDiscription: null,
+  Size: null,
+  State: null,
+  Status: null,
+  SellerEmail:null,
+  SellerName:null,
+  SellerPhone:null,
+  UserId:null,
+  SurveillanceCameras: null,
+  Tag: null,
+  Tags: [],
+  VideoURL: null,
+  ZipCode: null,
+  CarParking: null,
+  floor: null,
+  locality: null,
+  otherCity: null,
+  readyToMove: null,
+  statusText: null,
+  video: null,
+  propertyClassification: null,
+};

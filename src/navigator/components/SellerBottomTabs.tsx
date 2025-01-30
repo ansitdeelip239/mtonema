@@ -8,11 +8,11 @@ import Colors from '../../constants/Colors';
 import {SellerBottomTabParamList} from '../../types/navigation';
 import PropertyListScreen from '../../screens/seller/PropertyListScreen';
 // import PostProperty from '../../screens/seller/PostPropertyScreen';
-import TestingScreen from '../../screens/common/TestingScreen';
-import PropertyListingForm from '../../screens/seller/PostProperty';
+// import PropertyListingForm from '../../screens/seller/PostProperty';
 import { Text } from 'react-native-paper';
 import SellerProfileScreen from '../../screens/seller/SellerProfileScreen';
 import PostPropertyForm from '../../screens/seller/PostProperty/PostPropertyForm';
+import SellerHomeScreen from '../../screens/seller/SellerHomeScreen';
 
 
 const Tab = createBottomTabNavigator<SellerBottomTabParamList>();
@@ -29,17 +29,17 @@ const tabScreens: Array<{
   },
   {
     name: 'Property',
-    component:PostPropertyForm,
+    component:SellerHomeScreen,
     icon: 'realEstate',
   },
   {
     name: 'AddProperty',
-    component: PropertyListingForm,
+    component: PostPropertyForm,
     icon: 'property',
   },
   {
     name: 'Clients',
-    component: TestingScreen,
+    component: SellerHomeScreen,
     icon: 'client',
   },
   {

@@ -11,24 +11,27 @@ import {
   Dimensions,
 } from 'react-native';
 import {PostPropertyFormParamList} from './PostPropertyForm';
-import {SegmentedButtons} from 'react-native-paper';
+import {ActivityIndicator, SegmentedButtons} from 'react-native-paper';
 import ImagePicker from 'react-native-image-crop-picker';
 import {ImageType} from '../../../types/propertyform';
 import SellerService from '../../../services/SellerService';
 import {navigationRef} from '../../../navigator/NavigationRef';
 import Toast from 'react-native-toast-message';
 import {useAuth} from '../../../hooks/useAuth';
-
+import Colors from '../../../constants/Colors';
+import { initialFormData } from '../../../types/propertyform';
 type Props = NativeStackScreenProps<PostPropertyFormParamList, 'FormScreen3'>;
 
 const FormScreen3: React.FC<Props> = ({navigation, route}) => {
   const [value, setValue] = useState('Images');
   const [formData, setFormData] = useState(route.params.formData);
   const [images, setImages] = useState<ImageType[]>(formData.ImageURL || []);
-
+  const [loading, setLoading] = useState(false);
+  const [loadingImage, setLoadingImage] = useState(false);
   const {dataUpdated, setDataUpdated} = useAuth();
 
   const uploadToCloudinary = async (imagePath: string): Promise<string> => {
+    setLoadingImage(true);
     const tempformData = new FormData();
     tempformData.append('file', {
       uri: imagePath,
@@ -53,6 +56,9 @@ const FormScreen3: React.FC<Props> = ({navigation, route}) => {
     } catch (error) {
       console.error('Cloudinary upload error:', error);
       throw error;
+    }
+    finally {
+      setLoadingImage(false); // Stop the image loader after upload
     }
   };
 
@@ -129,6 +135,7 @@ const FormScreen3: React.FC<Props> = ({navigation, route}) => {
   };
 
   const handleSubmit = async () => {
+    setLoading(true);
     try {
       const response = await SellerService.addProperty(formData);
       console.log('Response:', response);
@@ -138,6 +145,8 @@ const FormScreen3: React.FC<Props> = ({navigation, route}) => {
           type: 'success',
           text1: 'Property listed successfully',
         });
+        setFormData(initialFormData);
+        setImages([]);
         navigationRef.current?.navigate('Home');
         setDataUpdated(!dataUpdated);
       }
@@ -147,6 +156,9 @@ const FormScreen3: React.FC<Props> = ({navigation, route}) => {
         type: 'error',
         text1: 'Error in listing property',
       });
+    }
+    finally {
+      setLoading(false);
     }
   };
 
@@ -204,6 +216,13 @@ const FormScreen3: React.FC<Props> = ({navigation, route}) => {
             </View>
           </TouchableOpacity>
         </View>
+        {loadingImage && (
+          <View style={styles.loaderContainer}>
+            <ActivityIndicator size="large" color={Colors.main} />
+            <Text style={styles.loaderText}>Uploading image...</Text>
+          </View>
+        )}
+
 
         {images.length > 0 && (
           <View style={styles.previewContainer}>
@@ -226,10 +245,15 @@ const FormScreen3: React.FC<Props> = ({navigation, route}) => {
           </View>
         )}
 
-        <TouchableOpacity
+<TouchableOpacity
           style={styles.listPropertyButton}
-          onPress={handleSubmit}>
-          <Text style={styles.listPropertyText}>List Your Property</Text>
+          onPress={handleSubmit}
+          disabled={loading}>
+          {loading ? (
+            <ActivityIndicator size="large" color="white" />
+          ) : (
+            <Text style={styles.listPropertyText}>List Your Property</Text>
+          )}
         </TouchableOpacity>
       </ScrollView>
     </ImageBackground>
@@ -335,7 +359,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   listPropertyButton: {
-    backgroundColor: '#4CAF50',
+    backgroundColor: Colors.main,
     padding: 15,
     borderRadius: 25,
     alignItems: 'center',
@@ -347,6 +371,15 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold',
   },
+  loaderContainer: {
+    alignItems: 'center',
+    marginVertical: 20,
+  },
+  loaderText: {
+    marginTop: 10,
+    color: '#333',
+  },
+
 });
 
 export default FormScreen3;

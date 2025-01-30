@@ -22,6 +22,7 @@ const SignUpScreen: React.FC<Props> = ({ navigation, route }) => {
   const { role } = route.params;
   const [loading, setLoading] = useState(false);
   const [isKeyboardVisible, setKeyboardVisible] = useState(false);
+  const emailExistMessage = ['Email already exist' , 'Email already exists'];
 
   useEffect(() => {
     const keyboardDidShowListener = Keyboard.addListener(
@@ -51,7 +52,7 @@ const SignUpScreen: React.FC<Props> = ({ navigation, route }) => {
         : await AuthService.signUp(formData);
       console.log('API Response:', response);
 
-      if (response.Success && response.Message !== 'Email already exists') {
+      if (response.Success && !emailExistMessage.includes(response.Message)) {
         navigation.navigate('OtpScreen', { email: formData.Email });
       } else {
         Toast.show({
