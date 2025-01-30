@@ -230,7 +230,7 @@ export interface Client {
   EmailId: string;
   Notes: string;
   ClientActivityDataModels: ClientActivityDataModel[];
-  Groups: {Id: number; Name: string; GroupColor: string}[];
+  Groups: {ID: number; Name: string; GroupColor: string}[];
   CreatedOn: string;
   Activity: string;
   Status: number;

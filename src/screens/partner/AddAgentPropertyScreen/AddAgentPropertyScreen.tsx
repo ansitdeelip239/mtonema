@@ -41,7 +41,7 @@ const AddAgentPropertyScreen: React.FC<Props> = ({navigation, route}) => {
   const [errors, setErrors] = useState<
     Partial<Record<keyof AgentPropertyFormType, string>>
   >({});
-  const {dataUpdated, setDataUpdated} = usePartner();
+  const {setAgentPropertyUpdated} = usePartner();
 
   const editMode = route.params?.editMode;
   const propertyData = route.params?.propertyData;
@@ -137,7 +137,7 @@ const AddAgentPropertyScreen: React.FC<Props> = ({navigation, route}) => {
               ? 'Property updated successfully'
               : 'Property added successfully',
           });
-          setDataUpdated(!dataUpdated);
+          setAgentPropertyUpdated((prev) => !prev);
           navigation.navigate('Property');
         } else {
           Toast.show({

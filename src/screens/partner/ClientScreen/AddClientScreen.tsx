@@ -1,4 +1,4 @@
-import React, {useRef, useMemo, useCallback, useState} from 'react';
+import React, {useRef, useMemo, useCallback, useState, useEffect} from 'react';
 import {
   View,
   StyleSheet,
@@ -28,12 +28,41 @@ import clientFormSchema from '../../../schema/ClientFormSchema';
 
 type Props = NativeStackScreenProps<ClientStackParamList, 'AddClientScreen'>;
 
-const AddClientScreen: React.FC<Props> = ({navigation}) => {
+const AddClientScreen: React.FC<Props> = ({navigation, route}) => {
   const scrollViewRef = useRef<ScrollView>(null);
-  const {groups, dataUpdated, setDataUpdated} = usePartner();
+  const {groups, setClientsUpdated} = usePartner();
   const {user} = useAuth();
 
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
+
+  const editMode = route.params?.editMode;
+  const clientData = route.params?.clientData;
+
+  const initialState = useMemo(() => {
+    if (editMode && clientData) {
+      return {
+        ClientName: clientData.ClientName || '',
+        DisplayName: clientData.DisplayName || '',
+        MobileNumber: clientData.MobileNumber || '',
+        WhatsappNumber: clientData.WhatsappNumber || '',
+        EmailId: clientData.EmailId || '',
+        Notes: clientData.Notes || '',
+        Groups: clientData.Groups?.map(group => group.ID) || [],
+        PartnerId: user?.Email ?? '',
+      };
+    }
+
+    return {
+      ClientName: '',
+      DisplayName: '',
+      MobileNumber: '',
+      WhatsappNumber: '',
+      EmailId: '',
+      Notes: '',
+      Groups: [],
+      PartnerId: user?.Email ?? '',
+    };
+  }, [editMode, clientData, user]);
 
   const validateField = useCallback((field: keyof ClientForm, value: any) => {
     if (field !== 'ClientName' && (!value || value === '')) {
@@ -60,17 +89,9 @@ const AddClientScreen: React.FC<Props> = ({navigation}) => {
     handleInputChange,
     loading: formLoading,
     onSubmit: handleSubmit,
+    setFormInput,
   } = useForm<ClientForm>({
-    initialState: {
-      ClientName: '',
-      DisplayName: '',
-      MobileNumber: '',
-      WhatsappNumber: '',
-      EmailId: '',
-      Notes: '',
-      Groups: [],
-      PartnerId: user?.Email ?? '',
-    },
+    initialState,
     onSubmit: async formData => {
       try {
         const cleanedData = {
@@ -85,13 +106,17 @@ const AddClientScreen: React.FC<Props> = ({navigation}) => {
 
         const validatedData = clientFormSchema.parse(cleanedData);
 
+        if (editMode && clientData) {
+          validatedData.Id = clientData.Id;
+        }
+
         const response = await PartnerService.addClient(validatedData);
         if (response.Success) {
           Toast.show({
             type: 'success',
             text1: 'Client added successfully',
           });
-          setDataUpdated(!dataUpdated);
+          setClientsUpdated((prev) => !prev);
           navigation.goBack();
         } else {
           Toast.show({
@@ -122,6 +147,10 @@ const AddClientScreen: React.FC<Props> = ({navigation}) => {
       }
     },
   });
+
+  useEffect(() => {
+    setFormInput(initialState);
+  }, [setFormInput, initialState]);
 
   const handleFieldChange = useCallback(
     (field: keyof ClientForm, value: string | boolean | number[]) => {
@@ -266,7 +295,8 @@ const AddClientScreen: React.FC<Props> = ({navigation}) => {
 
   return (
     <>
-      <Header<PartnerDrawerParamList> title="Add Client">
+      <Header<PartnerDrawerParamList>
+        title={editMode ? 'Edit Client' : 'Add Client'}>
         <TouchableOpacity
           style={styles.backButton}
           onPress={() => navigation.goBack()}>

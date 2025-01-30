@@ -13,6 +13,10 @@ interface PartnerContextProps {
   setGroups: React.Dispatch<React.SetStateAction<Group[]>>;
   dataUpdated: boolean;
   setDataUpdated: React.Dispatch<React.SetStateAction<boolean>>;
+  clientsUpdated: boolean;
+  setClientsUpdated: React.Dispatch<React.SetStateAction<boolean>>;
+  agentPropertyUpdated: boolean;
+  setAgentPropertyUpdated: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const PartnerContext = createContext<PartnerContextProps | undefined>(
@@ -22,6 +26,8 @@ const PartnerContext = createContext<PartnerContextProps | undefined>(
 export const PartnerProvider: React.FC<PartnerProviderProps> = ({children}) => {
   const [groups, setGroups] = useState<Group[]>([]);
   const [dataUpdated, setDataUpdated] = useState(false);
+  const [clientsUpdated, setClientsUpdated] = useState(false);
+  const [agentPropertyUpdated, setAgentPropertyUpdated] = useState(false);
   const {user} = useAuth();
 
   const fetchGroups = useCallback(async () => {
@@ -47,6 +53,10 @@ export const PartnerProvider: React.FC<PartnerProviderProps> = ({children}) => {
     setGroups,
     dataUpdated,
     setDataUpdated,
+    clientsUpdated,
+    setClientsUpdated,
+    agentPropertyUpdated,
+    setAgentPropertyUpdated,
   };
 
   return (

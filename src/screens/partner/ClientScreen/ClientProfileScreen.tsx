@@ -18,6 +18,7 @@ import Toast from 'react-native-toast-message';
 import {formatDate} from '../../../utils/dateUtils';
 import GetIcon from '../../../components/GetIcon';
 import Colors from '../../../constants/Colors';
+import { usePartner } from '../../../context/PartnerProvider';
 
 type Props = NativeStackScreenProps<
   ClientStackParamList,
@@ -45,6 +46,7 @@ const ClientProfileScreen: React.FC<Props> = ({route, navigation}) => {
   const [client, setClient] = useState<Client | null>(null);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
+  const {clientsUpdated} = usePartner();
 
   const fetchClient = React.useCallback(async () => {
     try {
@@ -70,7 +72,7 @@ const ClientProfileScreen: React.FC<Props> = ({route, navigation}) => {
 
   useEffect(() => {
     fetchClient();
-  }, [fetchClient]);
+  }, [fetchClient, clientsUpdated]);
 
   const onRefresh = React.useCallback(() => {
     setRefreshing(true);
@@ -131,7 +133,7 @@ const ClientProfileScreen: React.FC<Props> = ({route, navigation}) => {
   const renderGroups = React.useCallback(() => {
     return client?.Groups.map((group, index) => (
       <View
-        key={group.Id ? `group-${group.Id}` : `group-${index}-${group.Name}`}
+        key={group.ID ? `group-${group.ID}` : `group-${index}-${group.Name}`}
         style={[styles.groupBadge, {backgroundColor: `${group.GroupColor}20`}]}>
         <Text style={[styles.groupText, {color: group.GroupColor}]}>
           {group.Name}
