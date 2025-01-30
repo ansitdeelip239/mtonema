@@ -30,7 +30,7 @@ export const ClientCard: React.FC<ClientCardProps> = ({client, navigation}) => {
   };
 
   const handlePhone = () => {
-    Linking.openURL(`tel:+917303062845${client.MobileNumber}`);
+    Linking.openURL(`tel:${client.MobileNumber}`);
   };
 
   const handleCardPress = () => {
@@ -38,10 +38,7 @@ export const ClientCard: React.FC<ClientCardProps> = ({client, navigation}) => {
   };
 
   return (
-    <TouchableOpacity
-      onPress={handleCardPress}
-      activeOpacity={0.7}
-    >
+    <TouchableOpacity onPress={handleCardPress} activeOpacity={0.7}>
       <View style={styles.clientCard}>
         <View style={styles.cardHeader}>
           <View style={styles.dateContainer}>

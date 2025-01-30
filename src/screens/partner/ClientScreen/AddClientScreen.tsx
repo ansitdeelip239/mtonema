@@ -114,14 +114,16 @@ const AddClientScreen: React.FC<Props> = ({navigation, route}) => {
         if (response.Success) {
           Toast.show({
             type: 'success',
-            text1: 'Client added successfully',
+            text1: editMode
+              ? 'Client updated successfully'
+              : 'Client added successfully',
           });
-          setClientsUpdated((prev) => !prev);
+          setClientsUpdated(prev => !prev);
           navigation.goBack();
         } else {
           Toast.show({
             type: 'error',
-            text1: 'Failed to add client',
+            text1: editMode ? 'Error updating client' : 'Error adding client',
           });
         }
       } catch (err) {
