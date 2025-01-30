@@ -224,11 +224,15 @@ export interface ClientActivityDataModel {
 
 export interface Group {
   Id: number;
-  Name: string;
+  GroupName: string;
   GroupColor: string;
+  Color: MasterDataModel;
+  PartnerId: string | null;
+  CreatedOn: string;
+  UpdatedOn: string;
 }
 
-export interface ClientRequestModel {
+export interface Client {
   Id: number;
   PartnerId: number;
   ClientName: string;
@@ -238,29 +242,24 @@ export interface ClientRequestModel {
   EmailId: string;
   Notes: string;
   ClientActivityDataModels: ClientActivityDataModel[];
-  Groups: Group[];
+  Groups: { Id: number; Name: string, GroupColor: string }[];
   CreatedOn: string;
   Activity: string;
   Status: number;
 }
 
-export interface PostPropertyForm {
-  sellerType: string;
-  city: string;
-  propertyFor: string;
-  furnishedType: string;
-  facing: string;
-  propertyType: string;
-  isReadyToMove: string;
-  isLiftAvailable: string;
-  isPantryAvailable: string;
-  showMoreSellerType: boolean;
-  showMoreCity: boolean;
-  showMorePropertyFor: boolean;
-  showMoreFurnishedType: boolean;
-  showMorePropertyType: boolean;
-  showMoreFacing: boolean;
-  residentialCommercial: boolean;
-  carParking: boolean;
-  propertyAddress:String;
+export interface ClientResponseModel {
+  responsePagingModel: PagingModel;
+  clientDataModel: Client[];
+}
+
+export interface ClientForm {
+  ClientName: string;
+  DisplayName: string;
+  MobileNumber: string;
+  WhatsappNumber: string;
+  EmailId: string;
+  Notes: string;
+  Groups: number[];
+  PartnerId: string;
 }
