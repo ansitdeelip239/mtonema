@@ -7,7 +7,7 @@ export interface PropertyFormData {
   BhkType: null | string;
   BoundaryWall: null | string;
   CeilingHeight: null | string;
-  City: null | string;
+  City: null | number;
   ConstructionDone: null | string;
   Country: null | string;
   CreatedBy: null | string;
