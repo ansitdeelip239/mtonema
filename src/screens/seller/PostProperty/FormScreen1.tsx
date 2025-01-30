@@ -32,7 +32,7 @@ const FormScreen1: React.FC<Props> = ({navigation}) => {
     BhkType: '',
     BoundaryWall: '',
     CeilingHeight: '',
-    City: '',
+    City: 0,
     ConstructionDone: '',
     Country: '',
     CreatedBy: '',
@@ -68,14 +68,15 @@ const FormScreen1: React.FC<Props> = ({navigation}) => {
     UserId: '',
     VideoURL: '',
     ZipCode: '',
-    CarParking: '', 
+    CarParking: '',
     floor: '',
     locality: '',
     otherCity: '',
     readyToMove: '',
     statusText: '',
     video: '',
-  });
+    propertyClassification: '',
+});
 
   const handleChipPress = (key: keyof PropertyFormData, value: string) => {
     setFormData(prevState => {

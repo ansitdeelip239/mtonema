@@ -4,18 +4,29 @@ import {
   View,
   StyleSheet,
   TouchableOpacity,
-  TextInput,
   ImageBackground,
 } from 'react-native';
 import {PostPropertyFormParamList} from './PostPropertyForm';
 import {PropertyFormData} from '../../../types/propertyform';
-import {SegmentedButtons, Text} from 'react-native-paper';
+import {SegmentedButtons, Text, TextInput} from 'react-native-paper';
 import {useMaster} from '../../../context/MasterProvider';
 import Colors from '../../../constants/Colors';
 import {FlatList} from 'react-native-gesture-handler';
 
 type Props = NativeStackScreenProps<PostPropertyFormParamList, 'FormScreen2'>;
-
+type PropertyType =
+  | 'CoWorking'
+  | 'FOCP'
+  | 'Farm House'
+  | 'Flat'
+  | 'Independent House'
+  | 'Office'
+  | 'PG/Hostel'
+  | 'Plot'
+  | 'Retail Shop'
+  | 'Shop'
+  | 'Villa'
+  | 'Warehouse';
 const FormScreen2: React.FC<Props> = ({navigation, route}) => {
   const {masterData} = useMaster();
   const [values, setValue] = useState('Property info');
@@ -28,10 +39,15 @@ const FormScreen2: React.FC<Props> = ({navigation, route}) => {
   const initialChipsToShow = 2;
 
   const handleOptionPress = (key: keyof PropertyFormData, value: string) => {
-    setFormData(prevState => ({
-      ...prevState,
-      [key]: prevState[key] === value ? '' : value,
-    }));
+    console.log('Handling option press:', key, value);
+    setFormData(prevState => {
+      const newState = {
+        ...prevState,
+        [key]: prevState[key] === value ? '' : value,
+      };
+      console.log('New form data:', newState);
+      return newState;
+    });
   };
 
   const renderOptionSection = (
@@ -109,6 +125,197 @@ const FormScreen2: React.FC<Props> = ({navigation, route}) => {
     </View>
   );
 
+  const propertyTypeFields: Record<PropertyType, string[]> = {
+    CoWorking: [
+      'Ready To Move',
+      'Lift Available',
+      'Pantry',
+      'Floor',
+      'Furnished Type',
+      'Car Parking',
+      'Direction of Facing',
+      'Approved By',
+      'ZIP',
+      'Amount',
+      'Amount Unit',
+      'Property Area',
+      'Property Unit',
+    ],
+    FOCP: [
+      'Lift Available',
+      'Configuration',
+      'Floor',
+      'Furnished Type',
+      'Car Parking',
+      'Direction of Facing',
+      'Approved By',
+      'ZIP',
+      'Amount',
+      'Amount Unit',
+      'Property Area',
+      'Property Unit',
+    ],
+    'Farm House': [
+      'Age of Property',
+      'Gated community security',
+      'Surveillance',
+      'Alarm System',
+      'Furnished Type',
+      'Car Parking',
+      'Direction of Facing',
+      'Approved By',
+      'ZIP',
+      'Amount',
+      'Amount Unit',
+      'Property Area',
+      'Property Unit',
+    ],
+    Flat: [
+      'Ready To Move',
+      'Lift Available',
+      'Configuration',
+      'Floor',
+      'Furnished Type',
+      'Car Parking',
+      'Direction of Facing',
+      'Approved By',
+      'ZIP',
+      'Amount',
+      'Amount Unit',
+      'Property Area',
+      'Property Unit',
+    ],
+    'Independent House': [
+      'Ready To Move',
+      'Lift Available',
+      'Configuration',
+      'Floor',
+      'Furnished Type',
+      'Car Parking',
+      'Direction of Facing',
+      'Approved By',
+      'ZIP',
+      'Amount',
+      'Amount Unit',
+      'Property Area',
+      'Property Unit',
+    ],
+    Office: [
+      'Ready To Move',
+      'Lift Available',
+      'Pantry',
+      'Floor',
+      'Furnished Type',
+      'Car Parking',
+      'Direction of Facing',
+      'Approved By',
+      'ZIP',
+      'Amount',
+      'Amount Unit',
+      'Property Area',
+      'Property Unit',
+    ],
+    'PG/Hostel': [
+      'Ready To Move',
+      'Lift Available',
+      'Configuration',
+      'Floor',
+      'Furnished Type',
+      'Car Parking',
+      'Direction of Facing',
+      'Approved By',
+      'ZIP',
+      'Amount',
+      'Amount Unit',
+      'Property Area',
+      'Property Unit',
+    ],
+    Plot: [
+      'Any Construction',
+      'Boundary',
+      'No. of Open Side',
+      'Direction of Facing',
+      'Approved By',
+      'ZIP',
+      'Amount',
+      'Amount Unit',
+      'Property Area',
+      'Property Unit',
+    ],
+    'Retail Shop': [
+      'Ready To Move',
+      'Lift Available',
+      'Ceiling Height',
+      'Floor',
+      'Age of Property',
+      'Security Personal',
+      'Surveillance',
+      'Alarm System',
+      'car',
+      'Car Parking',
+      'Direction of Facing',
+      'Approved By',
+      'ZIP',
+      'Amount',
+      'Amount Unit',
+      'Property Area',
+      'Property Unit',
+    ],
+    Shop: [
+      'Ready To Move',
+      'Lift Available',
+      'Ceiling Height',
+      'Floor',
+      'Age of Property',
+      'Security Personal',
+      'Surveillance',
+      'Alarm System',
+      'car',
+      'Car Parking',
+      'Direction of Facing',
+      'Approved By',
+      'ZIP',
+      'Amount',
+      'Amount Unit',
+      'Property Area',
+      'Property Unit',
+    ],
+    Villa: [
+      'Age of Property',
+      'Gated community security',
+      'Surveillance',
+      'Alarm System',
+      'Car Parking',
+      'Direction of Facing',
+      'Approved By',
+      'ZIP',
+      'Amount',
+      'Amount Unit',
+      'Property Area',
+      'Property Unit',
+    ],
+    Warehouse: [
+      'Age of Property',
+      'Security Personal',
+      'Surveillance',
+      'Alarm System',
+    ],
+    // Add more property types and their respective fields here
+  };
+
+  const getFieldsToShow = () => {
+    const selectedPropertyType = formData.PropertyType;
+    console.log('Selected Property Type:', selectedPropertyType);
+
+    const fields =
+      propertyTypeFields[selectedPropertyType as PropertyType] ?? [];
+    console.log('Fields to show:', fields);
+
+    return fields;
+  };
+
+  const fieldsToShow = getFieldsToShow();
+
   return (
     <ImageBackground
       source={require('../../../assets/Images/bgimg1.png')}
@@ -145,79 +352,206 @@ const FormScreen2: React.FC<Props> = ({navigation, route}) => {
                   },
                 ]}
               />
-
               {renderOptionSection(
                 'Property Type',
                 'PropertyType',
                 masterData?.PropertyType || [],
               )}
-
-              {renderSimpleOptionButtons('Ready To Move', 'readyToMove', [
-                'Yes',
-                'No',
-              ])}
-
-              {renderSimpleOptionButtons('Lift Available', 'Lifts', [
-                'Yes',
-                'No',
-              ])}
-
-              {renderSimpleOptionButtons('Pantry', 'Pantry', ['Yes', 'No'])}
-
-              <View style={styles.section}>
-                <Text style={styles.sectionTitle}>Floor</Text>
-                <TextInput
-                  style={styles.input}
-                  value={formData.floor || ''}
-                  onChangeText={value =>
-                    setFormData({...formData, floor: value})
-                  }
-                  placeholder="Enter floor number"
-                />
-              </View>
-
-              {renderOptionSection(
-                'Furnished Type',
-                'Furnishing',
-                masterData?.FurnishType || [],
+              {renderSimpleOptionButtons(
+                'Property Classification',
+                'propertyClassification',
+                ['Residential', 'Commercial'],
               )}
-
-              {renderSimpleOptionButtons('Car Parking', 'CarParking', [
-                'Yes - Shaded',
-                'Yes - Unshaded',
-                'No',
-              ])}
-
-              {renderOptionSection(
-                'Direction of Facing',
-                'Facing',
-                masterData?.Facing || [],
+              {fieldsToShow.includes('Any Construction') &&
+                renderSimpleOptionButtons(
+                  'Any Construction',
+                  'ConstructionDone',
+                  ['Yes', 'No'],
+                )}
+              {fieldsToShow.includes('Boundary') &&
+                renderSimpleOptionButtons('Boundary', 'BoundaryWall', [
+                  'Yes',
+                  'No',
+                ])}
+              {fieldsToShow.includes('No. of Open Side') &&
+                renderSimpleOptionButtons('No. of Open Side', 'OpenSide', [
+                  'Yes',
+                  'No',
+                ])}
+              {fieldsToShow.includes('Age of Property') && (
+                <View style={styles.section}>
+                  <Text style={styles.sectionTitle}>Age of Property</Text>
+                  <TextInput
+                    mode="outlined"
+                    style={styles.input}
+                    value={formData.PropertyAge || ''}
+                    onChangeText={value =>
+                      setFormData({...formData, PropertyAge: value})
+                    }
+                    placeholder="Property Age"
+                    keyboardType="number-pad"
+                  />
+                </View>
               )}
-
-              <View style={styles.section}>
-                <Text style={styles.sectionTitle}>Approved By</Text>
-                <TextInput
-                  style={styles.input}
-                  value={formData.ApprovedBy || ''}
-                  onChangeText={value =>
-                    setFormData({...formData, ApprovedBy: value})
-                  }
-                  placeholder="Enter approval authority"
-                />
-              </View>
-
-              <View style={styles.section}>
-                <Text style={styles.sectionTitle}>ZIP</Text>
-                <TextInput
-                  style={styles.input}
-                  value={formData.ZipCode || ''}
-                  onChangeText={value =>
-                    setFormData({...formData, ZipCode: value})
-                  }
-                  placeholder="Enter ZIP code"
-                  keyboardType="numeric"
-                />
-              </View>
+              {fieldsToShow.includes('Security Personal') &&
+                renderSimpleOptionButtons(
+                  'Security Personal',
+                  'GatedSecurity',
+                  ['Yes', 'No'],
+                )}
+              {fieldsToShow.includes('Gated community security') &&
+                renderSimpleOptionButtons(
+                  'Gated community security',
+                  'GatedSecurity',
+                  ['Yes', 'No'],
+                )}
+              {fieldsToShow.includes('Surveillance') &&
+                renderSimpleOptionButtons(
+                  'Surveillance',
+                  'SurveillanceCameras',
+                  ['Yes', 'No'],
+                )}
+              {fieldsToShow.includes('Alarm System') &&
+                renderSimpleOptionButtons('Alarm System', 'AlarmSystem', [
+                  'Yes',
+                  'No',
+                ])}
+              {fieldsToShow.includes('Ready To Move') &&
+                renderSimpleOptionButtons('Ready To Move', 'readyToMove', [
+                  'Yes',
+                  'No',
+                ])}
+              {fieldsToShow.includes('Lift Available') &&
+                renderSimpleOptionButtons('Lift Available', 'Lifts', [
+                  'Yes',
+                  'No',
+                ])}
+              {fieldsToShow.includes('Ceiling Height') && (
+                <View style={styles.section}>
+                  <Text style={styles.sectionTitle}>Ceiling Height</Text>
+                  <TextInput
+                    mode="outlined"
+                    style={styles.input}
+                    value={formData.CeilingHeight || ''}
+                    onChangeText={value =>
+                      setFormData({...formData, CeilingHeight: value})
+                    }
+                    placeholder="CeilingHeight"
+                    keyboardType="number-pad"
+                  />
+                </View>
+              )}
+              {fieldsToShow.includes('Configuration') &&
+                renderOptionSection(
+                  'Configuration',
+                  'BhkType',
+                  masterData?.BhkType || [],
+                )}
+              {fieldsToShow.includes('Pantry') &&
+                renderSimpleOptionButtons('Pantry', 'Pantry', ['Yes', 'No'])}
+              {fieldsToShow.includes('Floor') && (
+                <View style={styles.section}>
+                  <Text style={styles.sectionTitle}>Floor</Text>
+                  <TextInput
+                    mode="outlined"
+                    style={styles.input}
+                    value={formData.floor || ''}
+                    onChangeText={value =>
+                      setFormData({...formData, floor: value})
+                    }
+                    placeholder="Enter floor number"
+                  />
+                </View>
+              )}
+              {fieldsToShow.includes('Furnished Type') &&
+                renderOptionSection(
+                  'Furnished Type',
+                  'Furnishing',
+                  masterData?.FurnishType || [],
+                )}
+              {fieldsToShow.includes('Car Parking') &&
+                renderSimpleOptionButtons('Car Parking', 'CarParking', [
+                  'Yes - Shaded',
+                  'Yes - Unshaded',
+                  'No',
+                ])}
+              {fieldsToShow.includes('Direction of Facing') &&
+                renderOptionSection(
+                  'Direction of Facing',
+                  'Facing',
+                  masterData?.Facing || [],
+                )}
+              {fieldsToShow.includes('Approved By') && (
+                <View style={styles.section}>
+                  <Text style={styles.sectionTitle}>Approved By</Text>
+                  <TextInput
+                    mode="outlined"
+                    style={styles.input}
+                    value={formData.ApprovedBy || ''}
+                    onChangeText={value =>
+                      setFormData({...formData, ApprovedBy: value})
+                    }
+                    placeholder="Enter approval authority"
+                  />
+                </View>
+              )}
+              {fieldsToShow.includes('ZIP') && (
+                <View style={styles.section}>
+                  <Text style={styles.sectionTitle}>ZIP</Text>
+                  <TextInput
+                    mode="outlined"
+                    style={styles.input}
+                    value={formData.ZipCode || ''}
+                    onChangeText={value =>
+                      setFormData({...formData, ZipCode: value})
+                    }
+                    placeholder="Enter ZIP code"
+                    keyboardType="number-pad"
+                  />
+                </View>
+              )}
+              {fieldsToShow.includes('Amount') && (
+                <View style={styles.section}>
+                  <Text style={styles.sectionTitle}>Amount</Text>
+                  <TextInput
+                    mode="outlined"
+                    style={styles.input}
+                    value={formData.Price || ''}
+                    onChangeText={value =>
+                      setFormData({...formData, Price: value})
+                    }
+                    placeholder="Enter Amount"
+                    keyboardType="number-pad"
+                  />
+                </View>
+              )}
+              {fieldsToShow.includes('Amount Unit') &&
+                renderOptionSection(
+                  'Amount Unit',
+                  'Rate',
+                  masterData?.AmountUnit || [],
+                )}
+              {fieldsToShow.includes('Property Area') && (
+                <View style={styles.section}>
+                  <Text style={styles.sectionTitle}>Property Area</Text>
+                  <TextInput
+                    mode="outlined"
+                    style={styles.input}
+                    value={formData.Area || ''}
+                    onChangeText={value =>
+                      setFormData({...formData, Area: value})
+                    }
+                    placeholder="Property Area"
+                    keyboardType="number-pad"
+                  />
+                </View>
+              )}
+              {fieldsToShow.includes('Property Unit') &&
+                renderOptionSection(
+                  'Property Unit',
+                  'Area',
+                  masterData?.AreaUnit || [],
+                )}
             </View>
             <View style={styles.buttonContainer}>
               <TouchableOpacity
@@ -263,12 +597,12 @@ const styles = StyleSheet.create({
   },
   section: {
     marginTop: 1,
-    marginBottom: 1,
+    marginBottom: 20,
     backgroundColor: 'transparent',
     borderRadius: 8,
     borderWidth: 1,
     borderColor: 'rgba(255, 255, 255, 0.3)',
-    padding: 10,
+    // padding: 10,
   },
   sectionTitle: {
     fontSize: 18,
@@ -310,9 +644,9 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#ddd',
     borderRadius: 8,
-    padding: 12,
+    // padding: 12,
     fontSize: 16,
-    backgroundColor: '#fff',
+    backgroundColor: 'transparent',
   },
   moreButton: {
     margin: 4,
@@ -331,6 +665,7 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     marginTop: 20,
+    marginBottom: 80,
     height: 50,
     justifyContent: 'center',
     alignItems: 'center',

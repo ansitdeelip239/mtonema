@@ -1,5 +1,5 @@
-import {NativeStackScreenProps} from '@react-navigation/native-stack';
-import React, {useState} from 'react';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import React, { useState } from 'react';
 import {
   View,
   Text,
@@ -10,13 +10,13 @@ import {
   ScrollView,
   Dimensions,
 } from 'react-native';
-import {PostPropertyFormParamList} from './PostPropertyForm';
-import {SegmentedButtons} from 'react-native-paper';
+import { PostPropertyFormParamList } from './PostPropertyForm';
+import { SegmentedButtons } from 'react-native-paper';
 import ImagePicker from 'react-native-image-crop-picker';
 
 type Props = NativeStackScreenProps<PostPropertyFormParamList, 'FormScreen3'>;
 
-const FormScreen3: React.FC<Props> = ({navigation, route}) => {
+const FormScreen3: React.FC<Props> = ({ navigation, route }) => {
   const [value, setValue] = useState('Images');
   const [formData, setFormData] = useState(route.params.formData);
   const [images, setImages] = useState<string[]>(formData.images || []);
@@ -31,7 +31,7 @@ const FormScreen3: React.FC<Props> = ({navigation, route}) => {
       .then(image => {
         const newImages = [...images, image.path];
         setImages(newImages);
-        setFormData({...formData, images: newImages});
+        setFormData({ ...formData, images: newImages });
       })
       .catch(error => console.log('Camera Error:', error));
   };
@@ -45,9 +45,15 @@ const FormScreen3: React.FC<Props> = ({navigation, route}) => {
         const imagePaths = selectedImages.map(image => image.path);
         const newImages = [...images, ...imagePaths];
         setImages(newImages);
-        setFormData({...formData, images: newImages});
+        setFormData({ ...formData, images: newImages });
       })
       .catch(error => console.log('Gallery Error:', error));
+  };
+
+  const removeImage = (image: string) => {
+    const filteredImages = images.filter(img => img !== image);
+    setImages(filteredImages);
+    setFormData({ ...formData, images: filteredImages });
   };
 
   const handleSubmit = () => {
@@ -71,15 +77,15 @@ const FormScreen3: React.FC<Props> = ({navigation, route}) => {
             {
               value: 'Property info',
               label: 'Property Info',
-              onPress: () => navigation.navigate('FormScreen2', {formData}),
+              onPress: () => navigation.navigate('FormScreen2', { formData }),
             },
             {
               value: 'Images',
               label: 'Image Upload',
-              onPress: () => navigation.navigate('FormScreen3', {formData}),
+              onPress: () => navigation.navigate('FormScreen3', { formData }),
             },
           ]}
-          theme={{colors: {primary: 'green'}}}
+          theme={{ colors: { primary: 'green' } }}
         />
 
         <Text style={styles.headerText}>
@@ -114,11 +120,17 @@ const FormScreen3: React.FC<Props> = ({navigation, route}) => {
             <Text style={styles.previewTitle}>Selected Images:</Text>
             <View style={styles.imageGrid}>
               {images.map((image, index) => (
-                <Image
-                  key={index}
-                  source={{uri: image}}
-                  style={styles.previewImage}
-                />
+                <View key={index} style={styles.imageContainer}>
+                  <Image
+                    source={{ uri: image }}
+                    style={styles.previewImage}
+                  />
+                  <TouchableOpacity
+                    style={styles.removeIcon}
+                    onPress={() => removeImage(image)}>
+                    <Text style={styles.removeText}>X</Text>
+                  </TouchableOpacity>
+                </View>
               ))}
             </View>
           </View>
@@ -212,11 +224,25 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
     justifyContent: 'flex-start',
   },
+  imageContainer: {
+    position: 'relative',
+    margin: 5,
+  },
   previewImage: {
     width: Dimensions.get('window').width / 4 - 20,
     height: Dimensions.get('window').width / 4 - 20,
     margin: 5,
     borderRadius: 5,
+  },
+  removeIcon: {
+    position: 'absolute',
+    top: 5,
+    right: 5,
+  },
+  removeText: {
+    color: 'red',
+    fontSize: 20,
+    fontWeight: 'bold',
   },
   listPropertyButton: {
     backgroundColor: '#4CAF50',
@@ -224,6 +250,7 @@ const styles = StyleSheet.create({
     borderRadius: 25,
     alignItems: 'center',
     marginVertical: 20,
+    marginBottom: 100,
   },
   listPropertyText: {
     color: 'white',
