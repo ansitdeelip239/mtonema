@@ -1,12 +1,13 @@
 import React, {useCallback} from 'react';
-import {TextInput, TextInputProps} from 'react-native-paper';
-import {TouchableOpacity, Image, StyleSheet} from 'react-native';
+import {TextInput, TextInputProps, HelperText} from 'react-native-paper';
+import {TouchableOpacity, Image, StyleSheet, View} from 'react-native';
 
 interface MaterialTextInputProps<T> extends TextInputProps {
   field: keyof T;
   formInput: T;
   setFormInput: (field: keyof T, value: string | boolean) => void;
   rightComponent?: React.ReactNode;
+  errorMessage?: string;
 }
 
 export const MaterialTextInput = <T,>({
@@ -14,6 +15,7 @@ export const MaterialTextInput = <T,>({
   formInput,
   setFormInput,
   rightComponent,
+  errorMessage,
   ...props
 }: MaterialTextInputProps<T>) => {
   const CrossButton = useCallback(() => {
@@ -30,19 +32,27 @@ export const MaterialTextInput = <T,>({
   }, [field, setFormInput]);
 
   return (
-    <TextInput
-      {...props}
-      value={formInput[field] as string}
-      onChangeText={(text: string) => setFormInput(field, text)}
-      right={
-        rightComponent ? (
-          <TextInput.Affix text={rightComponent as string} />
-        ) : formInput[field] ? (
-          <TextInput.Icon icon={() => CrossButton()} />
-        ) : null
-      }
-      outlineStyle={styles.textInput}
-    />
+    <View>
+      <TextInput
+        {...props}
+        value={formInput[field] as string}
+        onChangeText={(text: string) => setFormInput(field, text)}
+        right={
+          rightComponent ? (
+            <TextInput.Affix text={rightComponent as string} />
+          ) : formInput[field] ? (
+            <TextInput.Icon icon={() => CrossButton()} />
+          ) : null
+        }
+        outlineStyle={styles.textInput}
+        error={!!errorMessage}
+      />
+      {errorMessage && (
+        <HelperText type="error" visible={!!errorMessage} style={styles.helperText}>
+          {errorMessage}
+        </HelperText>
+      )}
+    </View>
   );
 };
 
@@ -54,5 +64,10 @@ const styles = StyleSheet.create({
   textInput: {
     borderRadius: 10,
     borderWidth: 1,
+  },
+  helperText: {
+    marginTop: -12,
+    marginBottom: 6,
+    paddingBottom: 0,
   },
 });

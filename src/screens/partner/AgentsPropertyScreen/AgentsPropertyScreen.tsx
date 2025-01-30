@@ -10,13 +10,15 @@ import SearchHeader from './components/SearchHeader';
 import Colors from '../../../constants/Colors';
 import {BottomTabScreenProps} from '@react-navigation/bottom-tabs';
 import Header from '../../../components/Header';
-import {PartnerBottomTabParamList, PartnerDrawerParamList} from '../../../types/navigation';
-
-// type Props = NativeStackScreenProps<AgentStackParamList, 'AgentPropertyList'>;
+import {
+  PartnerBottomTabParamList,
+  PartnerDrawerParamList,
+} from '../../../types/navigation';
+import {usePartner} from '../../../context/PartnerProvider';
 
 type Props = BottomTabScreenProps<PartnerBottomTabParamList, 'Property'>;
 
-const AgentDataScreen: React.FC<Props> = () => {
+const AgentDataScreen: React.FC<Props> = ({navigation}) => {
   const [agentData, setAgentData] = useState<AgentData[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isRefreshing, setIsRefreshing] = useState(false);
@@ -29,6 +31,7 @@ const AgentDataScreen: React.FC<Props> = () => {
     bhkType: null,
   });
   const {user} = useAuth();
+  const {dataUpdated, setDataUpdated} = usePartner();
   const PAGE_SIZE = 10;
 
   const isInitialRender = useRef(true);
@@ -121,7 +124,7 @@ const AgentDataScreen: React.FC<Props> = () => {
 
   useEffect(() => {
     fetchAgentData(1, true);
-  }, [user?.Email, fetchAgentData]);
+  }, [user?.Email, fetchAgentData, dataUpdated]);
 
   const handleRefresh = useCallback(() => {
     setIsRefreshing(true);
@@ -152,7 +155,13 @@ const AgentDataScreen: React.FC<Props> = () => {
         />
         <FlatList
           data={agentData}
-          renderItem={renderItem}
+          renderItem={({item}) =>
+            renderItem({
+              item,
+              onDataUpdate: () => setDataUpdated(prev => !prev),
+              navigation,
+            })
+          }
           keyExtractor={(item, index) =>
             `${item.Id?.toString() || 'item'}-${index}`
           }

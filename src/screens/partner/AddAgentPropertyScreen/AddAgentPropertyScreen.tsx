@@ -1,4 +1,4 @@
-import React, {useRef, useMemo, useCallback} from 'react';
+import React, {useRef, useMemo, useCallback, useState, useEffect} from 'react';
 import {
   View,
   StyleSheet,
@@ -10,34 +10,59 @@ import {
   Text,
 } from 'react-native';
 import {Button, Switch} from 'react-native-paper';
-import {AgentPropertyForm, AgentPropertyRequestModel} from '../../../types';
 import {MaterialTextInput} from '../../../components/MaterialTextInput';
 import {useMaster} from '../../../context/MasterProvider';
 import FilterOption from '../../../components/FilterOption';
-import formatCurrency from '../../../utils/currency';
+import {formatCurrency} from '../../../utils/currency';
 import Colors from '../../../constants/Colors';
 import PartnerService from '../../../services/PartnerService';
 import {useAuth} from '../../../hooks/useAuth';
 import useForm from '../../../hooks/useForm';
 import {BottomTabScreenProps} from '@react-navigation/bottom-tabs';
 import Header from '../../../components/Header';
-import {PartnerBottomTabParamList, PartnerDrawerParamList} from '../../../types/navigation';
+import {
+  PartnerBottomTabParamList,
+  PartnerDrawerParamList,
+} from '../../../types/navigation';
+import agentPropertyFormSchema, {
+  AgentPropertyFormType,
+  apiSubmissionSchema,
+} from '../../../schema/AgentPropertyFormSchema';
+import {z} from 'zod';
+import {usePartner} from '../../../context/PartnerProvider';
+import Toast from 'react-native-toast-message';
 
 type Props = BottomTabScreenProps<PartnerBottomTabParamList, 'AddProperty'>;
 
-const AddAgentPropertyScreen: React.FC<Props> = () => {
+const AddAgentPropertyScreen: React.FC<Props> = ({navigation, route}) => {
   const scrollViewRef = useRef<ScrollView>(null);
   const {user} = useAuth();
   const {masterData} = useMaster();
+  const [errors, setErrors] = useState<
+    Partial<Record<keyof AgentPropertyFormType, string>>
+  >({});
+  const {dataUpdated, setDataUpdated} = usePartner();
 
-  const {
-    formInput,
-    handleInputChange,
-    handleSelect,
-    loading,
-    onSubmit: handleSubmit,
-  } = useForm<AgentPropertyForm>({
-    initialState: {
+  const editMode = route.params?.editMode;
+  const propertyData = route.params?.propertyData;
+
+  const initialState = useMemo(() => {
+    if (editMode && propertyData) {
+      return {
+        agentName: propertyData.AgentName || '',
+        agentContactNo: propertyData.AgentContactNo || '',
+        propertyLocation: propertyData.PropertyLocation || '',
+        propertyType: propertyData.PropertyType?.MasterDetailName || '',
+        bhkType: propertyData.FlatSize?.MasterDetailName || '',
+        demandPrice: propertyData.DemandPrice?.toString() || '',
+        securityDepositAmount:
+          propertyData.SecurityDepositAmount?.toString() || '',
+        negotiable: propertyData.Negotiable || false,
+        propertyNotes: propertyData.PropertyNotes || '',
+      };
+    }
+
+    return {
       agentName: '',
       agentContactNo: '',
       propertyLocation: '',
@@ -47,36 +72,116 @@ const AddAgentPropertyScreen: React.FC<Props> = () => {
       securityDepositAmount: '',
       negotiable: false,
       propertyNotes: '',
-    },
-    onSubmit: async formData => {
-      const request: AgentPropertyRequestModel = {
-        AgentName: formData.agentName,
-        AgentContactNo: formData.agentContactNo,
-        PropertyLocation: formData.propertyLocation,
-        PropertyType: formData.propertyType,
-        FlatSize: formData.bhkType,
-        DemandPrice: formData.demandPrice,
-        SecurityDepositAmount: formData.securityDepositAmount,
-        Negotiable: formData.negotiable,
-        PropertyNotes: formData.propertyNotes,
-        Status: 1,
-        Id: 0,
-        PriceUnit: null,
-        EmailId: user?.Email || '',
-      };
+    };
+  }, [editMode, propertyData]);
 
+  const validateField = useCallback(
+    (field: keyof AgentPropertyFormType, value: string | boolean) => {
       try {
+        const fieldSchema = agentPropertyFormSchema.pick({
+          [field]: true,
+        } as Record<typeof field, true>);
+        fieldSchema.parse({[field]: value});
+        setErrors(prev => ({...prev, [field]: undefined}));
+        return true;
+      } catch (error) {
+        if (error instanceof z.ZodError) {
+          const fieldError = error.errors[0]?.message || 'Invalid input';
+          setErrors(prev => ({...prev, [field]: fieldError}));
+        }
+        return false;
+      }
+    },
+    [],
+  );
+
+  const {
+    formInput,
+    handleInputChange,
+    handleSelect,
+    loading,
+    onSubmit: handleSubmit,
+    setFormInput,
+    resetForm,
+  } = useForm<AgentPropertyFormType>({
+    initialState,
+    onSubmit: async formData => {
+      try {
+        const validatedFormData = agentPropertyFormSchema.parse(formData);
+        const validatedApiData = apiSubmissionSchema.parse(validatedFormData);
+
+        const request = {
+          AgentName: validatedApiData.agentName,
+          AgentContactNo: validatedApiData.agentContactNo,
+          PropertyLocation: validatedApiData.propertyLocation,
+          PropertyType: validatedApiData.propertyType,
+          FlatSize: validatedApiData.bhkType,
+          DemandPrice: validatedApiData.demandPrice.toString(),
+          SecurityDepositAmount:
+            validatedApiData.securityDepositAmount.toString(),
+          Negotiable: validatedApiData.negotiable,
+          PropertyNotes: validatedApiData.propertyNotes,
+          Status: 1,
+          Id: editMode && propertyData ? propertyData.Id : 0,
+          PriceUnit: null,
+          EmailId: user?.Email || '',
+        };
+
         const response = await PartnerService.updateAgentProperty(request);
         if (response.Success) {
-          // navigation.navigate('AgentPropertyList');
+          resetForm();
+          setErrors({});
+          Toast.show({
+            type: 'success',
+            text1: editMode
+              ? 'Property updated successfully'
+              : 'Property added successfully',
+          });
+          setDataUpdated(!dataUpdated);
+          navigation.navigate('Property');
         } else {
+          Toast.show({
+            type: 'error',
+            text1: 'Failed to update agent property',
+          });
           throw new Error('Failed to update agent property');
         }
       } catch (error) {
-        console.error('Error in onSubmit:', error);
+        if (error instanceof z.ZodError) {
+          const newErrors: Partial<
+            Record<keyof AgentPropertyFormType, string>
+          > = {};
+          error.errors.forEach(err => {
+            if (err.path[0]) {
+              newErrors[err.path[0] as keyof AgentPropertyFormType] =
+                err.message;
+            }
+          });
+          setErrors(newErrors);
+        }
+        Toast.show({
+          type: 'error',
+          text1: 'Please check your input and try again',
+        });
       }
     },
   });
+
+  const handleFieldChange = useCallback(
+    (field: keyof AgentPropertyFormType, value: string | boolean) => {
+      validateField(field, value);
+      handleInputChange(field, value);
+    },
+    [handleInputChange, validateField],
+  );
+
+  const handleFieldSelect = useCallback(
+    (field: keyof AgentPropertyFormType, value: string) => {
+      validateField(field, value);
+      handleSelect(field, value);
+    },
+    [handleSelect, validateField],
+  );
 
   const scrollToEnd = useCallback((delay = 100) => {
     setTimeout(() => {
@@ -84,73 +189,90 @@ const AddAgentPropertyScreen: React.FC<Props> = () => {
     }, delay);
   }, []);
 
+  useEffect(() => {
+    setFormInput(initialState);
+  }, [setFormInput, initialState]);
+
+  useEffect(() => {
+    return () => {
+      setErrors({});
+      resetForm();
+    };
+  }, [resetForm]);
+
   const renderPropertyInputs = useMemo(
     () => (
       <>
-        <MaterialTextInput<AgentPropertyForm>
+        <MaterialTextInput<AgentPropertyFormType>
           style={styles.input}
           label="Agent Name"
           field="agentName"
           formInput={formInput}
-          setFormInput={handleInputChange}
+          setFormInput={handleFieldChange}
           mode="outlined"
           placeholder="John Doe"
+          errorMessage={errors.agentName}
         />
 
-        <MaterialTextInput<AgentPropertyForm>
+        <MaterialTextInput<AgentPropertyFormType>
           style={styles.input}
           label="Agent Contact No."
           field="agentContactNo"
           formInput={formInput}
-          setFormInput={handleInputChange}
+          setFormInput={handleFieldChange}
           mode="outlined"
           placeholder="1234567890"
           keyboardType="number-pad"
+          errorMessage={errors.agentContactNo}
         />
 
-        <MaterialTextInput<AgentPropertyForm>
+        <MaterialTextInput<AgentPropertyFormType>
           style={styles.input}
           label="Property Location"
           field="propertyLocation"
           formInput={formInput}
-          setFormInput={handleInputChange}
+          setFormInput={handleFieldChange}
           mode="outlined"
           placeholder="Navi Mumbai, Thane, etc."
+          errorMessage={errors.propertyLocation}
         />
 
         <FilterOption
           label="Property Type"
           options={masterData?.AgentPropertyType || []}
           selectedValue={formInput.propertyType}
-          onSelect={value => handleSelect('propertyType', value)}
+          onSelect={value => handleFieldSelect('propertyType', value)}
+          error={errors.propertyType}
         />
 
         <FilterOption
           label="BHK Type"
           options={masterData?.BhkType || []}
           selectedValue={formInput.bhkType}
-          onSelect={value => handleSelect('bhkType', value)}
+          onSelect={value => handleFieldSelect('bhkType', value)}
+          error={errors.bhkType}
         />
 
-        <MaterialTextInput<AgentPropertyForm>
+        <MaterialTextInput<AgentPropertyFormType>
           style={styles.input}
           label="Demand Price"
           field="demandPrice"
           formInput={formInput}
-          setFormInput={handleInputChange}
+          setFormInput={handleFieldChange}
           mode="outlined"
           placeholder="Enter amount"
           keyboardType="number-pad"
           rightComponent={<Text>{formatCurrency(formInput.demandPrice)}</Text>}
           maxLength={10}
+          errorMessage={errors.demandPrice}
         />
 
-        <MaterialTextInput<AgentPropertyForm>
+        <MaterialTextInput<AgentPropertyFormType>
           style={styles.input}
           label="Security Deposit Amount"
           field="securityDepositAmount"
           formInput={formInput}
-          setFormInput={handleInputChange}
+          setFormInput={handleFieldChange}
           mode="outlined"
           placeholder="Enter deposit amount"
           keyboardType="number-pad"
@@ -159,36 +281,47 @@ const AddAgentPropertyScreen: React.FC<Props> = () => {
             <Text>{formatCurrency(formInput.securityDepositAmount)}</Text>
           }
           maxLength={10}
+          errorMessage={errors.securityDepositAmount}
         />
 
         <View style={styles.switchContainer}>
           <Text>Negotiable</Text>
           <Switch
             value={formInput.negotiable}
-            onValueChange={value => handleInputChange('negotiable', value)}
+            onValueChange={value => handleFieldChange('negotiable', value)}
           />
         </View>
 
-        <MaterialTextInput<AgentPropertyForm>
+        <MaterialTextInput<AgentPropertyFormType>
           style={styles.input}
           label="Property Notes"
           field="propertyNotes"
           formInput={formInput}
-          setFormInput={handleInputChange}
+          setFormInput={handleFieldChange}
           mode="outlined"
           placeholder="Add additional details"
           multiline
           numberOfLines={4}
           onFocus={() => scrollToEnd()}
+          errorMessage={errors.propertyNotes}
         />
       </>
     ),
-    [formInput, handleInputChange, handleSelect, masterData, scrollToEnd],
+    [
+      formInput,
+      handleFieldChange,
+      handleFieldSelect,
+      masterData,
+      scrollToEnd,
+      errors,
+    ],
   );
 
   return (
     <>
-      <Header<PartnerDrawerParamList> title="Add Agent's Property" />
+      <Header<PartnerDrawerParamList>
+        title={editMode ? "Edit Agent's Property" : "Add Agent's Property"}
+      />
       <KeyboardAvoidingView
         style={styles.container}
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
