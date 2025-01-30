@@ -1,6 +1,7 @@
 import url from '../constants/api';
 import {
   AgentPropertyRequestModel,
+  Client,
   ClientForm,
   ClientResponseModel,
   Group,
@@ -127,6 +128,18 @@ class PartnerService {
       return response;
     } catch (error) {
       console.error('Error in deleteAgentProperty', error);
+      throw error;
+    }
+  }
+
+  static async getClientById(clientId: number) {
+    try {
+      const response = await api.get<Client>(
+        `${url.getClientById}?Id=${clientId}`,
+      );
+      return response;
+    } catch (error) {
+      console.error('Error in getClientById', error);
       throw error;
     }
   }

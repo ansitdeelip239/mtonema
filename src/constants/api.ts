@@ -56,4 +56,5 @@ export default {
   addEditClientData: url1 + '/api/v1/partner/AddEditClientData',
   getPartnerProperty: url1 + '/api/v1/partner/GetPartnerPropertyUserId',
   deleteAgentProperty: url1 + '/api/v1/partner/DeleteAgentProperty',
+  getClientById: url1 + '/api/v1/partner/GetClientById',
 };

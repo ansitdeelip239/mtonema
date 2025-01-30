@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, {useState} from 'react';
 import {
   ActivityIndicator,
   StyleSheet,
@@ -55,7 +55,9 @@ const ClientScreen: React.FC<Props> = ({navigation}) => {
     return (
       <FlatList
         data={clients}
-        renderItem={({item}) => <ClientCard client={item} />}
+        renderItem={({item}) => (
+          <ClientCard client={item} navigation={navigation} />
+        )}
         keyExtractor={client => client.Id.toString()}
         contentContainerStyle={styles.listContainer}
         showsVerticalScrollIndicator={false}
@@ -82,7 +84,10 @@ const ClientScreen: React.FC<Props> = ({navigation}) => {
           <Text style={styles.buttonText}>Add Client</Text>
         </TouchableOpacity>
       </Header>
-      <SearchHeader placeholder="Search Clients..." onSearch={handleSearchWithLoading} />
+      <SearchHeader
+        placeholder="Search Clients..."
+        onSearch={handleSearchWithLoading}
+      />
       {renderContent()}
     </View>
   );
