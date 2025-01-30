@@ -49,6 +49,7 @@ export interface PropertyFormData {
   readyToMove: null | string;
   statusText: null | string;
   video: null | string;
+  propertyClassification: null |string;
   CarParking: null | string;
 }
 

@@ -4,12 +4,11 @@ import {
   View,
   StyleSheet,
   TouchableOpacity,
-  TextInput,
   ImageBackground,
 } from 'react-native';
 import {PostPropertyFormParamList} from './PostPropertyForm';
 import {PropertyFormData} from '../../../types/propertyform';
-import {SegmentedButtons, Text} from 'react-native-paper';
+import {SegmentedButtons, Text, TextInput} from 'react-native-paper';
 import {useMaster} from '../../../context/MasterProvider';
 import Colors from '../../../constants/Colors';
 import {FlatList} from 'react-native-gesture-handler';
@@ -145,13 +144,67 @@ const FormScreen2: React.FC<Props> = ({navigation, route}) => {
                   },
                 ]}
               />
-
               {renderOptionSection(
                 'Property Type',
                 'PropertyType',
                 masterData?.PropertyType || [],
               )}
-
+              {renderSimpleOptionButtons(
+                'Property Classification',
+                'propertyClassification',
+                ['Residential', 'Commercial'],
+              )}
+              {/* Plot Design */}
+              <View>
+                {renderSimpleOptionButtons(
+                  'Any Construction',
+                  'ConstructionDone',
+                  ['Yes', 'No'],
+                )}
+                {renderSimpleOptionButtons('Boundary', 'BoundaryWall', [
+                  'Yes',
+                  'No',
+                ])}
+                {renderSimpleOptionButtons('No. of Open Side', 'OpenSide', [
+                  'Yes',
+                  'No',
+                ])}
+              </View>
+              {/* Farm House design */}
+              <View>
+                <View style={styles.section}>
+                  <Text style={styles.sectionTitle}>Age of Property</Text>
+                  <TextInput
+                    mode="outlined"
+                    style={styles.input}
+                    value={formData.PropertyAge || ''}
+                    onChangeText={value =>
+                      setFormData({...formData, PropertyAge: value})
+                    }
+                    placeholder="Property Age"
+                    keyboardType="number-pad"
+                  />
+                </View>
+              </View>
+              {/* Retail Shop */}
+              {renderSimpleOptionButtons('Security Personal', 'GatedSecurity', [
+                  'Yes',
+                  'No',
+                ])}
+              {renderSimpleOptionButtons(
+                'Gated community security',
+                'GatedSecurity',
+                ['Yes', 'No'],
+              )}
+              {renderSimpleOptionButtons(
+                'Surveillance Cameras',
+                'SurveillanceCameras',
+                ['Yes', 'No'],
+              )}
+              {renderSimpleOptionButtons('Alarm System', 'AlarmSystem', [
+                'Yes',
+                'No',
+              ])}
               {renderSimpleOptionButtons('Ready To Move', 'readyToMove', [
                 'Yes',
                 'No',
@@ -161,12 +214,36 @@ const FormScreen2: React.FC<Props> = ({navigation, route}) => {
                 'Yes',
                 'No',
               ])}
+              {/* FOCP DESIGN */}
+              <View>
+                <View style={styles.section}>
+                  <Text style={styles.sectionTitle}>Ceiling Height</Text>
+                  <TextInput
+                    mode="outlined"
+                    style={styles.input}
+                    value={formData.CeilingHeight || ''}
+                    onChangeText={value =>
+                      setFormData({...formData, CeilingHeight: value})
+                    }
+                    placeholder="CeilingHeight"
+                    keyboardType="number-pad"
+                  />
+                </View>
+              </View>
+              {/* Flat  */}
+              {renderOptionSection(
+                'Configuration',
+                'BhkType',
+                masterData?.BhkType || [],
+              )}
+              {/* Flat end */}
 
               {renderSimpleOptionButtons('Pantry', 'Pantry', ['Yes', 'No'])}
 
               <View style={styles.section}>
                 <Text style={styles.sectionTitle}>Floor</Text>
                 <TextInput
+                  mode="outlined"
                   style={styles.input}
                   value={formData.floor || ''}
                   onChangeText={value =>
@@ -197,6 +274,7 @@ const FormScreen2: React.FC<Props> = ({navigation, route}) => {
               <View style={styles.section}>
                 <Text style={styles.sectionTitle}>Approved By</Text>
                 <TextInput
+                  mode="outlined"
                   style={styles.input}
                   value={formData.ApprovedBy || ''}
                   onChangeText={value =>
@@ -209,15 +287,52 @@ const FormScreen2: React.FC<Props> = ({navigation, route}) => {
               <View style={styles.section}>
                 <Text style={styles.sectionTitle}>ZIP</Text>
                 <TextInput
+                  mode="outlined"
                   style={styles.input}
                   value={formData.ZipCode || ''}
                   onChangeText={value =>
                     setFormData({...formData, ZipCode: value})
                   }
                   placeholder="Enter ZIP code"
-                  keyboardType="numeric"
+                  keyboardType="number-pad"
                 />
               </View>
+              <View style={styles.section}>
+                <Text style={styles.sectionTitle}>Amount</Text>
+                <TextInput
+                  mode="outlined"
+                  style={styles.input}
+                  value={formData.Price || ''}
+                  onChangeText={value =>
+                    setFormData({...formData, Price: value})
+                  }
+                  placeholder="Enter Amount"
+                  keyboardType="number-pad"
+                />
+              </View>
+              {renderOptionSection(
+                'Amount Unit',
+                'Rate',
+                masterData?.AmountUnit || [],
+              )}
+              <View style={styles.section}>
+                <Text style={styles.sectionTitle}>Property Area</Text>
+                <TextInput
+                  mode="outlined"
+                  style={styles.input}
+                  value={formData.Area || ''}
+                  onChangeText={value =>
+                    setFormData({...formData, Area: value})
+                  }
+                  placeholder="Property Area"
+                  keyboardType="number-pad"
+                />
+              </View>
+              {renderOptionSection(
+                'Property Unit',
+                'Area',
+                masterData?.AreaUnit || [],
+              )}
             </View>
             <View style={styles.buttonContainer}>
               <TouchableOpacity
@@ -263,12 +378,12 @@ const styles = StyleSheet.create({
   },
   section: {
     marginTop: 1,
-    marginBottom: 1,
+    marginBottom: 20,
     backgroundColor: 'transparent',
     borderRadius: 8,
     borderWidth: 1,
     borderColor: 'rgba(255, 255, 255, 0.3)',
-    padding: 10,
+    // padding: 10,
   },
   sectionTitle: {
     fontSize: 18,
@@ -310,9 +425,9 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#ddd',
     borderRadius: 8,
-    padding: 12,
+    // padding: 12,
     fontSize: 16,
-    backgroundColor: '#fff',
+    backgroundColor: 'transparent',
   },
   moreButton: {
     margin: 4,
