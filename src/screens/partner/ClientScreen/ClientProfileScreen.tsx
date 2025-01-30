@@ -9,6 +9,7 @@ import {
   Linking,
   RefreshControl,
   ActivityIndicator,
+  Alert,
 } from 'react-native';
 import {ClientStackParamList} from '../../../navigator/components/ClientScreenStack';
 import Header from '../../../components/Header';
@@ -18,7 +19,8 @@ import Toast from 'react-native-toast-message';
 import {formatDate} from '../../../utils/dateUtils';
 import GetIcon from '../../../components/GetIcon';
 import Colors from '../../../constants/Colors';
-import { usePartner } from '../../../context/PartnerProvider';
+import {usePartner} from '../../../context/PartnerProvider';
+import {Appbar, Menu, PaperProvider} from 'react-native-paper';
 
 type Props = NativeStackScreenProps<
   ClientStackParamList,
@@ -46,7 +48,8 @@ const ClientProfileScreen: React.FC<Props> = ({route, navigation}) => {
   const [client, setClient] = useState<Client | null>(null);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
-  const {clientsUpdated} = usePartner();
+  const [visible, setVisible] = useState(false);
+  const {clientsUpdated, setClientsUpdated} = usePartner();
 
   const fetchClient = React.useCallback(async () => {
     try {
@@ -101,6 +104,57 @@ const ClientProfileScreen: React.FC<Props> = ({route, navigation}) => {
     },
     [client],
   );
+
+  const openMenu = () => setVisible(true);
+  const closeMenu = () => setVisible(false);
+
+  const handleDelete = async () => {
+    closeMenu();
+    Alert.alert(
+      'Delete Client',
+      'Are you sure you want to delete this client?',
+      [
+        {
+          text: 'Cancel',
+          style: 'cancel',
+        },
+        {
+          text: 'Delete',
+          style: 'destructive',
+          onPress: async () => {
+            try {
+              const response = await PartnerService.deleteClientById(
+                client?.Id as number,
+              );
+              if (response.Success) {
+                Toast.show({
+                  type: 'success',
+                  text1: 'Success',
+                  text2: 'Client deleted successfully',
+                });
+                setClientsUpdated(prev => !prev);
+                navigation.goBack();
+              } else {
+                Toast.show({
+                  type: 'error',
+                  text1: 'Error',
+                  text2: 'Failed to delete client',
+                });
+              }
+            } catch (error) {
+              console.error('Error in handleDelete', error);
+              Toast.show({
+                type: 'error',
+                text1: 'Error',
+                text2: 'Failed to delete client',
+              });
+            }
+          },
+        },
+      ],
+      {cancelable: true},
+    );
+  };
 
   const renderContactInfo = React.useCallback(() => {
     if (!client) {
@@ -167,104 +221,134 @@ const ClientProfileScreen: React.FC<Props> = ({route, navigation}) => {
   }
 
   return (
-    <View style={styles.container}>
-      <Header title="Client Profile">
-        <TouchableOpacity
-          style={styles.addButton}
-          onPress={() => {
-            if (client) {
-              navigation.navigate('AddClientScreen', {
-                editMode: true,
-                clientData: client,
-              });
+    <PaperProvider>
+      <View style={styles.container}>
+        <Header title="Client Profile">
+          <Menu
+            visible={visible}
+            onDismiss={closeMenu}
+            anchor={
+              <Appbar.Action
+                // eslint-disable-next-line react/no-unstable-nested-components
+                icon={() => <GetIcon iconName="threeDots" />}
+                onPress={openMenu}
+              />
             }
-          }}>
-          <Text style={styles.buttonText}>Edit</Text>
-        </TouchableOpacity>
-      </Header>
-      <ScrollView
-        style={styles.scrollView}
-        refreshControl={
-          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-        }>
-        {client && (
-          <>
-            <View style={styles.profileHeader}>
-              <View style={styles.avatarContainer}>
-                <Text style={styles.avatarText}>
-                  {client.ClientName.charAt(0).toUpperCase()}
-                </Text>
-              </View>
-              <Text style={styles.clientName}>{client.ClientName}</Text>
-              {client.DisplayName && (
-                <Text style={styles.displayName}>{client.DisplayName}</Text>
-              )}
-            </View>
-
-            {(client.MobileNumber ||
-              client.WhatsappNumber ||
-              client.EmailId) && (
-              <View style={styles.contactButtons}>
-                {client.MobileNumber && (
-                  <TouchableOpacity
-                    key="contact-phone"
-                    style={styles.contactButton}
-                    onPress={() => handleContact('phone')}>
-                    <GetIcon iconName="phone" size="24" color="#0066cc" />
-                    <Text style={styles.contactText}>Call</Text>
-                  </TouchableOpacity>
-                )}
-                {client.WhatsappNumber && (
-                  <TouchableOpacity
-                    key="contact-whatsapp"
-                    style={styles.contactButton}
-                    onPress={() => handleContact('whatsapp')}>
-                    <GetIcon iconName="whatsapp" size="24" color="#0066cc" />
-                    <Text style={styles.contactText}>WhatsApp</Text>
-                  </TouchableOpacity>
-                )}
-                {client.EmailId && (
-                  <TouchableOpacity
-                    key="contact-email"
-                    style={styles.contactButton}
-                    onPress={() => handleContact('email')}>
-                    <GetIcon iconName="contactus" size="24" color="#0066cc" />
-                    <Text style={styles.contactText}>Email</Text>
-                  </TouchableOpacity>
+            contentStyle={styles.menuContent}>
+            <Menu.Item
+              onPress={() => {
+                closeMenu();
+                if (client) {
+                  navigation.navigate('AddClientScreen', {
+                    editMode: true,
+                    clientData: client,
+                  });
+                }
+              }}
+              title="Edit"
+              titleStyle={styles.menuItemTitle}
+              // eslint-disable-next-line react/no-unstable-nested-components
+              leadingIcon={() => <GetIcon iconName="edit" />}
+            />
+            <Menu.Item
+              onPress={handleDelete}
+              title="Delete"
+              titleStyle={styles.menuItemTitle}
+              // eslint-disable-next-line react/no-unstable-nested-components
+              leadingIcon={() => <GetIcon iconName="delete" />}
+            />
+          </Menu>
+        </Header>
+        <ScrollView
+          style={styles.scrollView}
+          refreshControl={
+            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+          }>
+          {client && (
+            <>
+              <View style={styles.profileHeader}>
+                <View style={styles.avatarContainer}>
+                  <Text style={styles.avatarText}>
+                    {client.ClientName.charAt(0).toUpperCase()}
+                  </Text>
+                </View>
+                <Text style={styles.clientName}>{client.ClientName}</Text>
+                {client.DisplayName && (
+                  <Text style={styles.displayName}>{client.DisplayName}</Text>
                 )}
               </View>
-            )}
 
-            <View style={styles.infoSection}>
-              {renderContactInfo()}
-
-              {client.Groups && client.Groups.length > 0 && (
-                <View style={styles.infoCard}>
-                  <Text style={styles.sectionTitle}>Groups</Text>
-                  <View style={styles.groupsContainer}>{renderGroups()}</View>
+              {(client.MobileNumber ||
+                client.WhatsappNumber ||
+                client.EmailId) && (
+                <View style={styles.contactButtons}>
+                  {client.MobileNumber && (
+                    <TouchableOpacity
+                      key="contact-phone"
+                      style={styles.contactButton}
+                      onPress={() => handleContact('phone')}>
+                      <GetIcon iconName="phone" size="24" color="#0066cc" />
+                      <Text style={styles.contactText}>Call</Text>
+                    </TouchableOpacity>
+                  )}
+                  {client.WhatsappNumber && (
+                    <TouchableOpacity
+                      key="contact-whatsapp"
+                      style={styles.contactButton}
+                      onPress={() => handleContact('whatsapp')}>
+                      <GetIcon iconName="whatsapp" size="24" color="#0066cc" />
+                      <Text style={styles.contactText}>WhatsApp</Text>
+                    </TouchableOpacity>
+                  )}
+                  {client.EmailId && (
+                    <TouchableOpacity
+                      key="contact-email"
+                      style={styles.contactButton}
+                      onPress={() => handleContact('email')}>
+                      <GetIcon iconName="contactus" size="24" color="#0066cc" />
+                      <Text style={styles.contactText}>Email</Text>
+                    </TouchableOpacity>
+                  )}
                 </View>
               )}
 
-              {client.Notes && (
-                <View style={styles.infoCard}>
-                  <Text style={styles.sectionTitle}>Notes</Text>
-                  <Text style={styles.notesText}>{client.Notes}</Text>
-                </View>
-              )}
+              <View style={styles.infoSection}>
+                {renderContactInfo()}
 
-              <View style={styles.infoCard}>
-                <Text style={styles.sectionTitle}>Recent Activities</Text>
-                {renderActivities()}
+                {client.Groups && client.Groups.length > 0 && (
+                  <View style={styles.infoCard}>
+                    <Text style={styles.sectionTitle}>Groups</Text>
+                    <View style={styles.groupsContainer}>{renderGroups()}</View>
+                  </View>
+                )}
+
+                {client.Notes && (
+                  <View style={styles.infoCard}>
+                    <Text style={styles.sectionTitle}>Notes</Text>
+                    <Text style={styles.notesText}>{client.Notes}</Text>
+                  </View>
+                )}
+
+                <View style={styles.infoCard}>
+                  <Text style={styles.sectionTitle}>Recent Activities</Text>
+                  {renderActivities()}
+                </View>
               </View>
-            </View>
-          </>
-        )}
-      </ScrollView>
-    </View>
+            </>
+          )}
+        </ScrollView>
+      </View>
+    </PaperProvider>
   );
 };
 
 const styles = StyleSheet.create({
+  menuContent: {
+    backgroundColor: 'white',
+  },
+  menuItemTitle: {
+    color: 'black',
+  },
   container: {
     flex: 1,
     backgroundColor: '#f8f9fa',

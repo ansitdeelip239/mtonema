@@ -143,5 +143,17 @@ class PartnerService {
       throw error;
     }
   }
+
+  static async deleteClientById(clientId: number) {
+    try {
+      const response = await api.delete<null>(
+        `${url.deleteClientById}?clientId=${clientId}`,
+      );
+      return response;
+    } catch (error) {
+      console.error('Error in deleteClientById', error);
+      throw error;
+    }
+  }
 }
 export default PartnerService;
