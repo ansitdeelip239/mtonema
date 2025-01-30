@@ -8,7 +8,7 @@ import { PropertyFormData } from '../../../types/propertyform';
 export type PostPropertyFormParamList = {
     FormScreen1: undefined;
     FormScreen2: { formData:PropertyFormData };
-    FormScreen3: { formData: any };
+    FormScreen3: { formData: PropertyFormData };
 }
 
 const Stack = createNativeStackNavigator<PostPropertyFormParamList>();

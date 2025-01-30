@@ -10,7 +10,7 @@ export type PartnerBottomTabParamList = {
   Property: undefined;
   AddProperty: undefined;
   Clients: undefined;
-  Test: undefined;
+  Profile: undefined;
 };
 
 export type SellerBottomTabParamList = {

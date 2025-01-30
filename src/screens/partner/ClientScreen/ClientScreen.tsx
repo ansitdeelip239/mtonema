@@ -1,5 +1,4 @@
-import {BottomTabScreenProps} from '@react-navigation/bottom-tabs';
-import React from 'react';
+import React, { useState } from 'react';
 import {
   ActivityIndicator,
   StyleSheet,
@@ -7,22 +6,32 @@ import {
   View,
   FlatList,
   RefreshControl,
+  TouchableOpacity,
 } from 'react-native';
-import {
-  PartnerBottomTabParamList,
-  PartnerDrawerParamList,
-} from '../../../types/navigation';
+import {PartnerDrawerParamList} from '../../../types/navigation';
 import Header from '../../../components/Header';
-import { useClientData } from '../../../hooks/useClientData';
-import { ClientCard } from './components/ClientCard';
+import {useClientData} from '../../../hooks/useClientData';
+import {ClientCard} from './components/ClientCard';
+import Colors from '../../../constants/Colors';
+import {NativeStackScreenProps} from '@react-navigation/native-stack';
+import {ClientStackParamList} from '../../../navigator/components/ClientScreenStack';
+import SearchHeader from '../../../components/SearchHeader';
 
-type Props = BottomTabScreenProps<PartnerBottomTabParamList, 'Clients'>;
+type Props = NativeStackScreenProps<ClientStackParamList, 'ClientScreen'>;
 
-const ClientScreen: React.FC<Props> = () => {
-  const {clients, isLoading, error, refreshing, onRefresh} = useClientData();
+const ClientScreen: React.FC<Props> = ({navigation}) => {
+  const {clients, isLoading, error, refreshing, onRefresh, handleSearch} =
+    useClientData();
+  const [isSearching, setIsSearching] = useState(false);
+
+  const handleSearchWithLoading = async (text: string) => {
+    setIsSearching(true);
+    await handleSearch(text);
+    setIsSearching(false);
+  };
 
   const renderContent = () => {
-    if (isLoading) {
+    if (isLoading || isSearching) {
       return (
         <View style={styles.centerContainer}>
           <ActivityIndicator size="large" color="#0066cc" />
@@ -64,7 +73,16 @@ const ClientScreen: React.FC<Props> = () => {
 
   return (
     <View style={styles.container}>
-      <Header<PartnerDrawerParamList> title="Clients" />
+      <Header<PartnerDrawerParamList> title="Clients">
+        <TouchableOpacity
+          style={styles.addButton}
+          onPress={() => {
+            navigation.navigate('AddClientScreen');
+          }}>
+          <Text style={styles.buttonText}>Add Client</Text>
+        </TouchableOpacity>
+      </Header>
+      <SearchHeader placeholder="Search Clients..." onSearch={handleSearchWithLoading} />
       {renderContent()}
     </View>
   );
@@ -82,6 +100,8 @@ const styles = StyleSheet.create({
   },
   listContainer: {
     padding: 16,
+    paddingBottom: 100,
+    paddingTop: 8,
   },
   errorText: {
     color: '#dc3545',
@@ -94,6 +114,39 @@ const styles = StyleSheet.create({
     margin: 16,
     color: '#666',
     fontSize: 15,
+  },
+  addButton: {
+    backgroundColor: Colors.main,
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+    borderRadius: 8,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  buttonText: {
+    color: '#fff',
+    fontSize: 14,
+    fontWeight: '600',
+  },
+  searchContainer: {
+    flex: 1,
+    marginRight: 12,
+  },
+  searchInput: {
+    backgroundColor: 'white',
+    borderRadius: 50,
+    elevation: 5,
+    height: 50,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.15,
+    shadowRadius: 4,
+  },
+  searchInputText: {
+    color: Colors.placeholderColor,
   },
 });
 

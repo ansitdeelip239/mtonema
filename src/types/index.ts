@@ -224,8 +224,12 @@ export interface ClientActivityDataModel {
 
 export interface Group {
   Id: number;
-  Name: string;
+  GroupName: string;
   GroupColor: string;
+  Color: MasterDataModel;
+  PartnerId: string | null;
+  CreatedOn: string;
+  UpdatedOn: string;
 }
 
 export interface Client {
@@ -238,7 +242,7 @@ export interface Client {
   EmailId: string;
   Notes: string;
   ClientActivityDataModels: ClientActivityDataModel[];
-  Groups: Group[];
+  Groups: { Id: number; Name: string, GroupColor: string }[];
   CreatedOn: string;
   Activity: string;
   Status: number;
@@ -247,4 +251,15 @@ export interface Client {
 export interface ClientResponseModel {
   responsePagingModel: PagingModel;
   clientDataModel: Client[];
+}
+
+export interface ClientForm {
+  ClientName: string;
+  DisplayName: string;
+  MobileNumber: string;
+  WhatsappNumber: string;
+  EmailId: string;
+  Notes: string;
+  Groups: number[];
+  PartnerId: string;
 }

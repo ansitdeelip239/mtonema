@@ -12,12 +12,12 @@ export default function useForm<T>({
   const [formInput, setFormInput] = useState<T>(initialState);
   const [loading, setLoading] = useState(false);
 
-  const handleInputChange = useCallback(
-    (field: keyof T, value: string | boolean) => {
-      setFormInput(prev => ({...prev, [field]: value}));
-    },
-    [],
-  );
+  const handleInputChange = (field: keyof T, value: any) => {
+    setFormInput(prevState => ({
+      ...prevState,
+      [field]: value,
+    }));
+  };
 
   const handleSelect = useCallback((key: keyof T, value: string) => {
     setFormInput(prev => ({

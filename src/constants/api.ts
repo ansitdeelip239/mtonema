@@ -52,4 +52,7 @@ export default {
   getAgentImportData: url1 + '/api/v1/partner/GetAgentImportDataUserId',
   updateAgentProperty: url1 + '/api/v1/partner/UpdateAgentProperty',
   getClientData: url1 + '/api/v1/partner/GetClientData',
+  getGroupsByPartnerId: url1 + '/api/v1/partner/GetGroupByPartnerId',
+  addEditClientData: url1 + '/api/v1/partner/AddEditClientData',
+  getPartnerProperty: url1 + '/api/v1/partner/GetPartnerPropertyUserId',
 };
