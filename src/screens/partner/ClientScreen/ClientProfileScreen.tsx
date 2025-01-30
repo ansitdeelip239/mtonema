@@ -17,6 +17,7 @@ import PartnerService from '../../../services/PartnerService';
 import Toast from 'react-native-toast-message';
 import {formatDate} from '../../../utils/dateUtils';
 import GetIcon from '../../../components/GetIcon';
+import Colors from '../../../constants/Colors';
 
 type Props = NativeStackScreenProps<
   ClientStackParamList,
@@ -165,7 +166,20 @@ const ClientProfileScreen: React.FC<Props> = ({route, navigation}) => {
 
   return (
     <View style={styles.container}>
-      <Header title="Client Profile" />
+      <Header title="Client Profile">
+        <TouchableOpacity
+          style={styles.addButton}
+          onPress={() => {
+            if (client) {
+              navigation.navigate('AddClientScreen', {
+                editMode: true,
+                clientData: client,
+              });
+            }
+          }}>
+          <Text style={styles.buttonText}>Edit</Text>
+        </TouchableOpacity>
+      </Header>
       <ScrollView
         style={styles.scrollView}
         refreshControl={
@@ -410,6 +424,19 @@ const styles = StyleSheet.create({
     color: '#666',
     fontStyle: 'italic',
     textAlign: 'center',
+  },
+  addButton: {
+    backgroundColor: Colors.main,
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+    borderRadius: 8,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  buttonText: {
+    color: '#fff',
+    fontSize: 14,
+    fontWeight: '600',
   },
 });
 

@@ -79,7 +79,7 @@ const ClientScreen: React.FC<Props> = ({navigation}) => {
         <TouchableOpacity
           style={styles.addButton}
           onPress={() => {
-            navigation.navigate('AddClientScreen');
+            navigation.navigate('AddClientScreen', {editMode: false});
           }}>
           <Text style={styles.buttonText}>Add Client</Text>
         </TouchableOpacity>
