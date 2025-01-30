@@ -107,8 +107,12 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({children}) => {
     }
   }, []);
 
-  const storeToken = useCallback((token: string) => {
-    setAuthToken(token);
+  const storeToken = useCallback(async (token: string) => {
+    try {
+      setAuthToken(token);
+    } catch (error) {
+      console.error('Error storing token:', error);
+    }
   }, []);
 
   const login = useCallback(
@@ -130,31 +134,41 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({children}) => {
   useEffect(() => {
     const checkAuthStatus = async () => {
       try {
-        const storedUser = await AuthService.getUserData();
-        const token = await AuthService.getToken();
-        if (storedUser && token) {
-          setUser(storedUser);
-          setIsAuthenticated(true);
-          if (authToken) {
-            handleTokenExpiry(authToken);
+        const token = await AsyncStorage.getItem('token');
+
+        if (token) {
+          const decodedToken = jwtDecode<DecodedToken>(token);
+
+          const expiryTime = decodedToken.exp * 1000;
+          const currentTime = Date.now();
+
+          if (currentTime >= expiryTime) {
+            console.log('Token expired during app closure, logging out');
+            logout();
+            return;
+          }
+
+          const userData = await AuthService.getUserData();
+          if (userData) {
+            setUser(userData);
+            setIsAuthenticated(true);
+            setAuthToken(token);
+            handleTokenExpiry(token);
           }
         }
       } catch (error) {
-        console.error('Authentication check failed:', error);
-        // Reset state on error
-        setUser(null);
-        setIsAuthenticated(false);
+        console.error('Error checking auth status:', error);
+        logout();
       }
     };
 
     checkAuthStatus();
-    // Cleanup function to clear timer on unmount
     return () => {
       if (tokenExpiryTimer.current) {
         clearTimeout(tokenExpiryTimer.current);
       }
     };
-  }, [authToken, handleTokenExpiry]);
+  }, [handleTokenExpiry, logout]);
 
   const contextValue = {
     isAuthenticated,
