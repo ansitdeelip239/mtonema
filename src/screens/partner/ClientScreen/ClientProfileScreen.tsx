@@ -16,7 +16,7 @@ import {Client, ClientActivityDataModel} from '../../../types';
 import PartnerService from '../../../services/PartnerService';
 import Toast from 'react-native-toast-message';
 import {formatDate} from '../../../utils/dateUtils';
-import GetIcon, {IconEnum} from '../../../components/GetIcon';
+import GetIcon from '../../../components/GetIcon';
 
 type Props = NativeStackScreenProps<
   ClientStackParamList,
@@ -185,25 +185,39 @@ const ClientProfileScreen: React.FC<Props> = ({route, navigation}) => {
               )}
             </View>
 
-            <View style={styles.contactButtons}>
-              {[
-                {type: 'phone', icon: 'phone', label: 'Call'},
-                {type: 'whatsapp', icon: 'whatsapp', label: 'WhatsApp'},
-                {type: 'email', icon: 'contactus', label: 'Email'},
-              ].map(button => (
-                <TouchableOpacity
-                  key={`contact-${button.type}`}
-                  style={styles.contactButton}
-                  onPress={() => handleContact(button.type as any)}>
-                  <GetIcon
-                    iconName={button.icon as IconEnum}
-                    size="24"
-                    color="#0066cc"
-                  />
-                  <Text style={styles.contactText}>{button.label}</Text>
-                </TouchableOpacity>
-              ))}
-            </View>
+            {(client.MobileNumber ||
+              client.WhatsappNumber ||
+              client.EmailId) && (
+              <View style={styles.contactButtons}>
+                {client.MobileNumber && (
+                  <TouchableOpacity
+                    key="contact-phone"
+                    style={styles.contactButton}
+                    onPress={() => handleContact('phone')}>
+                    <GetIcon iconName="phone" size="24" color="#0066cc" />
+                    <Text style={styles.contactText}>Call</Text>
+                  </TouchableOpacity>
+                )}
+                {client.WhatsappNumber && (
+                  <TouchableOpacity
+                    key="contact-whatsapp"
+                    style={styles.contactButton}
+                    onPress={() => handleContact('whatsapp')}>
+                    <GetIcon iconName="whatsapp" size="24" color="#0066cc" />
+                    <Text style={styles.contactText}>WhatsApp</Text>
+                  </TouchableOpacity>
+                )}
+                {client.EmailId && (
+                  <TouchableOpacity
+                    key="contact-email"
+                    style={styles.contactButton}
+                    onPress={() => handleContact('email')}>
+                    <GetIcon iconName="contactus" size="24" color="#0066cc" />
+                    <Text style={styles.contactText}>Email</Text>
+                  </TouchableOpacity>
+                )}
+              </View>
+            )}
 
             <View style={styles.infoSection}>
               {renderContactInfo()}
