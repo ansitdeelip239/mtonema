@@ -62,8 +62,8 @@ const FormScreen2: React.FC<Props> = ({navigation, route}) => {
       Area: formData.Area,
     };
 
-    return Object.values(requiredFields).every(value =>
-      value !== null && value !== undefined && value !== ''
+    return Object.values(requiredFields).every(
+      value => value !== null && value !== undefined && value !== '',
     );
   };
 
@@ -79,7 +79,9 @@ const FormScreen2: React.FC<Props> = ({navigation, route}) => {
 
     return (
       <View style={styles.section}>
-        <Text style={styles.sectionTitle}>{title} {isRequired && <Text style={styles.asterisk}>*</Text>}</Text>
+        <Text style={styles.sectionTitle}>
+          {title} {isRequired && <Text style={styles.asterisk}>*</Text>}
+        </Text>
         <View style={styles.optionsGrid}>
           {displayedOptions?.map((item, index) => (
             <TouchableOpacity
@@ -157,6 +159,7 @@ const FormScreen2: React.FC<Props> = ({navigation, route}) => {
       'Amount Unit',
       'Property Area',
       'Property Unit',
+      'Property Discription',
     ],
     FOCP: [
       'Lift Available',
@@ -171,6 +174,7 @@ const FormScreen2: React.FC<Props> = ({navigation, route}) => {
       'Amount Unit',
       'Property Area',
       'Property Unit',
+      'Property Discription',
     ],
     'Farm House': [
       'Age of Property',
@@ -186,6 +190,7 @@ const FormScreen2: React.FC<Props> = ({navigation, route}) => {
       'Amount Unit',
       'Property Area',
       'Property Unit',
+      'Property Discription',
     ],
     Flat: [
       'Ready To Move',
@@ -201,6 +206,7 @@ const FormScreen2: React.FC<Props> = ({navigation, route}) => {
       'Amount Unit',
       'Property Area',
       'Property Unit',
+      'Property Discription',
     ],
     'Independent House': [
       'Ready To Move',
@@ -216,6 +222,7 @@ const FormScreen2: React.FC<Props> = ({navigation, route}) => {
       'Amount Unit',
       'Property Area',
       'Property Unit',
+      'Property Discription',
     ],
     Office: [
       'Ready To Move',
@@ -231,6 +238,7 @@ const FormScreen2: React.FC<Props> = ({navigation, route}) => {
       'Amount Unit',
       'Property Area',
       'Property Unit',
+      'Property Discription',
     ],
     'PG/Hostel': [
       'Ready To Move',
@@ -246,6 +254,7 @@ const FormScreen2: React.FC<Props> = ({navigation, route}) => {
       'Amount Unit',
       'Property Area',
       'Property Unit',
+      'Property Discription',
     ],
     Plot: [
       'Any Construction',
@@ -258,6 +267,7 @@ const FormScreen2: React.FC<Props> = ({navigation, route}) => {
       'Amount Unit',
       'Property Area',
       'Property Unit',
+      'Property Discription',
     ],
     'Retail Shop': [
       'Ready To Move',
@@ -277,6 +287,7 @@ const FormScreen2: React.FC<Props> = ({navigation, route}) => {
       'Amount Unit',
       'Property Area',
       'Property Unit',
+      'Property Discription',
     ],
     Shop: [
       'Ready To Move',
@@ -296,6 +307,7 @@ const FormScreen2: React.FC<Props> = ({navigation, route}) => {
       'Amount Unit',
       'Property Area',
       'Property Unit',
+      'Property Discription',
     ],
     Villa: [
       'Age of Property',
@@ -310,12 +322,14 @@ const FormScreen2: React.FC<Props> = ({navigation, route}) => {
       'Amount Unit',
       'Property Area',
       'Property Unit',
+      'Property Discription',
     ],
     Warehouse: [
       'Age of Property',
       'Security Personal',
       'Surveillance',
       'Alarm System',
+      'Property Discription',
     ],
     // Add more property types and their respective fields here
   };
@@ -477,6 +491,8 @@ const FormScreen2: React.FC<Props> = ({navigation, route}) => {
                       setFormData({...formData, floor: value})
                     }
                     placeholder="Enter floor number"
+                    keyboardType="number-pad"
+                    maxLength={5}
                   />
                 </View>
               )}
@@ -524,14 +540,15 @@ const FormScreen2: React.FC<Props> = ({navigation, route}) => {
                     }
                     placeholder="Enter ZIP code"
                     keyboardType="number-pad"
+                    maxLength={6}
                   />
                 </View>
               )}
               {fieldsToShow.includes('Amount') && (
                 <View style={styles.section}>
-                 <Text style={styles.sectionTitle}>
-      Amount<Text style={styles.asterisk}> *</Text>
-    </Text>
+                  <Text style={styles.sectionTitle}>
+                    Amount<Text style={styles.asterisk}> *</Text>
+                  </Text>
                   <TextInput
                     mode="outlined"
                     style={styles.input}
@@ -541,6 +558,7 @@ const FormScreen2: React.FC<Props> = ({navigation, route}) => {
                     }
                     placeholder="Enter Amount"
                     keyboardType="number-pad"
+                    maxLength={9}
                   />
                 </View>
               )}
@@ -554,8 +572,8 @@ const FormScreen2: React.FC<Props> = ({navigation, route}) => {
               {fieldsToShow.includes('Property Area') && (
                 <View style={styles.section}>
                   <Text style={styles.sectionTitle}>
-      Property Area<Text style={styles.asterisk}> *</Text>
-    </Text>
+                    Property Area<Text style={styles.asterisk}> *</Text>
+                  </Text>
                   <TextInput
                     mode="outlined"
                     style={styles.input}
@@ -565,16 +583,52 @@ const FormScreen2: React.FC<Props> = ({navigation, route}) => {
                     }
                     placeholder="Property Area"
                     keyboardType="number-pad"
+                    maxLength={5}
                   />
                 </View>
               )}
               {fieldsToShow.includes('Property Unit') &&
                 renderOptionSection(
                   'Property Unit',
-                  'Area',
+                  'BhkType',
                   masterData?.AreaUnit || [],
                   true,
                 )}
+
+              {fieldsToShow.includes('Property Discription') && (
+                <View style={styles.section}>
+                  <Text style={styles.sectionTitle}>
+                    Property Description<Text style={styles.asterisk}> *</Text>
+                  </Text>
+                  <TextInput
+                    mode="outlined"
+                    style={styles.propertyDescriptionInput} // Apply new style
+                    value={String(formData.Discription || '')}
+                    onChangeText={value =>
+                      setFormData({...formData, Discription: value})
+                    }
+                    placeholder="Enter Property Description"
+                    keyboardType="default"
+                    multiline={true} // Make sure multiline is enabled
+                  />
+                </View>
+                // <View style={styles.section}>
+                //   <Text style={styles.sectionTitle}>
+                //     Property Description<Text style={styles.asterisk}> *</Text>
+                //   </Text>
+                //   <TextInput
+                //     mode="outlined"
+                //     // eslint-disable-next-line react-native/no-inline-styles
+                //     style={[styles.input, {height: 150}]}
+                //     value={String(formData.Discription || '')}
+                //     onChangeText={value =>
+                //       setFormData({...formData, Discription: value})
+                //     }
+                //     placeholder=""
+                //     keyboardType="default"
+                //   />
+                // </View>
+              )}
             </View>
             <View style={styles.buttonContainer}>
               <TouchableOpacity
@@ -608,6 +662,16 @@ const FormScreen2: React.FC<Props> = ({navigation, route}) => {
 };
 
 const styles = StyleSheet.create({
+  propertyDescriptionInput: {
+    borderWidth: 1,
+    borderColor: '#ddd',
+    borderRadius: 8,
+    fontSize: 16,
+    backgroundColor: 'transparent',
+    padding: 10, // Add padding for better user experience
+    textAlignVertical: 'top', // Ensure text starts from the top in multi-line input
+    height: 150, // Adjust height as needed
+  },
   asterisk: {
     color: 'red',
   },
