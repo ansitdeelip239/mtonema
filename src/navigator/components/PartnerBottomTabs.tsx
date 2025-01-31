@@ -1,8 +1,15 @@
-import React, {memo} from 'react';
+import React, {memo, useEffect, useState} from 'react';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {BottomTabBarProps} from '@react-navigation/bottom-tabs';
 import {CommonActions} from '@react-navigation/native';
-import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {
+  Keyboard,
+  Platform,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import GetIcon, {IconEnum} from '../../components/GetIcon';
 import Colors from '../../constants/Colors';
 import HomeScreen from '../../screens/partner/HomeScreen/HomeScreen';
@@ -48,7 +55,28 @@ const tabScreens: Array<{
 
 const CustomBottomBar = memo(
   ({navigation, state, descriptors}: BottomTabBarProps) => {
+    const [isKeyboardVisible, setKeyboardVisible] = useState(false);
     const middleIndex = Math.floor(tabScreens.length / 2);
+
+    useEffect(() => {
+      const keyboardWillShowListener = Keyboard.addListener(
+        Platform.OS === 'ios' ? 'keyboardWillShow' : 'keyboardDidShow',
+        () => setKeyboardVisible(true),
+      );
+      const keyboardWillHideListener = Keyboard.addListener(
+        Platform.OS === 'ios' ? 'keyboardWillHide' : 'keyboardDidHide',
+        () => setKeyboardVisible(false),
+      );
+
+      return () => {
+        keyboardWillShowListener.remove();
+        keyboardWillHideListener.remove();
+      };
+    }, []);
+
+    if (isKeyboardVisible) {
+      return null;
+    }
 
     return (
       <View style={styles.bottomBarContainer}>
@@ -170,7 +198,6 @@ const PartnerBottomTabs = memo(() => (
     initialRouteName="Property"
     screenOptions={{
       headerShown: false,
-      tabBarHideOnKeyboard: true,
     }}
     // eslint-disable-next-line react/no-unstable-nested-components
     tabBar={props => <CustomBottomBar {...props} />}>
@@ -199,6 +226,7 @@ const styles = StyleSheet.create({
     right: 0,
     paddingHorizontal: 16,
     paddingBottom: 16,
+    backgroundColor: 'transparent',
   },
   bottomBar: {
     backgroundColor: 'white',

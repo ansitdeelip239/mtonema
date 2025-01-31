@@ -31,7 +31,7 @@ import agentPropertyFormSchema, {
 import {z} from 'zod';
 import {usePartner} from '../../../context/PartnerProvider';
 import Toast from 'react-native-toast-message';
-import {SearchInput} from './components/LocationSearchInput';
+import {SearchInput} from './components/SearchInput';
 
 type Props = BottomTabScreenProps<PartnerBottomTabParamList, 'AddProperty'>;
 

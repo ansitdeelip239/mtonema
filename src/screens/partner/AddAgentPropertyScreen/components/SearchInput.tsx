@@ -67,7 +67,8 @@ export const SearchInput = <T,>({
                 (location): location is string =>
                   location !== null && location !== undefined,
               );
-            setSuggestions(locations);
+            const uniqueLocations = Array.from(new Set(locations));
+            setSuggestions(uniqueLocations);
             setShowSuggestions(true);
           }
         } catch (error) {
