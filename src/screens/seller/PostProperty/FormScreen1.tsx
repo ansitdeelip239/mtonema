@@ -103,6 +103,13 @@ const FormScreen1: React.FC<Props> = ({navigation}) => {
   //   const handleInputChange = () => {};
   const handleNext = () => navigation.navigate('FormScreen2', {formData});
 
+  const isFormValid = () => {
+    return (
+      formData.SellerType !== null &&
+      formData.City !== null &&
+      formData.PropertyFor !== null
+    );
+  };
   const handleLocationChange = (location: string) => {
     console.log('Location', location);
 
@@ -112,17 +119,19 @@ const FormScreen1: React.FC<Props> = ({navigation}) => {
     }));
   };
 
+
   const renderChipSection = (
     title: string,
     key: keyof PropertyFormData,
     data: MasterDetailModel[],
+    isRequired: boolean = false,
   ) => {
     const displayedChips = showAll[key]
       ? data
       : data.slice(0, initialChipsToShow);
     return (
       <View style={styles.sectionContainer}>
-        <Text style={styles.sectionTitle}>{title}</Text>
+        <Text style={styles.sectionTitle}>{title} {isRequired && <Text style={styles.asterisk}>*</Text>} </Text>
         <View style={styles.gridWrapper}>
           {displayedChips?.map((item, index) => (
             <Chip
@@ -163,44 +172,48 @@ const FormScreen1: React.FC<Props> = ({navigation}) => {
         ListHeaderComponent={
           <>
             <View style={styles.container}>
-              <SegmentedButtons
-                value={values}
-                onValueChange={setValue}
-                buttons={[
-                  {
-                    value: 'Basic Info',
-                    label: 'Basic Info',
-                    onPress: () => navigation.navigate('FormScreen1'),
-                  },
-                  {
-                    value: 'Property info',
-                    label: 'Property Info',
-                    onPress: () =>
-                      navigation.navigate('FormScreen2', {formData}),
-                  },
-                  {
-                    value: 'Images',
-                    label: 'Image Upload',
-                    onPress: () =>
-                      navigation.navigate('FormScreen3', {formData}),
-                  },
-                ]}
-              />
+            <SegmentedButtons
+  value={values}
+  onValueChange={setValue}
+  buttons={[
+    {
+      value: 'Basic Info',
+      label: 'Basic Info',
+      onPress: () => navigation.navigate('FormScreen1'),
+      disabled: false, // Always enabled
+    },
+    {
+      value: 'Property info',
+      label: 'Property Info',
+      onPress: () => navigation.navigate('FormScreen2', { formData }),
+      disabled: !isFormValid(), // Disable if basic info is not filled
+    },
+    {
+      value: 'Images',
+      label: 'Image Upload',
+      onPress: () => navigation.navigate('FormScreen3', { formData }),
+      disabled: true, // Disable until the second form is filled (you can add additional logic here)
+    },
+  ]}
+/>
 
               {renderChipSection(
                 'Seller Type',
                 'SellerType',
                 masterData?.SellerType || [],
+                true,
               )}
               {renderChipSection(
                 'City',
                 'City',
                 masterData?.ProjectLocation || [],
+                true,
               )}
               {renderChipSection(
                 'Property For',
                 'PropertyFor',
                 masterData?.PropertyFor || [],
+                true,
               )}
 
               <View style={styles.sectionContainer}>
@@ -214,10 +227,20 @@ const FormScreen1: React.FC<Props> = ({navigation}) => {
             </View>
             <View style={styles.buttonContainer}>
               <TouchableOpacity
+                style={[
+                  styles.touchableOpacity,
+                  !isFormValid() && styles.disabledButton, // Apply disabled style if form is not valid
+                ]}
+                onPress={isFormValid() ? handleNext : () => {}} // Only allow press if form is valid
+                disabled={!isFormValid()} // Disable the button if form is not valid
+              >
+                <Text style={styles.buttonText}>Continue</Text>
+              </TouchableOpacity>
+              {/* <TouchableOpacity
                 style={styles.touchableOpacity}
                 onPress={handleNext}>
                 <Text style={styles.buttonText}>Continue</Text>
-              </TouchableOpacity>
+              </TouchableOpacity> */}
             </View>
           </>
         }
@@ -229,7 +252,16 @@ const FormScreen1: React.FC<Props> = ({navigation}) => {
 };
 
 const styles = StyleSheet.create({
-  background: {
+  asterisk: {
+    color: 'red',
+  },
+  disabledButton: {
+    color: 'white', // Set text color to white
+    fontSize: 18, // Adjust font size
+    fontWeight: 'bold', // Make the text bold
+    opacity: 0.5, // Reduce opacity to indicate disabled state
+  },
+   background: {
     flex: 1,
     resizeMode: 'cover',
     justifyContent: 'center',

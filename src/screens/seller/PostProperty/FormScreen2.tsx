@@ -54,10 +54,24 @@ const FormScreen2: React.FC<Props> = ({navigation, route}) => {
     });
   };
 
+  const isFormValid = () => {
+    const requiredFields = {
+      PropertyType: formData.PropertyType,
+      Price: formData.Price,
+      Rate: formData.Rate,
+      Area: formData.Area,
+    };
+
+    return Object.values(requiredFields).every(value =>
+      value !== null && value !== undefined && value !== ''
+    );
+  };
+
   const renderOptionSection = (
     title: string,
     key: keyof PropertyFormData,
     data: MasterDetailModel[],
+    isRequired: boolean = false,
   ) => {
     const displayedOptions = showAll[key]
       ? data
@@ -65,7 +79,7 @@ const FormScreen2: React.FC<Props> = ({navigation, route}) => {
 
     return (
       <View style={styles.section}>
-        <Text style={styles.sectionTitle}>{title}</Text>
+        <Text style={styles.sectionTitle}>{title} {isRequired && <Text style={styles.asterisk}>*</Text>}</Text>
         <View style={styles.optionsGrid}>
           {displayedOptions?.map((item, index) => (
             <TouchableOpacity
@@ -102,6 +116,7 @@ const FormScreen2: React.FC<Props> = ({navigation, route}) => {
     title: string,
     field: keyof PropertyFormData,
     options: string[],
+    _isRequired: boolean = false,
   ) => (
     <View style={styles.section}>
       <Text style={styles.sectionTitle}>{title}</Text>
@@ -342,18 +357,21 @@ const FormScreen2: React.FC<Props> = ({navigation, route}) => {
                     value: 'Basic Info',
                     label: 'Basic Info',
                     onPress: () => navigation.navigate('FormScreen1'),
+                    disabled: false, // Always enabled
                   },
                   {
                     value: 'Property info',
                     label: 'Property Info',
                     onPress: () =>
                       navigation.navigate('FormScreen2', {formData}),
+                    disabled: !isFormValid(), // Disable if required fields are not filled
                   },
                   {
                     value: 'Images',
                     label: 'Image Upload',
                     onPress: () =>
                       navigation.navigate('FormScreen3', {formData}),
+                    disabled: !isFormValid(), // Disable if required fields are not filled
                   },
                 ]}
               />
@@ -361,6 +379,7 @@ const FormScreen2: React.FC<Props> = ({navigation, route}) => {
                 'Property Type',
                 'PropertyType',
                 masterData?.PropertyType || [],
+                true,
               )}
               {renderSimpleOptionButtons(
                 'Property Classification',
@@ -510,7 +529,9 @@ const FormScreen2: React.FC<Props> = ({navigation, route}) => {
               )}
               {fieldsToShow.includes('Amount') && (
                 <View style={styles.section}>
-                  <Text style={styles.sectionTitle}>Amount</Text>
+                 <Text style={styles.sectionTitle}>
+      Amount<Text style={styles.asterisk}> *</Text>
+    </Text>
                   <TextInput
                     mode="outlined"
                     style={styles.input}
@@ -528,10 +549,13 @@ const FormScreen2: React.FC<Props> = ({navigation, route}) => {
                   'Amount Unit',
                   'Rate',
                   masterData?.AmountUnit || [],
+                  true,
                 )}
               {fieldsToShow.includes('Property Area') && (
                 <View style={styles.section}>
-                  <Text style={styles.sectionTitle}>Property Area</Text>
+                  <Text style={styles.sectionTitle}>
+      Property Area<Text style={styles.asterisk}> *</Text>
+    </Text>
                   <TextInput
                     mode="outlined"
                     style={styles.input}
@@ -549,14 +573,30 @@ const FormScreen2: React.FC<Props> = ({navigation, route}) => {
                   'Property Unit',
                   'Area',
                   masterData?.AreaUnit || [],
+                  true,
                 )}
             </View>
             <View style={styles.buttonContainer}>
               <TouchableOpacity
+                style={[
+                  styles.touchableOpacity,
+                  !isFormValid() && styles.disabledButton, // Apply disabled style if form is not valid
+                ]}
+                onPress={
+                  isFormValid()
+                    ? () => navigation.navigate('FormScreen3', {formData})
+                    : () => {}
+                } // Use an empty function instead of null
+                disabled={!isFormValid()} // Disable the button if form is not valid
+              >
+                <Text style={styles.buttonText}>Continue</Text>
+              </TouchableOpacity>
+
+              {/* <TouchableOpacity
                 style={styles.touchableOpacity}
                 onPress={() => navigation.navigate('FormScreen3', {formData})}>
                 <Text style={styles.buttonText}>Continue</Text>
-              </TouchableOpacity>
+              </TouchableOpacity> */}
             </View>
           </>
         }
@@ -568,6 +608,15 @@ const FormScreen2: React.FC<Props> = ({navigation, route}) => {
 };
 
 const styles = StyleSheet.create({
+  asterisk: {
+    color: 'red',
+  },
+  disabledButton: {
+    color: 'white',
+    fontSize: 18,
+    fontWeight: 'bold',
+    opacity: 0.5,
+  },
   background: {
     flex: 1,
     resizeMode: 'cover',
