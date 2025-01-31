@@ -232,7 +232,7 @@ export interface Client {
   EmailId: string;
   Notes: string;
   ClientActivityDataModels: ClientActivityDataModel[];
-  Groups: {Id: number; Name: string; GroupColor: string}[];
+  Groups: {ID: number; Name: string; GroupColor: string}[];
   CreatedOn: string;
   Activity: string;
   Status: number;
@@ -252,4 +252,10 @@ export interface ClientForm {
   Notes?: string;
   Groups?: number[];
   PartnerId: string;
+}
+
+export interface SearchIntellisenseResponse {
+  AgentName: string | null;
+  AgentContactNo: string | null;
+  Location: string | null;
 }

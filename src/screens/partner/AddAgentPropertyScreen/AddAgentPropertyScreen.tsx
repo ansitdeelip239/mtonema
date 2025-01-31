@@ -31,17 +31,21 @@ import agentPropertyFormSchema, {
 import {z} from 'zod';
 import {usePartner} from '../../../context/PartnerProvider';
 import Toast from 'react-native-toast-message';
+import {SearchInput} from './components/SearchInput';
+import {useKeyboard} from '../../../hooks/useKeyboard';
 
 type Props = BottomTabScreenProps<PartnerBottomTabParamList, 'AddProperty'>;
 
 const AddAgentPropertyScreen: React.FC<Props> = ({navigation, route}) => {
-  const scrollViewRef = useRef<ScrollView>(null);
-  const {user} = useAuth();
-  const {masterData} = useMaster();
   const [errors, setErrors] = useState<
     Partial<Record<keyof AgentPropertyFormType, string>>
   >({});
-  const {dataUpdated, setDataUpdated} = usePartner();
+
+  const scrollViewRef = useRef<ScrollView>(null);
+  const {user} = useAuth();
+  const {masterData} = useMaster();
+  const {setAgentPropertyUpdated} = usePartner();
+  const {keyboardVisible} = useKeyboard();
 
   const editMode = route.params?.editMode;
   const propertyData = route.params?.propertyData;
@@ -137,7 +141,7 @@ const AddAgentPropertyScreen: React.FC<Props> = ({navigation, route}) => {
               ? 'Property updated successfully'
               : 'Property added successfully',
           });
-          setDataUpdated(!dataUpdated);
+          setAgentPropertyUpdated(prev => !prev);
           navigation.navigate('Property');
         } else {
           Toast.show({
@@ -226,15 +230,14 @@ const AddAgentPropertyScreen: React.FC<Props> = ({navigation, route}) => {
           errorMessage={errors.agentContactNo}
         />
 
-        <MaterialTextInput<AgentPropertyFormType>
-          style={styles.input}
-          label="Property Location"
+        <SearchInput<AgentPropertyFormType>
           field="propertyLocation"
           formInput={formInput}
-          setFormInput={handleFieldChange}
-          mode="outlined"
+          handleFieldChange={handleFieldChange}
+          errors={errors}
+          label="Property Location"
           placeholder="Navi Mumbai, Thane, etc."
-          errorMessage={errors.propertyLocation}
+          searchType="AgentPropertyLocation"
         />
 
         <FilterOption
@@ -329,7 +332,10 @@ const AddAgentPropertyScreen: React.FC<Props> = ({navigation, route}) => {
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
           <ScrollView
             ref={scrollViewRef}
-            contentContainerStyle={styles.scrollContainer}
+            contentContainerStyle={[
+              styles.scrollContainer,
+              {paddingBottom: keyboardVisible ? 60 : 120} as const,
+            ]}
             keyboardShouldPersistTaps="handled"
             showsVerticalScrollIndicator={false}
             nestedScrollEnabled={true}>
@@ -356,7 +362,6 @@ const styles = StyleSheet.create({
   },
   scrollContainer: {
     padding: 16,
-    paddingBottom: 100,
   },
   input: {
     marginBottom: 16,

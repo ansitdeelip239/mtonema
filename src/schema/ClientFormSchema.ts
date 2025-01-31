@@ -1,6 +1,7 @@
 import {z} from 'zod';
 
 const clientFormSchema = z.object({
+  Id: z.number().optional(),
   ClientName: z
     .string()
     .min(2, 'Name must be at least 2 characters')

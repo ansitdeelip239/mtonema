@@ -10,7 +10,7 @@ export const useClientData = () => {
   const [error, setError] = useState<string | null>(null);
   const [refreshing, setRefreshing] = useState(false);
   const {user} = useAuth();
-  const {dataUpdated} = usePartner();
+  const {clientsUpdated} = usePartner();
 
   const fetchClients = useCallback(
     async (search?: string) => {
@@ -40,7 +40,7 @@ export const useClientData = () => {
   useEffect(() => {
     setIsLoading(true);
     fetchClients().finally(() => setIsLoading(false));
-  }, [user?.Email, fetchClients, dataUpdated]);
+  }, [user?.Email, fetchClients, clientsUpdated]);
 
   const onRefresh = async () => {
     setRefreshing(true);

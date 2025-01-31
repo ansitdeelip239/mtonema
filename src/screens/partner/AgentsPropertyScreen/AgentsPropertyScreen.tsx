@@ -31,7 +31,7 @@ const AgentDataScreen: React.FC<Props> = ({navigation}) => {
     bhkType: null,
   });
   const {user} = useAuth();
-  const {dataUpdated, setDataUpdated} = usePartner();
+  const {agentPropertyUpdated, setAgentPropertyUpdated} = usePartner();
   const PAGE_SIZE = 10;
 
   const isInitialRender = useRef(true);
@@ -124,7 +124,7 @@ const AgentDataScreen: React.FC<Props> = ({navigation}) => {
 
   useEffect(() => {
     fetchAgentData(1, true);
-  }, [user?.Email, fetchAgentData, dataUpdated]);
+  }, [user?.Email, fetchAgentData, agentPropertyUpdated]);
 
   const handleRefresh = useCallback(() => {
     setIsRefreshing(true);
@@ -158,7 +158,7 @@ const AgentDataScreen: React.FC<Props> = ({navigation}) => {
           renderItem={({item}) =>
             renderItem({
               item,
-              onDataUpdate: () => setDataUpdated(prev => !prev),
+              onDataUpdate: () => setAgentPropertyUpdated(prev => !prev),
               navigation,
             })
           }

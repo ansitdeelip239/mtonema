@@ -11,6 +11,7 @@ import AddAgentPropertyScreen from '../../screens/partner/AddAgentPropertyScreen
 import AgentDataScreen from '../../screens/partner/AgentsPropertyScreen/AgentsPropertyScreen';
 import PartnerProfileScreen from '../../screens/partner/ProfileScreen/ProfileScreen';
 import ClientScreenStack from './ClientScreenStack';
+import {useKeyboard} from '../../hooks/useKeyboard';
 
 const Tab = createBottomTabNavigator<PartnerBottomTabParamList>();
 
@@ -49,6 +50,11 @@ const tabScreens: Array<{
 const CustomBottomBar = memo(
   ({navigation, state, descriptors}: BottomTabBarProps) => {
     const middleIndex = Math.floor(tabScreens.length / 2);
+    const {keyboardVisible} = useKeyboard();
+
+    if (keyboardVisible) {
+      return null;
+    }
 
     return (
       <View style={styles.bottomBarContainer}>
@@ -170,7 +176,6 @@ const PartnerBottomTabs = memo(() => (
     initialRouteName="Property"
     screenOptions={{
       headerShown: false,
-      tabBarHideOnKeyboard: true,
     }}
     // eslint-disable-next-line react/no-unstable-nested-components
     tabBar={props => <CustomBottomBar {...props} />}>
@@ -199,6 +204,7 @@ const styles = StyleSheet.create({
     right: 0,
     paddingHorizontal: 16,
     paddingBottom: 16,
+    backgroundColor: 'transparent',
   },
   bottomBar: {
     backgroundColor: 'white',

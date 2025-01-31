@@ -23,7 +23,11 @@ export type IconEnum =
   | 'login'
   | 'partner'
   | 'password'
-  | 'signup';
+  | 'signup'
+  | 'whatsapp'
+  | 'phone'
+  | 'threeDots' 
+  ;
 
 type IconProps = {
   iconName: IconEnum;
@@ -55,12 +59,15 @@ const GetIcon = ({iconName, color, size}: IconProps) => {
     partner: require('../assets/Icon/partner.png'),
     password: require('../assets/Icon/password.png'),
     signup: require('../assets/Icon/signup.png'),
+    whatsapp: require('../assets/Icon/whatsapp.png'),
+    phone: require('../assets/Icon/phone.png'),
+    threeDots: require('../assets/Icon/three-dots.png'),
   };
 
   const imageStyle = [
     styles.searchIcon,
     color ? {tintColor: color} : null,
-    size ? {width: Number(size), height:Number(size)} : null,
+    size ? {width: Number(size), height: Number(size)} : null,
   ];
 
   return <Image source={iconMap[iconName]} style={imageStyle} />;
