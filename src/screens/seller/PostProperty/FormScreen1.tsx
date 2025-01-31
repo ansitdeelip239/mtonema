@@ -1,6 +1,6 @@
 // screens/FormScreen1.js
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   View,
   StyleSheet,
@@ -17,6 +17,7 @@ import {FlatList, ScrollView} from 'react-native-gesture-handler';
 import Colors from '../../../constants/Colors';
 import {MasterDetailModel} from '../../../types';
 import {useAuth} from '../../../hooks/useAuth';
+import { loadFormData, saveFormData } from '../../../utils/asyncStoragePropertyForm';
 type Props = NativeStackScreenProps<PostPropertyFormParamList, 'FormScreen1'>;
 const FormScreen1: React.FC<Props> = ({navigation}) => {
   const [values, setValue] = useState('Basic Info');
@@ -101,7 +102,29 @@ const FormScreen1: React.FC<Props> = ({navigation}) => {
   //     handleInputChange();
   //   };
   //   const handleInputChange = () => {};
-  const handleNext = () => navigation.navigate('FormScreen2', {formData});
+
+
+  useEffect(() => {
+    const loadSavedData = async () => {
+      const savedData = await loadFormData();
+      if (savedData) {
+        setFormData(prevData => ({
+          ...prevData,
+          ...savedData,
+        }));
+      }
+    };
+    loadSavedData();
+  }, []);
+  useEffect(() => {
+    saveFormData(formData);
+  }, [formData]);
+
+  const handleNext = async () => {
+    await saveFormData(formData);
+    navigation.navigate('FormScreen2', {formData});
+  };
+  // const handleNext = () => navigation.navigate('FormScreen2', {formData});
 
   const isFormValid = () => {
     return (

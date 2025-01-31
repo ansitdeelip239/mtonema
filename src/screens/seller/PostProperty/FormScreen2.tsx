@@ -1,5 +1,5 @@
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   View,
   StyleSheet,
@@ -13,6 +13,7 @@ import {useMaster} from '../../../context/MasterProvider';
 import Colors from '../../../constants/Colors';
 import {FlatList} from 'react-native-gesture-handler';
 import {MasterDetailModel} from '../../../types';
+import { loadFormData, saveFormData } from '../../../utils/asyncStoragePropertyForm';
 
 type Props = NativeStackScreenProps<PostPropertyFormParamList, 'FormScreen2'>;
 type PropertyType =
@@ -38,6 +39,29 @@ const FormScreen2: React.FC<Props> = ({navigation, route}) => {
     FurnishType: false,
   });
   const initialChipsToShow = 2;
+
+  useEffect(() => {
+    const loadSavedData = async () => {
+      const savedData = await loadFormData();
+      if (savedData) {
+        setFormData(prevData => ({
+          ...prevData,
+          ...savedData,
+        }));
+      }
+    };
+    loadSavedData();
+  }, []);
+
+  // Save form data whenever it changes
+  useEffect(() => {
+    saveFormData(formData);
+  }, [formData]);
+
+  const handleNext = async () => {
+    await saveFormData(formData);
+    navigation.navigate('FormScreen3', {formData});
+  };
 
   const handleOptionPress = (
     key: keyof PropertyFormData,
@@ -638,7 +662,8 @@ const FormScreen2: React.FC<Props> = ({navigation, route}) => {
                 ]}
                 onPress={
                   isFormValid()
-                    ? () => navigation.navigate('FormScreen3', {formData})
+                    ? ()=>handleNext()
+                    // ? () => navigation.navigate('FormScreen3', {formData})
                     : () => {}
                 } // Use an empty function instead of null
                 disabled={!isFormValid()} // Disable the button if form is not valid
