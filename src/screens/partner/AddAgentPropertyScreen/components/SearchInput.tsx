@@ -2,7 +2,7 @@ import React, {useRef, useCallback, useState, useEffect} from 'react';
 import MasterService from '../../../../services/MasterService';
 import {SearchIntellisenseResponse} from '../../../../types';
 import {MaterialTextInput} from '../../../../components/MaterialTextInput';
-import {StyleSheet} from 'react-native';
+import {InteractionManager, StyleSheet} from 'react-native';
 
 const useDebounce = (callback: Function, delay: number) => {
   const timeoutRef = useRef<NodeJS.Timeout>();
@@ -35,6 +35,7 @@ interface SearchInputProps<T> {
   searchType: 'AgentPropertyLocation' | 'AgentName';
   label: string;
   placeholder?: string;
+  onAgentSelect?: (agentName: string, contactNo: string) => void;
 }
 
 export const SearchInput = <T,>({
@@ -45,11 +46,23 @@ export const SearchInput = <T,>({
   searchType,
   label,
   placeholder,
+  onAgentSelect,
 }: SearchInputProps<T>) => {
   const [suggestions, setSuggestions] = useState<string[]>([]);
+  const [searchData, setSearchData] = useState<SearchIntellisenseResponse[]>(
+    [],
+  );
   const [isSearching, setIsSearching] = useState(false);
   const [showSuggestions, setShowSuggestions] = useState(false);
   const isSelectingRef = useRef(false);
+  const mounted = useRef(true);
+
+  useEffect(() => {
+    mounted.current = true;
+    return () => {
+      mounted.current = false;
+    };
+  }, []);
 
   const searchIntellisense = useCallback(
     async (query: string) => {
@@ -60,24 +73,33 @@ export const SearchInput = <T,>({
             searchType,
             query,
           );
-          if (response.Success && response.data) {
-            const locations = response.data
-              .map((item: SearchIntellisenseResponse) => item.Location)
+          if (response.Success && response.data && mounted.current) {
+            setSearchData(response.data);
+            const items = response.data
+              .map((item: SearchIntellisenseResponse) =>
+                searchType === 'AgentPropertyLocation'
+                  ? item.Location
+                  : item.AgentName,
+              )
               .filter(
-                (location): location is string =>
-                  location !== null && location !== undefined,
+                (item): item is string => item !== null && item !== undefined,
               );
-            const uniqueLocations = Array.from(new Set(locations));
-            setSuggestions(uniqueLocations);
+
+            const uniqueItems = Array.from(new Set(items));
+            setSuggestions(uniqueItems);
             setShowSuggestions(true);
           }
         } catch (error) {
-          console.error('Error fetching locations:', error);
-          setSuggestions([]);
+          console.error('Error fetching data:', error);
+          if (mounted.current) {
+            setSuggestions([]);
+          }
         } finally {
-          setIsSearching(false);
+          if (mounted.current) {
+            setIsSearching(false);
+          }
         }
-      } else {
+      } else if (mounted.current) {
         setSuggestions([]);
         setShowSuggestions(false);
       }
@@ -100,22 +122,32 @@ export const SearchInput = <T,>({
   const handleSuggestionSelect = useCallback(
     (suggestion: string) => {
       isSelectingRef.current = true;
-      handleFieldChange(field, suggestion);
-      setSuggestions([]);
-      setShowSuggestions(false);
-      setTimeout(() => {
-        isSelectingRef.current = false;
-      }, 100);
-    },
-    [field, handleFieldChange],
-  );
 
-  useEffect(() => {
-    return () => {
-      setSuggestions([]);
-      setShowSuggestions(false);
-    };
-  }, []);
+      InteractionManager.runAfterInteractions(() => {
+        if (searchType === 'AgentName' && onAgentSelect) {
+          const selectedAgent = searchData.find(
+            item => item.AgentName === suggestion,
+          );
+          if (selectedAgent?.AgentContactNo) {
+            onAgentSelect(suggestion, selectedAgent.AgentContactNo);
+          }
+        } else {
+          handleFieldChange(field, suggestion);
+        }
+
+        setSuggestions([]);
+        setShowSuggestions(false);
+
+        // Reset selection flag after interactions complete
+        setTimeout(() => {
+          if (mounted.current) {
+            isSelectingRef.current = false;
+          }
+        }, 100);
+      });
+    },
+    [field, handleFieldChange, searchType, onAgentSelect, searchData],
+  );
 
   return (
     <MaterialTextInput<T>
@@ -131,13 +163,16 @@ export const SearchInput = <T,>({
       loading={isSearching}
       onSuggestionSelect={handleSuggestionSelect}
       onBlur={() => {
-        setTimeout(() => {
-          setShowSuggestions(false);
-        }, 200);
+        InteractionManager.runAfterInteractions(() => {
+          if (mounted.current && !isSelectingRef.current) {
+            setShowSuggestions(false);
+          }
+        });
       }}
       onFocus={() => {
-        if (formInput[field] && suggestions.length > 0) {
-          setShowSuggestions(true);
+        const currentValue = formInput[field] as string;
+        if (currentValue && currentValue.length > 2) {
+          debouncedSearch(currentValue);
         }
       }}
     />

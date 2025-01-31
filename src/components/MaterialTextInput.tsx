@@ -1,4 +1,4 @@
-import React, {useCallback} from 'react';
+import React, {useCallback, useRef} from 'react';
 import {
   TextInput,
   TextInputProps,
@@ -12,6 +12,7 @@ import {
   StyleSheet,
   View,
   ScrollView,
+  Keyboard,
 } from 'react-native';
 
 interface MaterialTextInputProps<T> extends TextInputProps {
@@ -36,6 +37,8 @@ export const MaterialTextInput = <T,>({
   loading,
   ...props
 }: MaterialTextInputProps<T>) => {
+  const suggestionTimeoutRef = useRef<NodeJS.Timeout>();
+
   const CrossButton = useCallback(() => {
     return (
       <TouchableOpacity
@@ -62,6 +65,26 @@ export const MaterialTextInput = <T,>({
     return null;
   };
 
+  const handleSuggestionPress = useCallback(
+    (suggestion: string) => {
+      // Clear any existing timeouts
+      if (suggestionTimeoutRef.current) {
+        clearTimeout(suggestionTimeoutRef.current);
+      }
+
+      // Dismiss keyboard first
+      Keyboard.dismiss();
+
+      // Delay the selection slightly to ensure keyboard dismiss completes
+      suggestionTimeoutRef.current = setTimeout(() => {
+        if (onSuggestionSelect) {
+          onSuggestionSelect(suggestion);
+        }
+      }, 50);
+    },
+    [onSuggestionSelect],
+  );
+
   return (
     <View style={styles.container}>
       <TextInput
@@ -85,17 +108,15 @@ export const MaterialTextInput = <T,>({
           <ScrollView
             style={styles.suggestionsList}
             nestedScrollEnabled
+            keyboardShouldPersistTaps="handled"
             showsVerticalScrollIndicator={true}
             indicatorStyle="black">
             {suggestions.map((suggestion, index) => (
               <TouchableOpacity
                 key={index}
                 style={styles.suggestionItem}
-                onPress={() => {
-                  if (onSuggestionSelect) {
-                    onSuggestionSelect(suggestion);
-                  }
-                }}>
+                activeOpacity={0.7}
+                onPress={() => handleSuggestionPress(suggestion)}>
                 <Text>{suggestion}</Text>
               </TouchableOpacity>
             ))}
