@@ -8,6 +8,8 @@ export interface AuthContextType {
   authToken: string | null;
   dataUpdated: boolean;
   setDataUpdated: (value: boolean) => void;
+  navigateToPostProperty: boolean;
+  setNavigateToPostProperty: (value: boolean) => void;
 }
 
 export interface Response<T> {

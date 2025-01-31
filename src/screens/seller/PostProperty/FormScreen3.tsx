@@ -1,5 +1,5 @@
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   View,
   Text,
@@ -20,6 +20,7 @@ import Toast from 'react-native-toast-message';
 import {useAuth} from '../../../hooks/useAuth';
 import Colors from '../../../constants/Colors';
 import { initialFormData } from '../../../types/propertyform';
+import { loadFormData, saveFormData ,clearFormData } from '../../../utils/asyncStoragePropertyForm';
 type Props = NativeStackScreenProps<PostPropertyFormParamList, 'FormScreen3'>;
 
 const FormScreen3: React.FC<Props> = ({navigation, route}) => {
@@ -28,19 +29,18 @@ const FormScreen3: React.FC<Props> = ({navigation, route}) => {
   const [images, setImages] = useState<ImageType[]>(formData.ImageURL || []);
   const [loading, setLoading] = useState(false);
   const [loadingImage, setLoadingImage] = useState(false);
-  const {dataUpdated, setDataUpdated} = useAuth();
+  const {dataUpdated, setDataUpdated,user} = useAuth();
 
   const uploadToCloudinary = async (imagePath: string): Promise<string> => {
     setLoadingImage(true);
-    const tempformData = new FormData();
-    tempformData.append('file', {
-      uri: imagePath,
-      type: 'image/jpeg',
-      name: 'upload.jpg',
-    });
-    tempformData.append('upload_preset', 'dncrproperty');
-
     try {
+      const tempformData = new FormData();
+      tempformData.append('file', {
+        uri: imagePath,
+        type: 'image/jpeg',
+        name: 'upload.jpg',
+      });
+      tempformData.append('upload_preset', 'dncrproperty');
       const response = await fetch(
         'https://api.cloudinary.com/v1_1/dncrproperty-com/image/upload',
         {
@@ -56,9 +56,8 @@ const FormScreen3: React.FC<Props> = ({navigation, route}) => {
     } catch (error) {
       console.error('Cloudinary upload error:', error);
       throw error;
-    }
-    finally {
-      setLoadingImage(false); // Stop the image loader after upload
+    } finally {
+      setLoadingImage(false);
     }
   };
 
@@ -133,28 +132,55 @@ const FormScreen3: React.FC<Props> = ({navigation, route}) => {
       ImageURL: filteredImages,
     }));
   };
+  useEffect(() => {
+    const loadSavedData = async () => {
+      const savedData = await loadFormData();
+      if (savedData) {
+        setFormData(prevData => ({
+          ...prevData,
+          ...savedData,
+        }));
+        if (savedData.ImageURL) {
+          setImages(savedData.ImageURL);
+        }
+      }
+    };
+    loadSavedData();
+  }, []);
 
+  // Save form data whenever it changes
+  useEffect(() => {
+    saveFormData(formData);
+  }, [formData]);
   const handleSubmit = async () => {
     if (images.length === 0) {
-      // Show a Toast message if no images are uploaded
       Toast.show({
         type: 'error',
         text1: 'Image is required. Please add an image.',
       });
-      return; // Prevent form submission
+      return;
     }
     setLoading(true);
     try {
-      const response = await SellerService.addProperty(formData);
+      const finalFormData = {
+        ...formData,
+        SellerEmail: user?.Email ?? null,
+        SellerPhone: user?.Phone ?? null ,
+        SellerName: user?.Name ?? null,
+        UserId: user?.ID.toString() ?? null,
+      };
+      await saveFormData(finalFormData);
+      const response = await SellerService.addProperty(finalFormData);
       console.log('Response:', response);
-
       if (response.Success) {
+        await clearFormData();
         Toast.show({
           type: 'success',
           text1: 'Property listed successfully',
         });
         setFormData(initialFormData);
         setImages([]);
+        navigation.navigate('FormScreen1');
         navigationRef.current?.navigate('Home');
         setDataUpdated(!dataUpdated);
       }
@@ -164,8 +190,7 @@ const FormScreen3: React.FC<Props> = ({navigation, route}) => {
         type: 'error',
         text1: 'Error in listing property',
       });
-    }
-    finally {
+    } finally {
       setLoading(false);
     }
   };
@@ -274,6 +299,7 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '100%',
   },
+
   container: {
     flex: 1,
     padding: 20,
@@ -391,3 +417,4 @@ const styles = StyleSheet.create({
 });
 
 export default FormScreen3;
+

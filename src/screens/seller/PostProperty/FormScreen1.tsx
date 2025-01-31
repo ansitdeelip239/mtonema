@@ -1,6 +1,6 @@
 // screens/FormScreen1.js
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   View,
   StyleSheet,
@@ -13,14 +13,16 @@ import {SegmentedButtons, Text} from 'react-native-paper';
 import {useMaster} from '../../../context/MasterProvider';
 import {Chip} from 'react-native-paper';
 import LocationComponent from '../../../components/LocationComponent';
-import {FlatList} from 'react-native-gesture-handler';
+import {FlatList, ScrollView} from 'react-native-gesture-handler';
 import Colors from '../../../constants/Colors';
 import {MasterDetailModel} from '../../../types';
 import {useAuth} from '../../../hooks/useAuth';
+import { loadFormData, saveFormData } from '../../../utils/asyncStoragePropertyForm';
 type Props = NativeStackScreenProps<PostPropertyFormParamList, 'FormScreen1'>;
 const FormScreen1: React.FC<Props> = ({navigation}) => {
   const [values, setValue] = useState('Basic Info');
   const {masterData} = useMaster();
+  const[isContinueClicked, setIsContinueClicked] =useState(false);
   const {user} = useAuth();
   const [showAll, setShowAll] = useState<{[key: string]: boolean}>({
     SellerType: false,
@@ -101,8 +103,38 @@ const FormScreen1: React.FC<Props> = ({navigation}) => {
   //     handleInputChange();
   //   };
   //   const handleInputChange = () => {};
-  const handleNext = () => navigation.navigate('FormScreen2', {formData});
 
+
+  useEffect(() => {
+    const loadSavedData = async () => {
+      const savedData = await loadFormData();
+      if (savedData) {
+        setFormData(prevData => ({
+          ...prevData,
+          ...savedData,
+        }));
+      }
+    };
+    loadSavedData();
+  }, []);
+  useEffect(() => {
+    saveFormData(formData);
+  }, [formData]);
+
+  const handleNext = async () => {
+    await saveFormData(formData);
+    setIsContinueClicked(true);
+    navigation.navigate('FormScreen2', {formData});
+  };
+  // const handleNext = () => navigation.navigate('FormScreen2', {formData});
+
+  const isFormValid = () => {
+    return (
+      formData.SellerType !== null &&
+      formData.City !== null &&
+      formData.PropertyFor !== null
+    );
+  };
   const handleLocationChange = (location: string) => {
     console.log('Location', location);
 
@@ -116,13 +148,16 @@ const FormScreen1: React.FC<Props> = ({navigation}) => {
     title: string,
     key: keyof PropertyFormData,
     data: MasterDetailModel[],
+    isRequired: boolean = false,
   ) => {
     const displayedChips = showAll[key]
       ? data
       : data.slice(0, initialChipsToShow);
     return (
       <View style={styles.sectionContainer}>
-        <Text style={styles.sectionTitle}>{title}</Text>
+        <Text style={styles.sectionTitle}>
+          {title} {isRequired && <Text style={styles.asterisk}>*</Text>}{' '}
+        </Text>
         <View style={styles.gridWrapper}>
           {displayedChips?.map((item, index) => (
             <Chip
@@ -160,29 +195,42 @@ const FormScreen1: React.FC<Props> = ({navigation}) => {
       <FlatList
         data={[1]} // To force the FlatList to render, add a dummy item
         contentContainerStyle={styles.scrollContainer}
+        keyboardShouldPersistTaps="handled"
+        //  keyboardDismissMode="on-drag"
+        keyExtractor={(item, index) => index.toString()}
+        renderItem={() => null}
         ListHeaderComponent={
           <>
             <View style={styles.container}>
               <SegmentedButtons
                 value={values}
                 onValueChange={setValue}
+                // eslint-disable-next-line react-native/no-inline-styles
+                style={{
+                  backgroundColor: '#f5f5f5', // Background color of the entire button group
+                  borderRadius: 1, // Rounded corners
+                  padding: 2, // Add spacing
+                }}
                 buttons={[
                   {
                     value: 'Basic Info',
                     label: 'Basic Info',
                     onPress: () => navigation.navigate('FormScreen1'),
+                    disabled: false, // Always enabled
                   },
                   {
                     value: 'Property info',
                     label: 'Property Info',
                     onPress: () =>
                       navigation.navigate('FormScreen2', {formData}),
+                    disabled: !isContinueClicked, // Disable if basic info is not filled
                   },
                   {
                     value: 'Images',
                     label: 'Image Upload',
                     onPress: () =>
                       navigation.navigate('FormScreen3', {formData}),
+                    disabled: true, // Disable until the second form is filled (you can add additional logic here)
                   },
                 ]}
               />
@@ -191,44 +239,78 @@ const FormScreen1: React.FC<Props> = ({navigation}) => {
                 'Seller Type',
                 'SellerType',
                 masterData?.SellerType || [],
+                true,
               )}
               {renderChipSection(
                 'City',
                 'City',
                 masterData?.ProjectLocation || [],
+                true,
               )}
               {renderChipSection(
                 'Property For',
                 'PropertyFor',
                 masterData?.PropertyFor || [],
+                true,
               )}
 
-              <View style={styles.sectionContainer}>
+              <View pointerEvents="auto" style={styles.sectionContainer}>
                 <Text style={styles.sectionTitle}> Property Location</Text>
+                <ScrollView keyboardShouldPersistTaps="handled">
                 <LocationComponent
                   onLocationChange={handleLocationChange}
                   color="grey"
-                  label="Property Location"
+                  label="_"
                 />
+                 </ScrollView>
               </View>
+              {/* <View pointerEvents="auto">
+  <ScrollView keyboardShouldPersistTaps="handled">
+    <LocationComponent
+      onLocationChange={handleLocationChange}
+      color="grey"
+      label="Property Location"
+    // Ensure input is enabled
+    />
+  </ScrollView>
+</View> */}
             </View>
             <View style={styles.buttonContainer}>
               <TouchableOpacity
+                style={[
+                  styles.touchableOpacity,
+                  !isFormValid() && styles.disabledButton, // Apply disabled style if form is not valid
+                ]}
+                onPress={isFormValid() ? handleNext : () => {}} // Only allow press if form is valid
+                disabled={!isFormValid()} // Disable the button if form is not valid
+              >
+                <Text style={styles.buttonText}>Continue</Text>
+              </TouchableOpacity>
+              {/* <TouchableOpacity
                 style={styles.touchableOpacity}
                 onPress={handleNext}>
                 <Text style={styles.buttonText}>Continue</Text>
-              </TouchableOpacity>
+              </TouchableOpacity> */}
             </View>
           </>
         }
-        keyExtractor={(item, index) => index.toString()} // Add key extractor to avoid warning
-        renderItem={() => null}
+        // keyExtrac/tor={(item, index) => index.toString()} // Add key extractor to avoid warning
+        // renderItem={() => null}
       />
     </ImageBackground>
   );
 };
 
 const styles = StyleSheet.create({
+  asterisk: {
+    color: 'red',
+  },
+  disabledButton: {
+    color: 'white', // Set text color to white
+    fontSize: 18, // Adjust font size
+    fontWeight: 'bold', // Make the text bold
+    opacity: 0.5, // Reduce opacity to indicate disabled state
+  },
   background: {
     flex: 1,
     resizeMode: 'cover',

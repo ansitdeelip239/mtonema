@@ -13,6 +13,8 @@ import { Text } from 'react-native-paper';
 import SellerProfileScreen from '../../screens/seller/SellerProfileScreen';
 import PostPropertyForm from '../../screens/seller/PostProperty/PostPropertyForm';
 import SellerHomeScreen from '../../screens/seller/SellerHomeScreen';
+import { useAuth } from '../../hooks/useAuth';
+import { useKeyboard } from '../../hooks/useKeyboard';
 
 
 const Tab = createBottomTabNavigator<SellerBottomTabParamList>();
@@ -53,6 +55,10 @@ const CustomBottomBar = memo(
   ({navigation, state, descriptors}: BottomTabBarProps) => {
     const middleIndex = Math.floor(tabScreens.length / 2);
 
+const {keyboardVisible} = useKeyboard();
+if (keyboardVisible) {
+  return null;
+}
     return (
       <View style={styles.bottomBarContainer}>
         <View style={styles.bottomBar}>
@@ -170,12 +176,15 @@ const CustomBottomBar = memo(
   },
 );
 
-const SellerbottomTabs = memo(() => (
+const SellerbottomTabs = memo(() => {
+  const {navigateToPostProperty} = useAuth();
+  return(
   <Tab.Navigator
     screenOptions={{
       headerShown: false,
       tabBarHideOnKeyboard: true,
     }}
+    initialRouteName={navigateToPostProperty ? 'AddProperty' : 'Home'}
     // eslint-disable-next-line react/no-unstable-nested-components
     tabBar={props => <CustomBottomBar {...props} />}>
     {tabScreens.map(({name, component, icon}) => (
@@ -193,7 +202,7 @@ const SellerbottomTabs = memo(() => (
       />
     ))}
   </Tab.Navigator>
-));
+);});
 
 const styles = StyleSheet.create({
   bottomBarContainer: {
