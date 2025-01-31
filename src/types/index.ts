@@ -251,3 +251,9 @@ export interface ClientForm {
   Groups?: number[];
   PartnerId: string;
 }
+
+export interface SearchIntellisenseResponse {
+  AgentName: string | null;
+  AgentContactNo: string | null;
+  Location: string | null;
+}

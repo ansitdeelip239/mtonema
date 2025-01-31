@@ -31,16 +31,18 @@ import agentPropertyFormSchema, {
 import {z} from 'zod';
 import {usePartner} from '../../../context/PartnerProvider';
 import Toast from 'react-native-toast-message';
+import {SearchInput} from './components/LocationSearchInput';
 
 type Props = BottomTabScreenProps<PartnerBottomTabParamList, 'AddProperty'>;
 
 const AddAgentPropertyScreen: React.FC<Props> = ({navigation, route}) => {
-  const scrollViewRef = useRef<ScrollView>(null);
-  const {user} = useAuth();
-  const {masterData} = useMaster();
   const [errors, setErrors] = useState<
     Partial<Record<keyof AgentPropertyFormType, string>>
   >({});
+
+  const scrollViewRef = useRef<ScrollView>(null);
+  const {user} = useAuth();
+  const {masterData} = useMaster();
   const {setAgentPropertyUpdated} = usePartner();
 
   const editMode = route.params?.editMode;
@@ -137,7 +139,7 @@ const AddAgentPropertyScreen: React.FC<Props> = ({navigation, route}) => {
               ? 'Property updated successfully'
               : 'Property added successfully',
           });
-          setAgentPropertyUpdated((prev) => !prev);
+          setAgentPropertyUpdated(prev => !prev);
           navigation.navigate('Property');
         } else {
           Toast.show({
@@ -226,7 +228,7 @@ const AddAgentPropertyScreen: React.FC<Props> = ({navigation, route}) => {
           errorMessage={errors.agentContactNo}
         />
 
-        <MaterialTextInput<AgentPropertyFormType>
+        {/* <MaterialTextInput<AgentPropertyFormType>
           style={styles.input}
           label="Property Location"
           field="propertyLocation"
@@ -235,6 +237,16 @@ const AddAgentPropertyScreen: React.FC<Props> = ({navigation, route}) => {
           mode="outlined"
           placeholder="Navi Mumbai, Thane, etc."
           errorMessage={errors.propertyLocation}
+        /> */}
+
+        <SearchInput<AgentPropertyFormType>
+          field="propertyLocation"
+          formInput={formInput}
+          handleFieldChange={handleFieldChange}
+          errors={errors}
+          label="Property Location"
+          placeholder="Navi Mumbai, Thane, etc."
+          searchType="AgentPropertyLocation"
         />
 
         <FilterOption
