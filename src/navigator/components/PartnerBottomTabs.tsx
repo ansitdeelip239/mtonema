@@ -1,15 +1,8 @@
-import React, {memo, useEffect, useState} from 'react';
+import React, {memo} from 'react';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {BottomTabBarProps} from '@react-navigation/bottom-tabs';
 import {CommonActions} from '@react-navigation/native';
-import {
-  Keyboard,
-  Platform,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import GetIcon, {IconEnum} from '../../components/GetIcon';
 import Colors from '../../constants/Colors';
 import HomeScreen from '../../screens/partner/HomeScreen/HomeScreen';
@@ -18,6 +11,7 @@ import AddAgentPropertyScreen from '../../screens/partner/AddAgentPropertyScreen
 import AgentDataScreen from '../../screens/partner/AgentsPropertyScreen/AgentsPropertyScreen';
 import PartnerProfileScreen from '../../screens/partner/ProfileScreen/ProfileScreen';
 import ClientScreenStack from './ClientScreenStack';
+import {useKeyboard} from '../../hooks/useKeyboard';
 
 const Tab = createBottomTabNavigator<PartnerBottomTabParamList>();
 
@@ -55,26 +49,10 @@ const tabScreens: Array<{
 
 const CustomBottomBar = memo(
   ({navigation, state, descriptors}: BottomTabBarProps) => {
-    const [isKeyboardVisible, setKeyboardVisible] = useState(false);
     const middleIndex = Math.floor(tabScreens.length / 2);
+    const {keyboardVisible} = useKeyboard();
 
-    useEffect(() => {
-      const keyboardWillShowListener = Keyboard.addListener(
-        Platform.OS === 'ios' ? 'keyboardWillShow' : 'keyboardDidShow',
-        () => setKeyboardVisible(true),
-      );
-      const keyboardWillHideListener = Keyboard.addListener(
-        Platform.OS === 'ios' ? 'keyboardWillHide' : 'keyboardDidHide',
-        () => setKeyboardVisible(false),
-      );
-
-      return () => {
-        keyboardWillShowListener.remove();
-        keyboardWillHideListener.remove();
-      };
-    }, []);
-
-    if (isKeyboardVisible) {
+    if (keyboardVisible) {
       return null;
     }
 

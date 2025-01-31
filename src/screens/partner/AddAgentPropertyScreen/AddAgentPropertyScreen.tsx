@@ -32,6 +32,7 @@ import {z} from 'zod';
 import {usePartner} from '../../../context/PartnerProvider';
 import Toast from 'react-native-toast-message';
 import {SearchInput} from './components/SearchInput';
+import {useKeyboard} from '../../../hooks/useKeyboard';
 
 type Props = BottomTabScreenProps<PartnerBottomTabParamList, 'AddProperty'>;
 
@@ -44,6 +45,7 @@ const AddAgentPropertyScreen: React.FC<Props> = ({navigation, route}) => {
   const {user} = useAuth();
   const {masterData} = useMaster();
   const {setAgentPropertyUpdated} = usePartner();
+  const {keyboardVisible} = useKeyboard();
 
   const editMode = route.params?.editMode;
   const propertyData = route.params?.propertyData;
@@ -228,17 +230,6 @@ const AddAgentPropertyScreen: React.FC<Props> = ({navigation, route}) => {
           errorMessage={errors.agentContactNo}
         />
 
-        {/* <MaterialTextInput<AgentPropertyFormType>
-          style={styles.input}
-          label="Property Location"
-          field="propertyLocation"
-          formInput={formInput}
-          setFormInput={handleFieldChange}
-          mode="outlined"
-          placeholder="Navi Mumbai, Thane, etc."
-          errorMessage={errors.propertyLocation}
-        /> */}
-
         <SearchInput<AgentPropertyFormType>
           field="propertyLocation"
           formInput={formInput}
@@ -341,7 +332,10 @@ const AddAgentPropertyScreen: React.FC<Props> = ({navigation, route}) => {
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
           <ScrollView
             ref={scrollViewRef}
-            contentContainerStyle={styles.scrollContainer}
+            contentContainerStyle={[
+              styles.scrollContainer,
+              {paddingBottom: keyboardVisible ? 60 : 120} as const,
+            ]}
             keyboardShouldPersistTaps="handled"
             showsVerticalScrollIndicator={false}
             nestedScrollEnabled={true}>
@@ -368,7 +362,6 @@ const styles = StyleSheet.create({
   },
   scrollContainer: {
     padding: 16,
-    paddingBottom: 100,
   },
   input: {
     marginBottom: 16,
