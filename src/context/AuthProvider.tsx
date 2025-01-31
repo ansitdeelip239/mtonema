@@ -18,6 +18,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({children}) => {
   const [user, setUser] = useState<User | null>(null);
   const [authToken, setAuthToken] = useState<string | null>(null);
   const [dataUpdated, setDataUpdated] = useState(false);
+  const [navigateToPostProperty,setNavigateToPostProperty] = useState(false);
   // Use useRef for timer to prevent memory leaks
   const tokenExpiryTimer = useRef<NodeJS.Timeout>();
   const logout = useCallback(async () => {
@@ -166,6 +167,8 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({children}) => {
     authToken,
     dataUpdated,
     setDataUpdated,
+    setNavigateToPostProperty,
+    navigateToPostProperty,
   };
 
   return (

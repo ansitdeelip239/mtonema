@@ -15,6 +15,7 @@ import {
   FlatList,
   Keyboard,
 } from 'react-native';
+import { useAuth } from '../../hooks/useAuth';
 
 type Props = NativeStackScreenProps<AuthStackParamList, 'SignUpScreen'>;
 
@@ -23,6 +24,7 @@ const SignUpScreen: React.FC<Props> = ({ navigation, route }) => {
   const [loading, setLoading] = useState(false);
   const [isKeyboardVisible, setKeyboardVisible] = useState(false);
   const emailExistMessage = ['Email already exist' , 'Email already exists'];
+ const {setNavigateToPostProperty} = useAuth();
 
   useEffect(() => {
     const keyboardDidShowListener = Keyboard.addListener(
@@ -53,6 +55,7 @@ const SignUpScreen: React.FC<Props> = ({ navigation, route }) => {
       console.log('API Response:', response);
 
       if (response.Success && !emailExistMessage.includes(response.Message)) {
+        setNavigateToPostProperty(true);
         navigation.navigate('OtpScreen', { email: formData.Email });
       } else {
         Toast.show({

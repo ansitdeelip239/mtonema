@@ -28,7 +28,7 @@ const OtpModel: React.FC<OtpModelProps> = ({
   apiError = '',
   successMessage = '',
 }) => {
-  const [resendTime, setResendTime] = useState(30);
+  const [resendTime, setResendTime] = useState(0); // add time resend now button as per your time
   const otpInputRef = useRef(null);
 
   useEffect(() => {

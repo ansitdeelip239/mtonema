@@ -25,7 +25,7 @@ const EmailScreen: React.FC<Props> = ({navigation, route}) => {
   const [email, setEmail] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [emailError, setEmailError] = useState<{ message: string; isClickable?: boolean }>({ message: '', isClickable: false });
-  const {storeUser} = useAuth();
+  const {storeUser,setNavigateToPostProperty} = useAuth();
   const {role} = route.params;
 
   const isEmailValid = useMemo(() => validateEmail(email), [email]);
@@ -96,6 +96,7 @@ const handleContinue = useCallback(async () => {
       // If email is unverified, navigate to OTP screen
       navigation.navigate('OtpScreen', {email});
     }
+    setNavigateToPostProperty(false);
   } catch (error) {
     Toast.show({
       type: 'error',
@@ -108,7 +109,7 @@ const handleContinue = useCallback(async () => {
   } finally {
     setIsLoading(false);
   }
-}, [email, isEmailValid, checkEmail, storeUser, navigation, role, emailError]);
+}, [email, isEmailValid, checkEmail, storeUser, navigation, role, emailError,setNavigateToPostProperty]);
 
   return (
     <KeyboardAvoidingView

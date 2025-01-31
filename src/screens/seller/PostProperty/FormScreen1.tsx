@@ -119,7 +119,6 @@ const FormScreen1: React.FC<Props> = ({navigation}) => {
     }));
   };
 
-
   const renderChipSection = (
     title: string,
     key: keyof PropertyFormData,
@@ -131,7 +130,9 @@ const FormScreen1: React.FC<Props> = ({navigation}) => {
       : data.slice(0, initialChipsToShow);
     return (
       <View style={styles.sectionContainer}>
-        <Text style={styles.sectionTitle}>{title} {isRequired && <Text style={styles.asterisk}>*</Text>} </Text>
+        <Text style={styles.sectionTitle}>
+          {title} {isRequired && <Text style={styles.asterisk}>*</Text>}{' '}
+        </Text>
         <View style={styles.gridWrapper}>
           {displayedChips?.map((item, index) => (
             <Chip
@@ -172,30 +173,38 @@ const FormScreen1: React.FC<Props> = ({navigation}) => {
         ListHeaderComponent={
           <>
             <View style={styles.container}>
-            <SegmentedButtons
-  value={values}
-  onValueChange={setValue}
-  buttons={[
-    {
-      value: 'Basic Info',
-      label: 'Basic Info',
-      onPress: () => navigation.navigate('FormScreen1'),
-      disabled: false, // Always enabled
-    },
-    {
-      value: 'Property info',
-      label: 'Property Info',
-      onPress: () => navigation.navigate('FormScreen2', { formData }),
-      disabled: !isFormValid(), // Disable if basic info is not filled
-    },
-    {
-      value: 'Images',
-      label: 'Image Upload',
-      onPress: () => navigation.navigate('FormScreen3', { formData }),
-      disabled: true, // Disable until the second form is filled (you can add additional logic here)
-    },
-  ]}
-/>
+              <SegmentedButtons
+                value={values}
+                onValueChange={setValue}
+                // eslint-disable-next-line react-native/no-inline-styles
+                style={{
+                  backgroundColor: '#f5f5f5', // Background color of the entire button group
+                  borderRadius: 1, // Rounded corners
+                  padding: 2, // Add spacing
+                }}
+                buttons={[
+                  {
+                    value: 'Basic Info',
+                    label: 'Basic Info',
+                    onPress: () => navigation.navigate('FormScreen1'),
+                    disabled: false, // Always enabled
+                  },
+                  {
+                    value: 'Property info',
+                    label: 'Property Info',
+                    onPress: () =>
+                      navigation.navigate('FormScreen2', {formData}),
+                    disabled: !isFormValid(), // Disable if basic info is not filled
+                  },
+                  {
+                    value: 'Images',
+                    label: 'Image Upload',
+                    onPress: () =>
+                      navigation.navigate('FormScreen3', {formData}),
+                    disabled: true, // Disable until the second form is filled (you can add additional logic here)
+                  },
+                ]}
+              />
 
               {renderChipSection(
                 'Seller Type',
@@ -261,7 +270,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold', // Make the text bold
     opacity: 0.5, // Reduce opacity to indicate disabled state
   },
-   background: {
+  background: {
     flex: 1,
     resizeMode: 'cover',
     justifyContent: 'center',
