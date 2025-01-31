@@ -14,6 +14,7 @@ import SellerProfileScreen from '../../screens/seller/SellerProfileScreen';
 import PostPropertyForm from '../../screens/seller/PostProperty/PostPropertyForm';
 import SellerHomeScreen from '../../screens/seller/SellerHomeScreen';
 import { useAuth } from '../../hooks/useAuth';
+import { useKeyboard } from '../../hooks/useKeyboard';
 
 
 const Tab = createBottomTabNavigator<SellerBottomTabParamList>();
@@ -54,6 +55,10 @@ const CustomBottomBar = memo(
   ({navigation, state, descriptors}: BottomTabBarProps) => {
     const middleIndex = Math.floor(tabScreens.length / 2);
 
+const {keyboardVisible} = useKeyboard();
+if (keyboardVisible) {
+  return null;
+}
     return (
       <View style={styles.bottomBarContainer}>
         <View style={styles.bottomBar}>

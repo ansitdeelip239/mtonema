@@ -235,7 +235,7 @@ const FormScreen1: React.FC<Props> = ({navigation}) => {
                 <LocationComponent
                   onLocationChange={handleLocationChange}
                   color="grey"
-                  label="Property Location"
+                  label="_"
                 />
                  </ScrollView>
               </View>
