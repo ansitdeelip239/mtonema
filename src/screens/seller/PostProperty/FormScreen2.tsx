@@ -33,6 +33,7 @@ const FormScreen2: React.FC<Props> = ({navigation, route}) => {
   const {masterData} = useMaster();
   const [values, setValue] = useState('Property info');
   const [formData, setFormData] = useState(route.params.formData);
+  const [isContinueClicked, setIsContinueClicked] = useState(false);
   const [showAll, setShowAll] = useState<{[key: string]: boolean}>({
     PropertyType: false,
     Facing: false,
@@ -60,6 +61,7 @@ const FormScreen2: React.FC<Props> = ({navigation, route}) => {
 
   const handleNext = async () => {
     await saveFormData(formData);
+    setIsContinueClicked(true);
     navigation.navigate('FormScreen3', {formData});
   };
 
@@ -402,14 +404,14 @@ const FormScreen2: React.FC<Props> = ({navigation, route}) => {
                     label: 'Property Info',
                     onPress: () =>
                       navigation.navigate('FormScreen2', {formData}),
-                    disabled: !isFormValid(), // Disable if required fields are not filled
+                    disabled: false,// Disable if required fields are not filled
                   },
                   {
                     value: 'Images',
                     label: 'Image Upload',
                     onPress: () =>
                       navigation.navigate('FormScreen3', {formData}),
-                    disabled: !isFormValid(), // Disable if required fields are not filled
+                    disabled: !isContinueClicked, // Disable if required fields are not filled
                   },
                 ]}
               />

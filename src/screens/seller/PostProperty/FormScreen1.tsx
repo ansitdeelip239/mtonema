@@ -22,6 +22,7 @@ type Props = NativeStackScreenProps<PostPropertyFormParamList, 'FormScreen1'>;
 const FormScreen1: React.FC<Props> = ({navigation}) => {
   const [values, setValue] = useState('Basic Info');
   const {masterData} = useMaster();
+  const[isContinueClicked, setIsContinueClicked] =useState(false);
   const {user} = useAuth();
   const [showAll, setShowAll] = useState<{[key: string]: boolean}>({
     SellerType: false,
@@ -122,6 +123,7 @@ const FormScreen1: React.FC<Props> = ({navigation}) => {
 
   const handleNext = async () => {
     await saveFormData(formData);
+    setIsContinueClicked(true);
     navigation.navigate('FormScreen2', {formData});
   };
   // const handleNext = () => navigation.navigate('FormScreen2', {formData});
@@ -221,7 +223,7 @@ const FormScreen1: React.FC<Props> = ({navigation}) => {
                     label: 'Property Info',
                     onPress: () =>
                       navigation.navigate('FormScreen2', {formData}),
-                    disabled: !isFormValid(), // Disable if basic info is not filled
+                    disabled: !isContinueClicked, // Disable if basic info is not filled
                   },
                   {
                     value: 'Images',
