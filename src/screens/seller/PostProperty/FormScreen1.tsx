@@ -13,7 +13,7 @@ import {SegmentedButtons, Text} from 'react-native-paper';
 import {useMaster} from '../../../context/MasterProvider';
 import {Chip} from 'react-native-paper';
 import LocationComponent from '../../../components/LocationComponent';
-import {FlatList} from 'react-native-gesture-handler';
+import {FlatList, ScrollView} from 'react-native-gesture-handler';
 import Colors from '../../../constants/Colors';
 import {MasterDetailModel} from '../../../types';
 import {useAuth} from '../../../hooks/useAuth';
@@ -170,6 +170,10 @@ const FormScreen1: React.FC<Props> = ({navigation}) => {
       <FlatList
         data={[1]} // To force the FlatList to render, add a dummy item
         contentContainerStyle={styles.scrollContainer}
+        keyboardShouldPersistTaps="handled"
+        //  keyboardDismissMode="on-drag"
+        keyExtractor={(item, index) => index.toString()}
+        renderItem={() => null}
         ListHeaderComponent={
           <>
             <View style={styles.container}>
@@ -225,14 +229,26 @@ const FormScreen1: React.FC<Props> = ({navigation}) => {
                 true,
               )}
 
-              <View style={styles.sectionContainer}>
+              <View pointerEvents="auto" style={styles.sectionContainer}>
                 <Text style={styles.sectionTitle}> Property Location</Text>
+                <ScrollView keyboardShouldPersistTaps="handled">
                 <LocationComponent
                   onLocationChange={handleLocationChange}
                   color="grey"
                   label="Property Location"
                 />
+                 </ScrollView>
               </View>
+              {/* <View pointerEvents="auto">
+  <ScrollView keyboardShouldPersistTaps="handled">
+    <LocationComponent
+      onLocationChange={handleLocationChange}
+      color="grey"
+      label="Property Location"
+    // Ensure input is enabled
+    />
+  </ScrollView>
+</View> */}
             </View>
             <View style={styles.buttonContainer}>
               <TouchableOpacity
@@ -253,8 +269,8 @@ const FormScreen1: React.FC<Props> = ({navigation}) => {
             </View>
           </>
         }
-        keyExtractor={(item, index) => index.toString()} // Add key extractor to avoid warning
-        renderItem={() => null}
+        // keyExtrac/tor={(item, index) => index.toString()} // Add key extractor to avoid warning
+        // renderItem={() => null}
       />
     </ImageBackground>
   );
