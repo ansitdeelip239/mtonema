@@ -152,6 +152,7 @@ const AgentDataScreen: React.FC<Props> = ({navigation}) => {
           initialFilters={filters}
           onSearch={handleSearch}
           onFilter={handleFilter}
+          agentData={agentData}
         />
         <FlatList
           data={agentData}

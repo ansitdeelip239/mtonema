@@ -3,16 +3,18 @@ import {StyleSheet, Text, TouchableOpacity, View, Animated} from 'react-native';
 import Colors from '../../../../constants/Colors';
 import {useMaster} from '../../../../context/MasterProvider';
 import FilterOption from '../../../../components/FilterOption';
-import {FilterValues} from '../../../../types';
+import {AgentData, FilterValues} from '../../../../types';
 
 const FilterModal = ({
   initialFilters,
   onFilter,
   onClose,
+  agentData,
 }: {
   initialFilters: FilterValues;
   onFilter: (filters: FilterValues) => void;
   onClose: () => void;
+  agentData: AgentData[];
 }) => {
   const [filters, setFilters] = useState<FilterValues>(initialFilters);
   const {masterData} = useMaster();
@@ -20,10 +22,24 @@ const FilterModal = ({
   const fadeAnim = useRef(new Animated.Value(0)).current;
   const slideAnim = useRef(new Animated.Value(300)).current;
 
-  const locations = useMemo(
-    () => masterData?.ProjectLocation || [],
-    [masterData],
-  );
+  const locations = useMemo(() => {
+    const uniqueLocations = Array.from(
+      new Set(agentData.map(agent => agent.PropertyLocation).filter(Boolean)),
+    ).sort();
+
+    // Transform string[] to MasterDetailModel[]
+    return uniqueLocations.map((location, index) => ({
+      ID: index + 1,
+      MasterID: 0,
+      MasterDetailName: location,
+      CreatedOn: null,
+      UpdatedOn: null,
+      CreatedBy: null,
+      UpdatedBy: null,
+      Status: 1,
+    }));
+  }, [agentData]);
+
   const propertyTypes = useMemo(
     () => masterData?.AgentPropertyType || [],
     [masterData],
