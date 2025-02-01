@@ -1,5 +1,5 @@
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import {
   View,
   Text,
@@ -19,17 +19,18 @@ import {navigationRef} from '../../../navigator/NavigationRef';
 import Toast from 'react-native-toast-message';
 import {useAuth} from '../../../hooks/useAuth';
 import Colors from '../../../constants/Colors';
-import { initialFormData } from '../../../types/propertyform';
-import { loadFormData, saveFormData ,clearFormData } from '../../../utils/asyncStoragePropertyForm';
+import {clearFormData} from '../../../utils/asyncStoragePropertyForm';
+import {usePropertyForm} from '../../../context/PropertyFormContext';
+
 type Props = NativeStackScreenProps<PostPropertyFormParamList, 'FormScreen3'>;
 
-const FormScreen3: React.FC<Props> = ({navigation, route}) => {
+const FormScreen3: React.FC<Props> = ({navigation}) => {
   const [value, setValue] = useState('Images');
-  const [formData, setFormData] = useState(route.params.formData);
+  const {formData, setFormData, resetForm} = usePropertyForm();
   const [images, setImages] = useState<ImageType[]>(formData.ImageURL || []);
   const [loading, setLoading] = useState(false);
   const [loadingImage, setLoadingImage] = useState(false);
-  const {dataUpdated, setDataUpdated,user} = useAuth();
+  const {dataUpdated, setDataUpdated, user} = useAuth();
 
   const uploadToCloudinary = async (imagePath: string): Promise<string> => {
     setLoadingImage(true);
@@ -132,26 +133,7 @@ const FormScreen3: React.FC<Props> = ({navigation, route}) => {
       ImageURL: filteredImages,
     }));
   };
-  useEffect(() => {
-    const loadSavedData = async () => {
-      const savedData = await loadFormData();
-      if (savedData) {
-        setFormData(prevData => ({
-          ...prevData,
-          ...savedData,
-        }));
-        if (savedData.ImageURL) {
-          setImages(savedData.ImageURL);
-        }
-      }
-    };
-    loadSavedData();
-  }, []);
 
-  // Save form data whenever it changes
-  useEffect(() => {
-    saveFormData(formData);
-  }, [formData]);
   const handleSubmit = async () => {
     if (images.length === 0) {
       Toast.show({
@@ -165,11 +147,11 @@ const FormScreen3: React.FC<Props> = ({navigation, route}) => {
       const finalFormData = {
         ...formData,
         SellerEmail: user?.Email ?? null,
-        SellerPhone: user?.Phone ?? null ,
+        SellerPhone: user?.Phone ?? null,
         SellerName: user?.Name ?? null,
         UserId: user?.ID.toString() ?? null,
       };
-      await saveFormData(finalFormData);
+
       const response = await SellerService.addProperty(finalFormData);
       console.log('Response:', response);
       if (response.Success) {
@@ -178,7 +160,7 @@ const FormScreen3: React.FC<Props> = ({navigation, route}) => {
           type: 'success',
           text1: 'Property listed successfully',
         });
-        setFormData(initialFormData);
+        resetForm();
         setImages([]);
         navigation.navigate('FormScreen1');
         navigationRef.current?.navigate('Home');
@@ -212,12 +194,12 @@ const FormScreen3: React.FC<Props> = ({navigation, route}) => {
             {
               value: 'Property info',
               label: 'Property Info',
-              onPress: () => navigation.navigate('FormScreen2', {formData}),
+              onPress: () => navigation.navigate('FormScreen2'),
             },
             {
               value: 'Images',
               label: 'Image Upload',
-              onPress: () => navigation.navigate('FormScreen3', {formData}),
+              onPress: () => navigation.navigate('FormScreen3'),
             },
           ]}
           theme={{colors: {primary: 'green'}}}
@@ -249,13 +231,13 @@ const FormScreen3: React.FC<Props> = ({navigation, route}) => {
             </View>
           </TouchableOpacity>
         </View>
+
         {loadingImage && (
           <View style={styles.loaderContainer}>
             <ActivityIndicator size="large" color={Colors.main} />
             <Text style={styles.loaderText}>Uploading image...</Text>
           </View>
         )}
-
 
         {images.length > 0 && (
           <View style={styles.previewContainer}>
@@ -278,7 +260,7 @@ const FormScreen3: React.FC<Props> = ({navigation, route}) => {
           </View>
         )}
 
-<TouchableOpacity
+        <TouchableOpacity
           style={styles.listPropertyButton}
           onPress={handleSubmit}
           disabled={loading}>
@@ -413,8 +395,6 @@ const styles = StyleSheet.create({
     marginTop: 10,
     color: '#333',
   },
-
 });
 
 export default FormScreen3;
-
