@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import {View, TouchableOpacity, Modal, StyleSheet, Image} from 'react-native';
 import {Searchbar} from 'react-native-paper';
-import {FilterValues} from '../../../../types';
+import {AgentData, FilterValues} from '../../../../types';
 import Colors from '../../../../constants/Colors';
 import FilterModal from './FilterModal';
 import GetIcon from '../../../../components/GetIcon';
@@ -10,10 +10,12 @@ const SearchHeader = ({
   initialFilters,
   onSearch,
   onFilter,
+  agentData,
 }: {
   initialFilters: FilterValues;
   onSearch: (text: string) => void;
   onFilter: (filter: FilterValues) => void;
+  agentData: AgentData[];
 }) => {
   const [searchText, setSearchText] = useState('');
   const [modalVisible, setModalVisible] = useState(false);
@@ -30,8 +32,14 @@ const SearchHeader = ({
             onSearch(text);
           }}
           style={styles.searchInput}
-          icon={() => GetIcon({iconName: 'search', color: Colors.placeholderColor})}
-          clearIcon={searchText ? () => GetIcon({iconName: 'clear', color: '#000'}) : undefined}
+          icon={() =>
+            GetIcon({iconName: 'search', color: Colors.placeholderColor})
+          }
+          clearIcon={
+            searchText
+              ? () => GetIcon({iconName: 'clear', color: '#000'})
+              : undefined
+          }
           inputStyle={styles.searchInputText}
           elevation={5}
           theme={{
@@ -63,6 +71,7 @@ const SearchHeader = ({
               onClose={() => {
                 setModalVisible(false);
               }}
+              agentData={agentData}
             />
           </View>
         </TouchableOpacity>

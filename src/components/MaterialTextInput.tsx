@@ -1,4 +1,4 @@
-import React, {useCallback} from 'react';
+import React, {useCallback, useRef} from 'react';
 import {
   TextInput,
   TextInputProps,
@@ -6,7 +6,14 @@ import {
   Text,
   ActivityIndicator,
 } from 'react-native-paper';
-import {TouchableOpacity, Image, StyleSheet, View} from 'react-native';
+import {
+  TouchableOpacity,
+  Image,
+  StyleSheet,
+  View,
+  ScrollView,
+  Keyboard,
+} from 'react-native';
 
 interface MaterialTextInputProps<T> extends TextInputProps {
   field: keyof T;
@@ -30,6 +37,8 @@ export const MaterialTextInput = <T,>({
   loading,
   ...props
 }: MaterialTextInputProps<T>) => {
+  const suggestionTimeoutRef = useRef<NodeJS.Timeout>();
+
   const CrossButton = useCallback(() => {
     return (
       <TouchableOpacity
@@ -56,6 +65,26 @@ export const MaterialTextInput = <T,>({
     return null;
   };
 
+  const handleSuggestionPress = useCallback(
+    (suggestion: string) => {
+      // Clear any existing timeouts
+      if (suggestionTimeoutRef.current) {
+        clearTimeout(suggestionTimeoutRef.current);
+      }
+
+      // Dismiss keyboard first
+      Keyboard.dismiss();
+
+      // Delay the selection slightly to ensure keyboard dismiss completes
+      suggestionTimeoutRef.current = setTimeout(() => {
+        if (onSuggestionSelect) {
+          onSuggestionSelect(suggestion);
+        }
+      }, 50);
+    },
+    [onSuggestionSelect],
+  );
+
   return (
     <View style={styles.container}>
       <TextInput
@@ -76,18 +105,22 @@ export const MaterialTextInput = <T,>({
       )}
       {suggestions && suggestions.length > 0 && (
         <View style={styles.suggestionsContainer}>
-          {suggestions.map((suggestion, index) => (
-            <TouchableOpacity
-              key={index}
-              style={styles.suggestionItem}
-              onPress={() => {
-                if (onSuggestionSelect) {
-                  onSuggestionSelect(suggestion);
-                }
-              }}>
-              <Text>{suggestion}</Text>
-            </TouchableOpacity>
-          ))}
+          <ScrollView
+            style={styles.suggestionsList}
+            nestedScrollEnabled
+            keyboardShouldPersistTaps="handled"
+            showsVerticalScrollIndicator={true}
+            indicatorStyle="black">
+            {suggestions.map((suggestion, index) => (
+              <TouchableOpacity
+                key={index}
+                style={styles.suggestionItem}
+                activeOpacity={0.7}
+                onPress={() => handleSuggestionPress(suggestion)}>
+                <Text>{suggestion}</Text>
+              </TouchableOpacity>
+            ))}
+          </ScrollView>
         </View>
       )}
     </View>
@@ -97,7 +130,6 @@ export const MaterialTextInput = <T,>({
 const styles = StyleSheet.create({
   container: {
     position: 'relative',
-    zIndex: 1,
   },
   crossIcon: {
     width: 20,
@@ -123,9 +155,18 @@ const styles = StyleSheet.create({
     borderRadius: 4,
     zIndex: 1000,
     elevation: 5,
+    maxHeight: 200,
+    overflow: 'hidden',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
   },
   suggestionsList: {
-    maxHeight: 200,
+    flex: 1,
   },
   suggestionItem: {
     padding: 10,

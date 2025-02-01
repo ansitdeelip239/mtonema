@@ -207,15 +207,18 @@ const AddAgentPropertyScreen: React.FC<Props> = ({navigation, route}) => {
   const renderPropertyInputs = useMemo(
     () => (
       <>
-        <MaterialTextInput<AgentPropertyFormType>
-          style={styles.input}
-          label="Agent Name"
+        <SearchInput<AgentPropertyFormType>
           field="agentName"
           formInput={formInput}
-          setFormInput={handleFieldChange}
-          mode="outlined"
-          placeholder="John Doe"
-          errorMessage={errors.agentName}
+          handleFieldChange={handleFieldChange}
+          errors={errors}
+          label="Agent Name"
+          placeholder="Eg. John Doe"
+          searchType="AgentName"
+          onAgentSelect={(agentName, contactNo) => {
+            handleFieldChange('agentName', agentName);
+            handleFieldChange('agentContactNo', contactNo);
+          }}
         />
 
         <MaterialTextInput<AgentPropertyFormType>
