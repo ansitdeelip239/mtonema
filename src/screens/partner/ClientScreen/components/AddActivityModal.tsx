@@ -38,7 +38,7 @@ const AddActivityModal: React.FC<AddActivityModalProps> = ({
   useEffect(() => {
     if (!visible) {
       setFormData({
-        activityType: null,
+        activityType: 106,
         description: '',
       });
     } else if (editMode && activityToEdit) {

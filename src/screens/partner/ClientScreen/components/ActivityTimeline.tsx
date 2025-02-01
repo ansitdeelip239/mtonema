@@ -6,10 +6,10 @@ import {formatDate} from '../../../../utils/dateUtils';
 
 const getActivityIcon = (activityType: string) => {
   const type = activityType.toLowerCase();
-  if (type.includes('call')) {
+  if (type.includes('phone number')) {
     return 'phone';
   }
-  if (type.includes('message') || type.includes('whatsapp')) {
+  if (type.includes('message')) {
     return 'message';
   }
   return 'notes';
