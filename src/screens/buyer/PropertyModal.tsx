@@ -10,6 +10,7 @@ import {
   Dimensions,
   NativeSyntheticEvent,
   NativeScrollEvent,
+  ActivityIndicator,
 } from 'react-native';
 import {PropertyModel} from '../../types';
 import EnquiryButton from '../common/EnquiryButton';
@@ -80,6 +81,7 @@ const PropertyModal = ({
 }: PropertyModalProps) => {
   const {user, dataUpdated, setDataUpdated} = useAuth();
   const {editPropertyData} = usePropertyForm();
+  const [isLoading, setIsLoading] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [isConfirmationModalVisible, setConfirmationModalVisible] =
     useState(false);
@@ -128,10 +130,20 @@ const PropertyModal = ({
     setConfirmationModalVisible(true);
   };
 
+  // const handleEdit = () => {
+
+  //   editPropertyData(property);
+  //   onClose();
+  //   navigation.navigate('AddProperty');
+  // };
   const handleEdit = () => {
-    editPropertyData(property);
-    onClose();
-    navigation.navigate('AddProperty');
+    setIsLoading(true);
+    setTimeout(() => {
+      editPropertyData(property);
+      onClose();
+      navigation.navigate('AddProperty');
+      setIsLoading(false);
+    }, 1500);
   };
 
   const handleDelete = async () => {
@@ -265,9 +277,16 @@ const PropertyModal = ({
             </Text> */}
             </View>
             <View style={styles.buttonContainer2}>
-              <TouchableOpacity onPress={handleEdit}>
-                <GetIcon iconName="edit" color="white" size="20" />
+              <TouchableOpacity onPress={handleEdit} disabled={isLoading}>
+                {isLoading ? (
+                  <ActivityIndicator size="small" color="white" />
+                ) : (
+                  <GetIcon iconName="edit" color="white" size="20" />
+                )}
               </TouchableOpacity>
+              {/* <TouchableOpacity onPress={handleEdit}>
+                <GetIcon iconName="edit" color="white" size="20" />
+              </TouchableOpacity> */}
             </View>
           </>
         ) : null}
@@ -310,8 +329,8 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     width: 50,
     position: 'absolute',
-    top: '33%',
-    right: '22%',
+    top: '40%',
+    right: '25%',
   },
   buttonContainer2: {
     flex: 1,
@@ -330,8 +349,8 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     width: 50,
     position: 'absolute',
-    top: '33%',
-    right: '50%',
+    top: '40%',
+    left: '82%',
   },
   imageContainer: {
     position: 'relative',

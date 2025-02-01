@@ -252,12 +252,15 @@ const FormScreen3: React.FC<Props> = ({navigation}) => {
           </View>
         )}
 
-        {images.length > 0 && (
+{images.length > 0 && (
           <View style={styles.previewContainer}>
             <Text style={styles.previewTitle}>Selected Images:</Text>
             <View style={styles.imageGrid}>
-              {images.map(image => (
-                <View key={image.ID} style={styles.imageContainer}>
+              {images.map((image, index) => (
+                <View
+                  key={`${image.ID}_${index}`}
+                  style={styles.imageContainer}
+                >
                   <Image
                     source={{uri: image.ImageUrl}}
                     style={styles.previewImage}

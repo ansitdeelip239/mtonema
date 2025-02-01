@@ -53,7 +53,7 @@ export const PropertyFormProvider: React.FC<{children: React.ReactNode}> = ({
     Price: null,
     PropertyAge: null,
     PropertyFor: null,
-    PropertyForType: 'Residential',
+    PropertyForType: null,
     PropertyType: null,
     Rate: null,
     SellerEmail: user?.Email || '',
@@ -77,7 +77,6 @@ export const PropertyFormProvider: React.FC<{children: React.ReactNode}> = ({
     readyToMove: null,
     statusText: null,
     video: null,
-    propertyClassification: null,
   });
 
   useEffect(() => {
@@ -115,13 +114,12 @@ export const PropertyFormProvider: React.FC<{children: React.ReactNode}> = ({
           City: property.City?.ID || null,
           Discription: property.Discription || null,
           Facing: property.Facing?.ID || null,
-          Furnishing: property.Furnishing?.ID || null,
+          Furnishing: property.Furnishing?.ID,
           ImageURL: Array.isArray(property.ImageURL) ? property.ImageURL : [],
           ImageURLType: Array.isArray(property.ImageURLType)
             ? property.ImageURLType
             : [],
-          Location: property.Location || null,
-          Price: typeof property.Price === 'number' ? property.Price : null,
+          Location: property.Location,
           PropertyFor: property.PropertyFor?.ID || null,
           PropertyType: property.PropertyType?.ID || null,
           Rate: property.Rate?.ID || null,
@@ -130,9 +128,22 @@ export const PropertyFormProvider: React.FC<{children: React.ReactNode}> = ({
           SellerPhone: property.SellerPhone || '',
           SellerType: property.SellerType?.ID || null,
           UserId: property.UserId?.toString() || user?.ID?.toString() || '',
+          readyToMove:property.readyToMove,
+          Lifts:property.Lifts || null,
+          Pantry:property.Pantry || null,
+          floor:property.floor || null,
+          Parking: property.Parking?.toString() || null,
+          ZipCode:property.ZipCode || null,
+          PropertyForType:property.PropertyForType || null,
+          Price: property.Price?.toString() || null,
+          locality: property.Locality || null,
+          Status: property.Status || null,
+          Tags: Array.isArray(property.Tags) ? property.Tags : [],
+
         } as PropertyFormData),
     );
   };
+
 
   const resetForm = () => {
     setIsEditMode(false);
@@ -162,7 +173,7 @@ export const PropertyFormProvider: React.FC<{children: React.ReactNode}> = ({
       Price: null,
       PropertyAge: null,
       PropertyFor: null,
-      PropertyForType: 'Residential',
+      PropertyForType: null,
       PropertyType: null,
       Rate: null,
       SellerEmail: user?.Email || '',
@@ -186,7 +197,6 @@ export const PropertyFormProvider: React.FC<{children: React.ReactNode}> = ({
       readyToMove: null,
       statusText: null,
       video: null,
-      propertyClassification: null,
     });
   };
 

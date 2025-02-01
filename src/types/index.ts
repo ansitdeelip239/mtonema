@@ -1,4 +1,4 @@
-import { ImageType } from "./propertyform";
+import {ImageType} from './propertyform';
 
 export interface AuthContextType {
   isAuthenticated: boolean;
