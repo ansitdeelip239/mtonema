@@ -30,7 +30,7 @@ interface PropertyModalProps {
   property: PropertyModel | null;
   visible: boolean;
   onClose: () => void;
-  navigation: BottomTabNavigationProp<
+  navigation?: BottomTabNavigationProp<
     SellerBottomTabParamList,
     'Home',
     undefined
@@ -141,7 +141,7 @@ const PropertyModal = ({
     setTimeout(() => {
       editPropertyData(property);
       onClose();
-      navigation.navigate('AddProperty');
+      navigation?.navigate('AddProperty');
       setIsLoading(false);
     }, 1500);
   };
