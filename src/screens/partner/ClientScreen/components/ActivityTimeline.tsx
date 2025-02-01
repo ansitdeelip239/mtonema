@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, Text, StyleSheet} from 'react-native';
+import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
 import GetIcon from '../../../../components/GetIcon';
 import {ClientActivityDataModel} from '../../../../types';
 import {formatDate} from '../../../../utils/dateUtils';
@@ -9,19 +9,26 @@ const getActivityIcon = (activityType: string) => {
   if (type.includes('call')) {
     return 'phone';
   }
-
   if (type.includes('message') || type.includes('whatsapp')) {
     return 'message';
   }
-
   return 'notes';
 };
 
-const ActivityTimeline: React.FC<{
+interface ActivityTimelineProps {
   activity: ClientActivityDataModel;
   isLast?: boolean;
-}> = ({activity, isLast = false}) => (
-  <View style={styles.container}>
+  onPress: (activity: ClientActivityDataModel) => void;
+}
+
+const ActivityTimeline: React.FC<ActivityTimelineProps> = ({
+  activity,
+  isLast = false,
+  onPress,
+}) => (
+  <TouchableOpacity
+    style={styles.touchableContainer}
+    onPress={() => onPress(activity)}>
     <View style={styles.timelineSection}>
       <View style={styles.iconContainer}>
         <GetIcon
@@ -34,22 +41,28 @@ const ActivityTimeline: React.FC<{
     </View>
     <View style={styles.contentSection}>
       <View style={styles.activityHeader}>
-        <Text style={styles.activityType}>{activity.ActivityType.Name}</Text>
+        <Text style={styles.activityType} numberOfLines={1}>
+          {activity.ActivityType.Name}
+        </Text>
         <Text style={styles.activityDate}>
           {formatDate(activity.CreatedOn, 'PPp')}
         </Text>
       </View>
-      <Text style={styles.activityDescription}>{activity.Description}</Text>
-      <Text style={styles.assignedTo}>
+      <Text style={styles.activityDescription} numberOfLines={2}>
+        {activity.Description}
+      </Text>
+      <Text style={styles.assignedTo} numberOfLines={1}>
         Assigned to: {activity.AssignedTo.Name}
       </Text>
     </View>
-  </View>
+  </TouchableOpacity>
 );
 
 const styles = StyleSheet.create({
-  container: {
+  touchableContainer: {
     flexDirection: 'row',
+    paddingVertical: 8,
+    backgroundColor: 'white',
   },
   timelineSection: {
     alignItems: 'center',
@@ -60,7 +73,7 @@ const styles = StyleSheet.create({
     width: 32,
     height: 32,
     borderRadius: 16,
-    backgroundColor: 'gray',
+    backgroundColor: '#666',
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: 4,
@@ -68,7 +81,7 @@ const styles = StyleSheet.create({
   verticalLine: {
     width: 2,
     flex: 1,
-    backgroundColor: '#f0f0f0',
+    backgroundColor: '#e0e0e0',
   },
   contentSection: {
     flex: 1,
@@ -84,6 +97,8 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: '600',
     color: '#0066cc',
+    flex: 1,
+    marginRight: 8,
   },
   activityDate: {
     fontSize: 12,
@@ -91,8 +106,9 @@ const styles = StyleSheet.create({
   },
   activityDescription: {
     fontSize: 14,
-    color: '#444',
+    color: '#333',
     marginBottom: 4,
+    lineHeight: 20,
   },
   assignedTo: {
     fontSize: 12,

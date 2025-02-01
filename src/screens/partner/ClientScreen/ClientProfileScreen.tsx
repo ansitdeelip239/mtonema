@@ -13,7 +13,7 @@ import {
 } from 'react-native';
 import {ClientStackParamList} from '../../../navigator/components/ClientScreenStack';
 import Header from '../../../components/Header';
-import {Client} from '../../../types';
+import {Client, ClientActivityDataModel} from '../../../types';
 import PartnerService from '../../../services/PartnerService';
 import Toast from 'react-native-toast-message';
 import GetIcon from '../../../components/GetIcon';
@@ -37,6 +37,9 @@ const ClientProfileScreen: React.FC<Props> = ({route, navigation}) => {
   const [visible, setVisible] = useState(false);
   const [isActivityModalVisible, setIsActivityModalVisible] = useState(false);
   const [addingActivity, setAddingActivity] = useState(false);
+  const [selectedActivity, setSelectedActivity] = useState<
+    ClientActivityDataModel | undefined
+  >();
 
   const {clientsUpdated, setClientsUpdated} = usePartner();
   const {keyboardVisible} = useKeyboard();
@@ -147,7 +150,16 @@ const ClientProfileScreen: React.FC<Props> = ({route, navigation}) => {
     );
   };
 
-  const handleAddActivity = async (type: number, description: string) => {
+  const handleActivityPress = (activity: ClientActivityDataModel) => {
+    setSelectedActivity(activity);
+    setIsActivityModalVisible(true);
+  };
+
+  const handleAddEditActivity = async (
+    type: number,
+    description: string,
+    activityId?: number,
+  ) => {
     try {
       setAddingActivity(true);
       const response = await PartnerService.addEditClientActivity(
@@ -155,25 +167,33 @@ const ClientProfileScreen: React.FC<Props> = ({route, navigation}) => {
         route.params.clientId.toString(),
         description,
         user?.Email as string,
+        activityId,
       );
 
       if (response.Success) {
         Toast.show({
           type: 'success',
           text1: 'Success',
-          text2: 'Activity added successfully',
+          text2: activityId
+            ? 'Activity updated successfully'
+            : 'Activity added successfully',
         });
         fetchClient();
         setIsActivityModalVisible(false);
+        setSelectedActivity(undefined);
         setClientsUpdated(prev => !prev);
       }
     } catch (error) {
-      console.error('Error in handleAddActivity', error);
+      console.error('Error in handleAddEditActivity', error);
       Toast.show({
         type: 'error',
         text1: 'Error',
-        text2: 'Failed to add activity',
+        text2: activityId
+          ? 'Failed to update activity'
+          : 'Failed to add activity',
       });
+    } finally {
+      setAddingActivity(false);
     }
   };
 
@@ -234,6 +254,7 @@ const ClientProfileScreen: React.FC<Props> = ({route, navigation}) => {
         key={`activity-${activity.Id}`}
         activity={activity}
         isLast={index === sortedActivities.length - 1}
+        onPress={handleActivityPress}
       />
     ));
   }, [client?.ClientActivityDataModels]);
@@ -381,9 +402,14 @@ const ClientProfileScreen: React.FC<Props> = ({route, navigation}) => {
         </ScrollView>
         <AddActivityModal
           visible={isActivityModalVisible}
-          onClose={() => setIsActivityModalVisible(false)}
-          onSubmit={handleAddActivity}
+          onClose={() => {
+            setIsActivityModalVisible(false);
+            setSelectedActivity(undefined);
+          }}
+          onSubmit={handleAddEditActivity}
           isLoading={addingActivity}
+          editMode={!!selectedActivity}
+          activityToEdit={selectedActivity}
         />
       </View>
     </PaperProvider>

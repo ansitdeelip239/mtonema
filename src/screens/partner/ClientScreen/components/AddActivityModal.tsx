@@ -84,7 +84,9 @@ const AddActivityModal: React.FC<AddActivityModalProps> = ({
       onRequestClose={onClose}>
       <View style={styles.modalOverlay}>
         <View style={styles.modalContent}>
-          <Text style={styles.modalTitle}>Add Activity</Text>
+          <Text style={styles.modalTitle}>
+            {editMode ? 'Edit Activity' : 'Add Activity'}
+          </Text>
 
           <FilterOption
             label="Select Activity Type"
