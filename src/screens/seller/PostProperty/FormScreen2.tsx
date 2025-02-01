@@ -7,13 +7,16 @@ import {
   ImageBackground,
 } from 'react-native';
 import {PostPropertyFormParamList} from './PostPropertyForm';
-import {PropertyFormData} from '../../../types/propertyform';
 import {SegmentedButtons, Text, TextInput} from 'react-native-paper';
 import {useMaster} from '../../../context/MasterProvider';
 import Colors from '../../../constants/Colors';
 import {FlatList} from 'react-native-gesture-handler';
 import {MasterDetailModel} from '../../../types';
-import { loadFormData, saveFormData } from '../../../utils/asyncStoragePropertyForm';
+import {
+  loadFormData,
+  saveFormData,
+} from '../../../utils/asyncStoragePropertyForm';
+import {usePropertyForm} from '../../../context/PropertyFormContext';
 
 type Props = NativeStackScreenProps<PostPropertyFormParamList, 'FormScreen2'>;
 type PropertyType =
@@ -29,10 +32,14 @@ type PropertyType =
   | 'Shop'
   | 'Villa'
   | 'Warehouse';
-const FormScreen2: React.FC<Props> = ({navigation, route}) => {
+const FormScreen2: React.FC<Props> = ({navigation}) => {
   const {masterData} = useMaster();
+  const {
+    formData,
+    setFormData,
+    isFormValid: isContextFormValid,
+  } = usePropertyForm();
   const [values, setValue] = useState('Property info');
-  const [formData, setFormData] = useState(route.params.formData);
   const [isContinueClicked, setIsContinueClicked] = useState(false);
   const [showAll, setShowAll] = useState<{[key: string]: boolean}>({
     PropertyType: false,
@@ -52,50 +59,33 @@ const FormScreen2: React.FC<Props> = ({navigation, route}) => {
       }
     };
     loadSavedData();
-  }, []);
+  }, [setFormData]);
 
   // Save form data whenever it changes
   useEffect(() => {
     saveFormData(formData);
   }, [formData]);
 
-  const handleNext = async () => {
-    await saveFormData(formData);
+  const handleNext = () => {
     setIsContinueClicked(true);
-    navigation.navigate('FormScreen3', {formData});
+    navigation.navigate('FormScreen3');
   };
 
-  const handleOptionPress = (
-    key: keyof PropertyFormData,
-    value: number | string,
-  ) => {
+  const handleOptionPress = (key: keyof typeof formData, value: any) => {
     console.log('Handling option press:', key, value);
-    setFormData(prevState => {
-      const newState = {
-        ...prevState,
-        [key]: prevState[key] === value ? '' : value,
-      };
-      console.log('New form data:', newState);
-      return newState;
-    });
+    setFormData(prevState => ({
+      ...prevState,
+      [key]: prevState[key] === value ? '' : value,
+    }));
   };
 
   const isFormValid = () => {
-    const requiredFields = {
-      PropertyType: formData.PropertyType,
-      Price: formData.Price,
-      Rate: formData.Rate,
-      Area: formData.Area,
-    };
-
-    return Object.values(requiredFields).every(
-      value => value !== null && value !== undefined && value !== '',
-    );
+    return isContextFormValid(2);
   };
 
   const renderOptionSection = (
     title: string,
-    key: keyof PropertyFormData,
+    key: keyof typeof formData,
     data: MasterDetailModel[],
     isRequired: boolean = false,
   ) => {
@@ -142,12 +132,14 @@ const FormScreen2: React.FC<Props> = ({navigation, route}) => {
 
   const renderSimpleOptionButtons = (
     title: string,
-    field: keyof PropertyFormData,
+    field: keyof typeof formData,
     options: string[],
-    _isRequired: boolean = false,
+    isRequired: boolean = false,
   ) => (
     <View style={styles.section}>
-      <Text style={styles.sectionTitle}>{title}</Text>
+      <Text style={styles.sectionTitle}>
+        {title} {isRequired && <Text style={styles.asterisk}>*</Text>}
+      </Text>
       <View style={styles.optionsRow}>
         {options.map((option, index) => (
           <TouchableOpacity
@@ -402,15 +394,13 @@ const FormScreen2: React.FC<Props> = ({navigation, route}) => {
                   {
                     value: 'Property info',
                     label: 'Property Info',
-                    onPress: () =>
-                      navigation.navigate('FormScreen2', {formData}),
-                    disabled: false,// Disable if required fields are not filled
+                    onPress: () => navigation.navigate('FormScreen2'),
+                    disabled: false, // Disable if required fields are not filled
                   },
                   {
                     value: 'Images',
                     label: 'Image Upload',
-                    onPress: () =>
-                      navigation.navigate('FormScreen3', {formData}),
+                    onPress: () => navigation.navigate('FormScreen3'),
                     disabled: !isContinueClicked, // Disable if required fields are not filled
                   },
                 ]}
@@ -423,7 +413,7 @@ const FormScreen2: React.FC<Props> = ({navigation, route}) => {
               )}
               {renderSimpleOptionButtons(
                 'Property Classification',
-                'propertyClassification',
+                'PropertyForType',
                 ['Residential', 'Commercial'],
               )}
               {fieldsToShow.includes('Any Construction') &&
@@ -529,7 +519,7 @@ const FormScreen2: React.FC<Props> = ({navigation, route}) => {
                   masterData?.FurnishType || [],
                 )}
               {fieldsToShow.includes('Car Parking') &&
-                renderSimpleOptionButtons('Car Parking', 'CarParking', [
+                renderSimpleOptionButtons('Car Parking', 'Parking', [
                   'Yes - Shaded',
                   'Yes - Unshaded',
                   'No',
@@ -664,9 +654,9 @@ const FormScreen2: React.FC<Props> = ({navigation, route}) => {
                 ]}
                 onPress={
                   isFormValid()
-                    ? ()=>handleNext()
-                    // ? () => navigation.navigate('FormScreen3', {formData})
-                    : () => {}
+                    ? () => handleNext()
+                    : // ? () => navigation.navigate('FormScreen3', {formData})
+                      () => {}
                 } // Use an empty function instead of null
                 disabled={!isFormValid()} // Disable the button if form is not valid
               >

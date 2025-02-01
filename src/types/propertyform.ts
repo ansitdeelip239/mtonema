@@ -54,8 +54,9 @@ export interface PropertyFormData {
   readyToMove: null | 'Yes' | 'No';
   statusText: null | string;
   video: null | string;
-  propertyClassification: null | string;
+  // propertyClassification: null | string;
   CarParking: null | string;
+  ID?: string;
 }
 
 export interface ImageType {
@@ -118,5 +119,4 @@ export const initialFormData: PropertyFormData = {
   readyToMove: null,
   statusText: null,
   video: null,
-  propertyClassification: null,
 };

@@ -1,3 +1,5 @@
+import {ImageType} from './propertyform';
+
 export interface AuthContextType {
   isAuthenticated: boolean;
   user: User | null;
@@ -50,11 +52,7 @@ export interface Response<T> {
 export interface PropertyModel {
   ID: number;
   UserId: number;
-  ImageURL: {
-    ImageUrl: string;
-    Type: number;
-    toggle: boolean;
-  }[];
+  ImageURL: ImageType[];
   ImageURLType: any | null;
   Image: any | null;
   Tags: any[];
@@ -63,7 +61,7 @@ export interface PropertyModel {
   VideoUrl: any | null;
   Video: any | null;
   Location: string;
-  Price: number;
+  Price: any;
   Discription: string;
   ShortDiscription: string | null;
   SellerType: {

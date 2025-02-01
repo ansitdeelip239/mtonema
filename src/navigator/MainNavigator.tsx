@@ -7,6 +7,7 @@ import {BuyerProvider} from '../context/BuyerProvider';
 import {MasterProvider} from '../context/MasterProvider';
 import PartnerNavigator from './PartnerNavigator';
 import {PartnerProvider} from '../context/PartnerProvider';
+import {PropertyFormProvider} from '../context/PropertyFormContext';
 
 const MainNavigator = () => {
   const {user} = useAuth();
@@ -27,7 +28,9 @@ const MainNavigator = () => {
           <BuyerNavigator />
         </BuyerProvider>
       ) : user?.Role === 'Seller' ? (
-        <SellerNavigator />
+        <PropertyFormProvider>
+          <SellerNavigator />
+        </PropertyFormProvider>
       ) : user?.Role === 'Partner' ? (
         <PartnerProvider>
           <PartnerNavigator />

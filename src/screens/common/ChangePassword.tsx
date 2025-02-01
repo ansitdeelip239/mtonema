@@ -1,5 +1,6 @@
 import React, {useState} from 'react';
 import {View, Text, TextInput, Button, StyleSheet} from 'react-native';
+import Header from '../../components/Header';
 
 const ChangePassword = () => {
   const [oldPassword, setOldPassword] = useState('');
@@ -21,6 +22,7 @@ const ChangePassword = () => {
 
   return (
     <View style={styles.container}>
+      <Header title="Change Password"/>
       <Text style={styles.header}>Change Password</Text>
       {errorMessage ? <Text style={styles.error}>{errorMessage}</Text> : null}
 

@@ -14,6 +14,7 @@ import {
 } from 'react-native';
 import {api} from '../../utils/api';
 import url from '../../constants/api';
+import Header from '../../components/Header';
 export default function ContactScreen() {
   const [formData, setFormData] = useState({
     name: '',
@@ -101,6 +102,8 @@ const [loading, setLoading] = useState(false);
     }
   };
   return (
+    <>
+    <Header title="Contact us"/>
     <ScrollView contentContainerStyle={styles.container}>
       {/* Form Section */}
       <Text style={styles.header}>Fill Your Enquiry Here</Text>
@@ -110,7 +113,7 @@ const [loading, setLoading] = useState(false);
           placeholder="Name"
           value={formData.name}
           onChangeText={value => handleInputChange('name', value)}
-        />
+          />
         {errors.name ? (
           <Text style={styles.errorText}>{errors.name}</Text>
         ) : null}
@@ -122,7 +125,7 @@ const [loading, setLoading] = useState(false);
           onChangeText={value => handleInputChange('email', value)}
           keyboardType="email-address"
           caretHidden={false}
-        />
+          />
         {errors.email ? (
           <Text style={styles.errorText}>{errors.email}</Text>
         ) : null}
@@ -133,7 +136,7 @@ const [loading, setLoading] = useState(false);
           onChangeText={value => handleInputChange('mobile', value)}
           keyboardType="phone-pad"
           maxLength={15}
-        />
+          />
         {errors.mobile ? (
           <Text style={styles.errorText}>{errors.mobile}</Text>
         ) : null}
@@ -144,7 +147,7 @@ const [loading, setLoading] = useState(false);
           onChangeText={value => handleInputChange('message', value)}
           multiline
           numberOfLines={4}
-        />
+          />
                 <TouchableOpacity style={styles.Button} onPress={handleSubmit} disabled={loading}>
           {loading ? (
             <ActivityIndicator color="#fff" />
@@ -160,7 +163,7 @@ const [loading, setLoading] = useState(false);
         <Image
           source={require('../../assets/Icon/Call-Icon.png')}
           style={styles.image}
-        />
+          />
         <TouchableOpacity onPress={() => handleCallClick('+917303062845')}>
           <Text style={styles.text}>+91 7303062845</Text>
         </TouchableOpacity>
@@ -176,7 +179,7 @@ const [loading, setLoading] = useState(false);
           <Image
             source={require('../../assets/Icon/Whatsapp-icon.png')}
             style={styles.image}
-          />
+            />
         </TouchableOpacity>
         <Text style={styles.title}>Whatsapp</Text>
         <Text style={styles.text}>+91 7303062845</Text>
@@ -188,7 +191,7 @@ const [loading, setLoading] = useState(false);
           <Image
             source={require('../../assets/Icon/Mail-icon.png')}
             style={styles.image}
-          />
+            />
         </TouchableOpacity>
         <Text style={styles.title}>E-mail</Text>
         <Text style={styles.text}>info@dncrproperty.com</Text>
@@ -199,13 +202,14 @@ const [loading, setLoading] = useState(false);
           <Image
             source={require('../../assets/Icon/Location-icon.png')}
             style={styles.image}
-          />
+            />
         </TouchableOpacity>
         <Text style={styles.title}>Address</Text>
         <Text style={styles.text}>C-116 GF, OfficeOn, Sector 2, Noida</Text>
         <Text style={styles.text}>Uttar Pradesh - 201301</Text>
       </View>
     </ScrollView>
+</>
   );
 }
 

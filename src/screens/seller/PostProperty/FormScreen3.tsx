@@ -1,5 +1,5 @@
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import {
   View,
   Text,
@@ -19,17 +19,19 @@ import {navigationRef} from '../../../navigator/NavigationRef';
 import Toast from 'react-native-toast-message';
 import {useAuth} from '../../../hooks/useAuth';
 import Colors from '../../../constants/Colors';
-import { initialFormData } from '../../../types/propertyform';
-import { loadFormData, saveFormData ,clearFormData } from '../../../utils/asyncStoragePropertyForm';
+import {clearFormData} from '../../../utils/asyncStoragePropertyForm';
+import {usePropertyForm} from '../../../context/PropertyFormContext';
+
 type Props = NativeStackScreenProps<PostPropertyFormParamList, 'FormScreen3'>;
 
-const FormScreen3: React.FC<Props> = ({navigation, route}) => {
+const FormScreen3: React.FC<Props> = ({navigation}) => {
   const [value, setValue] = useState('Images');
-  const [formData, setFormData] = useState(route.params.formData);
+  const {formData, setFormData, resetForm} = usePropertyForm();
   const [images, setImages] = useState<ImageType[]>(formData.ImageURL || []);
   const [loading, setLoading] = useState(false);
   const [loadingImage, setLoadingImage] = useState(false);
-  const {dataUpdated, setDataUpdated,user} = useAuth();
+  const {dataUpdated, setDataUpdated, user} = useAuth();
+  const {isEditMode} = usePropertyForm();
 
   const uploadToCloudinary = async (imagePath: string): Promise<string> => {
     setLoadingImage(true);
@@ -73,7 +75,7 @@ const FormScreen3: React.FC<Props> = ({navigation, route}) => {
       const cloudinaryUrl = await uploadToCloudinary(image.path);
 
       const newImage: ImageType = {
-        ID: Date.now().toString(),
+        ID: `camera_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
         imageNumber: images.length + 1,
         ImageUrl: cloudinaryUrl,
         isselected: false,
@@ -105,7 +107,9 @@ const FormScreen3: React.FC<Props> = ({navigation, route}) => {
       const cloudinaryUrls = await Promise.all(uploadPromises);
 
       const newImages: ImageType[] = cloudinaryUrls.map((url, index) => ({
-        ID: Date.now().toString() + index,
+        ID: `gallery_${Date.now()}_${index}_${Math.random()
+          .toString(36)
+          .substr(2, 9)}`,
         imageNumber: images.length + index + 1,
         ImageUrl: url,
         isselected: false,
@@ -132,26 +136,7 @@ const FormScreen3: React.FC<Props> = ({navigation, route}) => {
       ImageURL: filteredImages,
     }));
   };
-  useEffect(() => {
-    const loadSavedData = async () => {
-      const savedData = await loadFormData();
-      if (savedData) {
-        setFormData(prevData => ({
-          ...prevData,
-          ...savedData,
-        }));
-        if (savedData.ImageURL) {
-          setImages(savedData.ImageURL);
-        }
-      }
-    };
-    loadSavedData();
-  }, []);
 
-  // Save form data whenever it changes
-  useEffect(() => {
-    saveFormData(formData);
-  }, [formData]);
   const handleSubmit = async () => {
     if (images.length === 0) {
       Toast.show({
@@ -165,30 +150,40 @@ const FormScreen3: React.FC<Props> = ({navigation, route}) => {
       const finalFormData = {
         ...formData,
         SellerEmail: user?.Email ?? null,
-        SellerPhone: user?.Phone ?? null ,
+        SellerPhone: user?.Phone ?? null,
         SellerName: user?.Name ?? null,
         UserId: user?.ID.toString() ?? null,
       };
-      await saveFormData(finalFormData);
-      const response = await SellerService.addProperty(finalFormData);
+
+      let response;
+      if (isEditMode) {
+        response = await SellerService.updateProperty(finalFormData);
+      } else {
+        response = await SellerService.addProperty(finalFormData);
+      }
+
       console.log('Response:', response);
       if (response.Success) {
         await clearFormData();
         Toast.show({
           type: 'success',
-          text1: 'Property listed successfully',
+          text1: isEditMode
+            ? 'Property updated successfully'
+            : 'Property listed successfully',
         });
-        setFormData(initialFormData);
+        resetForm();
         setImages([]);
         navigation.navigate('FormScreen1');
         navigationRef.current?.navigate('Home');
         setDataUpdated(!dataUpdated);
       }
     } catch (err) {
-      console.log('Error in addProperty', err);
+      console.log('Error in property submission:', err);
       Toast.show({
         type: 'error',
-        text1: 'Error in listing property',
+        text1: isEditMode
+          ? 'Error in updating property'
+          : 'Error in listing property',
       });
     } finally {
       setLoading(false);
@@ -212,12 +207,12 @@ const FormScreen3: React.FC<Props> = ({navigation, route}) => {
             {
               value: 'Property info',
               label: 'Property Info',
-              onPress: () => navigation.navigate('FormScreen2', {formData}),
+              onPress: () => navigation.navigate('FormScreen2'),
             },
             {
               value: 'Images',
               label: 'Image Upload',
-              onPress: () => navigation.navigate('FormScreen3', {formData}),
+              onPress: () => navigation.navigate('FormScreen3'),
             },
           ]}
           theme={{colors: {primary: 'green'}}}
@@ -249,6 +244,7 @@ const FormScreen3: React.FC<Props> = ({navigation, route}) => {
             </View>
           </TouchableOpacity>
         </View>
+
         {loadingImage && (
           <View style={styles.loaderContainer}>
             <ActivityIndicator size="large" color={Colors.main} />
@@ -256,13 +252,15 @@ const FormScreen3: React.FC<Props> = ({navigation, route}) => {
           </View>
         )}
 
-
-        {images.length > 0 && (
+{images.length > 0 && (
           <View style={styles.previewContainer}>
             <Text style={styles.previewTitle}>Selected Images:</Text>
             <View style={styles.imageGrid}>
-              {images.map((image, _index) => (
-                <View key={image.ID} style={styles.imageContainer}>
+              {images.map((image, index) => (
+                <View
+                  key={`${image.ID}_${index}`}
+                  style={styles.imageContainer}
+                >
                   <Image
                     source={{uri: image.ImageUrl}}
                     style={styles.previewImage}
@@ -278,7 +276,7 @@ const FormScreen3: React.FC<Props> = ({navigation, route}) => {
           </View>
         )}
 
-<TouchableOpacity
+        <TouchableOpacity
           style={styles.listPropertyButton}
           onPress={handleSubmit}
           disabled={loading}>
@@ -413,8 +411,6 @@ const styles = StyleSheet.create({
     marginTop: 10,
     color: '#333',
   },
-
 });
 
 export default FormScreen3;
-

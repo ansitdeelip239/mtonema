@@ -16,8 +16,12 @@ import {PropertyModel} from '../../types';
 import PropertyModal from '../buyer/PropertyModal';
 import {useAuth} from '../../hooks/useAuth';
 import Header from '../../components/Header';
+import {BottomTabScreenProps} from '@react-navigation/bottom-tabs';
+import {SellerBottomTabParamList} from '../../types/navigation';
 
-const PropertyListScreen = () => {
+type Props = BottomTabScreenProps<SellerBottomTabParamList, 'Home'>;
+
+const PropertyListScreen: React.FC<Props> = ({navigation}) => {
   const [properties, setProperties] = useState<PropertyModel[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -120,6 +124,11 @@ const PropertyListScreen = () => {
     setModalVisible(true);
   };
 
+  const handleCloseModal = () => {
+    setModalVisible(false);
+    setSelectedProperty(null); // Reset selected property
+  };
+
   const loadMore = useCallback(() => {
     const debouncedLoadMore = debounce(() => {
       console.log('LoadMore triggered', {
@@ -142,9 +151,9 @@ const PropertyListScreen = () => {
     getAllProperty(1);
   }, [getAllProperty, dataUpdated]);
 
-  useEffect(()=>{
-console.log(authToken);
-  },[authToken]);
+  useEffect(() => {
+    console.log(authToken);
+  }, [authToken]);
 
   const renderPropertyItem = ({item}: {item: PropertyModel}) => (
     <TouchableOpacity onPress={() => handlePropertyPress(item)}>
@@ -227,7 +236,7 @@ console.log(authToken);
 
   return (
     <SafeAreaView style={styles.container}>
-      <Header title="Listed Property"/>
+      <Header title="Listed Property" />
       <FlatList
         data={properties}
         keyExtractor={item => `property-${item.ID}`}
@@ -250,23 +259,22 @@ console.log(authToken);
           ) : null
         }
         ListEmptyComponent={
-          refreshing ? null : ( // Hide the message while refreshing
-            error ? (
-              <View style={styles.centerContainer}>
-                <Text style={styles.errorText}>{error}</Text>
-              </View>
-            ) : (
-              <View style={styles.centerContainer}>
-                <Text style={styles.noDataText}>No listed Properties</Text>
-              </View>
-            )
+          refreshing ? null : error ? ( // Hide the message while refreshing
+            <View style={styles.centerContainer}>
+              <Text style={styles.errorText}>{error}</Text>
+            </View>
+          ) : (
+            <View style={styles.centerContainer}>
+              <Text style={styles.noDataText}>No listed Properties</Text>
+            </View>
           )
         }
       />
       <PropertyModal
         property={selectedProperty}
         visible={modalVisible}
-        onClose={() => setModalVisible(false)}
+        onClose={handleCloseModal}
+        navigation={navigation}
       />
     </SafeAreaView>
   );
@@ -277,6 +285,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#f5f5f5',
     padding: 10,
+    position: 'relative',
   },
   centerContainer: {
     flex: 1,
@@ -294,6 +303,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.2,
     shadowRadius: 4,
     overflow: 'hidden',
+    zIndex: 1,
   },
   propertyImage: {
     width: '100%',
