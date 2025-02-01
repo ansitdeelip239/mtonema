@@ -26,8 +26,9 @@ export type IconEnum =
   | 'signup'
   | 'whatsapp'
   | 'phone'
-  | 'threeDots' 
-  ;
+  | 'threeDots'
+  | 'notes'
+  | 'message';
 
 type IconProps = {
   iconName: IconEnum;
@@ -62,6 +63,8 @@ const GetIcon = ({iconName, color, size}: IconProps) => {
     whatsapp: require('../assets/Icon/whatsapp.png'),
     phone: require('../assets/Icon/phone.png'),
     threeDots: require('../assets/Icon/three-dots.png'),
+    notes: require('../assets/Icon/notes.png'),
+    message: require('../assets/Icon/message.png'),
   };
 
   const imageStyle = [

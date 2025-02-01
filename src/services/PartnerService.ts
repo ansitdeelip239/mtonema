@@ -155,5 +155,26 @@ class PartnerService {
       throw error;
     }
   }
+
+  static async addEditClientActivity(
+    activityType: number,
+    clientId: string,
+    description: string,
+    partnerId: string,
+  ) {
+    try {
+      const response = await api.post<null>(`${url.addEditClientActivity}`, {
+        ActivityType: activityType,
+        ClientId: clientId,
+        Description: description,
+        PartnerId: partnerId,
+      });
+
+      return response;
+    } catch (error) {
+      console.error('Error in addEditClientActivity', error);
+      throw error;
+    }
+  }
 }
 export default PartnerService;

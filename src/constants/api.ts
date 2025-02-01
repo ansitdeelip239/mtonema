@@ -59,4 +59,5 @@ export default {
   deleteAgentProperty: url1 + '/api/v1/partner/DeleteAgentProperty',
   getClientById: url1 + '/api/v1/partner/GetClientById',
   deleteClientById: url1 + '/api/v1/partner/DeleteClientDetails',
+  addEditClientActivity: url1 + '/api/v1/partner/AddEditClientActivity',
 };

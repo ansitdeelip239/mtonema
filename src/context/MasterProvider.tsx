@@ -1,6 +1,6 @@
 import React, {useState, useEffect, useCallback, createContext} from 'react';
 import MasterService from '../services/MasterService';
-import { MasterDetailModel } from '../types';
+import {MasterDetailModel} from '../types';
 
 interface MasterProviderProps {
   children: React.ReactNode;
@@ -18,6 +18,7 @@ interface MasterData {
   FurnishType: MasterDetailModel[];
   Facing: MasterDetailModel[];
   AgentPropertyType: MasterDetailModel[];
+  ActivityType: MasterDetailModel[];
 }
 
 interface MasterContextProps {
@@ -39,6 +40,7 @@ const masterName = [
   'FurnishType',
   'Facing',
   'AgentPropertyType',
+  'ActivityType',
 ];
 
 export const MasterProvider: React.FC<MasterProviderProps> = ({children}) => {
