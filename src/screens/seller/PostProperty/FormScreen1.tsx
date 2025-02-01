@@ -1,6 +1,6 @@
 // screens/FormScreen1.js
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import {
   View,
   StyleSheet,
@@ -8,7 +8,6 @@ import {
   ImageBackground,
 } from 'react-native';
 import {PostPropertyFormParamList} from './PostPropertyForm';
-import {PropertyFormData} from '../../../types/propertyform';
 import {SegmentedButtons, Text} from 'react-native-paper';
 import {useMaster} from '../../../context/MasterProvider';
 import {Chip} from 'react-native-paper';
@@ -16,147 +15,53 @@ import LocationComponent from '../../../components/LocationComponent';
 import {FlatList, ScrollView} from 'react-native-gesture-handler';
 import Colors from '../../../constants/Colors';
 import {MasterDetailModel} from '../../../types';
-import {useAuth} from '../../../hooks/useAuth';
-import { loadFormData, saveFormData } from '../../../utils/asyncStoragePropertyForm';
+import {usePropertyForm} from '../../../context/PropertyFormContext';
+
 type Props = NativeStackScreenProps<PostPropertyFormParamList, 'FormScreen1'>;
+
 const FormScreen1: React.FC<Props> = ({navigation}) => {
   const [values, setValue] = useState('Basic Info');
   const {masterData} = useMaster();
-  const[isContinueClicked, setIsContinueClicked] =useState(false);
-  const {user} = useAuth();
+  const [isContinueClicked, setIsContinueClicked] = useState(false);
   const [showAll, setShowAll] = useState<{[key: string]: boolean}>({
     SellerType: false,
     City: false,
     PropertyFor: false,
   });
+
+  const {formData, updateFormField, isFormValid} = usePropertyForm();
   const initialChipsToShow = 2;
-  const [formData, setFormData] = useState<PropertyFormData>({
-    AlarmSystem: null,
-    ApprovedBy: '',
-    Area: null,
-    BhkType: null,
-    BoundaryWall: null,
-    CeilingHeight: null,
-    City: null,
-    ConstructionDone: null,
-    Country: null,
-    CreatedBy: null,
-    Discription: null,
-    Facing: null,
-    Furnishing: null,
-    GatedSecurity: null,
-    ImageURL: [],
-    ImageURLType: [],
-    IsFeatured: false,
-    Lifts: null,
-    Location: null,
-    OpenSide: null,
-    Pantry: null,
-    Parking: null,
-    Price: null,
-    PropertyAge: null,
-    PropertyFor: null,
-    PropertyForType: 'Residential',
-    PropertyType: null,
-    Rate: null,
-    SellerEmail: user?.Email || '',
-    SellerName: user?.Name || '',
-    SellerPhone: user?.Phone || '',
-    SellerType: null,
-    ShortDiscription: null,
-    Size: null,
-    State: null,
-    Status: null,
-    SurveillanceCameras: null,
-    Tag: null,
-    Tags: [],
-    UserId: user?.ID.toString() || '',
-    VideoURL: null,
-    ZipCode: null,
-    CarParking: null,
-    floor: null,
-    locality: null,
-    otherCity: null,
-    readyToMove: null,
-    statusText: null,
-    video: null,
-    propertyClassification: null,
-  });
 
   const handleChipPress = (
-    key: keyof PropertyFormData,
+    key: keyof typeof formData,
     value: string | number,
   ) => {
-    setFormData(prevState => {
-      // Check if the chip is already selected
-      const currentValue = prevState[key];
-      if (currentValue === value) {
-        // Deselect if it's already selected
-        return {...prevState, [key]: null};
-      } else {
-        // Select the chip
-        return {...prevState, [key]: value};
-      }
-    });
+    updateFormField(key, formData[key] === value ? null : value);
   };
-  //   const handleLocationChange = () => {
-  //     handleInputChange();
-  //   };
-  //   const handleInputChange = () => {};
 
-
-  useEffect(() => {
-    const loadSavedData = async () => {
-      const savedData = await loadFormData();
-      if (savedData) {
-        setFormData(prevData => ({
-          ...prevData,
-          ...savedData,
-        }));
-      }
-    };
-    loadSavedData();
-  }, []);
-  useEffect(() => {
-    saveFormData(formData);
-  }, [formData]);
-
-  const handleNext = async () => {
-    await saveFormData(formData);
-    setIsContinueClicked(true);
-    navigation.navigate('FormScreen2', {formData});
-  };
-  // const handleNext = () => navigation.navigate('FormScreen2', {formData});
-
-  const isFormValid = () => {
-    return (
-      formData.SellerType !== null &&
-      formData.City !== null &&
-      formData.PropertyFor !== null
-    );
-  };
   const handleLocationChange = (location: string) => {
-    console.log('Location', location);
+    updateFormField('Location', location);
+  };
 
-    setFormData(prev => ({
-      ...prev,
-      Location: location,
-    }));
+  const handleNext = () => {
+    setIsContinueClicked(true);
+    navigation.navigate('FormScreen2');
   };
 
   const renderChipSection = (
     title: string,
-    key: keyof PropertyFormData,
+    key: keyof typeof formData,
     data: MasterDetailModel[],
     isRequired: boolean = false,
   ) => {
     const displayedChips = showAll[key]
       ? data
       : data.slice(0, initialChipsToShow);
+
     return (
       <View style={styles.sectionContainer}>
         <Text style={styles.sectionTitle}>
-          {title} {isRequired && <Text style={styles.asterisk}>*</Text>}{' '}
+          {title} {isRequired && <Text style={styles.asterisk}>*</Text>}
         </Text>
         <View style={styles.gridWrapper}>
           {displayedChips?.map((item, index) => (
@@ -221,15 +126,13 @@ const FormScreen1: React.FC<Props> = ({navigation}) => {
                   {
                     value: 'Property info',
                     label: 'Property Info',
-                    onPress: () =>
-                      navigation.navigate('FormScreen2', {formData}),
+                    onPress: () => navigation.navigate('FormScreen2'),
                     disabled: !isContinueClicked, // Disable if basic info is not filled
                   },
                   {
                     value: 'Images',
                     label: 'Image Upload',
-                    onPress: () =>
-                      navigation.navigate('FormScreen3', {formData}),
+                    onPress: () => navigation.navigate('FormScreen3'),
                     disabled: true, // Disable until the second form is filled (you can add additional logic here)
                   },
                 ]}
@@ -257,12 +160,12 @@ const FormScreen1: React.FC<Props> = ({navigation}) => {
               <View pointerEvents="auto" style={styles.sectionContainer}>
                 <Text style={styles.sectionTitle}> Property Location</Text>
                 <ScrollView keyboardShouldPersistTaps="handled">
-                <LocationComponent
-                  onLocationChange={handleLocationChange}
-                  color="grey"
-                  label="_"
-                />
-                 </ScrollView>
+                  <LocationComponent
+                    onLocationChange={handleLocationChange}
+                    color="grey"
+                    label="_"
+                  />
+                </ScrollView>
               </View>
               {/* <View pointerEvents="auto">
   <ScrollView keyboardShouldPersistTaps="handled">
@@ -279,10 +182,10 @@ const FormScreen1: React.FC<Props> = ({navigation}) => {
               <TouchableOpacity
                 style={[
                   styles.touchableOpacity,
-                  !isFormValid() && styles.disabledButton, // Apply disabled style if form is not valid
+                  !isFormValid(1) && styles.disabledButton, // Apply disabled style if form is not valid
                 ]}
-                onPress={isFormValid() ? handleNext : () => {}} // Only allow press if form is valid
-                disabled={!isFormValid()} // Disable the button if form is not valid
+                onPress={isFormValid(1) ? handleNext : () => {}} // Only allow press if form is valid
+                disabled={!isFormValid(1)} // Disable the button if form is not valid
               >
                 <Text style={styles.buttonText}>Continue</Text>
               </TouchableOpacity>

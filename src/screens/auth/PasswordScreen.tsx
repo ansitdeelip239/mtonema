@@ -143,7 +143,8 @@ const PasswordScreen: React.FC<Props> = ({navigation, route}) => {
         </View>
 
         {/* Forget Password Link */}
-        <TouchableOpacity style={styles.forgotPassword}>
+        <TouchableOpacity style={styles.forgotPassword}
+        onPress={() => navigation.navigate('ForgetPassword')}>
           <Text style={styles.forgotText}>Forget Password?</Text>
         </TouchableOpacity>
 

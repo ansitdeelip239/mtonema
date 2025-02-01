@@ -1,0 +1,200 @@
+import React, {createContext, useContext, useState, useEffect} from 'react';
+import {PropertyFormData} from '../types/propertyform';
+import {loadFormData, saveFormData} from '../utils/asyncStoragePropertyForm';
+import {useAuth} from '../hooks/useAuth';
+
+interface PropertyFormContextType {
+  formData: PropertyFormData;
+  setFormData: React.Dispatch<React.SetStateAction<PropertyFormData>>;
+  updateFormField: <K extends keyof PropertyFormData>(
+    field: K,
+    value: PropertyFormData[K],
+  ) => void;
+  resetForm: () => void;
+  isFormValid: (step: number) => boolean;
+}
+
+const PropertyFormContext = createContext<PropertyFormContextType | undefined>(
+  undefined,
+);
+
+export const PropertyFormProvider: React.FC<{children: React.ReactNode}> = ({
+  children,
+}) => {
+  const {user} = useAuth();
+  const [formData, setFormData] = useState<PropertyFormData>({
+    AlarmSystem: null,
+    ApprovedBy: '',
+    Area: null,
+    BhkType: null,
+    BoundaryWall: null,
+    CeilingHeight: null,
+    City: null,
+    ConstructionDone: null,
+    Country: null,
+    CreatedBy: null,
+    Discription: null,
+    Facing: null,
+    Furnishing: null,
+    GatedSecurity: null,
+    ImageURL: [],
+    ImageURLType: [],
+    IsFeatured: false,
+    Lifts: null,
+    Location: null,
+    OpenSide: null,
+    Pantry: null,
+    Parking: null,
+    Price: null,
+    PropertyAge: null,
+    PropertyFor: null,
+    PropertyForType: 'Residential',
+    PropertyType: null,
+    Rate: null,
+    SellerEmail: user?.Email || '',
+    SellerName: user?.Name || '',
+    SellerPhone: user?.Phone || '',
+    SellerType: null,
+    ShortDiscription: null,
+    Size: null,
+    State: null,
+    Status: null,
+    SurveillanceCameras: null,
+    Tag: null,
+    Tags: [],
+    UserId: user?.ID.toString() || '',
+    VideoURL: null,
+    ZipCode: null,
+    CarParking: null,
+    floor: null,
+    locality: null,
+    otherCity: null,
+    readyToMove: null,
+    statusText: null,
+    video: null,
+    propertyClassification: null,
+  });
+
+  useEffect(() => {
+    const loadSavedData = async () => {
+      const savedData = await loadFormData();
+      if (savedData) {
+        setFormData(prev => ({...prev, ...savedData}));
+      }
+    };
+    loadSavedData();
+  }, []);
+
+  useEffect(() => {
+    saveFormData(formData);
+  }, [formData]);
+
+  const updateFormField = <K extends keyof PropertyFormData>(
+    field: K,
+    value: PropertyFormData[K],
+  ) => {
+    setFormData(prev => ({...prev, [field]: value}));
+  };
+
+  const resetForm = () => {
+    setFormData({
+      AlarmSystem: null,
+      ApprovedBy: '',
+      Area: null,
+      BhkType: null,
+      BoundaryWall: null,
+      CeilingHeight: null,
+      City: null,
+      ConstructionDone: null,
+      Country: null,
+      CreatedBy: null,
+      Discription: null,
+      Facing: null,
+      Furnishing: null,
+      GatedSecurity: null,
+      ImageURL: [],
+      ImageURLType: [],
+      IsFeatured: false,
+      Lifts: null,
+      Location: null,
+      OpenSide: null,
+      Pantry: null,
+      Parking: null,
+      Price: null,
+      PropertyAge: null,
+      PropertyFor: null,
+      PropertyForType: 'Residential',
+      PropertyType: null,
+      Rate: null,
+      SellerEmail: user?.Email || '',
+      SellerName: user?.Name || '',
+      SellerPhone: user?.Phone || '',
+      SellerType: null,
+      ShortDiscription: null,
+      Size: null,
+      State: null,
+      Status: null,
+      SurveillanceCameras: null,
+      Tag: null,
+      Tags: [],
+      UserId: user?.ID.toString() || '',
+      VideoURL: null,
+      ZipCode: null,
+      CarParking: null,
+      floor: null,
+      locality: null,
+      otherCity: null,
+      readyToMove: null,
+      statusText: null,
+      video: null,
+      propertyClassification: null,
+    });
+  };
+
+  useEffect(() => {
+    console.log('formData', formData);
+  }, [formData]);
+
+  const isFormValid = (step: number) => {
+    switch (step) {
+      case 1:
+        return (
+          formData.SellerType !== null &&
+          formData.City !== null &&
+          formData.PropertyFor !== null
+        );
+      case 2:
+        return (
+          formData.PropertyType !== null &&
+          formData.Price !== null &&
+          formData.Rate !== null &&
+          formData.Area !== null
+        );
+      case 3:
+        return formData.ImageURL?.length > 0;
+      default:
+        return false;
+    }
+  };
+
+  return (
+    <PropertyFormContext.Provider
+      value={{
+        formData,
+        setFormData,
+        updateFormField,
+        resetForm,
+        isFormValid,
+      }}>
+      {children}
+    </PropertyFormContext.Provider>
+  );
+};
+
+export const usePropertyForm = () => {
+  const context = useContext(PropertyFormContext);
+  if (!context) {
+    throw new Error('usePropertyForm must be used within PropertyFormProvider');
+  }
+  return context;
+};
