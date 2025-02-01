@@ -22,7 +22,7 @@ type Props = NativeStackScreenProps<PostPropertyFormParamList, 'FormScreen1'>;
 const FormScreen1: React.FC<Props> = ({navigation}) => {
   const [values, setValue] = useState('Basic Info');
   const {masterData} = useMaster();
-  const[isContinueClicked, setIsContinueClicked] =useState(false);
+  const[isContinueClicked, setIsContinueClicked] = useState(false);
   const {user} = useAuth();
   const [showAll, setShowAll] = useState<{[key: string]: boolean}>({
     SellerType: false,
