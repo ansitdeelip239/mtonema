@@ -12,6 +12,16 @@ class SellerService {
       throw error;
     }
   }
+
+  static async updateProperty(body: PropertyFormData) {
+    try {
+      const response = await api.post<null>(`${url.UpdateProperty}`, body);
+      return response;
+    } catch (error) {
+      console.error('Error in updateProperty', error);
+      throw error;
+    }
+  }
 }
 
 export default SellerService;

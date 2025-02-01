@@ -56,6 +56,7 @@ export interface PropertyFormData {
   video: null | string;
   propertyClassification: null | string;
   CarParking: null | string;
+  ID?: string;
 }
 
 export interface ImageType {

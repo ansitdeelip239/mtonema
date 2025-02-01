@@ -31,6 +31,7 @@ const FormScreen3: React.FC<Props> = ({navigation}) => {
   const [loading, setLoading] = useState(false);
   const [loadingImage, setLoadingImage] = useState(false);
   const {dataUpdated, setDataUpdated, user} = useAuth();
+  const {isEditMode} = usePropertyForm();
 
   const uploadToCloudinary = async (imagePath: string): Promise<string> => {
     setLoadingImage(true);
@@ -74,7 +75,7 @@ const FormScreen3: React.FC<Props> = ({navigation}) => {
       const cloudinaryUrl = await uploadToCloudinary(image.path);
 
       const newImage: ImageType = {
-        ID: Date.now().toString(),
+        ID: `camera_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
         imageNumber: images.length + 1,
         ImageUrl: cloudinaryUrl,
         isselected: false,
@@ -106,7 +107,9 @@ const FormScreen3: React.FC<Props> = ({navigation}) => {
       const cloudinaryUrls = await Promise.all(uploadPromises);
 
       const newImages: ImageType[] = cloudinaryUrls.map((url, index) => ({
-        ID: Date.now().toString() + index,
+        ID: `gallery_${Date.now()}_${index}_${Math.random()
+          .toString(36)
+          .substr(2, 9)}`,
         imageNumber: images.length + index + 1,
         ImageUrl: url,
         isselected: false,
@@ -152,13 +155,21 @@ const FormScreen3: React.FC<Props> = ({navigation}) => {
         UserId: user?.ID.toString() ?? null,
       };
 
-      const response = await SellerService.addProperty(finalFormData);
+      let response;
+      if (isEditMode) {
+        response = await SellerService.updateProperty(finalFormData);
+      } else {
+        response = await SellerService.addProperty(finalFormData);
+      }
+
       console.log('Response:', response);
       if (response.Success) {
         await clearFormData();
         Toast.show({
           type: 'success',
-          text1: 'Property listed successfully',
+          text1: isEditMode
+            ? 'Property updated successfully'
+            : 'Property listed successfully',
         });
         resetForm();
         setImages([]);
@@ -167,10 +178,12 @@ const FormScreen3: React.FC<Props> = ({navigation}) => {
         setDataUpdated(!dataUpdated);
       }
     } catch (err) {
-      console.log('Error in addProperty', err);
+      console.log('Error in property submission:', err);
       Toast.show({
         type: 'error',
-        text1: 'Error in listing property',
+        text1: isEditMode
+          ? 'Error in updating property'
+          : 'Error in listing property',
       });
     } finally {
       setLoading(false);
@@ -243,7 +256,7 @@ const FormScreen3: React.FC<Props> = ({navigation}) => {
           <View style={styles.previewContainer}>
             <Text style={styles.previewTitle}>Selected Images:</Text>
             <View style={styles.imageGrid}>
-              {images.map((image, _index) => (
+              {images.map(image => (
                 <View key={image.ID} style={styles.imageContainer}>
                   <Image
                     source={{uri: image.ImageUrl}}

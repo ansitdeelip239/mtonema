@@ -25,4 +25,3 @@ export type PartnerDrawerParamList = {
   'Home Screen': NavigatorScreenParams<PartnerBottomTabParamList>;
   'Profile Screen': undefined;
 };
-

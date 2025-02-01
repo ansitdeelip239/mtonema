@@ -2,6 +2,7 @@ import React, {createContext, useContext, useState, useEffect} from 'react';
 import {PropertyFormData} from '../types/propertyform';
 import {loadFormData, saveFormData} from '../utils/asyncStoragePropertyForm';
 import {useAuth} from '../hooks/useAuth';
+import {PropertyModel} from '../types';
 
 interface PropertyFormContextType {
   formData: PropertyFormData;
@@ -12,6 +13,9 @@ interface PropertyFormContextType {
   ) => void;
   resetForm: () => void;
   isFormValid: (step: number) => boolean;
+  editPropertyData: (property: PropertyModel) => void;
+  isEditMode: boolean;
+  setIsEditMode: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const PropertyFormContext = createContext<PropertyFormContextType | undefined>(
@@ -22,6 +26,7 @@ export const PropertyFormProvider: React.FC<{children: React.ReactNode}> = ({
   children,
 }) => {
   const {user} = useAuth();
+  const [isEditMode, setIsEditMode] = useState(false);
   const [formData, setFormData] = useState<PropertyFormData>({
     AlarmSystem: null,
     ApprovedBy: '',
@@ -96,7 +101,41 @@ export const PropertyFormProvider: React.FC<{children: React.ReactNode}> = ({
     setFormData(prev => ({...prev, [field]: value}));
   };
 
+  const editPropertyData = (property: PropertyModel) => {
+    setIsEditMode(true);
+    setFormData(
+      prev =>
+        ({
+          ...prev,
+          ID: property.ID?.toString() || '', // Convert ID to string
+          AlarmSystem: property.AlarmSystem || null,
+          ApprovedBy: property.ApprovedBy || '',
+          Area: typeof property.Area === 'number' ? property.Area : null,
+          BhkType: property.BhkType?.ID || null,
+          City: property.City?.ID || null,
+          Discription: property.Discription || null,
+          Facing: property.Facing?.ID || null,
+          Furnishing: property.Furnishing?.ID || null,
+          ImageURL: Array.isArray(property.ImageURL) ? property.ImageURL : [],
+          ImageURLType: Array.isArray(property.ImageURLType)
+            ? property.ImageURLType
+            : [],
+          Location: property.Location || null,
+          Price: typeof property.Price === 'number' ? property.Price : null,
+          PropertyFor: property.PropertyFor?.ID || null,
+          PropertyType: property.PropertyType?.ID || null,
+          Rate: property.Rate?.ID || null,
+          SellerEmail: property.SellerEmail || '',
+          SellerName: property.SellerName || '',
+          SellerPhone: property.SellerPhone || '',
+          SellerType: property.SellerType?.ID || null,
+          UserId: property.UserId?.toString() || user?.ID?.toString() || '',
+        } as PropertyFormData),
+    );
+  };
+
   const resetForm = () => {
+    setIsEditMode(false);
     setFormData({
       AlarmSystem: null,
       ApprovedBy: '',
@@ -185,6 +224,9 @@ export const PropertyFormProvider: React.FC<{children: React.ReactNode}> = ({
         updateFormField,
         resetForm,
         isFormValid,
+        editPropertyData,
+        isEditMode,
+        setIsEditMode,
       }}>
       {children}
     </PropertyFormContext.Provider>
