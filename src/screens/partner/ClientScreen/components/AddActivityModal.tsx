@@ -36,13 +36,18 @@ const AddActivityModal: React.FC<AddActivityModalProps> = ({
   const {masterData} = useMaster();
 
   useEffect(() => {
-    if (editMode && activityToEdit) {
+    if (!visible) {
+      setFormData({
+        activityType: null,
+        description: '',
+      });
+    } else if (editMode && activityToEdit) {
       setFormData({
         activityType: activityToEdit.ActivityType.ID,
         description: activityToEdit.Description,
       });
     }
-  }, [editMode, activityToEdit]);
+  }, [visible, editMode, activityToEdit]);
 
   const handleSubmit = () => {
     if (formData.activityType) {
