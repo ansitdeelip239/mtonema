@@ -248,6 +248,7 @@ const ContactedProperty = ({navigation}: HomeProps) => {
       <PropertyModal
         property={selectedProperty}
         visible={modalVisible}
+        isRecommended={false}
         onClose={() => setModalVisible(false)}
       />
     </>

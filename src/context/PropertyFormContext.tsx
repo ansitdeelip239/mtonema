@@ -139,7 +139,13 @@ export const PropertyFormProvider: React.FC<{children: React.ReactNode}> = ({
           locality: property.Locality || null,
           Status: property.Status || null,
           Tags: Array.isArray(property.Tags) ? property.Tags : [],
-
+          PropertyAge:property.PropertyAge || null,
+          GatedSecurity:property.GatedSecurity || null,
+          SurveillanceCameras:property.SurveillanceCameras || null,
+          ConstructionDone:property.ConstructionDone || null,
+          BoundaryWall:property.BoundaryWall || null,
+          OpenSide:property.OpenSide || null,
+          CeilingHeight:property.CeilingHeight || null,
         } as PropertyFormData),
     );
   };

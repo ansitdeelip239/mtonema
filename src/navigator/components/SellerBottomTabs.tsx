@@ -1,4 +1,4 @@
-import React, {memo, useEffect} from 'react';
+import React, {memo} from 'react';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {BottomTabBarProps} from '@react-navigation/bottom-tabs';
 import {CommonActions} from '@react-navigation/native';
@@ -15,7 +15,6 @@ import PostPropertyForm from '../../screens/seller/PostProperty/PostPropertyForm
 import SellerHomeScreen from '../../screens/seller/SellerHomeScreen';
 import {useAuth} from '../../hooks/useAuth';
 import {useKeyboard} from '../../hooks/useKeyboard';
-import PostProperty from '../../screens/seller/PostPropertyScreen';
 
 const Tab = createBottomTabNavigator<SellerBottomTabParamList>();
 

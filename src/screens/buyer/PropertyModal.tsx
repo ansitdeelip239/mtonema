@@ -20,6 +20,8 @@ import GetIcon from '../../components/GetIcon';
 import {BottomTabNavigationProp} from '@react-navigation/bottom-tabs';
 import {SellerBottomTabParamList} from '../../types/navigation';
 import {usePropertyForm} from '../../context/PropertyFormContext';
+import Colors from '../../constants/Colors';
+import Toast from 'react-native-toast-message';
 
 // Utility function to strip HTML tags
 const stripHtmlTags = (html: string): string => {
@@ -35,6 +37,7 @@ interface PropertyModalProps {
     'Home',
     undefined
   >;
+  isRecommended: boolean;
 }
 
 interface ConfirmationModalProps {
@@ -78,6 +81,7 @@ const PropertyModal = ({
   visible,
   onClose,
   navigation,
+  isRecommended,
 }: PropertyModalProps) => {
   const {user, dataUpdated, setDataUpdated} = useAuth();
   const {editPropertyData} = usePropertyForm();
@@ -152,10 +156,18 @@ const PropertyModal = ({
       if (response?.Success) {
         setDataUpdated(!dataUpdated);
         onClose();
+        Toast.show({
+          type: 'success',
+          text1: 'Property Deleted Successfully',
+        });
         console.log('Property deleted successfully');
       }
     } catch (error) {
       console.error((error as Error).message);
+      Toast.show({
+        type: 'error',
+        text1: 'Failed to Delete Property',
+      });
     } finally {
       setConfirmationModalVisible(false);
     }
@@ -261,7 +273,7 @@ const PropertyModal = ({
         </View>
 
         {/* Enquiry Now Button */}
-        {user?.Role === 'User' ? (
+        {user?.Role === 'User' && isRecommended ? (
           <View style={styles.buttonContainer}>
             <EnquiryButton property={property} />
           </View>
@@ -493,7 +505,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   yesButton: {
-    backgroundColor: 'red',
+    backgroundColor: Colors.main,
   },
   noButton: {
     backgroundColor: 'white', // White background for No button
