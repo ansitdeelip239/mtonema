@@ -128,15 +128,6 @@ export interface PropertyModel {
   PropertyLocation?: string;
   propertyModels?: any[];
 }
-// export interface SignUpRequest {
-//   Name: string;
-//   Email: string;
-//   Location: string;
-//   Phone: string;
-//   URL: string;
-//   Password: string;
-//   TermsChecked: true;
-// }
 export interface SignUpRequest {
   Name: string;
   Email: string;
