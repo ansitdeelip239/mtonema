@@ -1,12 +1,11 @@
 import {StyleSheet, View} from 'react-native';
 import React from 'react';
 import ProfileScreen from '../common/ProfileScreen';
-import Header from '../../components/Header';
 
 const SellerProfileScreen = () => {
   return (
     <View style={styles.container}>
-        <Header title="Profile"/>
+        {/* <Header title="Profile"/> */}
       <ProfileScreen/>
     </View>
   );
