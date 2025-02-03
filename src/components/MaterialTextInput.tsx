@@ -94,6 +94,9 @@ export const MaterialTextInput = <T,>({
         right={renderRight()}
         outlineStyle={styles.textInput}
         error={!!errorMessage}
+        contentStyle={{
+          minHeight: props.multiline ? 100 : undefined,
+        }}
       />
       {errorMessage && (
         <HelperText

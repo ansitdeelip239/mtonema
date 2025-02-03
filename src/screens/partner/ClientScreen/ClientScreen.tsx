@@ -38,20 +38,23 @@ const ClientScreen: React.FC<Props> = ({navigation}) => {
         </View>
       );
     }
-    if (error) {
+
+    if (error && error !== 'Failed to fetch clients') {
       return (
         <View style={styles.centerContainer}>
           <Text style={styles.errorText}>{error}</Text>
         </View>
       );
     }
+
     if (clients.length === 0) {
       return (
         <View style={styles.centerContainer}>
-          <Text style={styles.emptyText}>No clients found</Text>
+          <Text style={styles.emptyText}>No Clients Found</Text>
         </View>
       );
     }
+
     return (
       <FlatList
         data={clients}

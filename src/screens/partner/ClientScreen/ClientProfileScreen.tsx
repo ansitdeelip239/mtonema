@@ -270,7 +270,10 @@ const ClientProfileScreen: React.FC<Props> = ({route, navigation}) => {
   return (
     <PaperProvider>
       <View style={styles.container}>
-        <Header title="Client Profile">
+        <Header
+          title="Client Profile"
+          navigation={navigation}
+          backButton={true}>
           <Menu
             visible={visible}
             onDismiss={closeMenu}
