@@ -16,40 +16,34 @@ import Header from '../../../components/Header';
 import {Client, ClientActivityDataModel} from '../../../types';
 import PartnerService from '../../../services/PartnerService';
 import Toast from 'react-native-toast-message';
-import {formatDate} from '../../../utils/dateUtils';
 import GetIcon from '../../../components/GetIcon';
 import Colors from '../../../constants/Colors';
 import {usePartner} from '../../../context/PartnerProvider';
 import {Appbar, Menu, PaperProvider} from 'react-native-paper';
+import AddActivityModal from './components/AddActivityModal';
+import {useKeyboard} from '../../../hooks/useKeyboard';
+import {useAuth} from '../../../hooks/useAuth';
+import ActivityTimeline from './components/ActivityTimeline';
 
 type Props = NativeStackScreenProps<
   ClientStackParamList,
   'ClientProfileScreen'
 >;
 
-const ActivityItem: React.FC<{activity: ClientActivityDataModel}> = React.memo(
-  ({activity}) => (
-    <View style={styles.activityItem}>
-      <View style={styles.activityHeader}>
-        <Text style={styles.activityType}>{activity.ActivityType.Name}</Text>
-        <Text style={styles.activityDate}>
-          {formatDate(activity.CreatedOn, 'PPp')}
-        </Text>
-      </View>
-      <Text style={styles.activityDescription}>{activity.Description}</Text>
-      <Text style={styles.assignedTo}>
-        Assigned to: {activity.AssignedTo.Name}
-      </Text>
-    </View>
-  ),
-);
-
 const ClientProfileScreen: React.FC<Props> = ({route, navigation}) => {
   const [client, setClient] = useState<Client | null>(null);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [visible, setVisible] = useState(false);
+  const [isActivityModalVisible, setIsActivityModalVisible] = useState(false);
+  const [addingActivity, setAddingActivity] = useState(false);
+  const [selectedActivity, setSelectedActivity] = useState<
+    ClientActivityDataModel | undefined
+  >();
+
   const {clientsUpdated, setClientsUpdated} = usePartner();
+  const {keyboardVisible} = useKeyboard();
+  const {user} = useAuth();
 
   const fetchClient = React.useCallback(async () => {
     try {
@@ -156,6 +150,53 @@ const ClientProfileScreen: React.FC<Props> = ({route, navigation}) => {
     );
   };
 
+  const handleActivityPress = (activity: ClientActivityDataModel) => {
+    setSelectedActivity(activity);
+    setIsActivityModalVisible(true);
+  };
+
+  const handleAddEditActivity = async (
+    type: number,
+    description: string,
+    activityId?: number,
+  ) => {
+    try {
+      setAddingActivity(true);
+      const response = await PartnerService.addEditClientActivity(
+        type,
+        route.params.clientId.toString(),
+        description,
+        user?.Email as string,
+        activityId,
+      );
+
+      if (response.Success) {
+        Toast.show({
+          type: 'success',
+          text1: 'Success',
+          text2: activityId
+            ? 'Activity updated successfully'
+            : 'Activity added successfully',
+        });
+        fetchClient();
+        setIsActivityModalVisible(false);
+        setSelectedActivity(undefined);
+        setClientsUpdated(prev => !prev);
+      }
+    } catch (error) {
+      console.error('Error in handleAddEditActivity', error);
+      Toast.show({
+        type: 'error',
+        text1: 'Error',
+        text2: activityId
+          ? 'Failed to update activity'
+          : 'Failed to add activity',
+      });
+    } finally {
+      setAddingActivity(false);
+    }
+  };
+
   const renderContactInfo = React.useCallback(() => {
     if (!client) {
       return null;
@@ -201,15 +242,21 @@ const ClientProfileScreen: React.FC<Props> = ({route, navigation}) => {
       return <Text style={styles.noActivityText}>No activities yet</Text>;
     }
 
-    return client.ClientActivityDataModels.slice()
+    const sortedActivities = client.ClientActivityDataModels.slice()
       .sort(
         (a, b) =>
           new Date(b.CreatedOn).getTime() - new Date(a.CreatedOn).getTime(),
       )
-      .slice(0, 5)
-      .map(activity => (
-        <ActivityItem key={`activity-${activity.Id}`} activity={activity} />
-      ));
+      .slice(0, 5);
+
+    return sortedActivities.map((activity, index) => (
+      <ActivityTimeline
+        key={`activity-${activity.Id}`}
+        activity={activity}
+        isLast={index === sortedActivities.length - 1}
+        onPress={handleActivityPress}
+      />
+    ));
   }, [client?.ClientActivityDataModels]);
 
   if (loading) {
@@ -312,7 +359,12 @@ const ClientProfileScreen: React.FC<Props> = ({route, navigation}) => {
                 </View>
               )}
 
-              <View style={styles.infoSection}>
+              <View
+                style={[
+                  styles.infoSection,
+                  // eslint-disable-next-line react-native/no-inline-styles
+                  {paddingBottom: keyboardVisible ? 60 : 100},
+                ]}>
                 {renderContactInfo()}
 
                 {client.Groups && client.Groups.length > 0 && (
@@ -330,13 +382,35 @@ const ClientProfileScreen: React.FC<Props> = ({route, navigation}) => {
                 )}
 
                 <View style={styles.infoCard}>
-                  <Text style={styles.sectionTitle}>Recent Activities</Text>
+                  <View style={styles.activityHeader}>
+                    <Text style={styles.sectionTitle}>Recent Activities</Text>
+                    <TouchableOpacity
+                      style={styles.addActivityButton}
+                      onPress={() => {
+                        setIsActivityModalVisible(true);
+                      }}>
+                      <Text style={styles.addActivityButtonText}>
+                        Add Activity
+                      </Text>
+                    </TouchableOpacity>
+                  </View>
                   {renderActivities()}
                 </View>
               </View>
             </>
           )}
         </ScrollView>
+        <AddActivityModal
+          visible={isActivityModalVisible}
+          onClose={() => {
+            setIsActivityModalVisible(false);
+            setSelectedActivity(undefined);
+          }}
+          onSubmit={handleAddEditActivity}
+          isLoading={addingActivity}
+          editMode={!!selectedActivity}
+          activityToEdit={selectedActivity}
+        />
       </View>
     </PaperProvider>
   );
@@ -352,7 +426,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#f8f9fa',
-    paddingBottom: 80,
   },
   loadingContainer: {
     flex: 1,
@@ -377,8 +450,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#0066cc',
     justifyContent: 'center',
     alignItems: 'center',
-    marginBottom: 16, // Increase bottom margin for better spacing
-    shadowColor: '#000', // Add shadow for better visual hierarchy
+    marginBottom: 16,
+    shadowColor: '#000',
     shadowOffset: {
       width: 0,
       height: 2,
@@ -476,6 +549,17 @@ const styles = StyleSheet.create({
     color: '#444',
     lineHeight: 20,
   },
+  addActivityButton: {
+    backgroundColor: Colors.main,
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: 8,
+    marginBottom: 12,
+  },
+  addActivityButtonText: {
+    color: '#fff',
+    fontSize: 14,
+  },
   activityItem: {
     borderBottomWidth: 1,
     borderBottomColor: '#f0f0f0',
@@ -484,7 +568,8 @@ const styles = StyleSheet.create({
   activityHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginBottom: 4,
+    alignItems: 'center',
+    marginBottom: 12,
   },
   activityType: {
     fontSize: 14,
