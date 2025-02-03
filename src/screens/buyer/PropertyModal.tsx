@@ -35,6 +35,7 @@ interface PropertyModalProps {
     'Home',
     undefined
   >;
+  isRecommended: boolean;
 }
 
 interface ConfirmationModalProps {
@@ -78,6 +79,7 @@ const PropertyModal = ({
   visible,
   onClose,
   navigation,
+  isRecommended,
 }: PropertyModalProps) => {
   const {user, dataUpdated, setDataUpdated} = useAuth();
   const {editPropertyData} = usePropertyForm();
@@ -261,7 +263,7 @@ const PropertyModal = ({
         </View>
 
         {/* Enquiry Now Button */}
-        {user?.Role === 'User' ? (
+        {user?.Role === 'User' && isRecommended ? (
           <View style={styles.buttonContainer}>
             <EnquiryButton property={property} />
           </View>

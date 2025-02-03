@@ -232,6 +232,7 @@ const RecommendedProperty = ({navigation}: HomeProps) => {
       <PropertyModal
         property={selectedProperty}
         visible={modalVisible}
+        isRecommended={true}
         onClose={() => setModalVisible(false)}
       />
     </SafeAreaView>
