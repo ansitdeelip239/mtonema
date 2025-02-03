@@ -44,6 +44,7 @@ const SellerNavigator = memo(() => {
         name="Change Password"
         component={ChangePasswordScreen}
         options={{
+          headerShown: false,
           // eslint-disable-next-line react/no-unstable-nested-components
           drawerIcon: ({color}) => (
             <GetIcon iconName="changepassword" color={color} size="29" /> // Use GetIcon here
@@ -54,6 +55,7 @@ const SellerNavigator = memo(() => {
         name="Contact Us"
         component={ContactScreen}
         options={{
+          headerShown: false,
           // eslint-disable-next-line react/no-unstable-nested-components
           drawerIcon: ({color}) => (
             <GetIcon iconName="contactus" color={color} size="26" /> // Use GetIcon here

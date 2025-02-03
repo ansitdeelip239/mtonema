@@ -12,6 +12,7 @@ import {
 import {api} from '../../utils/api';
 import url from '../../constants/api';
 import {useAuth} from '../../hooks/useAuth';
+import Header from '../../components/Header';
 
 const ChangePasswordScreen = () => {
   const [loading, setLoading] = useState(false);
@@ -84,6 +85,8 @@ const ChangePasswordScreen = () => {
   };
 
   return (
+    <>
+      <Header title="Change Password"/>
     <View style={styles.container}>
       <Text style={styles.header}>Change Password</Text>
 
@@ -98,18 +101,18 @@ const ChangePasswordScreen = () => {
             setOldPassword(text);
             setOldPasswordError('');
           }}
-        />
+          />
         <TouchableOpacity
           style={styles.icon}
           onPress={() => setShowOldPassword(!showOldPassword)}>
           <Image
             source={
               showOldPassword
-                ? require('../../assets/Icon/eye.png')
-                : require('../../assets/Icon/eye-slash.png')
+              ? require('../../assets/Icon/eye.png')
+              : require('../../assets/Icon/eye-slash.png')
             }
             style={styles.iconImage}
-          />
+            />
         </TouchableOpacity>
       </View>
       {oldPasswordError && <Text style={styles.error}>{oldPasswordError}</Text>}
@@ -125,18 +128,18 @@ const ChangePasswordScreen = () => {
             setNewPassword(text);
             setNewPasswordError('');
           }}
-        />
+          />
         <TouchableOpacity
           style={styles.icon}
           onPress={() => setShowNewPassword(!showNewPassword)}>
           <Image
             source={
               showNewPassword
-                ? require('../../assets/Icon/eye.png')
-                : require('../../assets/Icon/eye-slash.png')
+              ? require('../../assets/Icon/eye.png')
+              : require('../../assets/Icon/eye-slash.png')
             }
             style={styles.iconImage}
-          />
+            />
         </TouchableOpacity>
       </View>
       {newPasswordError && <Text style={styles.error}>{newPasswordError}</Text>}
@@ -152,18 +155,18 @@ const ChangePasswordScreen = () => {
             setConfirmPassword(text);
             setConfirmPasswordError('');
           }}
-        />
+          />
         <TouchableOpacity
           style={styles.icon}
           onPress={() => setShowConfirmPassword(!showConfirmPassword)}>
           <Image
             source={
               showConfirmPassword
-                ? require('../../assets/Icon/eye.png')
-                : require('../../assets/Icon/eye-slash.png')
+              ? require('../../assets/Icon/eye.png')
+              : require('../../assets/Icon/eye-slash.png')
             }
             style={styles.iconImage}
-          />
+            />
         </TouchableOpacity>
       </View>
       {confirmPasswordError && <Text style={styles.error}>{confirmPasswordError}</Text>}
@@ -177,6 +180,7 @@ const ChangePasswordScreen = () => {
         )}
       </TouchableOpacity>
     </View>
+</>
   );
 };
 

@@ -18,6 +18,7 @@ import { User } from '../../types';
 import CommonService from '../../services/CommonService';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import GetIcon from '../../components/GetIcon';
+import Header from '../../components/Header';
 
 type FieldName = 'name' | 'email' | 'password' | 'mobile' | 'location';
 type EditableFields = Record<FieldName, boolean>;
@@ -323,6 +324,7 @@ const ProfileScreen = () => {
 
   return (
     <>
+    <Header title="User Profile"/>
       <ScrollView contentContainerStyle={styles.scrollContainer}>
         <View style={styles.profileImageContainer}>
           <Image source={userData.profileImage} style={styles.profileImage} />

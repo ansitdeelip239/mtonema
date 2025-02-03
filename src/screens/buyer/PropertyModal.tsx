@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, {useState, useRef} from 'react';
 import {
   Modal,
   View,
@@ -10,12 +10,18 @@ import {
   Dimensions,
   NativeSyntheticEvent,
   NativeScrollEvent,
+  ActivityIndicator,
 } from 'react-native';
-import { PropertyModel } from '../../types';
+import {PropertyModel} from '../../types';
 import EnquiryButton from '../common/EnquiryButton';
-import { useAuth } from '../../hooks/useAuth';
+import {useAuth} from '../../hooks/useAuth';
 import BuyerService from '../../services/BuyerService';
 import GetIcon from '../../components/GetIcon';
+import {BottomTabNavigationProp} from '@react-navigation/bottom-tabs';
+import {SellerBottomTabParamList} from '../../types/navigation';
+import {usePropertyForm} from '../../context/PropertyFormContext';
+import Colors from '../../constants/Colors';
+import Toast from 'react-native-toast-message';
 
 // Utility function to strip HTML tags
 const stripHtmlTags = (html: string): string => {
@@ -26,6 +32,12 @@ interface PropertyModalProps {
   property: PropertyModel | null;
   visible: boolean;
   onClose: () => void;
+  navigation?: BottomTabNavigationProp<
+    SellerBottomTabParamList,
+    'Home',
+    undefined
+  >;
+  isRecommended: boolean;
 }
 
 interface ConfirmationModalProps {
@@ -34,32 +46,49 @@ interface ConfirmationModalProps {
   onCancel: () => void;
 }
 
-const ConfirmationModal: React.FC<ConfirmationModalProps> = ({ visible, onConfirm, onCancel }) => {
+const ConfirmationModal: React.FC<ConfirmationModalProps> = ({
+  visible,
+  onConfirm,
+  onCancel,
+}) => {
   return (
     <Modal visible={visible} transparent animationType="fade">
-  <View style={styles.confirmationModalContainer}>
-    <View style={styles.confirmationModalContent}>
-      <Text style={styles.confirmationModalText}>
-        Are you sure you want to delete your property?
-      </Text>
-      <View style={styles.confirmationModalButtons}>
-        <TouchableOpacity onPress={onConfirm} style={[styles.confirmationModalButton, styles.yesButton]}>
-          <Text style={styles.yesButtonText}>Yes</Text>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={onCancel} style={[styles.confirmationModalButton, styles.noButton]}>
-          <Text style={styles.noButtonText}>No</Text>
-        </TouchableOpacity>
+      <View style={styles.confirmationModalContainer}>
+        <View style={styles.confirmationModalContent}>
+          <Text style={styles.confirmationModalText}>
+            Are you sure you want to delete your property?
+          </Text>
+          <View style={styles.confirmationModalButtons}>
+            <TouchableOpacity
+              onPress={onConfirm}
+              style={[styles.confirmationModalButton, styles.yesButton]}>
+              <Text style={styles.yesButtonText}>Yes</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={onCancel}
+              style={[styles.confirmationModalButton, styles.noButton]}>
+              <Text style={styles.noButtonText}>No</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
       </View>
-    </View>
-  </View>
-</Modal>
+    </Modal>
   );
 };
 
-const PropertyModal = ({ property, visible, onClose }: PropertyModalProps) => {
-  const { user, dataUpdated, setDataUpdated } = useAuth();
+const PropertyModal = ({
+  property,
+  visible,
+  onClose,
+  navigation,
+  isRecommended,
+}: PropertyModalProps) => {
+  const {user, dataUpdated, setDataUpdated} = useAuth();
+  const {editPropertyData} = usePropertyForm();
+  const [isLoading, setIsLoading] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
-  const [isConfirmationModalVisible, setConfirmationModalVisible] = useState(false);
+  const [isConfirmationModalVisible, setConfirmationModalVisible] =
+    useState(false);
   const scrollViewRef = useRef<ScrollView>(null);
 
   if (!property) {
@@ -105,16 +134,40 @@ const PropertyModal = ({ property, visible, onClose }: PropertyModalProps) => {
     setConfirmationModalVisible(true);
   };
 
+  // const handleEdit = () => {
+
+  //   editPropertyData(property);
+  //   onClose();
+  //   navigation.navigate('AddProperty');
+  // };
+  const handleEdit = () => {
+    setIsLoading(true);
+    setTimeout(() => {
+      editPropertyData(property);
+      onClose();
+      navigation?.navigate('AddProperty');
+      setIsLoading(false);
+    }, 1500);
+  };
+
   const handleDelete = async () => {
     try {
       const response = await BuyerService.deleteProperty(property.ID);
       if (response?.Success) {
         setDataUpdated(!dataUpdated);
         onClose();
+        Toast.show({
+          type: 'success',
+          text1: 'Property Deleted Successfully',
+        });
         console.log('Property deleted successfully');
       }
     } catch (error) {
       console.error((error as Error).message);
+      Toast.show({
+        type: 'error',
+        text1: 'Failed to Delete Property',
+      });
     } finally {
       setConfirmationModalVisible(false);
     }
@@ -138,7 +191,7 @@ const PropertyModal = ({ property, visible, onClose }: PropertyModalProps) => {
               {images.map((image: any, index: any) => (
                 <Image
                   key={index}
-                  source={{ uri: image.ImageUrl || image }} // Handle both cases
+                  source={{uri: image.ImageUrl || image}} // Handle both cases
                   style={styles.propertyImage}
                   resizeMode="cover"
                 />
@@ -220,21 +273,34 @@ const PropertyModal = ({ property, visible, onClose }: PropertyModalProps) => {
         </View>
 
         {/* Enquiry Now Button */}
-        {user?.Role === 'User' ? (
+        {user?.Role === 'User' && isRecommended ? (
           <View style={styles.buttonContainer}>
             <EnquiryButton property={property} />
           </View>
         ) : null}
         {user?.Role === 'Seller' ? (
-          <View style={styles.buttonContainer2}>
-            <TouchableOpacity onPress={handleDeleteConfirmation}>
-
-            <GetIcon   iconName="delete" color="white" size="20" />
-            </TouchableOpacity>
-            {/* <Text  style={styles.enquiryButtonText2}>
+          <>
+            <View style={styles.buttonContainer1}>
+              <TouchableOpacity onPress={handleDeleteConfirmation}>
+                <GetIcon iconName="delete" color="white" size="20" />
+              </TouchableOpacity>
+              {/* <Text  style={styles.enquiryButtonText2}>
               DELETE PROPERTY
             </Text> */}
-          </View>
+            </View>
+            <View style={styles.buttonContainer2}>
+              <TouchableOpacity onPress={handleEdit} disabled={isLoading}>
+                {isLoading ? (
+                  <ActivityIndicator size="small" color="white" />
+                ) : (
+                  <GetIcon iconName="edit" color="white" size="20" />
+                )}
+              </TouchableOpacity>
+              {/* <TouchableOpacity onPress={handleEdit}>
+                <GetIcon iconName="edit" color="white" size="20" />
+              </TouchableOpacity> */}
+            </View>
+          </>
         ) : null}
       </ScrollView>
 
@@ -247,7 +313,6 @@ const PropertyModal = ({ property, visible, onClose }: PropertyModalProps) => {
   );
 };
 
-
 const styles = StyleSheet.create({
   modalContainer: {
     flex: 1,
@@ -259,25 +324,45 @@ const styles = StyleSheet.create({
     fontWeight: 'bold', // Bold text
     textAlign: 'center', // Center text
   },
-  buttonContainer2: {
-    flex:1,
+  buttonContainer1: {
+    flex: 1,
     flexDirection: 'row',
     gap: 4,
     backgroundColor: 'red',
     borderRadius: 8,
     paddingVertical: 12,
-    padding:5,
+    padding: 5,
     alignItems: 'center',
     justifyContent: 'center',
     elevation: 3,
     shadowColor: 'black',
-    shadowOffset: { width: 2, height: 6 },
+    shadowOffset: {width: 2, height: 6},
     shadowOpacity: 0.2,
     shadowRadius: 4,
-    width:50,
-    position:'absolute',
-    top:'33%',
-    right:'22%',
+    width: 50,
+    position: 'absolute',
+    top: '40%',
+    right: '25%',
+  },
+  buttonContainer2: {
+    flex: 1,
+    flexDirection: 'row',
+    gap: 4,
+    backgroundColor: 'red',
+    borderRadius: 8,
+    paddingVertical: 12,
+    padding: 5,
+    alignItems: 'center',
+    justifyContent: 'center',
+    elevation: 3,
+    shadowColor: 'black',
+    shadowOffset: {width: 2, height: 6},
+    shadowOpacity: 0.2,
+    shadowRadius: 4,
+    width: 50,
+    position: 'absolute',
+    top: '40%',
+    left: '82%',
   },
   imageContainer: {
     position: 'relative',
@@ -386,7 +471,7 @@ const styles = StyleSheet.create({
     marginBottom: 8,
     color: '#4a5568',
   },
- confirmationModalContainer: {
+  confirmationModalContainer: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
@@ -394,7 +479,7 @@ const styles = StyleSheet.create({
   },
   confirmationModalContent: {
     width: '90%',
-    height:'25%',
+    height: '25%',
     padding: 20,
     backgroundColor: 'white',
     borderRadius: 10,
@@ -420,7 +505,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   yesButton: {
-    backgroundColor: 'red',
+    backgroundColor: Colors.main,
   },
   noButton: {
     backgroundColor: 'white', // White background for No button

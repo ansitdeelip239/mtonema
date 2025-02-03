@@ -445,11 +445,16 @@ const SearchProperty =  ({navigation}: HomeProps) => {
         </View>
       )}
 
-      <PropertyModal
+{/* <PropertyModal
         property={selectedProperty as PropertyModel}
         visible={modalVisible}
         onClose={() => setModalVisible(false)}
-      />
+      /> */}
+
+      <PropertyModal
+        property={selectedProperty as PropertyModel}
+        visible={modalVisible}
+        onClose={() => setModalVisible(false)} isRecommended={false}/>
     </View>
   );
 };
@@ -601,7 +606,7 @@ const styles = StyleSheet.create({
   },
   suggestionsContainer: {
     position: 'absolute',
-    top: 70,
+    top: 130,
     left: 16,
     right: 16,
     backgroundColor: '#fff',

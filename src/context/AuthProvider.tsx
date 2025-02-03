@@ -4,6 +4,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import {jwtDecode} from 'jwt-decode';
 import AuthContext from './AuthContext';
 import {User} from '../types';
+import { usePropertyForm } from './PropertyFormContext';
 
 interface AuthProviderProps {
   children: React.ReactNode;
@@ -14,6 +15,7 @@ interface DecodedToken {
   [key: string]: any;
 }
 export const AuthProvider: React.FC<AuthProviderProps> = ({children}) => {
+   const {resetForm} = usePropertyForm();
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [user, setUser] = useState<User | null>(null);
   const [authToken, setAuthToken] = useState<string | null>(null);
@@ -23,12 +25,14 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({children}) => {
   const tokenExpiryTimer = useRef<NodeJS.Timeout>();
   const logout = useCallback(async () => {
     try {
+      await AsyncStorage.removeItem('propertyFormData');
       await AuthService.removeUserData();
       await AsyncStorage.removeItem('tokenExpiry');
       await AsyncStorage.removeItem('token');
       setUser(null);
       setAuthToken(null);
       setIsAuthenticated(false);
+      resetForm();
       // Clear token expiry timer
       if (tokenExpiryTimer.current) {
         clearTimeout(tokenExpiryTimer.current);
@@ -40,7 +44,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({children}) => {
       setAuthToken(null);
       setIsAuthenticated(false);
     }
-  }, []);
+  }, [resetForm]);
   const handleTokenExpiry = useCallback(
     (token: string) => {
       if (!token) {

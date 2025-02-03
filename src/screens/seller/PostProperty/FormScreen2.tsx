@@ -413,7 +413,7 @@ const FormScreen2: React.FC<Props> = ({navigation}) => {
               )}
               {renderSimpleOptionButtons(
                 'Property Classification',
-                'propertyClassification',
+                'PropertyForType',
                 ['Residential', 'Commercial'],
               )}
               {fieldsToShow.includes('Any Construction') &&
@@ -519,7 +519,7 @@ const FormScreen2: React.FC<Props> = ({navigation}) => {
                   masterData?.FurnishType || [],
                 )}
               {fieldsToShow.includes('Car Parking') &&
-                renderSimpleOptionButtons('Car Parking', 'CarParking', [
+                renderSimpleOptionButtons('Car Parking', 'Parking', [
                   'Yes - Shaded',
                   'Yes - Unshaded',
                   'No',

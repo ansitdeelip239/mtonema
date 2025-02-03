@@ -22,6 +22,7 @@ type Props = NativeStackScreenProps<PostPropertyFormParamList, 'FormScreen1'>;
 const FormScreen1: React.FC<Props> = ({navigation}) => {
   const [values, setValue] = useState('Basic Info');
   const {masterData} = useMaster();
+  const {isEditMode} = usePropertyForm();
   const [isContinueClicked, setIsContinueClicked] = useState(false);
   const [showAll, setShowAll] = useState<{[key: string]: boolean}>({
     SellerType: false,
@@ -95,7 +96,7 @@ const FormScreen1: React.FC<Props> = ({navigation}) => {
       source={require('../../../assets/Images/bgimg1.png')}
       style={styles.background}>
       <View style={styles.mainheading}>
-        <Text style={styles.mainheadingtext}>Property Details</Text>
+        <Text style={styles.mainheadingtext}>{isEditMode ? 'Edit Property Details' : 'Add Property Details'}</Text>
       </View>
       <FlatList
         data={[1]} // To force the FlatList to render, add a dummy item
