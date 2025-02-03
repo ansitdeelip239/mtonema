@@ -283,7 +283,9 @@ const FormScreen3: React.FC<Props> = ({navigation}) => {
           {loading ? (
             <ActivityIndicator size="large" color="white" />
           ) : (
-            <Text style={styles.listPropertyText}>List Your Property</Text>
+            <Text style={styles.listPropertyText}>
+            {isEditMode ? 'Update Property' : 'List Your Property'}
+          </Text>
           )}
         </TouchableOpacity>
       </ScrollView>
@@ -414,3 +416,4 @@ const styles = StyleSheet.create({
 });
 
 export default FormScreen3;
+
