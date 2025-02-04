@@ -28,6 +28,7 @@ const PartnerNavigator = memo(() => (
       component={PartnerBottomTabs}
       options={{
         headerShown: false,
+        drawerItemStyle: {display: 'none'},
       }}
     />
     <Drawer.Screen
