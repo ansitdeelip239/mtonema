@@ -101,6 +101,7 @@ const ClientProfileScreen: React.FC<Props> = ({route, navigation}) => {
 
   const openMenu = () => setVisible(true);
   const closeMenu = () => setVisible(false);
+  const closeActivityModal = () => setIsActivityModalVisible(false);
 
   const handleDelete = async () => {
     closeMenu();
@@ -148,6 +149,28 @@ const ClientProfileScreen: React.FC<Props> = ({route, navigation}) => {
       ],
       {cancelable: true},
     );
+  };
+
+  const handleDeleteActivity = async (activityId: number) => {
+    try {
+      const response = await PartnerService.deleteClientActivity(activityId);
+      if (response.Success) {
+        Toast.show({
+          type: 'success',
+          text1: 'Success',
+          text2: 'Activity deleted successfully',
+        });
+        fetchClient();
+        setClientsUpdated(prev => !prev);
+      }
+    } catch (error) {
+      console.error('Error in handleDeleteActivity', error);
+      Toast.show({
+        type: 'error',
+        text1: 'Error',
+        text2: 'Failed to delete activity',
+      });
+    }
   };
 
   const handleActivityPress = (activity: ClientActivityDataModel) => {
@@ -411,9 +434,11 @@ const ClientProfileScreen: React.FC<Props> = ({route, navigation}) => {
             setSelectedActivity(undefined);
           }}
           onSubmit={handleAddEditActivity}
+          onDelete={handleDeleteActivity}
           isLoading={addingActivity}
           editMode={!!selectedActivity}
           activityToEdit={selectedActivity}
+          closeMenu={closeActivityModal}
         />
       </View>
     </PaperProvider>

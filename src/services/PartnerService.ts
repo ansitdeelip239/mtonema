@@ -181,5 +181,17 @@ class PartnerService {
       throw error;
     }
   }
+
+  static async deleteClientActivity(activityId: number) {
+    try {
+      const response = await api.delete<null>(
+        `${url.deleteClientActivity}?Id=${activityId}`,
+      );
+      return response;
+    } catch (error) {
+      console.error('Error in deleteClientActivity', error);
+      throw error;
+    }
+  }
 }
 export default PartnerService;
