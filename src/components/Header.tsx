@@ -41,19 +41,21 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     paddingHorizontal: 16,
+    paddingVertical: 6,
   },
   headerText: {
     fontSize: 26,
     fontWeight: '600',
     color: Colors.black,
-    padding: 16,
+    padding: 18,
     paddingBottom: 8,
+    paddingTop: 5,
     flex: 1,
   },
   menuButton: {
-    paddingTop: 8,
+    // paddingTop: 8,
   },
   child: {
-    paddingTop: 10,
+    // paddingTop: 10,
   },
 });

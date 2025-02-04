@@ -298,13 +298,10 @@ const AddClientScreen: React.FC<Props> = ({navigation, route}) => {
   return (
     <>
       <Header<PartnerDrawerParamList>
-        title={editMode ? 'Edit Client' : 'Add Client'}>
-        <TouchableOpacity
-          style={styles.backButton}
-          onPress={() => navigation.goBack()}>
-          <Text style={styles.buttonText}>Back</Text>
-        </TouchableOpacity>
-      </Header>
+        title={editMode ? 'Edit Client' : 'Add Client'}
+        backButton={true}
+        navigation={navigation}
+      />
       <KeyboardAvoidingView
         style={styles.container}
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
@@ -343,14 +340,6 @@ const styles = StyleSheet.create({
   },
   input: {
     marginBottom: 16,
-  },
-  backButton: {
-    backgroundColor: Colors.main,
-    paddingHorizontal: 16,
-    paddingVertical: 8,
-    borderRadius: 8,
-    alignItems: 'center',
-    justifyContent: 'center',
   },
   buttonText: {
     color: '#fff',
