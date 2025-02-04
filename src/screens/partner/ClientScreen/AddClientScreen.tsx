@@ -25,6 +25,7 @@ import Toast from 'react-native-toast-message';
 import {useAuth} from '../../../hooks/useAuth';
 import {z} from 'zod';
 import clientFormSchema from '../../../schema/ClientFormSchema';
+import { useDialog } from '../../../hooks/useDialog';
 
 type Props = NativeStackScreenProps<ClientStackParamList, 'AddClientScreen'>;
 
@@ -32,6 +33,7 @@ const AddClientScreen: React.FC<Props> = ({navigation, route}) => {
   const scrollViewRef = useRef<ScrollView>(null);
   const {groups, setClientsUpdated} = usePartner();
   const {user} = useAuth();
+  const {showError} = useDialog();
 
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
 
@@ -135,10 +137,11 @@ const AddClientScreen: React.FC<Props> = ({navigation, route}) => {
             }
           });
           setFieldErrors(errors);
-          Toast.show({
-            type: 'error',
-            text1: 'Please provide a valid Client Name',
-          });
+          // Toast.show({
+          //   type: 'error',
+          //   text1: 'Please provide a valid Client Name',
+          // });
+          showError('Please provide a valid Client Name');
         } else {
           console.error('Error in onSubmit:', err);
           Toast.show({

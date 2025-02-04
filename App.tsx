@@ -7,24 +7,27 @@ import Toast from 'react-native-toast-message';
 import {PropertyFormProvider} from './src/context/PropertyFormContext';
 import {StatusBar} from 'react-native';
 import {PaperProvider} from 'react-native-paper';
+import {DialogProvider} from './src/context/DialogProvider';
 
 const App = () => {
   return (
     <PaperProvider>
-      <PropertyFormProvider>
-        <AuthProvider>
-          <StatusBar
-            barStyle="dark-content"
-            backgroundColor="hotpink"
-            animated
-            showHideTransition="fade"
-          />
-          <SafeAreaProvider>
-            <RootNavigator />
-            <Toast />
-          </SafeAreaProvider>
-        </AuthProvider>
-      </PropertyFormProvider>
+      <DialogProvider>
+        <PropertyFormProvider>
+          <AuthProvider>
+            <StatusBar
+              barStyle="dark-content"
+              backgroundColor="hotpink"
+              animated
+              showHideTransition="fade"
+            />
+            <SafeAreaProvider>
+              <RootNavigator />
+              <Toast />
+            </SafeAreaProvider>
+          </AuthProvider>
+        </PropertyFormProvider>
+      </DialogProvider>
     </PaperProvider>
   );
 };
