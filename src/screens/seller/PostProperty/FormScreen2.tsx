@@ -17,6 +17,8 @@ import {
   saveFormData,
 } from '../../../utils/asyncStoragePropertyForm';
 import {usePropertyForm} from '../../../context/PropertyFormContext';
+import { MaterialTextInput } from '../../../components/MaterialTextInput';
+import { formatCurrency } from '../../../utils/currency';
 
 type Props = NativeStackScreenProps<PostPropertyFormParamList, 'FormScreen2'>;
 type PropertyType =
@@ -81,6 +83,7 @@ const FormScreen2: React.FC<Props> = ({navigation}) => {
 
   const isFormValid = () => {
     return isContextFormValid(2);
+
   };
 
   const renderOptionSection = (
@@ -174,7 +177,7 @@ const FormScreen2: React.FC<Props> = ({navigation}) => {
       'Approved By',
       'ZIP',
       'Amount',
-      'Amount Unit',
+      // 'Amount Unit',
       'Property Area',
       'Property Unit',
       'Property Discription',
@@ -189,7 +192,7 @@ const FormScreen2: React.FC<Props> = ({navigation}) => {
       'Approved By',
       'ZIP',
       'Amount',
-      'Amount Unit',
+      // 'Amount Unit',
       'Property Area',
       'Property Unit',
       'Property Discription',
@@ -205,7 +208,7 @@ const FormScreen2: React.FC<Props> = ({navigation}) => {
       'Approved By',
       'ZIP',
       'Amount',
-      'Amount Unit',
+      // 'Amount Unit',
       'Property Area',
       'Property Unit',
       'Property Discription',
@@ -221,7 +224,7 @@ const FormScreen2: React.FC<Props> = ({navigation}) => {
       'Approved By',
       'ZIP',
       'Amount',
-      'Amount Unit',
+      // 'Amount Unit',
       'Property Area',
       'Property Unit',
       'Property Discription',
@@ -237,7 +240,7 @@ const FormScreen2: React.FC<Props> = ({navigation}) => {
       'Approved By',
       'ZIP',
       'Amount',
-      'Amount Unit',
+      // 'Amount Unit',
       'Property Area',
       'Property Unit',
       'Property Discription',
@@ -253,7 +256,7 @@ const FormScreen2: React.FC<Props> = ({navigation}) => {
       'Approved By',
       'ZIP',
       'Amount',
-      'Amount Unit',
+      // 'Amount Unit',
       'Property Area',
       'Property Unit',
       'Property Discription',
@@ -269,7 +272,7 @@ const FormScreen2: React.FC<Props> = ({navigation}) => {
       'Approved By',
       'ZIP',
       'Amount',
-      'Amount Unit',
+      // 'Amount Unit',
       'Property Area',
       'Property Unit',
       'Property Discription',
@@ -282,7 +285,7 @@ const FormScreen2: React.FC<Props> = ({navigation}) => {
       'Approved By',
       'ZIP',
       'Amount',
-      'Amount Unit',
+      // 'Amount Unit',
       'Property Area',
       'Property Unit',
       'Property Discription',
@@ -302,7 +305,7 @@ const FormScreen2: React.FC<Props> = ({navigation}) => {
       'Approved By',
       'ZIP',
       'Amount',
-      'Amount Unit',
+      // 'Amount Unit',
       'Property Area',
       'Property Unit',
       'Property Discription',
@@ -322,7 +325,7 @@ const FormScreen2: React.FC<Props> = ({navigation}) => {
       'Approved By',
       'ZIP',
       'Amount',
-      'Amount Unit',
+      // 'Amount Unit',
       'Property Area',
       'Property Unit',
       'Property Discription',
@@ -337,7 +340,7 @@ const FormScreen2: React.FC<Props> = ({navigation}) => {
       'Approved By',
       'ZIP',
       'Amount',
-      'Amount Unit',
+      // 'Amount Unit',
       'Property Area',
       'Property Unit',
       'Property Discription',
@@ -560,31 +563,41 @@ const FormScreen2: React.FC<Props> = ({navigation}) => {
                   />
                 </View>
               )}
-              {fieldsToShow.includes('Amount') && (
+
+{fieldsToShow.includes('Amount') && (
                 <View style={styles.section}>
                   <Text style={styles.sectionTitle}>
                     Amount<Text style={styles.asterisk}> *</Text>
                   </Text>
-                  <TextInput
+                  <MaterialTextInput
+                    field="Price"
+                    formInput={formData}
+                    setFormInput={(field, value) => {
+                      // Only allow numbers
+                      if (typeof value === 'string' && /^\d*$/.test(value)) {
+                        setFormData({...formData, [field]: value});
+                      }
+                    }}
                     mode="outlined"
-                    style={styles.input}
-                    value={formData.Price || ''}
-                    onChangeText={value =>
-                      setFormData({...formData, Price: value})
-                    }
                     placeholder="Enter Amount"
                     keyboardType="number-pad"
                     maxLength={9}
+                    rightComponent={
+                      <Text>{formatCurrency(formData.Price || '')}</Text>
+                    }
+                    style={styles.input}
+                    outlineColor="#ddd"
+                    activeOutlineColor={Colors.main}
                   />
                 </View>
               )}
-              {fieldsToShow.includes('Amount Unit') &&
+              {/* {fieldsToShow.includes('Amount Unit') &&
                 renderOptionSection(
                   'Amount Unit',
                   'Rate',
                   masterData?.AmountUnit || [],
-                  true,
-                )}
+                  false,
+                )} */}
               {fieldsToShow.includes('Property Area') && (
                 <View style={styles.section}>
                   <Text style={styles.sectionTitle}>
@@ -772,7 +785,7 @@ const styles = StyleSheet.create({
   input: {
     borderWidth: 1,
     borderColor: '#ddd',
-    borderRadius: 8,
+    borderRadius: 11,
     // padding: 12,
     fontSize: 16,
     backgroundColor: 'transparent',
