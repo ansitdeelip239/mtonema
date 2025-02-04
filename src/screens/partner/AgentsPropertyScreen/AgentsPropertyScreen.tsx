@@ -1,6 +1,5 @@
 import React, {useState, useEffect, useCallback, useMemo, useRef} from 'react';
 import {View, StyleSheet, FlatList, RefreshControl, Text} from 'react-native';
-import {PaperProvider} from 'react-native-paper';
 import PartnerService from '../../../services/PartnerService';
 import {useAuth} from '../../../hooks/useAuth';
 import {AgentData, FilterValues, PagingModel} from '../../../types';
@@ -145,41 +144,36 @@ const AgentDataScreen: React.FC<Props> = ({navigation}) => {
   );
 
   return (
-    <PaperProvider>
-      <View style={styles.container}>
-        <Header<PartnerDrawerParamList> title="Agent's Property" />
-        <SearchHeader
-          initialFilters={filters}
-          onSearch={handleSearch}
-          onFilter={handleFilter}
-          agentData={agentData}
-        />
-        <FlatList
-          data={agentData}
-          renderItem={({item}) =>
-            renderItem({
-              item,
-              onDataUpdate: () => setAgentPropertyUpdated(prev => !prev),
-              navigation,
-            })
-          }
-          keyExtractor={(item, index) =>
-            `${item.Id?.toString() || 'item'}-${index}`
-          }
-          contentContainerStyle={styles.listContainer}
-          refreshControl={
-            <RefreshControl
-              refreshing={isRefreshing}
-              onRefresh={handleRefresh}
-            />
-          }
-          onEndReached={handleLoadMore}
-          onEndReachedThreshold={0.5}
-          ListFooterComponent={renderFooter({isLoading})}
-          ListEmptyComponent={renderEmptyComponent}
-        />
-      </View>
-    </PaperProvider>
+    <View style={styles.container}>
+      <Header<PartnerDrawerParamList> title="Agent's Property" />
+      <SearchHeader
+        initialFilters={filters}
+        onSearch={handleSearch}
+        onFilter={handleFilter}
+        agentData={agentData}
+      />
+      <FlatList
+        data={agentData}
+        renderItem={({item}) =>
+          renderItem({
+            item,
+            onDataUpdate: () => setAgentPropertyUpdated(prev => !prev),
+            navigation,
+          })
+        }
+        keyExtractor={(item, index) =>
+          `${item.Id?.toString() || 'item'}-${index}`
+        }
+        contentContainerStyle={styles.listContainer}
+        refreshControl={
+          <RefreshControl refreshing={isRefreshing} onRefresh={handleRefresh} />
+        }
+        onEndReached={handleLoadMore}
+        onEndReachedThreshold={0.5}
+        ListFooterComponent={renderFooter({isLoading})}
+        ListEmptyComponent={renderEmptyComponent}
+      />
+    </View>
   );
 };
 

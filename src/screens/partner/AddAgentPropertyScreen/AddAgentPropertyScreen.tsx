@@ -212,7 +212,7 @@ const AddAgentPropertyScreen: React.FC<Props> = ({navigation, route}) => {
           formInput={formInput}
           handleFieldChange={handleFieldChange}
           errors={errors}
-          label="Agent Name"
+          label="Agent Name*"
           placeholder="Eg. John Doe"
           searchType="AgentName"
           onAgentSelect={(agentName, contactNo) => {
@@ -223,7 +223,7 @@ const AddAgentPropertyScreen: React.FC<Props> = ({navigation, route}) => {
 
         <MaterialTextInput<AgentPropertyFormType>
           style={styles.input}
-          label="Agent Contact No."
+          label="Agent Contact No.*"
           field="agentContactNo"
           formInput={formInput}
           setFormInput={handleFieldChange}
@@ -238,7 +238,7 @@ const AddAgentPropertyScreen: React.FC<Props> = ({navigation, route}) => {
           formInput={formInput}
           handleFieldChange={handleFieldChange}
           errors={errors}
-          label="Property Location"
+          label="Property Location*"
           placeholder="Navi Mumbai, Thane, etc."
           searchType="AgentPropertyLocation"
         />
@@ -348,6 +348,7 @@ const AddAgentPropertyScreen: React.FC<Props> = ({navigation, route}) => {
               mode="contained"
               onPress={handleSubmit}
               buttonColor={Colors.main}
+              textColor="white"
               loading={loading}>
               Submit
             </Button>

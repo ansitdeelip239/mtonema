@@ -19,7 +19,7 @@ import Toast from 'react-native-toast-message';
 import GetIcon from '../../../components/GetIcon';
 import Colors from '../../../constants/Colors';
 import {usePartner} from '../../../context/PartnerProvider';
-import {Appbar, Menu, PaperProvider} from 'react-native-paper';
+import {Appbar, Menu} from 'react-native-paper';
 import AddActivityModal from './components/AddActivityModal';
 import {useKeyboard} from '../../../hooks/useKeyboard';
 import {useAuth} from '../../../hooks/useAuth';
@@ -291,157 +291,152 @@ const ClientProfileScreen: React.FC<Props> = ({route, navigation}) => {
   }
 
   return (
-    <PaperProvider>
-      <View style={styles.container}>
-        <Header
-          title="Client Profile"
-          navigation={navigation}
-          backButton={true}>
-          <Menu
-            visible={visible}
-            onDismiss={closeMenu}
-            anchor={
-              <Appbar.Action
-                // eslint-disable-next-line react/no-unstable-nested-components
-                icon={() => <GetIcon iconName="threeDots" />}
-                onPress={openMenu}
-                style={styles.threeDotsIcon}
-              />
-            }
-            contentStyle={styles.menuContent}>
-            <Menu.Item
-              onPress={() => {
-                closeMenu();
-                if (client) {
-                  navigation.navigate('AddClientScreen', {
-                    editMode: true,
-                    clientData: client,
-                  });
-                }
-              }}
-              title="Edit"
-              titleStyle={styles.menuItemTitle}
+    <View style={styles.container}>
+      <Header title="Client Profile" navigation={navigation} backButton={true}>
+        <Menu
+          visible={visible}
+          onDismiss={closeMenu}
+          anchor={
+            <Appbar.Action
               // eslint-disable-next-line react/no-unstable-nested-components
-              leadingIcon={() => <GetIcon iconName="edit" />}
+              icon={() => <GetIcon iconName="threeDots" />}
+              onPress={openMenu}
+              style={styles.threeDotsIcon}
             />
-            <Menu.Item
-              onPress={handleDelete}
-              title="Delete"
-              titleStyle={styles.menuItemTitle}
-              // eslint-disable-next-line react/no-unstable-nested-components
-              leadingIcon={() => <GetIcon iconName="delete" />}
-            />
-          </Menu>
-        </Header>
-        <ScrollView
-          style={styles.scrollView}
-          refreshControl={
-            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-          }>
-          {client && (
-            <>
-              <View style={styles.profileHeader}>
-                <View style={styles.avatarContainer}>
-                  <Text style={styles.avatarText}>
-                    {client.ClientName.charAt(0).toUpperCase()}
-                  </Text>
-                </View>
-                <Text style={styles.clientName}>{client.ClientName}</Text>
-                {client.DisplayName && (
-                  <Text style={styles.displayName}>{client.DisplayName}</Text>
+          }
+          contentStyle={styles.menuContent}>
+          <Menu.Item
+            onPress={() => {
+              closeMenu();
+              if (client) {
+                navigation.navigate('AddClientScreen', {
+                  editMode: true,
+                  clientData: client,
+                });
+              }
+            }}
+            title="Edit"
+            titleStyle={styles.menuItemTitle}
+            // eslint-disable-next-line react/no-unstable-nested-components
+            leadingIcon={() => <GetIcon iconName="edit" />}
+          />
+          <Menu.Item
+            onPress={handleDelete}
+            title="Delete"
+            titleStyle={styles.menuItemTitle}
+            // eslint-disable-next-line react/no-unstable-nested-components
+            leadingIcon={() => <GetIcon iconName="delete" />}
+          />
+        </Menu>
+      </Header>
+      <ScrollView
+        style={styles.scrollView}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }>
+        {client && (
+          <>
+            <View style={styles.profileHeader}>
+              <View style={styles.avatarContainer}>
+                <Text style={styles.avatarText}>
+                  {client.ClientName.charAt(0).toUpperCase()}
+                </Text>
+              </View>
+              <Text style={styles.clientName}>{client.ClientName}</Text>
+              {client.DisplayName && (
+                <Text style={styles.displayName}>{client.DisplayName}</Text>
+              )}
+            </View>
+
+            {(client.MobileNumber ||
+              client.WhatsappNumber ||
+              client.EmailId) && (
+              <View style={styles.contactButtons}>
+                {client.MobileNumber && (
+                  <TouchableOpacity
+                    key="contact-phone"
+                    style={styles.contactButton}
+                    onPress={() => handleContact('phone')}>
+                    <GetIcon iconName="phone" size="24" color="#0066cc" />
+                    <Text style={styles.contactText}>Call</Text>
+                  </TouchableOpacity>
+                )}
+                {client.WhatsappNumber && (
+                  <TouchableOpacity
+                    key="contact-whatsapp"
+                    style={styles.contactButton}
+                    onPress={() => handleContact('whatsapp')}>
+                    <GetIcon iconName="whatsapp" size="24" color="#0066cc" />
+                    <Text style={styles.contactText}>WhatsApp</Text>
+                  </TouchableOpacity>
+                )}
+                {client.EmailId && (
+                  <TouchableOpacity
+                    key="contact-email"
+                    style={styles.contactButton}
+                    onPress={() => handleContact('email')}>
+                    <GetIcon iconName="contactus" size="24" color="#0066cc" />
+                    <Text style={styles.contactText}>Email</Text>
+                  </TouchableOpacity>
                 )}
               </View>
+            )}
 
-              {(client.MobileNumber ||
-                client.WhatsappNumber ||
-                client.EmailId) && (
-                <View style={styles.contactButtons}>
-                  {client.MobileNumber && (
-                    <TouchableOpacity
-                      key="contact-phone"
-                      style={styles.contactButton}
-                      onPress={() => handleContact('phone')}>
-                      <GetIcon iconName="phone" size="24" color="#0066cc" />
-                      <Text style={styles.contactText}>Call</Text>
-                    </TouchableOpacity>
-                  )}
-                  {client.WhatsappNumber && (
-                    <TouchableOpacity
-                      key="contact-whatsapp"
-                      style={styles.contactButton}
-                      onPress={() => handleContact('whatsapp')}>
-                      <GetIcon iconName="whatsapp" size="24" color="#0066cc" />
-                      <Text style={styles.contactText}>WhatsApp</Text>
-                    </TouchableOpacity>
-                  )}
-                  {client.EmailId && (
-                    <TouchableOpacity
-                      key="contact-email"
-                      style={styles.contactButton}
-                      onPress={() => handleContact('email')}>
-                      <GetIcon iconName="contactus" size="24" color="#0066cc" />
-                      <Text style={styles.contactText}>Email</Text>
-                    </TouchableOpacity>
-                  )}
+            <View
+              style={[
+                styles.infoSection,
+                // eslint-disable-next-line react-native/no-inline-styles
+                {paddingBottom: keyboardVisible ? 60 : 100},
+              ]}>
+              {renderContactInfo()}
+
+              {client.Groups && client.Groups.length > 0 && (
+                <View style={styles.infoCard}>
+                  <Text style={styles.sectionTitle}>Groups</Text>
+                  <View style={styles.groupsContainer}>{renderGroups()}</View>
                 </View>
               )}
 
-              <View
-                style={[
-                  styles.infoSection,
-                  // eslint-disable-next-line react-native/no-inline-styles
-                  {paddingBottom: keyboardVisible ? 60 : 100},
-                ]}>
-                {renderContactInfo()}
-
-                {client.Groups && client.Groups.length > 0 && (
-                  <View style={styles.infoCard}>
-                    <Text style={styles.sectionTitle}>Groups</Text>
-                    <View style={styles.groupsContainer}>{renderGroups()}</View>
-                  </View>
-                )}
-
-                {client.Notes && (
-                  <View style={styles.infoCard}>
-                    <Text style={styles.sectionTitle}>Notes</Text>
-                    <Text style={styles.notesText}>{client.Notes}</Text>
-                  </View>
-                )}
-
+              {client.Notes && (
                 <View style={styles.infoCard}>
-                  <View style={styles.activityHeader}>
-                    <Text style={styles.sectionTitle}>Recent Activities</Text>
-                    <TouchableOpacity
-                      style={styles.addActivityButton}
-                      onPress={() => {
-                        setIsActivityModalVisible(true);
-                      }}>
-                      <Text style={styles.addActivityButtonText}>
-                        Add Activity
-                      </Text>
-                    </TouchableOpacity>
-                  </View>
-                  {renderActivities()}
+                  <Text style={styles.sectionTitle}>Notes</Text>
+                  <Text style={styles.notesText}>{client.Notes}</Text>
                 </View>
+              )}
+
+              <View style={styles.infoCard}>
+                <View style={styles.activityHeader}>
+                  <Text style={styles.sectionTitle}>Recent Activities</Text>
+                  <TouchableOpacity
+                    style={styles.addActivityButton}
+                    onPress={() => {
+                      setIsActivityModalVisible(true);
+                    }}>
+                    <Text style={styles.addActivityButtonText}>
+                      Add Activity
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+                {renderActivities()}
               </View>
-            </>
-          )}
-        </ScrollView>
-        <AddActivityModal
-          visible={isActivityModalVisible}
-          onClose={() => {
-            setIsActivityModalVisible(false);
-            setSelectedActivity(undefined);
-          }}
-          onSubmit={handleAddEditActivity}
-          onDelete={handleDeleteActivity}
-          isLoading={addingActivity}
-          editMode={!!selectedActivity}
-          activityToEdit={selectedActivity}
-          closeMenu={closeActivityModal}
-        />
-      </View>
-    </PaperProvider>
+            </View>
+          </>
+        )}
+      </ScrollView>
+      <AddActivityModal
+        visible={isActivityModalVisible}
+        onClose={() => {
+          setIsActivityModalVisible(false);
+          setSelectedActivity(undefined);
+        }}
+        onSubmit={handleAddEditActivity}
+        onDelete={handleDeleteActivity}
+        isLoading={addingActivity}
+        editMode={!!selectedActivity}
+        activityToEdit={selectedActivity}
+        closeMenu={closeActivityModal}
+      />
+    </View>
   );
 };
 

@@ -97,6 +97,18 @@ export const MaterialTextInput = <T,>({
         // eslint-disable-next-line react-native/no-inline-styles
         contentStyle={{
           minHeight: props.multiline ? 100 : undefined,
+          color: 'black',
+        }}
+        theme={{
+          colors: {
+            background: 'white',
+            placeholder: !errorMessage ? 'black' : '#666666',
+            text: 'black',
+            primary: errorMessage ? '#FF0000' : 'black',
+            outline: errorMessage ? '#FF0000' : 'black',
+            onSurfaceVariant: 'gray',
+            error: '#FF0000',
+          },
         }}
       />
       {errorMessage && (
@@ -121,7 +133,7 @@ export const MaterialTextInput = <T,>({
                 style={styles.suggestionItem}
                 activeOpacity={0.7}
                 onPress={() => handleSuggestionPress(suggestion)}>
-                <Text>{suggestion}</Text>
+                <Text style={{color: 'black'}}>{suggestion}</Text>
               </TouchableOpacity>
             ))}
           </ScrollView>
@@ -147,6 +159,7 @@ const styles = StyleSheet.create({
     marginTop: -12,
     marginBottom: 6,
     paddingBottom: 0,
+    color: '#cc0000',
   },
   suggestionsContainer: {
     position: 'absolute',

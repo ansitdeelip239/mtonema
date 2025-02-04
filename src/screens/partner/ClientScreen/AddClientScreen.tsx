@@ -319,6 +319,7 @@ const AddClientScreen: React.FC<Props> = ({navigation, route}) => {
               mode="contained"
               onPress={handleSubmit}
               buttonColor={Colors.main}
+              textColor="white"
               loading={formLoading}>
               Submit
             </Button>
