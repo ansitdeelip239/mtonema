@@ -60,4 +60,5 @@ export default {
   getClientById: url1 + '/api/v1/partner/GetClientById',
   deleteClientById: url1 + '/api/v1/partner/DeleteClientDetails',
   addEditClientActivity: url1 + '/api/v1/partner/AddEditClientActivity',
+  deleteClientActivity: url1 + '/api/v1/partner/DeleteClientActivity',
 };

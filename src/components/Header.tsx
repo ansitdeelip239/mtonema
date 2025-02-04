@@ -4,20 +4,31 @@ import GetIcon from './GetIcon';
 import Colors from '../constants/Colors';
 import {useDrawer} from '../hooks/useDrawer';
 import {ParamListBase} from '@react-navigation/native';
+import {NativeStackNavigationProp} from '@react-navigation/native-stack';
+import {ClientStackParamList} from '../navigator/components/ClientScreenStack';
 
 export default function Header<T extends ParamListBase>({
   title,
   children,
+  backButton,
+  navigation,
 }: {
   title: string;
   children?: React.ReactNode;
+  backButton?: boolean;
+  navigation?: NativeStackNavigationProp<ClientStackParamList | ParamListBase>;
 }) {
   const {openDrawer} = useDrawer<T>();
 
   return (
     <View style={styles.headerContainer}>
-      <TouchableOpacity onPress={openDrawer} style={styles.menuButton}>
-        <GetIcon iconName="hamburgerMenu" color={Colors.black} />
+      <TouchableOpacity
+        onPress={backButton ? () => navigation?.goBack() : openDrawer}
+        style={styles.menuButton}>
+        <GetIcon
+          iconName={backButton ? 'back' : 'hamburgerMenu'}
+          color={Colors.black}
+        />
       </TouchableOpacity>
       <Text style={styles.headerText}>{title}</Text>
       <View style={styles.child}>{children}</View>
@@ -30,19 +41,21 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     paddingHorizontal: 16,
+    paddingVertical: 6,
   },
   headerText: {
     fontSize: 26,
     fontWeight: '600',
     color: Colors.black,
-    padding: 16,
+    padding: 18,
     paddingBottom: 8,
+    paddingTop: 5,
     flex: 1,
   },
   menuButton: {
-    paddingTop: 8,
+    // paddingTop: 8,
   },
   child: {
-    paddingTop: 10,
-  }
+    // paddingTop: 10,
+  },
 });

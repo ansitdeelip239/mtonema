@@ -150,6 +150,7 @@ export interface AgentData {
   DemandPrice: string;
   PropertyLocation: string;
   PropertyNotes: string;
+  PropertyType: MasterDetailModel;
   SecurityDepositAmount: string;
   Negotiable: boolean;
   CreatedOn: string;

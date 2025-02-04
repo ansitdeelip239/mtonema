@@ -25,6 +25,7 @@ import Toast from 'react-native-toast-message';
 import {useAuth} from '../../../hooks/useAuth';
 import {z} from 'zod';
 import clientFormSchema from '../../../schema/ClientFormSchema';
+import { useDialog } from '../../../hooks/useDialog';
 
 type Props = NativeStackScreenProps<ClientStackParamList, 'AddClientScreen'>;
 
@@ -32,6 +33,7 @@ const AddClientScreen: React.FC<Props> = ({navigation, route}) => {
   const scrollViewRef = useRef<ScrollView>(null);
   const {groups, setClientsUpdated} = usePartner();
   const {user} = useAuth();
+  const {showError} = useDialog();
 
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
 
@@ -135,10 +137,11 @@ const AddClientScreen: React.FC<Props> = ({navigation, route}) => {
             }
           });
           setFieldErrors(errors);
-          Toast.show({
-            type: 'error',
-            text1: 'Please provide a valid Client Name',
-          });
+          // Toast.show({
+          //   type: 'error',
+          //   text1: 'Please provide a valid Client Name',
+          // });
+          showError('Please provide a valid Client Name');
         } else {
           console.error('Error in onSubmit:', err);
           Toast.show({
@@ -298,13 +301,10 @@ const AddClientScreen: React.FC<Props> = ({navigation, route}) => {
   return (
     <>
       <Header<PartnerDrawerParamList>
-        title={editMode ? 'Edit Client' : 'Add Client'}>
-        <TouchableOpacity
-          style={styles.backButton}
-          onPress={() => navigation.goBack()}>
-          <Text style={styles.buttonText}>Back</Text>
-        </TouchableOpacity>
-      </Header>
+        title={editMode ? 'Edit Client' : 'Add Client'}
+        backButton={true}
+        navigation={navigation}
+      />
       <KeyboardAvoidingView
         style={styles.container}
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
@@ -322,6 +322,7 @@ const AddClientScreen: React.FC<Props> = ({navigation, route}) => {
               mode="contained"
               onPress={handleSubmit}
               buttonColor={Colors.main}
+              textColor="white"
               loading={formLoading}>
               Submit
             </Button>
@@ -343,14 +344,6 @@ const styles = StyleSheet.create({
   },
   input: {
     marginBottom: 16,
-  },
-  backButton: {
-    backgroundColor: Colors.main,
-    paddingHorizontal: 16,
-    paddingVertical: 8,
-    borderRadius: 8,
-    alignItems: 'center',
-    justifyContent: 'center',
   },
   buttonText: {
     color: '#fff',

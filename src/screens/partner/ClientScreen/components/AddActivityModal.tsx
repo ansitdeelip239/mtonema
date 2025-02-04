@@ -1,11 +1,19 @@
 import React, {useEffect} from 'react';
-import {Modal, View, Text, StyleSheet} from 'react-native';
+import {
+  Modal,
+  View,
+  Text,
+  StyleSheet,
+  Alert,
+  TouchableOpacity,
+} from 'react-native';
 import Colors from '../../../../constants/Colors';
 import FilterOption from '../../../../components/FilterOption';
 import {useMaster} from '../../../../context/MasterProvider';
 import {MaterialTextInput} from '../../../../components/MaterialTextInput';
 import {Button} from 'react-native-paper';
 import {ClientActivityDataModel} from '../../../../types';
+import GetIcon from '../../../../components/GetIcon';
 
 interface AddActivityModalProps {
   visible: boolean;
@@ -14,6 +22,8 @@ interface AddActivityModalProps {
   isLoading: boolean;
   editMode?: boolean;
   activityToEdit?: ClientActivityDataModel;
+  onDelete?: (activityId: number) => void;
+  closeMenu?: () => void;
 }
 
 interface ActivityFormData {
@@ -28,6 +38,8 @@ const AddActivityModal: React.FC<AddActivityModalProps> = ({
   isLoading,
   editMode = false,
   activityToEdit,
+  onDelete,
+  closeMenu,
 }) => {
   const [formData, setFormData] = React.useState<ActivityFormData>({
     activityType: null,
@@ -81,6 +93,24 @@ const AddActivityModal: React.FC<AddActivityModalProps> = ({
     }));
   };
 
+  const handleDelete = () => {
+    closeMenu && closeMenu();
+    if (editMode && activityToEdit?.Id && onDelete) {
+      Alert.alert(
+        'Delete Activity',
+        'Are you sure you want to delete this activity?',
+        [
+          {text: 'Cancel', style: 'cancel'},
+          {
+            text: 'Delete',
+            style: 'destructive',
+            onPress: () => onDelete(activityToEdit.Id),
+          },
+        ],
+      );
+    }
+  };
+
   return (
     <Modal
       visible={visible}
@@ -89,9 +119,18 @@ const AddActivityModal: React.FC<AddActivityModalProps> = ({
       onRequestClose={onClose}>
       <View style={styles.modalOverlay}>
         <View style={styles.modalContent}>
-          <Text style={styles.modalTitle}>
-            {editMode ? 'Edit Activity' : 'Add Activity'}
-          </Text>
+          <View style={styles.modalHeader}>
+            <Text style={styles.modalTitle}>
+              {editMode ? 'Edit Activity' : 'Add Activity'}
+            </Text>
+            {editMode && (
+              <TouchableOpacity
+                onPress={handleDelete}
+                style={styles.deleteButton}>
+                <GetIcon iconName="delete" size="24" color={Colors.red} />
+              </TouchableOpacity>
+            )}
+          </View>
 
           <FilterOption
             label="Select Activity Type"
@@ -163,14 +202,14 @@ const styles = StyleSheet.create({
   modalContent: {
     backgroundColor: 'white',
     borderRadius: 12,
-    padding: 20,
+    padding: 24,
     width: '80%',
   },
   modalTitle: {
-    fontSize: 18,
+    fontSize: 24,
     fontWeight: 'bold',
-    marginBottom: 20,
-    textAlign: 'center',
+    // marginBottom: 20,
+    // textAlign: 'center',
     color: '#000',
   },
   input: {
@@ -201,6 +240,15 @@ const styles = StyleSheet.create({
     color: 'white',
     textAlign: 'center',
     fontWeight: 'bold',
+  },
+  modalHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 20,
+  },
+  deleteButton: {
+    // padding: 8,
   },
 });
 

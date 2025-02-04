@@ -19,6 +19,7 @@ const tabScreens: Array<{
   name: keyof PartnerBottomTabParamList;
   component: React.FC<any>;
   icon: IconEnum;
+  listeners?: (props: {navigation: any}) => {tabPress: (e: any) => void};
 }> = [
   {
     name: 'Home',
@@ -29,6 +30,13 @@ const tabScreens: Array<{
     name: 'Clients',
     component: ClientScreenStack,
     icon: 'client',
+    listeners: ({navigation}) => ({
+      tabPress: () => {
+        navigation.navigate('Clients', {
+          screen: 'ClientScreen',
+        });
+      },
+    }),
   },
   {
     name: 'AddProperty',
@@ -179,7 +187,7 @@ const PartnerBottomTabs = memo(() => (
     }}
     // eslint-disable-next-line react/no-unstable-nested-components
     tabBar={props => <CustomBottomBar {...props} />}>
-    {tabScreens.map(({name, component, icon}) => (
+    {tabScreens.map(({name, component, icon, listeners}) => (
       <Tab.Screen
         key={name}
         name={name}
@@ -191,6 +199,7 @@ const PartnerBottomTabs = memo(() => (
             <GetIcon iconName={icon} color={focused ? Colors.main : color} />
           ),
         }}
+        listeners={listeners}
       />
     ))}
   </Tab.Navigator>

@@ -28,7 +28,8 @@ export type IconEnum =
   | 'phone'
   | 'threeDots'
   | 'notes'
-  | 'message';
+  | 'message'
+  | 'back'; 
 
 type IconProps = {
   iconName: IconEnum;
@@ -65,6 +66,7 @@ const GetIcon = ({iconName, color, size}: IconProps) => {
     threeDots: require('../assets/Icon/three-dots.png'),
     notes: require('../assets/Icon/notes.png'),
     message: require('../assets/Icon/message.png'),
+    back: require('../assets/Icon/back-button.png'),
   };
 
   const imageStyle = [

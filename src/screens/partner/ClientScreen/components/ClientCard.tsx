@@ -49,18 +49,22 @@ export const ClientCard: React.FC<ClientCardProps> = ({client, navigation}) => {
               </Text>
             </View>
             <View style={styles.iconContainer}>
-              <TouchableOpacity onPress={handlePhone}>
-                <Image
-                  source={require('../../../../assets/Icon/phone.png')}
-                  style={styles.phoneIcon}
-                />
-              </TouchableOpacity>
-              <TouchableOpacity onPress={handleWhatsapp}>
-                <Image
-                  source={require('../../../../assets/Icon/whatsapp.png')}
-                  style={styles.whatsappIcon}
-                />
-              </TouchableOpacity>
+              {client.MobileNumber && (
+                <TouchableOpacity onPress={handlePhone}>
+                  <Image
+                    source={require('../../../../assets/Icon/phone.png')}
+                    style={styles.phoneIcon}
+                  />
+                </TouchableOpacity>
+              )}
+              {client.WhatsappNumber && (
+                <TouchableOpacity onPress={handleWhatsapp}>
+                  <Image
+                    source={require('../../../../assets/Icon/whatsapp.png')}
+                    style={styles.whatsappIcon}
+                  />
+                </TouchableOpacity>
+              )}
             </View>
           </View>
         </View>
@@ -78,7 +82,7 @@ export const ClientCard: React.FC<ClientCardProps> = ({client, navigation}) => {
 
           <View style={styles.activitySection}>
             <View style={styles.row}>
-              {client.ClientActivityDataModels?.length > 0 ? (
+              {/* {client.ClientActivityDataModels?.length > 0 ? (
                 <>
                   <Text style={styles.label}>Last Activity:</Text>
                   <Text style={styles.lastActivity}>
@@ -90,6 +94,16 @@ export const ClientCard: React.FC<ClientCardProps> = ({client, navigation}) => {
                       )[0].CreatedOn,
                       'PPpp',
                     )}
+                  </Text>
+                </>
+              ) : (
+                <Text style={styles.noActivity}>No activities yet</Text>
+              )} */}
+              {client.Activity ? (
+                <>
+                  <Text style={styles.label}>Last Activity:</Text>
+                  <Text style={styles.lastActivity}>
+                    {formatDate(client.Activity, 'PPpp')}
                   </Text>
                 </>
               ) : (

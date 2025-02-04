@@ -9,13 +9,13 @@ const formatCurrency = (value: string | null | undefined) => {
       return value;
     }
     if (num >= 10000000) {
-      return `₹${(num / 10000000).toFixed(2)} Cr`;
+      return `₹${(num / 10000000).toFixed(1)} Cr`;
     } else if (num >= 100000) {
-      return `₹${(num / 100000).toFixed(2)} Lacs`;
+      return `₹${(num / 100000).toFixed(1)} Lacs`;
     } else if (num >= 1000) {
-      return `₹${(num / 1000).toFixed(2)} K`;
+      return `₹${(num / 1000).toFixed(1)} K`;
     } else {
-      return `₹${num.toFixed(2)}`;
+      return `₹${num.toFixed(1)}`;
     }
   } catch (error) {
     console.error('Currency formatting error:', error);

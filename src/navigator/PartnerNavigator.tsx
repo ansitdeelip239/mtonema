@@ -1,10 +1,12 @@
 import React, {memo} from 'react';
+import {StyleSheet, TouchableOpacity} from 'react-native';
 import {createDrawerNavigator} from '@react-navigation/drawer';
 import ProfileScreen from '../screens/common/ProfileScreen';
 import CustomDrawerContent from '../components/CustomDrawerContent';
 import Colors from '../constants/Colors';
 import {PartnerDrawerParamList} from '../types/navigation';
 import PartnerBottomTabs from './components/PartnerBottomTabs';
+import GetIcon from '../components/GetIcon';
 
 const Drawer = createDrawerNavigator<PartnerDrawerParamList>();
 
@@ -28,14 +30,33 @@ const PartnerNavigator = memo(() => (
       component={PartnerBottomTabs}
       options={{
         headerShown: false,
+        drawerItemStyle: {display: 'none'},
       }}
     />
     <Drawer.Screen
       name="Profile Screen"
       component={ProfileScreen}
-      options={{drawerItemStyle: {display: 'none'}}}
+      options={({navigation}) => ({
+        drawerItemStyle: {display: 'none'},
+        // eslint-disable-next-line react/no-unstable-nested-components
+        headerRight: () => (
+          <TouchableOpacity
+            onPress={() =>
+              navigation.navigate('Home Screen', {screen: 'Property'})
+            }
+            style={styles.backButton}>
+            <GetIcon iconName="back" size="24" color={Colors.SECONDARY_3} />
+          </TouchableOpacity>
+        ),
+      })}
     />
   </Drawer.Navigator>
 ));
+
+const styles = StyleSheet.create({
+  backButton: {
+    marginRight: 16,
+  },
+});
 
 export default PartnerNavigator;
