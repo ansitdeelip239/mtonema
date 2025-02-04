@@ -81,10 +81,25 @@ const FormScreen2: React.FC<Props> = ({navigation}) => {
     }));
   };
 
-  const isFormValid = () => {
-    return isContextFormValid(2);
+const isFormValid = () => {
+  const requiredFields = [
+    'PropertyType',
+    'Price',
+    'Area',
+    'Discription',
+  ] as const;
 
-  };
+  type RequiredField = (typeof requiredFields)[number];
+
+  return (
+    requiredFields.every(
+      (field: RequiredField) =>
+        formData[field] !== null &&
+        formData[field] !== undefined &&
+        formData[field] !== '',
+    ) && isContextFormValid(2)
+  );
+};
 
   const renderOptionSection = (
     title: string,

@@ -139,12 +139,12 @@ const FormScreen1: React.FC<Props> = ({navigation}) => {
                 ]}
               />
 
-              {renderChipSection(
+              {/* {renderChipSection(
                 'Seller Type',
                 'SellerType',
                 masterData?.SellerType || [],
                 true,
-              )}
+              )} */}
               {renderChipSection(
                 'City',
                 'City',

@@ -214,7 +214,7 @@ export const PropertyFormProvider: React.FC<{children: React.ReactNode}> = ({
     switch (step) {
       case 1:
         return (
-          formData.SellerType !== null &&
+         
           formData.City !== null &&
           formData.PropertyFor !== null
         );
