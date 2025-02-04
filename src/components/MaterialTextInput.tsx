@@ -94,6 +94,7 @@ export const MaterialTextInput = <T,>({
         right={renderRight()}
         outlineStyle={styles.textInput}
         error={!!errorMessage}
+        // eslint-disable-next-line react-native/no-inline-styles
         contentStyle={{
           minHeight: props.multiline ? 100 : undefined,
         }}

@@ -82,7 +82,7 @@ export const ClientCard: React.FC<ClientCardProps> = ({client, navigation}) => {
 
           <View style={styles.activitySection}>
             <View style={styles.row}>
-              {client.ClientActivityDataModels?.length > 0 ? (
+              {/* {client.ClientActivityDataModels?.length > 0 ? (
                 <>
                   <Text style={styles.label}>Last Activity:</Text>
                   <Text style={styles.lastActivity}>
@@ -94,6 +94,16 @@ export const ClientCard: React.FC<ClientCardProps> = ({client, navigation}) => {
                       )[0].CreatedOn,
                       'PPpp',
                     )}
+                  </Text>
+                </>
+              ) : (
+                <Text style={styles.noActivity}>No activities yet</Text>
+              )} */}
+              {client.Activity ? (
+                <>
+                  <Text style={styles.label}>Last Activity:</Text>
+                  <Text style={styles.lastActivity}>
+                    {formatDate(client.Activity, 'PPpp')}
                   </Text>
                 </>
               ) : (

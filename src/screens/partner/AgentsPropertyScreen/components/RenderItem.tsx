@@ -128,17 +128,26 @@ const renderItem = ({
           </View>
         </View>
 
-        <View style={styles.row}>
-          <Text style={styles.label}>Date Added:</Text>
-          <Text style={styles.value}>
-            {item.CreatedOn
-              ? new Date(item.CreatedOn).toLocaleDateString('en-GB', {
-                  day: '2-digit',
-                  month: 'short',
-                  year: 'numeric',
-                })
-              : 'N/A'}
-          </Text>
+        <View style={styles.typeAndDateContainer}>
+          <View style={styles.row}>
+            <Text style={styles.label}>Property Type:</Text>
+            <Text style={styles.value}>
+              {item.PropertyType?.MasterDetailName || 'N/A'}
+            </Text>
+          </View>
+
+          <View style={styles.row}>
+            <Text style={styles.label}>Date Added:</Text>
+            <Text style={styles.value}>
+              {item.CreatedOn
+                ? new Date(item.CreatedOn).toLocaleDateString('en-GB', {
+                    day: '2-digit',
+                    month: 'short',
+                    year: 'numeric',
+                  })
+                : 'N/A'}
+            </Text>
+          </View>
         </View>
       </View>
 
@@ -216,6 +225,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     marginBottom: 12,
     alignItems: 'center',
+  },
+  typeAndDateContainer: {
+    marginTop: 8,
   },
   securityDeposit: {
     marginBottom: 0,
