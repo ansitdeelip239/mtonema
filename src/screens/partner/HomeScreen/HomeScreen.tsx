@@ -1,5 +1,12 @@
 import React, {useCallback, useEffect, useState} from 'react';
-import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  ScrollView,
+  RefreshControl,
+} from 'react-native';
 import {BottomTabScreenProps} from '@react-navigation/bottom-tabs';
 import {
   PartnerBottomTabParamList,
@@ -39,6 +46,7 @@ const HomeScreen: React.FC<Props> = ({navigation}) => {
   const {clients} = useClientData();
   const [agentPropertyCount, setAgentPropertyCount] = useState<number>(0);
   const [partnerPropertyCount, setPartnerPropertyCount] = useState<number>(0);
+  const [refreshing, setRefreshing] = useState(false);
   const {user} = useAuth();
 
   const fetchAgentData = useCallback(async () => {
@@ -53,9 +61,11 @@ const HomeScreen: React.FC<Props> = ({navigation}) => {
         '',
       );
       setAgentPropertyCount(
-        response.data?.responsePagingModel?.TotalCount || [],
+        response.data?.responsePagingModel?.TotalCount || 0,
       );
-    } catch (error) {}
+    } catch (error) {
+      console.error(error);
+    }
   }, [user?.Email]);
 
   const fetchPartnerProperty = useCallback(async () => {
@@ -66,42 +76,59 @@ const HomeScreen: React.FC<Props> = ({navigation}) => {
         20,
       );
       setPartnerPropertyCount(
-        response.data?.responsePagingModel?.TotalCount || [],
+        response.data?.responsePagingModel?.TotalCount || 0,
       );
-    } catch (error) {}
+    } catch (error) {
+      console.error(error);
+    }
   }, [user?.Email]);
+
+  const onRefresh = useCallback(async () => {
+    setRefreshing(true);
+    await Promise.all([fetchAgentData(), fetchPartnerProperty()]);
+    setRefreshing(false);
+  }, [fetchAgentData, fetchPartnerProperty]);
 
   useEffect(() => {
     fetchAgentData();
     fetchPartnerProperty();
   }, [fetchAgentData, fetchPartnerProperty]);
 
-  const handleCardPress = (screen: keyof PartnerBottomTabParamList) => {
-    navigation.navigate(screen);
-  };
-
   return (
     <View style={styles.container}>
       <Header<PartnerDrawerParamList> title="Dashboard" />
-      <View style={styles.content}>
+      <ScrollView
+        contentContainerStyle={styles.content}
+        refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={onRefresh}
+            colors={[Colors.main]}
+            tintColor={Colors.main}
+          />
+        }>
         <View style={styles.gridContainer}>
           <StatCard
             title="Agent Properties"
-            count={agentPropertyCount}
-            onPress={() => handleCardPress('Property')}
+            count={agentPropertyCount || 0}
+            onPress={() => navigation.navigate('Property')}
           />
           <StatCard
             title="My Properties"
-            count={partnerPropertyCount}
+            count={partnerPropertyCount || 0}
             onPress={() => {}}
           />
           <StatCard
             title="Clients"
             count={clients?.length || 0}
-            onPress={() => handleCardPress('Clients')}
+            onPress={() =>
+              navigation.navigate('Clients', {
+                screen: 'ClientScreen',
+              })
+            }
           />
         </View>
-      </View>
+      </ScrollView>
     </View>
   );
 };

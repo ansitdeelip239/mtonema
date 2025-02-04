@@ -282,6 +282,7 @@ const ClientProfileScreen: React.FC<Props> = ({route, navigation}) => {
                 // eslint-disable-next-line react/no-unstable-nested-components
                 icon={() => <GetIcon iconName="threeDots" />}
                 onPress={openMenu}
+                style={styles.threeDotsIcon}
               />
             }
             contentStyle={styles.menuContent}>
@@ -429,6 +430,9 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#f8f9fa',
+  },
+  threeDotsIcon: {
+    marginRight: -10,
   },
   loadingContainer: {
     flex: 1,

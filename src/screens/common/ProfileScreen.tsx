@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback, useRef } from 'react';
+import React, {useEffect, useState, useCallback, useRef} from 'react';
 import {
   View,
   Text,
@@ -10,15 +10,14 @@ import {
   Modal,
 } from 'react-native';
 import Toast from 'react-native-toast-message';
-import { useAuth } from '../../hooks/useAuth';
-import { ActivityIndicator } from 'react-native-paper';
-import { api } from '../../utils/api';
+import {useAuth} from '../../hooks/useAuth';
+import {ActivityIndicator} from 'react-native-paper';
+import {api} from '../../utils/api';
 import url from '../../constants/api';
-import { User } from '../../types';
+import {User} from '../../types';
 import CommonService from '../../services/CommonService';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import GetIcon from '../../components/GetIcon';
-import Header from '../../components/Header';
 
 type FieldName = 'name' | 'email' | 'password' | 'mobile' | 'location';
 type EditableFields = Record<FieldName, boolean>;
@@ -72,10 +71,10 @@ const ProfileField = React.memo(
     setShowPassword,
   }: ProfileFieldProps) => {
     const handleEditPress = () => {
-      setEditMode((prev) => {
-        const newEditMode = { ...prev };
+      setEditMode(prev => {
+        const newEditMode = {...prev};
         // First, disable all other fields
-        Object.keys(newEditMode).forEach((key) => {
+        Object.keys(newEditMode).forEach(key => {
           newEditMode[key as FieldName] = false;
         });
         // Then enable the current field
@@ -103,8 +102,8 @@ const ProfileField = React.memo(
               editMode[field] && styles.editInput,
             ]}
             value={value}
-            onChangeText={(text) =>
-              setUserData((prev) => ({ ...prev, [field]: text }))
+            onChangeText={text =>
+              setUserData(prev => ({...prev, [field]: text}))
             }
             editable={editMode[field]}
             keyboardType={keyboardType}
@@ -132,9 +131,7 @@ const ProfileField = React.memo(
               />
             </TouchableOpacity>
           )}
-          <TouchableOpacity
-            onPress={handleEditPress}
-            style={styles.iconButton}>
+          <TouchableOpacity onPress={handleEditPress} style={styles.iconButton}>
             <Image
               source={require('../../assets/Icon/Edit.png')}
               style={styles.icon}
@@ -147,7 +144,7 @@ const ProfileField = React.memo(
 );
 
 const ProfileScreen = () => {
-  const { user, logout } = useAuth();
+  const {user, logout} = useAuth();
   const [isLoading, setIsLoading] = useState(false);
   const [showLogoutModal, setShowLogoutModal] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
@@ -206,7 +203,7 @@ const ProfileScreen = () => {
 
       const response = await CommonService.getUserByToken(token);
       if (response?.data) {
-        setUserData((prevData) => ({
+        setUserData(prevData => ({
           ...prevData,
           name: response.data.Name || '',
           email: response.data.Email || '',
@@ -324,7 +321,7 @@ const ProfileScreen = () => {
 
   return (
     <>
-    <Header title="User Profile"/>
+      {/* <Header title="User Profile" /> */}
       <ScrollView contentContainerStyle={styles.scrollContainer}>
         <View style={styles.profileImageContainer}>
           <Image source={userData.profileImage} style={styles.profileImage} />
@@ -460,7 +457,7 @@ const styles = StyleSheet.create({
     padding: 8,
     elevation: 2,
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
+    shadowOffset: {width: 0, height: 1},
     shadowOpacity: 0.2,
     shadowRadius: 2,
   },
@@ -504,7 +501,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     elevation: 3,
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
+    shadowOffset: {width: 0, height: 2},
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
   },
@@ -521,7 +518,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     textAlign: 'center',
     justifyContent: 'center',
-    gap:10,
+    gap: 10,
   },
   modalContainer: {
     flex: 1,
@@ -537,7 +534,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     elevation: 5,
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
+    shadowOffset: {width: 0, height: 2},
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
   },
