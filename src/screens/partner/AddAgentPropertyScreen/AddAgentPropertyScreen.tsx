@@ -33,6 +33,7 @@ import {usePartner} from '../../../context/PartnerProvider';
 import Toast from 'react-native-toast-message';
 import {SearchInput} from './components/SearchInput';
 import {useKeyboard} from '../../../hooks/useKeyboard';
+import { useDialog } from '../../../hooks/useDialog';
 
 type Props = BottomTabScreenProps<PartnerBottomTabParamList, 'AddProperty'>;
 
@@ -46,6 +47,7 @@ const AddAgentPropertyScreen: React.FC<Props> = ({navigation, route}) => {
   const {masterData} = useMaster();
   const {setAgentPropertyUpdated} = usePartner();
   const {keyboardVisible} = useKeyboard();
+  const {showError} = useDialog();
 
   const editMode = route.params?.editMode;
   const propertyData = route.params?.propertyData;
@@ -144,10 +146,11 @@ const AddAgentPropertyScreen: React.FC<Props> = ({navigation, route}) => {
           setAgentPropertyUpdated(prev => !prev);
           navigation.navigate('Property');
         } else {
-          Toast.show({
-            type: 'error',
-            text1: 'Failed to update agent property',
-          });
+          // Toast.show({
+          //   type: 'error',
+          //   text1: 'Failed to update agent property',
+          // });
+          showError('Failed to update agent property');
           throw new Error('Failed to update agent property');
         }
       } catch (error) {
@@ -163,10 +166,11 @@ const AddAgentPropertyScreen: React.FC<Props> = ({navigation, route}) => {
           });
           setErrors(newErrors);
         }
-        Toast.show({
-          type: 'error',
-          text1: 'Please check your input and try again',
-        });
+        // Toast.show({
+        //   type: 'error',
+        //   text1: 'Please check your input and try again',
+        // });
+        showError('Please check your input and try again');
       }
     },
   });
