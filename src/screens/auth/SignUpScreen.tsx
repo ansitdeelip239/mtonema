@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { AuthStackParamList } from '../../navigator/AuthNavigator';
+import React, {useState, useEffect} from 'react';
+import {NativeStackScreenProps} from '@react-navigation/native-stack';
+import {AuthStackParamList} from '../../navigator/AuthNavigator';
 import SignupForm from '../../components/SignupForm';
 import AuthService from '../../services/AuthService';
 import Toast from 'react-native-toast-message';
@@ -14,30 +14,33 @@ import {
   FlatList,
   Keyboard,
 } from 'react-native';
-import { useAuth } from '../../hooks/useAuth';
-import { apiSubmissionSchema, SignupBody, SignupFormType } from '../../schema/SignUpFormSchema';
+import {useAuth} from '../../hooks/useAuth';
+import {
+  apiSubmissionSchema,
+  SignupBody,
+  SignupFormType,
+} from '../../schema/SignUpFormSchema';
 
 type Props = NativeStackScreenProps<AuthStackParamList, 'SignUpScreen'>;
 
-const SignUpScreen: React.FC<Props> = ({ navigation, route }) => {
-  const { role } = route.params;
+const SignUpScreen: React.FC<Props> = ({navigation, route}) => {
   const [loading, setLoading] = useState(false);
   const [isKeyboardVisible, setKeyboardVisible] = useState(false);
-  const emailExistMessage = ['Email already exist' , 'Email already exists'];
- const {setNavigateToPostProperty} = useAuth();
+  const emailExistMessage = ['Email already exist', 'Email already exists'];
+  const {setNavigateToPostProperty} = useAuth();
 
   useEffect(() => {
     const keyboardDidShowListener = Keyboard.addListener(
       'keyboardDidShow',
       () => {
         setKeyboardVisible(true);
-      }
+      },
     );
     const keyboardDidHideListener = Keyboard.addListener(
       'keyboardDidHide',
       () => {
         setKeyboardVisible(false);
-      }
+      },
     );
 
     return () => {
@@ -46,21 +49,20 @@ const SignUpScreen: React.FC<Props> = ({ navigation, route }) => {
     };
   }, []);
 
-  const handleSignup = async (formData: SignupFormType, isSeller: boolean) => {
+  const handleSignup = async (formData: SignupFormType) => {
     try {
       setLoading(true);
-      const formDataWithRole = {
-        ...formData,
-        Role: isSeller ? 'Seller' : 'Buyer', // Assign role based on `isSeller`
-      };
+      const userrole = route.params.role === 'User' ? 'User' : 'Seller';
+
       // Convert formDataWithRole (with Role) to SignupBody using apiSubmissionSchema
-      const signupBody: SignupBody = apiSubmissionSchema.parse(formDataWithRole);
+      const signupBody: SignupBody = apiSubmissionSchema(userrole).parse(formData);
+
       const response = await AuthService.UserSignUp(signupBody);
       console.log('API Response:', response);
 
       if (response.Success && !emailExistMessage.includes(response.Message)) {
         setNavigateToPostProperty(true);
-        navigation.navigate('OtpScreen', { email: formData.Email });
+        navigation.navigate('OtpScreen', {email: formData.Email});
       } else {
         Toast.show({
           type: 'error',
@@ -108,7 +110,7 @@ const SignUpScreen: React.FC<Props> = ({ navigation, route }) => {
               {/* Form */}
               <SignupForm
                 handleSignup={(formData: SignupFormType) =>
-                  handleSignup(formData, role !== 'User')
+                  handleSignup(formData)
                 }
                 loading={loading}
               />

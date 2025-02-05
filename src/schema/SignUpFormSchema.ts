@@ -1,6 +1,6 @@
-import { z } from 'zod';
+import {z} from 'zod';
 
-const UserRoleEnum = z.enum(['Buyer', 'Seller']);
+const UserRoleEnum = z.enum(['User', 'Seller']);
 
 const SignUpFormSchema = z.object({
   Name: z
@@ -9,11 +9,12 @@ const SignUpFormSchema = z.object({
     .regex(/^[a-zA-Z\s]*$/, 'Name must contain only letters and spaces')
     .nonempty('Name is required'),
 
-  Email: z.string().email('Invalid email address')
-  .nonempty('Email is required'),
+  Email: z
+    .string()
+    .email('Invalid email address')
+    .nonempty('Email is required'),
 
-  Location: z.string().nonempty('Property location is required')
-  .nonempty('Location is required'),
+  Location: z.string().nonempty('Location is required'),
 
   Phone: z
     .string()
@@ -21,12 +22,14 @@ const SignUpFormSchema = z.object({
     .nonempty('Mobile Number is required'),
 });
 
-const apiSubmissionSchema = SignUpFormSchema.transform(data => ({
-  ...data,
-  Role: UserRoleEnum.parse('Buyer'),
-}));
+// Modified to accept role parameter
+const apiSubmissionSchema = (role: 'User' | 'Seller') =>
+  SignUpFormSchema.transform(data => ({
+    ...data,
+    Role: UserRoleEnum.parse(role),
+  }));
 
 export type SignupFormType = z.infer<typeof SignUpFormSchema>;
-export type SignupBody = z.infer<typeof apiSubmissionSchema>;
-export { apiSubmissionSchema };
+export type SignupBody = SignupFormType & {Role: 'User' | 'Seller'};
+export {apiSubmissionSchema};
 export default SignUpFormSchema;
