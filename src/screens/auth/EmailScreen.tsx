@@ -12,13 +12,13 @@ import {
 } from 'react-native';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import Toast from 'react-native-toast-message';
-
 import {AuthStackParamList} from '../../navigator/AuthNavigator';
 import AuthService from '../../services/AuthService';
 import {useAuth} from '../../hooks/useAuth';
 import {User} from '../../types';
 import {validateEmail} from '../../utils/formvalidation';
 import Colors from '../../constants/Colors';
+import { useDialog } from '../../hooks/useDialog';
 type Props = NativeStackScreenProps<AuthStackParamList, 'EmailScreen'>;
 
 const EmailScreen: React.FC<Props> = ({navigation, route}) => {
@@ -27,7 +27,7 @@ const EmailScreen: React.FC<Props> = ({navigation, route}) => {
   const [emailError, setEmailError] = useState<{ message: string; isClickable?: boolean }>({ message: '', isClickable: false });
   const {storeUser,setNavigateToPostProperty} = useAuth();
   const {role} = route.params;
-
+const {showError} = useDialog();
   const isEmailValid = useMemo(() => validateEmail(email), [email]);
 
   const checkEmail = useCallback(
@@ -38,7 +38,7 @@ const EmailScreen: React.FC<Props> = ({navigation, route}) => {
 
         // Validate email format first
         if (!isEmailValid) {
-          setEmailError({ message: 'Invalid email format', isClickable: false });
+          showError( 'Invalid email format');
           return false;
         }
 
@@ -46,7 +46,7 @@ const EmailScreen: React.FC<Props> = ({navigation, route}) => {
  console.log(response.Message);
         // Check if email matches the expected role
         if (response && !role.includes(response.data?.Role as string)) {
-          setEmailError({ message: '*Email not found', isClickable: false });
+          showError('Email not found');
           return false;
         }
 
@@ -72,7 +72,7 @@ const EmailScreen: React.FC<Props> = ({navigation, route}) => {
         return false;
       }
     },
-    [role, isEmailValid],
+    [role, isEmailValid ,showError],
   );
 
 const handleContinue = useCallback(async () => {
@@ -194,7 +194,7 @@ const styles = StyleSheet.create({
     minHeight: 50, // Add this to maintain consistent height
   },
   color: {
-    backgroundColor: '#790c5a',
+    backgroundColor: Colors.main,
   },
   txtpadding: {
     paddingLeft: 10,

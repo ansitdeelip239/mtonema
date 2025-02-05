@@ -22,7 +22,7 @@ import {SellerBottomTabParamList} from '../../types/navigation';
 import {usePropertyForm} from '../../context/PropertyFormContext';
 import Colors from '../../constants/Colors';
 import Toast from 'react-native-toast-message';
-import { formatCurrency } from '../../utils/currency';
+import {formatCurrency} from '../../utils/currency';
 
 // Utility function to strip HTML tags
 const stripHtmlTags = (html: string): string => {
@@ -243,8 +243,8 @@ const PropertyModal = ({
               For: {property.PropertyFor?.MasterDetailName}
             </Text>
             <Text style={styles.detail}>
-            {/* Amount: {formatCurrency(item.Price.toString())} */}
-              Price: {formatCurrency(property.Price.toString())}
+              {/* Amount: {formatCurrency(item.Price.toString())} */}
+              Price: {formatCurrency(String(property.Price))}
               {/* Price: ₹{property.Price} {property.Rate?.MasterDetailName} */}
             </Text>
             <Text style={styles.detail}>

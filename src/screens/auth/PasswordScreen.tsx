@@ -14,6 +14,7 @@ import AuthService from '../../services/AuthService';
 import {useAuth} from '../../hooks/useAuth';
 import Toast from 'react-native-toast-message';
 import Colors from '../../constants/Colors';
+import { useDialog } from '../../hooks/useDialog';
 
 type Props = NativeStackScreenProps<AuthStackParamList, 'PasswordScreen'>;
 
@@ -23,6 +24,7 @@ const PasswordScreen: React.FC<Props> = ({navigation, route}) => {
   const {storeToken, login} = useAuth();
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
+  const {showError} = useDialog();
 
   const showToast = (type: 'success' | 'error' | 'info', message: string) => {
     Toast.show({
@@ -49,7 +51,7 @@ const PasswordScreen: React.FC<Props> = ({navigation, route}) => {
       }
 
       if (!validatePassword(password)) {
-        showToast('error', 'Password must be at least 6 characters long');
+        showError('Password must be at least 6 characters long');
         return;
       }
 
@@ -66,11 +68,9 @@ const PasswordScreen: React.FC<Props> = ({navigation, route}) => {
           response.Message?.toLowerCase().includes('unauthorized') ||
           response.Message?.toLowerCase().includes('invalid')
         ) {
-          showToast('error', 'Incorrect password. Please try again.');
+          showError('Incorrect password. Please try again.');
         } else {
-          showToast(
-            'error',
-            response.Message || 'Login failed. Please try again.',
+          showError(response.Message || 'Login failed. Please try again.',
           );
         }
       }
@@ -83,16 +83,16 @@ const PasswordScreen: React.FC<Props> = ({navigation, route}) => {
           error.message.toLowerCase().includes('unauthorized') ||
           error.message.toLowerCase().includes('invalid')
         ) {
-          showToast('error', 'Incorrect password. Please try again.');
+          showError('Incorrect password. Please try again.');
         } else if (error.message.toLowerCase().includes('network')) {
-          showToast('error', 'Network error. Please check your connection.');
+          showError('Network error. Please check your connection.');
         } else if (error.message.toLowerCase().includes('timeout')) {
-          showToast('error', 'Request timed out. Please try again.');
+          showError('Request timed out. Please try again.');
         } else {
-          showToast('error', 'Unable to sign in. Please try again.');
+          showError('Unable to sign in. Please try again.');
         }
       } else {
-        showToast('error', 'An unexpected error occurred. Please try again.');
+        showError('An unexpected error occurred. Please try again.');
       }
     } finally {
       setIsLoading(false);
@@ -268,7 +268,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   color: {
-    backgroundColor: '#790c5a',
+    backgroundColor: Colors.main,
   },
 });
 

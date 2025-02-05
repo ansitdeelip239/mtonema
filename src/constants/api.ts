@@ -42,8 +42,7 @@ export default {
 
   //Master Detail
   getMasterDetail:
-    url1 +
-    '/api/v1/MasterDetail/getMasterDetailsByMasterName?MasterDetailName=',
+  url1 + '/api/v1/MasterDetail/getMasterDetailsByMasterName?MasterDetailName=',
   getPlaces: url1 + '/api/v1/MasterDetail/getgoogleplaces',
   deleteUser: url1 + '/api/v1/User/DeleteUserByUserId',
   searchIntellisense: url1 + '/api/v1/MasterDetail/SearchIntelligence',

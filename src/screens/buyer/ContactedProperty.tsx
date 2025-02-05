@@ -15,6 +15,7 @@ import { useAuth } from '../../hooks/useAuth';
 import PropertyModal from './PropertyModal';
 import { DrawerNavigationProp } from '@react-navigation/drawer';
 import Colors from '../../constants/Colors';
+import { formatCurrency } from '../../utils/currency';
 
 type HomeProps = {
   navigation: DrawerNavigationProp<any>;
@@ -175,7 +176,8 @@ const ContactedProperty = ({navigation}: HomeProps) => {
           </Text>
           <View style={styles.detailsRow}>
             <Text style={styles.price}>
-              ₹{item.Price} {item.Rate?.MasterDetailName}
+              {/* ₹{item.Price} {item.Rate?.MasterDetailName} */}
+              Price: {formatCurrency(String(item.Price))}
             </Text>
             <Text style={styles.area}>
               {item.Area} {item.Size?.MasterDetailName}
