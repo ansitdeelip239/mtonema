@@ -1,5 +1,5 @@
-import React from 'react';
-import {Alert, StyleSheet, Text, View} from 'react-native';
+import React, {useState} from 'react';
+import {StyleSheet, Text, View} from 'react-native';
 import {AgentData} from '../../../../types';
 import {formatCurrency} from '../../../../utils/currency';
 import {IconButton, Surface} from 'react-native-paper';
@@ -7,16 +7,21 @@ import Colors from '../../../../constants/Colors';
 import GetIcon from '../../../../components/GetIcon';
 import PartnerService from '../../../../services/PartnerService';
 import Toast from 'react-native-toast-message';
+import ConfirmationModal from '../../../../components/ConfirmationModal';
 
-const renderItem = ({
-  item,
-  onDataUpdate,
-  navigation,
-}: {
+interface RenderItemProps {
   item: AgentData;
   onDataUpdate: () => void;
   navigation: any;
+}
+
+const RenderItem: React.FC<RenderItemProps> = ({
+  item,
+  onDataUpdate,
+  navigation,
 }) => {
+  const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false);
+
   const onEdit = () => {
     navigation.navigate('AddProperty', {
       editMode: true,
@@ -24,143 +29,134 @@ const renderItem = ({
     });
   };
 
-  const onDelete = async (id: number) => {
-    const title = 'Delete Property';
-    const message =
-      'This action cannot be undone. Are you sure you want to delete this property?';
+  const handleDeletePress = () => {
+    setIsDeleteModalVisible(true);
+  };
 
-    Alert.alert(
-      title,
-      message,
-      [
-        {
-          text: 'Cancel',
-          style: 'cancel',
-          isPreferred: true,
-        },
-        {
-          text: 'Delete',
-          style: 'destructive',
-          onPress: async () => {
-            try {
-              const response = await PartnerService.deleteAgentProperty(id);
-              if (response.Success) {
-                Toast.show({
-                  type: 'success',
-                  text1: 'Property Deleted Successfully',
-                  visibilityTime: 3000,
-                });
-                onDataUpdate();
-              }
-            } catch (error) {
-              console.error('Error in deleting property:', error);
-              Toast.show({
-                type: 'error',
-                text1: 'Error in deleting property',
-                visibilityTime: 4000,
-              });
-            }
-          },
-        },
-      ],
-      {
-        cancelable: true,
-        userInterfaceStyle: 'light',
-      },
-    );
+  const handleConfirmDelete = async () => {
+    try {
+      const response = await PartnerService.deleteAgentProperty(item.Id);
+      if (response.Success) {
+        Toast.show({
+          type: 'success',
+          text1: 'Property Deleted Successfully',
+          visibilityTime: 3000,
+        });
+        onDataUpdate();
+      }
+    } catch (error) {
+      console.error('Error in deleting property:', error);
+      Toast.show({
+        type: 'error',
+        text1: 'Error in deleting property',
+        visibilityTime: 4000,
+      });
+    } finally {
+      setIsDeleteModalVisible(false);
+    }
   };
 
   return (
-    <Surface style={styles.card}>
-      <View style={styles.header}>
-        <View style={styles.titleContainer}>
-          <Text style={styles.name}>{item.AgentName || 'N/A'}</Text>
-          <View style={styles.badge}>
-            <Text style={styles.badgeText}>
-              {item.Negotiable ? 'Negotiable' : 'Fixed Price'}
-            </Text>
+    <>
+      <Surface style={styles.card}>
+        <View style={styles.header}>
+          <View style={styles.titleContainer}>
+            <Text style={styles.name}>{item.AgentName || 'N/A'}</Text>
+            <View style={styles.badge}>
+              <Text style={styles.badgeText}>
+                {item.Negotiable ? 'Negotiable' : 'Fixed Price'}
+              </Text>
+            </View>
+          </View>
+          <View style={styles.actions}>
+            <IconButton
+              icon={() => GetIcon({iconName: 'edit', color: Colors.main})}
+              size={20}
+              onPress={() => onEdit()}
+              iconColor={Colors.main}
+              style={styles.actionButton}
+            />
+            <IconButton
+              icon={() => GetIcon({iconName: 'delete', color: Colors.red})}
+              size={20}
+              onPress={handleDeletePress}
+              iconColor={Colors.red || '#ff4444'}
+              style={styles.actionButton}
+            />
           </View>
         </View>
-        <View style={styles.actions}>
-          <IconButton
-            icon={() => GetIcon({iconName: 'edit', color: Colors.main})}
-            size={20}
-            onPress={() => onEdit()}
-            iconColor={Colors.main}
-            style={styles.actionButton}
-          />
-          <IconButton
-            icon={() => GetIcon({iconName: 'delete', color: Colors.red})}
-            size={20}
-            onPress={() => onDelete(item.Id)}
-            iconColor={Colors.red || '#ff4444'}
-            style={styles.actionButton}
-          />
-        </View>
-      </View>
 
-      <View style={styles.divider} />
+        <View style={styles.divider} />
 
-      <View style={styles.contentSection}>
-        <View style={styles.row}>
-          <Text style={styles.label}>BHK Type:</Text>
-          <Text style={styles.value}>
-            {item.FlatSize?.MasterDetailName || 'Not Specified'}
-          </Text>
-        </View>
-        <View style={styles.row}>
-          <Text style={styles.label}>Location:</Text>
-          <Text style={styles.value}>{item.PropertyLocation || 'N/A'}</Text>
-        </View>
-
-        <View style={styles.priceSection}>
+        <View style={styles.contentSection}>
           <View style={styles.row}>
-            <Text style={styles.label}>Demand Price:</Text>
-            <Text style={[styles.value, styles.priceText]}>
-              {formatCurrency(item.DemandPrice) || 'N/A'}
-            </Text>
-          </View>
-          <View style={[styles.row, styles.securityDeposit]}>
-            <Text style={styles.label}>Security Deposit:</Text>
-            <Text style={[styles.value, styles.priceText]}>
-              {formatCurrency(item.SecurityDepositAmount) || 'N/A'}
-            </Text>
-          </View>
-        </View>
-
-        <View style={styles.typeAndDateContainer}>
-          <View style={styles.row}>
-            <Text style={styles.label}>Property Type:</Text>
+            <Text style={styles.label}>BHK Type:</Text>
             <Text style={styles.value}>
-              {item.PropertyType?.MasterDetailName || 'N/A'}
+              {item.FlatSize?.MasterDetailName || 'Not Specified'}
             </Text>
           </View>
-
           <View style={styles.row}>
-            <Text style={styles.label}>Date Added:</Text>
-            <Text style={styles.value}>
-              {item.CreatedOn
-                ? new Date(item.CreatedOn).toLocaleDateString('en-GB', {
-                    day: '2-digit',
-                    month: 'short',
-                    year: 'numeric',
-                  })
-                : 'N/A'}
-            </Text>
+            <Text style={styles.label}>Location:</Text>
+            <Text style={styles.value}>{item.PropertyLocation || 'N/A'}</Text>
+          </View>
+
+          <View style={styles.priceSection}>
+            <View style={styles.row}>
+              <Text style={styles.label}>Demand Price:</Text>
+              <Text style={[styles.value, styles.priceText]}>
+                {formatCurrency(item.DemandPrice) || 'N/A'}
+              </Text>
+            </View>
+            <View style={[styles.row, styles.securityDeposit]}>
+              <Text style={styles.label}>Security Deposit:</Text>
+              <Text style={[styles.value, styles.priceText]}>
+                {formatCurrency(item.SecurityDepositAmount) || 'N/A'}
+              </Text>
+            </View>
+          </View>
+
+          <View style={styles.typeAndDateContainer}>
+            <View style={styles.row}>
+              <Text style={styles.label}>Property Type:</Text>
+              <Text style={styles.value}>
+                {item.PropertyType?.MasterDetailName || 'N/A'}
+              </Text>
+            </View>
+
+            <View style={styles.row}>
+              <Text style={styles.label}>Date Added:</Text>
+              <Text style={styles.value}>
+                {item.CreatedOn
+                  ? new Date(item.CreatedOn).toLocaleDateString('en-GB', {
+                      day: '2-digit',
+                      month: 'short',
+                      year: 'numeric',
+                    })
+                  : 'N/A'}
+              </Text>
+            </View>
           </View>
         </View>
-      </View>
 
-      {item.PropertyNotes && (
-        <>
-          <View style={styles.divider} />
-          <View style={styles.notes}>
-            <Text style={styles.notesLabel}>Notes</Text>
-            <Text style={styles.notesText}>{item.PropertyNotes}</Text>
-          </View>
-        </>
-      )}
-    </Surface>
+        {item.PropertyNotes && (
+          <>
+            <View style={styles.divider} />
+            <View style={styles.notes}>
+              <Text style={styles.notesLabel}>Notes</Text>
+              <Text style={styles.notesText}>{item.PropertyNotes}</Text>
+            </View>
+          </>
+        )}
+      </Surface>
+
+      <ConfirmationModal
+        visible={isDeleteModalVisible}
+        title="Delete Property"
+        message="This action cannot be undone. Are you sure you want to delete this property?"
+        onConfirm={handleConfirmDelete}
+        onCancel={() => setIsDeleteModalVisible(false)}
+      />
+    </>
   );
 };
 
@@ -270,4 +266,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default renderItem;
+export default RenderItem;

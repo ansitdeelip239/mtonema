@@ -3,7 +3,6 @@ import {View, StyleSheet, FlatList, RefreshControl, Text} from 'react-native';
 import PartnerService from '../../../services/PartnerService';
 import {useAuth} from '../../../hooks/useAuth';
 import {AgentData, FilterValues, PagingModel} from '../../../types';
-import renderItem from './components/RenderItem';
 import renderFooter from './components/RenderFooter';
 import SearchHeader from './components/SearchHeader';
 import Colors from '../../../constants/Colors';
@@ -14,6 +13,7 @@ import {
   PartnerDrawerParamList,
 } from '../../../types/navigation';
 import {usePartner} from '../../../context/PartnerProvider';
+import RenderItem from './components/RenderItem';
 
 type Props = BottomTabScreenProps<PartnerBottomTabParamList, 'Property'>;
 
@@ -154,13 +154,13 @@ const AgentDataScreen: React.FC<Props> = ({navigation}) => {
       />
       <FlatList
         data={agentData}
-        renderItem={({item}) =>
-          renderItem({
-            item,
-            onDataUpdate: () => setAgentPropertyUpdated(prev => !prev),
-            navigation,
-          })
-        }
+        renderItem={({item}) => (
+          <RenderItem
+            item={item}
+            onDataUpdate={() => setAgentPropertyUpdated(prev => !prev)}
+            navigation={navigation}
+          />
+        )}
         keyExtractor={(item, index) =>
           `${item.Id?.toString() || 'item'}-${index}`
         }

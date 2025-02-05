@@ -9,7 +9,6 @@ import {
   Linking,
   RefreshControl,
   ActivityIndicator,
-  Alert,
 } from 'react-native';
 import {ClientStackParamList} from '../../../navigator/components/ClientScreenStack';
 import Header from '../../../components/Header';
@@ -24,6 +23,8 @@ import AddActivityModal from './components/AddActivityModal';
 import {useKeyboard} from '../../../hooks/useKeyboard';
 import {useAuth} from '../../../hooks/useAuth';
 import ActivityTimeline from './components/ActivityTimeline';
+import {useDialog} from '../../../hooks/useDialog';
+import ConfirmationModal from '../../../components/ConfirmationModal';
 
 type Props = NativeStackScreenProps<
   ClientStackParamList,
@@ -40,10 +41,12 @@ const ClientProfileScreen: React.FC<Props> = ({route, navigation}) => {
   const [selectedActivity, setSelectedActivity] = useState<
     ClientActivityDataModel | undefined
   >();
+  const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false);
 
   const {clientsUpdated, setClientsUpdated} = usePartner();
   const {keyboardVisible} = useKeyboard();
   const {user} = useAuth();
+  const {showError} = useDialog();
 
   const fetchClient = React.useCallback(async () => {
     try {
@@ -55,17 +58,18 @@ const ClientProfileScreen: React.FC<Props> = ({route, navigation}) => {
       }
     } catch (error) {
       console.error('Error in fetchClient', error);
-      Toast.show({
-        type: 'error',
-        text1: 'Error',
-        text2: 'Failed to fetch client data',
-      });
+      // Toast.show({
+      //   type: 'error',
+      //   text1: 'Error',
+      //   text2: 'Failed to fetch client data',
+      // });
+      showError('Failed to fetch client data');
       navigation.goBack();
     } finally {
       setLoading(false);
       setRefreshing(false);
     }
-  }, [route.params.clientId, navigation]);
+  }, [route.params.clientId, navigation, showError]);
 
   useEffect(() => {
     fetchClient();
@@ -105,50 +109,7 @@ const ClientProfileScreen: React.FC<Props> = ({route, navigation}) => {
 
   const handleDelete = async () => {
     closeMenu();
-    Alert.alert(
-      'Delete Client',
-      'Are you sure you want to delete this client?',
-      [
-        {
-          text: 'Cancel',
-          style: 'cancel',
-        },
-        {
-          text: 'Delete',
-          style: 'destructive',
-          onPress: async () => {
-            try {
-              const response = await PartnerService.deleteClientById(
-                client?.Id as number,
-              );
-              if (response.Success) {
-                Toast.show({
-                  type: 'success',
-                  text1: 'Success',
-                  text2: 'Client deleted successfully',
-                });
-                setClientsUpdated(prev => !prev);
-                navigation.goBack();
-              } else {
-                Toast.show({
-                  type: 'error',
-                  text1: 'Error',
-                  text2: 'Failed to delete client',
-                });
-              }
-            } catch (error) {
-              console.error('Error in handleDelete', error);
-              Toast.show({
-                type: 'error',
-                text1: 'Error',
-                text2: 'Failed to delete client',
-              });
-            }
-          },
-        },
-      ],
-      {cancelable: true},
-    );
+    setIsDeleteModalVisible(true);
   };
 
   const handleDeleteActivity = async (activityId: number) => {
@@ -165,17 +126,42 @@ const ClientProfileScreen: React.FC<Props> = ({route, navigation}) => {
       }
     } catch (error) {
       console.error('Error in handleDeleteActivity', error);
-      Toast.show({
-        type: 'error',
-        text1: 'Error',
-        text2: 'Failed to delete activity',
-      });
+      // Toast.show({
+      //   type: 'error',
+      //   text1: 'Error',
+      //   text2: 'Failed to delete activity',
+      // });
+      showError('Failed to delete activity');
     }
   };
 
   const handleActivityPress = (activity: ClientActivityDataModel) => {
     setSelectedActivity(activity);
     setIsActivityModalVisible(true);
+  };
+
+  const handleConfirmDelete = async () => {
+    try {
+      const response = await PartnerService.deleteClientById(
+        client?.Id as number,
+      );
+      if (response.Success) {
+        Toast.show({
+          type: 'success',
+          text1: 'Success',
+          text2: 'Client deleted successfully',
+        });
+        setClientsUpdated(prev => !prev);
+        navigation.goBack();
+      } else {
+        showError('Failed to delete client');
+      }
+    } catch (error) {
+      console.error('Error in handleDelete', error);
+      showError('Failed to delete client');
+    } finally {
+      setIsDeleteModalVisible(false);
+    }
   };
 
   const handleAddEditActivity = async (
@@ -208,13 +194,16 @@ const ClientProfileScreen: React.FC<Props> = ({route, navigation}) => {
       }
     } catch (error) {
       console.error('Error in handleAddEditActivity', error);
-      Toast.show({
-        type: 'error',
-        text1: 'Error',
-        text2: activityId
-          ? 'Failed to update activity'
-          : 'Failed to add activity',
-      });
+      // Toast.show({
+      //   type: 'error',
+      //   text1: 'Error',
+      //   text2: activityId
+      //     ? 'Failed to update activity'
+      //     : 'Failed to add activity',
+      // });
+      showError(
+        activityId ? 'Failed to update activity' : 'Failed to add activity',
+      );
     } finally {
       setAddingActivity(false);
     }
@@ -423,6 +412,7 @@ const ClientProfileScreen: React.FC<Props> = ({route, navigation}) => {
           </>
         )}
       </ScrollView>
+
       <AddActivityModal
         visible={isActivityModalVisible}
         onClose={() => {
@@ -435,6 +425,14 @@ const ClientProfileScreen: React.FC<Props> = ({route, navigation}) => {
         editMode={!!selectedActivity}
         activityToEdit={selectedActivity}
         closeMenu={closeActivityModal}
+      />
+
+      <ConfirmationModal
+        visible={isDeleteModalVisible}
+        title="Delete Client"
+        message="Are you sure you want to delete this client?"
+        onConfirm={handleConfirmDelete}
+        onCancel={() => setIsDeleteModalVisible(false)}
       />
     </View>
   );

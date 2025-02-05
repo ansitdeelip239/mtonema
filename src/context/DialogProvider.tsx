@@ -1,4 +1,4 @@
-import React, {createContext, useState} from 'react';
+import React, {createContext, useState, useRef, useCallback} from 'react';
 import {Image, StyleSheet, TouchableOpacity, View} from 'react-native';
 import {Dialog, Portal, Text, Button} from 'react-native-paper';
 
@@ -14,13 +14,30 @@ export const DialogContext = createContext<DialogContextType | undefined>(
 export const DialogProvider = ({children}: {children: React.ReactNode}) => {
   const [visible, setVisible] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
+  const lastDismissTime = useRef(0);
+  const isDismissing = useRef(false);
 
   const showError = (message: string) => {
     setErrorMessage(message);
     setVisible(true);
   };
 
-  const hideDialog = () => setVisible(false);
+  const hideDialog = useCallback(() => {
+    const now = Date.now();
+    if (isDismissing.current) {
+      return;
+    }
+
+    if (now - lastDismissTime.current > 500) {
+      isDismissing.current = true;
+      lastDismissTime.current = now;
+      setVisible(false);
+      // Reset dismissing flag after animation completes
+      setTimeout(() => {
+        isDismissing.current = false;
+      }, 300);
+    }
+  }, []);
 
   return (
     <DialogContext.Provider value={{showError, hideDialog}}>
@@ -29,7 +46,8 @@ export const DialogProvider = ({children}: {children: React.ReactNode}) => {
         <Dialog
           visible={visible}
           onDismiss={hideDialog}
-          style={[{backgroundColor: '#F5F5F5'}, styles.dialog]}>
+          style={styles.dialog}
+          dismissable={false}>
           <View style={styles.closeButtonContainer}>
             <TouchableOpacity onPress={hideDialog} style={styles.closeButton}>
               <Image
@@ -38,13 +56,13 @@ export const DialogProvider = ({children}: {children: React.ReactNode}) => {
               />
             </TouchableOpacity>
           </View>
-          <Dialog.Title style={{color: '#000000'}}>Error</Dialog.Title>
+          <Dialog.Title style={styles.titleText}>Error</Dialog.Title>
           <Dialog.Content>
-            <Text style={{color: '#000000'}}>{errorMessage}</Text>
+            <Text style={styles.contentText}>{errorMessage}</Text>
           </Dialog.Content>
           <Dialog.Actions>
             <Button textColor="#000000" onPress={hideDialog}>
-              Ok
+              OK
             </Button>
           </Dialog.Actions>
         </Dialog>
@@ -56,7 +74,13 @@ export const DialogProvider = ({children}: {children: React.ReactNode}) => {
 const styles = StyleSheet.create({
   dialog: {
     position: 'relative',
-    // paddingTop: 20, // Make room for close button
+    backgroundColor: '#F5F5F5',
+  },
+  titleText: {
+    color: '#000000',
+  },
+  contentText: {
+    color: '#000000',
   },
   closeButtonContainer: {
     position: 'absolute',
@@ -64,9 +88,7 @@ const styles = StyleSheet.create({
     top: 0,
     zIndex: 1,
   },
-  closeButton: {
-    // padding: 8,
-  },
+  closeButton: {},
   closeIcon: {
     width: 20,
     height: 20,
