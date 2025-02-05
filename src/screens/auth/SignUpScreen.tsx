@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { AuthStackParamList } from '../../navigator/AuthNavigator';
 import SignupForm from '../../components/SignupForm';
-import { SignUpRequest } from '../../types';
 import AuthService from '../../services/AuthService';
 import Toast from 'react-native-toast-message';
 import {
@@ -16,6 +15,7 @@ import {
   Keyboard,
 } from 'react-native';
 import { useAuth } from '../../hooks/useAuth';
+import { apiSubmissionSchema, SignupBody, SignupFormType } from '../../schema/SignUpFormSchema';
 
 type Props = NativeStackScreenProps<AuthStackParamList, 'SignUpScreen'>;
 
@@ -46,12 +46,16 @@ const SignUpScreen: React.FC<Props> = ({ navigation, route }) => {
     };
   }, []);
 
-  const handleSignup = async (formData: SignUpRequest, isSeller: boolean) => {
+  const handleSignup = async (formData: SignupFormType, isSeller: boolean) => {
     try {
       setLoading(true);
-      const response = isSeller
-        ? await AuthService.RegisterSeller(formData)
-        : await AuthService.signUp(formData);
+      const formDataWithRole = {
+        ...formData,
+        Role: isSeller ? 'Seller' : 'Buyer', // Assign role based on `isSeller`
+      };
+      // Convert formDataWithRole (with Role) to SignupBody using apiSubmissionSchema
+      const signupBody: SignupBody = apiSubmissionSchema.parse(formDataWithRole);
+      const response = await AuthService.UserSignUp(signupBody);
       console.log('API Response:', response);
 
       if (response.Success && !emailExistMessage.includes(response.Message)) {
@@ -103,7 +107,7 @@ const SignUpScreen: React.FC<Props> = ({ navigation, route }) => {
               )}
               {/* Form */}
               <SignupForm
-                handleSignup={(formData: SignUpRequest) =>
+                handleSignup={(formData: SignupFormType) =>
                   handleSignup(formData, role !== 'User')
                 }
                 loading={loading}

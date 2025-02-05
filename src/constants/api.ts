@@ -1,9 +1,16 @@
 // let url1 = 'https://dncrpropertyapi.azurewebsites.net'; //Dev Url
-export let url1 = 'https://devdncrbe.azurewebsites.net';
+// export let url1 = 'https://devdncrbe.azurewebsites.net';
 // let url1 = 'https://dncrpropertyapi.azurewebsites.net';
-//export let url1 = 'https://freehostingweb.bsite.net';
+export let url1 = 'https://freehostingweb.bsite.net';
+
+
+
+// signup for all users
+
+
 
 export default {
+  UserSignUp: url1 + '/api/v1/Account/UserSignup',
   //Authentication
   SignUp: url1 + '/api/v1/Account/GenerateOtp',
   VerifyOTP: url1 + '/api/v1/Account/CheckOTP',
