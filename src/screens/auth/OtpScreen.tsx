@@ -36,7 +36,7 @@ const OtpScreen: React.FC<Props> = ({route}) => {
       if (route.params.isForgetPassword) {
         response = await CommonService.ForgetPassword(email, OTP);
       }
-      response = await AuthService.VerifyOTP(email, OTP);
+      response = await CommonService.ForgetPassword(email, OTP);
       console.log('API Response:', response);
 
       if (response.Success) {

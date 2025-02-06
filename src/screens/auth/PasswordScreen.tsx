@@ -39,7 +39,7 @@ const PasswordScreen: React.FC<Props> = ({ navigation, route }) => {
     });
   };
 
-  const validatePassword = (pass: string): boolean => pass.length >= 2;
+  const validatePassword = (pass: string): boolean => pass.length >= 5;
 
   const handleContinue = async () => {
     if (!password.trim()) {
@@ -61,7 +61,7 @@ const PasswordScreen: React.FC<Props> = ({ navigation, route }) => {
         await login(response.data);
         showToast('success', 'Login successful!');
       } else {
-        showError(response.Message || 'Login failed. Please try again.');
+        showError('Please enter a valid Password');
       }
     } catch (error) {
       console.error(error); // Log the error for debugging purposes
@@ -89,6 +89,7 @@ const PasswordScreen: React.FC<Props> = ({ navigation, route }) => {
           <TextInput
             label="Password"
             mode="outlined"
+            placeholder="Please enter password"
             placeholderTextColor={Colors.placeholderColor}
             value={password}
             onChangeText={setPassword}
@@ -132,16 +133,24 @@ const PasswordScreen: React.FC<Props> = ({ navigation, route }) => {
 
         {/* Buttons Section */}
         <View style={styles.btnsection}>
-          <TouchableOpacity
-            style={[styles.button, styles.spacing]}
-            onPress={handleContinue}
-            disabled={isLoading || !validatePassword(password)}>
-            {isLoading ? (
-              <ActivityIndicator size="small" color="#ffffff" />
-            ) : (
-              <Text style={styles.buttonText}>Sign In</Text>
-            )}
-          </TouchableOpacity>
+        <TouchableOpacity
+  style={[
+    styles.button,
+    styles.spacing,
+    // eslint-disable-next-line react-native/no-inline-styles
+    {
+      backgroundColor: isLoading || !validatePassword(password) ? '#e0a1c2' : '#cc0e74',
+    },
+  ]}
+  onPress={handleContinue}
+  disabled={isLoading || !validatePassword(password)}
+>
+  {isLoading ? (
+    <ActivityIndicator size="small" color="#ffffff" />
+  ) : (
+    <Text style={styles.buttonText}>Sign In</Text>
+  )}
+</TouchableOpacity>
 
           <TouchableOpacity
             style={[styles.button, styles.spacing, styles.color]}
@@ -206,7 +215,7 @@ const styles = StyleSheet.create({
   button: {
     backgroundColor: '#cc0e74',
     padding: 15,
-    borderRadius: 30,
+    borderRadius: 15,
     marginVertical: 10,
     width: '95%',
     alignItems: 'center',

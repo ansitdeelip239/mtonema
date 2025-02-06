@@ -13,6 +13,7 @@ import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import Toast from 'react-native-toast-message';
 import {AuthStackParamList} from '../../navigator/AuthNavigator';
 import AuthService from '../../services/AuthService';
+import CommonService from '../../services/CommonService';
 import {useAuth} from '../../hooks/useAuth';
 import {User} from '../../types';
 import {validateEmail} from '../../utils/formvalidation';
@@ -30,6 +31,28 @@ const EmailScreen: React.FC<Props> = ({navigation, route}) => {
   const {role} = route.params;
   const {showError} = useDialog();
   const isEmailValid = useMemo(() => validateEmail(email), [email]);
+
+  const handleVerifyNow = useCallback(async () => {
+    if (!isEmailValid) {
+      setEmailError({ message: 'Invalid email format', isClickable: false });
+      return;
+    }
+
+    setIsLoading(true);
+    try {
+      const response = await CommonService.ForgetPassword(email);
+      console.log('otp response', response);
+      if (response.data === null && response.Success === true) {
+        navigation.navigate('OtpScreen', { email });
+      } else {
+        showError('Failed to send OTP. Please try again');
+      }
+    } catch (error) {
+      showError('An error occurred while sending OTP.');
+    } finally {
+      setIsLoading(false);
+    }
+  }, [email, isEmailValid, navigation, showError]);
 
   const checkEmail = useCallback(async (emailToCheck: string) => {
     try {
@@ -49,7 +72,7 @@ const EmailScreen: React.FC<Props> = ({navigation, route}) => {
       }
 
       if (response && response.data?.Status === 2) {
-        setEmailError({ message: 'Email is not verified. Please verify your email.', isClickable: true });
+        setEmailError({ message: 'Email is not verified. Click Verify Now to proceed.', isClickable: true });
         return false;
       }
 
@@ -82,8 +105,6 @@ const EmailScreen: React.FC<Props> = ({navigation, route}) => {
 
         storeUser(response.data as User);
         navigation.navigate('PasswordScreen', {email});
-      } else if (emailError.isClickable) {
-        navigation.navigate('OtpScreen', {email});
       }
       setNavigateToPostProperty(false);
     } catch (error) {
@@ -98,7 +119,7 @@ const EmailScreen: React.FC<Props> = ({navigation, route}) => {
     } finally {
       setIsLoading(false);
     }
-  }, [email, isEmailValid, checkEmail, storeUser, navigation, role, emailError, setNavigateToPostProperty]);
+  }, [email, isEmailValid, checkEmail, storeUser, navigation, role, setNavigateToPostProperty]);
 
   return (
     <KeyboardAvoidingView
@@ -114,58 +135,69 @@ const EmailScreen: React.FC<Props> = ({navigation, route}) => {
 
       <View style={styles.lowerPart}>
         <View style={styles.txtpadding}>
-          {/* <Text style={styles.label}>Email</Text> */}
           <TextInput
-  label="Email"
-  mode="outlined"
-  placeholderTextColor={Colors.placeholderColor}
-  value={email}
-  onChangeText={setEmail}
-  keyboardType="email-address"
-  autoCapitalize="none"
-  autoCorrect={false}
-  style={[styles.input, !isEmailValid && styles.inputError]}
-  theme={{
-    roundness: 8,
-    colors: {
-      background: 'white',
-      primary: '#880e4f',
-      text: '#000',
-      placeholder: Colors.placeholderColor,
-    },
-  }}
-/>
+            label="Email"
+            placeholder="Please Enter user email"
+            mode="outlined"
+            placeholderTextColor={Colors.placeholderColor}
+            value={email}
+            onChangeText={setEmail}
+            keyboardType="email-address"
+            autoCapitalize="none"
+            autoCorrect={false}
+            style={[styles.input, !isEmailValid && styles.inputError]}
+            theme={{
+              roundness: 8,
+              colors: {
+                background: 'white',
+                primary: '#880e4f',
+                text: '#000',
+                placeholder: Colors.placeholderColor,
+              },
+            }}
+          />
           {emailError.message ? (
             <Text style={styles.errorText}>
               {emailError.message}
-              {emailError.isClickable}
             </Text>
           ) : null}
         </View>
 
         <View style={styles.btnsection}>
-  <TouchableOpacity
-    style={[
-      styles.button,
-      styles.spacing,
-      !isEmailValid && styles.disabledButton, // Apply disabled style
-    ]}
-    onPress={handleContinue}
-    disabled={!isEmailValid || isLoading} // Disable when email is invalid or loading
-  >
-    {isLoading ? (
-      <ActivityIndicator size="small" color="#ffffff" />
-    ) : (
-      <Text style={styles.buttonText}>Continue</Text>
-    )}
-  </TouchableOpacity>
+          {emailError.isClickable ? (
+            <TouchableOpacity
+              style={[styles.button, styles.spacing, styles.verifyButton]}
+              onPress={handleVerifyNow}
+              disabled={isLoading}>
+              {isLoading ? (
+                <ActivityIndicator size="small" color="#ffffff" />
+              ) : (
+                <Text style={styles.buttonText}>Verify Now</Text>
+              )}
+            </TouchableOpacity>
+          ) : (
+            <TouchableOpacity
+              style={[
+                styles.button,
+                styles.spacing,
+                !isEmailValid && styles.disabledButton,
+              ]}
+              onPress={handleContinue}
+              disabled={!isEmailValid || isLoading}>
+              {isLoading ? (
+                <ActivityIndicator size="small" color="#ffffff" />
+              ) : (
+                <Text style={styles.buttonText}>Continue</Text>
+              )}
+            </TouchableOpacity>
+          )}
 
-  <TouchableOpacity
-    style={[styles.button, styles.spacing, styles.color]}
-    onPress={navigation.goBack}>
-    <Text style={styles.buttonText}>Back</Text>
-  </TouchableOpacity>
-</View>
+          <TouchableOpacity
+            style={[styles.button, styles.spacing, styles.color]}
+            onPress={navigation.goBack}>
+            <Text style={styles.buttonText}>Back</Text>
+          </TouchableOpacity>
+        </View>
       </View>
 
       <Toast />
@@ -175,8 +207,11 @@ const EmailScreen: React.FC<Props> = ({navigation, route}) => {
 
 const styles = StyleSheet.create({
   disabledButton: {
-    backgroundColor: Colors.main, // Light gray to indicate disabled state
-    opacity: 0.6, // Reduce opacity
+    backgroundColor: Colors.main,
+    opacity: 0.6,
+  },
+  verifyButton: {
+    backgroundColor: Colors.main,
   },
   mainScreen: {
     flex: 1,
@@ -201,8 +236,9 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.main,
   },
   txtpadding: {
-    paddingLeft: 12,
+    paddingLeft: 25,
     width: '95%',
+    marginBottom:30,
   },
   btnsection: {
     justifyContent: 'center',
@@ -225,14 +261,8 @@ const styles = StyleSheet.create({
     width: '70%',
     height: '100%',
   },
-  label: {
-    fontSize: 16,
-    color: '#880e4f',
-    marginBottom: 10,
-    fontWeight: 'bold',
-  },
   input: {
-    backgroundColor: 'transparent', // Ensures no background color
+    backgroundColor: 'transparent',
     fontSize: 16,
     color: '#000000',
   },

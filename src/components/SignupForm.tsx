@@ -330,6 +330,7 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '30%',
     fontWeight: 'bold',
+    borderRadius:15,
   },
   phoneInputContainer: {
     flexDirection: 'row',

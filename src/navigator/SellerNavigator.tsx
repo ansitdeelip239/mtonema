@@ -32,7 +32,7 @@ const SellerNavigator = memo(() => {
         name="Home."
         component={SellerbottomTabs}
         options={{
-          headerShown: true,
+          headerShown: false,
           // eslint-disable-next-line react/no-unstable-nested-components
           drawerIcon: ({color}) => (
             <GetIcon iconName="home" color={color} size="23"/> // Use GetIcon here
@@ -72,7 +72,7 @@ const SellerNavigator = memo(() => {
           headerRight: () => (
             <TouchableOpacity
               onPress={() =>
-                navigation.navigate('Home', {screen: 'Home'})
+                navigation.navigate('Home.', {screen: 'Home.'})
               }
               style={styles.backButton}>
               <GetIcon iconName="back" size="24" color={Colors.SECONDARY_3} />
