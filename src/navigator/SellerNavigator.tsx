@@ -7,6 +7,7 @@ import ChangePasswordScreen from '../screens/auth/ChangePasswordScreen';
 import ProfileScreen from '../screens/common/ProfileScreen';
 import SellerbottomTabs from './components/SellerBottomTabs';
 import GetIcon from '../components/GetIcon';
+import { StyleSheet, TouchableOpacity } from 'react-native';
 const Drawer = createDrawerNavigator();
 
 const SellerNavigator = memo(() => {
@@ -31,7 +32,7 @@ const SellerNavigator = memo(() => {
         name="Home."
         component={SellerbottomTabs}
         options={{
-          headerShown: false,
+          headerShown: true,
           // eslint-disable-next-line react/no-unstable-nested-components
           drawerIcon: ({color}) => (
             <GetIcon iconName="home" color={color} size="23"/> // Use GetIcon here
@@ -65,10 +66,27 @@ const SellerNavigator = memo(() => {
       <Drawer.Screen
         name="Profile Screen"
         component={ProfileScreen}
-        options={{drawerItemStyle: {display: 'none'}}}
+        options={({navigation}) => ({
+          drawerItemStyle: {display: 'none'},
+          // eslint-disable-next-line react/no-unstable-nested-components
+          headerRight: () => (
+            <TouchableOpacity
+              onPress={() =>
+                navigation.navigate('Home', {screen: 'Home'})
+              }
+              style={styles.backButton}>
+              <GetIcon iconName="back" size="24" color={Colors.SECONDARY_3} />
+            </TouchableOpacity>
+          ),
+        })}
       />
     </Drawer.Navigator>
   );
+});
+const styles = StyleSheet.create({
+  backButton: {
+    marginRight: 16,
+  },
 });
 
 export default SellerNavigator;

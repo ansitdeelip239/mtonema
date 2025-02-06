@@ -125,9 +125,9 @@ const handleContinue = useCallback(async () => {
 
       <View style={styles.lowerPart}>
         <View style={styles.txtpadding}>
-          <Text style={styles.label}>Email or Mobile</Text>
+          <Text style={styles.label}>Email</Text>
           <TextInput
-            placeholder="Email or Mobile"
+            placeholder="Email"
             placeholderTextColor={Colors.placeholderColor}
             value={email}
             onChangeText={setEmail}
@@ -197,7 +197,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.main,
   },
   txtpadding: {
-    paddingLeft: 10,
+    paddingLeft: 12,
     width: '95%',
   },
   btnsection: {

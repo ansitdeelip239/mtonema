@@ -20,6 +20,7 @@ import {
   SignupBody,
   SignupFormType,
 } from '../../schema/SignUpFormSchema';
+import { useDialog } from '../../hooks/useDialog';
 
 type Props = NativeStackScreenProps<AuthStackParamList, 'SignUpScreen'>;
 
@@ -28,7 +29,7 @@ const SignUpScreen: React.FC<Props> = ({navigation, route}) => {
   const [isKeyboardVisible, setKeyboardVisible] = useState(false);
   const emailExistMessage = ['Email already exist', 'Email already exists'];
   const {setNavigateToPostProperty} = useAuth();
-
+ const {showError} = useDialog();
   useEffect(() => {
     const keyboardDidShowListener = Keyboard.addListener(
       'keyboardDidShow',
@@ -64,11 +65,7 @@ const SignUpScreen: React.FC<Props> = ({navigation, route}) => {
         setNavigateToPostProperty(true);
         navigation.navigate('OtpScreen', {email: formData.Email});
       } else {
-        Toast.show({
-          type: 'error',
-          text1: 'Error',
-          text2: response.Message || 'Sign up failed. Please try again.',
-        });
+        showError(response.Message);
       }
     } catch (error) {
       console.error('API Error:', error);

@@ -4,11 +4,6 @@
 export let url1 = 'https://freehostingweb.bsite.net';
 
 
-
-// signup for all users
-
-
-
 export default {
   UserSignUp: url1 + '/api/v1/Account/UserSignup',
   //Authentication
