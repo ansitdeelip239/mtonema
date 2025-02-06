@@ -6,13 +6,16 @@ export let url1 = 'https://freehostingweb.bsite.net';
 
 export default {
   UserSignUp: url1 + '/api/v1/Account/UserSignup',
+  // ForgetPassword :url1 + '/api/v1/Account/OtpVerification',
+
+
   //Authentication
   SignUp: url1 + '/api/v1/Account/GenerateOtp',
   VerifyOTP: url1 + '/api/v1/Account/CheckOTP',
   GetUserByToken: url1 + '/api/v1/Account/GetUserByToken?token=',
   ValidateEmail: url1 + '/api/v1/User/varifyUserbyEmail?email=',
   Login: url1 + '/api/v1/Account/loginUser',
-  ForgotPassword: url1 + '/api/v1/Account/ForgetPasword',
+  ForgotPassword: url1 + '/api/v1/Account/OtpVerification',
   ChangePassword: url1 + '/api/v1/Account/ChangePassword',
 
   //Property

@@ -9,7 +9,7 @@ class AuthService {
   ): Promise<Response<User | null>> {
     try {
       if (!loginInput) {
-        throw new Error('Email or phone number is required');
+        throw new Error('Email is required');
       }
 
       const response = await fetch(api.ValidateEmail + loginInput, {
