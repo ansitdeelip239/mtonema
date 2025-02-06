@@ -18,6 +18,7 @@ import {User} from '../../types';
 import CommonService from '../../services/CommonService';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import GetIcon from '../../components/GetIcon';
+import Colors from '../../constants/Colors';
 
 type FieldName = 'name' | 'email' | 'password' | 'mobile' | 'location';
 type EditableFields = Record<FieldName, boolean>;
@@ -381,10 +382,10 @@ const ProfileScreen = () => {
 
         {Object.values(editMode).some(Boolean) && (
           <TouchableOpacity
-            style={styles.button}
+            style={styles.savebutton}
             onPress={handleUpdateProfile}
             disabled={isLoading}>
-            <Text style={styles.buttonText}>Save Changes</Text>
+            <Text style={styles.savebuttonText}>Save Changes</Text>
           </TouchableOpacity>
         )}
 
@@ -496,7 +497,8 @@ const styles = StyleSheet.create({
   button: {
     marginTop: 16,
     padding: 15,
-    backgroundColor: '#4f772d',
+    backgroundColor: '#fff',
+    color:'black',
     borderRadius: 10,
     alignItems: 'center',
     elevation: 3,
@@ -509,6 +511,25 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 16,
     fontWeight: 'bold',
+  },
+  savebuttonText: {
+    color: Colors.main,
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+  savebutton: {
+    marginTop: 16,
+    padding: 15,
+    backgroundColor: '#fff',
+    color:'black',
+    borderRadius: 10,
+    alignItems: 'center',
+    elevation: 3,
+    // shadowColor: Colors.main,
+    shadowColor: Colors.black,
+    shadowOffset: {width: 2, height: 2},
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
   },
   logoutButton: {
     backgroundColor: '#cc0e74',

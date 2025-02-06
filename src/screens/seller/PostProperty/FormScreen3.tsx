@@ -27,7 +27,16 @@ type Props = NativeStackScreenProps<PostPropertyFormParamList, 'FormScreen3'>;
 const FormScreen3: React.FC<Props> = ({navigation}) => {
   const [value, setValue] = useState('Images');
   const {formData, setFormData, resetForm} = usePropertyForm();
-  const [images, setImages] = useState<ImageType[]>(formData.ImageURL || []);
+  // const [images, setImages] = useState<ImageType[]>(formData.ImageURL || []);
+  const [images, setImages] = useState<ImageType[]>(
+    (formData.ImageURL || []).map(img => ({
+      ...img,
+      ID:
+        img.ID ||
+        img.ImageUrl ||
+        `edit_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+    })),
+  );
   const [loading, setLoading] = useState(false);
   const [loadingImage, setLoadingImage] = useState(false);
   const {dataUpdated, setDataUpdated, user} = useAuth();
@@ -73,8 +82,8 @@ const FormScreen3: React.FC<Props> = ({navigation}) => {
       });
 
       const cloudinaryUrl = await uploadToCloudinary(image.path);
-
       const newImage: ImageType = {
+
         ID: `camera_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
         imageNumber: images.length + 1,
         ImageUrl: cloudinaryUrl,
@@ -118,6 +127,7 @@ const FormScreen3: React.FC<Props> = ({navigation}) => {
       }));
 
       const updatedImages = [...images, ...newImages];
+      console.log('Upload images when seller upload via gallary',updatedImages);
       setImages(updatedImages);
       setFormData(prev => ({
         ...prev,
@@ -128,14 +138,23 @@ const FormScreen3: React.FC<Props> = ({navigation}) => {
     }
   };
 
-  const removeImage = (imageId: string) => {
-    const filteredImages = images.filter(img => img.ID !== imageId);
-    setImages(filteredImages);
-    setFormData(prev => ({
-      ...prev,
-      ImageURL: filteredImages,
-    }));
-  };
+const removeImage = (imageId: string) => {
+  if (!imageId) {
+    return;
+  }
+
+  // Add unique IDs if they don't exist
+  const filteredImages = images.filter(img => {
+    const imageIdentifier = img.ID || img.ImageUrl;
+    return imageIdentifier !== imageId;
+  });
+
+  setImages(filteredImages);
+  setFormData(prev => ({
+    ...prev,
+    ImageURL: filteredImages,
+  }));
+};
 
   const handleSubmit = async () => {
     if (images.length === 0) {
@@ -394,16 +413,32 @@ const styles = StyleSheet.create({
   },
   listPropertyButton: {
     backgroundColor: Colors.main,
-    padding: 15,
-    borderRadius: 25,
-    alignItems: 'center',
-    marginVertical: 20,
-    marginBottom: 100,
+  paddingVertical: 15,  // Keeps padding uniform
+  paddingHorizontal: 30,
+  borderRadius: 25,
+  alignItems: 'center',
+  justifyContent: 'center',
+  marginVertical: 20,
+  marginBottom: 150,
+  left:50,
+  width: 250, // Fixed width (adjust as needed)
+  height: 55, // Fixed height to prevent resizing
+    // backgroundColor: Colors.main,
+    // padding: 15,
+    // borderRadius: 25,
+    // alignItems: 'center',
+    // marginVertical: 20,
+    // marginBottom: 100,
   },
   listPropertyText: {
     color: 'white',
     fontSize: 18,
     fontWeight: 'bold',
+    textAlign: 'center',
+    minWidth: 180, // Ensures text area does not shrink
+    // color: 'white',
+    // fontSize: 18,
+    // fontWeight: 'bold',
   },
   loaderContainer: {
     alignItems: 'center',

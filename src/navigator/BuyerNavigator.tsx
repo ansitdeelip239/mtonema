@@ -11,6 +11,7 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import SearchProperty from '../screens/buyer/SearchProperty';
 import RecommendedProperty from '../screens/buyer/RecommendedProperty';
 import GetIcon from '../components/GetIcon';
+import { StyleSheet, TouchableOpacity } from 'react-native';
 
 const Drawer = createDrawerNavigator();
 const Stack = createNativeStackNavigator();
@@ -36,7 +37,7 @@ const BuyerNavigator = memo(() => {
         drawerType: 'front',
         drawerActiveTintColor: 'white',
         drawerActiveBackgroundColor: Colors.main,
-        headerShown: false,
+        headerShown: true,
         drawerStyle: {
           width: 240,
         },
@@ -71,6 +72,7 @@ const BuyerNavigator = memo(() => {
         name="Change Password"
         component={ChangePasswordScreen}
         options={{
+          headerShown: false,
           // eslint-disable-next-line react/no-unstable-nested-components
           drawerIcon: ({color}) => (
             <GetIcon iconName="changepassword" color={color} size="29" /> // Use GetIcon here
@@ -81,6 +83,7 @@ const BuyerNavigator = memo(() => {
         name="Contact Us"
         component={ContactScreen}
         options={{
+          headerShown: false,
           // eslint-disable-next-line react/no-unstable-nested-components
           drawerIcon: ({color}) => (
             <GetIcon iconName="contactus" color={color} size="26" /> // Use GetIcon here
@@ -90,10 +93,27 @@ const BuyerNavigator = memo(() => {
       <Drawer.Screen
         name="Profile Screen"
         component={ProfileScreen}
-        options={{drawerItemStyle: {display: 'none'}}}
+        options={({navigation}) => ({
+          drawerItemStyle: {display: 'none'},
+          // eslint-disable-next-line react/no-unstable-nested-components
+          headerRight: () => (
+            <TouchableOpacity
+              onPress={() =>
+                navigation.navigate('Home', {screen: 'Home'})
+              }
+              style={styles.backButton}>
+              <GetIcon iconName="back" size="24" color={Colors.SECONDARY_3} />
+            </TouchableOpacity>
+          ),
+        })}
       />
     </Drawer.Navigator>
   );
+});
+const styles = StyleSheet.create({
+  backButton: {
+    marginRight: 16,
+  },
 });
 
 export default BuyerNavigator;

@@ -80,7 +80,7 @@ export const MainScreen: React.FC<Props> = ({navigation}) => {
               <TouchableOpacity
                 style={styles.button2}
                 onPress={() => onLogin(['Partner'])}>
-                <GetIcon iconName="partner" color="white" size="45" />
+                <GetIcon iconName="partner" color="white" size="40" />
                 <Text style={styles.buttonText2}>Login as partner</Text>
               </TouchableOpacity>
             </View>
@@ -133,8 +133,8 @@ const styles = StyleSheet.create({
   },
   button: {
     backgroundColor: '#cc0e74', // Matching pink button
-    padding: 15,
-    borderRadius: 30,
+    padding: 16,
+    borderRadius: 15,
     marginVertical: 10,
     width: '100%', // Full width
     alignItems: 'center',
@@ -156,23 +156,23 @@ const styles = StyleSheet.create({
   },
   listPropertyButton: {
     backgroundColor: '#cc0e74', // Example button color
-    padding: 18, // Increase padding for height
-    borderRadius: 50, // Rounded corners
-    width: '80%', // Set width to 80% of the parent container
+    padding: 15, // Increase padding for height
+    borderRadius: 15, // Rounded corners
+    width: '78%', // Set width to 80% of the parent container
     alignItems: 'center', // Center text horizontally
     justifyContent: 'center', // Center text vertically
     marginBottom: 16, // Add spacing between buttons
   },
   listPropertyText: {
     color: 'white', // Text color
-    fontSize: 16, // Increase font size
+    fontSize: 17, // Increase font size
     fontWeight: 'bold', // Bold text
   },
   button2: {
     backgroundColor: '#cc0e74', // Button background color
-    padding: 8, // Increase padding for height
-    borderRadius: 50, // Rounded corners
-    width: '85%', // Set width to 80% of the parent container
+    padding: 6, // Increase padding for height
+    borderRadius: 15, // Rounded corners
+    width: '90%', // Set width to 80% of the parent container
     flexDirection: 'row', // Align icon and text horizontally
     alignItems: 'center', // Center icon and text vertically
     justifyContent: 'center', // Center the entire group horizontally
@@ -181,10 +181,10 @@ const styles = StyleSheet.create({
     color: 'white', // Text color
     fontSize: 18, // Increase font size
     fontWeight: 'bold', // Bold text
-    marginLeft: 10, // Add spacing between icon and text
+    marginLeft: 16, // Add spacing between icon and text
     alignItems: 'center', // Center icon and text vertically
     justifyContent: 'center', // Center the entire group horizontally
-    marginEnd: 20,
+    marginEnd: 30,
   },
   modalOverlay: {
     flex: 1,

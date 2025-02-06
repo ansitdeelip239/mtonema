@@ -29,7 +29,9 @@ export type IconEnum =
   | 'threeDots'
   | 'notes'
   | 'message'
-  | 'back'; 
+  | 'back'
+  | 'eye'
+  | 'crosseye'
 
 type IconProps = {
   iconName: IconEnum;
@@ -67,6 +69,8 @@ const GetIcon = ({iconName, color, size}: IconProps) => {
     notes: require('../assets/Icon/notes.png'),
     message: require('../assets/Icon/message.png'),
     back: require('../assets/Icon/back-button.png'),
+    eye:require('../assets/Icon/eye.png'),
+    crosseye :require('../assets/Icon/eye-slash.png'),
   };
 
   const imageStyle = [

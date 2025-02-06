@@ -15,17 +15,17 @@ import {
   validatePhone,
 } from '../utils/formvalidation';
 import LocationComponent from './LocationComponent';
-import {SignUpRequest} from '../types';
 import {navigationRef} from '../navigator/NavigationRef';
+import { SignupFormType } from '../schema/SignUpFormSchema';
 
 const SignupForm = ({
   handleSignup,
   loading,
 }: {
-  handleSignup: (formData: SignUpRequest) => void;
+  handleSignup: (formData: SignupFormType) => void;
   loading: boolean;
 }) => {
-  const [sellerData, setSellerData] = useState({
+  const [sellerData, setSellerData] = useState<SignupFormType>({
     Name: '',
     Email: '',
     Phone: '',
@@ -330,6 +330,7 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '30%',
     fontWeight: 'bold',
+    borderRadius:15,
   },
   phoneInputContainer: {
     flexDirection: 'row',

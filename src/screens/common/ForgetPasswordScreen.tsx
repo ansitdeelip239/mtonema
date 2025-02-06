@@ -6,12 +6,14 @@ import CommonService from '../../services/CommonService';
 import Toast from 'react-native-toast-message';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { AuthStackParamList } from '../../navigator/AuthNavigator';
+import { useDialog } from '../../hooks/useDialog';
 
 type Props = NativeStackScreenProps<AuthStackParamList, 'ForgetPassword'>;
 
 const ForgetPasswordScreen:React.FC<Props> = ({navigation}) => {
   const [email, setEmail] = useState('');
-
+  const [_isLoading, setIsLoading] = useState(false);
+const {showError} = useDialog();
   const handleContinue = async () => {
     if (!email.trim()) {
       Toast.show({
@@ -21,39 +23,21 @@ const ForgetPasswordScreen:React.FC<Props> = ({navigation}) => {
       });
       return;
     }
-
+    setIsLoading(true);
     try {
-      const response = await CommonService.ForgetPassword(
-        email,
-        'https://app.dncrproperty.com/resetpassword/'
-      );
-
-      if (response.Success) {
-        Toast.show({
-          type: 'success',
-          text1: 'Success',
-          text2: 'Reset link sent to your email!',
-        });
-
-        setEmail('');
-
-        setTimeout(() => {
-          navigation.navigate('MainScreen');
-        }, 1000);
+      const response = await CommonService.ForgetPassword(email);
+       console.log('otp repsonse',response);
+      if (response.data === null && response.Success === true) {
+        navigation.navigate('OtpScreen', { email });
       } else {
-        Toast.show({
-          type: 'error',
-          text1: 'Failed',
-          text2: response.Message || 'Something went wrong, try again later!',
-        });
+        showError('Failed to send OTP. Please try again');
       }
     } catch (error) {
-      Toast.show({
-        type: 'error',
-        text1: 'Error',
-        text2: 'An error occurred. Please try again later.',
-      });
+      showError('An error occurred while sending OTP.');
+    } finally {
+      setIsLoading(false);
     }
+
   };
 
   return (

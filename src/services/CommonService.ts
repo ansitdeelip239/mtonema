@@ -11,9 +11,18 @@ class CommonService {
       throw error;
     }
   }
-  static async ForgetPassword(Email:string, URL:string) {
+  static async ForgetPassword(Email:string ,OTP?:string) {
     try {
-      const response = await api.post<any>(url1.ForgotPassword,{Email,URL});
+      let response;
+      if(OTP)
+      {
+        response = await api.post<any>(url1.ForgotPassword,{Email,OTP});
+
+      }
+      else
+      {
+        response = await api.post<any>(url1.ForgotPassword,{Email});
+      }
       return response;
     } catch (error) {
       console.error('Error in ForgotPassword ', error);

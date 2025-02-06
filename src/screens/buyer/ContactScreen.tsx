@@ -2,7 +2,6 @@ import React, {useState} from 'react';
 import {
   View,
   Text,
-  TextInput,
   // Button,
   StyleSheet,
   ScrollView,
@@ -15,6 +14,7 @@ import {
 import {api} from '../../utils/api';
 import url from '../../constants/api';
 import Header from '../../components/Header';
+import { TextInput } from 'react-native-paper';
 export default function ContactScreen() {
   const [formData, setFormData] = useState({
     name: '',
@@ -109,8 +109,9 @@ const [loading, setLoading] = useState(false);
       <Text style={styles.header}>Fill Your Enquiry Here</Text>
       <View style={styles.form}>
         <TextInput
+        label="Name"
+         mode="outlined"
           style={[styles.input, errors.name ? styles.inputError : null]}
-          placeholder="Name"
           value={formData.name}
           onChangeText={value => handleInputChange('name', value)}
           />
@@ -119,8 +120,9 @@ const [loading, setLoading] = useState(false);
         ) : null}
 
         <TextInput
+        label="Email-Address"
+         mode="outlined"
           style={[styles.input, errors.email ? styles.inputError : null]}
-          placeholder="Email Address"
           value={formData.email}
           onChangeText={value => handleInputChange('email', value)}
           keyboardType="email-address"
@@ -130,9 +132,10 @@ const [loading, setLoading] = useState(false);
           <Text style={styles.errorText}>{errors.email}</Text>
         ) : null}
         <TextInput
+        label="Mobile Number"
           style={[styles.input, errors.mobile ? styles.inputError : null]}
-          placeholder="Mobile Number"
           value={formData.mobile}
+          mode="outlined"
           onChangeText={value => handleInputChange('mobile', value)}
           keyboardType="phone-pad"
           maxLength={15}
@@ -141,8 +144,9 @@ const [loading, setLoading] = useState(false);
           <Text style={styles.errorText}>{errors.mobile}</Text>
         ) : null}
         <TextInput
+        label="Enter your Message"
+         mode="outlined"
           style={[styles.input, styles.textarea]}
-          placeholder="Enter Message"
           value={formData.message}
           onChangeText={value => handleInputChange('message', value)}
           multiline
@@ -219,7 +223,6 @@ const styles = StyleSheet.create({
     padding: 16,
     backgroundColor: '#fff',
     alignItems: 'center',
-    // height:'auto',
   },
   inputError: {
     borderColor: 'red',
@@ -265,13 +268,10 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   input: {
-    borderWidth: 1,
-    borderColor: '#ccc',
-    borderRadius: 8,
-    padding: 10,
+    borderRadius: 8, // Keep border-radius for rounded corners
     marginBottom: 12,
     fontSize: 16,
-    backgroundColor: '#f9f9f9',
+    backgroundColor: 'white', // Ensures consistent input background
   },
   textarea: {
     height: 100,

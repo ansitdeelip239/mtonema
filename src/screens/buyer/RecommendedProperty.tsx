@@ -17,6 +17,7 @@ import PropertyModal from './PropertyModal';
 import EnquiryButton from '../common/EnquiryButton';
 import Colors from '../../constants/Colors';
 import { DrawerNavigationProp } from '@react-navigation/drawer';
+import { formatCurrency } from '../../utils/currency';
 type HomeProps = {
   navigation: DrawerNavigationProp<any>;
 };
@@ -129,7 +130,9 @@ const RecommendedProperty = ({navigation}: HomeProps) => {
          </Text>
          <View style={styles.detailsRow}>
            <Text style={styles.price}>
-             ₹{item.Price} {item.Rate?.MasterDetailName}
+           {/* Price: {formatCurrency(property.Price.toString())} */}
+           {formatCurrency(String(item.Price))}
+           {/* ₹{item.Price} {item.Rate?.MasterDetailName} */}
            </Text>
            <Text style={styles.area}>
              {item.Area} {item.Size?.MasterDetailName}

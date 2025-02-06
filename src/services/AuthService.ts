@@ -1,6 +1,7 @@
 import {Response, SignUpRequest, User} from '../types';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import api from '../constants/api';
+import { SignupBody } from '../schema/SignUpFormSchema';
 
 class AuthService {
   static async verifyLoginInput(
@@ -8,7 +9,7 @@ class AuthService {
   ): Promise<Response<User | null>> {
     try {
       if (!loginInput) {
-        throw new Error('Email or phone number is required');
+        throw new Error('Email is required');
       }
 
       const response = await fetch(api.ValidateEmail + loginInput, {
@@ -35,6 +36,22 @@ class AuthService {
   static async signUp(body: SignUpRequest) {
     try {
       const response = await fetch(api.SignUp, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(body),
+      });
+      return response.json();
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  static async UserSignUp(body:SignupBody) {
+    try {
+      console.log('jjhsljhvsbjlbdsljhbds',body);
+      const response = await fetch(api.UserSignUp, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

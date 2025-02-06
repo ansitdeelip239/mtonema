@@ -2,7 +2,6 @@ import React, {useCallback, useState, useMemo} from 'react';
 import {
   View,
   Text,
-  TextInput,
   StyleSheet,
   Image,
   ActivityIndicator,
@@ -12,104 +11,115 @@ import {
 } from 'react-native';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import Toast from 'react-native-toast-message';
-
 import {AuthStackParamList} from '../../navigator/AuthNavigator';
 import AuthService from '../../services/AuthService';
+import CommonService from '../../services/CommonService';
 import {useAuth} from '../../hooks/useAuth';
 import {User} from '../../types';
 import {validateEmail} from '../../utils/formvalidation';
 import Colors from '../../constants/Colors';
+import { useDialog } from '../../hooks/useDialog';
+import { TextInput } from 'react-native-paper';
+
 type Props = NativeStackScreenProps<AuthStackParamList, 'EmailScreen'>;
 
 const EmailScreen: React.FC<Props> = ({navigation, route}) => {
   const [email, setEmail] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [emailError, setEmailError] = useState<{ message: string; isClickable?: boolean }>({ message: '', isClickable: false });
-  const {storeUser,setNavigateToPostProperty} = useAuth();
+  const {storeUser, setNavigateToPostProperty} = useAuth();
   const {role} = route.params;
-
+  const {showError} = useDialog();
   const isEmailValid = useMemo(() => validateEmail(email), [email]);
 
-  const checkEmail = useCallback(
-    async (emailToCheck: string) => {
-      try {
-        // Clear previous errors
-        setEmailError({ message: '', isClickable: false });
+  const handleVerifyNow = useCallback(async () => {
+    if (!isEmailValid) {
+      setEmailError({ message: 'Invalid email format', isClickable: false });
+      return;
+    }
 
-        // Validate email format first
-        if (!isEmailValid) {
-          setEmailError({ message: 'Invalid email format', isClickable: false });
-          return false;
-        }
+    setIsLoading(true);
+    try {
+      const response = await CommonService.ForgetPassword(email);
+      console.log('otp response', response);
+      if (response.data === null && response.Success === true) {
+        navigation.navigate('OtpScreen', { email });
+      } else {
+        showError('Failed to send OTP. Please try again');
+      }
+    } catch (error) {
+      showError('An error occurred while sending OTP.');
+    } finally {
+      setIsLoading(false);
+    }
+  }, [email, isEmailValid, navigation, showError]);
 
-        const response = await AuthService.verifyLoginInput(emailToCheck);
- console.log(response.Message);
-        // Check if email matches the expected role
-        if (response && !role.includes(response.data?.Role as string)) {
-          setEmailError({ message: '*Email not found', isClickable: false });
-          return false;
-        }
+  const checkEmail = useCallback(async (emailToCheck: string) => {
+    try {
+      setEmailError({ message: '', isClickable: false });
 
-        // Check if email is not verified
-        if (response && response.data?.Status === 2) {
-          setEmailError({ message: 'Email is not verified. Please verify your email.', isClickable: true });
-          return false;
-        }
-
-        if (!response.Success) {
-          setEmailError({ message: response.Message || 'Email verification failed', isClickable: false });
-          return false;
-        }
-
-        return true;
-      } catch (error) {
-        const errorMessage =
-          error instanceof Error
-            ? error.message
-            : 'An unexpected error occurred';
-
-        setEmailError({ message: errorMessage, isClickable: false });
+      if (!isEmailValid) {
+        showError('Invalid email format');
         return false;
       }
-    },
-    [role, isEmailValid],
-  );
 
-const handleContinue = useCallback(async () => {
-  if (!isEmailValid) {
-    setEmailError({message: 'Invalid email format', isClickable: false});
-    return;
-  }
+      const response = await AuthService.verifyLoginInput(emailToCheck);
+      console.log(response.Message);
 
-  try {
-    setIsLoading(true);
-    const isValidEmail = await checkEmail(email);
+      if (response && !role.includes(response.data?.Role as string)) {
+        showError('Email not found');
+        return false;
+      }
 
-    if (isValidEmail) {
-      // Store user data and navigate to password screen
-      const response = await AuthService.verifyLoginInput(email);
-      console.log('API Response:', response.data, 'Role: ', role);
+      if (response && response.data?.Status === 2) {
+        setEmailError({ message: 'Email is not verified. Click Verify Now to proceed.', isClickable: true });
+        return false;
+      }
 
-      storeUser(response.data as User);
-      navigation.navigate('PasswordScreen', {email});
-    } else if (emailError.isClickable) {
-      // If email is unverified, navigate to OTP screen
-      navigation.navigate('OtpScreen', {email});
+      if (!response.Success) {
+        setEmailError({ message: response.Message || 'Email verification failed', isClickable: false });
+        return false;
+      }
+
+      return true;
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : 'An unexpected error occurred';
+      setEmailError({ message: errorMessage, isClickable: false });
+      return false;
     }
-    setNavigateToPostProperty(false);
-  } catch (error) {
-    Toast.show({
-      type: 'error',
-      position: 'top',
-      text1: 'Error',
-      text2: 'Something went wrong. Please try again.',
-      visibilityTime: 3000,
-      autoHide: true,
-    });
-  } finally {
-    setIsLoading(false);
-  }
-}, [email, isEmailValid, checkEmail, storeUser, navigation, role, emailError,setNavigateToPostProperty]);
+  }, [role, isEmailValid, showError]);
+
+  const handleContinue = useCallback(async () => {
+    if (!isEmailValid) {
+      setEmailError({ message: 'Invalid email format', isClickable: false });
+      return;
+    }
+
+    try {
+      setIsLoading(true);
+      const isValidEmail = await checkEmail(email);
+
+      if (isValidEmail) {
+        const response = await AuthService.verifyLoginInput(email);
+        console.log('API Response:', response.data, 'Role: ', role);
+
+        storeUser(response.data as User);
+        navigation.navigate('PasswordScreen', {email});
+      }
+      setNavigateToPostProperty(false);
+    } catch (error) {
+      Toast.show({
+        type: 'error',
+        position: 'top',
+        text1: 'Error',
+        text2: 'Something went wrong. Please try again.',
+        visibilityTime: 3000,
+        autoHide: true,
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  }, [email, isEmailValid, checkEmail, storeUser, navigation, role, setNavigateToPostProperty]);
 
   return (
     <KeyboardAvoidingView
@@ -125,40 +135,62 @@ const handleContinue = useCallback(async () => {
 
       <View style={styles.lowerPart}>
         <View style={styles.txtpadding}>
-          <Text style={styles.label}>Email or Mobile</Text>
           <TextInput
-            placeholder="Email or Mobile"
+            label="Email"
+            placeholder="Please Enter user email"
+            mode="outlined"
             placeholderTextColor={Colors.placeholderColor}
             value={email}
             onChangeText={setEmail}
-            style={[styles.input, !isEmailValid && styles.inputError]}
             keyboardType="email-address"
             autoCapitalize="none"
             autoCorrect={false}
+            style={[styles.input, !isEmailValid && styles.inputError]}
+            theme={{
+              roundness: 8,
+              colors: {
+                background: 'white',
+                primary: '#880e4f',
+                text: '#000',
+                placeholder: Colors.placeholderColor,
+              },
+            }}
           />
           {emailError.message ? (
             <Text style={styles.errorText}>
               {emailError.message}
-              {emailError.isClickable}
             </Text>
           ) : null}
         </View>
 
         <View style={styles.btnsection}>
-          <TouchableOpacity
-            style={[styles.button, styles.spacing]}
-            onPress={handleContinue}
-            disabled={isLoading || !isEmailValid}>
-            {isLoading ? (
-              <ActivityIndicator size="small" color="#ffffff" />
-            ) : (
-              <Text style={styles.buttonText}>
-                {emailError.message && emailError.isClickable
-                  ? 'Verify Email Now'
-                  : 'Continue'}
-              </Text>
-            )}
-          </TouchableOpacity>
+          {emailError.isClickable ? (
+            <TouchableOpacity
+              style={[styles.button, styles.spacing, styles.verifyButton]}
+              onPress={handleVerifyNow}
+              disabled={isLoading}>
+              {isLoading ? (
+                <ActivityIndicator size="small" color="#ffffff" />
+              ) : (
+                <Text style={styles.buttonText}>Verify Now</Text>
+              )}
+            </TouchableOpacity>
+          ) : (
+            <TouchableOpacity
+              style={[
+                styles.button,
+                styles.spacing,
+                !isEmailValid && styles.disabledButton,
+              ]}
+              onPress={handleContinue}
+              disabled={!isEmailValid || isLoading}>
+              {isLoading ? (
+                <ActivityIndicator size="small" color="#ffffff" />
+              ) : (
+                <Text style={styles.buttonText}>Continue</Text>
+              )}
+            </TouchableOpacity>
+          )}
 
           <TouchableOpacity
             style={[styles.button, styles.spacing, styles.color]}
@@ -174,16 +206,23 @@ const handleContinue = useCallback(async () => {
 };
 
 const styles = StyleSheet.create({
+  disabledButton: {
+    backgroundColor: Colors.main,
+    opacity: 0.6,
+  },
+  verifyButton: {
+    backgroundColor: Colors.main,
+  },
   mainScreen: {
     flex: 1,
-    backgroundColor: '#cc0e74', // Pinkish Background
+    backgroundColor: '#cc0e74',
   },
   button: {
     backgroundColor: '#cc0e74',
     padding: 15,
-    borderRadius: 30,
+    borderRadius: 15,
     marginVertical: 10,
-    width: '95%',
+    width: '90%',
     alignItems: 'center',
     justifyContent: 'center',
     shadowColor: '#000',
@@ -191,14 +230,15 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
     elevation: 5,
-    minHeight: 50, // Add this to maintain consistent height
+    minHeight: 50,
   },
   color: {
-    backgroundColor: '#790c5a',
+    backgroundColor: Colors.main,
   },
   txtpadding: {
-    paddingLeft: 10,
+    paddingLeft: 25,
     width: '95%',
+    marginBottom:30,
   },
   btnsection: {
     justifyContent: 'center',
@@ -221,16 +261,8 @@ const styles = StyleSheet.create({
     width: '70%',
     height: '100%',
   },
-  label: {
-    fontSize: 16,
-    color: '#880e4f',
-    marginBottom: 10,
-    fontWeight: 'bold',
-  },
   input: {
-    borderBottomWidth: 1,
-    borderBottomColor: '#880e4f',
-    padding: 5,
+    backgroundColor: 'transparent',
     fontSize: 16,
     color: '#000000',
   },
@@ -239,20 +271,15 @@ const styles = StyleSheet.create({
     marginTop: 5,
   },
   inputError: {
-    borderBottomColor: 'red',
+    borderColor: 'red',
   },
   spacing: {
-    marginBottom: 10, // Adds space below each button
+    marginBottom: 10,
   },
   buttonText: {
     color: '#ffffff',
     fontSize: 16,
     fontWeight: 'bold',
-  },
-  verifyNowText: {
-    color: 'blue',
-    fontWeight: 'bold',
-    textDecorationLine: 'underline',
   },
 });
 

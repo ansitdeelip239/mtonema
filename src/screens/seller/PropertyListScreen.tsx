@@ -18,6 +18,7 @@ import {useAuth} from '../../hooks/useAuth';
 import Header from '../../components/Header';
 import {BottomTabScreenProps} from '@react-navigation/bottom-tabs';
 import {SellerBottomTabParamList} from '../../types/navigation';
+import { formatCurrency } from '../../utils/currency';
 
 type Props = BottomTabScreenProps<SellerBottomTabParamList, 'Home'>;
 
@@ -183,7 +184,8 @@ const PropertyListScreen: React.FC<Props> = ({navigation}) => {
           {/* Price and Area */}
           <View style={styles.detailsRow}>
             <Text style={styles.price}>
-              Amount: ₹{item.Price} {item.Rate?.MasterDetailName}
+              {/* Amount: ₹{item.Price} {item.Rate?.MasterDetailName} */}
+              Amount: {formatCurrency(item.Price.toString())}
             </Text>
             <Text style={styles.area}>
               Area: {item.Area} {item.Size?.MasterDetailName}
@@ -275,7 +277,7 @@ const PropertyListScreen: React.FC<Props> = ({navigation}) => {
         visible={modalVisible}
         onClose={handleCloseModal}
         navigation={navigation}
-      />
+        isRecommended={false}      />
     </SafeAreaView>
   );
 };

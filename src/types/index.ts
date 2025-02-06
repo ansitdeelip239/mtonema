@@ -136,6 +136,7 @@ export interface SignUpRequest {
   Password?: string;
   TermsChecked?: boolean;
   URL?: string;
+  Role:string;
 }
 
 export interface MasterDetailModel {

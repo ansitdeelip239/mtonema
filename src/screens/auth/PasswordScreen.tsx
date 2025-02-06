@@ -1,28 +1,31 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import {
   View,
   Text,
-  TextInput,
   StyleSheet,
   TouchableOpacity,
   ActivityIndicator,
   Image,
 } from 'react-native';
-import {NativeStackScreenProps} from '@react-navigation/native-stack';
-import {AuthStackParamList} from '../../navigator/AuthNavigator';
+import { TextInput } from 'react-native-paper';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { AuthStackParamList } from '../../navigator/AuthNavigator';
 import AuthService from '../../services/AuthService';
-import {useAuth} from '../../hooks/useAuth';
+import { useAuth } from '../../hooks/useAuth';
 import Toast from 'react-native-toast-message';
 import Colors from '../../constants/Colors';
+import { useDialog } from '../../hooks/useDialog';
+import GetIcon from '../../components/GetIcon';
 
 type Props = NativeStackScreenProps<AuthStackParamList, 'PasswordScreen'>;
 
-const PasswordScreen: React.FC<Props> = ({navigation, route}) => {
+const PasswordScreen: React.FC<Props> = ({ navigation, route }) => {
   const [isLoading, setIsLoading] = useState(false);
-  const {email} = route.params;
-  const {storeToken, login} = useAuth();
+  const { email } = route.params;
+  const { storeToken, login } = useAuth();
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
+  const { showError } = useDialog();
 
   const showToast = (type: 'success' | 'error' | 'info', message: string) => {
     Toast.show({
@@ -36,23 +39,20 @@ const PasswordScreen: React.FC<Props> = ({navigation, route}) => {
     });
   };
 
-  const validatePassword = (pass: string): boolean => {
-    return pass.length >= 6; // Basic validation - password should be at least 6 characters
-  };
+  const validatePassword = (pass: string): boolean => pass.length >= 5;
 
   const handleContinue = async () => {
+    if (!password.trim()) {
+      showToast('error', 'Please enter your password');
+      return;
+    }
+
+    if (!validatePassword(password)) {
+      showError('Password must be at least 6 characters long');
+      return;
+    }
+
     try {
-      // First validate password
-      if (!password.trim()) {
-        showToast('error', 'Please enter your password');
-        return;
-      }
-
-      if (!validatePassword(password)) {
-        showToast('error', 'Password must be at least 6 characters long');
-        return;
-      }
-
       setIsLoading(true);
       const response = await AuthService.verifyPassword(email, password);
 
@@ -61,40 +61,13 @@ const PasswordScreen: React.FC<Props> = ({navigation, route}) => {
         await login(response.data);
         showToast('success', 'Login successful!');
       } else {
-        // Handle specific error messages from API
-        if (
-          response.Message?.toLowerCase().includes('unauthorized') ||
-          response.Message?.toLowerCase().includes('invalid')
-        ) {
-          showToast('error', 'Incorrect password. Please try again.');
-        } else {
-          showToast(
-            'error',
-            response.Message || 'Login failed. Please try again.',
-          );
-        }
+        showError('Please enter a valid Password');
       }
     } catch (error) {
-      console.error('Error during sign-in:', error);
-
-      // Handle different types of errors
-      if (error instanceof Error) {
-        if (
-          error.message.toLowerCase().includes('unauthorized') ||
-          error.message.toLowerCase().includes('invalid')
-        ) {
-          showToast('error', 'Incorrect password. Please try again.');
-        } else if (error.message.toLowerCase().includes('network')) {
-          showToast('error', 'Network error. Please check your connection.');
-        } else if (error.message.toLowerCase().includes('timeout')) {
-          showToast('error', 'Request timed out. Please try again.');
-        } else {
-          showToast('error', 'Unable to sign in. Please try again.');
-        }
-      } else {
-        showToast('error', 'An unexpected error occurred. Please try again.');
-      }
-    } finally {
+      console.error(error); // Log the error for debugging purposes
+      showError('An error occurred while verifying the password. Please try again.');
+    }
+     finally {
       setIsLoading(false);
     }
   };
@@ -113,53 +86,71 @@ const PasswordScreen: React.FC<Props> = ({navigation, route}) => {
       {/* Input Section / Lower Part */}
       <View style={styles.lowerPart}>
         <View style={styles.txtpadding}>
-          <Text style={styles.label}>Password</Text>
-          <View style={styles.passwordContainer}>
-            <TextInput
-              value={password}
-              onChangeText={setPassword}
-              secureTextEntry={!showPassword}
-              placeholder="Enter your password"
-              placeholderTextColor={Colors.placeholderColor}
-              style={styles.input}
-              onSubmitEditing={handleContinue}
-              returnKeyType="done"
-              autoCapitalize="none"
-              autoCorrect={false}
+          <TextInput
+            label="Password"
+            mode="outlined"
+            placeholder="Please enter password"
+            placeholderTextColor={Colors.placeholderColor}
+            value={password}
+            onChangeText={setPassword}
+            secureTextEntry={!showPassword}
+            style={styles.input}
+            returnKeyType="done"
+            autoCapitalize="none"
+            autoCorrect={false}
+            right={
+              <TextInput.Icon
+              // eslint-disable-next-line react/no-unstable-nested-components
+              icon={() => (
+                <GetIcon
+                  iconName={showPassword ? 'eye' : 'crosseye'}
+                  size="25"
+                  color={Colors.black}
+                />
+              )}
+              onPress={() => setShowPassword(!showPassword)}
             />
-            <TouchableOpacity
-              style={styles.eyeIcon}
-              onPress={() => setShowPassword(!showPassword)}>
-              <Image
-                source={
-                  showPassword
-                    ? require('../../assets/Icon/eye.png')
-                    : require('../../assets/Icon/eye-slash.png')
-                }
-                style={styles.iconImage}
-              />
-            </TouchableOpacity>
-          </View>
+              // <GetIcon iconName="back" size="24" color={Colors.SECONDARY_3} />
+            }
+            theme={{
+              roundness: 8,
+              colors: {
+                background: 'white',
+                primary: '#880e4f',
+                text: '#000',
+                placeholder: Colors.placeholderColor,
+              },
+            }}
+          />
         </View>
 
         {/* Forget Password Link */}
-        <TouchableOpacity style={styles.forgotPassword}
-        onPress={() => navigation.navigate('ForgetPassword')}>
+        <TouchableOpacity
+          style={styles.forgotPassword}
+          onPress={() => navigation.navigate('ForgetPassword')}>
           <Text style={styles.forgotText}>Forget Password?</Text>
         </TouchableOpacity>
 
         {/* Buttons Section */}
         <View style={styles.btnsection}>
-          <TouchableOpacity
-            style={[styles.button, styles.spacing]}
-            onPress={handleContinue}
-            disabled={isLoading}>
-            {isLoading ? (
-              <ActivityIndicator size="small" color="#ffffff" />
-            ) : (
-              <Text style={styles.buttonText}>Sign In</Text>
-            )}
-          </TouchableOpacity>
+        <TouchableOpacity
+  style={[
+    styles.button,
+    styles.spacing,
+    // eslint-disable-next-line react-native/no-inline-styles
+    {
+      backgroundColor: isLoading || !validatePassword(password) ? '#e0a1c2' : '#cc0e74',
+    },
+  ]}
+  onPress={handleContinue}
+  disabled={isLoading || !validatePassword(password)}
+>
+  {isLoading ? (
+    <ActivityIndicator size="small" color="#ffffff" />
+  ) : (
+    <Text style={styles.buttonText}>Sign In</Text>
+  )}
+</TouchableOpacity>
 
           <TouchableOpacity
             style={[styles.button, styles.spacing, styles.color]}
@@ -170,14 +161,12 @@ const PasswordScreen: React.FC<Props> = ({navigation, route}) => {
         </View>
       </View>
 
-      {/* Toast Message Component */}
       <Toast />
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  // ... existing styles remain the same
   mainScreen: {
     flex: 1,
     backgroundColor: '#cc0e74',
@@ -192,8 +181,8 @@ const styles = StyleSheet.create({
     color: '#cc0e74',
   },
   txtpadding: {
-    paddingLeft: 15,
-    width: '95%',
+    paddingHorizontal: 15,
+    width: '100%',
   },
   btnsection: {
     justifyContent: 'center',
@@ -218,42 +207,21 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '100%',
   },
-  label: {
-    fontSize: 20,
-    color: '#880e4f',
-    marginBottom: 10,
-    fontWeight: 'bold',
-  },
   input: {
-    flex: 1,
+    backgroundColor: 'white',
     fontSize: 16,
-    paddingVertical: 8,
     color: '#000',
-  },
-  passwordContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    borderBottomWidth: 1,
-    borderBottomColor: '#880e4f',
-    paddingBottom: 8,
-  },
-  eyeIcon: {
-    padding: 10,
-  },
-  iconImage: {
-    width: 24,
-    height: 24,
   },
   button: {
     backgroundColor: '#cc0e74',
     padding: 15,
-    borderRadius: 30,
+    borderRadius: 15,
     marginVertical: 10,
     width: '95%',
     alignItems: 'center',
     justifyContent: 'center',
     shadowColor: '#000',
-    shadowOffset: {width: 0, height: 2},
+    shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
     elevation: 5,
@@ -268,7 +236,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   color: {
-    backgroundColor: '#790c5a',
+    backgroundColor: Colors.main,
   },
 });
 

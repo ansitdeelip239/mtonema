@@ -3,7 +3,7 @@ import {
   Text,
   StyleSheet,
   TouchableOpacity,
-  Alert,
+  // Alert,
   ImageBackground,
   Image,
 } from 'react-native';
@@ -61,10 +61,10 @@ const OtpModel: React.FC<OtpModelProps> = ({
     }
   }, [successMessage]);
 
-  const handleResend = () => {
-    setResendTime(30);
-    Alert.alert('New OTP Sent', 'Check your registered Email Address');
-  };
+  // const handleResend = () => {
+  //   setResendTime(30);
+  //   Alert.alert('New OTP Sent', 'Check your registered Email Address');
+  // };
 
   const handleSubmit = () => {
     if (value.length !== 6) {
@@ -126,7 +126,7 @@ const OtpModel: React.FC<OtpModelProps> = ({
             )}
           </TouchableOpacity>
 
-          <View style={styles.resendContainer}>
+          {/* <View style={styles.resendContainer}>
             <Text style={styles.resendText}>
               Didn't receive code?{' '}
               {resendTime > 0 ? (
@@ -137,7 +137,7 @@ const OtpModel: React.FC<OtpModelProps> = ({
                 </TouchableOpacity>
               )}
             </Text>
-          </View>
+          </View> */}
         </View>
       </View>
     </ImageBackground>

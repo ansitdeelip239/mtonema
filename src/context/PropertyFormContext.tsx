@@ -214,7 +214,7 @@ export const PropertyFormProvider: React.FC<{children: React.ReactNode}> = ({
     switch (step) {
       case 1:
         return (
-          formData.SellerType !== null &&
+         
           formData.City !== null &&
           formData.PropertyFor !== null
         );
@@ -222,8 +222,9 @@ export const PropertyFormProvider: React.FC<{children: React.ReactNode}> = ({
         return (
           formData.PropertyType !== null &&
           formData.Price !== null &&
-          formData.Rate !== null &&
-          formData.Area !== null
+          formData.Area !== null &&
+          formData.BhkType !== null &&
+          formData.Discription !== null
         );
       case 3:
         return formData.ImageURL?.length > 0;
