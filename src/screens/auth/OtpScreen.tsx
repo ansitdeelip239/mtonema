@@ -51,7 +51,7 @@ const OtpScreen: React.FC<Props> = ({route}) => {
         if (response.Message === 'try after some time') {
           setApiError('Please enter a valid OTP.');
         } else {
-          throw new Error(response.Message || 'OTP verification failed');
+          setApiError(response.Message || 'OTP verification failed');
         }
       }
     } catch (error) {

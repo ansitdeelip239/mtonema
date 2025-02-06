@@ -10,7 +10,7 @@ import {
 import { OtpInput } from 'react-native-otp-entry';
 import React, { useEffect, useRef, useState } from 'react';
 import Toast from 'react-native-toast-message';
-
+import { useDialog } from '../hooks/useDialog';
 interface OtpModelProps {
   value: string; // OTP value
   onChangeText: (text: string) => void; // Function to update OTP
@@ -30,7 +30,7 @@ const OtpModel: React.FC<OtpModelProps> = ({
 }) => {
   const [resendTime, setResendTime] = useState(0); // add time resend now button as per your time
   const otpInputRef = useRef(null);
-
+  const { showError } = useDialog();
   useEffect(() => {
     let interval: NodeJS.Timeout;
     if (resendTime > 0) {
@@ -44,13 +44,9 @@ const OtpModel: React.FC<OtpModelProps> = ({
   useEffect(() => {
     // Show toast message if there's an API error
     if (apiError) {
-      Toast.show({
-        type: 'error',
-        text1: 'Invalid OTP',
-        text2: apiError,
-      });
+      showError('please enter a valid OTP');
     }
-  }, [apiError]);
+  }, [apiError, showError]);
   useEffect(() => {
     if (successMessage) {
       Toast.show({
@@ -68,12 +64,7 @@ const OtpModel: React.FC<OtpModelProps> = ({
 
   const handleSubmit = () => {
     if (value.length !== 6) {
-      // Show toast message if OTP is invalid
-      Toast.show({
-        type: 'error',
-        text1: 'Invalid OTP',
-        text2: 'Please enter a valid 6-digit OTP.',
-      });
+      showError('Please enter a valid 6-digit OTP.');
       return;
     }
     // Call the onPress function if OTP is valid

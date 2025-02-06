@@ -132,8 +132,10 @@ const EmailScreen: React.FC<Props> = ({navigation, route}) => {
           resizeMode="contain"
         />
       </View>
-
       <View style={styles.lowerPart}>
+      <View style={styles.titleContainer}>
+          <Text style={styles.titleText}>LOGIN</Text>
+        </View>
         <View style={styles.txtpadding}>
           <TextInput
             label="Email"
@@ -210,6 +212,16 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.main,
     opacity: 0.6,
   },
+  titleContainer: {
+    left:150,
+    bottom:30,
+  },
+  titleText: {
+    fontSize: 28,
+    fontWeight: '700',
+    color: '#880e4f',
+    letterSpacing: 1,
+  },
   verifyButton: {
     backgroundColor: Colors.main,
   },
@@ -238,7 +250,7 @@ const styles = StyleSheet.create({
   txtpadding: {
     paddingLeft: 25,
     width: '95%',
-    marginBottom:30,
+    marginBottom:40,
   },
   btnsection: {
     justifyContent: 'center',

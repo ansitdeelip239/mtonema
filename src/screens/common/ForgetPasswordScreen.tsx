@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, StyleSheet, TouchableOpacity, ImageBackground } from 'react-native';
+import { View, StyleSheet, TouchableOpacity, ImageBackground,ActivityIndicator } from 'react-native';
 import { Text, TextInput } from 'react-native-paper';
 import Colors from '../../constants/Colors';
 import CommonService from '../../services/CommonService';
@@ -12,7 +12,7 @@ type Props = NativeStackScreenProps<AuthStackParamList, 'ForgetPassword'>;
 
 const ForgetPasswordScreen:React.FC<Props> = ({navigation}) => {
   const [email, setEmail] = useState('');
-  const [_isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 const {showError} = useDialog();
   const handleContinue = async () => {
     if (!email.trim()) {
@@ -62,8 +62,12 @@ const {showError} = useDialog();
           autoCapitalize="none"
         />
 
-        <TouchableOpacity onPress={handleContinue} style={styles.button}>
-          <Text style={styles.buttonText}>Continue</Text>
+        <TouchableOpacity onPress={handleContinue} style={styles.button} disabled={isLoading}>
+        {isLoading ? (
+            <ActivityIndicator color="white" /> // Show loader
+          ) : (
+            <Text style={styles.buttonText}>Continue</Text> // Show button text
+          )}
         </TouchableOpacity>
 
         {/* Toast Message Container */}
