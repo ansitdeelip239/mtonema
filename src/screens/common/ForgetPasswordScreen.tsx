@@ -44,12 +44,12 @@ const {showError} = useDialog();
     <ImageBackground
       source={require('../../assets/Images/bgimg1.png')}
       style={styles.background}
-      resizeMode="cover"
-    >
+      resizeMode="cover">
       <View style={styles.overlay}>
         <Text style={styles.title}>Forgot Password?</Text>
         <Text style={styles.subtitle}>
-          Enter your email address, and we will send you a password reset link.
+          Enter your email address, and we will send you an OTP to forgot your
+          password.
         </Text>
 
         <TextInput
@@ -62,8 +62,11 @@ const {showError} = useDialog();
           autoCapitalize="none"
         />
 
-        <TouchableOpacity onPress={handleContinue} style={styles.button} disabled={isLoading}>
-        {isLoading ? (
+        <TouchableOpacity
+          onPress={handleContinue}
+          style={styles.button}
+          disabled={isLoading}>
+          {isLoading ? (
             <ActivityIndicator color="white" /> // Show loader
           ) : (
             <Text style={styles.buttonText}>Continue</Text> // Show button text

@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useCallback} from 'react';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {AuthStackParamList} from '../../navigator/AuthNavigator';
 import AuthService from '../../services/AuthService';
@@ -6,6 +6,7 @@ import {useAuth} from '../../hooks/useAuth';
 import {User} from '../../types';
 import OtpModel from '../../components/OtpModel';
 import CommonService from '../../services/CommonService';
+import {useDialog} from '../../hooks/useDialog';
 
 type Props = NativeStackScreenProps<AuthStackParamList, 'OtpScreen'>;
 
@@ -14,56 +15,52 @@ const OtpScreen: React.FC<Props> = ({route}) => {
   const {storeToken, login, storeUser} = useAuth();
   const [OTP, setOtp] = useState('');
   const {email} = route.params;
-  const [successMessage, setSuccessMessage] = useState('');
-  const [apiError, setApiError] = useState(''); // State for API error message
+  const {showError, hideDialog} = useDialog();
 
-  const handleSubmit = async () => {
-    // Reset the API error state before each submission
-    setApiError('');
-
+  const handleSubmit = useCallback(async () => {
     if (OTP.length !== 6) {
-      setApiError('Please enter a 6-digit OTP.');
+      showError('Please enter a valid 6-digit OTP.');
       return;
     }
-
-    console.log('OTP Submitted:', OTP);
-    console.log('Email', email);
 
     try {
       setIsLoading(true);
       let response;
 
+      // Ensure verification method is specified
       if (route.params.isForgetPassword) {
         response = await CommonService.ForgetPassword(email, OTP);
+      } else {
+        // Add your default verification method here
+        response = await CommonService.ForgetPassword(email, OTP);
       }
-      response = await CommonService.ForgetPassword(email, OTP);
-      console.log('API Response:', response);
 
       if (response.Success) {
         const userResponse = await AuthService.verifyLoginInput(email);
         if (userResponse.Success) {
-          storeUser(userResponse.data as User);
+          await storeUser(userResponse.data as User);
         }
         await storeToken(response.data);
         await login(response.data);
-        setSuccessMessage('Your OTP has been verified successfully!');
+
+        hideDialog();
       } else {
-        if (response.Message === 'try after some time') {
-          setApiError('Please enter a valid OTP.');
-        } else {
-          setApiError(response.Message || 'OTP verification failed');
-        }
+        const errorMessage =
+          response.Message === 'Invalid Otp'
+            ? 'Please enter a valid OTP.'
+            : response.Message || 'OTP verification failed';
+
+        showError(errorMessage);
       }
     } catch (error) {
-      console.error('Error during sign-in:', (error as Error).message);
-      setApiError(
+      const errorMessage =
         (error as Error).message ||
-          'An error occurred during OTP verification.',
-      );
+        'An error occurred during OTP verification.';
+      showError(errorMessage);
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [OTP, showError, route.params.isForgetPassword, email, storeToken, login, hideDialog, storeUser]);
 
   return (
     <OtpModel
@@ -71,8 +68,6 @@ const OtpScreen: React.FC<Props> = ({route}) => {
       onChangeText={setOtp}
       onPress={handleSubmit}
       isLoading={isLoading}
-      apiError={apiError}
-      successMessage={successMessage}
     />
   );
 };

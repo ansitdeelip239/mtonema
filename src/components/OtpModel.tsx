@@ -1,23 +1,20 @@
+import React, {useRef} from 'react';
 import {
   View,
   Text,
   StyleSheet,
   TouchableOpacity,
-  // Alert,
   ImageBackground,
   Image,
 } from 'react-native';
-import { OtpInput } from 'react-native-otp-entry';
-import React, { useEffect, useRef, useState } from 'react';
-import Toast from 'react-native-toast-message';
-import { useDialog } from '../hooks/useDialog';
+import {OtpInput} from 'react-native-otp-entry';
+import {useDialog} from '../hooks/useDialog';
+
 interface OtpModelProps {
-  value: string; // OTP value
-  onChangeText: (text: string) => void; // Function to update OTP
-  onPress: () => void; // Function to handle OTP submission
-  isLoading?: boolean; // Loading state
-  apiError?: string; // API error message
-  successMessage?:string;
+  value: string;
+  onChangeText: (text: string) => void;
+  onPress: () => void;
+  isLoading?: boolean;
 }
 
 const OtpModel: React.FC<OtpModelProps> = ({
@@ -25,49 +22,15 @@ const OtpModel: React.FC<OtpModelProps> = ({
   onChangeText,
   onPress,
   isLoading = false,
-  apiError = '',
-  successMessage = '',
 }) => {
-  const [resendTime, setResendTime] = useState(0); // add time resend now button as per your time
   const otpInputRef = useRef(null);
-  const { showError } = useDialog();
-  useEffect(() => {
-    let interval: NodeJS.Timeout;
-    if (resendTime > 0) {
-      interval = setInterval(() => {
-        setResendTime(prevTime => prevTime - 1);
-      }, 1000);
-    }
-    return () => clearInterval(interval);
-  }, [resendTime]);
-
-  useEffect(() => {
-    // Show toast message if there's an API error
-    if (apiError) {
-      showError('please enter a valid OTP');
-    }
-  }, [apiError, showError]);
-  useEffect(() => {
-    if (successMessage) {
-      Toast.show({
-        type: 'success',
-        text1: 'Verification Successful',
-        text2: successMessage,
-      });
-    }
-  }, [successMessage]);
-
-  // const handleResend = () => {
-  //   setResendTime(30);
-  //   Alert.alert('New OTP Sent', 'Check your registered Email Address');
-  // };
+  const {showError} = useDialog();
 
   const handleSubmit = () => {
     if (value.length !== 6) {
       showError('Please enter a valid 6-digit OTP.');
       return;
     }
-    // Call the onPress function if OTP is valid
     onPress();
   };
 
@@ -77,14 +40,12 @@ const OtpModel: React.FC<OtpModelProps> = ({
       style={styles.backgroundImage}
       resizeMode="cover">
       <View style={styles.container}>
-        {/* Logo at the top */}
         <Image
           source={require('../assets/Images/dncrlogo.png')}
           style={styles.logo}
           resizeMode="contain"
         />
 
-        {/* OTP Model Container with Border */}
         <View style={styles.otpModelContainer}>
           <Text style={styles.heading}>Enter OTP</Text>
           <Text style={styles.subHeading}>
@@ -94,8 +55,8 @@ const OtpModel: React.FC<OtpModelProps> = ({
           <OtpInput
             ref={otpInputRef}
             numberOfDigits={6}
-            onTextChange={onChangeText} // Use the onChangeText prop
-            onFilled={onChangeText} // Use the onChangeText prop
+            onTextChange={onChangeText}
+            onFilled={onChangeText}
             theme={{
               pinCodeContainerStyle: styles.otpBox,
               focusedPinCodeContainerStyle: styles.activeOtpBox,
@@ -108,27 +69,12 @@ const OtpModel: React.FC<OtpModelProps> = ({
               styles.submitButton,
               (value.length !== 6 || isLoading) && styles.disabledButton,
             ]}
-            onPress={handleSubmit} // Use the handleSubmit function
+            onPress={handleSubmit}
             disabled={value.length !== 6 || isLoading}>
-            {isLoading ? (
-              <Text style={styles.buttonText}>Verifying...</Text>
-            ) : (
-              <Text style={styles.buttonText}>Verify OTP</Text>
-            )}
-          </TouchableOpacity>
-
-          {/* <View style={styles.resendContainer}>
-            <Text style={styles.resendText}>
-              Didn't receive code?{' '}
-              {resendTime > 0 ? (
-                <Text style={styles.timerText}>Resend in {resendTime}s</Text>
-              ) : (
-                <TouchableOpacity onPress={handleResend}>
-                  <Text style={styles.resendLink}>Resend Now</Text>
-                </TouchableOpacity>
-              )}
+            <Text style={styles.buttonText}>
+              {isLoading ? 'Verifying...' : 'Verify OTP'}
             </Text>
-          </View> */}
+          </TouchableOpacity>
         </View>
       </View>
     </ImageBackground>

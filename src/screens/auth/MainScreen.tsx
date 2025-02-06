@@ -80,7 +80,7 @@ export const MainScreen: React.FC<Props> = ({navigation}) => {
               <TouchableOpacity
                 style={styles.button2}
                 onPress={() => onLogin(['Partner'])}>
-                <GetIcon iconName="partner" color="white" size="40" />
+                <GetIcon iconName="partner3" color="white" size="40" />
                 <Text style={styles.buttonText2}>Login as partner</Text>
               </TouchableOpacity>
             </View>

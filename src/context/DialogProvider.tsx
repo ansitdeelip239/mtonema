@@ -1,6 +1,14 @@
 import React, {createContext, useState, useRef, useCallback} from 'react';
-import {Image, StyleSheet, TouchableOpacity, View} from 'react-native';
-import {Dialog, Portal, Text, Button} from 'react-native-paper';
+import {
+  Image,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+  TouchableWithoutFeedback,
+  Modal as RNModal,
+  Dimensions,
+} from 'react-native';
+import { Text, Portal} from 'react-native-paper';
 
 type DialogContextType = {
   showError: (message: string) => void;
@@ -43,55 +51,114 @@ export const DialogProvider = ({children}: {children: React.ReactNode}) => {
     <DialogContext.Provider value={{showError, hideDialog}}>
       {children}
       <Portal>
-        <Dialog
+        <RNModal
+          transparent
           visible={visible}
-          onDismiss={hideDialog}
-          style={styles.dialog}
-          dismissable={false}>
-          <View style={styles.closeButtonContainer}>
-            <TouchableOpacity onPress={hideDialog} style={styles.closeButton}>
-              <Image
-                source={require('../assets/Icon/crossicon.png')}
-                style={styles.closeIcon}
-              />
-            </TouchableOpacity>
-          </View>
-          <Dialog.Title style={styles.titleText}>Error</Dialog.Title>
-          <Dialog.Content>
-            <Text style={styles.contentText}>{errorMessage}</Text>
-          </Dialog.Content>
-          <Dialog.Actions>
-            <Button textColor="#000000" onPress={hideDialog}>
-              OK
-            </Button>
-          </Dialog.Actions>
-        </Dialog>
+          onRequestClose={hideDialog}
+          animationType="slide">
+          <TouchableWithoutFeedback onPress={hideDialog}>
+            <View style={styles.modalOverlay}>
+              <TouchableWithoutFeedback>
+                <View style={styles.dialogContainer}>
+                  <View style={styles.dialog}>
+                    <View style={styles.closeButtonContainer}>
+                      <TouchableOpacity
+                        onPress={hideDialog}
+                        style={styles.closeButton}>
+                        <Image
+                          source={require('../assets/Icon/crossicon.png')}
+                          style={styles.closeIcon}
+                        />
+                      </TouchableOpacity>
+                    </View>
+                    <Text style={styles.titleText}>Error</Text>
+                    <View style={styles.contentContainer}>
+                      <Text style={styles.contentText}>{errorMessage}</Text>
+                    </View>
+                    <View style={styles.actionContainer}>
+                      <TouchableOpacity
+                        style={styles.okButton}
+                        onPress={hideDialog}>
+                        <Text style={styles.okButtonText}>OK</Text>
+                      </TouchableOpacity>
+                    </View>
+                  </View>
+                </View>
+              </TouchableWithoutFeedback>
+            </View>
+          </TouchableWithoutFeedback>
+        </RNModal>
       </Portal>
     </DialogContext.Provider>
   );
 };
 
+const {width} = Dimensions.get('window');
+
 const styles = StyleSheet.create({
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0,0,0,0.5)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  dialogContainer: {
+    width: width * 0.85,
+  },
   dialog: {
-    position: 'relative',
     backgroundColor: '#F5F5F5',
-  },
-  titleText: {
-    color: '#000000',
-  },
-  contentText: {
-    color: '#000000',
+    borderRadius: 10,
+    padding: 20,
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
   },
   closeButtonContainer: {
     position: 'absolute',
-    right: 20,
-    top: 0,
-    zIndex: 1,
+    right: 10,
+    top: 10,
   },
-  closeButton: {},
+  closeButton: {
+    padding: 10,
+  },
   closeIcon: {
     width: 20,
     height: 20,
     tintColor: '#000000',
   },
+  titleText: {
+    color: '#000000',
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginBottom: 15,
+  },
+  contentContainer: {
+    marginVertical: 20,
+  },
+  contentText: {
+    color: '#000000',
+    textAlign: 'center',
+  },
+  actionContainer: {
+    width: '100%',
+    alignItems: 'center',
+  },
+  okButton: {
+    backgroundColor: '#cc0e74',
+    paddingVertical: 10,
+    paddingHorizontal: 30,
+    borderRadius: 5,
+  },
+  okButtonText: {
+    color: 'white',
+    fontWeight: 'bold',
+  },
 });
+
+export default DialogProvider;
