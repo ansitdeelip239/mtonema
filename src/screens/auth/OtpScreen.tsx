@@ -3,9 +3,7 @@ import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {AuthStackParamList} from '../../navigator/AuthNavigator';
 import AuthService from '../../services/AuthService';
 import {useAuth} from '../../hooks/useAuth';
-import {User} from '../../types';
 import OtpModel from '../../components/OtpModel';
-import CommonService from '../../services/CommonService';
 import {useDialog} from '../../hooks/useDialog';
 
 type Props = NativeStackScreenProps<AuthStackParamList, 'OtpScreen'>;
@@ -25,23 +23,16 @@ const OtpScreen: React.FC<Props> = ({route}) => {
 
     try {
       setIsLoading(true);
-      let response;
-
-      // Ensure verification method is specified
-      if (route.params.isForgetPassword) {
-        response = await CommonService.ForgetPassword(email, OTP);
-      } else {
-        // Add your default verification method here
-        response = await CommonService.ForgetPassword(email, OTP);
-      }
+      const response = await AuthService.OtpVerification(email, OTP);
 
       if (response.Success) {
-        const userResponse = await AuthService.verifyLoginInput(email);
-        if (userResponse.Success) {
-          await storeUser(userResponse.data as User);
+        if (response.data) {
+          const userResponse = await AuthService.GetUserByToken(response.data);
+          await storeUser(userResponse.data);
         }
-        await storeToken(response.data);
-        await login(response.data);
+
+        await storeToken(response.data as string);
+        await login(response.data as string);
 
         hideDialog();
       } else {
@@ -60,7 +51,7 @@ const OtpScreen: React.FC<Props> = ({route}) => {
     } finally {
       setIsLoading(false);
     }
-  }, [OTP, showError, route.params.isForgetPassword, email, storeToken, login, hideDialog, storeUser]);
+  }, [OTP, showError, email, storeToken, login, hideDialog, storeUser]);
 
   return (
     <OtpModel

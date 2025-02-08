@@ -15,26 +15,28 @@ import {AuthStackParamList} from '../../navigator/AuthNavigator';
 import AuthService from '../../services/AuthService';
 import CommonService from '../../services/CommonService';
 import {useAuth} from '../../hooks/useAuth';
-import {User} from '../../types';
 import {validateEmail} from '../../utils/formvalidation';
 import Colors from '../../constants/Colors';
-import { useDialog } from '../../hooks/useDialog';
-import { TextInput } from 'react-native-paper';
+import {useDialog} from '../../hooks/useDialog';
+import {TextInput} from 'react-native-paper';
 
 type Props = NativeStackScreenProps<AuthStackParamList, 'EmailScreen'>;
 
 const EmailScreen: React.FC<Props> = ({navigation, route}) => {
   const [email, setEmail] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const [emailError, setEmailError] = useState<{ message: string; isClickable?: boolean }>({ message: '', isClickable: false });
-  const {storeUser, setNavigateToPostProperty} = useAuth();
-  const {role} = route.params;
+  const [emailError, setEmailError] = useState<{
+    message: string;
+    isClickable?: boolean;
+  }>({message: '', isClickable: false});
+  const {setNavigateToPostProperty} = useAuth();
   const {showError} = useDialog();
   const isEmailValid = useMemo(() => validateEmail(email), [email]);
+  const {role} = route.params;
 
   const handleVerifyNow = useCallback(async () => {
     if (!isEmailValid) {
-      setEmailError({ message: 'Invalid email format', isClickable: false });
+      setEmailError({message: 'Invalid email format', isClickable: false});
       return;
     }
 
@@ -43,7 +45,7 @@ const EmailScreen: React.FC<Props> = ({navigation, route}) => {
       const response = await CommonService.ForgetPassword(email);
       console.log('otp response', response);
       if (response.data === null && response.Success === true) {
-        navigation.navigate('OtpScreen', { email });
+        navigation.navigate('OtpScreen', {email});
       } else {
         showError('Failed to send OTP. Please try again');
       }
@@ -54,57 +56,69 @@ const EmailScreen: React.FC<Props> = ({navigation, route}) => {
     }
   }, [email, isEmailValid, navigation, showError]);
 
-  const checkEmail = useCallback(async (emailToCheck: string) => {
-    try {
-      setEmailError({ message: '', isClickable: false });
+  const checkEmail = useCallback(
+    async (emailToCheck: string) => {
+      try {
+        setEmailError({message: '', isClickable: false});
 
-      if (!isEmailValid) {
-        showError('Invalid email format');
+        if (!isEmailValid) {
+          showError('Invalid email format');
+          return false;
+        }
+
+        const response = await AuthService.verifyLoginInput(emailToCheck);
+        console.log(response.Message);
+
+        if (response && !role.includes(response.data?.Role as string)) {
+          showError('Email not found');
+          return false;
+        }
+
+        if (response && response.data?.Status === 2) {
+          setEmailError({
+            message: 'Email is not verified. Click Verify Now to proceed.',
+            isClickable: true,
+          });
+          return false;
+        }
+
+        if (!response.Success) {
+          setEmailError({
+            message: response.Message || 'Email verification failed',
+            isClickable: false,
+          });
+          return false;
+        }
+
+        return true;
+      } catch (error) {
+        const errorMessage =
+          error instanceof Error
+            ? error.message
+            : 'An unexpected error occurred';
+        setEmailError({message: errorMessage, isClickable: false});
         return false;
       }
-
-      const response = await AuthService.verifyLoginInput(emailToCheck);
-      console.log(response.Message);
-
-      if (response && !role.includes(response.data?.Role as string)) {
-        showError('Email not found');
-        return false;
-      }
-
-      if (response && response.data?.Status === 2) {
-        setEmailError({ message: 'Email is not verified. Click Verify Now to proceed.', isClickable: true });
-        return false;
-      }
-
-      if (!response.Success) {
-        setEmailError({ message: response.Message || 'Email verification failed', isClickable: false });
-        return false;
-      }
-
-      return true;
-    } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : 'An unexpected error occurred';
-      setEmailError({ message: errorMessage, isClickable: false });
-      return false;
-    }
-  }, [role, isEmailValid, showError]);
+    },
+    [role, isEmailValid, showError],
+  );
 
   const handleContinue = useCallback(async () => {
     if (!isEmailValid) {
-      setEmailError({ message: 'Invalid email format', isClickable: false });
+      setEmailError({message: 'Invalid email format', isClickable: false});
       return;
     }
 
     try {
       setIsLoading(true);
       const isValidEmail = await checkEmail(email);
-
       if (isValidEmail) {
-        const response = await AuthService.verifyLoginInput(email);
-        console.log('API Response:', response.data, 'Role: ', role);
-
-        storeUser(response.data as User);
-        navigation.navigate('PasswordScreen', {email});
+        const response = await AuthService.OtpVerification(email);
+        if (response.Success) {
+          navigation.navigate('OtpScreen', {email});
+        } else if (response.httpStatus === 404) {
+          showError('Email not found');
+        }
       }
       setNavigateToPostProperty(false);
     } catch (error) {
@@ -119,7 +133,14 @@ const EmailScreen: React.FC<Props> = ({navigation, route}) => {
     } finally {
       setIsLoading(false);
     }
-  }, [email, isEmailValid, checkEmail, storeUser, navigation, role, setNavigateToPostProperty]);
+  }, [
+    email,
+    isEmailValid,
+    navigation,
+    setNavigateToPostProperty,
+    showError,
+    checkEmail,
+  ]);
 
   return (
     <KeyboardAvoidingView
@@ -133,7 +154,7 @@ const EmailScreen: React.FC<Props> = ({navigation, route}) => {
         />
       </View>
       <View style={styles.lowerPart}>
-      <View style={styles.titleContainer}>
+        <View style={styles.titleContainer}>
           <Text style={styles.titleText}>LOGIN</Text>
         </View>
         <View style={styles.txtpadding}>
@@ -159,9 +180,7 @@ const EmailScreen: React.FC<Props> = ({navigation, route}) => {
             }}
           />
           {emailError.message ? (
-            <Text style={styles.errorText}>
-              {emailError.message}
-            </Text>
+            <Text style={styles.errorText}>{emailError.message}</Text>
           ) : null}
         </View>
 
@@ -213,8 +232,8 @@ const styles = StyleSheet.create({
     opacity: 0.6,
   },
   titleContainer: {
-    left:150,
-    bottom:30,
+    left: 150,
+    bottom: 30,
   },
   titleText: {
     fontSize: 28,
@@ -250,7 +269,7 @@ const styles = StyleSheet.create({
   txtpadding: {
     paddingLeft: 25,
     width: '95%',
-    marginBottom:40,
+    marginBottom: 40,
   },
   btnsection: {
     justifyContent: 'center',

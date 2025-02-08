@@ -20,7 +20,7 @@ import {
   SignupBody,
   SignupFormType,
 } from '../../schema/SignUpFormSchema';
-import { useDialog } from '../../hooks/useDialog';
+import {useDialog} from '../../hooks/useDialog';
 
 type Props = NativeStackScreenProps<AuthStackParamList, 'SignUpScreen'>;
 
@@ -29,7 +29,7 @@ const SignUpScreen: React.FC<Props> = ({navigation, route}) => {
   const [isKeyboardVisible, setKeyboardVisible] = useState(false);
   const emailExistMessage = ['Email already exist', 'Email already exists'];
   const {setNavigateToPostProperty} = useAuth();
- const {showError} = useDialog();
+  const {showError} = useDialog();
   useEffect(() => {
     const keyboardDidShowListener = Keyboard.addListener(
       'keyboardDidShow',
@@ -56,12 +56,14 @@ const SignUpScreen: React.FC<Props> = ({navigation, route}) => {
       const userrole = route.params.role === 'User' ? 'User' : 'Seller';
 
       // Convert formDataWithRole (with Role) to SignupBody using apiSubmissionSchema
-      const signupBody: SignupBody = apiSubmissionSchema(userrole).parse(formData);
+      const signupBody: SignupBody =
+        apiSubmissionSchema(userrole).parse(formData);
 
       const response = await AuthService.UserSignUp(signupBody);
       console.log('API Response:', response);
 
       if (response.Success && !emailExistMessage.includes(response.Message)) {
+        await AuthService.OtpVerification(formData.Email);
         setNavigateToPostProperty(true);
         navigation.navigate('OtpScreen', {email: formData.Email});
       } else {

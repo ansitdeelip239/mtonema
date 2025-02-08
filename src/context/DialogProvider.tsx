@@ -55,7 +55,7 @@ export const DialogProvider = ({children}: {children: React.ReactNode}) => {
           transparent
           visible={visible}
           onRequestClose={hideDialog}
-          animationType="slide">
+          animationType="fade">
           <TouchableWithoutFeedback onPress={hideDialog}>
             <View style={styles.modalOverlay}>
               <TouchableWithoutFeedback>

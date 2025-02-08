@@ -1,7 +1,8 @@
 import {Response, SignUpRequest, User} from '../types';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import api from '../constants/api';
-import { SignupBody } from '../schema/SignUpFormSchema';
+import {SignupBody} from '../schema/SignUpFormSchema';
+import {api as Api} from '../utils/api';
 
 class AuthService {
   static async verifyLoginInput(
@@ -35,22 +36,6 @@ class AuthService {
   }
   static async signUp(body: SignUpRequest) {
     try {
-      const response = await fetch(api.SignUp, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(body),
-      });
-      return response.json();
-    } catch (error) {
-      throw error;
-    }
-  }
-
-  static async UserSignUp(body:SignupBody) {
-    try {
-      console.log('jjhsljhvsbjlbdsljhbds',body);
       const response = await fetch(api.UserSignUp, {
         method: 'POST',
         headers: {
@@ -63,53 +48,93 @@ class AuthService {
       throw error;
     }
   }
-static async  RegisterSeller(formData: SignUpRequest):Promise<Response<string>>{
-  try {
-    const response = await fetch(api.RegisterSeller,{
-      method : 'POST',
-      headers :{
-        'Content-Type' : 'application/json',
-      },
-      body:JSON.stringify(formData),
-    });
-    const result: Response<string> = await response.json();
-    if(response.ok) {
-      return result;
-    } else
-    {
-      throw new Error(result.Message || 'An Error Ocured While signup',);
+
+  static async UserSignUp(body: SignupBody) {
+    try {
+      console.log('jjhsljhvsbjlbdsljhbds', body);
+      const response = await fetch(api.UserSignUp, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(body),
+      });
+      return response.json();
+    } catch (error) {
+      throw error;
     }
-  } catch (error) {
-    throw error;
   }
-}
 
-static async VerifyOTP(
-  Email: string,
-  OTP: string,
-): Promise<Response<string>> {
-  try {
-    const response = await fetch(api.VerifyOTP, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({Email,OTP }),
-    });
-
-    const result: Response<string> = await response.json();
-
-    if (response.ok) {
-      return result;
-    } else {
-      throw new Error(
-        result.Message || 'An error occurred while validating the Register',
+  static async OtpVerification(Email: string, OTP?: string) {
+    try {
+      const requestBody = OTP ? {Email, OTP} : {Email};
+      const response = await Api.post<string | null>(
+        api.OtpVerification,
+        requestBody,
       );
+      return response;
+    } catch (error) {
+      throw error;
     }
-  } catch (error) {
-    throw error;
   }
-}
+
+  static async GetUserByToken(token: string) {
+    try {
+      const response = await Api.get<User>(api.GetUserByToken + token);
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  static async RegisterSeller(
+    formData: SignUpRequest,
+  ): Promise<Response<string>> {
+    try {
+      const response = await fetch(api.RegisterSeller, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+      const result: Response<string> = await response.json();
+      if (response.ok) {
+        return result;
+      } else {
+        throw new Error(result.Message || 'An Error Ocured While signup');
+      }
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  static async VerifyOTP(
+    Email: string,
+    OTP: string,
+  ): Promise<Response<string>> {
+    try {
+      const response = await fetch(api.VerifyOTP, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({Email, OTP}),
+      });
+
+      const result: Response<string> = await response.json();
+
+      if (response.ok) {
+        return result;
+      } else {
+        throw new Error(
+          result.Message || 'An error occurred while validating the Register',
+        );
+      }
+    } catch (error) {
+      throw error;
+    }
+  }
 
   static async verifyPassword(
     email: string,

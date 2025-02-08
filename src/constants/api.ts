@@ -6,7 +6,7 @@ export let url1 = 'https://freehostingweb.bsite.net';
 
 export default {
   UserSignUp: url1 + '/api/v1/Account/UserSignup',
-  // ForgetPassword :url1 + '/api/v1/Account/OtpVerification',
+  OtpVerification :url1 + '/api/v1/Account/OtpVerification',
 
 
   //Authentication
