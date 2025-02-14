@@ -15,9 +15,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-               BuildableName = "DncrProperty.app"
-               BlueprintName = "DncrProperty"
-               ReferencedContainer = "container:DncrProperty.xcodeproj">
+               BuildableName = "MTEstatesMA.app"
+               BlueprintName = "MTEstatesMA"
+               ReferencedContainer = "container:MTEstatesMA.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -33,9 +33,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "00E356ED1AD99517003FC87E"
-               BuildableName = "DncrPropertyTests.xctest"
-               BlueprintName = "DncrPropertyTests"
-               ReferencedContainer = "container:DncrProperty.xcodeproj">
+               BuildableName = "MTEstatesMATests.xctest"
+               BlueprintName = "MTEstatesMATests"
+               ReferencedContainer = "container:MTEstatesMA.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
@@ -55,9 +55,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-            BuildableName = "DncrProperty.app"
-            BlueprintName = "DncrProperty"
-            ReferencedContainer = "container:DncrProperty.xcodeproj">
+            BuildableName = "MTEstatesMA.app"
+            BlueprintName = "MTEstatesMA"
+            ReferencedContainer = "container:MTEstatesMA.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </LaunchAction>
@@ -72,9 +72,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-            BuildableName = "DncrProperty.app"
-            BlueprintName = "DncrProperty"
-            ReferencedContainer = "container:DncrProperty.xcodeproj">
+            BuildableName = "MTEstatesMA.app"
+            BlueprintName = "MTEstatesMA"
+            ReferencedContainer = "container:MTEstatesMA.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>

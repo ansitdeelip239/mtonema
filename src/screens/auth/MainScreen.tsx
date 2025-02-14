@@ -1,15 +1,11 @@
 import React from 'react';
-import {
-  View,
-  Text,
-  TouchableOpacity,
-  StyleSheet,
-  Image,
-  ImageBackground,
-} from 'react-native';
+import {View, Text, TouchableOpacity, StyleSheet, Image} from 'react-native';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {AuthStackParamList} from '../../navigator/AuthNavigator';
 import GetIcon from '../../components/GetIcon';
+import Roles from '../../constants/Roles';
+import Images from '../../constants/Images';
+import {BackgroundWrapper} from '../../components/BackgroundWrapper';
 
 type Props = NativeStackScreenProps<AuthStackParamList, 'MainScreen'>;
 
@@ -20,35 +16,28 @@ export const MainScreen: React.FC<Props> = ({navigation}) => {
 
   const onBuyerSignup = () => {
     navigation.navigate('SignUpScreen', {
-      role: 'User',
+      role: Roles.BUYER,
     });
   };
 
   const onSellerSignup = () => {
     navigation.navigate('SignUpScreen', {
-      role: 'Seller',
+      role: Roles.SELLER,
     });
   };
 
   return (
-    <ImageBackground
-      source={require('../../assets/Images/bgimg1.png')} // Path to your background image
-      style={styles.backgroundImage}
-      resizeMode="cover" // Adjust the resizeMode as needed
-    >
+    <BackgroundWrapper>
       <View style={styles.mainScreen}>
-        {/* Upper Part: Logo and Title */}
         <View style={styles.upperPart}>
           <Image
-            source={require('../../assets/Images/dncr_pink.png')}
+            source={Images.DNCR_LOGO}
             style={styles.image}
             resizeMode="contain"
           />
         </View>
 
-        {/* Lower Part: Buttons */}
         <View style={styles.lowerPart}>
-          {/* "Already Have an Account?" Text and Login Button */}
           <Text style={styles.promptText}>Already have an account?</Text>
           <TouchableOpacity
             style={[styles.button, styles.spacing]}
@@ -56,7 +45,6 @@ export const MainScreen: React.FC<Props> = ({navigation}) => {
             <Text style={styles.buttonText}>Log In</Text>
           </TouchableOpacity>
 
-          {/* "New Here? Create an Account!" Text and Sign Up Button */}
           <Text style={styles.promptText}>New here? Create an account!</Text>
           <TouchableOpacity
             style={[styles.button, styles.spacing]}
@@ -64,9 +52,7 @@ export const MainScreen: React.FC<Props> = ({navigation}) => {
             <Text style={styles.buttonText}>Sign Up</Text>
           </TouchableOpacity>
 
-          {/* Combined View for "Want to List your Property?" and "Login As Partner" */}
           <View style={styles.combinedButtonContainer}>
-            {/* First Button */}
             <TouchableOpacity
               style={styles.listPropertyButton}
               onPress={onSellerSignup}>
@@ -75,7 +61,6 @@ export const MainScreen: React.FC<Props> = ({navigation}) => {
               </Text>
             </TouchableOpacity>
 
-            {/* Second Button */}
             <View>
               <TouchableOpacity
                 style={styles.button2}
@@ -87,34 +72,29 @@ export const MainScreen: React.FC<Props> = ({navigation}) => {
           </View>
         </View>
       </View>
-    </ImageBackground>
+    </BackgroundWrapper>
   );
 };
 
 const styles = StyleSheet.create({
-  backgroundImage: {
-    flex: 1,
-    width: '100%',
-    height: '100%',
-  },
   mainScreen: {
     flex: 1,
-    backgroundColor: 'transparent', // Make the main screen transparent
+    backgroundColor: 'transparent',
   },
   upperPart: {
     flex: 4,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'transparent', // Make the upper part transparent
+    backgroundColor: 'transparent',
     borderBottomRightRadius: 60,
   },
   lowerPart: {
     flex: 5,
     justifyContent: 'center',
-    backgroundColor: 'transparent', // Make the lower part transparent
+    backgroundColor: 'transparent',
     borderTopLeftRadius: 70,
     paddingVertical: 60,
-    paddingHorizontal: 20, // Added horizontal padding for better spacing
+    paddingHorizontal: 20,
   },
   image: {
     width: '80%',
@@ -122,21 +102,21 @@ const styles = StyleSheet.create({
   },
   spacing: {
     marginTop: 5,
-    marginBottom: 45, // Adds space below each button
+    marginBottom: 45,
   },
   promptText: {
     fontSize: 16,
     color: '#cc0e74',
     fontWeight: 'bold',
-    textAlign: 'left', // Align text to the left
-    paddingLeft: 10, // Add some padding to align with the buttons
+    textAlign: 'left',
+    paddingLeft: 10,
   },
   button: {
-    backgroundColor: '#cc0e74', // Matching pink button
+    backgroundColor: '#cc0e74',
     padding: 16,
     borderRadius: 15,
     marginVertical: 10,
-    width: '100%', // Full width
+    width: '100%',
     alignItems: 'center',
     shadowColor: '#000',
     shadowOffset: {width: 0, height: 2},
@@ -150,71 +130,40 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   combinedButtonContainer: {
-    alignItems: 'center', // Center buttons horizontally
-    justifyContent: 'center', // Center buttons vertically
-    width: '100%', // Take full width of the parent container
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: '100%',
   },
   listPropertyButton: {
-    backgroundColor: '#cc0e74', // Example button color
-    padding: 15, // Increase padding for height
-    borderRadius: 15, // Rounded corners
-    width: '78%', // Set width to 80% of the parent container
-    alignItems: 'center', // Center text horizontally
-    justifyContent: 'center', // Center text vertically
-    marginBottom: 16, // Add spacing between buttons
+    backgroundColor: '#cc0e74',
+    padding: 15,
+    borderRadius: 15,
+    width: '78%',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: 16,
   },
   listPropertyText: {
-    color: 'white', // Text color
-    fontSize: 17, // Increase font size
-    fontWeight: 'bold', // Bold text
+    color: 'white',
+    fontSize: 17,
+    fontWeight: 'bold',
   },
   button2: {
-    backgroundColor: '#cc0e74', // Button background color
-    padding: 6, // Increase padding for height
-    borderRadius: 15, // Rounded corners
-    width: '90%', // Set width to 80% of the parent container
-    flexDirection: 'row', // Align icon and text horizontally
-    alignItems: 'center', // Center icon and text vertically
-    justifyContent: 'center', // Center the entire group horizontally
+    backgroundColor: '#cc0e74',
+    padding: 6,
+    borderRadius: 15,
+    width: '90%',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   buttonText2: {
-    color: 'white', // Text color
-    fontSize: 18, // Increase font size
-    fontWeight: 'bold', // Bold text
-    marginLeft: 16, // Add spacing between icon and text
-    alignItems: 'center', // Center icon and text vertically
-    justifyContent: 'center', // Center the entire group horizontally
-    marginEnd: 30,
-  },
-  modalOverlay: {
-    flex: 1,
+    color: 'white',
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginLeft: 16,
+    alignItems: 'center',
     justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
-  },
-  modalContent: {
-    width: '80%',
-    backgroundColor: '#fff',
-    borderRadius: 10,
-    padding: 20,
-    alignItems: 'center',
-  },
-  modalText: {
-    fontSize: 16,
-    color: '#cc0e74',
-    fontWeight: 'bold',
-    marginBottom: 20,
-  },
-  modalButton: {
-    backgroundColor: '#cc0e74',
-    padding: 10,
-    borderRadius: 5,
-    width: '50%',
-    alignItems: 'center',
-  },
-  modalButtonText: {
-    color: '#fff',
-    fontSize: 16,
-    fontWeight: 'bold',
+    marginEnd: 30,
   },
 });

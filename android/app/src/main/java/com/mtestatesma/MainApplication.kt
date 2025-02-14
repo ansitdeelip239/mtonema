@@ -1,4 +1,4 @@
-package com.dncrproperty
+package com.mtestatesma
 
 import android.app.Application
 import com.facebook.react.PackageList

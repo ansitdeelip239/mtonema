@@ -1,16 +1,7 @@
-// new
 module.exports = {
   presets: ['module:@react-native/babel-preset'],
   plugins: [
-    'react-native-reanimated/plugin', // Your existing plugin
-    'react-native-paper/babel', // Add React Native Paper plugin
+    'react-native-reanimated/plugin',
+    'react-native-paper/babel',
   ],
 };
-
-// old
-// module.exports = {
-//   presets: ['module:@react-native/babel-preset'],
-//   plugins: ['react-native-reanimated/plugin'],
-// };
-
-
