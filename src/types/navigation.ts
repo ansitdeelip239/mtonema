@@ -6,6 +6,14 @@ export type AgentStackParamList = {
   AddAgentProperty: undefined;
 };
 
+export type AdminBottomTabParamList = {
+  Home: undefined;
+  Property: undefined;
+  AddProperty: {editMode: boolean; propertyData: any};
+  Clients: undefined;
+  Profile: undefined;
+};
+
 export type PartnerBottomTabParamList = {
   Home: undefined;
   Property: undefined;

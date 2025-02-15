@@ -13,7 +13,6 @@ import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import Toast from 'react-native-toast-message';
 import {AuthStackParamList} from '../../navigator/AuthNavigator';
 import AuthService from '../../services/AuthService';
-import CommonService from '../../services/CommonService';
 import {useAuth} from '../../hooks/useAuth';
 import {validateEmail} from '../../utils/formvalidation';
 import Colors from '../../constants/Colors';
@@ -34,40 +33,21 @@ const EmailScreen: React.FC<Props> = ({navigation, route}) => {
   const isEmailValid = useMemo(() => validateEmail(email), [email]);
   const {role} = route.params;
 
-  const handleVerifyNow = useCallback(async () => {
-    if (!isEmailValid) {
-      setEmailError({message: 'Invalid email format', isClickable: false});
-      return;
-    }
-
-    setIsLoading(true);
-    try {
-      const response = await CommonService.ForgetPassword(email);
-      console.log('otp response', response);
-      if (response.data === null && response.Success === true) {
-        navigation.navigate('OtpScreen', {email});
-      } else {
-        showError('Failed to send OTP. Please try again');
-      }
-    } catch (error) {
-      showError('An error occurred while sending OTP.');
-    } finally {
-      setIsLoading(false);
-    }
-  }, [email, isEmailValid, navigation, showError]);
-
   const checkEmail = useCallback(
     async (emailToCheck: string) => {
       try {
         setEmailError({message: '', isClickable: false});
 
-        if (!isEmailValid) {
-          showError('Invalid email format');
-          return false;
-        }
-
         const response = await AuthService.verifyLoginInput(emailToCheck);
         console.log(response.Message);
+
+        if (!response.Success) {
+          setEmailError({
+            message: response.Message || 'Email verification failed',
+            isClickable: false,
+          });
+          return false;
+        }
 
         if (response && !role.includes(response.data?.Role as string)) {
           showError('Email not found');
@@ -82,14 +62,6 @@ const EmailScreen: React.FC<Props> = ({navigation, route}) => {
           return false;
         }
 
-        if (!response.Success) {
-          setEmailError({
-            message: response.Message || 'Email verification failed',
-            isClickable: false,
-          });
-          return false;
-        }
-
         return true;
       } catch (error) {
         const errorMessage =
@@ -100,47 +72,58 @@ const EmailScreen: React.FC<Props> = ({navigation, route}) => {
         return false;
       }
     },
-    [role, isEmailValid, showError],
+    [role, showError],
   );
 
-  const handleContinue = useCallback(async () => {
-    if (!isEmailValid) {
-      setEmailError({message: 'Invalid email format', isClickable: false});
-      return;
-    }
+  const handleOtpVerification = useCallback(
+    async (skipEmailCheck = false) => {
+      if (!isEmailValid) {
+        setEmailError({message: 'Invalid email format', isClickable: false});
+        return;
+      }
 
-    try {
       setIsLoading(true);
-      const isValidEmail = await checkEmail(email);
-      if (isValidEmail) {
+      try {
+        // Skip email check for verify now button
+        if (!skipEmailCheck) {
+          const isValidEmail = await checkEmail(email);
+          if (!isValidEmail) {
+            return;
+          }
+        }
+
         const response = await AuthService.OtpVerification(email);
         if (response.Success) {
           navigation.navigate('OtpScreen', {email});
-        } else if (response.httpStatus === 404) {
-          showError('Email not found');
+          if (!skipEmailCheck) {
+            setNavigateToPostProperty(false);
+          }
+        } else {
+          showError(response.Message || 'Failed to send OTP. Please try again');
         }
+      } catch (error) {
+        showError('An error occurred while sending OTP.');
+      } finally {
+        setIsLoading(false);
       }
-      setNavigateToPostProperty(false);
-    } catch (error) {
-      Toast.show({
-        type: 'error',
-        position: 'top',
-        text1: 'Error',
-        text2: 'Something went wrong. Please try again.',
-        visibilityTime: 3000,
-        autoHide: true,
-      });
-    } finally {
-      setIsLoading(false);
-    }
-  }, [
-    email,
-    isEmailValid,
-    navigation,
-    setNavigateToPostProperty,
-    showError,
-    checkEmail,
-  ]);
+    },
+    [
+      email,
+      isEmailValid,
+      checkEmail,
+      navigation,
+      setNavigateToPostProperty,
+      showError,
+    ],
+  );
+
+  const handleVerifyNow = useCallback(async () => {
+    handleOtpVerification(true);
+  }, [handleOtpVerification]);
+
+  const handleContinue = useCallback(async () => {
+    handleOtpVerification();
+  }, [handleOtpVerification]);
 
   return (
     <KeyboardAvoidingView

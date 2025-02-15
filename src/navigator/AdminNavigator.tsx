@@ -5,8 +5,8 @@ import ProfileScreen from '../screens/common/ProfileScreen';
 import CustomDrawerContent from '../components/CustomDrawerContent';
 import Colors from '../constants/Colors';
 import {AdminDrawerParamList} from '../types/navigation';
-import PartnerBottomTabs from './components/PartnerBottomTabs';
 import GetIcon from '../components/GetIcon';
+import AdminBottomTabs from './components/AdminBottomTabs';
 
 const Drawer = createDrawerNavigator<AdminDrawerParamList>();
 
@@ -27,7 +27,7 @@ const AdminNavigator = memo(() => (
     initialRouteName="Home Screen">
     <Drawer.Screen
       name="Home Screen"
-      component={PartnerBottomTabs}
+      component={AdminBottomTabs}
       options={{
         headerShown: false,
         drawerItemStyle: {display: 'none'},

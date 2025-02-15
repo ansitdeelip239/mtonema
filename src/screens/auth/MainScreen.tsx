@@ -41,7 +41,7 @@ export const MainScreen: React.FC<Props> = ({navigation}) => {
           <Text style={styles.promptText}>Already have an account?</Text>
           <TouchableOpacity
             style={[styles.button, styles.spacing]}
-            onPress={() => onLogin(['User', 'Seller'])}>
+            onPress={() => onLogin([Roles.BUYER, Roles.SELLER])}>
             <Text style={styles.buttonText}>Log In</Text>
           </TouchableOpacity>
 
@@ -64,7 +64,7 @@ export const MainScreen: React.FC<Props> = ({navigation}) => {
             <View>
               <TouchableOpacity
                 style={styles.button2}
-                onPress={() => onLogin(['Partner'])}>
+                onPress={() => onLogin([Roles.PARTNER, Roles.ADMIN])}>
                 <GetIcon iconName="partner3" color="white" size="40" />
                 <Text style={styles.buttonText2}>Login as partner</Text>
               </TouchableOpacity>
