@@ -8,6 +8,8 @@ import {MasterProvider} from '../context/MasterProvider';
 import PartnerNavigator from './PartnerNavigator';
 import {PartnerProvider} from '../context/PartnerProvider';
 import {PropertyFormProvider} from '../context/PropertyFormContext';
+import Roles from '../constants/Roles';
+import AdminNavigator from './AdminNavigator';
 
 const MainNavigator = () => {
   const {user} = useAuth();
@@ -23,18 +25,20 @@ const MainNavigator = () => {
   // }
   return (
     <MasterProvider>
-      {user?.Role === 'User' ? (
+      {user?.Role === Roles.BUYER ? (
         <BuyerProvider>
           <BuyerNavigator />
         </BuyerProvider>
-      ) : user?.Role === 'Seller' ? (
+      ) : user?.Role === Roles.SELLER ? (
         <PropertyFormProvider>
           <SellerNavigator />
         </PropertyFormProvider>
-      ) : user?.Role === 'Partner' ? (
+      ) : user?.Role === Roles.PARTNER ? (
         <PartnerProvider>
           <PartnerNavigator />
         </PartnerProvider>
+      ) : user?.Role === Roles.ADMIN ? (
+        <AdminNavigator />
       ) : null}
     </MasterProvider>
   );

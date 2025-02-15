@@ -111,8 +111,8 @@ const styles = StyleSheet.create({
   clientCard: {
     backgroundColor: 'white',
     marginBottom: 16,
-    borderRadius: 16,
-    elevation: 4,
+    elevation: 5,
+    borderRadius: '3%',
     shadowColor: '#000',
     shadowOffset: {width: 0, height: 2},
     shadowOpacity: 0.15,

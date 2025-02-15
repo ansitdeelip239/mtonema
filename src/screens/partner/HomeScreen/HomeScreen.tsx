@@ -146,7 +146,7 @@ const styles = StyleSheet.create({
   },
   card: {
     backgroundColor: 'white',
-    borderRadius: 16,
+    borderRadius: 8,
     padding: 24,
     width: '100%',
     alignItems: 'center',
@@ -157,7 +157,7 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 0.15,
     shadowRadius: 8,
-    elevation: 5,
+    elevation: 4,
     marginBottom: 8,
   },
   cardTitle: {

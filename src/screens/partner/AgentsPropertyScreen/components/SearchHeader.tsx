@@ -95,24 +95,16 @@ const styles = StyleSheet.create({
   searchInput: {
     backgroundColor: 'white',
     borderRadius: 50,
-    elevation: 5,
     height: 50,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.15,
-    shadowRadius: 4,
   },
   searchInputText: {
     color: Colors.placeholderColor,
   },
   filterButton: {
     backgroundColor: 'white',
-    width: 48,
-    height: 48,
-    borderRadius: 24,
+    width: 50,
+    height: 50,
+    borderRadius: '50%',
     justifyContent: 'center',
     alignItems: 'center',
     elevation: 5,

@@ -163,7 +163,7 @@ const RenderItem: React.FC<RenderItemProps> = ({
 const styles = StyleSheet.create({
   card: {
     backgroundColor: 'white',
-    borderRadius: 16,
+    borderRadius: '3%',
     marginHorizontal: 4,
     marginVertical: 8,
     elevation: 4,
