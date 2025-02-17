@@ -6,6 +6,7 @@ import {BuyerSellerAdminBottomTabParamList} from '../../types/navigation';
 import {CustomBottomBar, TabScreen} from './CustomBottomBar';
 import AdminHomeScreen from '../../screens/admin/partner/home-screen/HomeScreen';
 import AdminPropertiesScreen from '../../screens/admin/buyer-seller/AdminPropertiesScreen/AdminPropertiesScreen';
+import BuyerSellerList from '../../screens/admin/buyer-seller/BuyerSellerList/BuyerSellerList';
 
 const Tab = createBottomTabNavigator<BuyerSellerAdminBottomTabParamList>();
 
@@ -16,8 +17,8 @@ const tabScreens: Array<TabScreen<BuyerSellerAdminBottomTabParamList>> = [
     icon: 'home',
   },
   {
-    name: 'Seller List',
-    component: AdminHomeScreen,
+    name: 'Sellers',
+    component: BuyerSellerList,
     icon: 'client',
   },
   {

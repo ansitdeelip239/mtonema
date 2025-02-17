@@ -25,17 +25,17 @@ const AdminNavigator = memo(() => (
     // eslint-disable-next-line react/no-unstable-nested-components
     drawerContent={props => <CustomDrawerContent {...props} />}
     screenOptions={drawerStyles}
-    initialRouteName="Partner">
+    initialRouteName="Buyer/Seller">
     <Drawer.Screen
-      name="Partner"
-      component={PartnerAdminBottomTabs}
+      name="Buyer/Seller"
+      component={BuyerSellerAdminBottomTabs}
       options={{
         headerShown: false,
       }}
     />
     <Drawer.Screen
-      name="Buyer/Seller"
-      component={BuyerSellerAdminBottomTabs}
+      name="Partner"
+      component={PartnerAdminBottomTabs}
       options={{
         headerShown: false,
       }}

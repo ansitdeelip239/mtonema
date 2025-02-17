@@ -18,7 +18,7 @@ export type BuyerSellerAdminBottomTabParamList = {
   Home: undefined;
   Property: undefined;
   AddProperty: {editMode: boolean; propertyData: any};
-  'Seller List': undefined;
+  Sellers: undefined;
   Profile: undefined;
 };
 
