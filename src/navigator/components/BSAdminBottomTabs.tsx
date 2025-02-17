@@ -7,18 +7,21 @@ import {CustomBottomBar, TabScreen} from './CustomBottomBar';
 import AdminHomeScreen from '../../screens/admin/partner/home-screen/HomeScreen';
 import AdminPropertiesScreen from '../../screens/admin/buyer-seller/AdminPropertiesScreen/AdminPropertiesScreen';
 import BuyerSellerList from '../../screens/admin/buyer-seller/BuyerSellerList/BuyerSellerList';
+import VisitorsScreen from '../../screens/admin/buyer-seller/VisitorsScreen/VisitorsScreen';
 
 const Tab = createBottomTabNavigator<BuyerSellerAdminBottomTabParamList>();
 
+const BuyerSellerListScreen = () => <BuyerSellerList viewType="buyerseller" />;
+
 const tabScreens: Array<TabScreen<BuyerSellerAdminBottomTabParamList>> = [
   {
-    name: 'Home',
-    component: AdminHomeScreen,
+    name: 'Visitors',
+    component: VisitorsScreen,
     icon: 'home',
   },
   {
-    name: 'Sellers',
-    component: BuyerSellerList,
+    name: 'Users',
+    component: BuyerSellerListScreen,
     icon: 'client',
   },
   {

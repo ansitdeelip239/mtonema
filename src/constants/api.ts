@@ -69,4 +69,5 @@ export default {
   //Admin
   getAllProperties: url1 + '/api/v1/property/getAllProperty',
   getAllUsers: url1 + '/api/v1/User/GetAllUser',
+  getVisitor: url1 + '/api/v1/User/GetVisitor',
 };

@@ -6,25 +6,15 @@ import UsersList from './components/UsersList';
 import Colors from '../../../../constants/Colors';
 import Roles from '../../../../constants/Roles';
 import AdminService from '../../../../services/AdminService';
+import { UserModel } from '../../../../types/admin';
 
 const Tab = createMaterialTopTabNavigator();
 
-interface UserModel {
-  ID: number;
-  Name: string;
-  Email: string;
-  Phone: string;
-  Role: string;
-  CreatedOn: string;
-  Status: number;
-  PropertyListed: number;
-  sellerStatus: {
-    MasterDetailName: string;
-    ID: number;
-  };
+interface Props {
+  viewType?: 'partner' | 'buyerseller';
 }
 
-const BuyerSellerList = () => {
+const BuyerSellerList: React.FC<Props> = ({viewType = 'buyerseller'}) => {
   const [users, setUsers] = useState<UserModel[]>([]);
   const [loading, setLoading] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
@@ -32,7 +22,7 @@ const BuyerSellerList = () => {
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
   const isInitialRender = useRef(true);
-  const pageSize = 10;
+  const pageSize = 100;
 
   const fetchUsers = useCallback(
     async (pageNumber: number, shouldRefresh = false) => {
@@ -89,6 +79,22 @@ const BuyerSellerList = () => {
     }
   }, [loading, hasMore, page, fetchUsers]);
 
+  if (viewType === 'partner') {
+    return (
+      <View style={styles.container}>
+        <Header title="Partners List" />
+        <UsersList
+          users={users.filter(user => user.Role === Roles.PARTNER)}
+          loading={loading}
+          refreshing={refreshing}
+          error={error}
+          onRefresh={handleRefresh}
+          onLoadMore={handleLoadMore}
+        />
+      </View>
+    );
+  }
+
   return (
     <View style={styles.container}>
       <Header title="Buyer/Seller List" />
@@ -126,19 +132,6 @@ const BuyerSellerList = () => {
             />
           )}
         />
-        {/* <Tab.Screen
-          name="Partners"
-          children={() => (
-            <UsersList
-              users={users.filter(user => user.Role === Roles.PARTNER)}
-              loading={loading}
-              refreshing={refreshing}
-              error={error}
-              onRefresh={handleRefresh}
-              onLoadMore={handleLoadMore}
-            />
-          )}
-        /> */}
       </Tab.Navigator>
     </View>
   );
