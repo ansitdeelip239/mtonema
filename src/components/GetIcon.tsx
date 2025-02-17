@@ -34,7 +34,9 @@ export type IconEnum =
   | 'crosseye'
   | 'partnership'
   | 'partner2'
-  | 'partner3';
+  | 'partner3'
+  | 'globe'
+  | 'help';
 
 type IconProps = {
   iconName: IconEnum;
@@ -77,6 +79,8 @@ const GetIcon = ({iconName, color, size}: IconProps) => {
     partnership: require('../assets/Icon/partnership.png'),
     partner2: require('../assets/Icon/trustworthy.png'),
     partner3: require('../assets/Icon/partner2.png'),
+    globe: require('../assets/Icon/earth.png'),
+    help: require('../assets/Icon/help.png'),
   };
 
   const imageStyle = [

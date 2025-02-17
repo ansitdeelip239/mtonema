@@ -49,3 +49,43 @@ export interface VisitorResponse {
   responsePagingModel: PagingModel;
   visitorDetailModels: VisitorDetail[];
 }
+
+export interface ContactedPropertyModel {
+  ID: number;
+  UserID: number;
+  PropertyID: number;
+  SellerID: number;
+  CreatedOn: string;
+  UpdatedOn: string | null;
+  CreatedBy: string | null;
+  UpdatedBy: string | null;
+  Status: number;
+  BuyerName: string;
+  BuyerLocation: string;
+  SellerName: string;
+  SellerLocation: string;
+  PropertyLocation: string;
+  Subject: string | null;
+  Message: string | null;
+  Discription: string | null;
+  ImageURL: string | null;
+  Image: string | null;
+  VideoURL: string | null;
+  Price: string | null;
+  Area: string | null;
+  Locality: string | null;
+  PropertyType: string | null;
+  PropertyFor: string | null;
+  Rate: string | null;
+  Size: string | null;
+  ImageURLType: string | null;
+  ShortDiscription: string | null;
+  BhkType: string | null;
+  Furnishing: string | null;
+  SellerType: string | null;
+}
+
+export interface ContactedPropertyResponse {
+  responsePagingModel: PagingModel;
+  contactedPropertyModels: ContactedPropertyModel[];
+}

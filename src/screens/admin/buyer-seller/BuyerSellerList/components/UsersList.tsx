@@ -7,7 +7,7 @@ import {
   ActivityIndicator,
 } from 'react-native';
 import {RefreshControl} from 'react-native-gesture-handler';
-import { UserModel } from '../../../../../types/admin';
+import {UserModel} from '../../../../../types/admin';
 
 interface Props {
   users: UserModel[];
@@ -95,14 +95,17 @@ const UsersList: React.FC<Props> = ({
     );
   }, [loading]);
 
-  const renderEmptyComponent = useCallback(
-    () => (
+  const renderEmptyComponent = useCallback(() => {
+    if (loading) {
+      return null;
+    }
+
+    return (
       <View style={styles.emptyContainer}>
         <Text style={styles.emptyText}>{error || 'No users available'}</Text>
       </View>
-    ),
-    [error],
-  );
+    );
+  }, [error, loading]);
 
   const keyExtractor = useCallback((item: UserModel) => item.ID.toString(), []);
 

@@ -70,4 +70,5 @@ export default {
   getAllProperties: url1 + '/api/v1/property/getAllProperty',
   getAllUsers: url1 + '/api/v1/User/GetAllUser',
   getVisitor: url1 + '/api/v1/User/GetVisitor',
+  getAllContact: url1 + '/api/v1/contactProperty/getAllContact',
 };

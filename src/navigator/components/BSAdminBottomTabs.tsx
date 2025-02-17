@@ -8,6 +8,7 @@ import AdminHomeScreen from '../../screens/admin/partner/home-screen/HomeScreen'
 import AdminPropertiesScreen from '../../screens/admin/buyer-seller/AdminPropertiesScreen/AdminPropertiesScreen';
 import BuyerSellerList from '../../screens/admin/buyer-seller/BuyerSellerList/BuyerSellerList';
 import VisitorsScreen from '../../screens/admin/buyer-seller/VisitorsScreen/VisitorsScreen';
+import ContactedPropertiesScreen from '../../screens/admin/buyer-seller/ContactedPropertiesScreen/ContactedPropertiesScreen';
 
 const Tab = createBottomTabNavigator<BuyerSellerAdminBottomTabParamList>();
 
@@ -17,7 +18,7 @@ const tabScreens: Array<TabScreen<BuyerSellerAdminBottomTabParamList>> = [
   {
     name: 'Visitors',
     component: VisitorsScreen,
-    icon: 'home',
+    icon: 'globe',
   },
   {
     name: 'Users',
@@ -35,9 +36,9 @@ const tabScreens: Array<TabScreen<BuyerSellerAdminBottomTabParamList>> = [
     icon: 'realEstate',
   },
   {
-    name: 'Profile',
-    component: AdminHomeScreen,
-    icon: 'user',
+    name: 'Inquiries',
+    component: ContactedPropertiesScreen,
+    icon: 'help',
   },
 ] as const;
 

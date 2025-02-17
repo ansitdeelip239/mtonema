@@ -19,7 +19,7 @@ export type BuyerSellerAdminBottomTabParamList = {
   Property: undefined;
   AddProperty: {editMode: boolean; propertyData: any};
   Users: undefined;
-  Profile: undefined;
+  Inquiries: undefined;
 };
 
 export type PartnerBottomTabParamList = {

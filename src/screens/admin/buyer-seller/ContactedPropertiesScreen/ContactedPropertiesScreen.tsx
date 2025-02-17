@@ -9,42 +9,39 @@ import {
 } from 'react-native';
 import Header from '../../../../components/Header';
 import AdminService from '../../../../services/AdminService';
-import VisitorCard from './components/VisitorCard';
-import {VisitorDetail} from '../../../../types/admin';
+import {ContactedPropertyModel} from '../../../../types/admin';
+import ContactedPropertyCard from './components/ContactedPropertyCard';
 
-const VisitorsScreen = () => {
-  const [visitors, setVisitors] = useState<VisitorDetail[]>([]);
+const ContactedPropertiesScreen = () => {
+  const [properties, setProperties] = useState<ContactedPropertyModel[]>([]);
   const [loading, setLoading] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
   const PAGE_SIZE = 20;
 
-  const fetchVisitors = useCallback(
+  const fetchProperties = useCallback(
     async (page: number, shouldRefresh = false) => {
       try {
         setLoading(true);
-        const response = await AdminService.getVisitors({
-          pageNum: page,
-          PageSize: PAGE_SIZE,
-          show: PAGE_SIZE.toString(),
-          Address: '',
-          date: '',
-        });
+        const response = await AdminService.getAllContactedProperty(
+          page,
+          PAGE_SIZE,
+        );
 
-        const newVisitors = response.data.visitorDetailModels;
+        const newProperties = response.data.contactedPropertyModels;
         const pagingInfo = response.data.responsePagingModel;
 
         if (shouldRefresh) {
-          setVisitors(newVisitors);
+          setProperties(newProperties);
         } else {
-          setVisitors(prev => [...prev, ...newVisitors]);
+          setProperties(prev => [...prev, ...newProperties]);
         }
 
         setHasMore(pagingInfo.CurrentPage < pagingInfo.TotalPage);
         setCurrentPage(pagingInfo.CurrentPage);
       } catch (error) {
-        console.error('Error fetching visitors:', error);
+        console.error('Error fetching properties:', error);
       } finally {
         setLoading(false);
         setRefreshing(false);
@@ -54,17 +51,17 @@ const VisitorsScreen = () => {
   );
 
   useEffect(() => {
-    fetchVisitors(1, true);
-  }, [fetchVisitors]);
+    fetchProperties(1, true);
+  }, [fetchProperties]);
 
   const handleRefresh = useCallback(() => {
     setRefreshing(true);
-    fetchVisitors(1, true);
-  }, [fetchVisitors]);
+    fetchProperties(1, true);
+  }, [fetchProperties]);
 
   const handleLoadMore = () => {
     if (!loading && hasMore) {
-      fetchVisitors(currentPage + 1);
+      fetchProperties(currentPage + 1);
     }
   };
 
@@ -87,18 +84,18 @@ const VisitorsScreen = () => {
 
     return (
       <View style={styles.emptyContainer}>
-        <Text style={styles.emptyText}>No visitors found</Text>
+        <Text style={styles.emptyText}>No contacted properties found</Text>
       </View>
     );
   };
 
   return (
     <View style={styles.container}>
-      <Header title="Visitors" />
+      <Header title="Contacted Properties" />
       <FlatList
-        data={visitors}
-        renderItem={({item}) => <VisitorCard visitor={item} />}
-        keyExtractor={(item, index) => `${item.Visitor_Ip}-${index}`}
+        data={properties}
+        renderItem={({item}) => <ContactedPropertyCard property={item} />}
+        keyExtractor={item => item.ID.toString()}
         contentContainerStyle={styles.listContainer}
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
@@ -137,4 +134,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default VisitorsScreen;
+export default ContactedPropertiesScreen;
