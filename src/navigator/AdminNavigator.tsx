@@ -6,7 +6,8 @@ import CustomDrawerContent from '../components/CustomDrawerContent';
 import Colors from '../constants/Colors';
 import {AdminDrawerParamList} from '../types/navigation';
 import GetIcon from '../components/GetIcon';
-import AdminBottomTabs from './components/AdminBottomTabs';
+import PartnerAdminBottomTabs from './components/PartnerAdminBottomTabs';
+import BuyerSellerAdminBottomTabs from './components/BSAdminBottomTabs';
 
 const Drawer = createDrawerNavigator<AdminDrawerParamList>();
 
@@ -24,13 +25,19 @@ const AdminNavigator = memo(() => (
     // eslint-disable-next-line react/no-unstable-nested-components
     drawerContent={props => <CustomDrawerContent {...props} />}
     screenOptions={drawerStyles}
-    initialRouteName="Home Screen">
+    initialRouteName="Partner">
     <Drawer.Screen
-      name="Home Screen"
-      component={AdminBottomTabs}
+      name="Partner"
+      component={PartnerAdminBottomTabs}
       options={{
         headerShown: false,
-        drawerItemStyle: {display: 'none'},
+      }}
+    />
+    <Drawer.Screen
+      name="Buyer/Seller"
+      component={BuyerSellerAdminBottomTabs}
+      options={{
+        headerShown: false,
       }}
     />
     <Drawer.Screen
@@ -42,7 +49,7 @@ const AdminNavigator = memo(() => (
         headerRight: () => (
           <TouchableOpacity
             onPress={() =>
-              navigation.navigate('Home Screen', {screen: 'Property'})
+              navigation.navigate('Partner', {screen: 'Property'})
             }
             style={styles.backButton}>
             <GetIcon iconName="back" size="24" color={Colors.SECONDARY_3} />

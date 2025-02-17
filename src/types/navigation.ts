@@ -6,11 +6,19 @@ export type AgentStackParamList = {
   AddAgentProperty: undefined;
 };
 
-export type AdminBottomTabParamList = {
+export type PartnerAdminBottomTabParamList = {
   Home: undefined;
   Property: undefined;
   AddProperty: {editMode: boolean; propertyData: any};
   Clients: undefined;
+  Profile: undefined;
+};
+
+export type BuyerSellerAdminBottomTabParamList = {
+  Home: undefined;
+  Property: undefined;
+  AddProperty: {editMode: boolean; propertyData: any};
+  'Seller List': undefined;
   Profile: undefined;
 };
 
@@ -36,6 +44,7 @@ export type PartnerDrawerParamList = {
 };
 
 export type AdminDrawerParamList = {
-  'Home Screen': NavigatorScreenParams<PartnerBottomTabParamList>;
+  'Partner': NavigatorScreenParams<PartnerAdminBottomTabParamList>;
+  'Buyer/Seller': NavigatorScreenParams<PartnerBottomTabParamList>;
   'Profile Screen': undefined;
 };

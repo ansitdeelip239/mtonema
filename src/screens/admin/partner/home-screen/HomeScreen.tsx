@@ -1,12 +1,12 @@
 import React from 'react';
 import {View} from 'react-native';
-import Header from '../../../components/Header';
+import Header from '../../../../components/Header';
 
-const AdminHomeScreen = () => {
+const PartnerAdminHomeScreen = () => {
   return (
     <View>
       <Header title="Admin Home" />
     </View>
   );
 };
-export default AdminHomeScreen;
+export default PartnerAdminHomeScreen;

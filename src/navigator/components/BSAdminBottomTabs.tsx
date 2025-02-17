@@ -2,21 +2,21 @@ import React, {memo} from 'react';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import GetIcon from '../../components/GetIcon';
 import Colors from '../../constants/Colors';
-import {AdminBottomTabParamList} from '../../types/navigation';
+import {BuyerSellerAdminBottomTabParamList} from '../../types/navigation';
 import {CustomBottomBar, TabScreen} from './CustomBottomBar';
-import AdminHomeScreen from '../../screens/admin/AdminHomeScreen/AdminHomeScreen';
-import AdminPropertiesScreen from '../../screens/admin/AdminPropertiesScreen/AdminPropertiesScreen';
+import AdminHomeScreen from '../../screens/admin/partner/home-screen/HomeScreen';
+import AdminPropertiesScreen from '../../screens/admin/buyer-seller/AdminPropertiesScreen/AdminPropertiesScreen';
 
-const Tab = createBottomTabNavigator<AdminBottomTabParamList>();
+const Tab = createBottomTabNavigator<BuyerSellerAdminBottomTabParamList>();
 
-const tabScreens: Array<TabScreen<AdminBottomTabParamList>> = [
+const tabScreens: Array<TabScreen<BuyerSellerAdminBottomTabParamList>> = [
   {
     name: 'Home',
     component: AdminHomeScreen,
     icon: 'home',
   },
   {
-    name: 'Clients',
+    name: 'Seller List',
     component: AdminHomeScreen,
     icon: 'client',
   },
@@ -37,19 +37,14 @@ const tabScreens: Array<TabScreen<AdminBottomTabParamList>> = [
   },
 ] as const;
 
-const AdminBottomTabs = memo(() => (
+const BuyerSellerAdminBottomTabs = memo(() => (
   <Tab.Navigator
     initialRouteName="Property"
     screenOptions={{
       headerShown: false,
     }}
     // eslint-disable-next-line react/no-unstable-nested-components
-    tabBar={props => (
-      <CustomBottomBar
-        {...props}
-        tabScreens={tabScreens}
-      />
-    )}>
+    tabBar={props => <CustomBottomBar {...props} tabScreens={tabScreens} />}>
     {tabScreens.map(({name, component, icon, listeners}) => (
       <Tab.Screen
         key={name}
@@ -68,4 +63,4 @@ const AdminBottomTabs = memo(() => (
   </Tab.Navigator>
 ));
 
-export default AdminBottomTabs;
+export default BuyerSellerAdminBottomTabs;

@@ -1,12 +1,12 @@
 import React, {useState} from 'react';
 import {StyleSheet, SafeAreaView} from 'react-native';
-import Header from '../../../components/Header';
-import PropertyList from '../../../components/PropertyList';
-import {api} from '../../../utils/api';
-import url from '../../../constants/api';
-import {PropertyModel} from '../../../types';
-import PropertyModal from '../../buyer/PropertyModal';
-import { useAuth } from '../../../hooks/useAuth';
+import Header from '../../../../components/Header';
+import PropertyList from '../../../../components/PropertyList';
+import {api} from '../../../../utils/api';
+import url from '../../../../constants/api';
+import {PropertyModel} from '../../../../types';
+import PropertyModal from '../../../buyer/PropertyModal';
+import { useAuth } from '../../../../hooks/useAuth';
 
 const AdminPropertiesScreen = () => {
   const [selectedProperty, setSelectedProperty] =
@@ -16,7 +16,6 @@ const AdminPropertiesScreen = () => {
   const {dataUpdated} = useAuth();
 
   const fetchAdminProperties = async (page: number) => {
-    // Replace with your actual admin property fetching logic
     const response = await api.get<any>(
       `${url.getAllProperties}?pageNumber=${page}&pageSize=10`,
     );
