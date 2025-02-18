@@ -1,74 +1,66 @@
-// let url1 = 'https://dncrpropertyapi.azurewebsites.net'; //Dev Url
-// export let url1 = 'https://devdncrbe.azurewebsites.net';
-// let url1 = 'https://dncrpropertyapi.azurewebsites.net';
-export let url1 = 'https://freehostingweb.bsite.net';
+// let BASE_URL = 'https://dncrpropertyapi.azurewebsites.net'; //Dev Url
+// export let BASE_URL = 'https://devdncrbe.azurewebsites.net';
+// let BASE_URL = 'https://dncrpropertyapi.azurewebsites.net';
+// export let BASE_URL = 'https://freehostingweb.bsite.net';
+export let BASE_URL = 'https://dncrnewapi-bmbfb6f6awd8b0bd.westindia-01.azurewebsites.net';
 
 
 export default {
-  UserSignUp: url1 + '/api/v1/Account/UserSignup',
-  OtpVerification :url1 + '/api/v1/Account/OtpVerification',
-
+  UserSignUp: BASE_URL + '/Account/UserSignup',
+  OtpVerification: BASE_URL + '/Account/OtpVerification',
 
   //Authentication
-  SignUp: url1 + '/api/v1/Account/GenerateOtp',
-  VerifyOTP: url1 + '/api/v1/Account/CheckOTP',
-  GetUserByToken: url1 + '/api/v1/Account/GetUserByToken?token=',
-  ValidateEmail: url1 + '/api/v1/User/varifyUserbyEmail?email=',
-  Login: url1 + '/api/v1/Account/loginUser',
-  ForgotPassword: url1 + '/api/v1/Account/OtpVerification',
-  ChangePassword: url1 + '/api/v1/Account/ChangePassword',
+  SignUp: BASE_URL + '/Account/GenerateOtp',
+  VerifyOTP: BASE_URL + '/Account/CheckOTP',
+  GetUserByToken: BASE_URL + '/Account/GetUserByToken?token=',
+  ValidateEmail: BASE_URL + '/User/varifyUserbyEmail?email=',
+  Login: BASE_URL + '/Account/loginUser',
+  ForgotPassword: BASE_URL + '/Account/OtpVerification',
+  ChangePassword: BASE_URL + '/Account/ChangePassword',
 
   //Property
-
-  FilterSearch: url1 + '/api/v1/property/filterProperty',
-  // RecommendedProperty: url1 + '/api/v1/property/getAllProperty?pageNumber=1&pageSize=10',
-  RecommendedProperty: url1 + '/api/v1/property/getAllProperty',
-  ContactProperty: url1 + '/api/v1/contactProperty/Contact',
-  getListOfContactedProperty:
-    url1 + '/api/v1/contactProperty/getAllContactByuserID',
+  FilterSearch: BASE_URL + '/property/filterProperty',
+  RecommendedProperty: BASE_URL + '/property/getAllProperty',
+  ContactProperty: BASE_URL + '/contactProperty/Contact',
+  getListOfContactedProperty: BASE_URL + '/contactProperty/getAllContactByuserID',
 
   //Seller
-
-  RegisterSeller: url1 + '/api/v1/Account/registerseller',
-  AddProperty: url1 + '/api/v1/property/addProperty',
-  GetProperty: url1 + '/api/v1/property/getPropertyByUserid',
-  UpdateProperty: url1 + '/api/v1/property/updateProperty',
-  deleteProperty: url1 + '/api/v1/property/removeProperty',
-  GetInTouch: url1 + '/api/v1/contactProperty/GetinTouch',
+  RegisterSeller: BASE_URL + '/Account/registerseller',
+  AddProperty: BASE_URL + '/property/addProperty',
+  GetProperty: BASE_URL + '/property/getPropertyByUserid',
+  UpdateProperty: BASE_URL + '/property/updateProperty',
+  deleteProperty: BASE_URL + '/property/removeProperty',
+  GetInTouch: BASE_URL + '/contactProperty/GetinTouch',
 
   //updateprofile
-  UpdateProfile: url1 + '/api/v1/User/UpdateUser',
+  UpdateProfile: BASE_URL + '/User/UpdateUser',
 
   //cloudnary
-  imageUpload:
-    url1 + 'https://api.cloudinary.com/v1_1/dncrproperty-com/image/upload',
-  videoUpload:
-    url1 + 'https://api.cloudinary.com/v1_1/proplisting/video/upload',
+  imageUpload: 'https://api.cloudinary.com/v1_1/dncrproperty-com/image/upload',
+  videoUpload: 'https://api.cloudinary.com/v1_1/proplisting/video/upload',
 
   //Master Detail
-  getMasterDetail:
-  url1 + '/api/v1/MasterDetail/getMasterDetailsByMasterName?MasterDetailName=',
-  getPlaces: url1 + '/api/v1/MasterDetail/getgoogleplaces',
-  deleteUser: url1 + '/api/v1/User/DeleteUserByUserId',
-  searchIntellisense: url1 + '/api/v1/MasterDetail/SearchIntelligence',
-
+  getMasterDetail: BASE_URL + '/MasterDetail/getMasterDetailsByMasterName?MasterDetailName=',
+  getPlaces: BASE_URL + '/MasterDetail/getgoogleplaces',
+  deleteUser: BASE_URL + '/User/DeleteUserByUserId',
+  searchIntellisense: BASE_URL + '/MasterDetail/SearchIntelligence',
 
   //Partner
-  getAgentImportData: url1 + '/api/v1/partner/GetAgentImportDataUserId',
-  updateAgentProperty: url1 + '/api/v1/partner/UpdateAgentProperty',
-  getClientData: url1 + '/api/v1/partner/GetClientData',
-  getGroupsByPartnerId: url1 + '/api/v1/partner/GetGroupByPartnerId',
-  addEditClientData: url1 + '/api/v1/partner/AddEditClientData',
-  getPartnerProperty: url1 + '/api/v1/partner/GetPartnerPropertyUserId',
-  deleteAgentProperty: url1 + '/api/v1/partner/DeleteAgentProperty',
-  getClientById: url1 + '/api/v1/partner/GetClientById',
-  deleteClientById: url1 + '/api/v1/partner/DeleteClientDetails',
-  addEditClientActivity: url1 + '/api/v1/partner/AddEditClientActivity',
-  deleteClientActivity: url1 + '/api/v1/partner/DeleteClientActivity',
+  getAgentImportData: BASE_URL + '/partner/GetAgentImportDataUserId',
+  updateAgentProperty: BASE_URL + '/partner/UpdateAgentProperty',
+  getClientData: BASE_URL + '/partner/GetClientData',
+  getGroupsByPartnerId: BASE_URL + '/partner/GetGroupByPartnerId',
+  addEditClientData: BASE_URL + '/partner/AddEditClientData',
+  getPartnerProperty: BASE_URL + '/partner/GetPartnerPropertyUserId',
+  deleteAgentProperty: BASE_URL + '/partner/DeleteAgentProperty',
+  getClientById: BASE_URL + '/partner/GetClientById',
+  deleteClientById: BASE_URL + '/partner/DeleteClientDetails',
+  addEditClientActivity: BASE_URL + '/partner/AddEditClientActivity',
+  deleteClientActivity: BASE_URL + '/partner/DeleteClientActivity',
 
   //Admin
-  getAllProperties: url1 + '/api/v1/property/getAllProperty',
-  getAllUsers: url1 + '/api/v1/User/GetAllUser',
-  getVisitor: url1 + '/api/v1/User/GetVisitor',
-  getAllContact: url1 + '/api/v1/contactProperty/getAllContact',
+  getAllProperties: BASE_URL + '/property/getAllProperty',
+  getAllUsers: BASE_URL + '/User/GetAllUser',
+  getVisitor: BASE_URL + '/User/GetVisitor',
+  getAllContact: BASE_URL + '/contactProperty/getAllContact',
 };

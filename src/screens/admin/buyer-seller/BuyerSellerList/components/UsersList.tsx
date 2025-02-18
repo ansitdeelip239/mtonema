@@ -8,6 +8,7 @@ import {
 } from 'react-native';
 import {RefreshControl} from 'react-native-gesture-handler';
 import {UserModel} from '../../../../../types/admin';
+import Roles from '../../../../../constants/Roles';
 
 interface Props {
   users: UserModel[];
@@ -71,7 +72,7 @@ const UsersList: React.FC<Props> = ({
               {new Date(item.CreatedOn).toLocaleDateString()}
             </Text>
           </View>
-          {item.Role === 'Seller' && (
+          {item.Role === Roles.SELLER && (
             <View style={styles.infoRow}>
               <Text style={styles.infoLabel}>Properties:</Text>
               <Text style={styles.infoValue}>{item.PropertyListed}</Text>

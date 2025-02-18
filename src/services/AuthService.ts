@@ -67,11 +67,14 @@ class AuthService {
 
   static async OtpVerification(Email: string, OTP?: string) {
     try {
-      const requestBody = OTP ? {Email, OTP} : {Email};
-      const response = await Api.post<string | null>(
-        api.OtpVerification,
-        requestBody,
-      );
+      // const requestBody = OTP ? {Email, OTP} : {Email};
+      // const response = await Api.post<string | null>(
+      //   api.OtpVerification,
+      //   requestBody,
+      // );
+      Email = encodeURIComponent(Email);
+      const requestURL = OTP ? `${api.OtpVerification}?Email=${Email}&OTP=${OTP}` : `${api.OtpVerification}?Email=${Email}`;
+      const response = await Api.post<string | null>(requestURL, {});
       return response;
     } catch (error) {
       throw error;

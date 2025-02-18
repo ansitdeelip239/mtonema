@@ -87,13 +87,17 @@ const EmailScreen: React.FC<Props> = ({navigation, route}) => {
         // Skip email check for verify now button
         if (!skipEmailCheck) {
           const isValidEmail = await checkEmail(email);
+
           if (!isValidEmail) {
-            return;
+            //Temporarily disabled for email restriction
+            // return;
           }
         }
 
         const response = await AuthService.OtpVerification(email);
         if (response.Success) {
+          console.log('API Response:', response);
+
           navigation.navigate('OtpScreen', {email});
           if (!skipEmailCheck) {
             setNavigateToPostProperty(false);

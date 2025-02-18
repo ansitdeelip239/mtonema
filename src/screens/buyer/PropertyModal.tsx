@@ -23,6 +23,7 @@ import {usePropertyForm} from '../../context/PropertyFormContext';
 import Colors from '../../constants/Colors';
 import Toast from 'react-native-toast-message';
 import {formatCurrency} from '../../utils/currency';
+import Roles from '../../constants/Roles';
 
 // Utility function to strip HTML tags
 const stripHtmlTags = (html: string): string => {
@@ -276,12 +277,12 @@ const PropertyModal = ({
         </View>
 
         {/* Enquiry Now Button */}
-        {user?.Role === 'User' && isRecommended ? (
+        {user?.Role === Roles.BUYER && isRecommended ? (
           <View style={styles.buttonContainer}>
             <EnquiryButton property={property} />
           </View>
         ) : null}
-        {user?.Role === 'Seller' ? (
+        {user?.Role === Roles.SELLER ? (
           <>
             <View style={styles.buttonContainer1}>
               <TouchableOpacity onPress={handleDeleteConfirmation}>

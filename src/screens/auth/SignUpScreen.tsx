@@ -21,6 +21,7 @@ import {
   SignupFormType,
 } from '../../schema/SignUpFormSchema';
 import {useDialog} from '../../hooks/useDialog';
+import Roles from '../../constants/Roles';
 
 type Props = NativeStackScreenProps<AuthStackParamList, 'SignUpScreen'>;
 
@@ -53,7 +54,8 @@ const SignUpScreen: React.FC<Props> = ({navigation, route}) => {
   const handleSignup = async (formData: SignupFormType) => {
     try {
       setLoading(true);
-      const userrole = route.params.role === 'User' ? 'User' : 'Seller';
+      const userrole =
+        route.params.role === Roles.BUYER ? Roles.BUYER : Roles.SELLER;
 
       // Convert formDataWithRole (with Role) to SignupBody using apiSubmissionSchema
       const signupBody: SignupBody =

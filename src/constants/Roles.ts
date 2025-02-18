@@ -1,14 +1,14 @@
-interface Roles {
+export interface RoleTypes {
   ADMIN: 'Admin';
   PARTNER: 'Partner';
-  BUYER: 'User';
+  BUYER: 'Buyer';
   SELLER: 'Seller';
 }
 
-const Roles = {
+const Roles: RoleTypes = {
   ADMIN: 'Admin',
   PARTNER: 'Partner',
-  BUYER: 'User',
+  BUYER: 'Buyer',
   SELLER: 'Seller',
 } as const;
 
