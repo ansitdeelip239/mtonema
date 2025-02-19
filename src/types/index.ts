@@ -43,12 +43,13 @@ export interface User {
 }
 
 export interface Response<T> {
-  Success: boolean;
-  Message: string;
+  success: boolean;
+  message: string;
   data: T;
   httpStatus: number;
   predictions?: any;
 }
+
 export interface PropertyModel {
   ID: number;
   UserId: number;

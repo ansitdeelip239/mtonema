@@ -34,11 +34,11 @@ const EnquiryButton = ({
         PropertyID: property.ID,
       };
       const response = await api.post(`${url.ContactProperty}`, request);
-      if (response.Success) {
+      if (response.success) {
         Alert.alert('Success', 'Our Team will contact you soon');
         setDataUpdated(!dataUpdated);
       } else {
-        throw new Error(response.Message);
+        throw new Error(response.message);
       }
     } catch (error) {
       if (error instanceof Error) {

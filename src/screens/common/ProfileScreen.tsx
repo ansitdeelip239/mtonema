@@ -15,10 +15,10 @@ import {ActivityIndicator} from 'react-native-paper';
 import {api} from '../../utils/api';
 import url from '../../constants/api';
 import {User} from '../../types';
-import CommonService from '../../services/CommonService';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import GetIcon from '../../components/GetIcon';
 import Colors from '../../constants/Colors';
+import AuthService from '../../services/AuthService';
 
 type FieldName = 'name' | 'email' | 'password' | 'mobile' | 'location';
 type EditableFields = Record<FieldName, boolean>;
@@ -202,7 +202,7 @@ const ProfileScreen = () => {
         return;
       }
 
-      const response = await CommonService.getUserByToken(token);
+      const response = await AuthService.GetUserByToken(token);
       if (response?.data) {
         setUserData(prevData => ({
           ...prevData,
@@ -276,7 +276,7 @@ const ProfileScreen = () => {
       };
 
       const response = await api.post<User>(`${url.UpdateProfile}`, request);
-      if (response.Success) {
+      if (response.success) {
         showToast('success', 'Profile updated successfully');
         setEditMode({
           name: false,
@@ -287,7 +287,7 @@ const ProfileScreen = () => {
         });
         await fetchUserProfile();
       } else {
-        throw new Error(response.Message || 'Update failed');
+        throw new Error(response.message || 'Update failed');
       }
     } catch (error) {
       showToast(

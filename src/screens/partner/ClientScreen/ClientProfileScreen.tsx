@@ -53,7 +53,7 @@ const ClientProfileScreen: React.FC<Props> = ({route, navigation}) => {
       const response = await PartnerService.getClientById(
         route.params.clientId,
       );
-      if (response.Success) {
+      if (response.success) {
         setClient(response.data);
       }
     } catch (error) {
@@ -115,7 +115,7 @@ const ClientProfileScreen: React.FC<Props> = ({route, navigation}) => {
   const handleDeleteActivity = async (activityId: number) => {
     try {
       const response = await PartnerService.deleteClientActivity(activityId);
-      if (response.Success) {
+      if (response.success) {
         Toast.show({
           type: 'success',
           text1: 'Success',
@@ -145,7 +145,7 @@ const ClientProfileScreen: React.FC<Props> = ({route, navigation}) => {
       const response = await PartnerService.deleteClientById(
         client?.Id as number,
       );
-      if (response.Success) {
+      if (response.success) {
         Toast.show({
           type: 'success',
           text1: 'Success',
@@ -179,7 +179,7 @@ const ClientProfileScreen: React.FC<Props> = ({route, navigation}) => {
         activityId,
       );
 
-      if (response.Success) {
+      if (response.success) {
         Toast.show({
           type: 'success',
           text1: 'Success',

@@ -4,7 +4,6 @@ import Colors from '../constants/Colors';
 import ContactScreen from '../screens/buyer/ContactScreen';
 import ContactedProperty from '../screens/buyer/ContactedProperty';
 import CustomDrawerContent from '../components/CustomDrawerContent';
-import ChangePasswordScreen from '../screens/auth/ChangePasswordScreen';
 import ProfileScreen from '../screens/common/ProfileScreen';
 import Home from '../screens/buyer/Home';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
@@ -65,17 +64,6 @@ const BuyerNavigator = memo(() => {
           // eslint-disable-next-line react/no-unstable-nested-components
           drawerIcon: ({color}) => (
             <GetIcon iconName="ContactedProperty" color={color} size="23" /> // Use GetIcon here
-          ),
-        }}
-      />
-      <Drawer.Screen
-        name="Change Password"
-        component={ChangePasswordScreen}
-        options={{
-          headerShown: false,
-          // eslint-disable-next-line react/no-unstable-nested-components
-          drawerIcon: ({color}) => (
-            <GetIcon iconName="changepassword" color={color} size="29" /> // Use GetIcon here
           ),
         }}
       />

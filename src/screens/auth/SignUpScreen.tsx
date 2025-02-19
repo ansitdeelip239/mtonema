@@ -64,12 +64,12 @@ const SignUpScreen: React.FC<Props> = ({navigation, route}) => {
       const response = await AuthService.UserSignUp(signupBody);
       console.log('API Response:', response);
 
-      if (response.Success && !emailExistMessage.includes(response.Message)) {
+      if (response.success && !emailExistMessage.includes(response.message)) {
         await AuthService.OtpVerification(formData.Email);
         setNavigateToPostProperty(true);
         navigation.navigate('OtpScreen', {email: formData.Email});
       } else {
-        showError(response.Message);
+        showError(response.message);
       }
     } catch (error) {
       console.error('API Error:', error);

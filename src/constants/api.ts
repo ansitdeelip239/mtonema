@@ -2,21 +2,18 @@
 // export let BASE_URL = 'https://devdncrbe.azurewebsites.net';
 // let BASE_URL = 'https://dncrpropertyapi.azurewebsites.net';
 // export let BASE_URL = 'https://freehostingweb.bsite.net';
-export let BASE_URL = 'https://dncrnewapi-bmbfb6f6awd8b0bd.westindia-01.azurewebsites.net';
+export const BASE_URL = 'https://dncrnewapi-bmbfb6f6awd8b0bd.westindia-01.azurewebsites.net';
 
 
 export default {
-  UserSignUp: BASE_URL + '/Account/UserSignup',
-  OtpVerification: BASE_URL + '/Account/OtpVerification',
-
   //Authentication
-  SignUp: BASE_URL + '/Account/GenerateOtp',
-  VerifyOTP: BASE_URL + '/Account/CheckOTP',
-  GetUserByToken: BASE_URL + '/Account/GetUserByToken?token=',
-  ValidateEmail: BASE_URL + '/User/varifyUserbyEmail?email=',
-  Login: BASE_URL + '/Account/loginUser',
-  ForgotPassword: BASE_URL + '/Account/OtpVerification',
-  ChangePassword: BASE_URL + '/Account/ChangePassword',
+  userSignup: BASE_URL + '/account/user-signup',
+  otpVerification: BASE_URL + '/account/otp-verification',
+
+  ValidateEmail: BASE_URL + '/User/varifyUserbyEmail?email=',  //Need to update
+
+  //Users
+  users: BASE_URL + '/users',
 
   //Property
   FilterSearch: BASE_URL + '/property/filterProperty',
@@ -40,7 +37,8 @@ export default {
   videoUpload: 'https://api.cloudinary.com/v1_1/proplisting/video/upload',
 
   //Master Detail
-  getMasterDetail: BASE_URL + '/MasterDetail/getMasterDetailsByMasterName?MasterDetailName=',
+  // getMasterDetail: BASE_URL + '/MasterDetail/getMasterDetailsByMasterName?MasterDetailName=',
+  getMasterDetail: BASE_URL + '/MasterDetail?masterName=',
   getPlaces: BASE_URL + '/MasterDetail/getgoogleplaces',
   deleteUser: BASE_URL + '/User/DeleteUserByUserId',
   searchIntellisense: BASE_URL + '/MasterDetail/SearchIntelligence',

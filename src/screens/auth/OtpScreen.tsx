@@ -25,7 +25,7 @@ const OtpScreen: React.FC<Props> = ({route}) => {
       setIsLoading(true);
       const response = await AuthService.OtpVerification(email, OTP);
 
-      if (response.Success) {
+      if (response.success) {
         if (response.data) {
           const userResponse = await AuthService.GetUserByToken(response.data);
           await storeUser(userResponse.data);
@@ -37,9 +37,9 @@ const OtpScreen: React.FC<Props> = ({route}) => {
         hideDialog();
       } else {
         const errorMessage =
-          response.Message === 'Invalid Otp'
+          response.message === 'Invalid Otp'
             ? 'Please enter a valid OTP.'
-            : response.Message || 'OTP verification failed';
+            : response.message || 'OTP verification failed';
 
         showError(errorMessage);
       }

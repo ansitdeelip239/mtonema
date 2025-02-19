@@ -36,7 +36,7 @@ const RenderItem: React.FC<RenderItemProps> = ({
   const handleConfirmDelete = async () => {
     try {
       const response = await PartnerService.deleteAgentProperty(item.Id);
-      if (response.Success) {
+      if (response.success) {
         Toast.show({
           type: 'success',
           text1: 'Property Deleted Successfully',

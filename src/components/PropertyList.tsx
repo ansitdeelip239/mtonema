@@ -53,8 +53,8 @@ const PropertyList: React.FC<PropertyListProps> = ({
           throw new Error('No response from server');
         }
 
-        if (response.Success === false) {
-          console.log('No data found:', response.Message);
+        if (response.success === false) {
+          console.log('No data found:', response.message);
           setProperties([]);
           setHasMore(false);
           setError(null);

@@ -134,7 +134,7 @@ const AddAgentPropertyScreen: React.FC<Props> = ({navigation, route}) => {
         };
 
         const response = await PartnerService.updateAgentProperty(request);
-        if (response.Success) {
+        if (response.success) {
           resetForm();
           setErrors({});
           Toast.show({

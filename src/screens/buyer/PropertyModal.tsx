@@ -155,7 +155,7 @@ const PropertyModal = ({
   const handleDelete = async () => {
     try {
       const response = await BuyerService.deleteProperty(property.ID);
-      if (response?.Success) {
+      if (response?.success) {
         setDataUpdated(!dataUpdated);
         onClose();
         Toast.show({

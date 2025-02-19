@@ -39,11 +39,11 @@ const EmailScreen: React.FC<Props> = ({navigation, route}) => {
         setEmailError({message: '', isClickable: false});
 
         const response = await AuthService.verifyLoginInput(emailToCheck);
-        console.log(response.Message);
+        console.log(response.message);
 
-        if (!response.Success) {
+        if (!response.success) {
           setEmailError({
-            message: response.Message || 'Email verification failed',
+            message: response.message || 'Email verification failed',
             isClickable: false,
           });
           return false;
@@ -95,7 +95,7 @@ const EmailScreen: React.FC<Props> = ({navigation, route}) => {
         }
 
         const response = await AuthService.OtpVerification(email);
-        if (response.Success) {
+        if (response.success) {
           console.log('API Response:', response);
 
           navigation.navigate('OtpScreen', {email});
@@ -103,7 +103,7 @@ const EmailScreen: React.FC<Props> = ({navigation, route}) => {
             setNavigateToPostProperty(false);
           }
         } else {
-          showError(response.Message || 'Failed to send OTP. Please try again');
+          showError(response.message || 'Failed to send OTP. Please try again');
         }
       } catch (error) {
         showError('An error occurred while sending OTP.');

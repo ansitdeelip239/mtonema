@@ -182,7 +182,7 @@ const removeImage = (imageId: string) => {
       }
 
       console.log('Response:', response);
-      if (response.Success) {
+      if (response.success) {
         await clearFormData();
         Toast.show({
           type: 'success',

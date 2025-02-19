@@ -16,7 +16,7 @@ import {
 } from '../utils/formvalidation';
 import LocationComponent from './LocationComponent';
 import {navigationRef} from '../navigator/NavigationRef';
-import { SignupFormType } from '../schema/SignUpFormSchema';
+import {SignupFormType} from '../schema/SignUpFormSchema';
 
 const SignupForm = ({
   handleSignup,
@@ -48,7 +48,6 @@ const SignupForm = ({
       processedValue = value.replace(/[^0-9]/g, '').slice(0, 10);
     }
 
-
     // Update seller data
     setSellerData(prev => ({...prev, [key]: processedValue}));
 
@@ -71,11 +70,12 @@ const SignupForm = ({
             ? ''
             : 'Invalid email address';
           break;
-          case 'Phone':
-        errorMessage = processedValue.length === 10
-          ? ''
-          : 'Phone number must be 10 digits';
-        break;
+        case 'Phone':
+          errorMessage =
+            processedValue.length === 10
+              ? ''
+              : 'Phone number must be 10 digits';
+          break;
       }
     }
 
@@ -84,8 +84,8 @@ const SignupForm = ({
   };
 
   const clearInputField = (key: string) => {
-    setSellerData(prev => ({ ...prev, [key]: '' }));
-    setErrors(prev => ({ ...prev, [key]: '' }));
+    setSellerData(prev => ({...prev, [key]: ''}));
+    setErrors(prev => ({...prev, [key]: ''}));
   };
 
   const handleLocationChange = (location: string) => {
@@ -105,7 +105,7 @@ const SignupForm = ({
         : !validateEmail(sellerData.Email)
         ? 'Invalid email address'
         : '',
-        Phone:
+      Phone:
         sellerData.Phone === ''
           ? 'Phone is required'
           : !validatePhone(sellerData.Phone)
@@ -217,63 +217,63 @@ const SignupForm = ({
       </View>
 
       {/* Location Component */}
-    <View style={styles.locationcontainer}>
-      <LocationComponent onLocationChange={handleLocationChange} />
-      {errors.Location !== '' && (
-        <HelperText type="error" visible={true}>
-          {errors.Location}
-        </HelperText>
-      )}
+      <View style={styles.locationcontainer}>
+        <LocationComponent onLocationChange={handleLocationChange} />
+        {errors.Location !== '' && (
+          <HelperText type="error" visible={true}>
+            {errors.Location}
+          </HelperText>
+        )}
       </View>
 
-<View style={styles.inputGroup}>
-  <View style={styles.phoneInputContainer}>
-    <View style={styles.flagContainer}>
-      <Image
-        source={require('../assets/Images/IndianFlag.png')}
-        style={styles.flagImage}
-      />
-      <Text style={styles.countryCodeText}>+91</Text>
-    </View>
-    <TextInput
-      label="Mobile"
-      value={sellerData.Phone}
-      onChangeText={text => handleInputChange('Phone', text)}
-      mode="outlined"
-      keyboardType="number-pad"
-      maxLength={10}
-      error={!!errors.Phone}
-      style={styles.phoneInput}
-      placeholder="10 Digit Mobile Number" // Placeholder text
-      theme={{
-        colors: {
-          primary: '#cc0e74', // Label color when focused
-          onSurfaceVariant: 'gray', // Label color when not focused
-          background: '#f0f0f0', // Background color of the input field
-          text: 'black', // Text color of the input field
-          error: 'red', // Error message and error state color
-        },
-      }}
-      right={
-        sellerData.Phone.length > 0 && (
-          <TextInput.Icon
-            // eslint-disable-next-line react/no-unstable-nested-components
-            icon={() => (
-              <Image
-                style={styles.crossicon}
-                source={require('../assets/Icon/crossicon.png')}
-              />
-            )}
-            onPress={() => clearInputField('Phone')}
+      <View style={styles.inputGroup}>
+        <View style={styles.phoneInputContainer}>
+          <View style={styles.flagContainer}>
+            <Image
+              source={require('../assets/Images/IndianFlag.png')}
+              style={styles.flagImage}
+            />
+            <Text style={styles.countryCodeText}>+91</Text>
+          </View>
+          <TextInput
+            label="Mobile"
+            value={sellerData.Phone}
+            onChangeText={text => handleInputChange('Phone', text)}
+            mode="outlined"
+            keyboardType="number-pad"
+            maxLength={10}
+            error={!!errors.Phone}
+            style={styles.phoneInput}
+            placeholder="10 Digit Mobile Number" // Placeholder text
+            theme={{
+              colors: {
+                primary: '#cc0e74', // Label color when focused
+                onSurfaceVariant: 'gray', // Label color when not focused
+                background: '#f0f0f0', // Background color of the input field
+                text: 'black', // Text color of the input field
+                error: 'red', // Error message and error state color
+              },
+            }}
+            right={
+              sellerData.Phone.length > 0 && (
+                <TextInput.Icon
+                  // eslint-disable-next-line react/no-unstable-nested-components
+                  icon={() => (
+                    <Image
+                      style={styles.crossicon}
+                      source={require('../assets/Icon/crossicon.png')}
+                    />
+                  )}
+                  onPress={() => clearInputField('Phone')}
+                />
+              )
+            }
           />
-        )
-      }
-    />
-  </View>
-  <HelperText type="error" visible={!!errors.Phone}>
-    {errors.Phone}
-  </HelperText>
-</View>
+        </View>
+        <HelperText type="error" visible={!!errors.Phone}>
+          {errors.Phone}
+        </HelperText>
+      </View>
 
       {/* Button Section */}
       <View style={styles.buttonContainer}>
@@ -303,8 +303,8 @@ const styles = StyleSheet.create({
     padding: 15,
     width: '100%',
   },
-  locationcontainer:{
-    marginBottom:35,
+  locationcontainer: {
+    marginBottom: 35,
   },
   buttonLabel: {
     fontSize: 18, // Increase font size
@@ -330,7 +330,7 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '30%',
     fontWeight: 'bold',
-    borderRadius:15,
+    borderRadius: 15,
   },
   phoneInputContainer: {
     flexDirection: 'row',

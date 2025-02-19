@@ -1,8 +1,8 @@
 import {Response, SignUpRequest, User} from '../types';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import api from '../constants/api';
+import url from '../constants/api';
 import {SignupBody} from '../schema/SignUpFormSchema';
-import {api as Api} from '../utils/api';
+import { api } from '../utils/api';
 
 class AuthService {
   static async verifyLoginInput(
@@ -13,7 +13,7 @@ class AuthService {
         throw new Error('Email is required');
       }
 
-      const response = await fetch(api.ValidateEmail + loginInput, {
+      const response = await fetch(url.ValidateEmail + loginInput, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -26,7 +26,7 @@ class AuthService {
         return result;
       } else {
         throw new Error(
-          result.Message ||
+          result.message ||
             'An error occurred while validating the login input',
         );
       }
@@ -36,7 +36,7 @@ class AuthService {
   }
   static async signUp(body: SignUpRequest) {
     try {
-      const response = await fetch(api.UserSignUp, {
+      const response = await fetch(url.userSignup, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -51,8 +51,7 @@ class AuthService {
 
   static async UserSignUp(body: SignupBody) {
     try {
-      console.log('jjhsljhvsbjlbdsljhbds', body);
-      const response = await fetch(api.UserSignUp, {
+      const response = await fetch(url.userSignup, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -65,16 +64,13 @@ class AuthService {
     }
   }
 
-  static async OtpVerification(Email: string, OTP?: string) {
+  static async OtpVerification(email: string, otp?: string) {
     try {
-      // const requestBody = OTP ? {Email, OTP} : {Email};
-      // const response = await Api.post<string | null>(
-      //   api.OtpVerification,
-      //   requestBody,
-      // );
-      Email = encodeURIComponent(Email);
-      const requestURL = OTP ? `${api.OtpVerification}?Email=${Email}&OTP=${OTP}` : `${api.OtpVerification}?Email=${Email}`;
-      const response = await Api.post<string | null>(requestURL, {});
+      const requestBody = otp ? {email, otp} : {email};
+      const response = await api.post<string | null>(
+        url.otpVerification,
+        requestBody,
+      );
       return response;
     } catch (error) {
       throw error;
@@ -83,7 +79,7 @@ class AuthService {
 
   static async GetUserByToken(token: string) {
     try {
-      const response = await Api.get<User>(api.GetUserByToken + token);
+      const response = await api.get<User>(`${url.users}?token=${token}`);
       return response;
     } catch (error) {
       throw error;
@@ -94,7 +90,7 @@ class AuthService {
     formData: SignUpRequest,
   ): Promise<Response<string>> {
     try {
-      const response = await fetch(api.RegisterSeller, {
+      const response = await fetch(url.RegisterSeller, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -105,66 +101,13 @@ class AuthService {
       if (response.ok) {
         return result;
       } else {
-        throw new Error(result.Message || 'An Error Ocured While signup');
+        throw new Error(result.message || 'An Error Ocured While signup');
       }
     } catch (error) {
       throw error;
     }
   }
 
-  static async VerifyOTP(
-    Email: string,
-    OTP: string,
-  ): Promise<Response<string>> {
-    try {
-      const response = await fetch(api.VerifyOTP, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({Email, OTP}),
-      });
-
-      const result: Response<string> = await response.json();
-
-      if (response.ok) {
-        return result;
-      } else {
-        throw new Error(
-          result.Message || 'An error occurred while validating the Register',
-        );
-      }
-    } catch (error) {
-      throw error;
-    }
-  }
-
-  static async verifyPassword(
-    email: string,
-    password: string,
-  ): Promise<Response<string>> {
-    try {
-      const response = await fetch(api.Login, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({email, password}),
-      });
-
-      const result: Response<string> = await response.json();
-
-      if (response.ok) {
-        return result;
-      } else {
-        throw new Error(
-          result.Message || 'An error occurred while validating the password',
-        );
-      }
-    } catch (error) {
-      throw new Error('Failed to verify password');
-    }
-  }
   // Store user data
   static async storeUserData(token: string): Promise<void> {
     try {

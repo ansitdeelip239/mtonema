@@ -112,7 +112,7 @@ const SearchProperty =  ({navigation}: HomeProps) => {
         pageSize: pagination.pageSize,
       });
       console.log('API Response:', response);
-      if (response.Success && response.data && response.data.propertyModels) {
+      if (response.success && response.data && response.data.propertyModels) {
         setSearchResults(response.data.propertyModels);
         setPagination({
           currentPage: response.data.responsePagingModel.CurrentPage,
@@ -168,7 +168,7 @@ const SearchProperty =  ({navigation}: HomeProps) => {
         pageSize: pagination.pageSize,
       });
 
-      if (response.Success && response.data && response.data.propertyModels) {
+      if (response.success && response.data && response.data.propertyModels) {
         setSearchResults(prev => [...prev, ...response.data.propertyModels]);
         setPagination({
           currentPage: response.data.responsePagingModel.CurrentPage,

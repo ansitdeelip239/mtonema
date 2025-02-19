@@ -113,7 +113,7 @@ const AddClientScreen: React.FC<Props> = ({navigation, route}) => {
         }
 
         const response = await PartnerService.addClient(validatedData);
-        if (response.Success) {
+        if (response.success) {
           Toast.show({
             type: 'success',
             text1: editMode

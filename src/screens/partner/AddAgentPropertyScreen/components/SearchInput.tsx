@@ -73,7 +73,7 @@ export const SearchInput = <T,>({
             searchType,
             query,
           );
-          if (response.Success && response.data && mounted.current) {
+          if (response.success && response.data && mounted.current) {
             setSearchData(response.data);
             const items = response.data
               .map((item: SearchIntellisenseResponse) =>
