@@ -1,8 +1,8 @@
 import {Response, SignUpRequest, User} from '../types';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import url from '../constants/api';
-import {SignupBody} from '../schema/SignUpFormSchema';
-import { api } from '../utils/api';
+import {SignupBody, SignupFormType} from '../schema/SignUpFormSchema';
+import {api} from '../utils/api';
 
 class AuthService {
   static async verifyLoginInput(
@@ -49,16 +49,24 @@ class AuthService {
     }
   }
 
-  static async UserSignUp(body: SignupBody) {
+  static async UserSignUp(
+    body: SignupBody,
+  ): Promise<Response<SignupFormType | null>> {
     try {
-      const response = await fetch(url.userSignup, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(body),
-      });
-      return response.json();
+      // const response = await fetch(url.userSignup, {
+      //   method: 'POST',
+      //   headers: {
+      //     'Content-Type': 'application/json',
+      //   },
+      //   body: JSON.stringify(body),
+      // });
+      // return response.json();
+
+      const response = await api.post<SignupFormType | null>(
+        url.userSignup,
+        body,
+      );
+      return response;
     } catch (error) {
       throw error;
     }

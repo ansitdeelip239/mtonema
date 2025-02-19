@@ -1,7 +1,7 @@
 import React from 'react';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import EmailScreen from '../screens/auth/EmailScreen';
-import SignUpScreen from '../screens/auth/SignUpScreen';
+import SignUpScreen from '../screens/auth/SignUpScreen2';
 import {MainScreen} from '../screens/auth/MainScreen';
 import PostProperty from '../screens/seller/PostPropertyScreen';
 import OtpScreen from '../screens/auth/OtpScreen';
@@ -11,12 +11,12 @@ export type AuthStackParamList = {
   EmailScreen: {role: string[]};
   SignUpScreen: {role: string};
   MainScreen: undefined;
-  ChangePasswordScreen: undefined;
+  // ChangePasswordScreen: undefined;
   PasswordScreen: {email: string};
   OtpScreen: {email: string ,isForgetPassword?:boolean} ;
   PostProperty: undefined;
   OtpModel: {email: string};
-  ForgetPassword: undefined;
+  // ForgetPassword: undefined;
 };
 
 const Stack = createNativeStackNavigator<AuthStackParamList>();

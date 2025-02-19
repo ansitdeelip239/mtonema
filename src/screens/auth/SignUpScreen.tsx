@@ -16,7 +16,7 @@ import {
 } from 'react-native';
 import {useAuth} from '../../hooks/useAuth';
 import {
-  apiSubmissionSchema,
+  signupSubmissionSchema,
   SignupBody,
   SignupFormType,
 } from '../../schema/SignUpFormSchema';
@@ -59,15 +59,15 @@ const SignUpScreen: React.FC<Props> = ({navigation, route}) => {
 
       // Convert formDataWithRole (with Role) to SignupBody using apiSubmissionSchema
       const signupBody: SignupBody =
-        apiSubmissionSchema(userrole).parse(formData);
+        signupSubmissionSchema(userrole).parse(formData);
 
       const response = await AuthService.UserSignUp(signupBody);
       console.log('API Response:', response);
 
       if (response.success && !emailExistMessage.includes(response.message)) {
-        await AuthService.OtpVerification(formData.Email);
+        await AuthService.OtpVerification(formData.email);
         setNavigateToPostProperty(true);
-        navigation.navigate('OtpScreen', {email: formData.Email});
+        navigation.navigate('OtpScreen', {email: formData.email});
       } else {
         showError(response.message);
       }

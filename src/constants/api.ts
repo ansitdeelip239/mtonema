@@ -32,7 +32,7 @@ export default {
   //updateprofile
   UpdateProfile: BASE_URL + '/User/UpdateUser',
 
-  //cloudnary
+  //cloudinary
   imageUpload: 'https://api.cloudinary.com/v1_1/dncrproperty-com/image/upload',
   videoUpload: 'https://api.cloudinary.com/v1_1/proplisting/video/upload',
 
