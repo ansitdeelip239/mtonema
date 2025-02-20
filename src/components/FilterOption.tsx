@@ -26,7 +26,7 @@ const FilterOption = ({
   const showLessButton = !showMoreButton && visibleLines > 1;
 
   const selectedOption = options.find(
-    option => option.MasterDetailName === selectedValue,
+    option => option.masterDetailName === selectedValue,
   );
   const visibleButtons = options.slice(0, visibleLines * buttonsPerLine);
 
@@ -41,25 +41,25 @@ const FilterOption = ({
       <View style={styles.chipContainer}>
         {finalVisibleButtons.map(option => (
           <Chip
-            key={option.ID}
-            selected={selectedValue === option.MasterDetailName}
-            onPress={() => onSelect(option.MasterDetailName)}
+            key={option.id}
+            selected={selectedValue === option.masterDetailName}
+            onPress={() => onSelect(option.masterDetailName)}
             style={[
               styles.chip,
-              selectedValue === option.MasterDetailName && styles.selectedChip,
+              selectedValue === option.masterDetailName && styles.selectedChip,
             ]}
             showSelectedCheck={false}
             selectedColor={Colors.PRIMARY_1}
             textStyle={
-              selectedValue === option.MasterDetailName
+              selectedValue === option.masterDetailName
                 ? styles.selectedText
                 : styles.chipText
             }
             mode={
-              selectedValue === option.MasterDetailName ? 'flat' : 'outlined'
+              selectedValue === option.masterDetailName ? 'flat' : 'outlined'
             }
             compact>
-            {option.MasterDetailName}
+            {option.masterDetailName}
           </Chip>
         ))}
 

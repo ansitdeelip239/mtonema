@@ -81,15 +81,15 @@ const AddActivityModal: React.FC<AddActivityModalProps> = ({
 
   const handleActivityTypeSelect = (value: string) => {
     const selectedOption = masterData?.ActivityType.find(
-      option => option.MasterDetailName === value,
+      option => option.masterDetailName === value,
     );
 
     setFormData(prev => ({
       ...prev,
       activityType:
-        prev.activityType === selectedOption?.ID
+        prev.activityType === selectedOption?.id
           ? null
-          : selectedOption?.ID ?? null,
+          : selectedOption?.id ?? null,
     }));
   };
 
@@ -137,8 +137,8 @@ const AddActivityModal: React.FC<AddActivityModalProps> = ({
             options={masterData?.ActivityType || []}
             selectedValue={
               masterData?.ActivityType.find(
-                option => option.ID === formData.activityType,
-              )?.MasterDetailName ?? null
+                option => option.id === formData.activityType,
+              )?.masterDetailName ?? null
             }
             onSelect={handleActivityTypeSelect}
           />

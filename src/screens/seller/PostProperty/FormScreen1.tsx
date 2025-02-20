@@ -68,13 +68,13 @@ const FormScreen1: React.FC<Props> = ({navigation}) => {
           {displayedChips?.map((item, index) => (
             <Chip
               key={index}
-              onPress={() => handleChipPress(key, item.ID)}
+              onPress={() => handleChipPress(key, item.id)}
               style={[
                 styles.chip,
-                formData[key] === item.ID && styles.selectedChip,
+                formData[key] === item.id && styles.selectedChip,
               ]}
-              textStyle={formData[key] === item.ID && styles.selectedChip}>
-              {item.MasterDetailName}
+              textStyle={formData[key] === item.id && styles.selectedChip}>
+              {item.masterDetailName}
             </Chip>
           ))}
           {data.length > initialChipsToShow && (

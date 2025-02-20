@@ -54,7 +54,7 @@ const HomeScreen: React.FC<Props> = ({navigation}) => {
       const response = await PartnerService.getAgentImportData(
         1,
         20,
-        user?.Email || '',
+        user?.email || '',
         '',
         '',
         '',
@@ -66,12 +66,12 @@ const HomeScreen: React.FC<Props> = ({navigation}) => {
     } catch (error) {
       console.error(error);
     }
-  }, [user?.Email]);
+  }, [user?.email]);
 
   const fetchPartnerProperty = useCallback(async () => {
     try {
       const response = await PartnerService.getPartnerProperty(
-        user?.Email || '',
+        user?.email || '',
         1,
         20,
       );
@@ -81,7 +81,7 @@ const HomeScreen: React.FC<Props> = ({navigation}) => {
     } catch (error) {
       console.error(error);
     }
-  }, [user?.Email]);
+  }, [user?.email]);
 
   const onRefresh = useCallback(async () => {
     setRefreshing(true);

@@ -54,12 +54,14 @@ export const MaterialTextInput = <T,>({
 
   const renderRight = () => {
     if (loading) {
+      // eslint-disable-next-line react/no-unstable-nested-components
       return <TextInput.Icon icon={() => <ActivityIndicator size={20} />} />;
     }
     if (rightComponent) {
       return <TextInput.Affix text={rightComponent as string} />;
     }
     if (formInput[field]) {
+      // eslint-disable-next-line react/no-unstable-nested-components
       return <TextInput.Icon icon={() => <CrossButton />} />;
     }
     return null;
@@ -133,7 +135,7 @@ export const MaterialTextInput = <T,>({
                 style={styles.suggestionItem}
                 activeOpacity={0.7}
                 onPress={() => handleSuggestionPress(suggestion)}>
-                <Text style={{color: 'black'}}>{suggestion}</Text>
+                <Text style={styles.suggestionText}>{suggestion}</Text>
               </TouchableOpacity>
             ))}
           </ScrollView>
@@ -189,5 +191,8 @@ const styles = StyleSheet.create({
     padding: 10,
     borderBottomWidth: 1,
     borderBottomColor: '#eee',
+  },
+  suggestionText: {
+    color: 'black',
   },
 });

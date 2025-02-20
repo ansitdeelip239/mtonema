@@ -11,6 +11,7 @@ import React, {useEffect, useState} from 'react';
 import {DrawerNavigationProp} from '@react-navigation/drawer';
 import {useBuyer} from '../../context/BuyerProvider';
 import {useAuth} from '../../hooks/useAuth';
+import Images from '../../constants/Images';
 
 type HomeProps = {
   navigation: DrawerNavigationProp<any>;
@@ -43,19 +44,16 @@ const Home = ({navigation}: HomeProps) => {
 
   return (
     <ImageBackground
-      source={require('../../assets/Images/bgimg1.png')}
+      source={Images.BACKGROUND_IMAGE}
       style={styles.backgroundImage}
       resizeMode="cover">
       <View style={styles.container}>
         {/* Top Bar with Icon and Text */}
         <View style={styles.topBar}>
           <TouchableOpacity onPress={() => navigation.toggleDrawer()}>
-            <Image
-              source={require('../../assets/Images/menu.png')}
-              style={styles.menuIcon}
-            />
+            <Image source={Images.MENU} style={styles.menuIcon} />
           </TouchableOpacity>
-          <Text style={styles.userName}>{user?.Name || 'Demo Buyer'}</Text>
+          <Text style={styles.userName}>{user?.name}</Text>
         </View>
 
         {/* Card for Recommended Property */}
@@ -109,7 +107,7 @@ const styles = StyleSheet.create({
   topBar: {
     position: 'absolute',
     top: 20,
-    borderRadius:15,
+    borderRadius: 15,
     width: '95%', // 90% width
     alignSelf: 'center', // Center the top bar
     marginHorizontal: '5%', // 5% space on both sides

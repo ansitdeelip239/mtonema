@@ -122,15 +122,15 @@ const isFormValid = () => {
               key={index}
               style={[
                 styles.optionButton,
-                formData[key] === item.ID && styles.selectedOption,
+                formData[key] === item.id && styles.selectedOption,
               ]}
-              onPress={() => handleOptionPress(key, item.ID)}>
+              onPress={() => handleOptionPress(key, item.id)}>
               <Text
                 style={[
                   styles.optionText,
-                  formData[key] === item.ID && styles.selectedOptionText,
+                  formData[key] === item.id && styles.selectedOptionText,
                 ]}>
-                {item.MasterDetailName}
+                {item.masterDetailName}
               </Text>
             </TouchableOpacity>
           ))}
@@ -373,9 +373,9 @@ const isFormValid = () => {
   const getFieldsToShow = () => {
     const selectedPropertyId = formData.PropertyType;
     const selectedProperty = masterData?.PropertyType?.find(
-      item => item.ID === selectedPropertyId,
+      item => item.id === selectedPropertyId,
     );
-    const propertyTypeName = selectedProperty?.MasterDetailName || '';
+    const propertyTypeName = selectedProperty?.masterDetailName || '';
 
     console.log('Selected Property Name:', propertyTypeName);
     const fields = propertyTypeFields[propertyTypeName as PropertyType] ?? [];

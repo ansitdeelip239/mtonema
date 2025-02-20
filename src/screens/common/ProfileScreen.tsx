@@ -202,15 +202,14 @@ const ProfileScreen = () => {
         return;
       }
 
-      const response = await AuthService.GetUserByToken(token);
+      const response = await AuthService.getUserByToken(token);
       if (response?.data) {
         setUserData(prevData => ({
           ...prevData,
-          name: response.data.Name || '',
-          email: response.data.Email || '',
-          password: response.data.Password || '',
-          mobile: response.data.Phone || '',
-          location: response.data.Location || '',
+          name: response.data.name || '',
+          email: response.data.email || '',
+          mobile: response.data.phone || '',
+          location: response.data.location || '',
         }));
       }
     } catch (error) {
@@ -267,7 +266,7 @@ const ProfileScreen = () => {
         Phone: userData.mobile,
         password: userData.password,
         Location: userData.location,
-        ID: user?.ID,
+        ID: user?.id,
         CreatedBy: null,
         CreatedOn: null,
         Role: null,

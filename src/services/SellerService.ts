@@ -5,7 +5,6 @@ import {api} from '../utils/api';
 class SellerService {
   static async addProperty(body: PropertyFormData) {
     try {
-      console.log('********Seeelerererererererererer',body);
       const response = await api.post<null>(`${url.AddProperty}`, body);
       return response;
     } catch (error) {

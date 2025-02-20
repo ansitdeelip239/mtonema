@@ -30,7 +30,7 @@ const EnquiryButton = ({
     setLoading(true); // Start loader
     try {
       const request = {
-        UserID: user?.ID,
+        UserID: user?.id,
         PropertyID: property.ID,
       };
       const response = await api.post(`${url.ContactProperty}`, request);

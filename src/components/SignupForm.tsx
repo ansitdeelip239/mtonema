@@ -26,10 +26,10 @@ const SignupForm = ({
   loading: boolean;
 }) => {
   const [sellerData, setSellerData] = useState<SignupFormType>({
-    Name: '',
-    Email: '',
-    Phone: '',
-    Location: '',
+    name: '',
+    email: '',
+    phone: '',
+    location: '',
   });
 
   const [errors, setErrors] = useState({
@@ -95,25 +95,25 @@ const SignupForm = ({
   const onSignUp = () => {
     // Validate all fields before submission
     const newErrors = {
-      Name: !sellerData.Name.trim()
+      Name: !sellerData.name.trim()
         ? 'Name is required'
-        : !validateName(sellerData.Name)
+        : !validateName(sellerData.name)
         ? 'Name contains invalid characters'
         : '',
-      Email: !sellerData.Email.trim()
+      Email: !sellerData.email.trim()
         ? 'Email is required'
-        : !validateEmail(sellerData.Email)
+        : !validateEmail(sellerData.email)
         ? 'Invalid email address'
         : '',
       Phone:
-        sellerData.Phone === ''
+        sellerData.phone === ''
           ? 'Phone is required'
-          : !validatePhone(sellerData.Phone)
+          : !validatePhone(sellerData.phone)
           ? 'Invalid phone number'
           : '',
-      Location: !sellerData.Location.trim()
+      Location: !sellerData.location.trim()
         ? ''
-        : !validateLocation(sellerData.Location)
+        : !validateLocation(sellerData.location)
         ? 'Invalid location'
         : '',
     };
@@ -130,7 +130,7 @@ const SignupForm = ({
     // Prepare data for submission
     const formDataToSubmit = {
       ...sellerData,
-      Phone: sellerData.Phone,
+      Phone: sellerData.phone,
     };
 
     // Submit form
@@ -145,7 +145,7 @@ const SignupForm = ({
       <View style={styles.inputGroup}>
         <TextInput
           label="Name"
-          value={sellerData.Name}
+          value={sellerData.name}
           onChangeText={text => handleInputChange('Name', text)}
           mode="outlined"
           error={!!errors.Name}
@@ -159,7 +159,7 @@ const SignupForm = ({
             },
           }}
           right={
-            sellerData.Name !== '' && (
+            sellerData.name !== '' && (
               <TextInput.Icon
                 // eslint-disable-next-line react/no-unstable-nested-components
                 icon={() => (
@@ -182,7 +182,7 @@ const SignupForm = ({
       <View style={styles.inputGroup}>
         <TextInput
           label="Email"
-          value={sellerData.Email}
+          value={sellerData.email}
           onChangeText={text => handleInputChange('Email', text)}
           mode="outlined"
           keyboardType="email-address"
@@ -197,7 +197,7 @@ const SignupForm = ({
             },
           }}
           right={
-            sellerData.Email !== '' && (
+            sellerData.email !== '' && (
               <TextInput.Icon
                 // eslint-disable-next-line react/no-unstable-nested-components
                 icon={() => (
@@ -237,7 +237,7 @@ const SignupForm = ({
           </View>
           <TextInput
             label="Mobile"
-            value={sellerData.Phone}
+            value={sellerData.phone}
             onChangeText={text => handleInputChange('Phone', text)}
             mode="outlined"
             keyboardType="number-pad"
@@ -255,7 +255,7 @@ const SignupForm = ({
               },
             }}
             right={
-              sellerData.Phone.length > 0 && (
+              sellerData.phone.length > 0 && (
                 <TextInput.Icon
                   // eslint-disable-next-line react/no-unstable-nested-components
                   icon={() => (
@@ -307,8 +307,8 @@ const styles = StyleSheet.create({
     marginBottom: 35,
   },
   buttonLabel: {
-    fontSize: 18, // Increase font size
-    fontWeight: 'bold', // Apply font weight
+    fontSize: 18,
+    fontWeight: 'bold',
   },
   crossicon: {
     width: 24,
@@ -357,7 +357,7 @@ const styles = StyleSheet.create({
   phoneInput: {
     flex: 1,
     backgroundColor: '#f0f0f0',
-    paddingLeft: 52, // Adjust to make space for flag and country code
+    paddingLeft: 52,
   },
   crossIcon: {
     width: 20,

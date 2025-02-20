@@ -24,7 +24,7 @@ const PropertyListScreen: React.FC<Props> = ({navigation}) => {
         throw new Error('User not authenticated');
       }
       const response = await api.get<any>(
-        `${url.GetProperty}?id=${user.ID}&pageNumber=${page}&pageSize=10`,
+        `${url.GetProperty}?id=${user.id}&pageNumber=${page}&pageSize=10`,
       );
       return response;
     },

@@ -64,7 +64,7 @@ const AgentDataScreen: React.FC<Props> = ({navigation}) => {
         const response = await PartnerService.getAgentImportData(
           page,
           PAGE_SIZE,
-          user?.Email || '',
+          user?.email || '',
           searchQuery,
           filters.propertyLocation || '',
           filters.propertyType || '',
@@ -104,7 +104,7 @@ const AgentDataScreen: React.FC<Props> = ({navigation}) => {
         setIsRefreshing(false);
       }
     },
-    [user?.Email, searchQuery, filters, DEFAULT_PAGING_MODEL],
+    [user?.email, searchQuery, filters, DEFAULT_PAGING_MODEL],
   );
 
   useEffect(() => {
@@ -123,7 +123,7 @@ const AgentDataScreen: React.FC<Props> = ({navigation}) => {
 
   useEffect(() => {
     fetchAgentData(1, true);
-  }, [user?.Email, fetchAgentData, agentPropertyUpdated]);
+  }, [user?.email, fetchAgentData, agentPropertyUpdated]);
 
   const handleRefresh = useCallback(() => {
     setIsRefreshing(true);

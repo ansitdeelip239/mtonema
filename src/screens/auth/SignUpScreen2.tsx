@@ -25,6 +25,7 @@ import AuthService from '../../services/AuthService';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import Roles, {RoleTypes} from '../../constants/Roles';
 import {AuthStackParamList} from '../../navigator/AuthNavigator';
+import Images from '../../constants/Images';
 
 type Props = NativeStackScreenProps<AuthStackParamList, 'SignUpScreen'>;
 
@@ -125,7 +126,7 @@ const SignUpScreen: React.FC<Props> = ({navigation, route}) => {
             showsVerticalScrollIndicator={false}>
             <View style={styles.logoContainer}>
               <Image
-                source={require('../../assets/Images/dncr_pink.png')}
+                source={Images.DNCR_LOGO}
                 style={styles.image}
                 resizeMode="contain"
               />

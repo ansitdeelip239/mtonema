@@ -58,7 +58,7 @@ const CustomDrawerContent = (props: any) => {
             source={require('../assets/Images/dncrlogo.png')}
             style={styles.logo}
           />
-          <Text style={styles.name}>{user?.Name}</Text>
+          <Text style={styles.name}>{user?.name}</Text>
         </View>
       </TouchableOpacity>
 
@@ -168,8 +168,8 @@ const styles = StyleSheet.create({
     color: Colors.main,
   },
   profileContainer: {
-    alignItems: 'center', // Center align items horizontally
-    justifyContent: 'center', // Center align items vertically
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   logouttxt: {
     color: '#fff',
@@ -179,15 +179,15 @@ const styles = StyleSheet.create({
   name: {
     fontSize: 18,
     fontWeight: 'bold',
-    marginTop: 1, // Space between image and text
-    textAlign: 'center', // Center align text
-    marginBottom: 50, // Space between image and text
+    marginTop: 1,
+    textAlign: 'center',
+    marginBottom: 50,
   },
   logo: {
     width: '90%',
     height: 150,
-    resizeMode: 'contain', // Ensure the image scales properly
-    alignSelf: 'center', // Center align image
+    resizeMode: 'contain',
+    alignSelf: 'center',
   },
   flexGrow: {
     flex: 1,
@@ -199,15 +199,9 @@ const styles = StyleSheet.create({
     paddingVertical: 2,
     marginLeft: 20,
     borderRadius: 50,
-    width:'70%',
+    width: '70%',
     alignItems: 'center',
   },
-  // name: {
-  //   fontSize: 16,
-  //   top: 155,
-  //   left: '38%',
-  //   fontWeight: 'bold',
-  // },
 
   textWhite: {
     color: 'white',
@@ -219,15 +213,6 @@ const styles = StyleSheet.create({
   p15: {
     padding: 16,
   },
-  // logo: {
-  //   width: '80%',
-  //   height: 120,
-  //   margin: 1,
-  //   // resizeMode: 'contain',
-  //   alignSelf: 'center',
-  //   marginBottom: 70,
-  // },
-
   modalContainer: {
     flex: 1,
     justifyContent: 'center',
@@ -250,7 +235,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.5)', // Dim background
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
   },
   loadingText: {
     marginTop: 10,

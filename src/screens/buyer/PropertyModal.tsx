@@ -277,12 +277,12 @@ const PropertyModal = ({
         </View>
 
         {/* Enquiry Now Button */}
-        {user?.Role === Roles.BUYER && isRecommended ? (
+        {user?.role === Roles.BUYER && isRecommended ? (
           <View style={styles.buttonContainer}>
             <EnquiryButton property={property} />
           </View>
         ) : null}
-        {user?.Role === Roles.SELLER ? (
+        {user?.role === Roles.SELLER ? (
           <>
             <View style={styles.buttonContainer1}>
               <TouchableOpacity onPress={handleDeleteConfirmation}>

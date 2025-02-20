@@ -130,7 +130,7 @@ const AddAgentPropertyScreen: React.FC<Props> = ({navigation, route}) => {
           Status: 1,
           Id: editMode && propertyData ? propertyData.Id : 0,
           PriceUnit: null,
-          EmailId: user?.Email || '',
+          EmailId: user?.email || '',
         };
 
         const response = await PartnerService.updateAgentProperty(request);

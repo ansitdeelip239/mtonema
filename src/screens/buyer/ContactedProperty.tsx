@@ -46,7 +46,7 @@ const ContactedProperty = ({navigation}: HomeProps) => {
     setPageNo(1);
     setProperties([]);
     setHasMore(true);
-  }, [user?.ID]);
+  }, [user?.id]);
 
   const handlePropertyPress = (property: PropertyModel) => {
     setSelectedProperty(property);
@@ -84,13 +84,13 @@ const ContactedProperty = ({navigation}: HomeProps) => {
         };
 
         // Check if user exists
-        if (!user?.ID) {
+        if (!user?.id) {
           throw new Error('User ID is required');
         }
 
         // Make the API call
         const response = await api.post<any>(
-          `${url.getListOfContactedProperty}?pageNumber=${pageNumber}&pageSize=${pageSize}&id=${user.ID}`,
+          `${url.getListOfContactedProperty}?pageNumber=${pageNumber}&pageSize=${pageSize}&id=${user.id}`,
           requestBody,
         );
 
@@ -130,7 +130,7 @@ const ContactedProperty = ({navigation}: HomeProps) => {
         setIsFetchingMore(false);
       }
     },
-    [isFetchingMore, user?.ID, pageSize],
+    [isFetchingMore, user?.id, pageSize],
   );
 
   const onRefresh = useCallback(() => {
@@ -143,10 +143,10 @@ const ContactedProperty = ({navigation}: HomeProps) => {
 
   // Fetch properties when page changes
   useEffect(() => {
-    if (user?.ID) {
+    if (user?.id) {
       getcontactedProperty(pageNo, pageSize);
     }
-  }, [pageNo, user?.ID, isFetchingMore, dataUpdated, getcontactedProperty]);
+  }, [pageNo, user?.id, isFetchingMore, dataUpdated, getcontactedProperty]);
 
   const loadMore = () => {
     if (hasMore && !isFetchingMore && !loading) {
@@ -160,7 +160,7 @@ const ContactedProperty = ({navigation}: HomeProps) => {
         {/* Display the first image if available */}
         {item.ImageURL && item.ImageURL.length > 0 && (
           <Image
-            source={{ uri: item.ImageURL[0].ImageUrl }} // Dynamically load the first image
+            source={{ uri: item.ImageURL[0].ImageUrl }}
             style={styles.propertyImage}
             resizeMode="cover"
           />

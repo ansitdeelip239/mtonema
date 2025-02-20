@@ -29,9 +29,9 @@ const FilterModal = ({
 
     // Transform string[] to MasterDetailModel[]
     return uniqueLocations.map((location, index) => ({
-      ID: index + 1,
+      id: index + 1,
+      masterDetailName: location,
       MasterID: 0,
-      MasterDetailName: location,
       CreatedOn: null,
       UpdatedOn: null,
       CreatedBy: null,

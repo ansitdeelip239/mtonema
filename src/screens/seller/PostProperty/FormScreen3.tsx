@@ -168,10 +168,10 @@ const removeImage = (imageId: string) => {
     try {
       const finalFormData = {
         ...formData,
-        SellerEmail: user?.Email ?? null,
-        SellerPhone: user?.Phone ?? null,
-        SellerName: user?.Name ?? null,
-        UserId: user?.ID.toString() ?? null,
+        SellerEmail: user?.email ?? null,
+        SellerPhone: user?.phone ?? null,
+        SellerName: user?.name ?? null,
+        UserId: user?.id.toString() ?? null,
       };
 
       let response;

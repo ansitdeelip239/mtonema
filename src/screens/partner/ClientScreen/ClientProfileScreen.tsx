@@ -175,7 +175,7 @@ const ClientProfileScreen: React.FC<Props> = ({route, navigation}) => {
         type,
         route.params.clientId.toString(),
         description,
-        user?.Email as string,
+        user?.email as string,
         activityId,
       );
 

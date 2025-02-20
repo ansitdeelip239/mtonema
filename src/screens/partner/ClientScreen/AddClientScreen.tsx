@@ -50,7 +50,7 @@ const AddClientScreen: React.FC<Props> = ({navigation, route}) => {
         EmailId: clientData.EmailId || '',
         Notes: clientData.Notes || '',
         Groups: clientData.Groups?.map(group => group.ID) || [],
-        PartnerId: user?.Email ?? '',
+        PartnerId: user?.email ?? '',
       };
     }
 
@@ -62,7 +62,7 @@ const AddClientScreen: React.FC<Props> = ({navigation, route}) => {
       EmailId: '',
       Notes: '',
       Groups: [],
-      PartnerId: user?.Email ?? '',
+      PartnerId: user?.email ?? '',
     };
   }, [editMode, clientData, user]);
 
