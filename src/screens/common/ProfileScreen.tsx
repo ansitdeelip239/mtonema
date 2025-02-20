@@ -20,7 +20,7 @@ import GetIcon from '../../components/GetIcon';
 import Colors from '../../constants/Colors';
 import AuthService from '../../services/AuthService';
 
-type FieldName = 'name' | 'email' | 'password' | 'mobile' | 'location';
+type FieldName = 'name' | 'email' | 'mobile' | 'location';
 type EditableFields = Record<FieldName, boolean>;
 
 interface UserData {
@@ -69,7 +69,6 @@ const ProfileField = React.memo(
     setEditMode,
     setUserData,
     showPassword,
-    setShowPassword,
   }: ProfileFieldProps) => {
     const handleEditPress = () => {
       setEditMode(prev => {
@@ -114,24 +113,6 @@ const ProfileField = React.memo(
             autoCapitalize={field === 'email' ? 'none' : 'sentences'}
             autoCorrect={false}
           />
-          {field === 'password' && (
-            <TouchableOpacity
-              onPress={() => {
-                if (setShowPassword) {
-                  setShowPassword(!showPassword);
-                }
-              }}
-              style={styles.iconButton}>
-              <Image
-                source={
-                  showPassword
-                    ? require('../../assets/Icon/eye.png')
-                    : require('../../assets/Icon/eye-slash.png')
-                }
-                style={styles.icon}
-              />
-            </TouchableOpacity>
-          )}
           <TouchableOpacity onPress={handleEditPress} style={styles.iconButton}>
             <Image
               source={require('../../assets/Icon/Edit.png')}
@@ -148,12 +129,10 @@ const ProfileScreen = () => {
   const {user, logout} = useAuth();
   const [isLoading, setIsLoading] = useState(false);
   const [showLogoutModal, setShowLogoutModal] = useState(false);
-  const [showPassword, setShowPassword] = useState(false);
   const [userData, setUserData] = useState<UserData>(INITIAL_USER_DATA);
   const [editMode, setEditMode] = useState<EditableFields>({
     name: false,
     email: false,
-    password: false,
     mobile: false,
     location: false,
   });
@@ -161,7 +140,6 @@ const ProfileScreen = () => {
   // Refs for TextInput fields
   const nameInputRef = useRef<TextInput>(null);
   const emailInputRef = useRef<TextInput>(null);
-  const passwordInputRef = useRef<TextInput>(null);
   const mobileInputRef = useRef<TextInput>(null);
   const locationInputRef = useRef<TextInput>(null);
 
@@ -173,10 +151,6 @@ const ProfileScreen = () => {
   const validateMobile = (mobile: string): boolean => {
     const mobileRegex = /^\d{10}$/;
     return mobileRegex.test(mobile);
-  };
-
-  const validatePassword = (password: string): boolean => {
-    return password.length >= 6;
   };
 
   const showToast = useCallback(
@@ -235,11 +209,6 @@ const ProfileScreen = () => {
       return false;
     }
 
-    if (editMode.password && !validatePassword(userData.password)) {
-      showToast('error', 'Password must be at least 6 characters long');
-      return false;
-    }
-
     if (!validateMobile(userData.mobile)) {
       showToast('error', 'Please enter a valid 10-digit mobile number');
       return false;
@@ -280,7 +249,6 @@ const ProfileScreen = () => {
         setEditMode({
           name: false,
           email: false,
-          password: false,
           mobile: false,
           location: false,
         });
@@ -345,18 +313,6 @@ const ProfileScreen = () => {
           editMode={editMode}
           setEditMode={setEditMode}
           setUserData={setUserData}
-        />
-        <ProfileField
-          label="Password"
-          field="password"
-          value={userData.password}
-          secureTextEntry
-          inputRef={passwordInputRef}
-          editMode={editMode}
-          setEditMode={setEditMode}
-          setUserData={setUserData}
-          showPassword={showPassword}
-          setShowPassword={setShowPassword}
         />
         <ProfileField
           label="Mobile"
@@ -495,9 +451,9 @@ const styles = StyleSheet.create({
   },
   button: {
     marginTop: 16,
-    padding: 15,
+    padding: 12,
     backgroundColor: '#fff',
-    color:'black',
+    color: 'black',
     borderRadius: 10,
     alignItems: 'center',
     elevation: 3,
@@ -508,8 +464,9 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     color: '#fff',
-    fontSize: 16,
+    fontSize: 14,
     fontWeight: 'bold',
+    lineHeight: 16,
   },
   savebuttonText: {
     color: Colors.main,
@@ -520,7 +477,7 @@ const styles = StyleSheet.create({
     marginTop: 16,
     padding: 15,
     backgroundColor: '#fff',
-    color:'black',
+    color: 'black',
     borderRadius: 10,
     alignItems: 'center',
     elevation: 3,
@@ -534,11 +491,15 @@ const styles = StyleSheet.create({
     backgroundColor: '#cc0e74',
     marginTop: 16,
     marginBottom: 20,
-    flex: 1,
+    paddingVertical: 8,
+    paddingHorizontal: 16,
+    alignSelf: 'center',
     flexDirection: 'row',
-    textAlign: 'center',
     justifyContent: 'center',
-    gap: 10,
+    alignItems: 'center',
+    gap: 8,
+    width: '100%',
+    minHeight: 40,
   },
   modalContainer: {
     flex: 1,

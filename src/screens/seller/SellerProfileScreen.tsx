@@ -6,8 +6,8 @@ import Header from '../../components/Header';
 const SellerProfileScreen = () => {
   return (
     <View style={styles.container}>
-        <Header title="User Profile"/>
-      <ProfileScreen/>
+      <Header title="User Profile" />
+      <ProfileScreen />
     </View>
   );
 };
@@ -15,8 +15,8 @@ const SellerProfileScreen = () => {
 export default SellerProfileScreen;
 
 const styles = StyleSheet.create({
-    container:{
-        flex:1,
+  container: {
+    flex: 1,
     paddingBottom: 80,
-    },
+  },
 });
