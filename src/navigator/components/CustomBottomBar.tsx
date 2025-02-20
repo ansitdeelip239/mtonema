@@ -158,7 +158,7 @@ const styles = StyleSheet.create({
   bottomBar: {
     backgroundColor: 'white',
     borderRadius: 16,
-    elevation: 15,
+    elevation: 5,
     height: 80,
     flexDirection: 'row',
     alignItems: 'center',
@@ -202,7 +202,8 @@ const styles = StyleSheet.create({
     // borderRadius: 24,
     justifyContent: 'center',
     alignItems: 'center',
-    borderRadius: '50%',
+    borderRadius: 50,
+    elevation: 5,
     height: 50,
     width: 50,
   },
