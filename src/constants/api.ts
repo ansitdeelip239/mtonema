@@ -10,7 +10,7 @@ export default {
   userSignup: BASE_URL + '/account/user-signup',
   otpVerification: BASE_URL + '/account/otp-verification',
 
-  ValidateEmail: BASE_URL + '/User/varifyUserbyEmail?email=',  //Need to update
+  ValidateEmail: BASE_URL + '/account/check-email',  //Need to update
 
   //Users
   users: BASE_URL + '/users',
@@ -38,7 +38,7 @@ export default {
 
   //Master Detail
   // getMasterDetail: BASE_URL + '/MasterDetail/getMasterDetailsByMasterName?MasterDetailName=',
-  getMasterDetail: BASE_URL + '/MasterDetail?masterName=',
+  getMasterDetail: BASE_URL + '/master-details',
   getPlaces: BASE_URL + '/MasterDetail/getgoogleplaces',
   deleteUser: BASE_URL + '/User/DeleteUserByUserId',
   searchIntellisense: BASE_URL + '/MasterDetail/SearchIntelligence',

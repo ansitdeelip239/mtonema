@@ -49,18 +49,18 @@ const EmailScreen: React.FC<Props> = ({navigation, route}) => {
           return false;
         }
 
-        if (response && !role.includes(response.data?.Role as string)) {
+        if (response && !role.includes(response.data?.userType as string)) {
           showError('Email not found');
           return false;
         }
 
-        if (response && response.data?.Status === 2) {
-          setEmailError({
-            message: 'Email is not verified. Click Verify Now to proceed.',
-            isClickable: true,
-          });
-          return false;
-        }
+        // if (response && response.data?. === 2) {
+        //   setEmailError({
+        //     message: 'Email is not verified. Click Verify Now to proceed.',
+        //     isClickable: true,
+        //   });
+        //   return false;
+        // }
 
         return true;
       } catch (error) {
@@ -89,12 +89,11 @@ const EmailScreen: React.FC<Props> = ({navigation, route}) => {
           const isValidEmail = await checkEmail(email);
 
           if (!isValidEmail) {
-            //Temporarily disabled for email restriction
-            // return;
+            return;
           }
         }
 
-        const response = await AuthService.OtpVerification(email);
+        const response = await AuthService.otpVerification(email);
         if (response.success) {
           console.log('API Response:', response);
 

@@ -61,11 +61,11 @@ const SignUpScreen: React.FC<Props> = ({navigation, route}) => {
       const signupBody: SignupBody =
         signupSubmissionSchema(userrole).parse(formData);
 
-      const response = await AuthService.UserSignUp(signupBody);
+      const response = await AuthService.userSignUp(signupBody);
       console.log('API Response:', response);
 
       if (response.success && !emailExistMessage.includes(response.message)) {
-        await AuthService.OtpVerification(formData.email);
+        await AuthService.otpVerification(formData.email);
         setNavigateToPostProperty(true);
         navigation.navigate('OtpScreen', {email: formData.email});
       } else {

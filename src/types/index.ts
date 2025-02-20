@@ -14,32 +14,18 @@ export interface AuthContextType {
   setNavigateToPostProperty: (value: boolean) => void;
 }
 
-export interface Response<T> {
-  success: boolean;
-  message: string;
-  data: T;
-  httpStatus: number;
-}
-
 export interface User {
-  ID: number;
-  Name: string;
-  Email: string;
-  Password: string;
-  Location: string;
-  Phone: string;
-  Role: string;
-  Token: string;
-  CreatedOn: Date | null;
-  UpdatedOn: Date | null;
-  CreatedBy: string | null;
-  UpdatedBy: string | null;
-  Status: number;
-  varificationlink: string | null;
-  LogoPath: string;
-  ColorTheme: string;
-  PropertyListed: number;
-  sellerStatus: string | null;
+  id: number;
+  name: string;
+  email: string;
+  location: string;
+  phone: string;
+  role: string;
+  createdOn: string;
+  createdBy: string;
+  updatedOn: string;
+  updatedBy: string;
+  recordStatus: number;
 }
 
 export interface Response<T> {
@@ -129,20 +115,10 @@ export interface PropertyModel {
   PropertyLocation?: string;
   propertyModels?: any[];
 }
-export interface SignUpRequest {
-  Name: string;
-  Email: string;
-  Location: string;
-  Phone: string;
-  Password?: string;
-  TermsChecked?: boolean;
-  URL?: string;
-  Role:string;
-}
 
 export interface MasterDetailModel {
-  MasterDetailName: string;
-  ID: number;
+  masterDetailName: string;
+  id: number;
 }
 
 export interface AgentData {

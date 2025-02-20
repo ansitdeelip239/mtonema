@@ -75,10 +75,10 @@ const SignUpScreen: React.FC<Props> = ({navigation, route}) => {
         const validatedData = SignUpFormSchema.parse(formData);
         const signupData = signupSubmissionSchema(role).parse(validatedData);
 
-        const response = await AuthService.UserSignUp(signupData);
+        const response = await AuthService.userSignUp(signupData);
 
         if (response.success || response.httpStatus === 409) {
-          await AuthService.OtpVerification(formData.email);
+          await AuthService.otpVerification(formData.email);
           navigation.navigate('OtpScreen', {email: formData.email});
         } else {
           showError(response.message);

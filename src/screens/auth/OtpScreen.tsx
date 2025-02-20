@@ -23,11 +23,11 @@ const OtpScreen: React.FC<Props> = ({route}) => {
 
     try {
       setIsLoading(true);
-      const response = await AuthService.OtpVerification(email, OTP);
+      const response = await AuthService.otpVerification(email, OTP);
 
       if (response.success) {
         if (response.data) {
-          const userResponse = await AuthService.GetUserByToken(response.data);
+          const userResponse = await AuthService.getUserByToken(response.data);
           await storeUser(userResponse.data);
         }
 

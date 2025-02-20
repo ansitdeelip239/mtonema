@@ -1,11 +1,11 @@
-import url1 from '../constants/api';
 import {SearchIntellisenseResponse} from '../types';
 import {api} from '../utils/api';
+import url from '../constants/api';
 
 class MasterService {
   static async getMasterDetails(masterName: string) {
     try {
-      const response = await api.get<any>(url1.getMasterDetail + masterName);
+      const response = await api.get<any>(`${url.getMasterDetail}?masterName=${masterName}`);
       return response;
     } catch (error) {
       console.error('Error in getMasterDetails', error);
@@ -16,7 +16,7 @@ class MasterService {
   static async searchIntellisense(searchType: string, searchKey: string) {
     try {
       const response = await api.get<SearchIntellisenseResponse[]>(
-        `${url1.searchIntellisense}?searchType=${searchType}&searchKey=${searchKey}`,
+        `${url.searchIntellisense}?searchType=${searchType}&searchKey=${searchKey}`,
       );
       return response;
     } catch (error) {

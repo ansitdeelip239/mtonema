@@ -56,9 +56,9 @@ export const PropertyFormProvider: React.FC<{children: React.ReactNode}> = ({
     PropertyForType: null,
     PropertyType: null,
     Rate: null,
-    SellerEmail: user?.Email || '',
-    SellerName: user?.Name || '',
-    SellerPhone: user?.Phone || '',
+    SellerEmail: user?.email || '',
+    SellerName: user?.name || '',
+    SellerPhone: user?.phone || '',
     SellerType: null,
     ShortDiscription: null,
     Size: null,
@@ -67,7 +67,7 @@ export const PropertyFormProvider: React.FC<{children: React.ReactNode}> = ({
     SurveillanceCameras: null,
     Tag: null,
     Tags: [],
-    UserId: user?.ID.toString() || '',
+    UserId: user?.id.toString() || '',
     VideoURL: null,
     ZipCode: null,
     CarParking: null,
@@ -127,29 +127,28 @@ export const PropertyFormProvider: React.FC<{children: React.ReactNode}> = ({
           SellerName: property.SellerName || '',
           SellerPhone: property.SellerPhone || '',
           SellerType: property.SellerType?.ID || null,
-          UserId: property.UserId?.toString() || user?.ID?.toString() || '',
-          readyToMove:property.readyToMove,
-          Lifts:property.Lifts || null,
-          Pantry:property.Pantry || null,
-          floor:property.floor || null,
+          UserId: property.UserId?.toString() || user?.id?.toString() || '',
+          readyToMove: property.readyToMove,
+          Lifts: property.Lifts || null,
+          Pantry: property.Pantry || null,
+          floor: property.floor || null,
           Parking: property.Parking?.toString() || null,
-          ZipCode:property.ZipCode || null,
-          PropertyForType:property.PropertyForType || null,
+          ZipCode: property.ZipCode || null,
+          PropertyForType: property.PropertyForType || null,
           Price: property.Price?.toString() || null,
           locality: property.Locality || null,
           Status: property.Status || null,
           Tags: Array.isArray(property.Tags) ? property.Tags : [],
-          PropertyAge:property.PropertyAge || null,
-          GatedSecurity:property.GatedSecurity || null,
-          SurveillanceCameras:property.SurveillanceCameras || null,
-          ConstructionDone:property.ConstructionDone || null,
-          BoundaryWall:property.BoundaryWall || null,
-          OpenSide:property.OpenSide || null,
-          CeilingHeight:property.CeilingHeight || null,
+          PropertyAge: property.PropertyAge || null,
+          GatedSecurity: property.GatedSecurity || null,
+          SurveillanceCameras: property.SurveillanceCameras || null,
+          ConstructionDone: property.ConstructionDone || null,
+          BoundaryWall: property.BoundaryWall || null,
+          OpenSide: property.OpenSide || null,
+          CeilingHeight: property.CeilingHeight || null,
         } as PropertyFormData),
     );
   };
-
 
   const resetForm = () => {
     setIsEditMode(false);
@@ -182,9 +181,9 @@ export const PropertyFormProvider: React.FC<{children: React.ReactNode}> = ({
       PropertyForType: null,
       PropertyType: null,
       Rate: null,
-      SellerEmail: user?.Email || '',
-      SellerName: user?.Name || '',
-      SellerPhone: user?.Phone || '',
+      SellerEmail: user?.email || '',
+      SellerName: user?.name || '',
+      SellerPhone: user?.phone || '',
       SellerType: null,
       ShortDiscription: null,
       Size: null,
@@ -193,7 +192,7 @@ export const PropertyFormProvider: React.FC<{children: React.ReactNode}> = ({
       SurveillanceCameras: null,
       Tag: null,
       Tags: [],
-      UserId: user?.ID.toString() || '',
+      UserId: user?.id.toString() || '',
       VideoURL: null,
       ZipCode: null,
       CarParking: null,
@@ -213,11 +212,7 @@ export const PropertyFormProvider: React.FC<{children: React.ReactNode}> = ({
   const isFormValid = (step: number) => {
     switch (step) {
       case 1:
-        return (
-         
-          formData.City !== null &&
-          formData.PropertyFor !== null
-        );
+        return formData.City !== null && formData.PropertyFor !== null;
       case 2:
         return (
           formData.PropertyType !== null &&

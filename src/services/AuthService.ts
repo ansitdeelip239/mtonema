@@ -1,67 +1,36 @@
-import {Response, SignUpRequest, User} from '../types';
+import {Response, User} from '../types';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import url from '../constants/api';
 import {SignupBody, SignupFormType} from '../schema/SignUpFormSchema';
 import {api} from '../utils/api';
+import { RoleTypes } from '../constants/Roles';
+
+interface ValidateEmailResponse {
+  id: number;
+  email: string;
+  userType: RoleTypes[keyof RoleTypes];
+}
 
 class AuthService {
   static async verifyLoginInput(
-    loginInput?: string,
-  ): Promise<Response<User | null>> {
+    email?: string,
+  ): Promise<Response<ValidateEmailResponse | null>> {
     try {
-      if (!loginInput) {
+      if (!email) {
         throw new Error('Email is required');
       }
 
-      const response = await fetch(url.ValidateEmail + loginInput, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
-
-      const result: Response<User | null> = await response.json();
-
-      if (response.ok) {
-        return result;
-      } else {
-        throw new Error(
-          result.message ||
-            'An error occurred while validating the login input',
-        );
-      }
-    } catch (error) {
-      throw error;
-    }
-  }
-  static async signUp(body: SignUpRequest) {
-    try {
-      const response = await fetch(url.userSignup, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(body),
-      });
-      return response.json();
+      const response = await api.get<ValidateEmailResponse | null>(`${url.ValidateEmail}?email=${email}`);
+      return response;
     } catch (error) {
       throw error;
     }
   }
 
-  static async UserSignUp(
+  static async userSignUp(
     body: SignupBody,
   ): Promise<Response<SignupFormType | null>> {
     try {
-      // const response = await fetch(url.userSignup, {
-      //   method: 'POST',
-      //   headers: {
-      //     'Content-Type': 'application/json',
-      //   },
-      //   body: JSON.stringify(body),
-      // });
-      // return response.json();
-
       const response = await api.post<SignupFormType | null>(
         url.userSignup,
         body,
@@ -72,7 +41,7 @@ class AuthService {
     }
   }
 
-  static async OtpVerification(email: string, otp?: string) {
+  static async otpVerification(email: string, otp?: string) {
     try {
       const requestBody = otp ? {email, otp} : {email};
       const response = await api.post<string | null>(
@@ -85,32 +54,10 @@ class AuthService {
     }
   }
 
-  static async GetUserByToken(token: string) {
+  static async getUserByToken(token: string) {
     try {
       const response = await api.get<User>(`${url.users}?token=${token}`);
       return response;
-    } catch (error) {
-      throw error;
-    }
-  }
-
-  static async RegisterSeller(
-    formData: SignUpRequest,
-  ): Promise<Response<string>> {
-    try {
-      const response = await fetch(url.RegisterSeller, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData),
-      });
-      const result: Response<string> = await response.json();
-      if (response.ok) {
-        return result;
-      } else {
-        throw new Error(result.message || 'An Error Ocured While signup');
-      }
     } catch (error) {
       throw error;
     }
