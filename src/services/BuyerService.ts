@@ -1,11 +1,11 @@
-import url1 from '../constants/api';
+import url from '../constants/api';
 import {api} from '../utils/api';
 
 class BuyerService {
   static async RecommendedProperty(pageNumber: number, pageSize: number) {
     try {
       const response = await api.get<any>(
-        `${url1.RecommendedProperty}?pageNumber=${pageNumber}&pageSize=${pageSize}`,
+        `${url.RecommendedProperty}?pageNumber=${pageNumber}&pageSize=${pageSize}`,
       );
       return response;
     } catch (error) {
@@ -16,7 +16,7 @@ class BuyerService {
   static async getPlaces(text: string, city: string) {
     try {
       const response = await api.get<any>(
-        `${url1.getPlaces}?text=${text}&city=${city}`,
+        `${url.getPlaces}?text=${text}&city=${city}`,
       );
       return response;
     } catch (error) {
@@ -27,7 +27,7 @@ class BuyerService {
   {
     try {
       const response = await api.get<any>(
-        `${url1.deleteProperty}?id=${id}`,
+        `${url.deleteProperty}?id=${id}`,
       );
       return response;
     } catch (error) {
@@ -52,7 +52,7 @@ class BuyerService {
     Relevance?: string;
   }) {
     try {
-      const response = await api.post<any>(url1.FilterSearch, filterCriteria);
+      const response = await api.post<any>(url.FilterSearch, filterCriteria);
       return response;
     } catch (error) {
       console.error('Error in filterProperties', error);

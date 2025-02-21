@@ -131,64 +131,65 @@ const SignUpScreen: React.FC<Props> = ({navigation, route}) => {
                 resizeMode="contain"
               />
             </View>
+            <View style={styles.formContainer}>
+              <MaterialTextInput<SignupFormType>
+                style={styles.input}
+                label="Full Name*"
+                field="name"
+                formInput={formInput}
+                setFormInput={handleFieldChange}
+                mode="outlined"
+                placeholder="Enter your full name"
+                errorMessage={errors.name}
+              />
 
-            <MaterialTextInput<SignupFormType>
-              style={styles.input}
-              label="Full Name*"
-              field="name"
-              formInput={formInput}
-              setFormInput={handleFieldChange}
-              mode="outlined"
-              placeholder="Enter your full name"
-              errorMessage={errors.name}
-            />
+              <MaterialTextInput<SignupFormType>
+                style={styles.input}
+                label="Email*"
+                field="email"
+                formInput={formInput}
+                setFormInput={handleFieldChange}
+                mode="outlined"
+                placeholder="Enter your email"
+                keyboardType="email-address"
+                autoCapitalize="none"
+                errorMessage={errors.email}
+              />
 
-            <MaterialTextInput<SignupFormType>
-              style={styles.input}
-              label="Email*"
-              field="email"
-              formInput={formInput}
-              setFormInput={handleFieldChange}
-              mode="outlined"
-              placeholder="Enter your email"
-              keyboardType="email-address"
-              autoCapitalize="none"
-              errorMessage={errors.email}
-            />
+              <MaterialTextInput<SignupFormType>
+                style={styles.input}
+                label="Location*"
+                field="location"
+                formInput={formInput}
+                setFormInput={handleFieldChange}
+                mode="outlined"
+                placeholder="Enter your location"
+                errorMessage={errors.location}
+              />
 
-            <MaterialTextInput<SignupFormType>
-              style={styles.input}
-              label="Location*"
-              field="location"
-              formInput={formInput}
-              setFormInput={handleFieldChange}
-              mode="outlined"
-              placeholder="Enter your location"
-              errorMessage={errors.location}
-            />
+              <MaterialTextInput<SignupFormType>
+                style={styles.input}
+                label="Phone Number*"
+                field="phone"
+                formInput={formInput}
+                setFormInput={handleFieldChange}
+                mode="outlined"
+                placeholder="Enter your phone number"
+                keyboardType="number-pad"
+                maxLength={10}
+                errorMessage={errors.phone}
+              />
 
-            <MaterialTextInput<SignupFormType>
-              style={styles.input}
-              label="Phone Number*"
-              field="phone"
-              formInput={formInput}
-              setFormInput={handleFieldChange}
-              mode="outlined"
-              placeholder="Enter your phone number"
-              keyboardType="number-pad"
-              maxLength={10}
-              errorMessage={errors.phone}
-            />
-
-            <Button
-              mode="contained"
-              onPress={handleSubmit}
-              buttonColor={Colors.main}
-              textColor="white"
-              loading={loading}
-              style={styles.button}>
-              Sign Up
-            </Button>
+              <Button
+                mode="contained"
+                onPress={handleSubmit}
+                buttonColor={Colors.main}
+                textColor="white"
+                loading={loading}
+                style={styles.button}>
+                Sign Up
+              </Button>
+            </View>
           </ScrollView>
         </TouchableWithoutFeedback>
       </KeyboardAvoidingView>
@@ -204,11 +205,17 @@ const styles = StyleSheet.create({
     padding: 16,
     flexGrow: 1,
   },
+  formContainer: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: 16,
+  },
   input: {
-    marginBottom: 16,
+    // marginBottom: 16,
   },
   button: {
     marginTop: 24,
+    paddingVertical: 5,
   },
   logoContainer: {
     alignItems: 'center',

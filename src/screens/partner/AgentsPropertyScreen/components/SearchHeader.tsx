@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {View, TouchableOpacity, Modal, StyleSheet, Image} from 'react-native';
+import {View, TouchableOpacity, Modal, StyleSheet} from 'react-native';
 import {Searchbar} from 'react-native-paper';
 import {AgentData, FilterValues} from '../../../../types';
 import Colors from '../../../../constants/Colors';
@@ -50,10 +50,7 @@ const SearchHeader = ({
       <TouchableOpacity
         style={styles.filterButton}
         onPress={() => setModalVisible(!modalVisible)}>
-        <Image
-          source={require('../../../../assets/Icon/filter.png')}
-          style={styles.filterIcon}
-        />
+          <GetIcon iconName="filter" color={Colors.black} size="24" />
       </TouchableOpacity>
       <Modal
         visible={modalVisible}
@@ -105,9 +102,9 @@ const styles = StyleSheet.create({
     width: 50,
     height: 50,
     borderRadius: 24,
+    elevation: 5,
     justifyContent: 'center',
     alignItems: 'center',
-    elevation: 5,
     shadowColor: '#000',
     shadowOffset: {
       width: 0,

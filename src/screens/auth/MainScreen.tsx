@@ -128,6 +128,7 @@ const styles = StyleSheet.create({
     color: '#ffffff',
     fontSize: 16,
     fontWeight: 'bold',
+    elevation: 5,
   },
   combinedButtonContainer: {
     alignItems: 'center',

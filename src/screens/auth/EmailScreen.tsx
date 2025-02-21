@@ -1,11 +1,9 @@
-import React, {useCallback, useState, useMemo} from 'react';
+import React, {useCallback, useState} from 'react';
 import {
   View,
   Text,
   StyleSheet,
   Image,
-  ActivityIndicator,
-  TouchableOpacity,
   KeyboardAvoidingView,
   Platform,
 } from 'react-native';
@@ -14,24 +12,41 @@ import Toast from 'react-native-toast-message';
 import {AuthStackParamList} from '../../navigator/AuthNavigator';
 import AuthService from '../../services/AuthService';
 import {useAuth} from '../../hooks/useAuth';
-import {validateEmail} from '../../utils/formvalidation';
 import Colors from '../../constants/Colors';
 import {useDialog} from '../../hooks/useDialog';
-import {TextInput} from 'react-native-paper';
+import {MaterialTextInput} from '../../components/MaterialTextInput';
+import useForm from '../../hooks/useForm';
+import {EmailFormData, emailSchema} from '../../schema/LoginSchema';
+import {Button} from 'react-native-paper';
 
 type Props = NativeStackScreenProps<AuthStackParamList, 'EmailScreen'>;
 
 const EmailScreen: React.FC<Props> = ({navigation, route}) => {
-  const [email, setEmail] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [emailError, setEmailError] = useState<{
     message: string;
     isClickable?: boolean;
   }>({message: '', isClickable: false});
+
   const {setNavigateToPostProperty} = useAuth();
   const {showError} = useDialog();
-  const isEmailValid = useMemo(() => validateEmail(email), [email]);
   const {role} = route.params;
+
+  const onSubmit = async (_data: EmailFormData) => {
+    // This is just to maintain the form submission structure
+    // Actual submission is handled by handleOtpVerification
+  };
+
+  const {
+    formInput,
+    handleInputChange,
+    loading: formLoading,
+  } = useForm<EmailFormData>({
+    initialState: {
+      email: '',
+    },
+    onSubmit,
+  });
 
   const checkEmail = useCallback(
     async (emailToCheck: string) => {
@@ -54,14 +69,6 @@ const EmailScreen: React.FC<Props> = ({navigation, route}) => {
           return false;
         }
 
-        // if (response && response.data?. === 2) {
-        //   setEmailError({
-        //     message: 'Email is not verified. Click Verify Now to proceed.',
-        //     isClickable: true,
-        //   });
-        //   return false;
-        // }
-
         return true;
       } catch (error) {
         const errorMessage =
@@ -77,27 +84,28 @@ const EmailScreen: React.FC<Props> = ({navigation, route}) => {
 
   const handleOtpVerification = useCallback(
     async (skipEmailCheck = false) => {
-      if (!isEmailValid) {
-        setEmailError({message: 'Invalid email format', isClickable: false});
+      const validationResult = emailSchema.safeParse(formInput);
+      if (!validationResult.success) {
+        setEmailError({
+          message: validationResult.error.errors[0].message,
+          isClickable: false,
+        });
         return;
       }
 
       setIsLoading(true);
       try {
-        // Skip email check for verify now button
         if (!skipEmailCheck) {
-          const isValidEmail = await checkEmail(email);
-
+          const isValidEmail = await checkEmail(formInput.email);
           if (!isValidEmail) {
             return;
           }
         }
 
-        const response = await AuthService.otpVerification(email);
+        const response = await AuthService.otpVerification(formInput.email);
         if (response.success) {
           console.log('API Response:', response);
-
-          navigation.navigate('OtpScreen', {email});
+          navigation.navigate('OtpScreen', {email: formInput.email});
           if (!skipEmailCheck) {
             setNavigateToPostProperty(false);
           }
@@ -110,21 +118,14 @@ const EmailScreen: React.FC<Props> = ({navigation, route}) => {
         setIsLoading(false);
       }
     },
-    [
-      email,
-      isEmailValid,
-      checkEmail,
-      navigation,
-      setNavigateToPostProperty,
-      showError,
-    ],
+    [formInput, checkEmail, navigation, setNavigateToPostProperty, showError],
   );
 
-  const handleVerifyNow = useCallback(async () => {
+  const handleVerifyNow = useCallback(() => {
     handleOtpVerification(true);
   }, [handleOtpVerification]);
 
-  const handleContinue = useCallback(async () => {
+  const handleContinue = useCallback(() => {
     handleOtpVerification();
   }, [handleOtpVerification]);
 
@@ -144,69 +145,67 @@ const EmailScreen: React.FC<Props> = ({navigation, route}) => {
           <Text style={styles.titleText}>LOGIN</Text>
         </View>
         <View style={styles.txtpadding}>
-          <TextInput
+          <MaterialTextInput
             label="Email"
             placeholder="Please Enter user email"
-            mode="outlined"
-            placeholderTextColor={Colors.placeholderColor}
-            value={email}
-            onChangeText={setEmail}
+            field="email"
+            formInput={formInput}
+            setFormInput={handleInputChange}
             keyboardType="email-address"
             autoCapitalize="none"
             autoCorrect={false}
-            style={[styles.input, !isEmailValid && styles.inputError]}
-            theme={{
-              roundness: 8,
-              colors: {
-                background: 'white',
-                primary: '#880e4f',
-                text: '#000',
-                placeholder: Colors.placeholderColor,
-              },
-            }}
+            mode="outlined"
+            errorMessage={emailError.message}
           />
-          {emailError.message ? (
-            <Text style={styles.errorText}>{emailError.message}</Text>
-          ) : null}
         </View>
 
         <View style={styles.btnsection}>
           {emailError.isClickable ? (
-            <TouchableOpacity
-              style={[styles.button, styles.spacing, styles.verifyButton]}
+            <Button
+              mode="contained"
               onPress={handleVerifyNow}
-              disabled={isLoading}>
-              {isLoading ? (
-                <ActivityIndicator size="small" color="#ffffff" />
-              ) : (
-                <Text style={styles.buttonText}>Verify Now</Text>
-              )}
-            </TouchableOpacity>
-          ) : (
-            <TouchableOpacity
+              disabled={isLoading || formLoading}
+              loading={isLoading}
+              buttonColor={Colors.main}
+              textColor={isLoading || formLoading ? Colors.grey : 'white'}
               style={[
-                styles.button,
-                styles.spacing,
-                !isEmailValid && styles.disabledButton,
-              ]}
+                styles.paperButton,
+                (isLoading || formLoading) && styles.disabledButton,
+              ]}>
+              Verify Now
+            </Button>
+          ) : (
+            <Button
+              mode="contained"
               onPress={handleContinue}
-              disabled={!isEmailValid || isLoading}>
-              {isLoading ? (
-                <ActivityIndicator size="small" color="#ffffff" />
-              ) : (
-                <Text style={styles.buttonText}>Continue</Text>
-              )}
-            </TouchableOpacity>
+              disabled={!formInput.email || isLoading || formLoading}
+              loading={isLoading}
+              buttonColor={Colors.main}
+              textColor={
+                !formInput.email || isLoading || formLoading
+                  ? Colors.grey
+                  : 'white'
+              }
+              style={[
+                styles.paperButton,
+                (!formInput.email || isLoading || formLoading) &&
+                  styles.disabledButton,
+              ]}>
+              Continue
+            </Button>
           )}
 
-          <TouchableOpacity
-            style={[styles.button, styles.spacing, styles.color]}
-            onPress={navigation.goBack}>
-            <Text style={styles.buttonText}>Back</Text>
-          </TouchableOpacity>
+          <Button
+            mode="contained"
+            onPress={navigation.goBack}
+            buttonColor={Colors.main}
+            textColor={Colors.white}
+            // buttonColor={Colors.main}
+            style={styles.paperButton}>
+            Back
+          </Button>
         </View>
       </View>
-
       <Toast />
     </KeyboardAvoidingView>
   );
@@ -214,12 +213,13 @@ const EmailScreen: React.FC<Props> = ({navigation, route}) => {
 
 const styles = StyleSheet.create({
   disabledButton: {
+    opacity: 0.7,
     backgroundColor: Colors.main,
-    opacity: 0.6,
   },
   titleContainer: {
-    left: 150,
-    bottom: 30,
+    width: '100%',
+    alignItems: 'center',
+    marginBottom: 30,
   },
   titleText: {
     fontSize: 28,
@@ -255,11 +255,12 @@ const styles = StyleSheet.create({
   txtpadding: {
     paddingLeft: 25,
     width: '95%',
-    marginBottom: 40,
+    marginBottom: 16,
   },
   btnsection: {
-    justifyContent: 'center',
+    width: '100%',
     alignItems: 'center',
+    paddingHorizontal: 16,
   },
   upperPart: {
     flex: 2,
@@ -297,6 +298,12 @@ const styles = StyleSheet.create({
     color: '#ffffff',
     fontSize: 16,
     fontWeight: 'bold',
+  },
+  paperButton: {
+    width: '90%',
+    marginVertical: 8,
+    borderRadius: 15,
+    paddingVertical: 5,
   },
 });
 

@@ -2,13 +2,14 @@ import React from 'react';
 import {View, StyleSheet} from 'react-native';
 import Header from '../../../components/Header';
 import {PartnerDrawerParamList} from '../../../types/navigation';
-import ProfileScreen from '../../common/ProfileScreen';
+import EditProfileComponent from '../../../components/EditProfileComponent';
 
 export default function PartnerProfileScreen() {
   return (
     <View style={styles.container}>
       <Header<PartnerDrawerParamList> title="Profile" />
-      <ProfileScreen />
+      {/* <ProfileScreen /> */}
+      <EditProfileComponent />
     </View>
   );
 }

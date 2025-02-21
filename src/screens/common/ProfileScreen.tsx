@@ -12,33 +12,22 @@ import {
 import Toast from 'react-native-toast-message';
 import {useAuth} from '../../hooks/useAuth';
 import {ActivityIndicator} from 'react-native-paper';
-import {api} from '../../utils/api';
-import url from '../../constants/api';
 import {User} from '../../types';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import GetIcon from '../../components/GetIcon';
 import Colors from '../../constants/Colors';
 import AuthService from '../../services/AuthService';
+import CommonService from '../../services/CommonService';
+import Images from '../../constants/Images';
 
-type FieldName = 'name' | 'email' | 'mobile' | 'location';
+type FieldName = 'name' | 'email' | 'phone' | 'location';
 type EditableFields = Record<FieldName, boolean>;
 
-interface UserData {
-  name: string;
-  email: string;
-  password: string;
-  mobile: string;
-  location: string;
-  profileImage: any;
-}
-
-const INITIAL_USER_DATA: UserData = {
+const INITIAL_USER_DATA: User = {
   name: '',
   email: '',
-  password: '',
-  mobile: '',
+  phone: '',
   location: '',
-  profileImage: require('../../assets/Images/dncrlogo.png'),
 };
 
 interface ProfileFieldProps {
@@ -51,7 +40,7 @@ interface ProfileFieldProps {
   inputRef: React.RefObject<TextInput>;
   editMode: EditableFields;
   setEditMode: React.Dispatch<React.SetStateAction<EditableFields>>;
-  setUserData: React.Dispatch<React.SetStateAction<UserData>>;
+  setUserData: React.Dispatch<React.SetStateAction<User>>;
   showPassword?: boolean;
   setShowPassword?: React.Dispatch<React.SetStateAction<boolean>>;
 }
@@ -129,11 +118,11 @@ const ProfileScreen = () => {
   const {user, logout} = useAuth();
   const [isLoading, setIsLoading] = useState(false);
   const [showLogoutModal, setShowLogoutModal] = useState(false);
-  const [userData, setUserData] = useState<UserData>(INITIAL_USER_DATA);
+  const [userData, setUserData] = useState<User>(INITIAL_USER_DATA);
   const [editMode, setEditMode] = useState<EditableFields>({
     name: false,
     email: false,
-    mobile: false,
+    phone: false,
     location: false,
   });
 
@@ -182,7 +171,7 @@ const ProfileScreen = () => {
           ...prevData,
           name: response.data.name || '',
           email: response.data.email || '',
-          mobile: response.data.phone || '',
+          phone: response.data.phone || '',
           location: response.data.location || '',
         }));
       }
@@ -209,7 +198,7 @@ const ProfileScreen = () => {
       return false;
     }
 
-    if (!validateMobile(userData.mobile)) {
+    if (!validateMobile(userData.phone)) {
       showToast('error', 'Please enter a valid 10-digit mobile number');
       return false;
     }
@@ -229,27 +218,21 @@ const ProfileScreen = () => {
       }
 
       setIsLoading(true);
-      const request = {
-        Name: userData.name,
-        Email: userData.email,
-        Phone: userData.mobile,
-        password: userData.password,
-        Location: userData.location,
-        ID: user?.id,
-        CreatedBy: null,
-        CreatedOn: null,
-        Role: null,
-        Status: null,
-        UpdatedOn: null,
+      const request: User = {
+        name: userData.name,
+        email: userData.email,
+        phone: userData.phone,
+        location: userData.location,
+        id: user?.id,
       };
 
-      const response = await api.post<User>(`${url.UpdateProfile}`, request);
+      const response = await CommonService.updateProfile(request);
       if (response.success) {
         showToast('success', 'Profile updated successfully');
         setEditMode({
           name: false,
           email: false,
-          mobile: false,
+          phone: false,
           location: false,
         });
         await fetchUserProfile();
@@ -292,7 +275,7 @@ const ProfileScreen = () => {
       {/* <Header title="User Profile" /> */}
       <ScrollView contentContainerStyle={styles.scrollContainer}>
         <View style={styles.profileImageContainer}>
-          <Image source={userData.profileImage} style={styles.profileImage} />
+          <Image source={Images.DNCR_LOGO} style={styles.profileImage} />
         </View>
 
         <ProfileField
@@ -316,8 +299,8 @@ const ProfileScreen = () => {
         />
         <ProfileField
           label="Mobile"
-          field="mobile"
-          value={userData.mobile}
+          field="phone"
+          value={userData.phone}
           keyboardType="phone-pad"
           inputRef={mobileInputRef}
           editMode={editMode}

@@ -108,8 +108,11 @@ export const MaterialTextInput = <T,>({
             text: 'black',
             primary: errorMessage ? '#FF0000' : 'black',
             outline: errorMessage ? '#FF0000' : 'black',
-            onSurfaceVariant: 'gray',
+            onSurfaceVariant: 'black',
             error: '#FF0000',
+            onSurface: 'black',
+            surfaceDisabled: 'transparent',
+            onSurfaceDisabled: 'rgba(0, 0, 0, 0.6)',
           },
         }}
       />
@@ -158,10 +161,11 @@ const styles = StyleSheet.create({
     borderWidth: 1,
   },
   helperText: {
-    marginTop: -12,
-    marginBottom: 6,
+    marginTop: 4, // Change from -12 to 0
+    marginBottom: 0,
     paddingBottom: 0,
     color: '#cc0000',
+    fontSize: 12, // Add specific font size for better readability
   },
   suggestionsContainer: {
     position: 'absolute',
