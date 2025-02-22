@@ -24,7 +24,7 @@ const FilterModal = ({
 
   const locations = useMemo(() => {
     const uniqueLocations = Array.from(
-      new Set(agentData.map(agent => agent.PropertyLocation).filter(Boolean)),
+      new Set(agentData.map(agent => agent.propertyLocation).filter(Boolean)),
     ).sort();
 
     // Transform string[] to MasterDetailModel[]
