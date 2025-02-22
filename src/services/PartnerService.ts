@@ -79,10 +79,10 @@ class PartnerService {
     }
   }
 
-  static async getGroups(partnerId: string) {
+  static async getGroups(email: string) {
     try {
       const params = new URLSearchParams({
-        partnerId,
+        email,
       }).toString();
       const response = await api.get<Group[]>(
         `${url.getGroupsByPartnerId}?${params}`,
@@ -97,7 +97,7 @@ class PartnerService {
   static async addClient(body: ClientForm) {
     try {
       const response = await api.post<string | null>(
-        `${url.addEditClientData}`,
+        `${url.addClient}`,
         body,
       );
       return response;

@@ -45,7 +45,7 @@ export const ClientCard: React.FC<ClientCardProps> = ({client, navigation}) => {
             <View style={styles.dateBlock}>
               <Text style={styles.dateLabel}>Date Added</Text>
               <Text style={styles.dateText}>
-                {formatDate(client.createdOn, 'dd MMM yy')}
+                {client.createdOn && formatDate(client.createdOn, 'dd MMM yy')}
               </Text>
             </View>
             <View style={styles.iconContainer}>
@@ -86,14 +86,14 @@ export const ClientCard: React.FC<ClientCardProps> = ({client, navigation}) => {
                 <>
                   <Text style={styles.label}>Last Activity:</Text>
                   <Text style={styles.lastActivity}>
-                    {formatDate(
+                    {/* {client.clientActivityDataModels && formatDate(
                       client.clientActivityDataModels.sort(
                         (a, b) =>
                           new Date(b.CreatedOn).getTime() -
                           new Date(a.CreatedOn).getTime(),
                       )[0].CreatedOn,
                       'PPpp',
-                    )}
+                    )} */}
                   </Text>
                 </>
               ) : (

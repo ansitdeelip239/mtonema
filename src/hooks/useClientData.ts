@@ -22,6 +22,8 @@ export const useClientData = () => {
           20,
           search,
         );
+        console.log('response', response);
+        
         setClients(response.data.clientDataModel || []);
       } catch (err) {
         setError('Failed to fetch clients');

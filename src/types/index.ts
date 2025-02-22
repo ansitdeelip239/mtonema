@@ -183,17 +183,17 @@ export interface AgentPropertyRequestModel {
 }
 
 export interface MasterDataModel {
-  ID: number;
-  Name: string;
+  id: number;
+  name: string;
 }
 
 export interface ClientActivityDataModel {
-  Id: number;
-  ActivityType: MasterDataModel;
-  AssignedTo: MasterDataModel;
-  Description: string;
-  CreatedOn: string;
-  UpdatedOn: string;
+  id: number;
+  activityType: MasterDataModel;
+  assignedTo: MasterDataModel;
+  description: string;
+  createdOn: string;
+  updatedOn: string;
 }
 
 export interface Group {
@@ -228,14 +228,14 @@ export interface ClientResponseModel {
 }
 
 export interface ClientForm {
-  ClientName: string;
-  DisplayName?: string;
-  MobileNumber?: string;
-  WhatsappNumber?: string;
-  EmailId?: string;
-  Notes?: string;
-  Groups?: number[];
-  PartnerId: string;
+  clientName: string;
+  displayName?: string;
+  mobileNumber?: string;
+  whatsappNumber?: string;
+  emailId?: string;
+  notes?: string;
+  groups?: number[];
+  partnerId: string;
 }
 
 export interface SearchIntellisenseResponse {

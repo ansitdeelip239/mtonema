@@ -32,12 +32,12 @@ export const PartnerProvider: React.FC<PartnerProviderProps> = ({children}) => {
 
   const fetchGroups = useCallback(async () => {
     try {
-      const response = await PartnerService.getGroups(user?.Email as string);
+      const response = await PartnerService.getGroups(user?.email as string);
       setGroups(response.data);
     } catch (error) {
       console.error('Error fetching groups:', error);
     }
-  }, [user?.Email]);
+  }, [user?.email]);
 
   useEffect(() => {
     fetchGroups();

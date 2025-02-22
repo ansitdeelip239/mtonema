@@ -25,7 +25,7 @@ import Toast from 'react-native-toast-message';
 import {useAuth} from '../../../hooks/useAuth';
 import {z} from 'zod';
 import clientFormSchema from '../../../schema/ClientFormSchema';
-import { useDialog } from '../../../hooks/useDialog';
+import {useDialog} from '../../../hooks/useDialog';
 
 type Props = NativeStackScreenProps<ClientStackParamList, 'AddClientScreen'>;
 
@@ -43,31 +43,31 @@ const AddClientScreen: React.FC<Props> = ({navigation, route}) => {
   const initialState = useMemo(() => {
     if (editMode && clientData) {
       return {
-        ClientName: clientData.ClientName || '',
-        DisplayName: clientData.DisplayName || '',
-        MobileNumber: clientData.MobileNumber || '',
-        WhatsappNumber: clientData.WhatsappNumber || '',
-        EmailId: clientData.EmailId || '',
-        Notes: clientData.Notes || '',
-        Groups: clientData.Groups?.map(group => group.ID) || [],
-        PartnerId: user?.email ?? '',
+        clientName: clientData.clientName || '',
+        displayName: clientData.displayName || '',
+        mobileNumber: clientData.mobileNumber || '',
+        whatsappNumber: clientData.whatsappNumber || '',
+        emailId: clientData.emailId || '',
+        notes: clientData.notes || '',
+        groups: clientData.groups?.map(group => group.id) || [],
+        partnerId: user?.email ?? '',
       };
     }
 
     return {
-      ClientName: '',
-      DisplayName: '',
-      MobileNumber: '',
-      WhatsappNumber: '',
-      EmailId: '',
-      Notes: '',
-      Groups: [],
-      PartnerId: user?.email ?? '',
+      clientName: '',
+      displayName: '',
+      mobileNumber: '',
+      whatsappNumber: '',
+      emailId: '',
+      notes: '',
+      groups: [],
+      partnerId: user?.email ?? '',
     };
   }, [editMode, clientData, user]);
 
   const validateField = useCallback((field: keyof ClientForm, value: any) => {
-    if (field !== 'ClientName' && (!value || value === '')) {
+    if (field !== 'clientName' && (!value || value === '')) {
       setFieldErrors(prev => ({...prev, [field]: ''}));
       return;
     }
@@ -98,18 +98,18 @@ const AddClientScreen: React.FC<Props> = ({navigation, route}) => {
       try {
         const cleanedData = {
           ...formData,
-          DisplayName: formData.DisplayName || undefined,
-          MobileNumber: formData.MobileNumber || undefined,
-          WhatsappNumber: formData.WhatsappNumber || undefined,
-          EmailId: formData.EmailId || undefined,
-          Notes: formData.Notes || '',
-          Groups: formData.Groups || [],
+          displayName: formData.displayName || undefined,
+          mobileNumber: formData.mobileNumber || undefined,
+          whatsappNumber: formData.whatsappNumber || undefined,
+          emailId: formData.emailId || undefined,
+          notes: formData.notes || '',
+          groups: formData.groups || [],
         };
 
         const validatedData = clientFormSchema.parse(cleanedData);
 
         if (editMode && clientData) {
-          validatedData.Id = clientData.Id;
+          validatedData.id = clientData.id;
         }
 
         const response = await PartnerService.addClient(validatedData);
@@ -160,7 +160,7 @@ const AddClientScreen: React.FC<Props> = ({navigation, route}) => {
   const handleFieldChange = useCallback(
     (field: keyof ClientForm, value: string | boolean | number[]) => {
       handleInputChange(field, value);
-      if (field === 'ClientName' || (value && value !== '')) {
+      if (field === 'clientName' || (value && value !== '')) {
         validateField(field, value);
       } else {
         setFieldErrors(prev => ({...prev, [field]: ''}));
@@ -169,20 +169,25 @@ const AddClientScreen: React.FC<Props> = ({navigation, route}) => {
     [handleInputChange, validateField],
   );
 
-  const scrollToEnd = (delay = 100) => {
+  const scrollToEnd = (delay: number = 100) => {
+    // Ensure delay is a positive number and within reasonable bounds
+    const safeDelay = Math.max(0, Math.min(delay, 1000));
+
     setTimeout(() => {
-      scrollViewRef.current?.scrollToEnd({animated: true});
-    }, delay);
+      if (scrollViewRef.current) {
+        scrollViewRef.current.scrollToEnd({animated: true});
+      }
+    }, safeDelay);
   };
 
   const toggleGroup = useCallback(
     (groupId: number) => {
-      const updatedGroups = formInput.Groups?.includes(groupId)
-        ? formInput.Groups?.filter(id => id !== groupId)
-        : [...(formInput.Groups ?? []), groupId];
-      handleInputChange('Groups', updatedGroups);
+      const updatedGroups = formInput.groups?.includes(groupId)
+        ? formInput.groups?.filter(id => id !== groupId)
+        : [...(formInput.groups ?? []), groupId];
+      handleInputChange('groups', updatedGroups);
     },
-    [formInput.Groups, handleInputChange],
+    [formInput.groups, handleInputChange],
   );
 
   const renderGroupToggleButtons = useMemo(
@@ -195,16 +200,16 @@ const AddClientScreen: React.FC<Props> = ({navigation, route}) => {
               key={group.Id}
               style={[
                 styles.groupButton,
-                formInput.Groups?.some(g => g === group.Id) && {
-                  backgroundColor: group.Color.Name,
-                  borderColor: group.Color.Name,
+                formInput.groups?.some(g => g === group.Id) && {
+                  backgroundColor: group.Color.name,
+                  borderColor: group.Color.name,
                 },
               ]}
               onPress={() => toggleGroup(group.Id)}>
               <Text
                 style={[
                   styles.groupButtonText,
-                  formInput.Groups?.some(g => g === group.Id) &&
+                  formInput.groups?.some(g => g === group.Id) &&
                     styles.groupButtonTextSelected,
                 ]}>
                 {group.GroupName}
@@ -214,7 +219,7 @@ const AddClientScreen: React.FC<Props> = ({navigation, route}) => {
         </View>
       </View>
     ),
-    [groups, formInput.Groups, toggleGroup],
+    [groups, formInput.groups, toggleGroup],
   );
 
   const renderForm = useMemo(
@@ -223,7 +228,7 @@ const AddClientScreen: React.FC<Props> = ({navigation, route}) => {
         <MaterialTextInput<ClientForm>
           style={styles.input}
           label="Client Name*"
-          field="ClientName"
+          field="clientName"
           formInput={formInput}
           setFormInput={handleFieldChange}
           mode="outlined"
@@ -234,7 +239,7 @@ const AddClientScreen: React.FC<Props> = ({navigation, route}) => {
         <MaterialTextInput<ClientForm>
           style={styles.input}
           label="Display Name"
-          field="DisplayName"
+          field="displayName"
           formInput={formInput}
           setFormInput={handleFieldChange}
           mode="outlined"
@@ -245,7 +250,7 @@ const AddClientScreen: React.FC<Props> = ({navigation, route}) => {
         <MaterialTextInput<ClientForm>
           style={styles.input}
           label="Mobile Number"
-          field="MobileNumber"
+          field="mobileNumber"
           formInput={formInput}
           setFormInput={handleFieldChange}
           mode="outlined"
@@ -257,7 +262,7 @@ const AddClientScreen: React.FC<Props> = ({navigation, route}) => {
         <MaterialTextInput<ClientForm>
           style={styles.input}
           label="WhatsApp Number"
-          field="WhatsappNumber"
+          field="whatsappNumber"
           formInput={formInput}
           setFormInput={handleFieldChange}
           mode="outlined"
@@ -269,7 +274,7 @@ const AddClientScreen: React.FC<Props> = ({navigation, route}) => {
         <MaterialTextInput<ClientForm>
           style={styles.input}
           label="Email"
-          field="EmailId"
+          field="emailId"
           formInput={formInput}
           setFormInput={handleFieldChange}
           mode="outlined"
@@ -284,7 +289,7 @@ const AddClientScreen: React.FC<Props> = ({navigation, route}) => {
         <MaterialTextInput<ClientForm>
           style={styles.input}
           label="Notes"
-          field="Notes"
+          field="notes"
           formInput={formInput}
           setFormInput={handleFieldChange}
           mode="outlined"

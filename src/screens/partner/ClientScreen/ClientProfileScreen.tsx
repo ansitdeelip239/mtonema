@@ -257,13 +257,13 @@ const ClientProfileScreen: React.FC<Props> = ({route, navigation}) => {
     const sortedActivities = client.clientActivityDataModels.slice()
       .sort(
         (a, b) =>
-          new Date(b.CreatedOn).getTime() - new Date(a.CreatedOn).getTime(),
+          new Date(b.createdOn).getTime() - new Date(a.createdOn).getTime(),
       )
       .slice(0, 5);
 
     return sortedActivities.map((activity, index) => (
       <ActivityTimeline
-        key={`activity-${activity.Id}`}
+        key={`activity-${activity.id}`}
         activity={activity}
         isLast={index === sortedActivities.length - 1}
         onPress={handleActivityPress}

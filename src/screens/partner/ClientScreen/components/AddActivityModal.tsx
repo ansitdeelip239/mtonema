@@ -55,8 +55,8 @@ const AddActivityModal: React.FC<AddActivityModalProps> = ({
       });
     } else if (editMode && activityToEdit) {
       setFormData({
-        activityType: activityToEdit.ActivityType.ID,
-        description: activityToEdit.Description,
+        activityType: activityToEdit.activityType.id,
+        description: activityToEdit.description,
       });
     }
   }, [visible, editMode, activityToEdit]);
@@ -66,7 +66,7 @@ const AddActivityModal: React.FC<AddActivityModalProps> = ({
       onSubmit(
         formData.activityType,
         formData.description,
-        editMode ? activityToEdit?.Id : undefined,
+        editMode ? activityToEdit?.id : undefined,
       );
       setFormData({activityType: null, description: ''});
     }
@@ -95,7 +95,7 @@ const AddActivityModal: React.FC<AddActivityModalProps> = ({
 
   const handleDelete = () => {
     closeMenu && closeMenu();
-    if (editMode && activityToEdit?.Id && onDelete) {
+    if (editMode && activityToEdit?.id && onDelete) {
       Alert.alert(
         'Delete Activity',
         'Are you sure you want to delete this activity?',
@@ -104,7 +104,7 @@ const AddActivityModal: React.FC<AddActivityModalProps> = ({
           {
             text: 'Delete',
             style: 'destructive',
-            onPress: () => onDelete(activityToEdit.Id),
+            onPress: () => onDelete(activityToEdit.id),
           },
         ],
       );

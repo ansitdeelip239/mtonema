@@ -32,7 +32,7 @@ const ActivityTimeline: React.FC<ActivityTimelineProps> = ({
     <View style={styles.timelineSection}>
       <View style={styles.iconContainer}>
         <GetIcon
-          iconName={getActivityIcon(activity.ActivityType.Name)}
+          iconName={getActivityIcon(activity.activityType.name)}
           size="16"
           color="white"
         />
@@ -42,17 +42,17 @@ const ActivityTimeline: React.FC<ActivityTimelineProps> = ({
     <View style={styles.contentSection}>
       <View style={styles.activityHeader}>
         <Text style={styles.activityType} numberOfLines={1}>
-          {activity.ActivityType.Name}
+          {activity.activityType.name}
         </Text>
         <Text style={styles.activityDate}>
-          {formatDate(activity.CreatedOn, 'PPp')}
+          {formatDate(activity.createdOn, 'PPp')}
         </Text>
       </View>
       <Text style={styles.activityDescription} numberOfLines={2}>
-        {activity.Description}
+        {activity.description}
       </Text>
       <Text style={styles.assignedTo} numberOfLines={1}>
-        Assigned to: {activity.AssignedTo.Name}
+        Assigned to: {activity.assignedTo.name}
       </Text>
     </View>
   </TouchableOpacity>

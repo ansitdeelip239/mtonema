@@ -1,29 +1,29 @@
 import {z} from 'zod';
 
 const clientFormSchema = z.object({
-  Id: z.number().optional(),
-  ClientName: z
+  id: z.number().optional(),
+  clientName: z
     .string()
     .min(2, 'Name must be at least 2 characters')
     .regex(/^[a-zA-Z\s]*$/, 'Name must contain only letters and spaces')
     .nonempty('Client Name is required'),
-  DisplayName: z
+  displayName: z
     .string()
     .min(2, 'Name must be at least 2 characters')
     .regex(/^[a-zA-Z\s]*$/, 'Name must contain only letters and spaces')
     .optional(),
-  MobileNumber: z
+  mobileNumber: z
     .string()
     .regex(/^\d{10}$/, 'Mobile number must be exactly 10 digits')
     .optional(),
-  WhatsappNumber: z
+  whatsappNumber: z
     .string()
     .regex(/^\d{10}$/, 'WhatsApp number must be exactly 10 digits')
     .optional(),
-  EmailId: z.string().email('Invalid email address').optional(),
-  Notes: z.string().optional().default(''),
-  Groups: z.array(z.number()).optional().default([]),
-  PartnerId: z.string().nonempty('Partner ID is required'),
+  emailId: z.string().email('Invalid email address').optional(),
+  notes: z.string().optional().default(''),
+  groups: z.array(z.number()).optional().default([]),
+  partnerId: z.string().nonempty('Partner ID is required'),
 });
 
 export default clientFormSchema;
