@@ -19,7 +19,9 @@ const EditProfileComponent = () => {
     location: false,
     phone: false,
   });
-  const {user, setUser} = useAuth();
+  const [profileUpdated, setProfileUpdated] = useState(false);
+  const {user} = useAuth();
+  
 
   const {formInput, handleInputChange, loading, onSubmit, setFormInput} =
     useForm<ProfileFormData>({
@@ -44,7 +46,8 @@ const EditProfileComponent = () => {
           if (response.httpStatus === 200) {
             console.log('Profile updated successfully');
             // storeUser(response.data);
-            setUser(response.data);
+            // setUser(response.data);
+            setProfileUpdated((prev) => !prev);
           }
           // After successful submission
           setEditingFields({
@@ -73,7 +76,6 @@ const EditProfileComponent = () => {
       try {
         const token = await AuthService.getToken();
         const response = await AuthService.getUserByToken(token as string);
-        console.log('#$%#$%#$', response);
 
         setFormInput(response.data);
       } catch (error) {
@@ -82,7 +84,7 @@ const EditProfileComponent = () => {
     }
 
     fetchProfileData();
-  }, [setFormInput]);
+  }, [setFormInput, profileUpdated]);
 
   return (
     <View style={styles.container}>
