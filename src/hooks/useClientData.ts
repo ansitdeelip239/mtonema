@@ -1,5 +1,5 @@
 import {useState, useCallback, useEffect} from 'react';
-import {Client} from '../types';
+import {Client, PagingModel} from '../types';
 import {useAuth} from './useAuth';
 import PartnerService from '../services/PartnerService';
 import {usePartner} from '../context/PartnerProvider';
@@ -9,35 +9,60 @@ export const useClientData = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [refreshing, setRefreshing] = useState(false);
+  const [paging, setPaging] = useState<PagingModel>({
+    currentPage: 1,
+    pageSize: 20,
+    totalCount: 0,
+    totalPage: 1,
+    nextPage: false,
+    previousPage: false,
+  });
+
   const {user} = useAuth();
   const {clientsUpdated} = usePartner();
 
   const fetchClients = useCallback(
-    async (search?: string) => {
+    async (page: number = 1, search?: string) => {
       setError(null);
       try {
         const response = await PartnerService.getClientData(
           user?.email || '',
-          1,
-          20,
+          page,
+          paging.pageSize,
           search,
         );
-        console.log('response', response);
-        
-        setClients(response.data.clientDataModel || []);
+
+        if (page === 1) {
+          setClients(response.data.clientDataModel || []);
+        } else {
+          setClients(prev => [
+            ...prev,
+            ...(response.data.clientDataModel || []),
+          ]);
+        }
+
+        setPaging(response.data.responsePagingModel);
       } catch (err) {
         setError('Failed to fetch clients');
       }
     },
-    [user?.email],
+    [user?.email, paging.pageSize],
   );
 
   const handleSearch = useCallback(
     async (text: string) => {
-      await fetchClients(text);
+      await fetchClients(1, text);
     },
     [fetchClients],
   );
+
+  const loadMoreClients = useCallback(async () => {
+    if (paging.nextPage && !isLoading) {
+      setIsLoading(true);
+      await fetchClients(paging.currentPage + 1);
+      setIsLoading(false);
+    }
+  }, [fetchClients, paging.nextPage, paging.currentPage, isLoading]);
 
   useEffect(() => {
     setIsLoading(true);
@@ -58,5 +83,6 @@ export const useClientData = () => {
     fetchClients,
     onRefresh,
     handleSearch,
+    loadMoreClients,
   };
 };

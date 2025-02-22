@@ -5,6 +5,7 @@ import {
   ClientForm,
   ClientResponseModel,
   Group,
+  Response,
 } from '../types';
 import {api} from '../utils/api';
 
@@ -84,7 +85,7 @@ class PartnerService {
       const params = new URLSearchParams({
         email,
       }).toString();
-      const response = await api.get<Group[]>(
+      const response = await api.get<Response<Group[]>>(
         `${url.getGroupsByPartnerId}?${params}`,
       );
       return response;

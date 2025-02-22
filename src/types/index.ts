@@ -197,13 +197,13 @@ export interface ClientActivityDataModel {
 }
 
 export interface Group {
-  Id: number;
-  GroupName: string;
-  GroupColor: string;
-  Color: MasterDataModel;
-  PartnerId: string | null;
-  CreatedOn: string;
-  UpdatedOn: string;
+  id: number;
+  groupName: string;
+  groupColor: string;
+  color: MasterDataModel;
+  partnerId: string | null;
+  createdOn: string;
+  updatedOn: string;
 }
 
 export interface Client {

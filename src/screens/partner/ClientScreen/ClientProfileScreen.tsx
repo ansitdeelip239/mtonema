@@ -240,7 +240,7 @@ const ClientProfileScreen: React.FC<Props> = ({route, navigation}) => {
   const renderGroups = React.useCallback(() => {
     return client?.groups.map((group, index) => (
       <View
-        key={group.id ? `group-${group.id}` : `group-${index}-${group.name}`}
+        key={`group-${group.id}-${group.name}-${index}`} // Added index to make key unique
         style={[styles.groupBadge, {backgroundColor: `${group.groupColor}20`}]}>
         <Text style={[styles.groupText, {color: group.groupColor}]}>
           {group.name}
@@ -254,7 +254,8 @@ const ClientProfileScreen: React.FC<Props> = ({route, navigation}) => {
       return <Text style={styles.noActivityText}>No activities yet</Text>;
     }
 
-    const sortedActivities = client.clientActivityDataModels.slice()
+    const sortedActivities = client.clientActivityDataModels
+      .slice()
       .sort(
         (a, b) =>
           new Date(b.createdOn).getTime() - new Date(a.createdOn).getTime(),

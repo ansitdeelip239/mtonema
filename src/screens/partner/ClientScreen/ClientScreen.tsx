@@ -20,14 +20,33 @@ import SearchHeader from '../../../components/SearchHeader';
 type Props = NativeStackScreenProps<ClientStackParamList, 'ClientScreen'>;
 
 const ClientScreen: React.FC<Props> = ({navigation}) => {
-  const {clients, isLoading, error, refreshing, onRefresh, handleSearch} =
-    useClientData();
+  const {
+    clients,
+    isLoading,
+    error,
+    refreshing,
+    onRefresh,
+    handleSearch,
+    loadMoreClients,
+  } = useClientData();
   const [isSearching, setIsSearching] = useState(false);
 
   const handleSearchWithLoading = async (text: string) => {
     setIsSearching(true);
     await handleSearch(text);
     setIsSearching(false);
+  };
+
+  const renderFooter = () => {
+    if (!isLoading) {
+      return null;
+    }
+
+    return (
+      <View style={styles.footerLoader}>
+        <ActivityIndicator size="small" color="#0066cc" />
+      </View>
+    );
   };
 
   const renderContent = () => {
@@ -72,6 +91,9 @@ const ClientScreen: React.FC<Props> = ({navigation}) => {
             tintColor="#0066cc"
           />
         }
+        onEndReached={loadMoreClients}
+        onEndReachedThreshold={0.5}
+        ListFooterComponent={renderFooter}
       />
     );
   };
@@ -155,6 +177,10 @@ const styles = StyleSheet.create({
   },
   searchInputText: {
     color: Colors.placeholderColor,
+  },
+  footerLoader: {
+    paddingVertical: 20,
+    alignItems: 'center',
   },
 });
 

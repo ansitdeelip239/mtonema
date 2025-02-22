@@ -75,10 +75,12 @@ export const ClientCard: React.FC<ClientCardProps> = ({client, navigation}) => {
             <Text style={styles.clientName}>{client.clientName}</Text>
           </View>
 
-          <View style={styles.groupContainer}>
-            <Text style={styles.label}>Groups:</Text>
-            <GroupBadges groups={client.groups} />
-          </View>
+          {client.groups.length > 0 && (
+            <View style={styles.groupContainer}>
+              <Text style={styles.label}>Groups:</Text>
+              <GroupBadges groups={client.groups} />
+            </View>
+          )}
 
           <View style={styles.activitySection}>
             <View style={styles.row}>
@@ -86,14 +88,15 @@ export const ClientCard: React.FC<ClientCardProps> = ({client, navigation}) => {
                 <>
                   <Text style={styles.label}>Last Activity:</Text>
                   <Text style={styles.lastActivity}>
-                    {/* {client.clientActivityDataModels && formatDate(
-                      client.clientActivityDataModels.sort(
-                        (a, b) =>
-                          new Date(b.CreatedOn).getTime() -
-                          new Date(a.CreatedOn).getTime(),
-                      )[0].CreatedOn,
-                      'PPpp',
-                    )} */}
+                    {client.clientActivityDataModels.length > 0 &&
+                      formatDate(
+                        client.clientActivityDataModels.sort(
+                          (a, b) =>
+                            new Date(b.createdOn).getTime() -
+                            new Date(a.createdOn).getTime(),
+                        )[0].createdOn,
+                        'PPpp',
+                      )}
                   </Text>
                 </>
               ) : (

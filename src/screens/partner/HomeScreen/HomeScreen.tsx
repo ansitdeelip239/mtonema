@@ -51,7 +51,7 @@ const HomeScreen: React.FC<Props> = ({navigation}) => {
 
   const fetchAgentData = useCallback(async () => {
     try {
-      const response = await PartnerService.getAgentImportData(
+      const response = await PartnerService.getAgentProperties(
         1,
         20,
         user?.email || '',
@@ -61,7 +61,7 @@ const HomeScreen: React.FC<Props> = ({navigation}) => {
         '',
       );
       setAgentPropertyCount(
-        response.data?.responsePagingModel?.TotalCount || 0,
+        response.data?.responsePagingModel?.totalCount || 0,
       );
     } catch (error) {
       console.error(error);
@@ -76,7 +76,7 @@ const HomeScreen: React.FC<Props> = ({navigation}) => {
         20,
       );
       setPartnerPropertyCount(
-        response.data?.responsePagingModel?.TotalCount || 0,
+        response.data?.responsePagingModel?.totalCount || 0,
       );
     } catch (error) {
       console.error(error);

@@ -98,6 +98,7 @@ const AddClientScreen: React.FC<Props> = ({navigation, route}) => {
       try {
         const cleanedData = {
           ...formData,
+          clientName: formData.clientName?.trim(),
           displayName: formData.displayName || undefined,
           mobileNumber: formData.mobileNumber || undefined,
           whatsappNumber: formData.whatsappNumber || undefined,
@@ -154,6 +155,12 @@ const AddClientScreen: React.FC<Props> = ({navigation, route}) => {
   });
 
   useEffect(() => {
+    if (fieldErrors.clientName) {
+      console.log('Client Name Error:', fieldErrors.clientName);
+    }
+  }, [fieldErrors]);
+
+  useEffect(() => {
     setFormInput(initialState);
   }, [setFormInput, initialState]);
 
@@ -197,22 +204,22 @@ const AddClientScreen: React.FC<Props> = ({navigation, route}) => {
         <View style={styles.groupButtonsContainer}>
           {groups?.map(group => (
             <TouchableOpacity
-              key={group.Id}
+              key={group.id}
               style={[
                 styles.groupButton,
-                formInput.groups?.some(g => g === group.Id) && {
-                  backgroundColor: group.Color.name,
-                  borderColor: group.Color.name,
+                formInput.groups?.some(g => g === group.id) && {
+                  backgroundColor: group.color.name,
+                  borderColor: group.color.name,
                 },
               ]}
-              onPress={() => toggleGroup(group.Id)}>
+              onPress={() => toggleGroup(group.id)}>
               <Text
                 style={[
                   styles.groupButtonText,
-                  formInput.groups?.some(g => g === group.Id) &&
+                  formInput.groups?.some(g => g === group.id) &&
                     styles.groupButtonTextSelected,
                 ]}>
-                {group.GroupName}
+                {group.groupName}
               </Text>
             </TouchableOpacity>
           ))}
@@ -224,7 +231,7 @@ const AddClientScreen: React.FC<Props> = ({navigation, route}) => {
 
   const renderForm = useMemo(
     () => (
-      <>
+      <View style={styles.formContainer}>
         <MaterialTextInput<ClientForm>
           style={styles.input}
           label="Client Name*"
@@ -233,7 +240,7 @@ const AddClientScreen: React.FC<Props> = ({navigation, route}) => {
           setFormInput={handleFieldChange}
           mode="outlined"
           placeholder="Eg. John Doe"
-          errorMessage={fieldErrors.ClientName}
+          errorMessage={fieldErrors.clientName}
         />
 
         <MaterialTextInput<ClientForm>
@@ -244,7 +251,7 @@ const AddClientScreen: React.FC<Props> = ({navigation, route}) => {
           setFormInput={handleFieldChange}
           mode="outlined"
           placeholder="Eg. John Doe"
-          errorMessage={fieldErrors.DisplayName}
+          errorMessage={fieldErrors.displayName}
         />
 
         <MaterialTextInput<ClientForm>
@@ -256,7 +263,7 @@ const AddClientScreen: React.FC<Props> = ({navigation, route}) => {
           mode="outlined"
           placeholder="Eg. 1234567890"
           keyboardType="number-pad"
-          errorMessage={fieldErrors.MobileNumber}
+          errorMessage={fieldErrors.mobileNumber}
         />
 
         <MaterialTextInput<ClientForm>
@@ -268,7 +275,7 @@ const AddClientScreen: React.FC<Props> = ({navigation, route}) => {
           mode="outlined"
           placeholder="Eg. 1234567890"
           keyboardType="number-pad"
-          errorMessage={fieldErrors.WhatsappNumber}
+          errorMessage={fieldErrors.whatsappNumber}
         />
 
         <MaterialTextInput<ClientForm>
@@ -281,7 +288,7 @@ const AddClientScreen: React.FC<Props> = ({navigation, route}) => {
           placeholder="Eg. email@example.com"
           keyboardType="email-address"
           autoCapitalize="none"
-          errorMessage={fieldErrors.EmailId}
+          errorMessage={fieldErrors.emailId}
         />
 
         {renderGroupToggleButtons}
@@ -298,7 +305,7 @@ const AddClientScreen: React.FC<Props> = ({navigation, route}) => {
           numberOfLines={4}
           onFocus={() => scrollToEnd()}
         />
-      </>
+      </View>
     ),
     [formInput, handleFieldChange, renderGroupToggleButtons, fieldErrors],
   );
@@ -346,9 +353,15 @@ const styles = StyleSheet.create({
   scrollContainer: {
     padding: 16,
     paddingBottom: 110,
+    gap: 16,
   },
   input: {
-    marginBottom: 16,
+    // marginBottom: 16,
+    flex: 1,
+  },
+  formContainer: {
+    flex: 1,
+    gap: 16,
   },
   buttonText: {
     color: '#fff',
