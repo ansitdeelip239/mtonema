@@ -170,19 +170,15 @@ export interface FilterValues {
 }
 
 export interface AgentPropertyRequestModel {
-  AgentName: string;
-  AgentContactNo: string;
-  PropertyLocation: string;
-  PropertyType: string;
-  FlatSize: string;
-  DemandPrice: string;
-  SecurityDepositAmount: string;
-  Negotiable: boolean;
-  PropertyNotes: string;
-  Status: number;
-  Id: number;
-  PriceUnit: string | null;
-  EmailId: string;
+  agentName: string;
+  agentContactNo: string;
+  propertyLocation: string;
+  propertyType: string;
+  bhkType: string;
+  demandPrice: string;
+  securityDepositAmount: string;
+  negotiable: boolean;
+  propertyNotes: string;
 }
 
 export interface MasterDataModel {

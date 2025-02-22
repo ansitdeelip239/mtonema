@@ -61,7 +61,7 @@ const AgentDataScreen: React.FC<Props> = ({navigation}) => {
     async (page: number, shouldRefresh = false) => {
       try {
         setIsLoading(true);
-        const response = await PartnerService.getAgentImportData(
+        const response = await PartnerService.getAgentProperties(
           page,
           PAGE_SIZE,
           user?.email || '',
@@ -71,9 +71,9 @@ const AgentDataScreen: React.FC<Props> = ({navigation}) => {
           filters.bhkType || '',
         );
 
-        const newData = response?.data?.agentDataModel ?? [];
+        const newData = response?.agentDataModel ?? [];
         const pagingInfo: PagingModel =
-          response?.data?.responsePagingModel ?? DEFAULT_PAGING_MODEL;
+          response?.responsePagingModel ?? DEFAULT_PAGING_MODEL;
 
         const filteredData = newData.filter(
           (item: any) => item !== null && item !== undefined,

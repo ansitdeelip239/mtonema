@@ -45,7 +45,7 @@ const url = {
   searchIntellisense: BASE_URL + '/MasterDetail/SearchIntelligence',
 
   //Partner
-  getAgentImportData: BASE_URL + '/GetAgentImportDataUserId',
+  agentProperties: BASE_URL + '/partners/agent-properties',
   updateAgentProperty: BASE_URL + '/partner/UpdateAgentProperty',
   getClientData: BASE_URL + '/partner/GetClientData',
   getGroupsByPartnerId: BASE_URL + '/partner/GetGroupByPartnerId',

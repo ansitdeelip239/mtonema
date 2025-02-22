@@ -9,7 +9,7 @@ import {
 import {api} from '../utils/api';
 
 class PartnerService {
-  static async getAgentImportData(
+  static async getAgentProperties(
     pageNumber: number,
     pageSize: number,
     partnerId: string,
@@ -29,7 +29,7 @@ class PartnerService {
         flatSize,
       }).toString();
       const response = await api.get<any>(
-        `${url.getAgentImportData}?${params}`,
+        `${url.agentProperties}?${params}`,
       );
       return response.data;
     } catch (error) {
@@ -38,9 +38,19 @@ class PartnerService {
     }
   }
 
+  static async addAgentProperties(body: AgentPropertyRequestModel) {
+    try {
+      const response = await api.post<null>(`${url.agentProperties}`, body);
+      return response;
+    } catch (error) {
+      console.error('Error in updateAgentProperty', error);
+      throw error;
+    }
+  }
+
   static async updateAgentProperty(body: AgentPropertyRequestModel) {
     try {
-      const response = await api.post<null>(`${url.updateAgentProperty}`, body);
+      const response = await api.post<null>(`${url.agentProperties}`, body);
       return response;
     } catch (error) {
       console.error('Error in updateAgentProperty', error);

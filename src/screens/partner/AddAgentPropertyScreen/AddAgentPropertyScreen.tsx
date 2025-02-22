@@ -16,7 +16,7 @@ import FilterOption from '../../../components/FilterOption';
 import {formatCurrency} from '../../../utils/currency';
 import Colors from '../../../constants/Colors';
 import PartnerService from '../../../services/PartnerService';
-import {useAuth} from '../../../hooks/useAuth';
+// import {useAuth} from '../../../hooks/useAuth';
 import useForm from '../../../hooks/useForm';
 import {BottomTabScreenProps} from '@react-navigation/bottom-tabs';
 import Header from '../../../components/Header';
@@ -43,7 +43,7 @@ const AddAgentPropertyScreen: React.FC<Props> = ({navigation, route}) => {
   >({});
 
   const scrollViewRef = useRef<ScrollView>(null);
-  const {user} = useAuth();
+  // const {user} = useAuth();
   const {masterData} = useMaster();
   const {setAgentPropertyUpdated} = usePartner();
   const {keyboardVisible} = useKeyboard();
@@ -117,20 +117,16 @@ const AddAgentPropertyScreen: React.FC<Props> = ({navigation, route}) => {
         const validatedApiData = apiSubmissionSchema.parse(validatedFormData);
 
         const request = {
-          AgentName: validatedApiData.agentName,
-          AgentContactNo: validatedApiData.agentContactNo,
-          PropertyLocation: validatedApiData.propertyLocation,
-          PropertyType: validatedApiData.propertyType,
-          FlatSize: validatedApiData.bhkType,
-          DemandPrice: validatedApiData.demandPrice.toString(),
-          SecurityDepositAmount:
+          agentName: validatedApiData.agentName,
+          agentContactNo: validatedApiData.agentContactNo,
+          propertyLocation: validatedApiData.propertyLocation,
+          propertyType: validatedApiData.propertyType,
+          bhkType: validatedApiData.bhkType,
+          demandPrice: validatedApiData.demandPrice.toString(),
+          securityDepositAmount:
             validatedApiData.securityDepositAmount.toString(),
-          Negotiable: validatedApiData.negotiable,
-          PropertyNotes: validatedApiData.propertyNotes,
-          Status: 1,
-          Id: editMode && propertyData ? propertyData.Id : 0,
-          PriceUnit: null,
-          EmailId: user?.email || '',
+          negotiable: validatedApiData.negotiable,
+          propertyNotes: validatedApiData.propertyNotes,
         };
 
         const response = await PartnerService.updateAgentProperty(request);
