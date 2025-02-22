@@ -4,8 +4,9 @@ import {getLighterColor} from '../../../../utils/colorUtils';
 
 interface GroupBadgesProps {
   groups: Array<{
-    Name: string;
-    GroupColor: string;
+    name: string;
+    groupColor: string;
+    id: number;
   }>;
 }
 
@@ -17,12 +18,12 @@ const GroupBadges: React.FC<GroupBadgesProps> = ({groups}) => (
         style={[
           styles.badge,
           {
-            backgroundColor: getLighterColor(group.GroupColor),
-            borderColor: group.GroupColor,
+            backgroundColor: getLighterColor(group.groupColor),
+            borderColor: group.groupColor,
           },
         ]}>
-        <Text style={[styles.badgeText, {color: group.GroupColor}]}>
-          {group.Name}
+        <Text style={[styles.badgeText, {color: group.groupColor}]}>
+          {group.name}
         </Text>
       </View>
     ))}

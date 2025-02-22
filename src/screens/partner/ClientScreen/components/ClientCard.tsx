@@ -25,16 +25,16 @@ interface ClientCardProps {
 export const ClientCard: React.FC<ClientCardProps> = ({client, navigation}) => {
   const handleWhatsapp = () => {
     Linking.openURL(
-      `https://api.whatsapp.com/send?phone=${client.WhatsappNumber}`,
+      `https://api.whatsapp.com/send?phone=${client.whatsappNumber}`,
     );
   };
 
   const handlePhone = () => {
-    Linking.openURL(`tel:${client.MobileNumber}`);
+    Linking.openURL(`tel:${client.mobileNumber}`);
   };
 
   const handleCardPress = () => {
-    navigation.navigate('ClientProfileScreen', {clientId: client.Id});
+    navigation.navigate('ClientProfileScreen', {clientId: client.id});
   };
 
   return (
@@ -45,11 +45,11 @@ export const ClientCard: React.FC<ClientCardProps> = ({client, navigation}) => {
             <View style={styles.dateBlock}>
               <Text style={styles.dateLabel}>Date Added</Text>
               <Text style={styles.dateText}>
-                {formatDate(client.CreatedOn, 'dd MMM yy')}
+                {formatDate(client.createdOn, 'dd MMM yy')}
               </Text>
             </View>
             <View style={styles.iconContainer}>
-              {client.MobileNumber && (
+              {client.mobileNumber && (
                 <TouchableOpacity onPress={handlePhone}>
                   <Image
                     source={require('../../../../assets/Icon/phone.png')}
@@ -57,7 +57,7 @@ export const ClientCard: React.FC<ClientCardProps> = ({client, navigation}) => {
                   />
                 </TouchableOpacity>
               )}
-              {client.WhatsappNumber && (
+              {client.whatsappNumber && (
                 <TouchableOpacity onPress={handleWhatsapp}>
                   <Image
                     source={require('../../../../assets/Icon/whatsapp.png')}
@@ -72,22 +72,22 @@ export const ClientCard: React.FC<ClientCardProps> = ({client, navigation}) => {
         <View style={styles.cardContent}>
           <View style={styles.row}>
             <Text style={styles.label}>Client Name:</Text>
-            <Text style={styles.clientName}>{client.ClientName}</Text>
+            <Text style={styles.clientName}>{client.clientName}</Text>
           </View>
 
           <View style={styles.groupContainer}>
             <Text style={styles.label}>Groups:</Text>
-            <GroupBadges groups={client.Groups} />
+            <GroupBadges groups={client.groups} />
           </View>
 
           <View style={styles.activitySection}>
             <View style={styles.row}>
-              {client.ClientActivityDataModels?.length > 0 ? (
+              {client.clientActivityDataModels?.length > 0 ? (
                 <>
                   <Text style={styles.label}>Last Activity:</Text>
                   <Text style={styles.lastActivity}>
                     {formatDate(
-                      client.ClientActivityDataModels.sort(
+                      client.clientActivityDataModels.sort(
                         (a, b) =>
                           new Date(b.CreatedOn).getTime() -
                           new Date(a.CreatedOn).getTime(),

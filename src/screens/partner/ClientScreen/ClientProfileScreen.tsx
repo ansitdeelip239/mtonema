@@ -88,15 +88,15 @@ const ClientProfileScreen: React.FC<Props> = ({route, navigation}) => {
 
       switch (type) {
         case 'phone':
-          Linking.openURL(`tel:${client.MobileNumber}`);
+          Linking.openURL(`tel:${client.mobileNumber}`);
           break;
         case 'whatsapp':
           Linking.openURL(
-            `https://api.whatsapp.com/send?phone=${client.WhatsappNumber}`,
+            `https://api.whatsapp.com/send?phone=${client.whatsappNumber}`,
           );
           break;
         case 'email':
-          Linking.openURL(`mailto:${client.EmailId}`);
+          Linking.openURL(`mailto:${client.emailId}`);
           break;
       }
     },
@@ -143,7 +143,7 @@ const ClientProfileScreen: React.FC<Props> = ({route, navigation}) => {
   const handleConfirmDelete = async () => {
     try {
       const response = await PartnerService.deleteClientById(
-        client?.Id as number,
+        client?.id as number,
       );
       if (response.success) {
         Toast.show({
@@ -215,9 +215,9 @@ const ClientProfileScreen: React.FC<Props> = ({route, navigation}) => {
     }
 
     const contactFields = [
-      {label: 'Mobile', value: client.MobileNumber},
-      {label: 'WhatsApp', value: client.WhatsappNumber},
-      {label: 'Email', value: client.EmailId},
+      {label: 'Mobile', value: client.mobileNumber},
+      {label: 'WhatsApp', value: client.whatsappNumber},
+      {label: 'Email', value: client.emailId},
     ].filter(field => field.value);
 
     if (contactFields.length === 0) {
@@ -238,23 +238,23 @@ const ClientProfileScreen: React.FC<Props> = ({route, navigation}) => {
   }, [client]);
 
   const renderGroups = React.useCallback(() => {
-    return client?.Groups.map((group, index) => (
+    return client?.groups.map((group, index) => (
       <View
-        key={group.ID ? `group-${group.ID}` : `group-${index}-${group.Name}`}
-        style={[styles.groupBadge, {backgroundColor: `${group.GroupColor}20`}]}>
-        <Text style={[styles.groupText, {color: group.GroupColor}]}>
-          {group.Name}
+        key={group.id ? `group-${group.id}` : `group-${index}-${group.name}`}
+        style={[styles.groupBadge, {backgroundColor: `${group.groupColor}20`}]}>
+        <Text style={[styles.groupText, {color: group.groupColor}]}>
+          {group.name}
         </Text>
       </View>
     ));
-  }, [client?.Groups]);
+  }, [client?.groups]);
 
   const renderActivities = React.useCallback(() => {
-    if (!client?.ClientActivityDataModels.length) {
+    if (!client?.clientActivityDataModels.length) {
       return <Text style={styles.noActivityText}>No activities yet</Text>;
     }
 
-    const sortedActivities = client.ClientActivityDataModels.slice()
+    const sortedActivities = client.clientActivityDataModels.slice()
       .sort(
         (a, b) =>
           new Date(b.CreatedOn).getTime() - new Date(a.CreatedOn).getTime(),
@@ -269,7 +269,7 @@ const ClientProfileScreen: React.FC<Props> = ({route, navigation}) => {
         onPress={handleActivityPress}
       />
     ));
-  }, [client?.ClientActivityDataModels]);
+  }, [client?.clientActivityDataModels]);
 
   if (loading) {
     return (
@@ -328,20 +328,20 @@ const ClientProfileScreen: React.FC<Props> = ({route, navigation}) => {
             <View style={styles.profileHeader}>
               <View style={styles.avatarContainer}>
                 <Text style={styles.avatarText}>
-                  {client.ClientName.charAt(0).toUpperCase()}
+                  {client.clientName.charAt(0).toUpperCase()}
                 </Text>
               </View>
-              <Text style={styles.clientName}>{client.ClientName}</Text>
-              {client.DisplayName && (
-                <Text style={styles.displayName}>{client.DisplayName}</Text>
+              <Text style={styles.clientName}>{client.clientName}</Text>
+              {client.displayName && (
+                <Text style={styles.displayName}>{client.displayName}</Text>
               )}
             </View>
 
-            {(client.MobileNumber ||
-              client.WhatsappNumber ||
-              client.EmailId) && (
+            {(client.mobileNumber ||
+              client.whatsappNumber ||
+              client.emailId) && (
               <View style={styles.contactButtons}>
-                {client.MobileNumber && (
+                {client.mobileNumber && (
                   <TouchableOpacity
                     key="contact-phone"
                     style={styles.contactButton}
@@ -350,7 +350,7 @@ const ClientProfileScreen: React.FC<Props> = ({route, navigation}) => {
                     <Text style={styles.contactText}>Call</Text>
                   </TouchableOpacity>
                 )}
-                {client.WhatsappNumber && (
+                {client.whatsappNumber && (
                   <TouchableOpacity
                     key="contact-whatsapp"
                     style={styles.contactButton}
@@ -359,7 +359,7 @@ const ClientProfileScreen: React.FC<Props> = ({route, navigation}) => {
                     <Text style={styles.contactText}>WhatsApp</Text>
                   </TouchableOpacity>
                 )}
-                {client.EmailId && (
+                {client.emailId && (
                   <TouchableOpacity
                     key="contact-email"
                     style={styles.contactButton}
@@ -379,17 +379,17 @@ const ClientProfileScreen: React.FC<Props> = ({route, navigation}) => {
               ]}>
               {renderContactInfo()}
 
-              {client.Groups && client.Groups.length > 0 && (
+              {client.groups && client.groups.length > 0 && (
                 <View style={styles.infoCard}>
                   <Text style={styles.sectionTitle}>Groups</Text>
                   <View style={styles.groupsContainer}>{renderGroups()}</View>
                 </View>
               )}
 
-              {client.Notes && (
+              {client.notes && (
                 <View style={styles.infoCard}>
                   <Text style={styles.sectionTitle}>Notes</Text>
-                  <Text style={styles.notesText}>{client.Notes}</Text>
+                  <Text style={styles.notesText}>{client.notes}</Text>
                 </View>
               )}
 

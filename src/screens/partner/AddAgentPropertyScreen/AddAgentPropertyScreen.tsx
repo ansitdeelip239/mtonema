@@ -34,6 +34,7 @@ import Toast from 'react-native-toast-message';
 import {SearchInput} from './components/SearchInput';
 import {useKeyboard} from '../../../hooks/useKeyboard';
 import { useDialog } from '../../../hooks/useDialog';
+import { useAuth } from '../../../hooks/useAuth';
 
 type Props = BottomTabScreenProps<PartnerBottomTabParamList, 'AddProperty'>;
 
@@ -48,6 +49,7 @@ const AddAgentPropertyScreen: React.FC<Props> = ({navigation, route}) => {
   const {setAgentPropertyUpdated} = usePartner();
   const {keyboardVisible} = useKeyboard();
   const {showError} = useDialog();
+  const {user} = useAuth();
 
   const editMode = route.params?.editMode;
   const propertyData = route.params?.propertyData;
@@ -117,6 +119,7 @@ const AddAgentPropertyScreen: React.FC<Props> = ({navigation, route}) => {
         const validatedApiData = apiSubmissionSchema.parse(validatedFormData);
 
         const request = {
+          partnerid: user?.id as number,
           agentName: validatedApiData.agentName,
           agentContactNo: validatedApiData.agentContactNo,
           propertyLocation: validatedApiData.propertyLocation,

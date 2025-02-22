@@ -170,6 +170,7 @@ export interface FilterValues {
 }
 
 export interface AgentPropertyRequestModel {
+  partnerid: number;
   agentName: string;
   agentContactNo: string;
   propertyLocation: string;
@@ -206,19 +207,19 @@ export interface Group {
 }
 
 export interface Client {
-  Id: number;
-  PartnerId: number;
-  ClientName: string;
-  DisplayName: string;
-  MobileNumber: string;
-  WhatsappNumber: string;
-  EmailId: string;
-  Notes: string;
-  ClientActivityDataModels: ClientActivityDataModel[];
-  Groups: {ID: number; Name: string; GroupColor: string}[];
-  CreatedOn: string;
-  Activity: string;
-  Status: number;
+  id: number;
+  partnerId: number;
+  clientName: string;
+  displayName: string;
+  mobileNumber: string;
+  whatsappNumber: string;
+  emailId: string;
+  notes: string;
+  clientActivityDataModels: ClientActivityDataModel[];
+  groups: {id: number; name: string; groupColor: string}[];
+  createdOn: string;
+  activity: string;
+  status: number;
 }
 
 export interface ClientResponseModel {

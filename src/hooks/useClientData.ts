@@ -17,7 +17,7 @@ export const useClientData = () => {
       setError(null);
       try {
         const response = await PartnerService.getClientData(
-          user?.Email || '',
+          user?.email || '',
           1,
           20,
           search,
@@ -27,7 +27,7 @@ export const useClientData = () => {
         setError('Failed to fetch clients');
       }
     },
-    [user?.Email],
+    [user?.email],
   );
 
   const handleSearch = useCallback(
@@ -40,7 +40,7 @@ export const useClientData = () => {
   useEffect(() => {
     setIsLoading(true);
     fetchClients().finally(() => setIsLoading(false));
-  }, [user?.Email, fetchClients, clientsUpdated]);
+  }, [user?.email, fetchClients, clientsUpdated]);
 
   const onRefresh = async () => {
     setRefreshing(true);

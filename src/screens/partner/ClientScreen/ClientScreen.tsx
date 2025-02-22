@@ -61,7 +61,7 @@ const ClientScreen: React.FC<Props> = ({navigation}) => {
         renderItem={({item}) => (
           <ClientCard client={item} navigation={navigation} />
         )}
-        keyExtractor={client => client.Id.toString()}
+        keyExtractor={client => client.id.toString()}
         contentContainerStyle={styles.listContainer}
         showsVerticalScrollIndicator={false}
         refreshControl={

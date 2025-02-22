@@ -28,9 +28,7 @@ class PartnerService {
         propertyType,
         flatSize,
       }).toString();
-      const response = await api.get<any>(
-        `${url.agentProperties}?${params}`,
-      );
+      const response = await api.get<any>(`${url.agentProperties}?${params}`);
       return response.data;
     } catch (error) {
       console.error('Error in getMasterDetails', error);
@@ -69,7 +67,7 @@ class PartnerService {
         partnerId,
         pageNumber: pageNumber.toString(),
         pageSize: pageSize.toString(),
-        searchKey: searchKey || '',
+        SearchKey: searchKey || '',
       }).toString();
       const response = await api.get<ClientResponseModel>(
         `${url.getClientData}?${params}`,
@@ -145,8 +143,9 @@ class PartnerService {
   static async getClientById(clientId: number) {
     try {
       const response = await api.get<Client>(
-        `${url.getClientById}?Id=${clientId}`,
+        `${url.getClientById}/${clientId}`,
       );
+
       return response;
     } catch (error) {
       console.error('Error in getClientById', error);
