@@ -33,8 +33,8 @@ import {usePartner} from '../../../context/PartnerProvider';
 import Toast from 'react-native-toast-message';
 import {SearchInput} from './components/SearchInput';
 import {useKeyboard} from '../../../hooks/useKeyboard';
-import { useDialog } from '../../../hooks/useDialog';
-import { useAuth } from '../../../hooks/useAuth';
+import {useDialog} from '../../../hooks/useDialog';
+import {useAuth} from '../../../hooks/useAuth';
 
 type Props = BottomTabScreenProps<PartnerBottomTabParamList, 'AddProperty'>;
 
@@ -127,12 +127,12 @@ const AddAgentPropertyScreen: React.FC<Props> = ({navigation, route}) => {
           bhkType: validatedApiData.bhkType,
           demandPrice: validatedApiData.demandPrice.toString(),
           securityDepositAmount:
-            validatedApiData.securityDepositAmount.toString(),
+            validatedApiData.securityDepositAmount,
           negotiable: validatedApiData.negotiable,
           propertyNotes: validatedApiData.propertyNotes,
         };
 
-        const response = await PartnerService.updateAgentProperty(request);
+        const response = !editMode ? await PartnerService.addAgentProperty(request) : await PartnerService.updateAgentProperty(request, propertyData?.id as number);
         if (response.success) {
           resetForm();
           setErrors({});

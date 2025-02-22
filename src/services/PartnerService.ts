@@ -37,7 +37,7 @@ class PartnerService {
     }
   }
 
-  static async addAgentProperties(body: AgentPropertyRequestModel) {
+  static async addAgentProperty(body: AgentPropertyRequestModel) {
     try {
       const response = await api.post<null>(`${url.agentProperties}`, body);
       return response;
@@ -47,9 +47,9 @@ class PartnerService {
     }
   }
 
-  static async updateAgentProperty(body: AgentPropertyRequestModel) {
+  static async updateAgentProperty(body: AgentPropertyRequestModel, id: number) {
     try {
-      const response = await api.post<null>(`${url.agentProperties}`, body);
+      const response = await api.put<null>(`${url.agentProperties}/${id}`, body);
       return response;
     } catch (error) {
       console.error('Error in updateAgentProperty', error);
@@ -98,7 +98,7 @@ class PartnerService {
   static async addClient(body: ClientForm) {
     try {
       const response = await api.post<string | null>(
-        `${url.addClient}`,
+        `${url.clients}`,
         body,
       );
       return response;

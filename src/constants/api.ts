@@ -46,11 +46,10 @@ const url = {
 
   //Partner
   agentProperties: BASE_URL + '/partners/agent-properties',
-  updateAgentProperty: BASE_URL + '/partner/UpdateAgentProperty',
+  // updateAgentProperty: BASE_URL + '/partner/UpdateAgentProperty',
   getClientData: BASE_URL + '/partners/getclientdata',
-  addClient: BASE_URL + '/partners/clients',
   getGroupsByPartnerId: BASE_URL + '/partners/getgroupby-partnerId',
-  addEditClientData: BASE_URL + '/partner/AddEditClientData',
+  // addEditClientData: BASE_URL + '/partner/AddEditClientData',
   getPartnerProperty: BASE_URL + '/partner/GetPartnerPropertyUserId',
   deleteAgentProperty: BASE_URL + '/partners/agent-properties',
   clients: BASE_URL + '/partners/clients',

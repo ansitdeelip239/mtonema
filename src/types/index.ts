@@ -177,7 +177,7 @@ export interface AgentPropertyRequestModel {
   propertyType: string;
   bhkType: string;
   demandPrice: string;
-  securityDepositAmount: string;
+  securityDepositAmount: number;
   negotiable: boolean;
   propertyNotes: string;
 }
