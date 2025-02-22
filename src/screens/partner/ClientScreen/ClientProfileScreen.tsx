@@ -173,7 +173,7 @@ const ClientProfileScreen: React.FC<Props> = ({route, navigation}) => {
       setAddingActivity(true);
       const response = await PartnerService.addEditClientActivity(
         type,
-        route.params.clientId.toString(),
+        route.params.clientId,
         description,
         user?.email as string,
         activityId,

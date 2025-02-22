@@ -1,5 +1,6 @@
 import {NavigatorScreenParams} from '@react-navigation/native';
 import {ClientStackParamList} from '../navigator/components/ClientScreenStack';
+import { AgentData } from '.';
 
 export type AgentStackParamList = {
   AgentPropertyList: undefined;
@@ -25,7 +26,7 @@ export type BuyerSellerAdminBottomTabParamList = {
 export type PartnerBottomTabParamList = {
   Home: undefined;
   Property: undefined;
-  AddProperty: {editMode: boolean; propertyData: any};
+  AddProperty: {editMode: boolean; propertyData: AgentData};
   Clients: NavigatorScreenParams<ClientStackParamList>;
   Profile: undefined;
 };

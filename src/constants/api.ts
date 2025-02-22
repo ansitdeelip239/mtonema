@@ -52,10 +52,9 @@ const url = {
   getGroupsByPartnerId: BASE_URL + '/partners/getgroupby-partnerId',
   addEditClientData: BASE_URL + '/partner/AddEditClientData',
   getPartnerProperty: BASE_URL + '/partner/GetPartnerPropertyUserId',
-  deleteAgentProperty: BASE_URL + '/partner/DeleteAgentProperty',
-  getClientById: BASE_URL + '/partners/clients',
-  deleteClientById: BASE_URL + '/partner/DeleteClientDetails',
-  addEditClientActivity: BASE_URL + '/partner/AddEditClientActivity',
+  deleteAgentProperty: BASE_URL + '/partners/agent-properties',
+  clients: BASE_URL + '/partners/clients',
+  addEditClientActivity: BASE_URL + '/partners/addeditclient-activity',
   deleteClientActivity: BASE_URL + '/partner/DeleteClientActivity',
 
   //Admin

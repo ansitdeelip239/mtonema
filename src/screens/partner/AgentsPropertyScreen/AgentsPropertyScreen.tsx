@@ -111,7 +111,7 @@ const AgentDataScreen: React.FC<Props> = ({navigation}) => {
     if (isInitialRender.current) {
       isInitialRender.current = false;
       return;
-    }
+      }
 
     if (
       JSON.stringify(lastAppliedFilters.current) !== JSON.stringify(filters)

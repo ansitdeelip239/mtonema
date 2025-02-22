@@ -57,16 +57,16 @@ const AddAgentPropertyScreen: React.FC<Props> = ({navigation, route}) => {
   const initialState = useMemo(() => {
     if (editMode && propertyData) {
       return {
-        agentName: propertyData.AgentName || '',
-        agentContactNo: propertyData.AgentContactNo || '',
-        propertyLocation: propertyData.PropertyLocation || '',
-        propertyType: propertyData.PropertyType?.MasterDetailName || '',
-        bhkType: propertyData.FlatSize?.MasterDetailName || '',
-        demandPrice: propertyData.DemandPrice?.toString() || '',
+        agentName: propertyData.agentName || '',
+        agentContactNo: propertyData.agentContactNo || '',
+        propertyLocation: propertyData.propertyLocation || '',
+        propertyType: propertyData.propertyType || '',
+        bhkType: propertyData.flatSize || '',
+        demandPrice: propertyData.demandPrice?.toString() || '',
         securityDepositAmount:
-          propertyData.SecurityDepositAmount?.toString() || '',
-        negotiable: propertyData.Negotiable || false,
-        propertyNotes: propertyData.PropertyNotes || '',
+          propertyData.securityDepositAmount?.toString() || '',
+        negotiable: propertyData.negotiable || false,
+        propertyNotes: propertyData.propertyNotes || '',
       };
     }
 

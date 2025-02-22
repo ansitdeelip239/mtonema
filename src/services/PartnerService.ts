@@ -132,7 +132,7 @@ class PartnerService {
   static async deleteAgentProperty(agentPropertyId: number) {
     try {
       const response = await api.delete<null>(
-        `${url.deleteAgentProperty}?agentPropertId=${agentPropertyId}`,
+        `${url.deleteAgentProperty}?agentPropertyId=${agentPropertyId}`,
       );
       return response;
     } catch (error) {
@@ -144,7 +144,7 @@ class PartnerService {
   static async getClientById(clientId: number) {
     try {
       const response = await api.get<Client>(
-        `${url.getClientById}/${clientId}`,
+        `${url.clients}/${clientId}`,
       );
 
       return response;
@@ -157,7 +157,7 @@ class PartnerService {
   static async deleteClientById(clientId: number) {
     try {
       const response = await api.delete<null>(
-        `${url.deleteClientById}?clientId=${clientId}`,
+        `${url.clients}/${clientId}`,
       );
       return response;
     } catch (error) {
@@ -168,18 +168,18 @@ class PartnerService {
 
   static async addEditClientActivity(
     activityType: number,
-    clientId: string,
+    clientId: number,
     description: string,
     partnerId: string,
     id?: number,
   ) {
     try {
       const body = {
-        ActivityType: activityType,
-        ClientId: clientId,
-        Description: description,
-        PartnerId: partnerId,
-        ...(id && {Id: id}),
+        activityType: activityType,
+        clientId: clientId,
+        description: description,
+        partnerId: partnerId,
+        ...(id && {id: id}),
       };
       const response = await api.post<null>(
         `${url.addEditClientActivity}`,
