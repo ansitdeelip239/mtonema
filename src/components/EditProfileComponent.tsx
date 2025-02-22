@@ -7,6 +7,8 @@ import {ProfileFormData} from '../schema/ProfileFormSchema';
 import GetIcon from './GetIcon';
 import Images from '../constants/Images';
 import AuthService from '../services/AuthService';
+import CommonService from '../services/CommonService';
+import {useAuth} from '../hooks/useAuth';
 
 const EditProfileComponent = () => {
   const [editingFields, setEditingFields] = useState<
@@ -17,21 +19,33 @@ const EditProfileComponent = () => {
     location: false,
     phone: false,
   });
+  const {user, setUser} = useAuth();
 
-  const [profileData, setProfileData] = useState<ProfileFormData>({
-    name: '',
-    email: '',
-    location: '',
-    phone: '',
-  });
-
-  const {formInput, handleInputChange, loading, onSubmit} =
+  const {formInput, handleInputChange, loading, onSubmit, setFormInput} =
     useForm<ProfileFormData>({
-      initialState: profileData,
+      initialState: {
+        name: '',
+        email: '',
+        location: '',
+        phone: '',
+      },
       onSubmit: async formData => {
         try {
           // Add your API call here
-          console.log('Submitting:', formData);
+          const requestBody = {
+            id: user?.id as number,
+            name: formData.name,
+            email: formData.email,
+            location: formData.location,
+            phone: formData.phone,
+          };
+
+          const response = await CommonService.updateProfile(requestBody);
+          if (response.httpStatus === 200) {
+            console.log('Profile updated successfully');
+            // storeUser(response.data);
+            setUser(response.data);
+          }
           // After successful submission
           setEditingFields({
             name: false,
@@ -59,14 +73,16 @@ const EditProfileComponent = () => {
       try {
         const token = await AuthService.getToken();
         const response = await AuthService.getUserByToken(token as string);
-        setProfileData(response.data);
+        console.log('#$%#$%#$', response);
+
+        setFormInput(response.data);
       } catch (error) {
         console.error('Error fetching profile data:', error);
       }
     }
 
     fetchProfileData();
-  }, []);
+  }, [setFormInput]);
 
   return (
     <View style={styles.container}>

@@ -3,6 +3,7 @@ import {ImageType} from './propertyform';
 export interface AuthContextType {
   isAuthenticated: boolean;
   user: User | null;
+  setUser: (user: User | null) => void;
   login: (token: string) => void;
   logout: () => void;
   storeUser: (user: User) => void;

@@ -4,6 +4,7 @@ import {AuthContextType, User} from '../types';
 const AuthContext = createContext<AuthContextType>({
   isAuthenticated: false,
   user: null,
+  setUser: () => {},
   login: (_token: string) => {},
   logout: () => {},
   storeUser: (_user: User) => {},

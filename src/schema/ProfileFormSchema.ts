@@ -8,7 +8,7 @@ export const profileFormSchema = z.object({
 });
 
 export const profileApiSchema = profileFormSchema.extend({
-  id: z.string(),
+  id: z.number(),
 });
 
 export type ProfileFormData = z.infer<typeof profileFormSchema>;
