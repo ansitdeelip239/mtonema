@@ -33,6 +33,9 @@ const SignUpScreen: React.FC<Props> = ({navigation, route}) => {
   const [errors, setErrors] = useState<
     Partial<Record<keyof SignupFormType, string>>
   >({});
+  const [locationSuggestions, setLocationSuggestions] = useState<string[]>([]);
+  const [isLoadingLocations, setIsLoadingLocations] = useState(false);
+
   const {keyboardVisible} = useKeyboard();
   const {showError} = useDialog();
 
@@ -41,6 +44,42 @@ const SignUpScreen: React.FC<Props> = ({navigation, route}) => {
     email: '',
     location: '',
     phone: '',
+  };
+
+  const handleLocationChange = async (
+    field: keyof SignupFormType,
+    value: string | boolean,
+  ) => {
+    if (typeof value !== 'string') {
+      return;
+    }
+    handleFieldChange(field, value);
+
+    if (value.length >= 2) {
+      setIsLoadingLocations(true);
+      try {
+        const response = await AuthService.getPlaces(value, 'Noida');
+        if (response?.predictions) {
+          // Convert predictions to string array
+          const suggestions = response.predictions.map(
+            (prediction: any) => prediction.description,
+          );
+          setLocationSuggestions(suggestions);
+        }
+      } catch (error) {
+        console.error('Error fetching locations:', error);
+      } finally {
+        setIsLoadingLocations(false);
+      }
+    } else {
+      setLocationSuggestions([]);
+    }
+  };
+
+  // Add a handler for suggestion selection
+  const handleLocationSelect = (suggestion: string) => {
+    handleFieldChange('location', suggestion);
+    setLocationSuggestions([]);
   };
 
   const validateField = (field: keyof SignupFormType, value: string) => {
@@ -161,10 +200,13 @@ const SignUpScreen: React.FC<Props> = ({navigation, route}) => {
                 label="Location*"
                 field="location"
                 formInput={formInput}
-                setFormInput={handleFieldChange}
+                setFormInput={handleLocationChange}
                 mode="outlined"
                 placeholder="Enter your location"
                 errorMessage={errors.location}
+                suggestions={locationSuggestions}
+                onSuggestionSelect={handleLocationSelect}
+                loading={isLoadingLocations}
               />
 
               <MaterialTextInput<SignupFormType>
@@ -225,6 +267,14 @@ const styles = StyleSheet.create({
   image: {
     width: 180,
     height: 180,
+  },
+  mainText: {
+    fontSize: 16,
+    color: '#000',
+  },
+  secondaryText: {
+    fontSize: 14,
+    color: '#666',
   },
 });
 

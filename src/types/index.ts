@@ -117,32 +117,50 @@ export interface PropertyModel {
   propertyModels?: any[];
 }
 
+export interface PlacePrediction {
+  description: string;
+  place_id: string;
+  structured_formatting: {
+    main_text: string;
+    secondary_text: string;
+  };
+}
+
+export interface PlacesResponse {
+  predictions: PlacePrediction[];
+  status: string;
+}
+
 export interface MasterDetailModel {
   masterDetailName: string;
   id: number;
 }
 
 export interface AgentData {
-  Id: number;
-  AgentContactNo: string;
-  AgentName: string;
-  DemandPrice: string;
-  PropertyLocation: string;
-  PropertyNotes: string;
-  PropertyType: MasterDetailModel;
-  SecurityDepositAmount: string;
-  Negotiable: boolean;
-  CreatedOn: string;
-  FlatSize: MasterDetailModel;
+  id: number;
+  agentContactNo: string;
+  agentName: string;
+  demandPrice: string;
+  propertyLocation: string;
+  propertyNotes: string;
+  propertyType: MasterDetailModel;
+  securityDepositAmount: string;
+  negotiable: boolean;
+  flatSize: MasterDetailModel;
+  createdOn: string;
+  createdBy: number;
+  modifiedBy: number;
+  modifiedOn: string;
+  recordStatus: number;
 }
 
 export interface PagingModel {
-  CurrentPage: number;
-  NextPage: boolean;
-  PageSize: number;
-  TotalCount: number;
-  TotalPage: number;
-  PreviousPage: boolean;
+  currentPage: number;
+  nextPage: boolean;
+  pageSize: number;
+  totalCount: number;
+  totalPage: number;
+  previousPage: boolean;
 }
 
 export interface FilterValues {

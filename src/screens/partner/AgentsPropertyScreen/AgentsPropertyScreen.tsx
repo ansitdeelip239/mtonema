@@ -47,12 +47,12 @@ const AgentDataScreen: React.FC<Props> = ({navigation}) => {
 
   const DEFAULT_PAGING_MODEL: PagingModel = useMemo(
     () => ({
-      CurrentPage: 1,
-      NextPage: false,
-      PageSize: 10,
-      PreviousPage: false,
-      TotalCount: 0,
-      TotalPage: 1,
+      currentPage: 1,
+      nextPage: false,
+      pageSize: 10,
+      previousPage: false,
+      totalCount: 0,
+      totalPage: 1,
     }),
     [],
   );
@@ -71,7 +71,7 @@ const AgentDataScreen: React.FC<Props> = ({navigation}) => {
           filters.bhkType || '',
         );
 
-        const newData = response?.data?.AgentDataModel ?? [];
+        const newData = response?.data?.agentDataModel ?? [];
         const pagingInfo: PagingModel =
           response?.data?.responsePagingModel ?? DEFAULT_PAGING_MODEL;
 
@@ -86,13 +86,13 @@ const AgentDataScreen: React.FC<Props> = ({navigation}) => {
         }
 
         const hasMore = Boolean(
-          pagingInfo?.CurrentPage &&
-            pagingInfo?.TotalPage &&
-            pagingInfo.CurrentPage < pagingInfo.TotalPage,
+          pagingInfo?.currentPage &&
+            pagingInfo?.totalPage &&
+            pagingInfo.currentPage < pagingInfo.totalPage,
         );
 
         setHasMoreData(hasMore);
-        setCurrentPage(pagingInfo?.CurrentPage ?? 1);
+        setCurrentPage(pagingInfo?.currentPage ?? 1);
       } catch (error) {
         console.error('Error fetching agent data:', error);
         if (shouldRefresh) {
@@ -162,7 +162,7 @@ const AgentDataScreen: React.FC<Props> = ({navigation}) => {
           />
         )}
         keyExtractor={(item, index) =>
-          `${item.Id?.toString() || 'item'}-${index}`
+          `${item.id?.toString() || 'item'}-${index}`
         }
         contentContainerStyle={styles.listContainer}
         refreshControl={

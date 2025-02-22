@@ -35,7 +35,7 @@ const RenderItem: React.FC<RenderItemProps> = ({
 
   const handleConfirmDelete = async () => {
     try {
-      const response = await PartnerService.deleteAgentProperty(item.Id);
+      const response = await PartnerService.deleteAgentProperty(item.id);
       if (response.success) {
         Toast.show({
           type: 'success',
@@ -61,10 +61,10 @@ const RenderItem: React.FC<RenderItemProps> = ({
       <Surface style={styles.card}>
         <View style={styles.header}>
           <View style={styles.titleContainer}>
-            <Text style={styles.name}>{item.AgentName || 'N/A'}</Text>
+            <Text style={styles.name}>{item.agentName || 'N/A'}</Text>
             <View style={styles.badge}>
               <Text style={styles.badgeText}>
-                {item.Negotiable ? 'Negotiable' : 'Fixed Price'}
+                {item.negotiable ? 'Negotiable' : 'Fixed Price'}
               </Text>
             </View>
           </View>
@@ -92,25 +92,25 @@ const RenderItem: React.FC<RenderItemProps> = ({
           <View style={styles.row}>
             <Text style={styles.label}>BHK Type:</Text>
             <Text style={styles.value}>
-              {item.FlatSize?.masterDetailName || 'Not Specified'}
+              {item.flatSize?.masterDetailName || 'Not Specified'}
             </Text>
           </View>
           <View style={styles.row}>
             <Text style={styles.label}>Location:</Text>
-            <Text style={styles.value}>{item.PropertyLocation || 'N/A'}</Text>
+            <Text style={styles.value}>{item.propertyLocation || 'N/A'}</Text>
           </View>
 
           <View style={styles.priceSection}>
             <View style={styles.row}>
               <Text style={styles.label}>Demand Price:</Text>
               <Text style={[styles.value, styles.priceText]}>
-                {formatCurrency(item.DemandPrice) || 'N/A'}
+                {formatCurrency(item.demandPrice) || 'N/A'}
               </Text>
             </View>
             <View style={[styles.row, styles.securityDeposit]}>
               <Text style={styles.label}>Security Deposit:</Text>
               <Text style={[styles.value, styles.priceText]}>
-                {formatCurrency(item.SecurityDepositAmount) || 'N/A'}
+                {formatCurrency(item.securityDepositAmount) || 'N/A'}
               </Text>
             </View>
           </View>
@@ -119,15 +119,15 @@ const RenderItem: React.FC<RenderItemProps> = ({
             <View style={styles.row}>
               <Text style={styles.label}>Property Type:</Text>
               <Text style={styles.value}>
-                {item.PropertyType?.masterDetailName || 'N/A'}
+                {item.propertyType?.masterDetailName || 'N/A'}
               </Text>
             </View>
 
             <View style={styles.row}>
               <Text style={styles.label}>Date Added:</Text>
               <Text style={styles.value}>
-                {item.CreatedOn
-                  ? new Date(item.CreatedOn).toLocaleDateString('en-GB', {
+                {item.createdOn
+                  ? new Date(item.createdOn).toLocaleDateString('en-GB', {
                       day: '2-digit',
                       month: 'short',
                       year: 'numeric',
@@ -138,12 +138,12 @@ const RenderItem: React.FC<RenderItemProps> = ({
           </View>
         </View>
 
-        {item.PropertyNotes && (
+        {item.propertyNotes && (
           <>
             <View style={styles.divider} />
             <View style={styles.notes}>
               <Text style={styles.notesLabel}>Notes</Text>
-              <Text style={styles.notesText}>{item.PropertyNotes}</Text>
+              <Text style={styles.notesText}>{item.propertyNotes}</Text>
             </View>
           </>
         )}

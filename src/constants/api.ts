@@ -40,12 +40,12 @@ const url = {
   //Master Detail
   // getMasterDetail: BASE_URL + '/MasterDetail/getMasterDetailsByMasterName?MasterDetailName=',
   getMasterDetail: BASE_URL + '/master-details',
-  getPlaces: BASE_URL + '/MasterDetail/getgoogleplaces',
+  getPlaces: BASE_URL + '/master-details/getgoogleplaces',
   deleteUser: BASE_URL + '/User/DeleteUserByUserId',
   searchIntellisense: BASE_URL + '/MasterDetail/SearchIntelligence',
 
   //Partner
-  getAgentImportData: BASE_URL + '/partner/GetAgentImportDataUserId',
+  getAgentImportData: BASE_URL + '/GetAgentImportDataUserId',
   updateAgentProperty: BASE_URL + '/partner/UpdateAgentProperty',
   getClientData: BASE_URL + '/partner/GetClientData',
   getGroupsByPartnerId: BASE_URL + '/partner/GetGroupByPartnerId',

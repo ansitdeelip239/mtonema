@@ -21,7 +21,6 @@ const EditProfileComponent = () => {
   });
   const [profileUpdated, setProfileUpdated] = useState(false);
   const {user} = useAuth();
-  
 
   const {formInput, handleInputChange, loading, onSubmit, setFormInput} =
     useForm<ProfileFormData>({
@@ -47,7 +46,7 @@ const EditProfileComponent = () => {
             console.log('Profile updated successfully');
             // storeUser(response.data);
             // setUser(response.data);
-            setProfileUpdated((prev) => !prev);
+            setProfileUpdated(prev => !prev);
           }
           // After successful submission
           setEditingFields({

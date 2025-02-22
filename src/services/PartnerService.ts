@@ -20,9 +20,9 @@ class PartnerService {
   ) {
     try {
       const params = new URLSearchParams({
+        email: partnerId,
         pageNumber: pageNumber.toString(),
         pageSize: pageSize.toString(),
-        partnerId,
         agentName,
         areaLocality,
         propertyType,
@@ -31,7 +31,7 @@ class PartnerService {
       const response = await api.get<any>(
         `${url.getAgentImportData}?${params}`,
       );
-      return response;
+      return response.data;
     } catch (error) {
       console.error('Error in getMasterDetails', error);
       throw error;

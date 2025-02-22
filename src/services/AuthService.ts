@@ -1,9 +1,9 @@
-import {Response, User} from '../types';
+import {PlacesResponse, Response, User} from '../types';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import url from '../constants/api';
 import {SignupBody, SignupFormType} from '../schema/SignUpFormSchema';
 import {api} from '../utils/api';
-import { RoleTypes } from '../constants/Roles';
+import {RoleTypes} from '../constants/Roles';
 
 interface ValidateEmailResponse {
   id: number;
@@ -20,7 +20,9 @@ class AuthService {
         throw new Error('Email is required');
       }
 
-      const response = await api.get<ValidateEmailResponse | null>(`${url.ValidateEmail}?email=${email}`);
+      const response = await api.get<ValidateEmailResponse | null>(
+        `${url.ValidateEmail}?email=${email}`,
+      );
       return response;
     } catch (error) {
       throw error;
@@ -60,6 +62,17 @@ class AuthService {
       return response;
     } catch (error) {
       throw error;
+    }
+  }
+
+  static async getPlaces(text: string, city: string) {
+    try {
+      const response = await api.get<PlacesResponse>(
+        `${url.getPlaces}?text=${text}&city=${city}`,
+      );
+      return response;
+    } catch (error) {
+      console.log('Error in getplaces', error);
     }
   }
 
