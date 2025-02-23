@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, Modal, Text, StyleSheet, TouchableOpacity} from 'react-native';
+import {View, Modal, Text, StyleSheet, TouchableOpacity, ActivityIndicator} from 'react-native';
 
 interface ConfirmationModalProps {
   visible: boolean;
@@ -7,6 +7,7 @@ interface ConfirmationModalProps {
   message: string;
   onConfirm: () => void;
   onCancel: () => void;
+  isLoading?: boolean;
 }
 
 const ConfirmationModal: React.FC<ConfirmationModalProps> = ({
@@ -15,6 +16,7 @@ const ConfirmationModal: React.FC<ConfirmationModalProps> = ({
   message,
   onConfirm,
   onCancel,
+  isLoading = false,
 }) => {
   return (
     <Modal
@@ -29,13 +31,19 @@ const ConfirmationModal: React.FC<ConfirmationModalProps> = ({
           <View style={styles.buttonContainer}>
             <TouchableOpacity
               style={[styles.button, styles.cancelButton]}
-              onPress={onCancel}>
+              onPress={onCancel}
+              disabled={isLoading}>
               <Text style={styles.cancelButtonText}>Cancel</Text>
             </TouchableOpacity>
             <TouchableOpacity
               style={[styles.button, styles.confirmButton]}
-              onPress={onConfirm}>
-              <Text style={styles.confirmButtonText}>Delete</Text>
+              onPress={onConfirm}
+              disabled={isLoading}>
+              {isLoading ? (
+                <ActivityIndicator size="small" color="#fff" />
+              ) : (
+                <Text style={styles.confirmButtonText}>Delete</Text>
+              )}
             </TouchableOpacity>
           </View>
         </View>

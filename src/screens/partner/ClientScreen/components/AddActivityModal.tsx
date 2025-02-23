@@ -1,12 +1,5 @@
-import React, {useEffect} from 'react';
-import {
-  Modal,
-  View,
-  Text,
-  StyleSheet,
-  Alert,
-  TouchableOpacity,
-} from 'react-native';
+import React, {useEffect, useState} from 'react';
+import {Modal, View, Text, StyleSheet, TouchableOpacity} from 'react-native';
 import Colors from '../../../../constants/Colors';
 import FilterOption from '../../../../components/FilterOption';
 import {useMaster} from '../../../../context/MasterProvider';
@@ -14,6 +7,7 @@ import {MaterialTextInput} from '../../../../components/MaterialTextInput';
 import {Button} from 'react-native-paper';
 import {ClientActivityDataModel} from '../../../../types';
 import GetIcon from '../../../../components/GetIcon';
+import ConfirmationModal from '../../../../components/ConfirmationModal';
 
 interface AddActivityModalProps {
   visible: boolean;
@@ -24,6 +18,7 @@ interface AddActivityModalProps {
   activityToEdit?: ClientActivityDataModel;
   onDelete?: (activityId: number) => void;
   closeMenu?: () => void;
+  isDeletingActivity?: boolean;
 }
 
 interface ActivityFormData {
@@ -40,11 +35,13 @@ const AddActivityModal: React.FC<AddActivityModalProps> = ({
   activityToEdit,
   onDelete,
   closeMenu,
+  isDeletingActivity = false,
 }) => {
   const [formData, setFormData] = React.useState<ActivityFormData>({
     activityType: null,
     description: '',
   });
+  const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false);
   const {masterData} = useMaster();
 
   useEffect(() => {
@@ -96,99 +93,106 @@ const AddActivityModal: React.FC<AddActivityModalProps> = ({
   const handleDelete = () => {
     closeMenu && closeMenu();
     if (editMode && activityToEdit?.id && onDelete) {
-      Alert.alert(
-        'Delete Activity',
-        'Are you sure you want to delete this activity?',
-        [
-          {text: 'Cancel', style: 'cancel'},
-          {
-            text: 'Delete',
-            style: 'destructive',
-            onPress: () => onDelete(activityToEdit.id),
-          },
-        ],
-      );
+      setIsDeleteModalVisible(true);
+    }
+  };
+
+  const handleConfirmDelete = async () => {
+    if (editMode && activityToEdit?.id && onDelete) {
+      await onDelete(activityToEdit.id);
+      setIsDeleteModalVisible(false);
     }
   };
 
   return (
-    <Modal
-      visible={visible}
-      transparent
-      animationType="fade"
-      onRequestClose={onClose}>
-      <View style={styles.modalOverlay}>
-        <View style={styles.modalContent}>
-          <View style={styles.modalHeader}>
-            <Text style={styles.modalTitle}>
-              {editMode ? 'Edit Activity' : 'Add Activity'}
-            </Text>
-            {editMode && (
-              <TouchableOpacity
-                onPress={handleDelete}
-                style={styles.deleteButton}>
-                <GetIcon iconName="delete" size="24" color={Colors.red} />
-              </TouchableOpacity>
-            )}
-          </View>
+    <>
+      <Modal
+        visible={visible}
+        transparent
+        animationType="fade"
+        onRequestClose={onClose}>
+        <View style={styles.modalOverlay}>
+          <View style={styles.modalContent}>
+            <View style={styles.modalHeader}>
+              <Text style={styles.modalTitle}>
+                {editMode ? 'Edit Activity' : 'Add Activity'}
+              </Text>
+              {editMode && (
+                <TouchableOpacity
+                  onPress={handleDelete}
+                  style={styles.deleteButton}>
+                  <GetIcon iconName="delete" size="24" color={Colors.red} />
+                </TouchableOpacity>
+              )}
+            </View>
 
-          <FilterOption
-            label="Select Activity Type"
-            options={masterData?.ActivityType || []}
-            selectedValue={
-              masterData?.ActivityType.find(
-                option => option.id === formData.activityType,
-              )?.masterDetailName ?? null
-            }
-            onSelect={handleActivityTypeSelect}
-          />
+            <FilterOption
+              label="Select Activity Type"
+              options={masterData?.ActivityType || []}
+              selectedValue={
+                masterData?.ActivityType.find(
+                  option => option.id === formData.activityType,
+                )?.masterDetailName ?? null
+              }
+              onSelect={handleActivityTypeSelect}
+            />
 
-          <MaterialTextInput
-            label="Description"
-            field="description"
-            formInput={formData}
-            setFormInput={handleFormChange}
-            mode="outlined"
-            multiline
-            numberOfLines={4}
-            style={styles.input}
-            outlineColor={Colors.main}
-            activeOutlineColor={Colors.main}
-            theme={{
-              colors: {
-                primary: Colors.main,
-                background: 'white',
-                placeholder: '#666',
-                text: '#000',
-                onSurfaceVariant: '#666',
-                onSurface: '#000',
-              },
-            }}
-            textColor="#000"
-          />
-
-          <View style={styles.modalButtons}>
-            <Button
+            <MaterialTextInput
+              label="Description"
+              field="description"
+              formInput={formData}
+              setFormInput={handleFormChange}
               mode="outlined"
-              style={[styles.modalButton, styles.cancelButton]}
-              labelStyle={styles.cancelButtonText}
-              onPress={onClose}>
-              Cancel
-            </Button>
+              multiline
+              numberOfLines={4}
+              style={styles.input}
+              outlineColor={Colors.main}
+              activeOutlineColor={Colors.main}
+              theme={{
+                colors: {
+                  primary: Colors.main,
+                  background: 'white',
+                  placeholder: '#666',
+                  text: '#000',
+                  onSurfaceVariant: '#666',
+                  onSurface: '#000',
+                },
+              }}
+              textColor="#000"
+            />
 
-            <Button
-              mode="contained"
-              style={[styles.modalButton, styles.submitButton]}
-              labelStyle={styles.buttonText}
-              onPress={handleSubmit}
-              loading={isLoading}
-              disabled={isLoading}>
-              Submit
-            </Button>
+            <View style={styles.modalButtons}>
+              <Button
+                mode="outlined"
+                style={[styles.modalButton, styles.cancelButton]}
+                labelStyle={styles.cancelButtonText}
+                onPress={onClose}>
+                Cancel
+              </Button>
+
+              <Button
+                mode="contained"
+                style={[styles.modalButton, styles.submitButton]}
+                labelStyle={styles.buttonText}
+                onPress={handleSubmit}
+                loading={isLoading}
+                disabled={isLoading}>
+                Submit
+              </Button>
+            </View>
           </View>
         </View>
-      </View>
-    </Modal>
+      </Modal>
+
+      <ConfirmationModal
+        visible={isDeleteModalVisible}
+        title="Delete Activity"
+        message="Are you sure you want to delete this activity?"
+        onConfirm={handleConfirmDelete}
+        onCancel={() => setIsDeleteModalVisible(false)}
+        isLoading={isDeletingActivity}
+      />
+    </>
   );
 };
 

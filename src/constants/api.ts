@@ -54,7 +54,7 @@ const url = {
   deleteAgentProperty: BASE_URL + '/partners/agent-properties',
   clients: BASE_URL + '/partners/clients',
   addEditClientActivity: BASE_URL + '/partners/addeditclient-activity',
-  deleteClientActivity: BASE_URL + '/partner/DeleteClientActivity',
+  deleteClientActivity: BASE_URL + '/partners/deleteclient-activity',
 
   //Admin
   getAllProperties: BASE_URL + '/property/getAllProperty',

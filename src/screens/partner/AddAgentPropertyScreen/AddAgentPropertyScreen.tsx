@@ -61,7 +61,7 @@ const AddAgentPropertyScreen: React.FC<Props> = ({navigation, route}) => {
         agentContactNo: propertyData.agentContactNo || '',
         propertyLocation: propertyData.propertyLocation || '',
         propertyType: propertyData.propertyType || '',
-        bhkType: propertyData.flatSize || '',
+        bhkType: propertyData.bhkType || '',
         demandPrice: propertyData.demandPrice?.toString() || '',
         securityDepositAmount:
           propertyData.securityDepositAmount?.toString() || '',

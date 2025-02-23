@@ -92,7 +92,7 @@ const RenderItem: React.FC<RenderItemProps> = ({
           <View style={styles.row}>
             <Text style={styles.label}>BHK Type:</Text>
             <Text style={styles.value}>
-              {item.flatSize || 'Not Specified'}
+              {item.bhkType || 'Not Specified'}
             </Text>
           </View>
           <View style={styles.row}>

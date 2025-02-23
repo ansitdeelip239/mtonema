@@ -71,9 +71,10 @@ const AgentDataScreen: React.FC<Props> = ({navigation}) => {
           filters.bhkType || '',
         );
 
-        const newData = response?.agentDataModel ?? [];
+        // Extract properties and pagination from response.data
+        const newData = response.properties ?? [];
         const pagingInfo: PagingModel =
-          response?.responsePagingModel ?? DEFAULT_PAGING_MODEL;
+          response.pagination ?? DEFAULT_PAGING_MODEL;
 
         const filteredData = newData.filter(
           (item: any) => item !== null && item !== undefined,
@@ -111,7 +112,7 @@ const AgentDataScreen: React.FC<Props> = ({navigation}) => {
     if (isInitialRender.current) {
       isInitialRender.current = false;
       return;
-      }
+    }
 
     if (
       JSON.stringify(lastAppliedFilters.current) !== JSON.stringify(filters)

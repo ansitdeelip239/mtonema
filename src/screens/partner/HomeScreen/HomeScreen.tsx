@@ -61,7 +61,7 @@ const HomeScreen: React.FC<Props> = ({navigation}) => {
         '',
       );
       setAgentPropertyCount(
-        response.data?.responsePagingModel?.totalCount || 0,
+        response.pagination?.totalCount || 0,
       );
     } catch (error) {
       console.error(error);

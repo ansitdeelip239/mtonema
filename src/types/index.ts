@@ -146,7 +146,7 @@ export interface AgentData {
   propertyType: string;
   securityDepositAmount: string;
   negotiable: boolean;
-  flatSize: string;
+  bhkType: string;
   createdOn: string;
   createdBy: number;
   modifiedBy: number;

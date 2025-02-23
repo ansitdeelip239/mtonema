@@ -42,6 +42,7 @@ const ClientProfileScreen: React.FC<Props> = ({route, navigation}) => {
     ClientActivityDataModel | undefined
   >();
   const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false);
+  const [isDeletingActivity, setIsDeletingActivity] = useState(false);
 
   const {clientsUpdated, setClientsUpdated} = usePartner();
   const {keyboardVisible} = useKeyboard();
@@ -114,6 +115,7 @@ const ClientProfileScreen: React.FC<Props> = ({route, navigation}) => {
 
   const handleDeleteActivity = async (activityId: number) => {
     try {
+      setIsDeletingActivity(true);
       const response = await PartnerService.deleteClientActivity(activityId);
       if (response.success) {
         Toast.show({
@@ -121,7 +123,7 @@ const ClientProfileScreen: React.FC<Props> = ({route, navigation}) => {
           text1: 'Success',
           text2: 'Activity deleted successfully',
         });
-        fetchClient();
+        await fetchClient();
         setClientsUpdated(prev => !prev);
       }
     } catch (error) {
@@ -132,6 +134,8 @@ const ClientProfileScreen: React.FC<Props> = ({route, navigation}) => {
       //   text2: 'Failed to delete activity',
       // });
       showError('Failed to delete activity');
+    } finally {
+      setIsDeletingActivity(false);
     }
   };
 
@@ -422,6 +426,7 @@ const ClientProfileScreen: React.FC<Props> = ({route, navigation}) => {
         }}
         onSubmit={handleAddEditActivity}
         onDelete={handleDeleteActivity}
+        isDeletingActivity={isDeletingActivity}
         isLoading={addingActivity}
         editMode={!!selectedActivity}
         activityToEdit={selectedActivity}
