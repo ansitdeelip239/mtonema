@@ -17,7 +17,7 @@ class PartnerService {
     agentName: string,
     areaLocality: string,
     propertyType: string,
-    flatSize: string,
+    bhkType: string,
   ) {
     try {
       const params = new URLSearchParams({
@@ -27,7 +27,7 @@ class PartnerService {
         agentName,
         areaLocality,
         propertyType,
-        flatSize,
+        bhkType,
       }).toString();
       const response = await api.get<any>(`${url.agentProperties}?${params}`);
       return response.data;
