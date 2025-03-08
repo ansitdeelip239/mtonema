@@ -50,7 +50,7 @@ const url = {
   getClientData: BASE_URL + '/partners/getclientdata',
   getGroupsByPartnerId: BASE_URL + '/partners/groups',
   // addEditClientData: BASE_URL + '/partner/AddEditClientData',
-  getPartnerProperty: BASE_URL + '/partner/GetPartnerPropertyUserId',
+  // getPartnerProperty: BASE_URL + '/partner-properties',
   deleteAgentProperty: BASE_URL + '/partners/agent-properties',
   clients: BASE_URL + '/partners/clients',
   addEditClientActivity: BASE_URL + '/partners/addeditclient-activity',

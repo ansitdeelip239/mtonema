@@ -108,7 +108,7 @@ class PartnerService {
   }
 
   static async getPartnerProperty(
-    partnerId: string,
+    partnerId: number,
     pageNumber: number,
     pageSize: number,
   ) {
@@ -116,10 +116,9 @@ class PartnerService {
       const params = new URLSearchParams({
         pageNumber: pageNumber.toString(),
         pageSize: pageSize.toString(),
-        partnerId: partnerId,
       });
       const response = await api.get<any>(
-        url.getPartnerProperty + '?' + params,
+        `${url.users}/${partnerId}/partner-properties?${params}`,
       );
       return response;
     } catch (error) {

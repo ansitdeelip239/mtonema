@@ -71,17 +71,17 @@ const HomeScreen: React.FC<Props> = ({navigation}) => {
   const fetchPartnerProperty = useCallback(async () => {
     try {
       const response = await PartnerService.getPartnerProperty(
-        user?.email || '',
+        user?.id || 0,
         1,
         20,
       );
       setPartnerPropertyCount(
-        response.data?.responsePagingModel?.totalCount || 0,
+        response.data?.pagination?.totalItems || 0,
       );
     } catch (error) {
       console.error(error);
     }
-  }, [user?.email]);
+  }, [user?.id]);
 
   const onRefresh = useCallback(async () => {
     setRefreshing(true);
