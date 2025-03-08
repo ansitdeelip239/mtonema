@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import {View, TouchableOpacity, Modal, StyleSheet} from 'react-native';
 import {Searchbar} from 'react-native-paper';
-import {AgentData, FilterValues} from '../../../../types';
+import {FilterValues} from '../../../../types';
 import Colors from '../../../../constants/Colors';
 import FilterModal from './FilterModal';
 import GetIcon from '../../../../components/GetIcon';
@@ -10,12 +10,12 @@ const SearchHeader = ({
   initialFilters,
   onSearch,
   onFilter,
-  agentData,
+  locations,
 }: {
   initialFilters: FilterValues;
   onSearch: (text: string) => void;
   onFilter: (filter: FilterValues) => void;
-  agentData: AgentData[];
+  locations: string[];
 }) => {
   const [searchText, setSearchText] = useState('');
   const [modalVisible, setModalVisible] = useState(false);
@@ -68,7 +68,7 @@ const SearchHeader = ({
               onClose={() => {
                 setModalVisible(false);
               }}
-              agentData={agentData}
+              locations={locations}
             />
           </View>
         </TouchableOpacity>

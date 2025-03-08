@@ -3,18 +3,18 @@ import {StyleSheet, Text, TouchableOpacity, View, Animated} from 'react-native';
 import Colors from '../../../../constants/Colors';
 import {useMaster} from '../../../../context/MasterProvider';
 import FilterOption from '../../../../components/FilterOption';
-import {AgentData, FilterValues} from '../../../../types';
+import {FilterValues} from '../../../../types';
 
 const FilterModal = ({
   initialFilters,
   onFilter,
   onClose,
-  agentData,
+  locations,
 }: {
   initialFilters: FilterValues;
   onFilter: (filters: FilterValues) => void;
   onClose: () => void;
-  agentData: AgentData[];
+  locations: string[];
 }) => {
   const [filters, setFilters] = useState<FilterValues>(initialFilters);
   const {masterData} = useMaster();
@@ -22,13 +22,13 @@ const FilterModal = ({
   const fadeAnim = useRef(new Animated.Value(0)).current;
   const slideAnim = useRef(new Animated.Value(300)).current;
 
-  const locations = useMemo(() => {
-    const uniqueLocations = Array.from(
-      new Set(agentData.map(agent => agent.propertyLocation).filter(Boolean)),
-    ).sort();
+  const mappedLocations = useMemo(() => {
+    // const uniqueLocations = Array.from(
+    //   new Set(agentData.map(agent => agent.propertyLocation).filter(Boolean)),
+    // ).sort();
 
     // Transform string[] to MasterDetailModel[]
-    return uniqueLocations.map((location, index) => ({
+    return locations.map((location, index) => ({
       id: index + 1,
       masterDetailName: location,
       MasterID: 0,
@@ -38,7 +38,7 @@ const FilterModal = ({
       UpdatedBy: null,
       Status: 1,
     }));
-  }, [agentData]);
+  }, [locations]);
 
   const propertyTypes = useMemo(
     () => masterData?.AgentPropertyType || [],
@@ -114,7 +114,7 @@ const FilterModal = ({
           <Text style={styles.modalTitle}>Filter Properties</Text>
           <FilterOption
             label="Location"
-            options={locations}
+            options={mappedLocations}
             selectedValue={filters.propertyLocation}
             onSelect={value => handleSelect('propertyLocation', value)}
           />

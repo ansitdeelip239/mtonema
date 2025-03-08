@@ -19,6 +19,7 @@ type Props = BottomTabScreenProps<PartnerBottomTabParamList, 'Property'>;
 
 const AgentDataScreen: React.FC<Props> = ({navigation}) => {
   const [agentData, setAgentData] = useState<AgentData[]>([]);
+  const [locations, setLocations] = useState<string[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
@@ -75,6 +76,7 @@ const AgentDataScreen: React.FC<Props> = ({navigation}) => {
         const newData = response.properties ?? [];
         const pagingInfo: PagingModel =
           response.pagination ?? DEFAULT_PAGING_MODEL;
+        setLocations(response.propertyLocations);
 
         const filteredData = newData.filter(
           (item: any) => item !== null && item !== undefined,
@@ -151,7 +153,7 @@ const AgentDataScreen: React.FC<Props> = ({navigation}) => {
         initialFilters={filters}
         onSearch={handleSearch}
         onFilter={handleFilter}
-        agentData={agentData}
+        locations={locations}
       />
       <FlatList
         data={agentData}
