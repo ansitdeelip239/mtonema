@@ -196,6 +196,10 @@ export interface ClientActivityDataModel {
   updatedOn: string;
 }
 
+export interface GroupResponse {
+  groups: Group[];
+  pagination: PagingModel;
+}
 export interface Group {
   id: number;
   groupName: string;

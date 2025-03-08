@@ -104,7 +104,7 @@ const AddClientScreen: React.FC<Props> = ({navigation, route}) => {
           whatsappNumber: formData.whatsappNumber || undefined,
           emailId: formData.emailId || undefined,
           notes: formData.notes || '',
-          groups: formData.groups || [],
+          groups: Array.from(new Set(formData.groups || [])),
         };
 
         const validatedData = clientFormSchema.parse(cleanedData);
@@ -190,9 +190,10 @@ const AddClientScreen: React.FC<Props> = ({navigation, route}) => {
   const toggleGroup = useCallback(
     (groupId: number) => {
       const updatedGroups = formInput.groups?.includes(groupId)
-        ? formInput.groups?.filter(id => id !== groupId)
-        : [...(formInput.groups ?? []), groupId];
-      handleInputChange('groups', updatedGroups);
+        ? formInput.groups.filter(id => id !== groupId)
+        : Array.from(new Set([...(formInput.groups || []), groupId])); // Convert to array after Set operation
+
+      handleInputChange('groups', Array.from(new Set(updatedGroups)));
     },
     [formInput.groups, handleInputChange],
   );
