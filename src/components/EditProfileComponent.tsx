@@ -1,5 +1,16 @@
-import {View, StyleSheet, TouchableOpacity, Image} from 'react-native';
-import React, {useEffect, useState} from 'react';
+import {
+  View,
+  StyleSheet,
+  TouchableOpacity,
+  Image,
+  KeyboardAvoidingView,
+  ScrollView,
+  Platform,
+  TouchableWithoutFeedback,
+  Keyboard,
+  Dimensions,
+} from 'react-native';
+import React, {useEffect, useState, useRef} from 'react';
 import useForm from '../hooks/useForm';
 import {MaterialTextInput} from './MaterialTextInput';
 import {Button} from 'react-native-paper';
@@ -9,6 +20,8 @@ import Images from '../constants/Images';
 import AuthService from '../services/AuthService';
 import CommonService from '../services/CommonService';
 import {useAuth} from '../hooks/useAuth';
+import Colors from '../constants/Colors';
+import {useKeyboard} from '../hooks/useKeyboard';
 
 const EditProfileComponent = () => {
   const [editingFields, setEditingFields] = useState<
@@ -21,6 +34,8 @@ const EditProfileComponent = () => {
   });
   const [profileUpdated, setProfileUpdated] = useState(false);
   const {user} = useAuth();
+  const {keyboardVisible} = useKeyboard();
+  const scrollViewRef = useRef<ScrollView>(null);
 
   const {formInput, handleInputChange, loading, onSubmit, setFormInput} =
     useForm<ProfileFormData>({
@@ -62,13 +77,33 @@ const EditProfileComponent = () => {
     });
 
   const toggleEdit = (field: keyof ProfileFormData) => {
-    setEditingFields(prev => ({
-      ...prev,
-      [field]: !prev[field],
-    }));
+    setEditingFields(prev => {
+      const newEditingFields = {
+        ...prev,
+        [field]: !prev[field],
+      };
+
+      // Schedule scrolling to the end if field is being enabled
+      if (newEditingFields[field]) {
+        setTimeout(() => {
+          scrollViewRef.current?.scrollToEnd({animated: true});
+        }, 300);
+      }
+
+      return newEditingFields;
+    });
   };
 
   const isAnyFieldEditing = Object.values(editingFields).some(value => value);
+
+  // Effect to scroll to the end when keyboard appears
+  useEffect(() => {
+    if (keyboardVisible && isAnyFieldEditing) {
+      setTimeout(() => {
+        scrollViewRef.current?.scrollToEnd({animated: true});
+      }, 300);
+    }
+  }, [keyboardVisible, isAnyFieldEditing]);
 
   useEffect(() => {
     async function fetchProfileData() {
@@ -85,106 +120,152 @@ const EditProfileComponent = () => {
     fetchProfileData();
   }, [setFormInput, profileUpdated]);
 
+  // Get screen dimensions to calculate appropriate padding
+  const screenHeight = Dimensions.get('window').height;
+
+  // Determine which field is being edited to provide appropriate padding
+  const getAdaptivePadding = () => {
+    // More padding for fields at the bottom of the form
+    if (editingFields.phone) {
+      return screenHeight * 0.05; // 5% for phone field
+    }
+
+    if (editingFields.location) {
+      return screenHeight * 0.04; // 4% for location field
+    }
+
+    if (editingFields.email) {
+      return screenHeight * 0.02; // 2% for email field
+    }
+
+    // Minimal padding for the name field at the top
+    return screenHeight * 0.01; // 1% for name field
+  };
+
   return (
-    <View style={styles.container}>
-      <View style={styles.profileImageContainer}>
-        <Image source={Images.DNCR_LOGO} style={styles.profileImage} />
-      </View>
-      <MaterialTextInput
-        field="name"
-        formInput={formInput}
-        setFormInput={handleInputChange}
-        label="Name"
-        mode="outlined"
-        disabled={!editingFields.name}
-        rightComponent={
-          <TouchableOpacity onPress={() => toggleEdit('name')}>
-            <GetIcon
-              iconName={editingFields.name ? 'clear' : 'edit'}
-              size="24"
+    <KeyboardAvoidingView
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      style={styles.keyboardAvoidingView}
+      keyboardVerticalOffset={Platform.OS === 'ios' ? 64 : 40}>
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+        <ScrollView
+          ref={scrollViewRef}
+          contentContainerStyle={styles.scrollContent}
+          showsVerticalScrollIndicator={false}
+          keyboardShouldPersistTaps="handled">
+          <View style={styles.container}>
+            <View style={styles.profileImageContainer}>
+              <Image source={Images.DNCR_LOGO} style={styles.profileImage} />
+            </View>
+            <MaterialTextInput
+              field="name"
+              formInput={formInput}
+              setFormInput={handleInputChange}
+              label="Name"
+              mode="outlined"
+              disabled={!editingFields.name}
+              rightComponent={
+                <TouchableOpacity onPress={() => toggleEdit('name')}>
+                  <GetIcon
+                    iconName={editingFields.name ? 'clear' : 'edit'}
+                    size="24"
+                  />
+                </TouchableOpacity>
+              }
+              theme={{
+                colors: {
+                  placeholder: !editingFields.name ? 'black' : '#666666',
+                },
+              }}
             />
-          </TouchableOpacity>
-        }
-        theme={{
-          colors: {
-            placeholder: !editingFields.name ? 'black' : '#666666',
-          },
-        }}
-      />
 
-      <MaterialTextInput
-        field="email"
-        formInput={formInput}
-        setFormInput={handleInputChange}
-        label="Email"
-        mode="outlined"
-        disabled={!editingFields.email}
-        keyboardType="email-address"
-        rightComponent={
-          <TouchableOpacity onPress={() => toggleEdit('email')}>
-            <GetIcon
-              iconName={editingFields.email ? 'clear' : 'edit'}
-              size="24"
+            <MaterialTextInput
+              field="email"
+              formInput={formInput}
+              setFormInput={handleInputChange}
+              label="Email"
+              mode="outlined"
+              disabled={!editingFields.email}
+              keyboardType="email-address"
+              rightComponent={
+                <TouchableOpacity onPress={() => toggleEdit('email')}>
+                  <GetIcon
+                    iconName={editingFields.email ? 'clear' : 'edit'}
+                    size="24"
+                  />
+                </TouchableOpacity>
+              }
             />
-          </TouchableOpacity>
-        }
-      />
 
-      <MaterialTextInput
-        field="location"
-        formInput={formInput}
-        setFormInput={handleInputChange}
-        label="Location"
-        mode="outlined"
-        disabled={!editingFields.location}
-        rightComponent={
-          <TouchableOpacity onPress={() => toggleEdit('location')}>
-            <GetIcon
-              iconName={editingFields.location ? 'clear' : 'edit'}
-              size="24"
+            <MaterialTextInput
+              field="location"
+              formInput={formInput}
+              setFormInput={handleInputChange}
+              label="Location"
+              mode="outlined"
+              disabled={!editingFields.location}
+              rightComponent={
+                <TouchableOpacity onPress={() => toggleEdit('location')}>
+                  <GetIcon
+                    iconName={editingFields.location ? 'clear' : 'edit'}
+                    size="24"
+                  />
+                </TouchableOpacity>
+              }
             />
-          </TouchableOpacity>
-        }
-      />
 
-      <MaterialTextInput
-        field="phone"
-        formInput={formInput}
-        setFormInput={handleInputChange}
-        label="Phone"
-        mode="outlined"
-        disabled={!editingFields.phone}
-        keyboardType="phone-pad"
-        rightComponent={
-          <TouchableOpacity onPress={() => toggleEdit('phone')}>
-            <GetIcon
-              iconName={editingFields.phone ? 'clear' : 'edit'}
-              size="24"
+            <MaterialTextInput
+              field="phone"
+              formInput={formInput}
+              setFormInput={handleInputChange}
+              label="Phone"
+              mode="outlined"
+              disabled={!editingFields.phone}
+              keyboardType="phone-pad"
+              rightComponent={
+                <TouchableOpacity onPress={() => toggleEdit('phone')}>
+                  <GetIcon
+                    iconName={editingFields.phone ? 'clear' : 'edit'}
+                    size="24"
+                  />
+                </TouchableOpacity>
+              }
             />
-          </TouchableOpacity>
-        }
-      />
 
-      {isAnyFieldEditing && (
-        <Button
-          mode="contained"
-          onPress={onSubmit}
-          loading={loading}
-          style={styles.submitButton}>
-          Save Changes
-        </Button>
-      )}
-    </View>
+            {isAnyFieldEditing && (
+              <Button
+                mode="contained"
+                onPress={onSubmit}
+                loading={loading}
+                textColor={Colors.white}
+                style={styles.submitButton}>
+                Save Changes
+              </Button>
+            )}
+
+            {/* Adaptive padding based on which field is being edited */}
+            {keyboardVisible && <View style={{height: getAdaptivePadding()}} />}
+          </View>
+        </ScrollView>
+      </TouchableWithoutFeedback>
+    </KeyboardAvoidingView>
   );
 };
 
 const styles = StyleSheet.create({
+  keyboardAvoidingView: {
+    flex: 1,
+  },
+  scrollContent: {
+    flexGrow: 1,
+  },
   container: {
     padding: 16,
     gap: 16,
   },
   submitButton: {
     marginTop: 16,
+    backgroundColor: Colors.main,
   },
   profileImageContainer: {
     alignSelf: 'center',
@@ -194,6 +275,9 @@ const styles = StyleSheet.create({
     width: 150,
     height: 200,
     borderRadius: 50,
+  },
+  bottomPadding: {
+    height: 150,
   },
 });
 
