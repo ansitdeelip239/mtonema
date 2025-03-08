@@ -2,7 +2,8 @@ import React, {useRef, useCallback, useState, useEffect} from 'react';
 import MasterService from '../../../../services/MasterService';
 import {SearchIntellisenseResponse} from '../../../../types';
 import {MaterialTextInput} from '../../../../components/MaterialTextInput';
-import {InteractionManager, StyleSheet} from 'react-native';
+import {InteractionManager} from 'react-native';
+import {ViewStyle} from 'react-native';
 
 const useDebounce = (callback: Function, delay: number) => {
   const timeoutRef = useRef<NodeJS.Timeout>();
@@ -36,6 +37,7 @@ interface SearchInputProps<T> {
   label: string;
   placeholder?: string;
   onAgentSelect?: (agentName: string, contactNo: string) => void;
+  style?: ViewStyle;
 }
 
 export const SearchInput = <T,>({
@@ -47,6 +49,7 @@ export const SearchInput = <T,>({
   label,
   placeholder,
   onAgentSelect,
+  style,
 }: SearchInputProps<T>) => {
   const [suggestions, setSuggestions] = useState<string[]>([]);
   const [searchData, setSearchData] = useState<SearchIntellisenseResponse[]>(
@@ -78,8 +81,8 @@ export const SearchInput = <T,>({
             const items = response.data
               .map((item: SearchIntellisenseResponse) =>
                 searchType === 'AgentPropertyLocation'
-                  ? item.Location
-                  : item.AgentName,
+                  ? item.location
+                  : item.agentName,
               )
               .filter(
                 (item): item is string => item !== null && item !== undefined,
@@ -126,10 +129,10 @@ export const SearchInput = <T,>({
       InteractionManager.runAfterInteractions(() => {
         if (searchType === 'AgentName' && onAgentSelect) {
           const selectedAgent = searchData.find(
-            item => item.AgentName === suggestion,
+            item => item.agentName === suggestion,
           );
-          if (selectedAgent?.AgentContactNo) {
-            onAgentSelect(suggestion, selectedAgent.AgentContactNo);
+          if (selectedAgent?.agentContactNo) {
+            onAgentSelect(suggestion, selectedAgent.agentContactNo);
           }
         } else {
           handleFieldChange(field, suggestion);
@@ -151,7 +154,7 @@ export const SearchInput = <T,>({
 
   return (
     <MaterialTextInput<T>
-      style={styles.textInput}
+      style={style}
       label={label}
       field={field}
       formInput={formInput}
@@ -179,8 +182,8 @@ export const SearchInput = <T,>({
   );
 };
 
-const styles = StyleSheet.create({
-  textInput: {
-    marginBottom: 16,
-  },
-});
+// const styles = StyleSheet.create({
+//   textInput: {
+//     // marginBottom: 16,
+//   },
+// });

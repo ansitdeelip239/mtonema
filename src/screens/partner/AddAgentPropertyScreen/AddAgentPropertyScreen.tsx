@@ -126,13 +126,17 @@ const AddAgentPropertyScreen: React.FC<Props> = ({navigation, route}) => {
           propertyType: validatedApiData.propertyType,
           bhkType: validatedApiData.bhkType,
           demandPrice: validatedApiData.demandPrice.toString(),
-          securityDepositAmount:
-            validatedApiData.securityDepositAmount,
+          securityDepositAmount: validatedApiData.securityDepositAmount,
           negotiable: validatedApiData.negotiable,
           propertyNotes: validatedApiData.propertyNotes,
         };
 
-        const response = !editMode ? await PartnerService.addAgentProperty(request) : await PartnerService.updateAgentProperty(request, propertyData?.id as number);
+        const response = !editMode
+          ? await PartnerService.addAgentProperty(request)
+          : await PartnerService.updateAgentProperty(
+              request,
+              propertyData?.id as number,
+            );
         if (response.success) {
           resetForm();
           setErrors({});
@@ -210,88 +214,103 @@ const AddAgentPropertyScreen: React.FC<Props> = ({navigation, route}) => {
   const renderPropertyInputs = useMemo(
     () => (
       <>
-        <SearchInput<AgentPropertyFormType>
-          field="agentName"
-          formInput={formInput}
-          handleFieldChange={handleFieldChange}
-          errors={errors}
-          label="Agent Name*"
-          placeholder="Eg. John Doe"
-          searchType="AgentName"
-          onAgentSelect={(agentName, contactNo) => {
-            handleFieldChange('agentName', agentName);
-            handleFieldChange('agentContactNo', contactNo);
-          }}
-        />
+        <View style={styles.formField}>
+          <SearchInput<AgentPropertyFormType>
+            field="agentName"
+            style={styles.input}
+            formInput={formInput}
+            handleFieldChange={handleFieldChange}
+            errors={errors}
+            label="Agent Name*"
+            placeholder="Eg. John Doe"
+            searchType="AgentName"
+            onAgentSelect={(agentName, contactNo) => {
+              handleFieldChange('agentName', agentName);
+              handleFieldChange('agentContactNo', contactNo);
+            }}
+          />
+        </View>
 
-        <MaterialTextInput<AgentPropertyFormType>
-          style={styles.input}
-          label="Agent Contact No.*"
-          field="agentContactNo"
-          formInput={formInput}
-          setFormInput={handleFieldChange}
-          mode="outlined"
-          placeholder="1234567890"
-          keyboardType="number-pad"
-          errorMessage={errors.agentContactNo}
-        />
+        <View style={styles.formField}>
+          <MaterialTextInput<AgentPropertyFormType>
+            style={styles.input}
+            label="Agent Contact No.*"
+            field="agentContactNo"
+            formInput={formInput}
+            setFormInput={handleFieldChange}
+            mode="outlined"
+            placeholder="1234567890"
+            keyboardType="number-pad"
+            errorMessage={errors.agentContactNo}
+          />
+        </View>
 
-        <SearchInput<AgentPropertyFormType>
-          field="propertyLocation"
-          formInput={formInput}
-          handleFieldChange={handleFieldChange}
-          errors={errors}
-          label="Property Location*"
-          placeholder="Navi Mumbai, Thane, etc."
-          searchType="AgentPropertyLocation"
-        />
+        <View style={styles.formField}>
+          <SearchInput<AgentPropertyFormType>
+            field="propertyLocation"
+            style={styles.input}
+            formInput={formInput}
+            handleFieldChange={handleFieldChange}
+            errors={errors}
+            label="Property Location*"
+            placeholder="Navi Mumbai, Thane, etc."
+            searchType="AgentPropertyLocation"
+          />
+        </View>
 
-        <FilterOption
-          label="Property Type"
-          options={masterData?.AgentPropertyType || []}
-          selectedValue={formInput.propertyType}
-          onSelect={value => handleFieldSelect('propertyType', value)}
-          error={errors.propertyType}
-        />
+        <View style={styles.dropdownField}>
+          <FilterOption
+            label="Property Type"
+            options={masterData?.AgentPropertyType || []}
+            selectedValue={formInput.propertyType}
+            onSelect={value => handleFieldSelect('propertyType', value)}
+            error={errors.propertyType}
+          />
+          <FilterOption
+            label="BHK Type"
+            options={masterData?.BhkType || []}
+            selectedValue={formInput.bhkType}
+            onSelect={value => handleFieldSelect('bhkType', value)}
+            error={errors.bhkType}
+          />
+        </View>
 
-        <FilterOption
-          label="BHK Type"
-          options={masterData?.BhkType || []}
-          selectedValue={formInput.bhkType}
-          onSelect={value => handleFieldSelect('bhkType', value)}
-          error={errors.bhkType}
-        />
+        <View style={styles.formField}>
+          <MaterialTextInput<AgentPropertyFormType>
+            style={styles.input}
+            label="Demand Price"
+            field="demandPrice"
+            formInput={formInput}
+            setFormInput={handleFieldChange}
+            mode="outlined"
+            placeholder="Enter amount"
+            keyboardType="number-pad"
+            rightComponent={
+              <Text>{formatCurrency(formInput.demandPrice)}</Text>
+            }
+            maxLength={10}
+            errorMessage={errors.demandPrice}
+          />
+        </View>
 
-        <MaterialTextInput<AgentPropertyFormType>
-          style={styles.input}
-          label="Demand Price"
-          field="demandPrice"
-          formInput={formInput}
-          setFormInput={handleFieldChange}
-          mode="outlined"
-          placeholder="Enter amount"
-          keyboardType="number-pad"
-          rightComponent={<Text>{formatCurrency(formInput.demandPrice)}</Text>}
-          maxLength={10}
-          errorMessage={errors.demandPrice}
-        />
-
-        <MaterialTextInput<AgentPropertyFormType>
-          style={styles.input}
-          label="Security Deposit Amount"
-          field="securityDepositAmount"
-          formInput={formInput}
-          setFormInput={handleFieldChange}
-          mode="outlined"
-          placeholder="Enter deposit amount"
-          keyboardType="number-pad"
-          onFocus={() => scrollToEnd()}
-          rightComponent={
-            <Text>{formatCurrency(formInput.securityDepositAmount)}</Text>
-          }
-          maxLength={10}
-          errorMessage={errors.securityDepositAmount}
-        />
+        <View style={styles.formField}>
+          <MaterialTextInput<AgentPropertyFormType>
+            style={styles.input}
+            label="Security Deposit Amount"
+            field="securityDepositAmount"
+            formInput={formInput}
+            setFormInput={handleFieldChange}
+            mode="outlined"
+            placeholder="Enter deposit amount"
+            keyboardType="number-pad"
+            onFocus={() => scrollToEnd()}
+            rightComponent={
+              <Text>{formatCurrency(formInput.securityDepositAmount)}</Text>
+            }
+            maxLength={10}
+            errorMessage={errors.securityDepositAmount}
+          />
+        </View>
 
         <View style={styles.switchContainer}>
           <Text>Negotiable</Text>
@@ -301,19 +320,21 @@ const AddAgentPropertyScreen: React.FC<Props> = ({navigation, route}) => {
           />
         </View>
 
-        <MaterialTextInput<AgentPropertyFormType>
-          style={styles.input}
-          label="Property Notes"
-          field="propertyNotes"
-          formInput={formInput}
-          setFormInput={handleFieldChange}
-          mode="outlined"
-          placeholder="Add additional details"
-          multiline
-          numberOfLines={4}
-          onFocus={() => scrollToEnd()}
-          errorMessage={errors.propertyNotes}
-        />
+        <View style={styles.formField}>
+          <MaterialTextInput<AgentPropertyFormType>
+            style={styles.input}
+            label="Property Notes"
+            field="propertyNotes"
+            formInput={formInput}
+            setFormInput={handleFieldChange}
+            mode="outlined"
+            placeholder="Add additional details"
+            multiline
+            numberOfLines={4}
+            onFocus={() => scrollToEnd()}
+            errorMessage={errors.propertyNotes}
+          />
+        </View>
       </>
     ),
     [
@@ -371,7 +392,13 @@ const styles = StyleSheet.create({
     padding: 16,
   },
   input: {
+    marginBottom: 0,
+  },
+  formField: {
     marginBottom: 16,
+  },
+  dropdownField: {
+    marginBottom: 4,
   },
   switchContainer: {
     flexDirection: 'row',

@@ -243,7 +243,7 @@ export interface ClientForm {
 }
 
 export interface SearchIntellisenseResponse {
-  AgentName: string | null;
-  AgentContactNo: string | null;
-  Location: string | null;
+  agentName: string | null;
+  agentContactNo: string | null;
+  location: string | null;
 }

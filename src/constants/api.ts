@@ -42,7 +42,7 @@ const url = {
   getMasterDetail: BASE_URL + '/master-details',
   getPlaces: BASE_URL + '/master-details/getgoogleplaces',
   deleteUser: BASE_URL + '/User/DeleteUserByUserId',
-  searchIntellisense: BASE_URL + '/MasterDetail/SearchIntelligence',
+  searchIntellisense: BASE_URL + '/master-details/search-intellisense',
 
   //Partner
   agentProperties: BASE_URL + '/partners/agent-properties',

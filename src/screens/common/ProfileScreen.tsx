@@ -12,18 +12,18 @@ import {
 import Toast from 'react-native-toast-message';
 import {useAuth} from '../../hooks/useAuth';
 import {ActivityIndicator} from 'react-native-paper';
-import {User} from '../../types';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import GetIcon from '../../components/GetIcon';
 import Colors from '../../constants/Colors';
 import AuthService from '../../services/AuthService';
 import CommonService from '../../services/CommonService';
 import Images from '../../constants/Images';
+import { ProfileFormData } from '../../schema/ProfileFormSchema';
 
 type FieldName = 'name' | 'email' | 'phone' | 'location';
 type EditableFields = Record<FieldName, boolean>;
 
-const INITIAL_USER_DATA: User = {
+const INITIAL_USER_DATA: ProfileFormData = {
   name: '',
   email: '',
   phone: '',
@@ -40,7 +40,7 @@ interface ProfileFieldProps {
   inputRef: React.RefObject<TextInput>;
   editMode: EditableFields;
   setEditMode: React.Dispatch<React.SetStateAction<EditableFields>>;
-  setUserData: React.Dispatch<React.SetStateAction<User>>;
+  setUserData: React.Dispatch<React.SetStateAction<ProfileFormData>>;
   showPassword?: boolean;
   setShowPassword?: React.Dispatch<React.SetStateAction<boolean>>;
 }
@@ -118,7 +118,7 @@ const ProfileScreen = () => {
   const {user, logout} = useAuth();
   const [isLoading, setIsLoading] = useState(false);
   const [showLogoutModal, setShowLogoutModal] = useState(false);
-  const [userData, setUserData] = useState<User>(INITIAL_USER_DATA);
+  const [userData, setUserData] = useState<ProfileFormData>(INITIAL_USER_DATA);
   const [editMode, setEditMode] = useState<EditableFields>({
     name: false,
     email: false,
@@ -218,7 +218,7 @@ const ProfileScreen = () => {
       }
 
       setIsLoading(true);
-      const request: User = {
+      const request = {
         name: userData.name,
         email: userData.email,
         phone: userData.phone,
