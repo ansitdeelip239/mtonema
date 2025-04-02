@@ -36,12 +36,18 @@ export type IconEnum =
   | 'partner2'
   | 'partner3'
   | 'globe'
-  | 'help';
+  | 'help'
+  | 'calendarUpcoming'
+  | 'calendarOverdue'
+  | 'calendarSomeday'
+  | 'calendarToday'
+  | 'chevronRight'
+  | 'time';
 
 type IconProps = {
   iconName: IconEnum;
   color?: string;
-  size?: string;
+  size?: string | number;
 };
 
 const GetIcon = ({iconName, color, size}: IconProps) => {
@@ -81,6 +87,12 @@ const GetIcon = ({iconName, color, size}: IconProps) => {
     partner3: require('../assets/Icon/partner2.png'),
     globe: require('../assets/Icon/earth.png'),
     help: require('../assets/Icon/help.png'),
+    calendarUpcoming: require('../assets/Icon/calendar-upcoming.png'),
+    calendarOverdue: require('../assets/Icon/calendar-overdue.png'),
+    calendarSomeday: require('../assets/Icon/calendar-someday.png'),
+    calendarToday: require('../assets/Icon/calendar-today.png'),
+    chevronRight: require('../assets/Icon/chevron-right.png'),
+    time: require('../assets/Icon/time.png'),
   };
 
   const imageStyle = [

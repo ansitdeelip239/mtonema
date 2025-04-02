@@ -5,6 +5,7 @@ import {
   ClientForm,
   ClientResponseModel,
   FollowUp,
+  FollowUpType,
   GroupResponse,
 } from '../types';
 import {api} from '../utils/api';
@@ -219,6 +220,18 @@ class PartnerService {
       return response;
     } catch (error) {
       console.error('Error in getFollowUpDate', error);
+      throw error;
+    }
+  }
+
+  static async getFollowUpByUserId(userId: number, filter: string) {
+    try {
+      const response = await api.get<FollowUpType[]>(
+        `https://dncr-hardcoded.onrender.com/follow-ups?userId=${userId}&filter=${filter}`,
+      );
+      return response;
+    } catch (error) {
+      console.error('Error in getFollowUpByUserId', error);
       throw error;
     }
   }

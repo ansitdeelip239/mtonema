@@ -19,4 +19,5 @@ export default {
   grey: '#666666',
   placeholderColor: '#a1a19f',
   red: '#ff0000',
+  textLight: '#a1a19f',
 };

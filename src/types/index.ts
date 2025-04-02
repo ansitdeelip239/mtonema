@@ -234,6 +234,18 @@ export interface FollowUp {
     userId: number;
 }
 
+export interface FollowUpType {
+  id: number;
+  userId: number;
+  followUpDate: string;
+  status: 'Pending' | 'Completed';
+  createdAt: string;
+  updatedAt: string;
+  createdBy: number;
+  updatedBy: number;
+  client: Client;
+}
+
 export interface ClientResponseModel {
   responsePagingModel: PagingModel;
   clientDataModel: Client[];

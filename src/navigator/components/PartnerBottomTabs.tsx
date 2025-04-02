@@ -2,20 +2,20 @@ import React, {memo} from 'react';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import GetIcon from '../../components/GetIcon';
 import Colors from '../../constants/Colors';
-import HomeScreen from '../../screens/partner/HomeScreen/HomeScreen';
 import {PartnerBottomTabParamList} from '../../types/navigation';
 import AddAgentPropertyScreen from '../../screens/partner/AddAgentPropertyScreen/AddAgentPropertyScreen';
 import AgentDataScreen from '../../screens/partner/AgentsPropertyScreen/AgentsPropertyScreen';
 import PartnerProfileScreen from '../../screens/partner/ProfileScreen/ProfileScreen';
 import ClientScreenStack from './ClientScreenStack';
 import {CustomBottomBar, TabScreen} from './CustomBottomBar';
+import FollowUpScreen from '../../screens/partner/FollowUpScreen/FollowUpScreen';
 
 const Tab = createBottomTabNavigator<PartnerBottomTabParamList>();
 
 const tabScreens: Array<TabScreen<PartnerBottomTabParamList>> = [
   {
     name: 'Home',
-    component: HomeScreen,
+    component: FollowUpScreen,
     icon: 'home',
   },
   {
