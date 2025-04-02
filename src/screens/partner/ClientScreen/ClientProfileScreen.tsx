@@ -12,7 +12,7 @@ import {
 } from 'react-native';
 import {ClientStackParamList} from '../../../navigator/components/ClientScreenStack';
 import Header from '../../../components/Header';
-import {Client, ClientActivityDataModel} from '../../../types';
+import {Client, ClientActivityDataModel, FollowUp} from '../../../types';
 import PartnerService from '../../../services/PartnerService';
 import Toast from 'react-native-toast-message';
 import GetIcon from '../../../components/GetIcon';
@@ -25,6 +25,7 @@ import {useAuth} from '../../../hooks/useAuth';
 import ActivityTimeline from './components/ActivityTimeline';
 import {useDialog} from '../../../hooks/useDialog';
 import ConfirmationModal from '../../../components/ConfirmationModal';
+import {formatFollowUpDate, formatTime} from '../../../utils/dateUtils';
 
 type Props = NativeStackScreenProps<
   ClientStackParamList,
@@ -69,6 +70,24 @@ const ClientProfileScreen: React.FC<Props> = ({route, navigation}) => {
     } finally {
       setLoading(false);
       setRefreshing(false);
+    }
+
+    try {
+      const response = await PartnerService.getFollowUpDate(
+        route.params.clientId,
+      );
+      if (response.success) {
+        setClient(prevClient =>
+          prevClient
+            ? {
+                ...prevClient,
+                followUp: response.data.followUp as FollowUp,
+              }
+            : null,
+        );
+      }
+    } catch (error) {
+      showError('Failed to fetch follow-up date');
     }
   }, [route.params.clientId, navigation, showError]);
 
@@ -376,12 +395,32 @@ const ClientProfileScreen: React.FC<Props> = ({route, navigation}) => {
               </View>
             )}
 
-            <View
-              style={[
-                styles.infoSection,
-                // eslint-disable-next-line react-native/no-inline-styles
-                {paddingBottom: keyboardVisible ? 60 : 100},
-              ]}>
+            <View style={styles.infoSection}>
+              {/* Follow Up Date as a separate card */}
+              <View style={styles.infoCard}>
+                <Text style={styles.sectionTitle}>
+                  {client.followUp?.date
+                    ? `Follow Up in ${Math.ceil(
+                        (new Date(client.followUp.date).getTime() -
+                          new Date().getTime()) /
+                          (1000 * 60 * 60 * 24),
+                      )} days`
+                    : 'No Follow Up Scheduled'}
+                </Text>
+                {client.followUp?.date ? (
+                  <View style={styles.followUpDateContainer}>
+                    <Text style={styles.infoValue}>
+                      {formatFollowUpDate(new Date(client.followUp.date))}
+                    </Text>
+                    <Text style={styles.followUpTime}>
+                      {formatTime(new Date(client.followUp.date))}
+                    </Text>
+                  </View>
+                ) : (
+                  <Text style={styles.infoValue}>No date set</Text>
+                )}
+              </View>
+
               {renderContactInfo()}
 
               {client.groups && client.groups.length > 0 && (
@@ -413,6 +452,9 @@ const ClientProfileScreen: React.FC<Props> = ({route, navigation}) => {
                 </View>
                 {renderActivities()}
               </View>
+
+              {/* Add bottom padding when keyboard is visible */}
+              {keyboardVisible && <View style={styles.keyboardSpacing} />}
             </View>
           </>
         )}
@@ -445,6 +487,19 @@ const ClientProfileScreen: React.FC<Props> = ({route, navigation}) => {
 };
 
 const styles = StyleSheet.create({
+  followUpDateContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  followUpTime: {
+    fontSize: 14,
+    color: '#1a1a1a',
+    textAlign: 'right',
+  },
+  keyboardSpacing: {
+    height: 60,
+  },
   menuContent: {
     backgroundColor: 'white',
   },

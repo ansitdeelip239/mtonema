@@ -224,6 +224,14 @@ export interface Client {
   createdOn: string;
   activity: string;
   status: number;
+  followUp?: FollowUp
+}
+
+export interface FollowUp {
+    id: number;
+    date: string;
+    status: 'Pending' | 'Completed';
+    userId: number;
 }
 
 export interface ClientResponseModel {

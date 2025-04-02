@@ -4,6 +4,7 @@ import {
   Client,
   ClientForm,
   ClientResponseModel,
+  FollowUp,
   GroupResponse,
 } from '../types';
 import {api} from '../utils/api';
@@ -46,9 +47,15 @@ class PartnerService {
     }
   }
 
-  static async updateAgentProperty(body: AgentPropertyRequestModel, id: number) {
+  static async updateAgentProperty(
+    body: AgentPropertyRequestModel,
+    id: number,
+  ) {
     try {
-      const response = await api.put<null>(`${url.agentProperties}/${id}`, body);
+      const response = await api.put<null>(
+        `${url.agentProperties}/${id}`,
+        body,
+      );
       return response;
     } catch (error) {
       console.error('Error in updateAgentProperty', error);
@@ -96,10 +103,7 @@ class PartnerService {
 
   static async addClient(body: ClientForm) {
     try {
-      const response = await api.post<string | null>(
-        `${url.clients}`,
-        body,
-      );
+      const response = await api.post<string | null>(`${url.clients}`, body);
       return response;
     } catch (error) {
       console.error('Error in addClient', error);
@@ -141,9 +145,7 @@ class PartnerService {
 
   static async getClientById(clientId: number) {
     try {
-      const response = await api.get<Client>(
-        `${url.clients}/${clientId}`,
-      );
+      const response = await api.get<Client>(`${url.clients}/${clientId}`);
 
       return response;
     } catch (error) {
@@ -154,9 +156,7 @@ class PartnerService {
 
   static async deleteClientById(clientId: number) {
     try {
-      const response = await api.delete<null>(
-        `${url.clients}/${clientId}`,
-      );
+      const response = await api.delete<null>(`${url.clients}/${clientId}`);
       return response;
     } catch (error) {
       console.error('Error in deleteClientById', error);
@@ -198,6 +198,27 @@ class PartnerService {
       return response;
     } catch (error) {
       console.error('Error in deleteClientActivity', error);
+      throw error;
+    }
+  }
+
+  static async getFollowUpDate(clientId: number) {
+    try {
+      const response = await api.get<
+        | {
+            clientId: number;
+            clientName: string;
+            displayName: string;
+            followUp: FollowUp | null;
+          }
+        | {
+            clientId: number;
+            followUp: null;
+          }
+      >(`https://dncr-hardcoded.onrender.com/follow-ups/client?clientId=${clientId}`);
+      return response;
+    } catch (error) {
+      console.error('Error in getFollowUpDate', error);
       throw error;
     }
   }
