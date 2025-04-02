@@ -41,6 +41,7 @@ export type IconEnum =
   | 'calendarOverdue'
   | 'calendarSomeday'
   | 'calendarToday'
+  | 'calendar'
   | 'chevronRight'
   | 'time';
 
@@ -91,6 +92,7 @@ const GetIcon = ({iconName, color, size}: IconProps) => {
     calendarOverdue: require('../assets/Icon/calendar-overdue.png'),
     calendarSomeday: require('../assets/Icon/calendar-someday.png'),
     calendarToday: require('../assets/Icon/calendar-today.png'),
+    calendar: require('../assets/Icon/calendar.png'),
     chevronRight: require('../assets/Icon/chevron-right.png'),
     time: require('../assets/Icon/time.png'),
   };

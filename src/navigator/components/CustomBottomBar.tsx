@@ -6,12 +6,15 @@ import Colors from '../../constants/Colors';
 import {useKeyboard} from '../../hooks/useKeyboard';
 import GetIcon, {IconEnum} from '../../components/GetIcon';
 
-export interface TabScreen<T extends ParamListBase> {
+export type TabScreen<T extends ParamListBase> = {
   name: keyof T;
-  component: React.FC<any>;
+  component: React.ComponentType<any>;
   icon: IconEnum;
-  listeners?: (props: {navigation: any}) => {tabPress: (e: any) => void};
-}
+  label?: string; // Add this optional label property
+  listeners?: (props: {navigation: any}) => Partial<{
+    tabPress: () => void;
+  }>;
+};
 
 interface CustomBottomBarProps<T extends ParamListBase>
   extends BottomTabBarProps {
@@ -60,11 +63,20 @@ export const CustomBottomBar = <T extends ParamListBase>({
                   size: 24,
                 })}
                 <Text
+                  numberOfLines={1}
                   style={[
                     styles.tabLabel,
                     state.index === index && styles.activeTabLabel,
                   ]}>
-                  {route.name}
+                  {typeof descriptors[route.key].options.tabBarLabel ===
+                  'function'
+                    ? (descriptors[route.key].options.tabBarLabel as Function)({
+                        focused: state.index === index,
+                        color: state.index === index ? Colors.main : '#666',
+                        position: 'below-icon',
+                        children: route.name,
+                      })
+                    : descriptors[route.key].options.tabBarLabel ?? route.name}
                 </Text>
               </View>
             </TouchableOpacity>
@@ -129,12 +141,24 @@ export const CustomBottomBar = <T extends ParamListBase>({
                   size: 24,
                 })}
                 <Text
+                  numberOfLines={1}
                   style={[
                     styles.tabLabel,
                     state.index === index + middleIndex + 1 &&
                       styles.activeTabLabel,
                   ]}>
-                  {route.name}
+                  {typeof descriptors[route.key].options.tabBarLabel ===
+                  'function'
+                    ? (descriptors[route.key].options.tabBarLabel as Function)({
+                        focused: state.index === index + middleIndex + 1,
+                        color:
+                          state.index === index + middleIndex + 1
+                            ? Colors.main
+                            : '#666',
+                        position: 'below-icon',
+                        children: route.name,
+                      })
+                    : descriptors[route.key].options.tabBarLabel ?? route.name}
                 </Text>
               </View>
             </TouchableOpacity>
@@ -170,12 +194,17 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
   },
   tabLabel: {
-    fontSize: 12,
-    color: '#666',
+    fontSize: 11,
+    fontWeight: '500',
+    color: '#444',
     marginTop: 4,
+    textAlign: 'center',
+    width: 60,
+    flexShrink: 1,
   },
   activeTabLabel: {
     color: Colors.main,
+    fontWeight: 'bold',
   },
   tabSection: {
     flex: 1,
@@ -193,7 +222,7 @@ const styles = StyleSheet.create({
     // margin: 2,
   },
   activeTabColor: {
-    color: Colors.main + '20', // 20 is opacity
+    color: Colors.main + '20',
   },
   centerTab: {
     backgroundColor: Colors.main,

@@ -24,7 +24,7 @@ export type BuyerSellerAdminBottomTabParamList = {
 };
 
 export type PartnerBottomTabParamList = {
-  Home: undefined;
+  FollowUp: undefined;
   Property: undefined;
   AddProperty: {editMode: boolean; propertyData: AgentData};
   Clients: NavigatorScreenParams<ClientStackParamList>;
