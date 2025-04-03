@@ -12,11 +12,13 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import GetIcon, {IconEnum} from '../../../../components/GetIcon';
 import Colors from '../../../../constants/Colors';
 import {format} from 'date-fns';
+import ConfirmationModal from '../../../../components/ConfirmationModal';
 
 interface ScheduleFollowUpModalProps {
   visible: boolean;
   onClose: () => void;
   onSubmit: (date: Date | null) => void;
+  onDelete?: () => void; // New prop for delete functionality
   currentDate: Date | null;
   isLoading: boolean;
 }
@@ -25,6 +27,7 @@ const ScheduleFollowUpModal: React.FC<ScheduleFollowUpModalProps> = ({
   visible,
   onClose,
   onSubmit,
+  onDelete, // Add delete handler
   currentDate,
   isLoading,
 }) => {
@@ -34,6 +37,7 @@ const ScheduleFollowUpModal: React.FC<ScheduleFollowUpModalProps> = ({
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [showTimePicker, setShowTimePicker] = useState(false);
   const [finalDate, setFinalDate] = useState<Date | null>(currentDate);
+  const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
 
   useEffect(() => {
     if (visible) {
@@ -129,6 +133,18 @@ const ScheduleFollowUpModal: React.FC<ScheduleFollowUpModalProps> = ({
     }
   };
 
+  const handleDelete = () => {
+    setShowDeleteConfirmation(true);
+  };
+
+  const confirmDelete = () => {
+    setShowDeleteConfirmation(false);
+    onClose();
+    if (onDelete) {
+      onDelete();
+    }
+  };
+
   const renderOption = (option: string, label: string, icon: IconEnum) => (
     <TouchableOpacity
       style={[
@@ -149,116 +165,141 @@ const ScheduleFollowUpModal: React.FC<ScheduleFollowUpModalProps> = ({
   };
 
   return (
-    <Modal
-      visible={visible}
-      transparent
-      animationType="fade"
-      onRequestClose={onClose}>
-      <View style={styles.modalOverlay}>
-        <View
-          style={[
-            styles.modalContainer,
-            selectedOption === 'custom' && styles.addModalHeight,
-          ]}>
-          <View style={styles.modalHeader}>
-            <Text style={styles.modalTitle}>Schedule Follow-up</Text>
-            <TouchableOpacity onPress={onClose} style={styles.closeButton}>
-              <GetIcon iconName="clear" size={20} color="#666" />
-            </TouchableOpacity>
-          </View>
-
-          <ScrollView style={styles.modalContent}>
-            <Text style={styles.sectionTitle}>Select an option</Text>
-
-            <View style={styles.optionsContainer}>
-              {renderOption('today', 'Today', 'calendarToday')}
-              {renderOption('tomorrow', 'Tomorrow', 'calendarUpcoming')}
-              {renderOption('nextWeek', 'Next Week', 'calendarUpcoming')}
-              {renderOption('nextMonth', 'Next Month', 'calendarUpcoming')}
-              {renderOption('someday', 'Someday', 'calendarSomeday')}
-              {renderOption('custom', 'Custom Date', 'calendar')}
+    <>
+      <Modal
+        visible={visible}
+        transparent
+        animationType="fade"
+        onRequestClose={onClose}>
+        <View style={styles.modalOverlay}>
+          <View
+            style={[
+              styles.modalContainer,
+              selectedOption === 'custom' && styles.addModalHeight,
+            ]}>
+            <View style={styles.modalHeader}>
+              <Text style={styles.modalTitle}>Schedule Follow-up</Text>
+              {/* Show trash icon only if current date exists */}
+              {currentDate ? (
+                <TouchableOpacity onPress={handleDelete} style={styles.deleteIcon}>
+                  <GetIcon iconName="delete" size={20} color="#e74c3c" />
+                </TouchableOpacity>
+              ) : (
+                <View style={styles.emptyHeaderSpace} />
+              )}
             </View>
 
-            {selectedOption === 'custom' && (
-              <View style={styles.customDateSection}>
-                <Text style={styles.dateTimeLabel}>Selected Date & Time:</Text>
-                <TouchableOpacity
-                  style={styles.dateTimeDisplay}
-                  onPress={() => setShowDatePicker(true)}>
-                  <GetIcon iconName="calendar" size={20} color={Colors.main} />
-                  <Text style={styles.dateTimeText}>
-                    {formatDisplayDate(finalDate)}
-                  </Text>
-                </TouchableOpacity>
-              </View>
-            )}
+            <ScrollView style={styles.modalContent}>
+              <Text style={styles.sectionTitle}>Select an option</Text>
 
-            {selectedOption &&
-              selectedOption !== 'custom' &&
-              selectedOption !== 'someday' && (
+              <View style={styles.optionsContainer}>
+                {renderOption('today', 'Today', 'calendarToday')}
+                {renderOption('tomorrow', 'Tomorrow', 'calendarUpcoming')}
+                {renderOption('nextWeek', 'Next Week', 'calendarUpcoming')}
+                {renderOption('nextMonth', 'Next Month', 'calendarUpcoming')}
+                {renderOption('someday', 'Someday', 'calendarSomeday')}
+                {renderOption('custom', 'Custom Date', 'calendar')}
+              </View>
+
+              {selectedOption === 'custom' && (
+                <View style={styles.customDateSection}>
+                  <Text style={styles.dateTimeLabel}>Selected Date & Time:</Text>
+                  <TouchableOpacity
+                    style={styles.dateTimeDisplay}
+                    onPress={() => setShowDatePicker(true)}>
+                    <GetIcon iconName="calendar" size={20} color={Colors.main} />
+                    <Text style={styles.dateTimeText}>
+                      {formatDisplayDate(finalDate)}
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+              )}
+
+              {selectedOption &&
+                selectedOption !== 'custom' &&
+                selectedOption !== 'someday' && (
+                  <View style={styles.datePreview}>
+                    <Text style={styles.datePreviewLabel}>Scheduled for:</Text>
+                    <Text style={styles.datePreviewText}>
+                      {formatDisplayDate(finalDate)}
+                    </Text>
+                  </View>
+                )}
+
+              {selectedOption === 'someday' && (
                 <View style={styles.datePreview}>
                   <Text style={styles.datePreviewLabel}>Scheduled for:</Text>
                   <Text style={styles.datePreviewText}>
-                    {formatDisplayDate(finalDate)}
+                    Someday (no specific date)
                   </Text>
                 </View>
               )}
 
-            {selectedOption === 'someday' && (
-              <View style={styles.datePreview}>
-                <Text style={styles.datePreviewLabel}>Scheduled for:</Text>
-                <Text style={styles.datePreviewText}>
-                  Someday (no specific date)
-                </Text>
+              {/* Button row for Submit and Cancel */}
+              <View style={styles.buttonRow}>
+                <TouchableOpacity
+                  style={[
+                    styles.submitButton,
+                    (!selectedOption || isLoading) && styles.disabledButton,
+                  ]}
+                  disabled={!selectedOption || isLoading}
+                  onPress={() => onSubmit(finalDate)}>
+                  <Text style={styles.submitButtonText}>
+                    {isLoading ? 'Saving...' : 'Submit'}
+                  </Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity
+                  style={styles.cancelButton}
+                  onPress={onClose}>
+                  <Text style={styles.cancelButtonText}>Cancel</Text>
+                </TouchableOpacity>
               </View>
+
+              {/* Add more bottom padding when custom date is selected */}
+              <View
+                style={[
+                  styles.bottomPadding,
+                  selectedOption === 'custom' && styles.extendedBottomPadding,
+                ]}
+              />
+            </ScrollView>
+
+            {/* Date Picker Modal - iOS renders as modal, Android as dropdown */}
+            {showDatePicker && (
+              <DateTimePicker
+                value={customDate}
+                mode="date"
+                display={Platform.OS === 'ios' ? 'spinner' : 'default'}
+                onChange={handleDateChange}
+                minimumDate={new Date()}
+                style={styles.datePicker}
+              />
             )}
 
-            <TouchableOpacity
-              style={[
-                styles.submitButton,
-                (!selectedOption || isLoading) && styles.disabledButton,
-              ]}
-              disabled={!selectedOption || isLoading}
-              onPress={() => onSubmit(finalDate)}>
-              <Text style={styles.submitButtonText}>
-                {isLoading ? 'Saving...' : 'Schedule Follow-up'}
-              </Text>
-            </TouchableOpacity>
-
-            {/* Add more bottom padding when custom date is selected */}
-            <View
-              style={[
-                styles.bottomPadding,
-                selectedOption === 'custom' && styles.extendedBottomPadding,
-              ]}
-            />
-          </ScrollView>
-
-          {/* Date Picker Modal - iOS renders as modal, Android as dropdown */}
-          {showDatePicker && (
-            <DateTimePicker
-              value={customDate}
-              mode="date"
-              display={Platform.OS === 'ios' ? 'spinner' : 'default'}
-              onChange={handleDateChange}
-              minimumDate={new Date()}
-              style={styles.datePicker}
-            />
-          )}
-
-          {/* Time Picker Modal */}
-          {showTimePicker && (
-            <DateTimePicker
-              value={customTime}
-              mode="time"
-              display={Platform.OS === 'ios' ? 'spinner' : 'default'}
-              onChange={handleTimeChange}
-              style={styles.datePicker}
-            />
-          )}
+            {/* Time Picker Modal */}
+            {showTimePicker && (
+              <DateTimePicker
+                value={customTime}
+                mode="time"
+                display={Platform.OS === 'ios' ? 'spinner' : 'default'}
+                onChange={handleTimeChange}
+                style={styles.datePicker}
+              />
+            )}
+          </View>
         </View>
-      </View>
-    </Modal>
+      </Modal>
+
+      {/* Confirmation Modal for deletion */}
+      <ConfirmationModal
+        visible={showDeleteConfirmation}
+        title="Remove Follow-up"
+        message="Are you sure you want to remove this follow-up?"
+        onConfirm={confirmDelete}
+        onCancel={() => setShowDeleteConfirmation(false)}
+      />
+    </>
   );
 };
 
@@ -278,7 +319,7 @@ const styles = StyleSheet.create({
     maxHeight: '80%',
   },
   addModalHeight: {
-    height: '63%',
+    height: '65%',
   },
   modalHeader: {
     flexDirection: 'row',
@@ -292,6 +333,12 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold',
     color: '#333',
+  },
+  deleteIcon: {
+    padding: 4,
+  },
+  emptyHeaderSpace: {
+    width: 28, // Matches the size of the delete icon with padding
   },
   closeButton: {
     padding: 4,
@@ -381,12 +428,27 @@ const styles = StyleSheet.create({
     color: '#333',
     fontWeight: '600',
   },
+  buttonRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginTop: 24,
+    gap: 12,
+  },
   submitButton: {
+    flex: 1,
     backgroundColor: Colors.main,
     paddingVertical: 12,
     borderRadius: 8,
     alignItems: 'center',
-    marginTop: 24,
+  },
+  cancelButton: {
+    flex: 1,
+    backgroundColor: '#f5f5f5',
+    paddingVertical: 12,
+    borderRadius: 8,
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: '#e0e0e0',
   },
   disabledButton: {
     backgroundColor: '#cccccc',
@@ -395,6 +457,26 @@ const styles = StyleSheet.create({
     color: 'white',
     fontSize: 16,
     fontWeight: '600',
+  },
+  cancelButtonText: {
+    color: '#666',
+    fontSize: 16,
+    fontWeight: '600',
+  },
+  deleteButton: {
+    backgroundColor: '#e74c3c',
+    paddingVertical: 12,
+    borderRadius: 8,
+    alignItems: 'center',
+    marginTop: 16,
+    flexDirection: 'row',
+    justifyContent: 'center',
+  },
+  deleteButtonText: {
+    color: 'white',
+    fontSize: 16,
+    fontWeight: '600',
+    marginLeft: 8,
   },
   datePicker: {
     backgroundColor: 'white',

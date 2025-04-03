@@ -287,6 +287,45 @@ const ClientProfileScreen: React.FC<Props> = ({route, navigation}) => {
     }
   };
 
+  // Add this new function to handle follow-up deletion
+
+  const handleDeleteFollowUp = async () => {
+    try {
+      setSchedulingFollowUp(true);
+
+      const payload = {
+        clientId: client?.id as number,
+        userId: user?.id || 101,
+        followUpDate: null,
+        status: 'Cancelled',
+      };
+
+      const response = await PartnerService.scheduleFollowUp(
+        payload,
+        user?.id || 101,
+      );
+
+      if (response.success) {
+        Toast.show({
+          type: 'success',
+          text1: 'Success',
+          text2: 'Follow-up removed successfully',
+        });
+
+        // Update client data with new follow-up info
+        fetchClient();
+        setClientsUpdated(prev => !prev);
+      } else {
+        showError('Failed to remove follow-up');
+      }
+    } catch (error) {
+      console.error('Error removing follow-up:', error);
+      showError('Failed to remove follow-up');
+    } finally {
+      setSchedulingFollowUp(false);
+    }
+  };
+
   const renderContactInfo = React.useCallback(() => {
     if (!client) {
       return null;
@@ -353,7 +392,9 @@ const ClientProfileScreen: React.FC<Props> = ({route, navigation}) => {
   const renderFollowUpCard = () => {
     // Calculate days difference for proper display
     const getDaysText = () => {
-      if (!client?.followUp?.date) return '';
+      if (!client?.followUp?.date) {
+        return '';
+      }
 
       const daysLeft = Math.ceil(
         (new Date(client.followUp.date).getTime() - new Date().getTime()) /
@@ -571,6 +612,7 @@ const ClientProfileScreen: React.FC<Props> = ({route, navigation}) => {
         visible={isFollowUpModalVisible}
         onClose={() => setIsFollowUpModalVisible(false)}
         onSubmit={handleScheduleFollowUp}
+        onDelete={handleDeleteFollowUp}
         currentDate={
           client?.followUp?.date ? new Date(client.followUp.date) : null
         }
@@ -710,7 +752,7 @@ const styles = StyleSheet.create({
     borderColor: '#0066cc',
     backgroundColor: '#e6f0ff',
     shadowColor: '#0066cc',
-    shadowOffset: { width: 0, height: 2 },
+    shadowOffset: {width: 0, height: 2},
     shadowOpacity: 0.15,
     shadowRadius: 4,
     elevation: 4,
