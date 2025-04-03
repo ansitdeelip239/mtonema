@@ -216,7 +216,9 @@ class PartnerService {
             clientId: number;
             followUp: null;
           }
-      >(`https://dncr-hardcoded.onrender.com/follow-ups/client?clientId=${clientId}`);
+      >(
+        `https://dncr-hardcoded.onrender.com/follow-ups/client?clientId=${clientId}`,
+      );
       return response;
     } catch (error) {
       console.error('Error in getFollowUpDate', error);
@@ -228,6 +230,27 @@ class PartnerService {
     try {
       const response = await api.get<FollowUpType[]>(
         `https://dncr-hardcoded.onrender.com/follow-ups?userId=${userId}&filter=${filter}`,
+      );
+      return response;
+    } catch (error) {
+      console.error('Error in getFollowUpByUserId', error);
+      throw error;
+    }
+  }
+
+  static async scheduleFollowUp(
+    payload: {
+      clientId: number;
+      userId: number;
+      followUpDate: string | null;
+      status: string;
+    },
+    userId: number,
+  ) {
+    try {
+      const response = await api.post<FollowUpType>(
+        `https://dncr-hardcoded.onrender.com/follow-ups?userId=${userId}`,
+        payload,
       );
       return response;
     } catch (error) {

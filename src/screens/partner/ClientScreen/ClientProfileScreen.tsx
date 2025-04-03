@@ -26,6 +26,7 @@ import ActivityTimeline from './components/ActivityTimeline';
 import {useDialog} from '../../../hooks/useDialog';
 import ConfirmationModal from '../../../components/ConfirmationModal';
 import {formatFollowUpDate, formatTime} from '../../../utils/dateUtils';
+import ScheduleFollowUpModal from './components/ScheduleFollowUpModal';
 
 type Props = NativeStackScreenProps<
   ClientStackParamList,
@@ -44,6 +45,8 @@ const ClientProfileScreen: React.FC<Props> = ({route, navigation}) => {
   >();
   const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false);
   const [isDeletingActivity, setIsDeletingActivity] = useState(false);
+  const [isFollowUpModalVisible, setIsFollowUpModalVisible] = useState(false);
+  const [schedulingFollowUp, setSchedulingFollowUp] = useState(false);
 
   const {clientsUpdated, setClientsUpdated} = usePartner();
   const {keyboardVisible} = useKeyboard();
@@ -232,6 +235,58 @@ const ClientProfileScreen: React.FC<Props> = ({route, navigation}) => {
     }
   };
 
+  const handleScheduleFollowUp = async (selectedDate: Date | null) => {
+    try {
+      setSchedulingFollowUp(true);
+
+      // Format the date to the correct UTC format for the API or null for "someday"
+      let followUpDateString = null;
+      if (selectedDate) {
+        const utcDate = new Date(selectedDate.getTime());
+
+        const year = utcDate.getUTCFullYear();
+        const month = String(utcDate.getUTCMonth() + 1).padStart(2, '0');
+        const day = String(utcDate.getUTCDate()).padStart(2, '0');
+        const hours = String(utcDate.getUTCHours()).padStart(2, '0');
+        const minutes = String(utcDate.getUTCMinutes()).padStart(2, '0');
+
+        followUpDateString = `${year}-${month}-${day}T${hours}:${minutes}`;
+      }
+
+      const payload = {
+        clientId: client?.id as number,
+        userId: user?.id || 101,
+        followUpDate: followUpDateString,
+        status: 'Pending',
+      };
+
+      const response = await PartnerService.scheduleFollowUp(
+        payload,
+        user?.id || 101,
+      );
+
+      if (response.success) {
+        Toast.show({
+          type: 'success',
+          text1: 'Success',
+          text2: 'Follow-up scheduled successfully',
+        });
+
+        // Update client data with new follow-up info
+        fetchClient();
+        setClientsUpdated(prev => !prev);
+      } else {
+        showError('Failed to schedule follow-up');
+      }
+    } catch (error) {
+      console.error('Error scheduling follow-up:', error);
+      showError('Failed to schedule follow-up');
+    } finally {
+      setSchedulingFollowUp(false);
+      setIsFollowUpModalVisible(false);
+    }
+  };
+
   const renderContactInfo = React.useCallback(() => {
     if (!client) {
       return null;
@@ -295,6 +350,65 @@ const ClientProfileScreen: React.FC<Props> = ({route, navigation}) => {
     ));
   }, [client?.clientActivityDataModels]);
 
+  const renderFollowUpCard = () => {
+    // Calculate days difference for proper display
+    const getDaysText = () => {
+      if (!client?.followUp?.date) return '';
+
+      const daysLeft = Math.ceil(
+        (new Date(client.followUp.date).getTime() - new Date().getTime()) /
+          (1000 * 60 * 60 * 24),
+      );
+
+      return daysLeft === 1 ? '1 day' : `${daysLeft} days`;
+    };
+
+    // Determine if this is a "Someday" follow-up
+    const isSomedayFollowUp =
+      client?.followUp?.status === 'Pending' && !client?.followUp?.date;
+
+    return (
+      <TouchableOpacity
+        style={[
+          styles.infoCard,
+          styles.followUpCard,
+          client?.followUp?.date && styles.activeFollowUpCard,
+        ]}
+        onPress={() => setIsFollowUpModalVisible(true)}>
+        <View style={styles.followUpHeader}>
+          <Text style={styles.sectionTitle}>
+            {client?.followUp?.date
+              ? `Follow Up in ${getDaysText()}`
+              : isSomedayFollowUp
+              ? 'Follow Up: Someday'
+              : 'No Follow Up Scheduled'}
+          </Text>
+          <View style={styles.scheduleButton}>
+            {client?.followUp?.date ? (
+              <GetIcon iconName="edit" size={20} color="#0066cc" />
+            ) : (
+              <GetIcon iconName="plus" size={20} color="#0066cc" />
+            )}
+          </View>
+        </View>
+        {client?.followUp?.date ? (
+          <View style={styles.followUpDateContainer}>
+            <Text style={styles.infoValue}>
+              {formatFollowUpDate(new Date(client.followUp.date))}
+            </Text>
+            <Text style={styles.followUpTime}>
+              {formatTime(new Date(client.followUp.date))}
+            </Text>
+          </View>
+        ) : isSomedayFollowUp ? (
+          <Text style={styles.infoValue}>To be scheduled later</Text>
+        ) : (
+          <Text style={styles.infoValue}>No date set</Text>
+        )}
+      </TouchableOpacity>
+    );
+  };
+
   if (loading) {
     return (
       <View style={styles.loadingContainer}>
@@ -344,6 +458,7 @@ const ClientProfileScreen: React.FC<Props> = ({route, navigation}) => {
       </Header>
       <ScrollView
         style={styles.scrollView}
+        contentContainerStyle={styles.scrollViewContent}
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         }>
@@ -396,30 +511,7 @@ const ClientProfileScreen: React.FC<Props> = ({route, navigation}) => {
             )}
 
             <View style={styles.infoSection}>
-              {/* Follow Up Date as a separate card */}
-              <View style={styles.infoCard}>
-                <Text style={styles.sectionTitle}>
-                  {client.followUp?.date
-                    ? `Follow Up in ${Math.ceil(
-                        (new Date(client.followUp.date).getTime() -
-                          new Date().getTime()) /
-                          (1000 * 60 * 60 * 24),
-                      )} days`
-                    : 'No Follow Up Scheduled'}
-                </Text>
-                {client.followUp?.date ? (
-                  <View style={styles.followUpDateContainer}>
-                    <Text style={styles.infoValue}>
-                      {formatFollowUpDate(new Date(client.followUp.date))}
-                    </Text>
-                    <Text style={styles.followUpTime}>
-                      {formatTime(new Date(client.followUp.date))}
-                    </Text>
-                  </View>
-                ) : (
-                  <Text style={styles.infoValue}>No date set</Text>
-                )}
-              </View>
+              {renderFollowUpCard()}
 
               {renderContactInfo()}
 
@@ -475,6 +567,16 @@ const ClientProfileScreen: React.FC<Props> = ({route, navigation}) => {
         closeMenu={closeActivityModal}
       />
 
+      <ScheduleFollowUpModal
+        visible={isFollowUpModalVisible}
+        onClose={() => setIsFollowUpModalVisible(false)}
+        onSubmit={handleScheduleFollowUp}
+        currentDate={
+          client?.followUp?.date ? new Date(client.followUp.date) : null
+        }
+        isLoading={schedulingFollowUp}
+      />
+
       <ConfirmationModal
         visible={isDeleteModalVisible}
         title="Delete Client"
@@ -520,6 +622,9 @@ const styles = StyleSheet.create({
   },
   scrollView: {
     flex: 1,
+  },
+  scrollViewContent: {
+    paddingBottom: 80,
   },
   profileHeader: {
     alignItems: 'center',
@@ -594,6 +699,21 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowRadius: 4,
     elevation: 3,
+  },
+  followUpCard: {
+    borderWidth: 1,
+    borderColor: '#e0e0e0',
+    backgroundColor: '#f8f8f8',
+  },
+  activeFollowUpCard: {
+    borderWidth: 1,
+    borderColor: '#0066cc',
+    backgroundColor: '#e6f0ff',
+    shadowColor: '#0066cc',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.15,
+    shadowRadius: 4,
+    elevation: 4,
   },
   sectionTitle: {
     fontSize: 18,
@@ -694,6 +814,20 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 14,
     fontWeight: '600',
+  },
+  followUpHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 12,
+  },
+  scheduleButton: {
+    width: 32,
+    height: 32,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 16,
+    backgroundColor: '#f0f0f0',
   },
 });
 
