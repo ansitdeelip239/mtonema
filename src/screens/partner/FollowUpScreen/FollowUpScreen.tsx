@@ -15,12 +15,14 @@ import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {FollowUpStackParamList} from '../../../navigator/components/FollowUpScreenStack';
 import {useFollowUps} from '../../../hooks/useFollowUps';
 import FollowUpListSection from './components/FollowUpListSection';
+import { usePartner } from '../../../context/PartnerProvider';
 
 type Props = NativeStackScreenProps<FollowUpStackParamList, 'FollowUpScreen'>;
 
 const FollowUpScreen: React.FC<Props> = ({navigation}) => {
   const {followUps, isLoading, refreshing, fetchFollowUps, onRefresh} =
     useFollowUps('today');
+  const { clientsUpdated } = usePartner();
 
   // Helper function to determine if a date is today
   const isToday = useCallback((dateString: string | null): boolean => {
@@ -57,7 +59,7 @@ const FollowUpScreen: React.FC<Props> = ({navigation}) => {
 
   useEffect(() => {
     fetchFollowUps();
-  }, [fetchFollowUps]);
+  }, [fetchFollowUps, clientsUpdated]);
 
   return (
     <View style={styles.container}>

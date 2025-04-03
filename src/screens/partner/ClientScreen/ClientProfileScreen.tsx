@@ -255,7 +255,7 @@ const ClientProfileScreen: React.FC<Props> = ({route, navigation}) => {
 
       const payload = {
         clientId: client?.id as number,
-        userId: user?.id || 101,
+        userId: 101,
         followUpDate: followUpDateString,
         status: 'Pending',
       };
