@@ -1,8 +1,17 @@
-import React from 'react';
+import React, {useEffect} from 'react';
+import {
+  View,
+  StyleSheet,
+  ScrollView,
+  RefreshControl,
+  SafeAreaView,
+} from 'react-native';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {FollowUpStackParamList} from '../../../navigator/components/FollowUpScreenStack';
-import { ScrollView, Text, View } from 'react-native';
 import Header from '../../../components/Header';
+import Colors from '../../../constants/Colors';
+import {useFollowUps} from '../../../hooks/useFollowUps';
+import FollowUpListSection from './components/FollowUpListSection';
 
 type Props = NativeStackScreenProps<
   FollowUpStackParamList,
@@ -10,15 +19,57 @@ type Props = NativeStackScreenProps<
 >;
 
 const SomedayFollowUpScreen: React.FC<Props> = ({navigation}) => {
+  const {followUps, isLoading, refreshing, fetchFollowUps, onRefresh} =
+    useFollowUps('someday');
+
+  useEffect(() => {
+    fetchFollowUps();
+  }, [fetchFollowUps]);
+
   return (
-    <View>
-      <Header title="Someday Follow Up" backButton={true} navigation={navigation} />
-      <ScrollView>
-        <Text>Someday Follow Up Screen</Text>
-        {/* Add your content here */}
+    <SafeAreaView style={styles.container}>
+      <Header
+        title="Someday Follow-ups"
+        backButton={true}
+        navigation={navigation}
+      />
+
+      <ScrollView
+        style={styles.content}
+        refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={onRefresh}
+            colors={[Colors.main]}
+            tintColor={Colors.main}
+          />
+        }>
+        <FollowUpListSection
+          isLoading={isLoading}
+          followUps={followUps}
+          emptyText="No someday follow-ups scheduled"
+          showTitle={false}
+        />
+
+        {/* Increase bottom padding to prevent content from being hidden under bottom navigation */}
+        <View style={styles.bottomPadding} />
       </ScrollView>
-    </View>
+    </SafeAreaView>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#f5f5f5',
+  },
+  content: {
+    flex: 1,
+    padding: 16,
+  },
+  bottomPadding: {
+    height: 100,
+  },
+});
 
 export default SomedayFollowUpScreen;

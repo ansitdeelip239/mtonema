@@ -1,0 +1,133 @@
+import React from 'react';
+import {View, Text, StyleSheet} from 'react-native';
+import {Card} from 'react-native-paper';
+import {FollowUpType} from '../../../../types';
+import {formatFollowUpDate, formatTime} from '../../../../utils/dateUtils';
+import GetIcon from '../../../../components/GetIcon';
+import Colors from '../../../../constants/Colors';
+
+interface FollowUpCardProps {
+  item: FollowUpType;
+}
+
+const FollowUpCard: React.FC<FollowUpCardProps> = ({item}) => {
+  return (
+    <Card style={styles.followUpCard}>
+      <Card.Content>
+        <View style={styles.followUpHeader}>
+          <View>
+            <Text style={styles.clientName}>{item.client.clientName}</Text>
+            <View style={styles.groupsContainer}>
+              {item.client.groups && item.client.groups.length > 0 ? (
+                item.client.groups.map(group => (
+                  <View
+                    key={group.id}
+                    style={[
+                      styles.groupTag,
+                      {backgroundColor: group.groupColor + '20'},
+                      {borderColor: group.groupColor},
+                    ]}>
+                    <Text style={[styles.groupText, {color: group.groupColor}]}>
+                      {group.name}
+                    </Text>
+                  </View>
+                ))
+              ) : (
+                <Text style={styles.noGroupText}>No Group</Text>
+              )}
+            </View>
+          </View>
+          <View style={styles.timeContainer}>
+            {item.followUpDate && (
+              <>
+                <Text style={styles.followUpDate}>
+                  {formatFollowUpDate(new Date(item.followUpDate))}
+                </Text>
+                <View style={styles.timeWrapper}>
+                  <GetIcon iconName="time" size={14} color={Colors.main} />
+                  <Text style={styles.followUpTime}>
+                    {formatTime(new Date(item.followUpDate))}
+                  </Text>
+                </View>
+              </>
+            )}
+          </View>
+        </View>
+        <Text style={styles.notes}>{item.client.notes || 'No notes'}</Text>
+      </Card.Content>
+    </Card>
+  );
+};
+
+const styles = StyleSheet.create({
+  followUpCard: {
+    marginBottom: 8,
+    borderRadius: 8,
+    elevation: 2,
+    backgroundColor: Colors.white,
+  },
+  followUpHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: 8,
+  },
+  clientName: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: '#333',
+    marginBottom: 4,
+  },
+  timeContainer: {
+    alignItems: 'flex-end',
+  },
+  timeWrapper: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#f0f7ff',
+    paddingHorizontal: 6,
+    paddingVertical: 2,
+    borderRadius: 10,
+    marginTop: 2,
+  },
+  followUpDate: {
+    fontSize: 14,
+    color: '#333',
+    fontWeight: '500',
+  },
+  followUpTime: {
+    fontSize: 14,
+    color: Colors.main,
+    fontWeight: 'bold',
+    marginLeft: 4,
+  },
+  notes: {
+    fontSize: 14,
+    color: '#444',
+    marginTop: 6,
+  },
+  groupsContainer: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    marginTop: 4,
+    marginBottom: 4,
+  },
+  groupTag: {
+    borderRadius: 12,
+    paddingHorizontal: 8,
+    paddingVertical: 2,
+    marginRight: 6,
+    marginBottom: 4,
+    borderWidth: 1,
+  },
+  groupText: {
+    fontSize: 12,
+    fontWeight: '500',
+  },
+  noGroupText: {
+    fontSize: 12,
+    color: '#888',
+    fontStyle: 'italic',
+  },
+});
+
+export default FollowUpCard;
