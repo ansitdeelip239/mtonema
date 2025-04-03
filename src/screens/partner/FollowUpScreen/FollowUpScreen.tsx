@@ -6,6 +6,8 @@ import {
   TouchableOpacity,
   ScrollView,
   FlatList,
+  ActivityIndicator,
+  RefreshControl,
 } from 'react-native';
 import Colors from '../../../constants/Colors';
 import {Card} from 'react-native-paper';
@@ -18,6 +20,8 @@ import {formatFollowUpDate, formatTime} from '../../../utils/dateUtils';
 
 const FollowUpScreen: React.FC = () => {
   const [followUps, setFollowUps] = useState<FollowUpType[]>();
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [refreshing, setRefreshing] = useState<boolean>(false);
 
   // Helper function to determine if a date is today
   const isToday = (dateString: string | null): boolean => {
@@ -55,7 +59,7 @@ const FollowUpScreen: React.FC = () => {
                     key={group.id}
                     style={[
                       styles.groupTag,
-                      {backgroundColor: group.groupColor + '20'}, // Adding 20% opacity
+                      {backgroundColor: group.groupColor + '20'},
                       {borderColor: group.groupColor},
                     ]}>
                     <Text style={[styles.groupText, {color: group.groupColor}]}>
@@ -75,7 +79,7 @@ const FollowUpScreen: React.FC = () => {
                   {formatFollowUpDate(new Date(item.followUpDate))}
                 </Text>
                 <View style={styles.timeWrapper}>
-                  <GetIcon iconName="time" size={14} />
+                  <GetIcon iconName="time" size={14} color={Colors.main} />
                   <Text style={styles.followUpTime}>
                     {formatTime(new Date(item.followUpDate))}
                   </Text>
@@ -84,7 +88,7 @@ const FollowUpScreen: React.FC = () => {
             )}
           </View>
         </View>
-        {/* <Text style={styles.notes}>{item.client.notes || 'No notes'}</Text> */}
+        <Text style={styles.notes}>{item.client.notes || 'No notes'}</Text>
       </Card.Content>
     </Card>
   );
@@ -96,27 +100,62 @@ const FollowUpScreen: React.FC = () => {
     // Example: navigation.navigate('OverdueFollowUps');
   };
 
-  const fetchFollowUps = useCallback(async () => {
+  // Common function for fetching follow-ups
+  const fetchData = useCallback(async (isRefreshing = false) => {
+    if (isRefreshing) {
+      setRefreshing(true);
+    }
+
+    setIsLoading(true);
     try {
       const response = await PartnerService.getFollowUpByUserId(101, 'today');
       if (response.success && response.data) {
         setFollowUps(response.data);
       }
     } catch (error) {
-      console.error('Error fetching follow-ups:', error);
+      console.error(
+        `Error ${isRefreshing ? 'refreshing' : 'fetching'} follow-ups:`,
+        error,
+      );
+    } finally {
+      // Reset the appropriate loading state
+      if (isRefreshing) {
+        setRefreshing(false);
+      }
+
+      setIsLoading(false);
     }
   }, []);
+
+  // Initial fetch
+  const fetchFollowUps = useCallback(() => {
+    fetchData(false);
+  }, [fetchData]);
+
+  // Refresh function
+  const onRefresh = useCallback(() => {
+    fetchData(true);
+  }, [fetchData]);
 
   useEffect(() => {
     fetchFollowUps();
   }, [fetchFollowUps]);
 
-  // Rest of the code remains the same
+  // Rest of the component (return statement) remains the same
   return (
     <View style={styles.container}>
       <Header<PartnerDrawerParamList> title="Follow-ups" />
 
-      <ScrollView style={styles.content}>
+      <ScrollView
+        style={styles.content}
+        refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={onRefresh}
+            colors={[Colors.main]}
+            tintColor={Colors.main}
+          />
+        }>
         {/* Navigation Buttons */}
         <View style={styles.navButtonsContainer}>
           <TouchableOpacity
@@ -190,7 +229,12 @@ const FollowUpScreen: React.FC = () => {
             <Text style={styles.sectionTitle}>Today's Follow-ups</Text>
           </View>
 
-          {followUps && getTodayFollowUps().length > 0 ? (
+          {isLoading ? (
+            <View style={styles.loaderContainer}>
+              <ActivityIndicator size="large" color={Colors.main} />
+              <Text style={styles.loaderText}>Loading follow-ups...</Text>
+            </View>
+          ) : followUps && getTodayFollowUps().length > 0 ? (
             <FlatList
               data={getTodayFollowUps()}
               renderItem={renderFollowUpItem}
@@ -395,6 +439,22 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: '#888',
     fontStyle: 'italic',
+  },
+  loaderContainer: {
+    padding: 24,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#f9f9f9',
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: '#e0e0e0',
+    borderStyle: 'dashed',
+  },
+  loaderText: {
+    marginTop: 12,
+    fontSize: 14,
+    color: '#666',
+    textAlign: 'center',
   },
 });
 
