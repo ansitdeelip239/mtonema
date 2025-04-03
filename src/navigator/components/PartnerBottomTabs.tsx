@@ -8,14 +8,14 @@ import AgentDataScreen from '../../screens/partner/AgentsPropertyScreen/AgentsPr
 import PartnerProfileScreen from '../../screens/partner/ProfileScreen/ProfileScreen';
 import ClientScreenStack from './ClientScreenStack';
 import {CustomBottomBar, TabScreen} from './CustomBottomBar';
-import FollowUpScreen from '../../screens/partner/FollowUpScreen/FollowUpScreen';
+import FollowUpScreenStack from './FollowUpScreenStack';
 
 const Tab = createBottomTabNavigator<PartnerBottomTabParamList>();
 
 const tabScreens: Array<TabScreen<PartnerBottomTabParamList>> = [
   {
     name: 'FollowUp',
-    component: FollowUpScreen,
+    component: FollowUpScreenStack,
     icon: 'calendar',
     label: 'Follow Ups', // Add a custom label that will be used in display
   },

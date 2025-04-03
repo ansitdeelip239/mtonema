@@ -5,7 +5,6 @@ import Colors from '../constants/Colors';
 import {useDrawer} from '../hooks/useDrawer';
 import {ParamListBase} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
-import {ClientStackParamList} from '../navigator/components/ClientScreenStack';
 
 export default function Header<T extends ParamListBase>({
   title,
@@ -16,7 +15,7 @@ export default function Header<T extends ParamListBase>({
   title: string;
   children?: React.ReactNode;
   backButton?: boolean;
-  navigation?: NativeStackNavigationProp<ClientStackParamList | ParamListBase>;
+  navigation?: NativeStackNavigationProp<any>;
 }) {
   const {openDrawer} = useDrawer<T>();
 

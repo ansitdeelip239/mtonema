@@ -3,51 +3,31 @@ import {
   View,
   Text,
   StyleSheet,
-  TouchableOpacity,
   ScrollView,
   FlatList,
   ActivityIndicator,
   RefreshControl,
+  SafeAreaView,
 } from 'react-native';
-import Colors from '../../../constants/Colors';
+import {NativeStackScreenProps} from '@react-navigation/native-stack';
+import {FollowUpStackParamList} from '../../../navigator/components/FollowUpScreenStack';
+import Header from '../../../components/Header';
 import {Card} from 'react-native-paper';
 import GetIcon from '../../../components/GetIcon';
-import Header from '../../../components/Header';
-import {PartnerDrawerParamList} from '../../../types/navigation';
+import Colors from '../../../constants/Colors';
 import PartnerService from '../../../services/PartnerService';
 import {FollowUpType} from '../../../types';
 import {formatFollowUpDate, formatTime} from '../../../utils/dateUtils';
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { FollowUpStackParamList } from '../../../navigator/components/FollowUpScreenStack';
 
-type Props = NativeStackScreenProps<FollowUpStackParamList, 'FollowUpScreen'>;
+type Props = NativeStackScreenProps<
+  FollowUpStackParamList,
+  'OverdueFollowUpScreen'
+>;
 
-const FollowUpScreen: React.FC<Props> = ({navigation}) => {
-  const [followUps, setFollowUps] = useState<FollowUpType[]>();
+const OverdueFollowUpScreen: React.FC<Props> = ({navigation}) => {
+  const [followUps, setFollowUps] = useState<FollowUpType[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [refreshing, setRefreshing] = useState<boolean>(false);
-
-  // Helper function to determine if a date is today
-  const isToday = (dateString: string | null): boolean => {
-    if (!dateString) {
-      return false;
-    }
-    const date = new Date(dateString);
-    const today = new Date();
-    return (
-      date.getDate() === today.getDate() &&
-      date.getMonth() === today.getMonth() &&
-      date.getFullYear() === today.getFullYear()
-    );
-  };
-
-  // Filter follow-ups for today
-  const getTodayFollowUps = () => {
-    if (!followUps) {
-      return [];
-    }
-    return followUps.filter(followUp => isToday(followUp.followUpDate));
-  };
 
   // Updated to work with the new data structure and display all groups
   const renderFollowUpItem = ({item}: {item: FollowUpType}) => (
@@ -97,18 +77,7 @@ const FollowUpScreen: React.FC<Props> = ({navigation}) => {
     </Card>
   );
 
-  // Navigate to different screens based on button pressed
-  const navigateToScreen = (screenType: string) => {
-    if(screenType === 'overdue') {
-      navigation.navigate('OverdueFollowUpScreen');
-    } else if(screenType === 'upcoming') {
-      navigation.navigate('UpcomingFollowUpScreen');
-    } else if(screenType === 'someday') {
-      navigation.navigate('SomedayFollowUpScreen');
-    }
-  };
-
-  // Common function for fetching follow-ups
+  // Common function for fetching follow-ups - using 'someday' as parameter
   const fetchData = useCallback(async (isRefreshing = false) => {
     if (isRefreshing) {
       setRefreshing(true);
@@ -116,13 +85,13 @@ const FollowUpScreen: React.FC<Props> = ({navigation}) => {
 
     setIsLoading(true);
     try {
-      const response = await PartnerService.getFollowUpByUserId(101, 'today');
+      const response = await PartnerService.getFollowUpByUserId(101, 'someday');
       if (response.success && response.data) {
         setFollowUps(response.data);
       }
     } catch (error) {
       console.error(
-        `Error ${isRefreshing ? 'refreshing' : 'fetching'} follow-ups:`,
+        `Error ${isRefreshing ? 'refreshing' : 'fetching'} someday follow-ups:`,
         error,
       );
     } finally {
@@ -149,10 +118,13 @@ const FollowUpScreen: React.FC<Props> = ({navigation}) => {
     fetchFollowUps();
   }, [fetchFollowUps]);
 
-  // Rest of the component (return statement) remains the same
   return (
-    <View style={styles.container}>
-      <Header<PartnerDrawerParamList> title="Follow-ups" />
+    <SafeAreaView style={styles.container}>
+      <Header
+        title="Someday Follow-ups"
+        backButton={true}
+        navigation={navigation}
+      />
 
       <ScrollView
         style={styles.content}
@@ -164,87 +136,21 @@ const FollowUpScreen: React.FC<Props> = ({navigation}) => {
             tintColor={Colors.main}
           />
         }>
-        {/* Navigation Buttons */}
-        <View style={styles.navButtonsContainer}>
-          <TouchableOpacity
-            style={[styles.navButton, styles.overdueButton]}
-            onPress={() => navigateToScreen('overdue')}>
-            <View style={styles.navButtonContent}>
-              <View
-                style={[
-                  styles.navButtonIconContainer,
-                  styles.overdueIconContainer,
-                ]}>
-                <GetIcon iconName="calendarOverdue" size={24} />
-              </View>
-              <View style={styles.navButtonTextContainer}>
-                <Text style={styles.navButtonTitle}>Overdue Follow-ups</Text>
-                <Text style={styles.navButtonSubtitle}>
-                  Follow-ups that have passed their due date
-                </Text>
-              </View>
-              <GetIcon iconName="chevronRight" size={24} color="#666" />
-            </View>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            style={styles.navButton}
-            onPress={() => navigateToScreen('upcoming')}>
-            <View style={styles.navButtonContent}>
-              <View
-                style={[
-                  styles.navButtonIconContainer,
-                  styles.upcomingIconContainer,
-                ]}>
-                <GetIcon iconName="calendarUpcoming" size={24} />
-              </View>
-              <View style={styles.navButtonTextContainer}>
-                <Text style={styles.navButtonTitle}>Upcoming Follow-ups</Text>
-                <Text style={styles.navButtonSubtitle}>
-                  Follow-ups scheduled for the next 7 days
-                </Text>
-              </View>
-              <GetIcon iconName="chevronRight" size={24} color="#666" />
-            </View>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            style={[styles.navButton, styles.somedayButton]}
-            onPress={() => navigateToScreen('someday')}>
-            <View style={styles.navButtonContent}>
-              <View
-                style={[
-                  styles.navButtonIconContainer,
-                  styles.somedayIconContainer,
-                ]}>
-                <GetIcon iconName="calendarSomeday" size={24} />
-              </View>
-              <View style={styles.navButtonTextContainer}>
-                <Text style={styles.navButtonTitle}>Someday Follow-ups</Text>
-                <Text style={styles.navButtonSubtitle}>
-                  Follow-ups scheduled for later dates
-                </Text>
-              </View>
-              <GetIcon iconName="chevronRight" size={24} color="#666" />
-            </View>
-          </TouchableOpacity>
-        </View>
-
-        {/* Today's Follow-ups Section */}
+        {/* Someday Follow-ups Section */}
         <View style={styles.sectionContainer}>
-          <View style={styles.sectionTitleContainer}>
-            <GetIcon iconName="calendarToday" size={22} />
-            <Text style={styles.sectionTitle}>Today's Follow-ups</Text>
-          </View>
+          {/* <View style={styles.sectionTitleContainer}>
+            <GetIcon iconName="calendarSomeday" size={22} />
+            <Text style={styles.sectionTitle}>Someday Follow-ups</Text>
+          </View> */}
 
           {isLoading ? (
             <View style={styles.loaderContainer}>
               <ActivityIndicator size="large" color={Colors.main} />
               <Text style={styles.loaderText}>Loading follow-ups...</Text>
             </View>
-          ) : followUps && getTodayFollowUps().length > 0 ? (
+          ) : followUps && followUps.length > 0 ? (
             <FlatList
-              data={getTodayFollowUps()}
+              data={followUps}
               renderItem={renderFollowUpItem}
               keyExtractor={item => item.id.toString()}
               scrollEnabled={false}
@@ -253,7 +159,7 @@ const FollowUpScreen: React.FC<Props> = ({navigation}) => {
             <View style={styles.emptyContainer}>
               <GetIcon iconName="about" size={24} />
               <Text style={styles.emptyText}>
-                No follow-ups scheduled for today
+                No someday follow-ups scheduled
               </Text>
             </View>
           )}
@@ -262,7 +168,7 @@ const FollowUpScreen: React.FC<Props> = ({navigation}) => {
         {/* Increase bottom padding to prevent content from being hidden under bottom navigation */}
         <View style={styles.bottomPadding} />
       </ScrollView>
-    </View>
+    </SafeAreaView>
   );
 };
 
@@ -271,77 +177,9 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#f5f5f5',
   },
-  headerContainer: {
-    padding: 16,
-    backgroundColor: Colors.main,
-  },
-  headerTitle: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    color: Colors.white,
-  },
   content: {
     flex: 1,
     padding: 16,
-  },
-  navButtonsContainer: {
-    marginBottom: 24,
-  },
-  navButton: {
-    backgroundColor: Colors.white,
-    borderRadius: 8,
-    marginBottom: 12,
-    elevation: 2,
-    shadowColor: '#000',
-    shadowOffset: {width: 0, height: 1},
-    shadowOpacity: 0.22,
-    shadowRadius: 2.22,
-  },
-  navButtonContent: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    padding: 16,
-  },
-  navButtonIconContainer: {
-    marginRight: 16,
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    backgroundColor: '#f0f0f0',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  overdueButton: {
-    backgroundColor: '#fff0f0', // Light red background
-    borderLeftWidth: 4,
-    borderLeftColor: '#e74c3c', // Red border
-  },
-  overdueIconContainer: {
-    backgroundColor: '#e74c3c', // Red background for icon
-  },
-  upcomingIconContainer: {
-    backgroundColor: Colors.main, // Main app color for upcoming
-  },
-  somedayButton: {
-    backgroundColor: '#f5f5f5', // Light gray background
-    borderLeftWidth: 4,
-    borderLeftColor: '#95a5a6', // Gray border
-  },
-  somedayIconContainer: {
-    backgroundColor: '#95a5a6', // Gray background for icon
-  },
-  navButtonTextContainer: {
-    flex: 1,
-  },
-  navButtonTitle: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    color: '#333',
-    marginBottom: 4,
-  },
-  navButtonSubtitle: {
-    fontSize: 14,
-    color: '#666',
   },
   sectionContainer: {
     marginBottom: 16,
@@ -373,10 +211,6 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: '#333',
     marginBottom: 4,
-  },
-  clientType: {
-    fontSize: 14,
-    color: '#666',
   },
   timeContainer: {
     alignItems: 'flex-end',
@@ -419,7 +253,7 @@ const styles = StyleSheet.create({
   emptyText: {
     marginTop: 8,
     fontSize: 14,
-    color: Colors.textLight,
+    color: Colors.textLight || '#999',
     textAlign: 'center',
   },
   bottomPadding: {
@@ -466,4 +300,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default FollowUpScreen;
+export default OverdueFollowUpScreen;
