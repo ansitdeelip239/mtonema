@@ -293,16 +293,8 @@ const ClientProfileScreen: React.FC<Props> = ({route, navigation}) => {
     try {
       setSchedulingFollowUp(true);
 
-      const payload = {
-        clientId: client?.id as number,
-        userId: user?.id || 101,
-        followUpDate: null,
-        status: 'Cancelled',
-      };
-
-      const response = await PartnerService.scheduleFollowUp(
-        payload,
-        user?.id || 101,
+      const response = await PartnerService.deleteFollowUp(
+        client?.followUp?.id as number,
       );
 
       if (response.success) {
@@ -404,16 +396,20 @@ const ClientProfileScreen: React.FC<Props> = ({route, navigation}) => {
       return daysLeft === 1 ? '1 day' : `${daysLeft} days`;
     };
 
-    // Determine if this is a "Someday" follow-up
+    // Determine if this is a "Someday" follow-up - only true if status is Pending AND date is null
     const isSomedayFollowUp =
       client?.followUp?.status === 'Pending' && !client?.followUp?.date;
+
+    // Determine if there's any follow-up at all
+    const hasFollowUp = client?.followUp?.status === 'Pending'; // Either with date or someday
 
     return (
       <TouchableOpacity
         style={[
           styles.infoCard,
           styles.followUpCard,
-          client?.followUp?.date && styles.activeFollowUpCard,
+          // Apply the activeFollowUpCard style for both date-based and someday follow-ups
+          (client?.followUp?.date || isSomedayFollowUp) && styles.activeFollowUpCard,
         ]}
         onPress={() => setIsFollowUpModalVisible(true)}>
         <View style={styles.followUpHeader}>
@@ -425,7 +421,7 @@ const ClientProfileScreen: React.FC<Props> = ({route, navigation}) => {
               : 'No Follow Up Scheduled'}
           </Text>
           <View style={styles.scheduleButton}>
-            {client?.followUp?.date ? (
+            {hasFollowUp ? (
               <GetIcon iconName="edit" size={20} color="#0066cc" />
             ) : (
               <GetIcon iconName="plus" size={20} color="#0066cc" />
@@ -617,6 +613,9 @@ const ClientProfileScreen: React.FC<Props> = ({route, navigation}) => {
           client?.followUp?.date ? new Date(client.followUp.date) : null
         }
         isLoading={schedulingFollowUp}
+        isSomedayFollowUp={
+          client?.followUp?.status === 'Pending' && !client?.followUp?.date
+        } // Add this prop
       />
 
       <ConfirmationModal

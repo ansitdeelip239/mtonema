@@ -18,18 +18,20 @@ interface ScheduleFollowUpModalProps {
   visible: boolean;
   onClose: () => void;
   onSubmit: (date: Date | null) => void;
-  onDelete?: () => void; // New prop for delete functionality
+  onDelete?: () => void;
   currentDate: Date | null;
   isLoading: boolean;
+  isSomedayFollowUp?: boolean; // Add this prop
 }
 
 const ScheduleFollowUpModal: React.FC<ScheduleFollowUpModalProps> = ({
   visible,
   onClose,
   onSubmit,
-  onDelete, // Add delete handler
+  onDelete,
   currentDate,
   isLoading,
+  isSomedayFollowUp = false, // Default to false
 }) => {
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
   const [customDate, setCustomDate] = useState<Date>(new Date());
@@ -41,18 +43,23 @@ const ScheduleFollowUpModal: React.FC<ScheduleFollowUpModalProps> = ({
 
   useEffect(() => {
     if (visible) {
-      // Initialize with current follow-up date if it exists
       if (currentDate) {
+        // Regular date-based follow-up
         setSelectedOption('custom');
         setCustomDate(currentDate);
         setCustomTime(currentDate);
         setFinalDate(currentDate);
+      } else if (isSomedayFollowUp) {
+        // "Someday" follow-up
+        setSelectedOption('someday');
+        setFinalDate(null);
       } else {
+        // No follow-up scheduled
         setSelectedOption(null);
         setFinalDate(null);
       }
     }
-  }, [visible, currentDate]);
+  }, [visible, currentDate, isSomedayFollowUp]);
 
   const handleOptionSelect = (option: string) => {
     setSelectedOption(option);
@@ -179,8 +186,8 @@ const ScheduleFollowUpModal: React.FC<ScheduleFollowUpModalProps> = ({
             ]}>
             <View style={styles.modalHeader}>
               <Text style={styles.modalTitle}>Schedule Follow-up</Text>
-              {/* Show trash icon only if current date exists */}
-              {currentDate ? (
+              {/* Show trash icon if there's any follow-up (date-based or someday) */}
+              {(currentDate || isSomedayFollowUp) ? (
                 <TouchableOpacity onPress={handleDelete} style={styles.deleteIcon}>
                   <GetIcon iconName="delete" size={20} color="#e74c3c" />
                 </TouchableOpacity>

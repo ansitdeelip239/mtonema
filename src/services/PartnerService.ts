@@ -258,5 +258,18 @@ class PartnerService {
       throw error;
     }
   }
+
+  static async deleteFollowUp(followUpId: number) {
+    try {
+      const response = await api.delete<null>(
+        `https://dncr-hardcoded.onrender.com/follow-ups/${followUpId}`,
+      );
+      return response;
+    } catch (error) {
+      console.error('Error in deleteFollowUp', error);
+      throw error;
+    }
+  }
 }
+
 export default PartnerService;
