@@ -129,7 +129,7 @@ const FollowUpScreen: React.FC<Props> = ({navigation}) => {
 
   return (
     <View style={styles.container}>
-      <Header<PartnerDrawerParamList> title="Follow-ups" />
+      <Header<PartnerDrawerParamList> title="Follow-Ups" />
 
       <ScrollView
         style={styles.content}
