@@ -1,4 +1,4 @@
-import React, {useEffect, useCallback} from 'react';
+import React, {useEffect, useCallback, useState} from 'react';
 import {
   View,
   Text,
@@ -15,15 +15,35 @@ import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {FollowUpStackParamList} from '../../../navigator/components/FollowUpScreenStack';
 import {useFollowUps} from '../../../hooks/useFollowUps';
 import FollowUpListSection from './components/FollowUpListSection';
-import { usePartner } from '../../../context/PartnerProvider';
-import { navigate } from '../../../navigator/NavigationRef';
+import {usePartner} from '../../../context/PartnerProvider';
+import {navigate} from '../../../navigator/NavigationRef';
 
 type Props = NativeStackScreenProps<FollowUpStackParamList, 'FollowUpScreen'>;
 
 const FollowUpScreen: React.FC<Props> = ({navigation}) => {
-  const {followUps, isLoading, refreshing, fetchFollowUps, onRefresh} =
-    useFollowUps('today');
-  const { clientsUpdated } = usePartner();
+  const {
+    followUps: todayFollowUps,
+    isLoading: isTodayLoading,
+    fetchFollowUps: fetchTodayFollowUps,
+  } = useFollowUps('today');
+
+  const {
+    followUps: overdueFollowUps,
+    fetchFollowUps: fetchOverdueFollowUps,
+  } = useFollowUps('overdue');
+
+  const {
+    followUps: upcomingFollowUps,
+    fetchFollowUps: fetchUpcomingFollowUps,
+  } = useFollowUps('upcoming');
+
+  const {
+    followUps: somedayFollowUps,
+    fetchFollowUps: fetchSomedayFollowUps,
+  } = useFollowUps('someday');
+
+  const [isRefreshing, setIsRefreshing] = useState(false);
+  const {clientsUpdated} = usePartner();
 
   // Helper function to determine if a date is today
   const isToday = useCallback((dateString: string | null): boolean => {
@@ -41,33 +61,71 @@ const FollowUpScreen: React.FC<Props> = ({navigation}) => {
 
   // Filter follow-ups for today
   const getTodayFollowUps = useCallback(() => {
-    if (!followUps) {
+    if (!todayFollowUps) {
       return [];
     }
-    return followUps.filter(followUp => isToday(followUp.followUpDate));
-  }, [followUps, isToday]);
+    return todayFollowUps.filter(followUp => isToday(followUp.followUpDate));
+  }, [todayFollowUps, isToday]);
+
+  // Update useEffect to fetch all follow-ups
+  useEffect(() => {
+    fetchTodayFollowUps();
+    fetchOverdueFollowUps();
+    fetchUpcomingFollowUps();
+    fetchSomedayFollowUps();
+  }, [
+    fetchTodayFollowUps,
+    fetchOverdueFollowUps,
+    fetchUpcomingFollowUps,
+    fetchSomedayFollowUps,
+    clientsUpdated,
+  ]);
+
+  // Create a new combined refresh handler
+  const handleRefresh = useCallback(async () => {
+    setIsRefreshing(true);
+    try {
+      await Promise.all([
+        fetchTodayFollowUps(),
+        fetchOverdueFollowUps(),
+        fetchUpcomingFollowUps(),
+        fetchSomedayFollowUps(),
+      ]);
+    } catch (error) {
+      console.error('Error refreshing follow-ups:', error);
+    } finally {
+      setIsRefreshing(false);
+    }
+  }, [
+    fetchTodayFollowUps,
+    fetchOverdueFollowUps,
+    fetchUpcomingFollowUps,
+    fetchSomedayFollowUps,
+  ]);
 
   // Navigate to different screens based on button pressed
   const navigateToScreen = (screenType: string) => {
     if (screenType === 'overdue') {
-      navigation.navigate('OverdueFollowUpScreen');
+      navigation.navigate('OverdueFollowUpScreen', {
+        followUps: overdueFollowUps,
+      });
     } else if (screenType === 'upcoming') {
-      navigation.navigate('UpcomingFollowUpScreen');
+      navigation.navigate('UpcomingFollowUpScreen', {
+        followUps: upcomingFollowUps,
+      });
     } else if (screenType === 'someday') {
-      navigation.navigate('SomedayFollowUpScreen');
+      navigation.navigate('SomedayFollowUpScreen', {
+        followUps: somedayFollowUps,
+      });
     }
   };
 
   const handleFollowUpPress = (clientId: number) => {
     navigate('Clients', {
       screen: 'ClientProfileScreen',
-      params: { clientId },
+      params: {clientId},
     });
   };
-
-  useEffect(() => {
-    fetchFollowUps();
-  }, [fetchFollowUps, clientsUpdated]);
 
   return (
     <View style={styles.container}>
@@ -77,8 +135,8 @@ const FollowUpScreen: React.FC<Props> = ({navigation}) => {
         style={styles.content}
         refreshControl={
           <RefreshControl
-            refreshing={refreshing}
-            onRefresh={onRefresh}
+            refreshing={isRefreshing}
+            onRefresh={handleRefresh}
             colors={[Colors.main]}
             tintColor={Colors.main}
           />
@@ -102,7 +160,12 @@ const FollowUpScreen: React.FC<Props> = ({navigation}) => {
                   Follow-ups that have passed their due date
                 </Text>
               </View>
-              <GetIcon iconName="chevronRight" size={24} color="#666" />
+              <View style={styles.countContainer}>
+                <Text style={[styles.count, styles.overdueCount]}>
+                  {overdueFollowUps.length}
+                </Text>
+                <GetIcon iconName="chevronRight" size={24} color="#666" />
+              </View>
             </View>
           </TouchableOpacity>
 
@@ -123,7 +186,12 @@ const FollowUpScreen: React.FC<Props> = ({navigation}) => {
                   Follow-ups scheduled for the next 7 days
                 </Text>
               </View>
-              <GetIcon iconName="chevronRight" size={24} color="#666" />
+              <View style={styles.countContainer}>
+                <Text style={[styles.count, styles.upcomingCount]}>
+                  {upcomingFollowUps.length}
+                </Text>
+                <GetIcon iconName="chevronRight" size={24} color="#666" />
+              </View>
             </View>
           </TouchableOpacity>
 
@@ -144,7 +212,12 @@ const FollowUpScreen: React.FC<Props> = ({navigation}) => {
                   Follow-ups scheduled for later dates
                 </Text>
               </View>
-              <GetIcon iconName="chevronRight" size={24} color="#666" />
+              <View style={styles.countContainer}>
+                <Text style={[styles.count, styles.somedayCount]}>
+                  {somedayFollowUps.length}
+                </Text>
+                <GetIcon iconName="chevronRight" size={24} color="#666" />
+              </View>
             </View>
           </TouchableOpacity>
         </View>
@@ -153,7 +226,7 @@ const FollowUpScreen: React.FC<Props> = ({navigation}) => {
         <FollowUpListSection
           title="Today's Follow-ups"
           iconName="calendarToday"
-          isLoading={isLoading}
+          isLoading={isTodayLoading}
           followUps={getTodayFollowUps()}
           emptyText="No follow-ups scheduled for today"
           onFollowUpPress={handleFollowUpPress}
@@ -236,6 +309,32 @@ const styles = StyleSheet.create({
   },
   bottomPadding: {
     height: 100, // Keeps the larger padding for bottom navigation
+  },
+  countContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+  },
+  count: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    borderRadius: 12,
+    minWidth: 28,
+    textAlign: 'center',
+  },
+  overdueCount: {
+    backgroundColor: '#ffe5e5',
+    color: '#e74c3c',
+  },
+  upcomingCount: {
+    backgroundColor: Colors.main + '20',
+    color: Colors.main,
+  },
+  somedayCount: {
+    backgroundColor: '#ecf0f1',
+    color: '#95a5a6',
   },
 });
 

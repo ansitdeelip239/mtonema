@@ -5,13 +5,14 @@ import FollowUpScreen from '../../screens/partner/FollowUpScreen/FollowUpScreen'
 import OverdueFollowUpScreen from '../../screens/partner/FollowUpScreen/OverdueFollowUpScreen';
 import UpcomingFollowUpScreen from '../../screens/partner/FollowUpScreen/UpcomingFollowUpScreen';
 import SomedayFollowUpScreen from '../../screens/partner/FollowUpScreen/SomedayFollowUpScreen';
+import { FollowUpType } from '../../types';
 
 // Define the param list type for this stack
 export type FollowUpStackParamList = {
   FollowUpScreen: undefined;
-  OverdueFollowUpScreen: undefined;
-  UpcomingFollowUpScreen: undefined;
-  SomedayFollowUpScreen: undefined;
+  OverdueFollowUpScreen: { followUps: FollowUpType[] };
+  UpcomingFollowUpScreen: { followUps: FollowUpType[] };
+  SomedayFollowUpScreen: { followUps: FollowUpType[] };
 };
 
 const Stack = createNativeStackNavigator<FollowUpStackParamList>();
