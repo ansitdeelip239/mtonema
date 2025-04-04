@@ -16,6 +16,7 @@ import {FollowUpStackParamList} from '../../../navigator/components/FollowUpScre
 import {useFollowUps} from '../../../hooks/useFollowUps';
 import FollowUpListSection from './components/FollowUpListSection';
 import { usePartner } from '../../../context/PartnerProvider';
+import { navigate } from '../../../navigator/NavigationRef';
 
 type Props = NativeStackScreenProps<FollowUpStackParamList, 'FollowUpScreen'>;
 
@@ -55,6 +56,13 @@ const FollowUpScreen: React.FC<Props> = ({navigation}) => {
     } else if (screenType === 'someday') {
       navigation.navigate('SomedayFollowUpScreen');
     }
+  };
+
+  const handleFollowUpPress = (clientId: number) => {
+    navigate('Clients', {
+      screen: 'ClientProfileScreen',
+      params: { clientId },
+    });
   };
 
   useEffect(() => {
@@ -148,6 +156,7 @@ const FollowUpScreen: React.FC<Props> = ({navigation}) => {
           isLoading={isLoading}
           followUps={getTodayFollowUps()}
           emptyText="No follow-ups scheduled for today"
+          onFollowUpPress={handleFollowUpPress}
         />
 
         {/* Increase bottom padding to prevent content from being hidden under bottom navigation */}

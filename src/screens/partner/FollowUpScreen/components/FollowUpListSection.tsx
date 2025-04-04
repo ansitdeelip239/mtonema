@@ -5,6 +5,7 @@ import {
   StyleSheet,
   FlatList,
   ActivityIndicator,
+  TouchableOpacity,
 } from 'react-native';
 import FollowUpCard from './FollowUpCard';
 import {FollowUpType} from '../../../../types';
@@ -18,6 +19,7 @@ interface FollowUpListSectionProps {
   followUps: FollowUpType[] | undefined;
   emptyText: string;
   showTitle?: boolean;
+  onFollowUpPress?: (clientId: number) => void;
 }
 
 const FollowUpListSection: React.FC<FollowUpListSectionProps> = ({
@@ -27,9 +29,12 @@ const FollowUpListSection: React.FC<FollowUpListSectionProps> = ({
   followUps,
   emptyText,
   showTitle = true,
+  onFollowUpPress,
 }) => {
   const renderFollowUpItem = ({item}: {item: FollowUpType}) => (
-    <FollowUpCard item={item} />
+    <TouchableOpacity onPress={() => onFollowUpPress?.(item.client.id)}>
+      <FollowUpCard item={item} />
+    </TouchableOpacity>
   );
 
   return (

@@ -12,6 +12,7 @@ import Header from '../../../components/Header';
 import Colors from '../../../constants/Colors';
 import {useFollowUps} from '../../../hooks/useFollowUps';
 import FollowUpListSection from './components/FollowUpListSection';
+import { navigate } from '../../../navigator/NavigationRef';
 
 type Props = NativeStackScreenProps<
   FollowUpStackParamList,
@@ -21,6 +22,13 @@ type Props = NativeStackScreenProps<
 const SomedayFollowUpScreen: React.FC<Props> = ({navigation}) => {
   const {followUps, isLoading, refreshing, fetchFollowUps, onRefresh} =
     useFollowUps('someday');
+
+  const handleFollowUpPress = (clientId: number) => {
+    navigate('Clients', {
+      screen: 'ClientProfileScreen',
+      params: { clientId },
+    });
+  };
 
   useEffect(() => {
     fetchFollowUps();
@@ -49,6 +57,7 @@ const SomedayFollowUpScreen: React.FC<Props> = ({navigation}) => {
           followUps={followUps}
           emptyText="No someday follow-ups scheduled"
           showTitle={false}
+          onFollowUpPress={handleFollowUpPress}
         />
 
         {/* Increase bottom padding to prevent content from being hidden under bottom navigation */}
