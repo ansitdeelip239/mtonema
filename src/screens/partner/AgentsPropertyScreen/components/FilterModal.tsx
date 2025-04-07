@@ -23,11 +23,6 @@ const FilterModal = ({
   const slideAnim = useRef(new Animated.Value(300)).current;
 
   const mappedLocations = useMemo(() => {
-    // const uniqueLocations = Array.from(
-    //   new Set(agentData.map(agent => agent.propertyLocation).filter(Boolean)),
-    // ).sort();
-
-    // Transform string[] to MasterDetailModel[]
     return locations.map((location, index) => ({
       id: index + 1,
       masterDetailName: location,
@@ -53,6 +48,10 @@ const FilterModal = ({
       filters.bhkType !== initialFilters.bhkType
     );
   }, [filters, initialFilters]);
+
+  const hasActiveFilters = useMemo(() => {
+    return Object.values(filters).some(value => value !== null);
+  }, [filters]);
 
   useEffect(() => {
     Animated.parallel([
@@ -98,6 +97,14 @@ const FilterModal = ({
     }));
   }, []);
 
+  const handleClearAllFilters = useCallback(() => {
+    setFilters({
+      propertyLocation: null,
+      propertyType: null,
+      bhkType: null,
+    });
+  }, []);
+
   useEffect(() => {
     setFilters(initialFilters);
   }, [initialFilters]);
@@ -111,7 +118,15 @@ const FilterModal = ({
         <Animated.View
           style={[styles.modalContent, {transform: [{translateY: slideAnim}]}]}
           onStartShouldSetResponder={() => true}>
-          <Text style={styles.modalTitle}>Filter Properties</Text>
+          <View style={styles.headerContainer}>
+            <Text style={styles.modalTitle}>Filter Properties</Text>
+            {hasActiveFilters && (
+              <TouchableOpacity onPress={handleClearAllFilters}>
+                <Text style={styles.clearAllText}>Clear All</Text>
+              </TouchableOpacity>
+            )}
+          </View>
+          
           <FilterOption
             label="Location"
             options={mappedLocations}
@@ -168,10 +183,20 @@ const styles = StyleSheet.create({
     elevation: 15,
     shadowColor: Colors.PRIMARY_1,
   },
+  headerContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 20,
+  },
   modalTitle: {
     fontSize: 18,
     fontWeight: 'bold',
-    marginBottom: 20,
+  },
+  clearAllText: {
+    fontSize: 14,
+    color: Colors.main,
+    fontWeight: '500',
   },
   buttonContainer: {
     flexDirection: 'row',

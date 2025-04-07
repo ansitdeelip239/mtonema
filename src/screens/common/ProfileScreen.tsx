@@ -18,7 +18,7 @@ import Colors from '../../constants/Colors';
 import AuthService from '../../services/AuthService';
 import CommonService from '../../services/CommonService';
 import Images from '../../constants/Images';
-import { ProfileFormData } from '../../schema/ProfileFormSchema';
+import {ProfileFormData} from '../../schema/ProfileFormSchema';
 
 type FieldName = 'name' | 'email' | 'phone' | 'location';
 type EditableFields = Record<FieldName, boolean>;
@@ -115,7 +115,7 @@ const ProfileField = React.memo(
 );
 
 const ProfileScreen = () => {
-  const {user, logout} = useAuth();
+  const {user, setUser, logout} = useAuth();
   const [isLoading, setIsLoading] = useState(false);
   const [showLogoutModal, setShowLogoutModal] = useState(false);
   const [userData, setUserData] = useState<ProfileFormData>(INITIAL_USER_DATA);
@@ -174,6 +174,16 @@ const ProfileScreen = () => {
           phone: response.data.phone || '',
           location: response.data.location || '',
         }));
+
+        if (user) {
+          setUser({
+            ...user,
+            name: response.data.name || '',
+            email: response.data.email || '',
+            phone: response.data.phone || '',
+            location: response.data.location || '',
+          });
+        }
       }
     } catch (error) {
       showToast('error', 'Failed to fetch profile data');
@@ -181,7 +191,7 @@ const ProfileScreen = () => {
     } finally {
       setIsLoading(false);
     }
-  }, [showToast]);
+  }, [showToast, setUser, user]);
 
   useEffect(() => {
     fetchUserProfile();
@@ -228,6 +238,17 @@ const ProfileScreen = () => {
 
       const response = await CommonService.updateProfile(request);
       if (response.success) {
+        // Update the user context immediately after successful API response
+        if (user) {
+          setUser({
+            ...user,
+            name: userData.name,
+            email: userData.email,
+            phone: userData.phone,
+            location: userData.location,
+          });
+        }
+
         showToast('success', 'Profile updated successfully');
         setEditMode({
           name: false,
@@ -235,6 +256,8 @@ const ProfileScreen = () => {
           phone: false,
           location: false,
         });
+
+        // You may still want to fetch the profile to ensure everything is in sync
         await fetchUserProfile();
       } else {
         throw new Error(response.message || 'Update failed');

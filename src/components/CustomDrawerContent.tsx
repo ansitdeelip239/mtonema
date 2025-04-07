@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {useAuth} from '../hooks/useAuth';
 import {
   DrawerContentScrollView,
@@ -23,9 +23,17 @@ import {Drawer} from 'react-native-paper';
 
 const CustomDrawerContent = (props: any) => {
   const {user, logout} = useAuth();
+  const [userName, setUserName] = useState(user?.name || '');
   const [isLoggingOut, setIsLoggingOut] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
   const [loadingModalVisible, setLoadingModalVisible] = useState(false);
+
+  // Add this effect to update the userName when user context changes
+  useEffect(() => {
+    if (user?.name) {
+      setUserName(user.name);
+    }
+  }, [user?.name]);
 
   const handleCustomButtonPress = () => {
     props.navigation.closeDrawer();
@@ -58,7 +66,7 @@ const CustomDrawerContent = (props: any) => {
             source={require('../assets/Images/dncrlogo.png')}
             style={styles.logo}
           />
-          <Text style={styles.name}>{user?.name}</Text>
+          <Text style={styles.name}>{userName}</Text>
         </View>
       </TouchableOpacity>
 
