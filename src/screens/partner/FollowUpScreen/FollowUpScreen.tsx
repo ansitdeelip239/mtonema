@@ -27,20 +27,14 @@ const FollowUpScreen: React.FC<Props> = ({navigation}) => {
     fetchFollowUps: fetchTodayFollowUps,
   } = useFollowUps('today');
 
-  const {
-    followUps: overdueFollowUps,
-    fetchFollowUps: fetchOverdueFollowUps,
-  } = useFollowUps('overdue');
+  const {followUps: overdueFollowUps, fetchFollowUps: fetchOverdueFollowUps} =
+    useFollowUps('overdue');
 
-  const {
-    followUps: upcomingFollowUps,
-    fetchFollowUps: fetchUpcomingFollowUps,
-  } = useFollowUps('upcoming');
+  const {followUps: upcomingFollowUps, fetchFollowUps: fetchUpcomingFollowUps} =
+    useFollowUps('upcoming');
 
-  const {
-    followUps: somedayFollowUps,
-    fetchFollowUps: fetchSomedayFollowUps,
-  } = useFollowUps('someday');
+  const {followUps: somedayFollowUps, fetchFollowUps: fetchSomedayFollowUps} =
+    useFollowUps('someday');
 
   const [isRefreshing, setIsRefreshing] = useState(false);
   const {clientsUpdated} = usePartner();
@@ -230,6 +224,7 @@ const FollowUpScreen: React.FC<Props> = ({navigation}) => {
           followUps={getTodayFollowUps()}
           emptyText="No follow-ups scheduled for today"
           onFollowUpPress={handleFollowUpPress}
+          filterType="today"
         />
 
         {/* Increase bottom padding to prevent content from being hidden under bottom navigation */}

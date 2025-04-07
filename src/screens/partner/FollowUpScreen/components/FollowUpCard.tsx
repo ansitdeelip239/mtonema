@@ -8,9 +8,10 @@ import Colors from '../../../../constants/Colors';
 
 interface FollowUpCardProps {
   item: FollowUpType;
+  filterType?: string;
 }
 
-const FollowUpCard: React.FC<FollowUpCardProps> = ({item}) => {
+const FollowUpCard: React.FC<FollowUpCardProps> = ({item, filterType}) => {
   return (
     <Card style={styles.followUpCard}>
       <Card.Content>
@@ -21,9 +22,11 @@ const FollowUpCard: React.FC<FollowUpCardProps> = ({item}) => {
           <View style={styles.timeContainer}>
             {item.followUpDate && (
               <>
-                <Text style={styles.followUpDate}>
-                  {formatFollowUpDate(new Date(item.followUpDate))}
-                </Text>
+                {filterType !== 'today' && (
+                  <Text style={styles.followUpDate}>
+                    {formatFollowUpDate(new Date(item.followUpDate))}
+                  </Text>
+                )}
                 <View style={styles.timeWrapper}>
                   <GetIcon iconName="time" size={14} color={Colors.main} />
                   <Text style={styles.followUpTime}>

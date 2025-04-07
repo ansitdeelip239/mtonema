@@ -20,6 +20,7 @@ interface FollowUpListSectionProps {
   emptyText: string;
   showTitle?: boolean;
   onFollowUpPress?: (clientId: number) => void;
+  filterType?: string;
 }
 
 const FollowUpListSection: React.FC<FollowUpListSectionProps> = ({
@@ -30,10 +31,15 @@ const FollowUpListSection: React.FC<FollowUpListSectionProps> = ({
   emptyText,
   showTitle = true,
   onFollowUpPress,
+  filterType,
 }) => {
   const renderFollowUpItem = ({item}: {item: FollowUpType}) => (
     <TouchableOpacity onPress={() => onFollowUpPress?.(item.client.id)}>
-      <FollowUpCard item={item} />
+      {!filterType ? (
+        <FollowUpCard item={item} />
+      ) : (
+        <FollowUpCard item={item} filterType={filterType} />
+      )}
     </TouchableOpacity>
   );
 
