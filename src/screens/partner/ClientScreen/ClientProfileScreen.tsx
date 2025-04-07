@@ -255,14 +255,14 @@ const ClientProfileScreen: React.FC<Props> = ({route, navigation}) => {
 
       const payload = {
         clientId: client?.id as number,
-        userId: 101,
+        userId: user?.id as number,
         followUpDate: followUpDateString,
         status: 'Pending',
       };
 
       const response = await PartnerService.scheduleFollowUp(
         payload,
-        user?.id || 101,
+        user?.id as number,
       );
 
       if (response.success) {

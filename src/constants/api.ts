@@ -56,6 +56,9 @@ const url = {
   addEditClientActivity: BASE_URL + '/partners/addeditclient-activity',
   deleteClientActivity: BASE_URL + '/partners/deleteclient-activity',
 
+  //Partner Follow-ups
+  followUps: BASE_URL + '/partners/follow-ups',
+
   //Admin
   getAllProperties: BASE_URL + '/property/getAllProperty',
   getAllUsers: BASE_URL + '/User/GetAllUser',

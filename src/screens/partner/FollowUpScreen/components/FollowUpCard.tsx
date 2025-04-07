@@ -15,27 +15,8 @@ const FollowUpCard: React.FC<FollowUpCardProps> = ({item}) => {
     <Card style={styles.followUpCard}>
       <Card.Content>
         <View style={styles.followUpHeader}>
-          <View>
+          <View style={styles.clientSection}>
             <Text style={styles.clientName}>{item.client.clientName}</Text>
-            <View style={styles.groupsContainer}>
-              {item.client.groups && item.client.groups.length > 0 ? (
-                item.client.groups.map(group => (
-                  <View
-                    key={group.id}
-                    style={[
-                      styles.groupTag,
-                      {backgroundColor: group.groupColor + '20'},
-                      {borderColor: group.groupColor},
-                    ]}>
-                    <Text style={[styles.groupText, {color: group.groupColor}]}>
-                      {group.name}
-                    </Text>
-                  </View>
-                ))
-              ) : (
-                <Text style={styles.noGroupText}>No Group</Text>
-              )}
-            </View>
           </View>
           <View style={styles.timeContainer}>
             {item.followUpDate && (
@@ -53,6 +34,27 @@ const FollowUpCard: React.FC<FollowUpCardProps> = ({item}) => {
             )}
           </View>
         </View>
+
+        <View style={styles.groupsContainer}>
+          {item.client.groups && item.client.groups.length > 0 ? (
+            item.client.groups.map(group => (
+              <View
+                key={group.id}
+                style={[
+                  styles.groupTag,
+                  {backgroundColor: group.groupColor + '20'},
+                  {borderColor: group.groupColor},
+                ]}>
+                <Text style={[styles.groupText, {color: group.groupColor}]}>
+                  {group.name}
+                </Text>
+              </View>
+            ))
+          ) : (
+            <Text style={styles.noGroupText}>No Group</Text>
+          )}
+        </View>
+
         <Text style={styles.notes}>{item.client.notes || 'No notes'}</Text>
       </Card.Content>
     </Card>
@@ -69,7 +71,11 @@ const styles = StyleSheet.create({
   followUpHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginBottom: 8,
+    marginBottom: 4,
+  },
+  clientSection: {
+    flex: 1,
+    marginRight: 8,
   },
   clientName: {
     fontSize: 16,
@@ -79,6 +85,7 @@ const styles = StyleSheet.create({
   },
   timeContainer: {
     alignItems: 'flex-end',
+    minWidth: 80, // ensure minimum width for time section
   },
   timeWrapper: {
     flexDirection: 'row',
@@ -108,8 +115,7 @@ const styles = StyleSheet.create({
   groupsContainer: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    marginTop: 4,
-    marginBottom: 4,
+    marginVertical: 4,
   },
   groupTag: {
     borderRadius: 12,

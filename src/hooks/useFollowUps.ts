@@ -1,6 +1,7 @@
 import {useState, useCallback} from 'react';
 import PartnerService from '../services/PartnerService';
 import {FollowUpType} from '../types';
+import { useAuth } from './useAuth';
 
 export const useFollowUps = (
   type: 'today' | 'someday' | 'overdue' | 'upcoming',
@@ -8,6 +9,7 @@ export const useFollowUps = (
   const [followUps, setFollowUps] = useState<FollowUpType[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [refreshing, setRefreshing] = useState<boolean>(false);
+  const { user } = useAuth();
 
   const fetchData = useCallback(
     async (isRefreshing = false) => {
@@ -17,7 +19,7 @@ export const useFollowUps = (
 
       setIsLoading(true);
       try {
-        const response = await PartnerService.getFollowUpByUserId(101, type);
+        const response = await PartnerService.getFollowUpByUserId(user?.id as number, type);
         if (response.success && response.data) {
           setFollowUps(response.data);
         }
@@ -35,7 +37,7 @@ export const useFollowUps = (
         setIsLoading(false);
       }
     },
-    [type],
+    [type, user?.id],
   );
 
   const fetchFollowUps = useCallback(() => {

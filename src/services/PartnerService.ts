@@ -228,8 +228,13 @@ class PartnerService {
 
   static async getFollowUpByUserId(userId: number, filter: string) {
     try {
+      const params = new URLSearchParams({
+        userId: userId.toString(),
+        filter,
+      }).toString();
+
       const response = await api.get<FollowUpType[]>(
-        `https://dncr-hardcoded.onrender.com/follow-ups?userId=${userId}&filter=${filter}`,
+        `${url.followUps}?${params}`,
       );
       return response;
     } catch (error) {
@@ -248,8 +253,12 @@ class PartnerService {
     userId: number,
   ) {
     try {
+      const params = new URLSearchParams({
+        userId: userId.toString(),
+      }).toString();
+
       const response = await api.post<FollowUpType>(
-        `https://dncr-hardcoded.onrender.com/follow-ups?userId=${userId}`,
+        `${url.followUps}?${params}`,
         payload,
       );
       return response;
@@ -262,7 +271,7 @@ class PartnerService {
   static async deleteFollowUp(followUpId: number) {
     try {
       const response = await api.delete<null>(
-        `https://dncr-hardcoded.onrender.com/follow-ups/${followUpId}`,
+        `${url.followUps}/${followUpId}`,
       );
       return response;
     } catch (error) {
