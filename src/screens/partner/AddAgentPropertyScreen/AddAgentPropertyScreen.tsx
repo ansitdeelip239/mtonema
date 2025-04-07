@@ -239,7 +239,7 @@ const AddAgentPropertyScreen: React.FC<Props> = ({navigation, route}) => {
             formInput={formInput}
             setFormInput={handleFieldChange}
             mode="outlined"
-            placeholder="1234567890"
+            placeholder="Eg. 1234567890"
             keyboardType="number-pad"
             errorMessage={errors.agentContactNo}
           />
@@ -253,7 +253,7 @@ const AddAgentPropertyScreen: React.FC<Props> = ({navigation, route}) => {
             handleFieldChange={handleFieldChange}
             errors={errors}
             label="Property Location*"
-            placeholder="Navi Mumbai, Thane, etc."
+            placeholder="Eg. Navi Mumbai, Thane, etc."
             searchType="AgentPropertyLocation"
           />
         </View>

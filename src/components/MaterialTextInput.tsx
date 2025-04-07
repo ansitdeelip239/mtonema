@@ -108,7 +108,7 @@ export const MaterialTextInput = <T,>({
             text: 'black',
             primary: errorMessage ? '#FF0000' : 'black',
             outline: errorMessage ? '#FF0000' : 'black',
-            onSurfaceVariant: 'black',
+            onSurfaceVariant: '#555555',
             error: '#FF0000',
             onSurface: 'black',
             surfaceDisabled: 'transparent',
