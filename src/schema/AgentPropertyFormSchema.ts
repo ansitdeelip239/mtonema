@@ -45,7 +45,7 @@ const agentPropertyFormSchema = z.object({
     .string()
     .refine(
       val => val === '' || /^\d+$/.test(val),
-      'If provided, price must be a non-negative number',
+      'Price must contain only digits (no commas or decimals)',
     )
     .optional()
     .default(''),
@@ -54,7 +54,7 @@ const agentPropertyFormSchema = z.object({
     .string()
     .refine(
       val => val === '' || /^\d+$/.test(val),
-      'If provided, security deposit must be a non-negative number',
+      'Security deposit must contain only digits (no commas or decimals)',
     )
     .optional()
     .default(''),
