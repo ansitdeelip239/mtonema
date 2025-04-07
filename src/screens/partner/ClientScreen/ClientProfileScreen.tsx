@@ -260,10 +260,7 @@ const ClientProfileScreen: React.FC<Props> = ({route, navigation}) => {
         status: 'Pending',
       };
 
-      const response = await PartnerService.scheduleFollowUp(
-        payload,
-        user?.id as number,
-      );
+      const response = await PartnerService.scheduleFollowUp(payload);
 
       if (response.success) {
         Toast.show({
@@ -409,7 +406,8 @@ const ClientProfileScreen: React.FC<Props> = ({route, navigation}) => {
           styles.infoCard,
           styles.followUpCard,
           // Apply the activeFollowUpCard style for both date-based and someday follow-ups
-          (client?.followUp?.date || isSomedayFollowUp) && styles.activeFollowUpCard,
+          (client?.followUp?.date || isSomedayFollowUp) &&
+            styles.activeFollowUpCard,
         ]}
         onPress={() => setIsFollowUpModalVisible(true)}>
         <View style={styles.followUpHeader}>

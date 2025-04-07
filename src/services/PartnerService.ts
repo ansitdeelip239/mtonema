@@ -205,6 +205,10 @@ class PartnerService {
 
   static async getFollowUpDate(clientId: number) {
     try {
+      const params = new URLSearchParams({
+        clientId: clientId.toString(),
+      }).toString();
+
       const response = await api.get<
         | {
             clientId: number;
@@ -216,9 +220,7 @@ class PartnerService {
             clientId: number;
             followUp: null;
           }
-      >(
-        `https://dncr-hardcoded.onrender.com/follow-ups/client?clientId=${clientId}`,
-      );
+      >(`${url.followUps}/client?${params}`);
       return response;
     } catch (error) {
       console.error('Error in getFollowUpDate', error);
@@ -243,22 +245,15 @@ class PartnerService {
     }
   }
 
-  static async scheduleFollowUp(
-    payload: {
-      clientId: number;
-      userId: number;
-      followUpDate: string | null;
-      status: string;
-    },
-    userId: number,
-  ) {
+  static async scheduleFollowUp(payload: {
+    clientId: number;
+    userId: number;
+    followUpDate: string | null;
+    status: string;
+  }) {
     try {
-      const params = new URLSearchParams({
-        userId: userId.toString(),
-      }).toString();
-
       const response = await api.post<FollowUpType>(
-        `${url.followUps}?${params}`,
+        `${url.followUps}`,
         payload,
       );
       return response;
@@ -270,9 +265,7 @@ class PartnerService {
 
   static async deleteFollowUp(followUpId: number) {
     try {
-      const response = await api.delete<null>(
-        `${url.followUps}/${followUpId}`,
-      );
+      const response = await api.delete<null>(`${url.followUps}/${followUpId}`);
       return response;
     } catch (error) {
       console.error('Error in deleteFollowUp', error);
