@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useCallback, memo, useEffect} from 'react';
 import {
   Modal,
   View,
@@ -8,6 +8,7 @@ import {
   StyleSheet,
   ScrollView,
   Dimensions,
+  ActivityIndicator,
 } from 'react-native';
 import {useMaster} from '../../../../context/MasterProvider';
 import GetIcon from '../../../../components/GetIcon';
@@ -22,8 +23,36 @@ interface AddGroupModalProps {
   visible: boolean;
   onClose: () => void;
   onSave: (groupName: string, colorId: number) => void;
-  styles: any; // You can define a more specific type if needed
+  styles: any;
+  isLoading?: boolean;
 }
+
+const ColorButton = memo(
+  ({
+    color,
+    isSelected,
+    onPress,
+  }: {
+    color: any;
+    isSelected: boolean;
+    onPress: () => void;
+  }) => (
+    <TouchableOpacity
+      key={color.id}
+      style={[
+        modalStyles.colorButton,
+        {backgroundColor: color.masterDetailName},
+        isSelected && modalStyles.selectedColorButton,
+      ]}
+      onPress={onPress}>
+      {isSelected && (
+        <View style={modalStyles.checkmarkContainer}>
+          <GetIcon iconName="checkmark" size={14} color="#FFFFFF" />
+        </View>
+      )}
+    </TouchableOpacity>
+  ),
+);
 
 const AddGroupModal: React.FC<AddGroupModalProps> = ({
   visible,
@@ -33,19 +62,38 @@ const AddGroupModal: React.FC<AddGroupModalProps> = ({
 }) => {
   const [groupName, setGroupName] = useState('');
   const [selectedColorId, setSelectedColorId] = useState<number | null>(null);
+  const [saving, setSaving] = useState(false);
   const {masterData} = useMaster();
 
-  const handleSave = () => {
-    onSave(groupName, selectedColorId as number);
-    setGroupName('');
-    setSelectedColorId(null);
-  };
+  const handleSave = useCallback(() => {
+    if (groupName.trim() && selectedColorId) {
+      setSaving(true);
+      onSave(groupName, selectedColorId);
+      // Don't reset states here as they will be reset on successful save or modal close
+    }
+  }, [groupName, selectedColorId, onSave]);
 
-  const handleClose = () => {
+  const handleClose = useCallback(() => {
     setGroupName('');
     setSelectedColorId(null);
+    setSaving(false);
     onClose();
-  };
+  }, [onClose]);
+
+  const selectColor = useCallback((id: number) => {
+    setSelectedColorId(id);
+  }, []);
+
+  // Reset saving state when modal becomes invisible
+  useEffect(() => {
+    if (!visible) {
+      setSaving(false);
+      setGroupName('');
+      setSelectedColorId(null);
+    }
+  }, [visible]);
+
+  const colors = masterData?.GroupColor || [];
 
   return (
     <Modal
@@ -60,30 +108,25 @@ const AddGroupModal: React.FC<AddGroupModalProps> = ({
           <TextInput
             style={styles.input}
             placeholder="Group Name"
+            placeholderTextColor={'#999'}
             value={groupName}
             onChangeText={setGroupName}
+            autoFocus={true}
+            editable={!saving}
           />
 
           <Text style={modalStyles.colorSectionTitle}>Select Color</Text>
 
-          <ScrollView horizontal={false} style={modalStyles.colorContainer}>
+          <ScrollView style={modalStyles.colorContainer}>
             <View style={modalStyles.colorGrid}>
-              {masterData?.GroupColor && masterData.GroupColor.length > 0 ? (
-                masterData.GroupColor.map((color: any) => (
-                  <TouchableOpacity
+              {colors.length > 0 ? (
+                colors.map((color: any) => (
+                  <ColorButton
                     key={color.id}
-                    style={[
-                      modalStyles.colorButton,
-                      {backgroundColor: color.masterDetailName},
-                      selectedColorId === color.id && modalStyles.selectedColorButton,
-                    ]}
-                    onPress={() => setSelectedColorId(color.id)}>
-                    {selectedColorId === color.id && (
-                      <View style={modalStyles.checkmarkContainer}>
-                        <GetIcon iconName="checkmark" size={16} color="#FFFFFF" />
-                      </View>
-                    )}
-                  </TouchableOpacity>
+                    color={color}
+                    isSelected={selectedColorId === color.id}
+                    onPress={() => selectColor(color.id)}
+                  />
                 ))
               ) : (
                 <Text style={modalStyles.noColorsText}>
@@ -96,14 +139,24 @@ const AddGroupModal: React.FC<AddGroupModalProps> = ({
           <View style={styles.modalButtons}>
             <TouchableOpacity
               style={[styles.modalButton, styles.cancelButton]}
-              onPress={handleClose}>
+              onPress={handleClose}
+              disabled={saving}>
               <Text style={styles.buttonText}>Cancel</Text>
             </TouchableOpacity>
             <TouchableOpacity
-              style={[styles.modalButton, styles.saveButton]}
+              style={[
+                styles.modalButton,
+                styles.saveButton,
+                (!groupName.trim() || !selectedColorId || saving) &&
+                  modalStyles.disabledButton,
+              ]}
               onPress={handleSave}
-              disabled={!groupName.trim()}>
-              <Text style={styles.buttonText}>Save</Text>
+              disabled={!groupName.trim() || !selectedColorId || saving}>
+              {saving ? (
+                <ActivityIndicator size="small" color="#FFFFFF" />
+              ) : (
+                <Text style={styles.buttonText}>Save</Text>
+              )}
             </TouchableOpacity>
           </View>
         </View>
@@ -121,24 +174,25 @@ const modalStyles = StyleSheet.create({
     color: '#333',
   },
   colorContainer: {
-    maxHeight: 180, // Increased height for larger buttons
+    maxHeight: 180,
   },
   colorGrid: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    justifyContent: 'space-between', // Changed to space-between for better alignment
+    justifyContent: 'space-between', // Evenly distribute items
     marginBottom: 16,
+    paddingHorizontal: 2,
   },
   colorButton: {
     width: buttonSize,
     height: buttonSize,
-    borderRadius: 8, // Slightly more rounded corners
-    margin: 5,
+    borderRadius: 6,
+    margin: 4,
     justifyContent: 'center',
     alignItems: 'center',
     borderWidth: 1,
     borderColor: 'rgba(0,0,0,0.1)',
-    elevation: 2, // Add a subtle shadow on Android
+    elevation: 2,
     shadowColor: '#000',
     shadowOffset: {width: 0, height: 1},
     shadowOpacity: 0.2,
@@ -147,7 +201,6 @@ const modalStyles = StyleSheet.create({
   selectedColorButton: {
     borderWidth: 2,
     borderColor: '#FFFFFF',
-    // Add a shadow/glow effect around selected button
     shadowColor: '#000',
     shadowOffset: {width: 0, height: 0},
     shadowOpacity: 0.4,
@@ -155,17 +208,9 @@ const modalStyles = StyleSheet.create({
     elevation: 4,
   },
   checkmarkContainer: {
-    // backgroundColor: 'rgba(0,0,0,0.3)',
-    // borderRadius: 12,
     padding: 2,
     justifyContent: 'center',
     alignItems: 'center',
-  },
-  checkIcon: {
-    shadowColor: '#000',
-    shadowOffset: {width: 0, height: 1},
-    shadowOpacity: 0.5,
-    shadowRadius: 1,
   },
   noColorsText: {
     textAlign: 'center',
@@ -173,6 +218,9 @@ const modalStyles = StyleSheet.create({
     color: '#666',
     padding: 10,
   },
+  disabledButton: {
+    opacity: 0.5,
+  },
 });
 
-export default AddGroupModal;
+export default memo(AddGroupModal);

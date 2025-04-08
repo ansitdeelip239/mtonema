@@ -1,4 +1,4 @@
-import React, {useEffect, useState, useCallback} from 'react';
+import React, {useEffect, useState, useCallback, memo} from 'react';
 import {
   View,
   Text,
@@ -17,75 +17,17 @@ import PartnerService from '../../../services/PartnerService';
 import {useAuth} from '../../../hooks/useAuth';
 import {useMaster} from '../../../context/MasterProvider';
 import AddGroupModal from './components/AddGroupModal';
+import Toast from 'react-native-toast-message';
 
-const GroupsScreen = () => {
-  const [groups, setGroups] = useState<Group2[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [refreshing, setRefreshing] = useState(false);
-  const [modalVisible, setModalVisible] = useState(false);
-  const {user} = useAuth();
-  const {masterData} = useMaster();
-
-  const fetchGroups = useCallback(async () => {
-    setIsLoading(true);
-    try {
-      const response = await PartnerService.getGroupsByEmail(
-        user?.email as string,
-      );
-      if (response) {
-        setGroups(response.data.groups || []);
-      }
-    } catch (error) {
-      console.error('Error fetching groups:', error);
-    } finally {
-      setIsLoading(false);
-    }
-  }, [user?.email]);
-
-  const onRefresh = async () => {
-    setRefreshing(true);
-    await fetchGroups();
-    setRefreshing(false);
-  };
-
-  const handleAddGroup = async (groupName: string, colorId: number) => {
-    if (!groupName.trim()) {
-      return;
-    }
-
-    try {
-      setIsLoading(true);
-      const response = await PartnerService.createGroup(
-        groupName.trim(),
-        colorId,
-        user?.email as string,
-      );
-
-      if (response && response.data) {
-        await fetchGroups();
-        setModalVisible(false);
-      }
-    } catch (error) {
-      console.error('Error creating group:', error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    fetchGroups();
-  }, [user?.email, fetchGroups]);
-
-  const getColorByMasterId = (colorId?: number) => {
-    if (!colorId || !masterData?.GroupColor) {
-      return '#cccccc';
-    }
-
-    const color = masterData.GroupColor.find((c: any) => c.id === colorId);
-    return color ? color.masterDetailName : '#cccccc';
-  };
-
-  const renderGroupItem = ({item}: {item: Group2}) => (
+// Memoized GroupItem component
+const GroupItem = memo(
+  ({
+    item,
+    getColorByMasterId,
+  }: {
+    item: Group2;
+    getColorByMasterId: (id?: number) => string;
+  }) => (
     <View style={styles.groupItem}>
       <View
         style={[
@@ -99,25 +41,155 @@ const GroupsScreen = () => {
       />
       <Text style={styles.groupName}>{item.groupName}</Text>
     </View>
-  );
+  ),
+);
 
-  const renderEmptyList = () => {
-    if (isLoading) {
-      return (
-        <View style={styles.loaderContainer}>
-          <ActivityIndicator size="large" color={Colors.main} />
-        </View>
-      );
-    }
-
+// Memoized EmptyList component
+const EmptyList = memo(({isLoading}: {isLoading: boolean}) => {
+  if (isLoading) {
     return (
-      <View style={styles.emptyContainer}>
-        <Text style={styles.emptyText}>
-          No groups available. Groups will appear here when created.
-        </Text>
+      <View style={styles.loaderContainer}>
+        <ActivityIndicator size="large" color={Colors.main} />
       </View>
     );
-  };
+  }
+
+  return (
+    <View style={styles.emptyContainer}>
+      <Text style={styles.emptyText}>
+        No groups available. Groups will appear here when created.
+      </Text>
+    </View>
+  );
+});
+
+const GroupsScreen = () => {
+  const [groups, setGroups] = useState<Group2[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
+  const [modalVisible, setModalVisible] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
+  const {user} = useAuth();
+  const {masterData} = useMaster();
+
+  // Fetch groups
+  const fetchGroups = useCallback(async () => {
+    if (!user?.email) {
+      return;
+    }
+
+    setIsLoading(true);
+    try {
+      const response = await PartnerService.getGroupsByEmail(user.email);
+      if (response?.data) {
+        setGroups(response.data.groups || []);
+      }
+    } catch (error) {
+      console.error('Error fetching groups:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  }, [user?.email]);
+
+  // Handle pull-to-refresh
+  const onRefresh = useCallback(async () => {
+    setRefreshing(true);
+    await fetchGroups();
+    setRefreshing(false);
+  }, [fetchGroups]);
+
+  // Handle adding a new group
+  const handleAddGroup = useCallback(
+    async (groupName: string, colorId: number) => {
+      if (!groupName.trim() || !user?.email) {
+        return;
+      }
+
+      try {
+        setIsSaving(true); // Set saving state to true
+        const response = await PartnerService.createGroup(
+          groupName.trim(),
+          colorId,
+          user.email,
+        );
+
+        if (response.success) {
+          await fetchGroups(); // Refresh the list
+          setModalVisible(false); // Close the modal after successful save
+          Toast.show({
+            type: 'success',
+            text1: response.message,
+          });
+        } else {
+          Toast.show({
+            type: 'error',
+            text1: response.message || 'Failed to create group',
+          });
+        }
+      } catch (error) {
+        console.error('Error creating group:', error);
+        Toast.show({
+          type: 'error',
+          text1: 'Error creating group',
+          text2: (error as Error).message,
+        });
+      } finally {
+        setIsSaving(false); // Reset saving state
+      }
+    },
+    [user?.email, fetchGroups],
+  );
+
+  // Toggle modal visibility
+  const toggleModal = useCallback(() => {
+    if (!isSaving) {
+      // Only toggle if not currently saving
+      setModalVisible(prev => !prev);
+    }
+  }, [isSaving]);
+
+  // Close modal
+  const closeModal = useCallback(() => {
+    if (!isSaving) {
+      // Only close if not currently saving
+      setModalVisible(false);
+    }
+  }, [isSaving]);
+
+  // Get color by master ID
+  const getColorByMasterId = useCallback(
+    (colorId?: number) => {
+      if (!colorId || !masterData?.GroupColor) {
+        return '#cccccc';
+      }
+
+      const color = masterData.GroupColor.find((c: any) => c.id === colorId);
+      return color ? color.masterDetailName : '#cccccc';
+    },
+    [masterData?.GroupColor],
+  );
+
+  // Render a group item
+  const renderGroupItem = useCallback(
+    ({item}: {item: Group2}) => (
+      <GroupItem item={item} getColorByMasterId={getColorByMasterId} />
+    ),
+    [getColorByMasterId],
+  );
+
+  // Initial fetch
+  useEffect(() => {
+    fetchGroups();
+  }, [fetchGroups]);
+
+  // Keyextractor for FlatList
+  const keyExtractor = useCallback((item: Group2) => item.id.toString(), []);
+
+  // Render empty list
+  const renderEmptyList = useCallback(
+    () => <EmptyList isLoading={isLoading} />,
+    [isLoading],
+  );
 
   return (
     <SafeAreaView style={styles.container}>
@@ -125,9 +197,10 @@ const GroupsScreen = () => {
         title="Groups"
         children={
           <TouchableOpacity
-            onPress={() => setModalVisible(true)}
-            style={styles.addButton}>
-            <Text style={styles.addButtonText}>+ Add</Text>
+            onPress={toggleModal}
+            style={styles.addButton}
+            disabled={isSaving}>
+            <Text style={styles.addButtonText}>+ Add Group</Text>
           </TouchableOpacity>
         }
       />
@@ -135,7 +208,7 @@ const GroupsScreen = () => {
       <View style={styles.content}>
         <FlatList
           data={groups}
-          keyExtractor={item => item.id.toString()}
+          keyExtractor={keyExtractor}
           renderItem={renderGroupItem}
           refreshControl={
             <RefreshControl
@@ -147,20 +220,27 @@ const GroupsScreen = () => {
           }
           ListEmptyComponent={renderEmptyList}
           contentContainerStyle={styles.flatListContainer}
+          showsVerticalScrollIndicator={false}
+          removeClippedSubviews={true}
+          initialNumToRender={10}
+          maxToRenderPerBatch={10}
+          windowSize={5}
         />
       </View>
 
       <AddGroupModal
         visible={modalVisible}
-        onClose={() => setModalVisible(false)}
+        onClose={closeModal}
         onSave={handleAddGroup}
         styles={styles}
+        isLoading={isSaving}
       />
     </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
+  // Styles remain the same
   container: {
     flex: 1,
     backgroundColor: '#f5f5f5',
