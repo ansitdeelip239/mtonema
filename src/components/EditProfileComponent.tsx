@@ -33,7 +33,7 @@ const EditProfileComponent = () => {
     phone: false,
   });
   const [profileUpdated, setProfileUpdated] = useState(false);
-  const {user} = useAuth();
+  const {user, setUser} = useAuth();
   const {keyboardVisible} = useKeyboard();
   const scrollViewRef = useRef<ScrollView>(null);
 
@@ -62,6 +62,15 @@ const EditProfileComponent = () => {
             // storeUser(response.data);
             // setUser(response.data);
             setProfileUpdated(prev => !prev);
+            if (user) {
+              setUser({
+                ...user,
+                name: requestBody.name,
+                email: requestBody.email,
+                phone: requestBody.phone,
+                location: requestBody.location,
+              });
+            }
           }
           // After successful submission
           setEditingFields({
