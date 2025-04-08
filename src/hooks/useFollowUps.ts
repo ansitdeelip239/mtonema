@@ -7,7 +7,7 @@ export const useFollowUps = (
   type: 'today' | 'someday' | 'overdue' | 'upcoming',
 ) => {
   const [followUps, setFollowUps] = useState<FollowUpType[]>([]);
-  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [refreshing, setRefreshing] = useState<boolean>(false);
   const { user } = useAuth();
 
