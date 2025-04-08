@@ -4,7 +4,6 @@ import {
   DrawerContentScrollView,
   DrawerItemList,
 } from '@react-navigation/drawer';
-// import { Drawer} from 'react-native-paper';
 import {
   ActivityIndicator,
   Image,
@@ -12,14 +11,12 @@ import {
   Modal,
   StyleSheet,
   Text,
-  TouchableHighlight,
   TouchableOpacity,
   View,
 } from 'react-native';
 import Strings from '../constants/Strings';
 import Colors from '../constants/Colors';
 import GetIcon from './GetIcon';
-import {Drawer} from 'react-native-paper';
 
 const CustomDrawerContent = (props: any) => {
   const {user, logout} = useAuth();
@@ -49,15 +46,12 @@ const CustomDrawerContent = (props: any) => {
     setLoadingModalVisible(false);
     console.log('Logged Out Successfully');
   };
-  // const openURL = (url: any) => {
-  //   Linking.openURL(url).catch(err =>
-  //     console.error('Failed to open URL:', err),
-  //   );
-  // };
+
   const navigateToProfile = () => {
-    props.navigation.navigate('Home Screen', {
+    props.navigation.navigate('Home', {
       screen: 'Profile',
     });
+    props.navigation.closeDrawer();
   };
 
   return (
@@ -74,34 +68,26 @@ const CustomDrawerContent = (props: any) => {
 
       {/* Existing Drawer Items */}
       <DrawerItemList {...props} />
-      <View style={styles.linkdesign}>
-        <TouchableHighlight
-          style={styles.touchableHighlight}
-          underlayColor={Colors.main}
-          onPress={() => Linking.openURL(Strings.About_Us_Url)}>
-          <Drawer.Item
-            label="About"
-            // eslint-disable-next-line react/no-unstable-nested-components
-            icon={({color}) => (
-              <GetIcon iconName="about" color={color} size="25" />
-            )}
-            onPress={() => Linking.openURL(Strings.About_Us_Url)}
-          />
-        </TouchableHighlight>
 
-        <TouchableHighlight
-          style={styles.touchableHighlight}
-          underlayColor={Colors.main}
+      {/* Custom About and FAQ Items */}
+      <View style={styles.customItemsContainer}>
+        <TouchableOpacity
+          style={styles.customDrawerItem}
+          onPress={() => Linking.openURL(Strings.About_Us_Url)}>
+          <View style={styles.iconContainer}>
+            <GetIcon iconName="about" color="#444" size="25" />
+          </View>
+          <Text style={styles.itemText}>About</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={styles.customDrawerItem}
           onPress={() => Linking.openURL(Strings.FAQ_Url)}>
-          <Drawer.Item
-            label="FAQ"
-            // eslint-disable-next-line react/no-unstable-nested-components
-            icon={({color}) => (
-              <GetIcon iconName="faq" color={color} size="25" />
-            )}
-            onPress={() => Linking.openURL(Strings.About_Us_Url)}
-          />
-        </TouchableHighlight>
+          <View style={styles.iconContainer}>
+            <GetIcon iconName="faq" color="#444" size="25" />
+          </View>
+          <Text style={styles.itemText}>FAQ</Text>
+        </TouchableOpacity>
       </View>
 
       {/* Custom Button */}
@@ -115,7 +101,6 @@ const CustomDrawerContent = (props: any) => {
             <GetIcon iconName="logout" color={Colors.white} size="25" />
             <Text style={styles.logouttxt}>Logout</Text>
           </View>
-          {/* <Text style={styles.textWhite}>Logout</Text> */}
         </TouchableOpacity>
       </View>
 
@@ -172,6 +157,29 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     paddingHorizontal: 16,
   },
+  customItemsContainer: {
+    marginTop: 8,
+  },
+  customDrawerItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingVertical: 12,
+    paddingHorizontal: 16,
+    marginVertical: 2,
+  },
+  iconContainer: {
+    width: 24,
+    height: 24,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: 32,
+    marginLeft: 4,
+  },
+  itemText: {
+    fontSize: 14,
+    fontWeight: '500',
+    color: 'black',
+  },
   drawerItemText: {
     marginLeft: 16,
     fontSize: 16,
@@ -202,7 +210,6 @@ const styles = StyleSheet.create({
   flexGrow: {
     flex: 1,
   },
-  linkdesign: {},
   logout: {
     backgroundColor: '#cc0e74',
     padding: 8,
@@ -212,7 +219,6 @@ const styles = StyleSheet.create({
     width: '70%',
     alignItems: 'center',
   },
-
   textWhite: {
     color: 'white',
     fontWeight: 'bold',

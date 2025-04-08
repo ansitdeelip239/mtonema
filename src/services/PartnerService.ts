@@ -6,6 +6,7 @@ import {
   ClientResponseModel,
   FollowUp,
   FollowUpType,
+  Group2Response,
   GroupResponse,
 } from '../types';
 import {api} from '../utils/api';
@@ -199,6 +200,34 @@ class PartnerService {
       return response;
     } catch (error) {
       console.error('Error in deleteClientActivity', error);
+      throw error;
+    }
+  }
+
+  static async getGroupsByEmail(email: string) {
+    try {
+      const params = new URLSearchParams({
+        email,
+      }).toString();
+
+      const response = await api.get<Group2Response>(`${url.groups}?${params}`);
+      return response;
+    } catch (error) {
+      console.error('Error in getGroupsByEmail', error);
+      throw error;
+    }
+  }
+
+  static async createGroup(groupName: string, colorId: number, email: string) {
+    try {
+      const response = await api.post<null>(`${url.addGroups}`, {
+        groupName,
+        colorId,
+        email,
+      });
+      return response;
+    } catch (error) {
+      console.error('Error in createGroup', error);
       throw error;
     }
   }

@@ -44,7 +44,8 @@ export type IconEnum =
   | 'calendar'
   | 'chevronRight'
   | 'time'
-  | 'plus';
+  | 'plus'
+  | 'checkmark';
 
 type IconProps = {
   iconName: IconEnum;
@@ -97,6 +98,7 @@ const GetIcon = ({iconName, color, size}: IconProps) => {
     chevronRight: require('../assets/Icon/chevron-right.png'),
     time: require('../assets/Icon/time.png'),
     plus: require('../assets/Icon/plus.png'),
+    checkmark: require('../assets/Icon/check-mark.png'),
   };
 
   const imageStyle = [

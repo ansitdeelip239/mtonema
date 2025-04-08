@@ -40,8 +40,8 @@ export type SellerBottomTabParamList = {
 };
 
 export type PartnerDrawerParamList = {
-  'Home Screen': NavigatorScreenParams<PartnerBottomTabParamList>;
-  'Profile Screen': undefined;
+  'Home': NavigatorScreenParams<PartnerBottomTabParamList>;
+  'Groups': undefined;
 };
 
 export type AdminDrawerParamList = {

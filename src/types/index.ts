@@ -210,6 +210,19 @@ export interface Group {
   updatedOn: string;
 }
 
+export interface Group2 {
+  id: number;
+  groupName: string;
+  color: {
+    id: number;
+    name: string;
+  }
+}
+
+export interface Group2Response {
+  groups: Group2[];
+}
+
 export interface Client {
   id: number;
   partnerId: number;
