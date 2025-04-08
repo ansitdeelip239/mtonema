@@ -12,6 +12,32 @@ interface FollowUpCardProps {
 }
 
 const FollowUpCard: React.FC<FollowUpCardProps> = ({item, filterType}) => {
+  // Helper function to convert UTC date to local time
+  const getLocalDate = (dateString: string) => {
+    if (!dateString) {
+      return null;
+    }
+
+    // Parse the date string into year, month, day, hours, minutes
+    const [datePart, timePart] = dateString.split('T');
+    if (!datePart) {
+      return new Date();
+    } // Fallback if parsing fails
+
+    const [year, month, day] = datePart.split('-').map(Number);
+    const [hours, minutes] = timePart
+      ? timePart.split(':').map(Number)
+      : [0, 0];
+
+    // Create a date object in local time zone with the UTC components
+    return new Date(Date.UTC(year, month - 1, day, hours, minutes));
+  };
+
+  // Get local follow-up date
+  const localFollowUpDate = item.followUpDate
+    ? getLocalDate(item.followUpDate)
+    : null;
+
   return (
     <Card style={styles.followUpCard}>
       <Card.Content>
@@ -20,17 +46,17 @@ const FollowUpCard: React.FC<FollowUpCardProps> = ({item, filterType}) => {
             <Text style={styles.clientName}>{item.client.clientName}</Text>
           </View>
           <View style={styles.timeContainer}>
-            {item.followUpDate && (
+            {localFollowUpDate && (
               <>
                 {filterType !== 'today' && (
                   <Text style={styles.followUpDate}>
-                    {formatFollowUpDate(new Date(item.followUpDate))}
+                    {formatFollowUpDate(localFollowUpDate)}
                   </Text>
                 )}
                 <View style={styles.timeWrapper}>
                   <GetIcon iconName="time" size={14} color={Colors.main} />
                   <Text style={styles.followUpTime}>
-                    {formatTime(new Date(item.followUpDate))}
+                    {formatTime(localFollowUpDate)}
                   </Text>
                 </View>
               </>

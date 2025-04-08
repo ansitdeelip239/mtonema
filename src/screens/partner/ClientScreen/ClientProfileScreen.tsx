@@ -197,6 +197,8 @@ const ClientProfileScreen: React.FC<Props> = ({route, navigation}) => {
   ) => {
     try {
       setAddingActivity(true);
+
+      // First, add or edit the activity
       const response = await PartnerService.addEditClientActivity(
         type,
         route.params.clientId,
@@ -206,13 +208,51 @@ const ClientProfileScreen: React.FC<Props> = ({route, navigation}) => {
       );
 
       if (response.success) {
-        Toast.show({
-          type: 'success',
-          text1: 'Success',
-          text2: activityId
-            ? 'Activity updated successfully'
-            : 'Activity added successfully',
-        });
+        // If we're adding a new activity (not editing) and there's an active follow-up,
+        // mark the follow-up as completed
+        if (!activityId && client?.followUp?.status === 'Pending') {
+          try {
+            // Call API to update follow-up status to completed
+            const followUpResponse = await PartnerService.completeFollowUp(
+              client.followUp.id as number,
+              'Completed',
+            );
+
+            if (followUpResponse.success) {
+              Toast.show({
+                type: 'success',
+                text1: 'Success',
+                text2: 'Activity added and follow-up marked as completed',
+              });
+            } else {
+              // Still show success for the activity, but note the follow-up status issue
+              Toast.show({
+                type: 'success',
+                text1: 'Activity Added',
+                text2: 'Activity added but could not update follow-up status',
+              });
+            }
+          } catch (followUpError) {
+            console.error('Error updating follow-up status:', followUpError);
+            // Still consider the overall operation successful if the activity was added
+            Toast.show({
+              type: 'success',
+              text1: 'Activity Added',
+              text2: 'Activity added but could not update follow-up status',
+            });
+          }
+        } else {
+          // Regular success message for edits or when no follow-up exists
+          Toast.show({
+            type: 'success',
+            text1: 'Success',
+            text2: activityId
+              ? 'Activity updated successfully'
+              : 'Activity added successfully',
+          });
+        }
+
+        // Refresh client data to show updated follow-up status
         fetchClient();
         setIsActivityModalVisible(false);
         setSelectedActivity(undefined);
@@ -220,13 +260,6 @@ const ClientProfileScreen: React.FC<Props> = ({route, navigation}) => {
       }
     } catch (error) {
       console.error('Error in handleAddEditActivity', error);
-      // Toast.show({
-      //   type: 'error',
-      //   text1: 'Error',
-      //   text2: activityId
-      //     ? 'Failed to update activity'
-      //     : 'Failed to add activity',
-      // });
       showError(
         activityId ? 'Failed to update activity' : 'Failed to add activity',
       );
@@ -379,41 +412,87 @@ const ClientProfileScreen: React.FC<Props> = ({route, navigation}) => {
   }, [client?.clientActivityDataModels]);
 
   const renderFollowUpCard = () => {
-    // Calculate days difference for proper display
+    // Helper function to convert UTC date to local time - this part looks good
+    const getLocalDate = (dateString: string) => {
+      if (!dateString) {
+        return null;
+      }
+
+      // Parse the date string into year, month, day, hours, minutes
+      const [datePart, timePart] = dateString.split('T');
+      const [year, month, day] = datePart.split('-').map(Number);
+      const [hours, minutes] = timePart
+        ? timePart.split(':').map(Number)
+        : [0, 0];
+
+      // Create a date object in local time zone with the UTC components
+      return new Date(Date.UTC(year, month - 1, day, hours, minutes));
+    };
+
+    // Get local follow-up date
+    const localFollowUpDate = client?.followUp?.date
+      ? getLocalDate(client.followUp.date)
+      : null;
+
+    // Calculate days difference for proper display - fix the logic here
     const getDaysText = () => {
-      if (!client?.followUp?.date) {
+      if (!localFollowUpDate) {
         return '';
       }
 
-      const daysLeft = Math.ceil(
-        (new Date(client.followUp.date).getTime() - new Date().getTime()) /
-          (1000 * 60 * 60 * 24),
-      );
+      // Create date objects for today and the follow-up date that ignore time
+      const today = new Date();
+      const followUpDay = new Date(localFollowUpDate);
 
-      return daysLeft === 1 ? '1 day' : `${daysLeft} days`;
+      // Reset hours to compare dates only, not times
+      today.setHours(0, 0, 0, 0);
+      followUpDay.setHours(0, 0, 0, 0);
+
+      // Calculate difference in days
+      const diffTime = followUpDay.getTime() - today.getTime();
+      const daysLeft = Math.round(diffTime / (1000 * 60 * 60 * 24));
+
+      if (daysLeft < 0) {
+        return 'Overdue';
+      } else if (daysLeft === 0) {
+        return 'Today';
+      } else {
+        return daysLeft === 1 ? '1 day' : `${daysLeft} days`;
+      }
     };
 
-    // Determine if this is a "Someday" follow-up - only true if status is Pending AND date is null
+    // Rest of the function can stay the same
     const isSomedayFollowUp =
       client?.followUp?.status === 'Pending' && !client?.followUp?.date;
 
-    // Determine if there's any follow-up at all
-    const hasFollowUp = client?.followUp?.status === 'Pending'; // Either with date or someday
+    const hasFollowUp = client?.followUp?.status === 'Pending';
 
+    const isOverdue = localFollowUpDate
+      ? localFollowUpDate.getTime() < new Date().getTime()
+      : false;
+
+    const isToday = localFollowUpDate ? getDaysText() === 'Today' : false;
+
+    // Rest of the render function...
     return (
       <TouchableOpacity
         style={[
           styles.infoCard,
           styles.followUpCard,
           // Apply the activeFollowUpCard style for both date-based and someday follow-ups
-          (client?.followUp?.date || isSomedayFollowUp) &&
-            styles.activeFollowUpCard,
+          (localFollowUpDate || isSomedayFollowUp) && styles.activeFollowUpCard,
+          // Add overdue style if follow-up is overdue
+          isOverdue && styles.overdueFollowUpCard,
         ]}
         onPress={() => setIsFollowUpModalVisible(true)}>
         <View style={styles.followUpHeader}>
-          <Text style={styles.sectionTitle}>
-            {client?.followUp?.date
-              ? `Follow Up in ${getDaysText()}`
+          <Text style={[styles.sectionTitle, isOverdue && styles.overdueText]}>
+            {localFollowUpDate
+              ? isOverdue
+                ? 'Follow Up Overdue'
+                : isToday
+                ? 'Follow Up Today'
+                : `Follow Up in ${getDaysText()}`
               : isSomedayFollowUp
               ? 'Follow Up: Someday'
               : 'No Follow Up Scheduled'}
@@ -426,13 +505,14 @@ const ClientProfileScreen: React.FC<Props> = ({route, navigation}) => {
             )}
           </View>
         </View>
-        {client?.followUp?.date ? (
+        {localFollowUpDate ? (
           <View style={styles.followUpDateContainer}>
-            <Text style={styles.infoValue}>
-              {formatFollowUpDate(new Date(client.followUp.date))}
+            <Text style={[styles.infoValue, isOverdue && styles.overdueText]}>
+              {formatFollowUpDate(localFollowUpDate)}
             </Text>
-            <Text style={styles.followUpTime}>
-              {formatTime(new Date(client.followUp.date))}
+            <Text
+              style={[styles.followUpTime, isOverdue && styles.overdueText]}>
+              {formatTime(localFollowUpDate)}
             </Text>
           </View>
         ) : isSomedayFollowUp ? (
@@ -753,6 +833,20 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.15,
     shadowRadius: 4,
     elevation: 4,
+  },
+  overdueFollowUpCard: {
+    borderWidth: 1,
+    borderColor: '#e74c3c',
+    backgroundColor: '#ffe5e5',
+    shadowColor: '#e74c3c',
+    shadowOffset: {width: 0, height: 2},
+    shadowOpacity: 0.15,
+    shadowRadius: 4,
+    elevation: 4,
+  },
+  overdueText: {
+    color: '#e74c3c',
+    fontWeight: 'bold',
   },
   sectionTitle: {
     fontSize: 18,

@@ -272,6 +272,18 @@ class PartnerService {
       throw error;
     }
   }
+
+  static async completeFollowUp(followUpId: number, status: string) {
+    try {
+      const response = await api.put<null>(`${url.followUps}/${followUpId}`, {
+        status: status,
+      });
+      return response;
+    } catch (error) {
+      console.error('Error completing follow-up:', error);
+      throw error;
+    }
+  }
 }
 
 export default PartnerService;
