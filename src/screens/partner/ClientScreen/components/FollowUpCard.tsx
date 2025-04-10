@@ -53,7 +53,21 @@ const FollowUpCard: React.FC<FollowUpCardProps> = ({client, onPress}) => {
     if (daysLeft < 0) {
       return 'Overdue';
     } else if (daysLeft === 0) {
-      return 'Today';
+      // Calculate time difference in hours and minutes
+      const timeRemainingMs =
+        localFollowUpDate.getTime() - new Date().getTime();
+      const hoursLeft = Math.floor(timeRemainingMs / (1000 * 60 * 60));
+      const minutesLeft = Math.floor(
+        (timeRemainingMs % (1000 * 60 * 60)) / (1000 * 60),
+      );
+
+      if (hoursLeft > 0) {
+        return `${hoursLeft} hrs`;
+      } else if (minutesLeft > 0) {
+        return `${minutesLeft} mins`;
+      } else {
+        return 'Today';
+      }
     } else {
       return daysLeft === 1 ? '1 day' : `${daysLeft} days`;
     }
@@ -70,6 +84,10 @@ const FollowUpCard: React.FC<FollowUpCardProps> = ({client, onPress}) => {
 
   const isToday = localFollowUpDate ? getDaysText() === 'Today' : false;
 
+  const isLessThanOneHour = localFollowUpDate
+    ? localFollowUpDate.getTime() - new Date().getTime() < 1000 * 60 * 60
+    : false;
+
   return (
     <TouchableOpacity
       style={[
@@ -79,6 +97,8 @@ const FollowUpCard: React.FC<FollowUpCardProps> = ({client, onPress}) => {
         (localFollowUpDate || isSomedayFollowUp) && styles.activeFollowUpCard,
         // Add overdue style if follow-up is overdue
         isOverdue && styles.overdueFollowUpCard,
+        // Add yellow style if time remaining is less than 1 hour
+        isLessThanOneHour && styles.lessThanOneHourFollowUpCard,
       ]}
       onPress={onPress}>
       <View style={styles.followUpHeader}>
@@ -194,6 +214,16 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: '#1a1a1a',
     textAlign: 'right',
+  },
+  lessThanOneHourFollowUpCard: {
+    borderWidth: 1,
+    borderColor: '#f1c40f',
+    backgroundColor: '#fff9e6',
+    shadowColor: '#f1c40f',
+    shadowOffset: {width: 0, height: 2},
+    shadowOpacity: 0.15,
+    shadowRadius: 4,
+    elevation: 4,
   },
 });
 
