@@ -251,11 +251,7 @@ const ScheduleFollowUpModal: React.FC<ScheduleFollowUpModalProps> = ({
                     <TouchableOpacity
                       style={styles.timeSelectButton}
                       onPress={() => setShowTimePicker(true)}>
-                      <GetIcon
-                        iconName="time"
-                        size={24}
-                        color={Colors.main}
-                      />
+                      <GetIcon iconName="time" size={24} color={Colors.main} />
                     </TouchableOpacity>
                   </View>
                 )}

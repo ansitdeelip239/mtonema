@@ -174,12 +174,12 @@ export interface AgentPropertyRequestModel {
   agentName: string;
   agentContactNo: string;
   propertyLocation: string;
-  propertyType: string | null;
-  bhkType: string | null;
-  demandPrice: number | null;
-  securityDepositAmount: number | null;
-  negotiable: boolean | null;
-  propertyNotes: string | null;
+  propertyType: string | undefined;
+  bhkType: string | undefined;
+  demandPrice: number | undefined;
+  securityDepositAmount: number | undefined;
+  negotiable: boolean | undefined;
+  propertyNotes: string | undefined;
 }
 
 export interface MasterDataModel {

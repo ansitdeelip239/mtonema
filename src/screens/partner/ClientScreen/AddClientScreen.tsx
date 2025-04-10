@@ -104,7 +104,7 @@ const AddClientScreen: React.FC<Props> = ({navigation, route}) => {
           mobileNumber: formData.mobileNumber?.trim() || undefined,
           whatsappNumber: formData.whatsappNumber?.trim() || undefined,
           emailId: formData.emailId?.trim() || undefined,
-          notes: formData.notes?.trim() || '',
+          notes: formData.notes?.trim() || undefined,
           groups: Array.from(new Set(formData.groups || [])),
           partnerId: formData.partnerId,
         };

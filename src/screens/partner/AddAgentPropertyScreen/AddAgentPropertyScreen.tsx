@@ -124,12 +124,12 @@ const AddAgentPropertyScreen: React.FC<Props> = ({navigation, route}) => {
           agentName: validatedApiData.agentName.trim(),
           agentContactNo: validatedApiData.agentContactNo.trim(),
           propertyLocation: validatedApiData.propertyLocation.trim(),
-          propertyType: validatedApiData.propertyType?.trim() || null,
-          bhkType: validatedApiData.bhkType?.trim() || null,
-          demandPrice: validatedApiData.demandPrice ? parseInt(validatedApiData.demandPrice.toString().trim(), 10) : null,
-          securityDepositAmount: validatedApiData.securityDepositAmount ? parseInt(validatedApiData.securityDepositAmount.toString().trim(), 10) : null,
+          propertyType: validatedApiData.propertyType?.trim() || undefined,
+          bhkType: validatedApiData.bhkType?.trim() || undefined,
+          demandPrice: validatedApiData.demandPrice ? parseInt(validatedApiData.demandPrice.toString().trim(), 10) : undefined,
+          securityDepositAmount: validatedApiData.securityDepositAmount ? parseInt(validatedApiData.securityDepositAmount.toString().trim(), 10) : undefined,
           negotiable: validatedApiData.negotiable,
-          propertyNotes: validatedApiData.propertyNotes?.trim() || null,
+          propertyNotes: validatedApiData.propertyNotes?.trim() || undefined,
         };
 
         const response = !editMode
