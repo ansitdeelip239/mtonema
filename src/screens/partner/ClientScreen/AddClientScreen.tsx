@@ -96,24 +96,46 @@ const AddClientScreen: React.FC<Props> = ({navigation, route}) => {
     initialState,
     onSubmit: async formData => {
       try {
+        // Trim all string fields before validation and submission
         const cleanedData = {
           ...formData,
-          clientName: formData.clientName?.trim(),
-          displayName: formData.displayName || undefined,
-          mobileNumber: formData.mobileNumber || undefined,
-          whatsappNumber: formData.whatsappNumber || undefined,
-          emailId: formData.emailId || undefined,
-          notes: formData.notes || '',
+          clientName: formInput.clientName?.trim(),
+          displayName: formData.displayName?.trim() || undefined,
+          mobileNumber: formData.mobileNumber?.trim() || undefined,
+          whatsappNumber: formData.whatsappNumber?.trim() || undefined,
+          emailId: formData.emailId?.trim() || undefined,
+          notes: formData.notes?.trim() || '',
           groups: Array.from(new Set(formData.groups || [])),
+          partnerId: formData.partnerId,
         };
 
-        const validatedData = clientFormSchema.parse(cleanedData);
-
-        if (editMode && clientData) {
-          validatedData.id = clientData.id;
+        if (!cleanedData.clientName) {
+          setFieldErrors(prev => ({
+            ...prev,
+            clientName: 'Client name is required',
+          }));
+          showError('Please provide a valid Client Name');
+          return;
         }
 
-        const response = await PartnerService.addClient(validatedData);
+        // Only validate the client name field directly
+        try {
+          const nameSchema = clientFormSchema.shape.clientName;
+          nameSchema.parse(cleanedData.clientName);
+        } catch (validationError) {
+          if (validationError instanceof z.ZodError) {
+            setFieldErrors(prev => ({
+              ...prev,
+              clientName: validationError.errors[0].message,
+            }));
+            showError('Please provide a valid Client Name');
+            return;
+          }
+        }
+
+        console.log('Submitting form data:', cleanedData);
+
+        const response = await PartnerService.addClient(cleanedData);
         if (response.success) {
           Toast.show({
             type: 'success',
@@ -130,26 +152,11 @@ const AddClientScreen: React.FC<Props> = ({navigation, route}) => {
           });
         }
       } catch (err) {
-        if (err instanceof z.ZodError) {
-          const errors: Record<string, string> = {};
-          err.errors.forEach(error => {
-            if (error.path[0]) {
-              errors[error.path[0]] = error.message;
-            }
-          });
-          setFieldErrors(errors);
-          // Toast.show({
-          //   type: 'error',
-          //   text1: 'Please provide a valid Client Name',
-          // });
-          showError('Please provide a valid Client Name');
-        } else {
-          console.error('Error in onSubmit:', err);
-          Toast.show({
-            type: 'error',
-            text1: 'An unexpected error occurred',
-          });
-        }
+        console.error('Error in onSubmit:', err);
+        Toast.show({
+          type: 'error',
+          text1: 'An unexpected error occurred',
+        });
       }
     },
   });
@@ -198,12 +205,49 @@ const AddClientScreen: React.FC<Props> = ({navigation, route}) => {
     [formInput.groups, handleInputChange],
   );
 
-  const renderGroupToggleButtons = useMemo(
-    () => (
+  const [showAllGroups, setShowAllGroups] = useState(false);
+
+  const renderGroupToggleButtons = useMemo(() => {
+    const initialGroupsToShow = 15;
+
+    // First, get all selected groups - these will always be shown
+    const selectedGroups =
+      groups?.filter(group => formInput.groups?.includes(group.id)) || [];
+
+    // Then, get unselected groups
+    const unselectedGroups =
+      groups?.filter(group => !formInput.groups?.includes(group.id)) || [];
+
+    // Determine which unselected groups to show
+    const unselectedToShow = showAllGroups
+      ? unselectedGroups
+      : unselectedGroups.slice(
+          0,
+          Math.max(0, initialGroupsToShow - selectedGroups.length),
+        );
+
+    // Combine the selected and unselected groups
+    const visibleGroups = [...selectedGroups, ...unselectedToShow];
+
+    // Determine if there are more unselected groups to show
+    const hasMoreGroups = unselectedGroups.length > unselectedToShow.length;
+
+    return (
       <View style={styles.groupsContainer}>
-        <Text style={styles.groupsLabel}>Select Groups</Text>
+        <View style={styles.groupsLabelRow}>
+          <Text style={styles.groupsLabel}>Select Groups</Text>
+          {(hasMoreGroups || showAllGroups) && (
+            <TouchableOpacity
+              onPress={() => setShowAllGroups(!showAllGroups)}
+              style={styles.showToggleButton}>
+              <Text style={styles.showToggleButtonText}>
+                {showAllGroups ? 'Show Less' : 'Show All'}
+              </Text>
+            </TouchableOpacity>
+          )}
+        </View>
         <View style={styles.groupButtonsContainer}>
-          {groups?.map(group => (
+          {visibleGroups.map(group => (
             <TouchableOpacity
               key={group.id}
               style={[
@@ -224,11 +268,20 @@ const AddClientScreen: React.FC<Props> = ({navigation, route}) => {
               </Text>
             </TouchableOpacity>
           ))}
+
+          {hasMoreGroups && !showAllGroups && (
+            <TouchableOpacity
+              style={[styles.groupButton, styles.moreButton]}
+              onPress={() => setShowAllGroups(true)}>
+              <Text style={styles.moreButtonText}>
+                +{unselectedGroups.length - unselectedToShow.length} More
+              </Text>
+            </TouchableOpacity>
+          )}
         </View>
       </View>
-    ),
-    [groups, formInput.groups, toggleGroup],
-  );
+    );
+  }, [groups, formInput.groups, toggleGroup, showAllGroups]);
 
   const renderForm = useMemo(
     () => (
@@ -395,6 +448,29 @@ const styles = StyleSheet.create({
   },
   groupButtonTextSelected: {
     color: '#fff',
+  },
+  moreButton: {
+    backgroundColor: '#f0f0f0',
+    borderColor: '#d0d0d0',
+  },
+  moreButtonText: {
+    color: '#555',
+    fontSize: 14,
+    fontWeight: '500',
+  },
+  groupsLabelRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 8,
+  },
+  showToggleButton: {
+    padding: 6,
+  },
+  showToggleButtonText: {
+    color: Colors.main,
+    fontSize: 14,
+    fontWeight: '500',
   },
 });
 
