@@ -1,11 +1,9 @@
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import React, {useEffect, useState} from 'react';
 import {
-  Text,
   View,
   StyleSheet,
   ScrollView,
-  TouchableOpacity,
   Linking,
   RefreshControl,
   ActivityIndicator,
@@ -16,17 +14,23 @@ import {Client, ClientActivityDataModel, FollowUp} from '../../../types';
 import PartnerService from '../../../services/PartnerService';
 import Toast from 'react-native-toast-message';
 import GetIcon from '../../../components/GetIcon';
-import Colors from '../../../constants/Colors';
 import {usePartner} from '../../../context/PartnerProvider';
 import {Appbar, Menu} from 'react-native-paper';
 import AddActivityModal from './components/AddActivityModal';
 import {useKeyboard} from '../../../hooks/useKeyboard';
 import {useAuth} from '../../../hooks/useAuth';
-import ActivityTimeline from './components/ActivityTimeline';
 import {useDialog} from '../../../hooks/useDialog';
 import ConfirmationModal from '../../../components/ConfirmationModal';
-import {formatFollowUpDate, formatTime} from '../../../utils/dateUtils';
 import ScheduleFollowUpModal from './components/ScheduleFollowUpModal';
+
+// Import our new components
+import ProfileHeader from './components/ProfileHeader';
+import ContactButtons from './components/ContactButtons';
+import FollowUpCard from './components/FollowUpCard';
+import ContactInfoCard from './components/ContactInfoCard';
+import GroupsCard from './components/GroupsCard';
+import NotesCard from './components/NotesCard';
+import RecentActivitiesCard from './components/RecentActivitiesCard';
 
 type Props = NativeStackScreenProps<
   ClientStackParamList,
@@ -63,11 +67,6 @@ const ClientProfileScreen: React.FC<Props> = ({route, navigation}) => {
       }
     } catch (error) {
       console.error('Error in fetchClient', error);
-      // Toast.show({
-      //   type: 'error',
-      //   text1: 'Error',
-      //   text2: 'Failed to fetch client data',
-      // });
       showError('Failed to fetch client data');
       navigation.goBack();
     } finally {
@@ -150,11 +149,6 @@ const ClientProfileScreen: React.FC<Props> = ({route, navigation}) => {
       }
     } catch (error) {
       console.error('Error in handleDeleteActivity', error);
-      // Toast.show({
-      //   type: 'error',
-      //   text1: 'Error',
-      //   text2: 'Failed to delete activity',
-      // });
       showError('Failed to delete activity');
     } finally {
       setIsDeletingActivity(false);
@@ -317,8 +311,6 @@ const ClientProfileScreen: React.FC<Props> = ({route, navigation}) => {
     }
   };
 
-  // Add this new function to handle follow-up deletion
-
   const handleDeleteFollowUp = async () => {
     try {
       setSchedulingFollowUp(true);
@@ -346,182 +338,6 @@ const ClientProfileScreen: React.FC<Props> = ({route, navigation}) => {
     } finally {
       setSchedulingFollowUp(false);
     }
-  };
-
-  const renderContactInfo = React.useCallback(() => {
-    if (!client) {
-      return null;
-    }
-
-    const contactFields = [
-      {label: 'Mobile', value: client.mobileNumber},
-      {label: 'WhatsApp', value: client.whatsappNumber},
-      {label: 'Email', value: client.emailId},
-    ].filter(field => field.value);
-
-    if (contactFields.length === 0) {
-      return null;
-    }
-
-    return (
-      <View style={styles.infoCard}>
-        <Text style={styles.sectionTitle}>Contact Information</Text>
-        {contactFields.map(field => (
-          <View key={field.label} style={styles.infoRow}>
-            <Text style={styles.infoLabel}>{field.label}:</Text>
-            <Text style={styles.infoValue}>{field.value}</Text>
-          </View>
-        ))}
-      </View>
-    );
-  }, [client]);
-
-  const renderGroups = React.useCallback(() => {
-    return client?.groups.map((group, index) => (
-      <View
-        key={`group-${group.id}-${group.name}-${index}`} // Added index to make key unique
-        style={[styles.groupBadge, {backgroundColor: `${group.groupColor}20`}]}>
-        <Text style={[styles.groupText, {color: group.groupColor}]}>
-          {group.name}
-        </Text>
-      </View>
-    ));
-  }, [client?.groups]);
-
-  const renderActivities = React.useCallback(() => {
-    if (!client?.clientActivityDataModels.length) {
-      return <Text style={styles.noActivityText}>No activities yet</Text>;
-    }
-
-    const sortedActivities = client.clientActivityDataModels
-      .slice()
-      .sort(
-        (a, b) =>
-          new Date(b.createdOn).getTime() - new Date(a.createdOn).getTime(),
-      )
-      .slice(0, 5);
-
-    return sortedActivities.map((activity, index) => (
-      <ActivityTimeline
-        key={`activity-${activity.id}`}
-        activity={activity}
-        isLast={index === sortedActivities.length - 1}
-        onPress={handleActivityPress}
-      />
-    ));
-  }, [client?.clientActivityDataModels]);
-
-  const renderFollowUpCard = () => {
-    // Helper function to convert UTC date to local time - this part looks good
-    const getLocalDate = (dateString: string) => {
-      if (!dateString) {
-        return null;
-      }
-
-      // Parse the date string into year, month, day, hours, minutes
-      const [datePart, timePart] = dateString.split('T');
-      const [year, month, day] = datePart.split('-').map(Number);
-      const [hours, minutes] = timePart
-        ? timePart.split(':').map(Number)
-        : [0, 0];
-
-      // Create a date object in local time zone with the UTC components
-      return new Date(Date.UTC(year, month - 1, day, hours, minutes));
-    };
-
-    // Get local follow-up date
-    const localFollowUpDate = client?.followUp?.date
-      ? getLocalDate(client.followUp.date)
-      : null;
-
-    // Calculate days difference for proper display - fix the logic here
-    const getDaysText = () => {
-      if (!localFollowUpDate) {
-        return '';
-      }
-
-      // Create date objects for today and the follow-up date that ignore time
-      const today = new Date();
-      const followUpDay = new Date(localFollowUpDate);
-
-      // Reset hours to compare dates only, not times
-      today.setHours(0, 0, 0, 0);
-      followUpDay.setHours(0, 0, 0, 0);
-
-      // Calculate difference in days
-      const diffTime = followUpDay.getTime() - today.getTime();
-      const daysLeft = Math.round(diffTime / (1000 * 60 * 60 * 24));
-
-      if (daysLeft < 0) {
-        return 'Overdue';
-      } else if (daysLeft === 0) {
-        return 'Today';
-      } else {
-        return daysLeft === 1 ? '1 day' : `${daysLeft} days`;
-      }
-    };
-
-    // Rest of the function can stay the same
-    const isSomedayFollowUp =
-      client?.followUp?.status === 'Pending' && !client?.followUp?.date;
-
-    const hasFollowUp = client?.followUp?.status === 'Pending';
-
-    const isOverdue = localFollowUpDate
-      ? localFollowUpDate.getTime() < new Date().getTime()
-      : false;
-
-    const isToday = localFollowUpDate ? getDaysText() === 'Today' : false;
-
-    // Rest of the render function...
-    return (
-      <TouchableOpacity
-        style={[
-          styles.infoCard,
-          styles.followUpCard,
-          // Apply the activeFollowUpCard style for both date-based and someday follow-ups
-          (localFollowUpDate || isSomedayFollowUp) && styles.activeFollowUpCard,
-          // Add overdue style if follow-up is overdue
-          isOverdue && styles.overdueFollowUpCard,
-        ]}
-        onPress={() => setIsFollowUpModalVisible(true)}>
-        <View style={styles.followUpHeader}>
-          <Text style={[styles.sectionTitle, isOverdue && styles.overdueText]}>
-            {localFollowUpDate
-              ? isOverdue
-                ? 'Follow Up Overdue'
-                : isToday
-                ? 'Follow Up Today'
-                : `Follow Up in ${getDaysText()}`
-              : isSomedayFollowUp
-              ? 'Follow Up: Someday'
-              : 'No Follow Up Scheduled'}
-          </Text>
-          <View style={styles.scheduleButton}>
-            {hasFollowUp ? (
-              <GetIcon iconName="edit" size={20} color="#0066cc" />
-            ) : (
-              <GetIcon iconName="plus" size={20} color="#0066cc" />
-            )}
-          </View>
-        </View>
-        {localFollowUpDate ? (
-          <View style={styles.followUpDateContainer}>
-            <Text style={[styles.infoValue, isOverdue && styles.overdueText]}>
-              {formatFollowUpDate(localFollowUpDate)}
-            </Text>
-            <Text
-              style={[styles.followUpTime, isOverdue && styles.overdueText]}>
-              {formatTime(localFollowUpDate)}
-            </Text>
-          </View>
-        ) : isSomedayFollowUp ? (
-          <Text style={styles.infoValue}>To be scheduled later</Text>
-        ) : (
-          <Text style={styles.infoValue}>No date set</Text>
-        )}
-      </TouchableOpacity>
-    );
   };
 
   if (loading) {
@@ -579,86 +395,27 @@ const ClientProfileScreen: React.FC<Props> = ({route, navigation}) => {
         }>
         {client && (
           <>
-            <View style={styles.profileHeader}>
-              <View style={styles.avatarContainer}>
-                <Text style={styles.avatarText}>
-                  {client.clientName.charAt(0).toUpperCase()}
-                </Text>
-              </View>
-              <Text style={styles.clientName}>{client.clientName}</Text>
-              {client.displayName && (
-                <Text style={styles.displayName}>{client.displayName}</Text>
-              )}
-            </View>
+            <ProfileHeader client={client} />
 
-            {(client.mobileNumber ||
-              client.whatsappNumber ||
-              client.emailId) && (
-              <View style={styles.contactButtons}>
-                {client.mobileNumber && (
-                  <TouchableOpacity
-                    key="contact-phone"
-                    style={styles.contactButton}
-                    onPress={() => handleContact('phone')}>
-                    <GetIcon iconName="phone" size="24" color="#0066cc" />
-                    <Text style={styles.contactText}>Call</Text>
-                  </TouchableOpacity>
-                )}
-                {client.whatsappNumber && (
-                  <TouchableOpacity
-                    key="contact-whatsapp"
-                    style={styles.contactButton}
-                    onPress={() => handleContact('whatsapp')}>
-                    <GetIcon iconName="whatsapp" size="24" color="#0066cc" />
-                    <Text style={styles.contactText}>WhatsApp</Text>
-                  </TouchableOpacity>
-                )}
-                {client.emailId && (
-                  <TouchableOpacity
-                    key="contact-email"
-                    style={styles.contactButton}
-                    onPress={() => handleContact('email')}>
-                    <GetIcon iconName="contactus" size="24" color="#0066cc" />
-                    <Text style={styles.contactText}>Email</Text>
-                  </TouchableOpacity>
-                )}
-              </View>
-            )}
+            <ContactButtons client={client} handleContact={handleContact} />
 
             <View style={styles.infoSection}>
-              {renderFollowUpCard()}
+              <FollowUpCard
+                client={client}
+                onPress={() => setIsFollowUpModalVisible(true)}
+              />
 
-              {renderContactInfo()}
+              <ContactInfoCard client={client} />
 
-              {client.groups && client.groups.length > 0 && (
-                <View style={styles.infoCard}>
-                  <Text style={styles.sectionTitle}>Groups</Text>
-                  <View style={styles.groupsContainer}>{renderGroups()}</View>
-                </View>
-              )}
+              <GroupsCard client={client} />
 
-              {client.notes && (
-                <View style={styles.infoCard}>
-                  <Text style={styles.sectionTitle}>Notes</Text>
-                  <Text style={styles.notesText}>{client.notes}</Text>
-                </View>
-              )}
+              <NotesCard notes={client.notes} />
 
-              <View style={styles.infoCard}>
-                <View style={styles.activityHeader}>
-                  <Text style={styles.sectionTitle}>Recent Activities</Text>
-                  <TouchableOpacity
-                    style={styles.addActivityButton}
-                    onPress={() => {
-                      setIsActivityModalVisible(true);
-                    }}>
-                    <Text style={styles.addActivityButtonText}>
-                      Add Activity
-                    </Text>
-                  </TouchableOpacity>
-                </View>
-                {renderActivities()}
-              </View>
+              <RecentActivitiesCard
+                activities={client.clientActivityDataModels}
+                onAddActivity={() => setIsActivityModalVisible(true)}
+                onActivityPress={handleActivityPress}
+              />
 
               {/* Add bottom padding when keyboard is visible */}
               {keyboardVisible && <View style={styles.keyboardSpacing} />}
@@ -693,7 +450,7 @@ const ClientProfileScreen: React.FC<Props> = ({route, navigation}) => {
         isLoading={schedulingFollowUp}
         isSomedayFollowUp={
           client?.followUp?.status === 'Pending' && !client?.followUp?.date
-        } // Add this prop
+        }
       />
 
       <ConfirmationModal
@@ -708,19 +465,6 @@ const ClientProfileScreen: React.FC<Props> = ({route, navigation}) => {
 };
 
 const styles = StyleSheet.create({
-  followUpDateContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-  },
-  followUpTime: {
-    fontSize: 14,
-    color: '#1a1a1a',
-    textAlign: 'right',
-  },
-  keyboardSpacing: {
-    height: 60,
-  },
   menuContent: {
     backgroundColor: 'white',
   },
@@ -745,222 +489,11 @@ const styles = StyleSheet.create({
   scrollViewContent: {
     paddingBottom: 80,
   },
-  profileHeader: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    padding: 20,
-    backgroundColor: 'white',
-    borderBottomWidth: 1,
-    borderBottomColor: '#f0f0f0',
-  },
-  avatarContainer: {
-    width: 80,
-    height: 80,
-    borderRadius: 40,
-    backgroundColor: '#0066cc',
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginBottom: 16,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 3,
-  },
-  avatarText: {
-    fontSize: 32,
-    color: 'white',
-    fontWeight: 'bold',
-  },
-  clientName: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    color: '#1a1a1a',
-    marginBottom: 4,
-  },
-  displayName: {
-    fontSize: 16,
-    color: '#666',
-  },
-  contactButtons: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    padding: 16,
-    backgroundColor: 'white',
-    borderBottomWidth: 1,
-    borderBottomColor: '#f0f0f0',
-  },
-  contactButton: {
-    alignItems: 'center',
-  },
-  contactIcon: {
-    width: 24,
-    height: 24,
-    marginBottom: 4,
-  },
-  contactText: {
-    fontSize: 12,
-    color: '#0066cc',
-  },
   infoSection: {
     padding: 16,
   },
-  infoCard: {
-    backgroundColor: 'white',
-    borderRadius: 12,
-    padding: 16,
-    marginBottom: 16,
-    shadowColor: '#000',
-    shadowOffset: {width: 0, height: 2},
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 3,
-  },
-  followUpCard: {
-    borderWidth: 1,
-    borderColor: '#e0e0e0',
-    backgroundColor: '#f8f8f8',
-  },
-  activeFollowUpCard: {
-    borderWidth: 1,
-    borderColor: '#0066cc',
-    backgroundColor: '#e6f0ff',
-    shadowColor: '#0066cc',
-    shadowOffset: {width: 0, height: 2},
-    shadowOpacity: 0.15,
-    shadowRadius: 4,
-    elevation: 4,
-  },
-  overdueFollowUpCard: {
-    borderWidth: 1,
-    borderColor: '#e74c3c',
-    backgroundColor: '#ffe5e5',
-    shadowColor: '#e74c3c',
-    shadowOffset: {width: 0, height: 2},
-    shadowOpacity: 0.15,
-    shadowRadius: 4,
-    elevation: 4,
-  },
-  overdueText: {
-    color: '#e74c3c',
-    fontWeight: 'bold',
-  },
-  sectionTitle: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    color: '#1a1a1a',
-    marginBottom: 12,
-  },
-  infoRow: {
-    flexDirection: 'row',
-    marginBottom: 8,
-  },
-  infoLabel: {
-    width: 80,
-    fontSize: 14,
-    color: '#666',
-    fontWeight: '500',
-  },
-  infoValue: {
-    flex: 1,
-    fontSize: 14,
-    color: '#1a1a1a',
-  },
-  groupsContainer: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    gap: 8,
-  },
-  groupBadge: {
-    paddingHorizontal: 12,
-    paddingVertical: 6,
-    borderRadius: 16,
-  },
-  groupText: {
-    fontSize: 12,
-    fontWeight: '500',
-  },
-  notesText: {
-    fontSize: 14,
-    color: '#444',
-    lineHeight: 20,
-  },
-  addActivityButton: {
-    backgroundColor: Colors.main,
-    paddingHorizontal: 12,
-    paddingVertical: 6,
-    borderRadius: 8,
-    marginBottom: 12,
-  },
-  addActivityButtonText: {
-    color: '#fff',
-    fontSize: 14,
-  },
-  activityItem: {
-    borderBottomWidth: 1,
-    borderBottomColor: '#f0f0f0',
-    paddingVertical: 12,
-  },
-  activityHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: 12,
-  },
-  activityType: {
-    fontSize: 14,
-    fontWeight: '600',
-    color: '#0066cc',
-  },
-  activityDate: {
-    fontSize: 12,
-    color: '#666',
-  },
-  activityDescription: {
-    fontSize: 14,
-    color: '#444',
-    marginBottom: 4,
-  },
-  assignedTo: {
-    fontSize: 12,
-    color: '#666',
-    fontStyle: 'italic',
-  },
-  noActivityText: {
-    fontSize: 14,
-    color: '#666',
-    fontStyle: 'italic',
-    textAlign: 'center',
-  },
-  addButton: {
-    backgroundColor: Colors.main,
-    paddingHorizontal: 16,
-    paddingVertical: 8,
-    borderRadius: 8,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  buttonText: {
-    color: '#fff',
-    fontSize: 14,
-    fontWeight: '600',
-  },
-  followUpHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: 12,
-  },
-  scheduleButton: {
-    width: 32,
-    height: 32,
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderRadius: 16,
-    backgroundColor: '#f0f0f0',
+  keyboardSpacing: {
+    height: 60,
   },
 });
 
