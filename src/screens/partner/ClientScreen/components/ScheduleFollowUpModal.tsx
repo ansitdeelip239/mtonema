@@ -106,6 +106,12 @@ const ScheduleFollowUpModal: React.FC<ScheduleFollowUpModalProps> = ({
         return; // Don't set finalDate yet
     }
 
+    // Update customDate and customTime for all options except 'someday'
+    if (newDate) {
+      setCustomDate(newDate);
+      setCustomTime(newDate);
+    }
+
     setFinalDate(newDate);
   };
 
@@ -187,8 +193,10 @@ const ScheduleFollowUpModal: React.FC<ScheduleFollowUpModalProps> = ({
             <View style={styles.modalHeader}>
               <Text style={styles.modalTitle}>Schedule Follow-up</Text>
               {/* Show trash icon if there's any follow-up (date-based or someday) */}
-              {(currentDate || isSomedayFollowUp) ? (
-                <TouchableOpacity onPress={handleDelete} style={styles.deleteIcon}>
+              {currentDate || isSomedayFollowUp ? (
+                <TouchableOpacity
+                  onPress={handleDelete}
+                  style={styles.deleteIcon}>
                   <GetIcon iconName="delete" size={20} color="#e74c3c" />
                 </TouchableOpacity>
               ) : (
@@ -210,11 +218,17 @@ const ScheduleFollowUpModal: React.FC<ScheduleFollowUpModalProps> = ({
 
               {selectedOption === 'custom' && (
                 <View style={styles.customDateSection}>
-                  <Text style={styles.dateTimeLabel}>Selected Date & Time:</Text>
+                  <Text style={styles.dateTimeLabel}>
+                    Selected Date & Time:
+                  </Text>
                   <TouchableOpacity
                     style={styles.dateTimeDisplay}
                     onPress={() => setShowDatePicker(true)}>
-                    <GetIcon iconName="calendar" size={20} color={Colors.main} />
+                    <GetIcon
+                      iconName="calendar"
+                      size={20}
+                      color={Colors.main}
+                    />
                     <Text style={styles.dateTimeText}>
                       {formatDisplayDate(finalDate)}
                     </Text>
@@ -226,10 +240,23 @@ const ScheduleFollowUpModal: React.FC<ScheduleFollowUpModalProps> = ({
                 selectedOption !== 'custom' &&
                 selectedOption !== 'someday' && (
                   <View style={styles.datePreview}>
-                    <Text style={styles.datePreviewLabel}>Scheduled for:</Text>
-                    <Text style={styles.datePreviewText}>
-                      {formatDisplayDate(finalDate)}
-                    </Text>
+                    <View style={styles.datePreviewContent}>
+                      <Text style={styles.datePreviewLabel}>
+                        Scheduled for:
+                      </Text>
+                      <Text style={styles.datePreviewText}>
+                        {formatDisplayDate(finalDate)}
+                      </Text>
+                    </View>
+                    <TouchableOpacity
+                      style={styles.timeSelectButton}
+                      onPress={() => setShowTimePicker(true)}>
+                      <GetIcon
+                        iconName="time"
+                        size={24}
+                        color={Colors.main}
+                      />
+                    </TouchableOpacity>
                   </View>
                 )}
 
@@ -256,9 +283,7 @@ const ScheduleFollowUpModal: React.FC<ScheduleFollowUpModalProps> = ({
                   </Text>
                 </TouchableOpacity>
 
-                <TouchableOpacity
-                  style={styles.cancelButton}
-                  onPress={onClose}>
+                <TouchableOpacity style={styles.cancelButton} onPress={onClose}>
                   <Text style={styles.cancelButtonText}>Cancel</Text>
                 </TouchableOpacity>
               </View>
@@ -423,6 +448,16 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     borderWidth: 1,
     borderColor: '#d0e0ff',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  datePreviewContent: {
+    flex: 1,
+  },
+  timeSelectButton: {
+    padding: 8,
+    marginLeft: 8,
   },
   datePreviewLabel: {
     fontSize: 14,
@@ -495,6 +530,11 @@ const styles = StyleSheet.create({
   },
   extendedBottomPadding: {
     height: 60, // Increased padding for custom date selection
+  },
+  timeSelectText: {
+    marginLeft: 8,
+    fontSize: 14,
+    color: Colors.main,
   },
 });
 
