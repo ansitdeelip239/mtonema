@@ -19,15 +19,15 @@ const formatCurrency = (value: string | number | null | undefined) => {
 
     if (num >= 10000000) {
       const amountInCrores = num / 10000000;
-      return `₹${formatWithDecimals(amountInCrores)} Cr`;
+      return `₹ ${formatWithDecimals(amountInCrores)} Cr`;
     } else if (num >= 100000) {
       const amountInLacs = num / 100000;
-      return `₹${formatWithDecimals(amountInLacs)} Lacs`;
+      return `₹ ${formatWithDecimals(amountInLacs)} Lacs`;
     } else if (num >= 1000) {
       const amountInThousands = num / 1000;
-      return `₹${formatWithDecimals(amountInThousands)} K`;
+      return `₹ ${formatWithDecimals(amountInThousands)} K`;
     } else {
-      return `₹${formatWithDecimals(num)}`;
+      return `₹ ${formatWithDecimals(num)}`;
     }
   } catch (error) {
     console.error('Currency formatting error:', error);

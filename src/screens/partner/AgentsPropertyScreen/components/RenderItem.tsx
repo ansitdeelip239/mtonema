@@ -91,50 +91,42 @@ const RenderItem: React.FC<RenderItemProps> = ({
         <View style={styles.contentSection}>
           <View style={styles.row}>
             <Text style={styles.label}>BHK Type:</Text>
-            <Text style={styles.value}>
-              {item.bhkType || 'Not Specified'}
-            </Text>
+            <Text style={styles.value}>{item.bhkType || 'Not Specified'}</Text>
           </View>
           <View style={styles.row}>
             <Text style={styles.label}>Location:</Text>
             <Text style={styles.value}>{item.propertyLocation || 'N/A'}</Text>
           </View>
 
-          <View style={styles.priceSection}>
-            <View style={styles.row}>
-              <Text style={styles.label}>Demand Price:</Text>
-              <Text style={[styles.value, styles.priceText]}>
-                {formatCurrency(item.demandPrice) || 'N/A'}
-              </Text>
-            </View>
-            <View style={[styles.row, styles.securityDeposit]}>
-              <Text style={styles.label}>Security Deposit:</Text>
-              <Text style={[styles.value, styles.priceText]}>
-                {formatCurrency(item.securityDepositAmount) || 'N/A'}
-              </Text>
-            </View>
+          <View style={styles.row}>
+            <Text style={styles.label}>Demand Price:</Text>
+            <Text style={[styles.value, styles.priceText]}>
+              {formatCurrency(item.demandPrice) || 'N/A'}
+            </Text>
+          </View>
+          <View style={styles.row}>
+            <Text style={styles.label}>Security Deposit:</Text>
+            <Text style={[styles.value, styles.priceText]}>
+              {formatCurrency(item.securityDepositAmount) || 'N/A'}
+            </Text>
           </View>
 
-          <View style={styles.typeAndDateContainer}>
-            <View style={styles.row}>
-              <Text style={styles.label}>Property Type:</Text>
-              <Text style={styles.value}>
-                {item.propertyType || 'N/A'}
-              </Text>
-            </View>
+          <View style={styles.row}>
+            <Text style={styles.label}>Property Type:</Text>
+            <Text style={styles.value}>{item.propertyType || 'N/A'}</Text>
+          </View>
 
-            <View style={styles.row}>
-              <Text style={styles.label}>Date Added:</Text>
-              <Text style={styles.value}>
-                {item.createdOn
-                  ? new Date(item.createdOn).toLocaleDateString('en-GB', {
-                      day: '2-digit',
-                      month: 'short',
-                      year: 'numeric',
-                    })
-                  : 'N/A'}
-              </Text>
-            </View>
+          <View style={styles.row}>
+            <Text style={styles.label}>Date Added:</Text>
+            <Text style={styles.value}>
+              {item.createdOn
+                ? new Date(item.createdOn).toLocaleDateString('en-GB', {
+                    day: '2-digit',
+                    month: 'short',
+                    year: 'numeric',
+                  })
+                : 'N/A'}
+            </Text>
           </View>
         </View>
 
@@ -222,12 +214,6 @@ const styles = StyleSheet.create({
     marginBottom: 12,
     alignItems: 'center',
   },
-  typeAndDateContainer: {
-    marginTop: 8,
-  },
-  securityDeposit: {
-    marginBottom: 0,
-  },
   label: {
     fontWeight: '600',
     width: 140,
@@ -238,13 +224,6 @@ const styles = StyleSheet.create({
     flex: 1,
     color: '#333',
     fontSize: 14,
-  },
-  priceSection: {
-    backgroundColor: '#F8F9FA',
-    margin: 0,
-    padding: 12,
-    borderRadius: 12,
-    marginVertical: 8,
   },
   priceText: {
     fontWeight: '700',
