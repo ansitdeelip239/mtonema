@@ -262,10 +262,12 @@ const ScheduleFollowUpModal: React.FC<ScheduleFollowUpModalProps> = ({
 
               {selectedOption === 'someday' && (
                 <View style={styles.datePreview}>
-                  <Text style={styles.datePreviewLabel}>Scheduled for:</Text>
-                  <Text style={styles.datePreviewText}>
-                    Someday (no specific date)
-                  </Text>
+                  <View style={styles.datePreviewContent}>
+                    <Text style={styles.datePreviewLabel}>Scheduled for:</Text>
+                    <Text style={styles.datePreviewText}>
+                      Someday (no specific date)
+                    </Text>
+                  </View>
                 </View>
               )}
 

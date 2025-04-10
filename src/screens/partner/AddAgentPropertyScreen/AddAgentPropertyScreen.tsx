@@ -118,17 +118,18 @@ const AddAgentPropertyScreen: React.FC<Props> = ({navigation, route}) => {
         const validatedFormData = agentPropertyFormSchema.parse(formData);
         const validatedApiData = apiSubmissionSchema.parse(validatedFormData);
 
+        // Convert empty strings to null before submitting to API
         const request = {
           partnerid: user?.id as number,
-          agentName: validatedApiData.agentName,
-          agentContactNo: validatedApiData.agentContactNo,
-          propertyLocation: validatedApiData.propertyLocation,
-          propertyType: validatedApiData.propertyType,
-          bhkType: validatedApiData.bhkType,
-          demandPrice: validatedApiData.demandPrice.toString(),
-          securityDepositAmount: validatedApiData.securityDepositAmount,
+          agentName: validatedApiData.agentName.trim(),
+          agentContactNo: validatedApiData.agentContactNo.trim(),
+          propertyLocation: validatedApiData.propertyLocation.trim(),
+          propertyType: validatedApiData.propertyType?.trim() || null,
+          bhkType: validatedApiData.bhkType?.trim() || null,
+          demandPrice: validatedApiData.demandPrice ? parseInt(validatedApiData.demandPrice.toString().trim(), 10) : null,
+          securityDepositAmount: validatedApiData.securityDepositAmount ? parseInt(validatedApiData.securityDepositAmount.toString().trim(), 10) : null,
           negotiable: validatedApiData.negotiable,
-          propertyNotes: validatedApiData.propertyNotes,
+          propertyNotes: validatedApiData.propertyNotes?.trim() || null,
         };
 
         const response = !editMode
