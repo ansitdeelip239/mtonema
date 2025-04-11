@@ -18,29 +18,33 @@ import {useAuth} from '../../../hooks/useAuth';
 import {useMaster} from '../../../context/MasterProvider';
 import AddGroupModal from './components/AddGroupModal';
 import Toast from 'react-native-toast-message';
+import {usePartner} from '../../../context/PartnerProvider';
 
-// Memoized GroupItem component
+// Memoized GroupItem component - now clickable
 const GroupItem = memo(
   ({
     item,
     getColorByMasterId,
+    onPress,
   }: {
     item: Group2;
     getColorByMasterId: (id?: number) => string;
+    onPress: (group: Group2) => void;
   }) => (
-    <View style={styles.groupItem}>
+    <TouchableOpacity onPress={() => onPress(item)} style={styles.groupItem}>
       <View
         style={[
           styles.colorIndicator,
           {
-            backgroundColor: item.color?.id
-              ? getColorByMasterId(item.color.id)
-              : '#cccccc',
+            backgroundColor:
+              item.color && item.color.id
+                ? getColorByMasterId(item.color.id)
+                : '#cccccc',
           },
         ]}
       />
       <Text style={styles.groupName}>{item.groupName}</Text>
-    </View>
+    </TouchableOpacity>
   ),
 );
 
@@ -69,8 +73,11 @@ const GroupsScreen = () => {
   const [refreshing, setRefreshing] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [selectedGroup, setSelectedGroup] = useState<Group2 | null>(null);
   const {user} = useAuth();
   const {masterData} = useMaster();
+  const {reloadGroups} = usePartner();
 
   // Fetch groups
   const fetchGroups = useCallback(async () => {
@@ -98,63 +105,120 @@ const GroupsScreen = () => {
     setRefreshing(false);
   }, [fetchGroups]);
 
-  // Handle adding a new group
-  const handleAddGroup = useCallback(
-    async (groupName: string, colorId: number) => {
+  // Handle group operations - now handles both add and edit
+  const handleSaveGroup = useCallback(
+    async (groupName: string, colorId: number, groupId?: number) => {
       if (!groupName.trim() || !user?.email) {
         return;
       }
 
       try {
-        setIsSaving(true); // Set saving state to true
-        const response = await PartnerService.createGroup(
-          groupName.trim(),
-          colorId,
-          user.email,
-        );
+        setIsSaving(true);
+        let response;
+
+        if (groupId) {
+          // Update existing group
+          response = await PartnerService.createGroup(
+            groupName.trim(),
+            colorId,
+            user.email,
+            groupId,
+          );
+        } else {
+          // Create new group
+          response = await PartnerService.createGroup(
+            groupName.trim(),
+            colorId,
+            user.email,
+          );
+        }
 
         if (response.success) {
           await fetchGroups(); // Refresh the list
           setModalVisible(false); // Close the modal after successful save
+          setSelectedGroup(null);
           Toast.show({
             type: 'success',
-            text1: response.message,
+            text1: groupId ? 'Group updated successfully' : response.message,
           });
+          reloadGroups();
         } else {
           Toast.show({
             type: 'error',
-            text1: response.message || 'Failed to create group',
+            text1: response.message || 'Failed to save group',
           });
         }
       } catch (error) {
-        console.error('Error creating group:', error);
+        console.error('Error saving group:', error);
         Toast.show({
           type: 'error',
-          text1: 'Error creating group',
+          text1: 'Error saving group',
           text2: (error as Error).message,
         });
       } finally {
         setIsSaving(false); // Reset saving state
       }
     },
-    [user?.email, fetchGroups],
+    [user?.email, fetchGroups, reloadGroups],
   );
+
+  // Handle deleting a group
+  const handleDeleteGroup = useCallback(
+    async (groupId: number) => {
+      try {
+        setIsDeleting(true);
+        const response = await PartnerService.deleteGroup(groupId);
+
+        if (response.success) {
+          await fetchGroups();
+          setModalVisible(false);
+          setSelectedGroup(null);
+          Toast.show({
+            type: 'success',
+            text1: 'Group deleted successfully',
+          });
+          reloadGroups();
+        } else {
+          Toast.show({
+            type: 'error',
+            text1: response.message || 'Failed to delete group',
+          });
+        }
+      } catch (error) {
+        console.error('Error deleting group:', error);
+        Toast.show({
+          type: 'error',
+          text1: 'Error deleting group',
+          text2: (error as Error).message,
+        });
+      } finally {
+        setIsDeleting(false);
+      }
+    },
+    [fetchGroups, reloadGroups],
+  );
+
+  // Handle group item press
+  const handleGroupPress = useCallback((group: Group2) => {
+    setSelectedGroup(group);
+    setModalVisible(true);
+  }, []);
 
   // Toggle modal visibility
   const toggleModal = useCallback(() => {
-    if (!isSaving) {
-      // Only toggle if not currently saving
+    if (!isSaving && !isDeleting) {
+      setSelectedGroup(null); // Clear selected group when opening modal for add
       setModalVisible(prev => !prev);
     }
-  }, [isSaving]);
+  }, [isSaving, isDeleting]);
 
   // Close modal
   const closeModal = useCallback(() => {
-    if (!isSaving) {
-      // Only close if not currently saving
+    if (!isSaving && !isDeleting) {
       setModalVisible(false);
+      setSelectedGroup(null);
     }
-  }, [isSaving]);
+  }, [isSaving, isDeleting]);
 
   // Get color by master ID
   const getColorByMasterId = useCallback(
@@ -172,9 +236,13 @@ const GroupsScreen = () => {
   // Render a group item
   const renderGroupItem = useCallback(
     ({item}: {item: Group2}) => (
-      <GroupItem item={item} getColorByMasterId={getColorByMasterId} />
+      <GroupItem
+        item={item}
+        getColorByMasterId={getColorByMasterId}
+        onPress={handleGroupPress}
+      />
     ),
-    [getColorByMasterId],
+    [getColorByMasterId, handleGroupPress],
   );
 
   // Initial fetch
@@ -199,7 +267,7 @@ const GroupsScreen = () => {
           <TouchableOpacity
             onPress={toggleModal}
             style={styles.addButton}
-            disabled={isSaving}>
+            disabled={isSaving || isDeleting}>
             <Text style={styles.addButtonText}>+ Add Group</Text>
           </TouchableOpacity>
         }
@@ -231,9 +299,12 @@ const GroupsScreen = () => {
       <AddGroupModal
         visible={modalVisible}
         onClose={closeModal}
-        onSave={handleAddGroup}
+        onSave={handleSaveGroup}
+        onDelete={handleDeleteGroup}
         styles={styles}
         isLoading={isSaving}
+        isDeleting={isDeleting}
+        group={selectedGroup}
       />
     </SafeAreaView>
   );

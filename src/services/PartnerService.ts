@@ -218,16 +218,34 @@ class PartnerService {
     }
   }
 
-  static async createGroup(groupName: string, colorId: number, email: string) {
+  static async createGroup(
+    groupName: string,
+    colorId: number,
+    email: string,
+    groupId?: number,
+  ) {
     try {
-      const response = await api.post<null>(`${url.addGroups}`, {
+      const payload = {
         groupName,
         colorId,
         email,
-      });
+        ...(groupId && {groupId}),
+      };
+
+      const response = await api.post<null>(`${url.addGroups}`, payload);
       return response;
     } catch (error) {
       console.error('Error in createGroup', error);
+      throw error;
+    }
+  }
+
+  static async deleteGroup(groupId: number) {
+    try {
+      const response = await api.delete<null>(`${url.groups}/${groupId}`);
+      return response;
+    } catch (error) {
+      console.error('Error in deleteGroup', error);
       throw error;
     }
   }

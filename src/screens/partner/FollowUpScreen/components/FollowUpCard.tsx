@@ -18,21 +18,27 @@ const FollowUpCard: React.FC<FollowUpCardProps> = ({item, filterType}) => {
       return null;
     }
 
-    // Parse the date string into year, month, day, hours, minutes
-    const [datePart, timePart] = dateString.split('T');
-    if (!datePart) {
-      return new Date();
-    } // Fallback if parsing fails
+    try {
+      // Append 'Z' to indicate UTC time if it doesn't already have a timezone indicator
+      const utcDateString = dateString.endsWith('Z')
+        ? dateString
+        : `${dateString}Z`;
 
-    const [year, month, day] = datePart.split('-').map(Number);
-    const [hours, minutes] = timePart
-      ? timePart.split(':').map(Number)
-      : [0, 0];
+      // Create a date directly from the UTC string - JS will automatically convert to local time
+      const localDate = new Date(utcDateString);
 
-    // Create a date object in local time zone with the UTC components
-    return new Date(Date.UTC(year, month - 1, day, hours, minutes));
+      // Check if date is valid
+      if (isNaN(localDate.getTime())) {
+        console.warn('Invalid date string:', dateString);
+        return new Date(); // Fallback to current date
+      }
+
+      return localDate;
+    } catch (error) {
+      console.error('Error parsing date:', error);
+      return new Date(); // Fallback to current date if parsing fails
+    }
   };
-
   // Get local follow-up date
   const localFollowUpDate = item.followUpDate
     ? getLocalDate(item.followUpDate)
