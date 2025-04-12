@@ -229,7 +229,7 @@ class PartnerService {
         groupName,
         colorId,
         email,
-        ...(groupId && {groupId}),
+        ...(groupId && {id: groupId}),
       };
 
       const response = await api.post<null>(`${url.addGroups}`, payload);
