@@ -6,6 +6,7 @@ import {PartnerDrawerParamList} from '../types/navigation';
 import PartnerBottomTabs from './components/PartnerBottomTabs';
 import GroupsScreen from '../screens/partner/GroupsScreen/GroupsScreen';
 import GetIcon from '../components/GetIcon';
+import PartnerProfileScreen from '../screens/partner/ProfileScreen/ProfileScreen';
 
 const Drawer = createDrawerNavigator<PartnerDrawerParamList>();
 
@@ -49,6 +50,15 @@ const PartnerNavigator = memo(() => (
         drawerIcon: ({color}) => (
           <GetIcon iconName="globe" color={color} size="25" />
         ),
+      }}
+    />
+
+    <Drawer.Screen
+      name="Profile Screen"
+      component={PartnerProfileScreen}
+      options={{
+        headerShown: false,
+        drawerItemStyle: {display: 'none'},
       }}
     />
   </Drawer.Navigator>

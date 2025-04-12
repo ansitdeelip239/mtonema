@@ -103,7 +103,7 @@ export const CustomBottomBar = <T extends ParamListBase>({
               });
             }
           }}>
-          <GetIcon iconName="property" color="#fff" />
+          <GetIcon iconName={tabScreens[middleIndex].icon} color="#fff" />
         </TouchableOpacity>
 
         <View style={styles.tabSection}>

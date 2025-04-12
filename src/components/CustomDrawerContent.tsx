@@ -48,9 +48,7 @@ const CustomDrawerContent = (props: any) => {
   };
 
   const navigateToProfile = () => {
-    props.navigation.navigate('Home', {
-      screen: 'Profile',
-    });
+    props.navigation.navigate('Profile Screen');
     props.navigation.closeDrawer();
   };
 

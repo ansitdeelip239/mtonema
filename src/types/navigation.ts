@@ -28,7 +28,7 @@ export type PartnerBottomTabParamList = {
   Property: undefined;
   AddProperty: {editMode: boolean; propertyData: AgentData};
   Clients: NavigatorScreenParams<ClientStackParamList>;
-  Profile: undefined;
+  AgentData: undefined;
 };
 
 export type SellerBottomTabParamList = {
@@ -42,6 +42,7 @@ export type SellerBottomTabParamList = {
 export type PartnerDrawerParamList = {
   'Home': NavigatorScreenParams<PartnerBottomTabParamList>;
   'Groups': undefined;
+  'Profile Screen': undefined;
 };
 
 export type AdminDrawerParamList = {

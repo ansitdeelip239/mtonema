@@ -352,6 +352,8 @@ const AddAgentPropertyScreen: React.FC<Props> = ({navigation, route}) => {
     <>
       <Header<PartnerDrawerParamList>
         title={editMode ? "Edit Agent's Property" : "Add Agent's Property"}
+        backButton={true}
+        onBackPress={() => navigation.navigate('Property')}
       />
       <KeyboardAvoidingView
         style={styles.container}

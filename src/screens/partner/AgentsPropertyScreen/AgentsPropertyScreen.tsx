@@ -1,5 +1,11 @@
 import React, {useState, useEffect, useCallback, useMemo, useRef} from 'react';
-import {View, StyleSheet, FlatList, RefreshControl, Text} from 'react-native';
+import {
+  View,
+  StyleSheet,
+  FlatList,
+  RefreshControl,
+  Text,
+} from 'react-native';
 import PartnerService from '../../../services/PartnerService';
 import {useAuth} from '../../../hooks/useAuth';
 import {AgentData, FilterValues, PagingModel} from '../../../types';

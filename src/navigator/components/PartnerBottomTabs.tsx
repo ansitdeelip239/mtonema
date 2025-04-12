@@ -5,7 +5,6 @@ import Colors from '../../constants/Colors';
 import {PartnerBottomTabParamList} from '../../types/navigation';
 import AddAgentPropertyScreen from '../../screens/partner/AddAgentPropertyScreen/AddAgentPropertyScreen';
 import AgentDataScreen from '../../screens/partner/AgentsPropertyScreen/AgentsPropertyScreen';
-import PartnerProfileScreen from '../../screens/partner/ProfileScreen/ProfileScreen';
 import ClientScreenStack from './ClientScreenStack';
 import {CustomBottomBar, TabScreen} from './CustomBottomBar';
 import FollowUpScreenStack from './FollowUpScreenStack';
@@ -34,24 +33,26 @@ const tabScreens: Array<TabScreen<PartnerBottomTabParamList>> = [
   {
     name: 'AddProperty',
     component: AddAgentPropertyScreen,
-    icon: 'property',
+    icon: 'listproperty',
     label: 'Add', // Shorter label for this tab
   },
   {
     name: 'Property',
     component: AgentDataScreen,
     icon: 'realEstate',
+    label: 'Listings',
   },
   {
-    name: 'Profile',
-    component: PartnerProfileScreen,
-    icon: 'user',
+    name: 'AgentData',
+    component: AgentDataScreen,
+    icon: 'realEstate',
+    label: 'Agent Data',
   },
 ] as const;
 
 const PartnerBottomTabs = memo(() => (
   <Tab.Navigator
-    initialRouteName="Property"
+    initialRouteName="FollowUp"
     screenOptions={{
       headerShown: false,
       tabBarLabelStyle: {
@@ -60,12 +61,7 @@ const PartnerBottomTabs = memo(() => (
       },
     }}
     // eslint-disable-next-line react/no-unstable-nested-components
-    tabBar={props => (
-      <CustomBottomBar
-        {...props}
-        tabScreens={tabScreens}
-      />
-    )}>
+    tabBar={props => <CustomBottomBar {...props} tabScreens={tabScreens} />}>
     {tabScreens.map(({name, component, icon, listeners, label}) => (
       <Tab.Screen
         key={name}
