@@ -11,18 +11,28 @@ export default function Header<T extends ParamListBase>({
   children,
   backButton,
   navigation,
+  onBackPress,
 }: {
   title: string;
   children?: React.ReactNode;
   backButton?: boolean;
   navigation?: NativeStackNavigationProp<any>;
+  onBackPress?: () => void;
 }) {
   const {openDrawer} = useDrawer<T>();
+
+  const handleBackPress = () => {
+    if (onBackPress) {
+      onBackPress();
+    } else if (navigation) {
+      navigation.goBack();
+    }
+  };
 
   return (
     <View style={styles.headerContainer}>
       <TouchableOpacity
-        onPress={backButton ? () => navigation?.goBack() : openDrawer}
+        onPress={backButton ? () => handleBackPress() : openDrawer}
         style={styles.menuButton}>
         <GetIcon
           iconName={backButton ? 'back' : 'hamburgerMenu'}

@@ -350,7 +350,13 @@ const ClientProfileScreen: React.FC<Props> = ({route, navigation}) => {
 
   return (
     <View style={styles.container}>
-      <Header title="Client Profile" navigation={navigation} backButton={true}>
+      <Header
+        title="Client Profile"
+        navigation={navigation}
+        backButton={true}
+        onBackPress={() => {
+          navigation.navigate('ClientScreen');
+        }}>
         <Menu
           visible={visible}
           onDismiss={closeMenu}
