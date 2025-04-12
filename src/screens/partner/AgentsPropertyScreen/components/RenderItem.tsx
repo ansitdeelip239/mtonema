@@ -8,11 +8,16 @@ import GetIcon from '../../../../components/GetIcon';
 import PartnerService from '../../../../services/PartnerService';
 import Toast from 'react-native-toast-message';
 import ConfirmationModal from '../../../../components/ConfirmationModal';
+import {AgentDataStackParamList} from '../../../../navigator/components/AgentDataStack';
+import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 
 interface RenderItemProps {
   item: AgentData;
   onDataUpdate: () => void;
-  navigation: any;
+  navigation: NativeStackNavigationProp<
+    AgentDataStackParamList,
+    'AgentDataScreen'
+  >;
 }
 
 const RenderItem: React.FC<RenderItemProps> = ({
@@ -23,7 +28,7 @@ const RenderItem: React.FC<RenderItemProps> = ({
   const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false);
 
   const onEdit = () => {
-    navigation.navigate('AddProperty', {
+    navigation.navigate('AddAgentDataScreen', {
       editMode: true,
       propertyData: item,
     });

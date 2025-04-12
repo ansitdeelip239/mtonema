@@ -3,11 +3,11 @@ import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import GetIcon from '../../components/GetIcon';
 import Colors from '../../constants/Colors';
 import {PartnerBottomTabParamList} from '../../types/navigation';
-import AddAgentPropertyScreen from '../../screens/partner/AddAgentPropertyScreen/AddAgentPropertyScreen';
-import AgentDataScreen from '../../screens/partner/AgentsPropertyScreen/AgentsPropertyScreen';
 import ClientScreenStack from './ClientScreenStack';
 import {CustomBottomBar, TabScreen} from './CustomBottomBar';
 import FollowUpScreenStack from './FollowUpScreenStack';
+import AgentDataScreenStack from './AgentDataStack';
+import UnderDevelopment from '../../screens/partner/UnderDevelopment';
 
 const Tab = createBottomTabNavigator<PartnerBottomTabParamList>();
 
@@ -32,19 +32,19 @@ const tabScreens: Array<TabScreen<PartnerBottomTabParamList>> = [
   },
   {
     name: 'AddProperty',
-    component: AddAgentPropertyScreen,
+    component: UnderDevelopment,
     icon: 'listproperty',
     label: 'Add', // Shorter label for this tab
   },
   {
     name: 'Property',
-    component: AgentDataScreen,
-    icon: 'realEstate',
+    component: UnderDevelopment,
+    icon: 'home',
     label: 'Listings',
   },
   {
     name: 'AgentData',
-    component: AgentDataScreen,
+    component: AgentDataScreenStack,
     icon: 'realEstate',
     label: 'Agent Data',
   },

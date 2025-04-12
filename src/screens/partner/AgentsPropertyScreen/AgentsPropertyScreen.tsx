@@ -5,6 +5,7 @@ import {
   FlatList,
   RefreshControl,
   Text,
+  TouchableOpacity,
 } from 'react-native';
 import PartnerService from '../../../services/PartnerService';
 import {useAuth} from '../../../hooks/useAuth';
@@ -12,16 +13,15 @@ import {AgentData, FilterValues, PagingModel} from '../../../types';
 import renderFooter from './components/RenderFooter';
 import SearchHeader from './components/SearchHeader';
 import Colors from '../../../constants/Colors';
-import {BottomTabScreenProps} from '@react-navigation/bottom-tabs';
 import Header from '../../../components/Header';
-import {
-  PartnerBottomTabParamList,
-  PartnerDrawerParamList,
-} from '../../../types/navigation';
+import {PartnerDrawerParamList} from '../../../types/navigation';
 import {usePartner} from '../../../context/PartnerProvider';
 import RenderItem from './components/RenderItem';
+import {NativeStackScreenProps} from '@react-navigation/native-stack';
+import {AgentDataStackParamList} from '../../../navigator/components/AgentDataStack';
 
-type Props = BottomTabScreenProps<PartnerBottomTabParamList, 'Property'>;
+// type Props = BottomTabScreenProps<PartnerBottomTabParamList, 'Property'>;
+type Props = NativeStackScreenProps<AgentDataStackParamList, 'AgentDataScreen'>;
 
 const AgentDataScreen: React.FC<Props> = ({navigation}) => {
   const [agentData, setAgentData] = useState<AgentData[]>([]);
@@ -99,7 +99,6 @@ const AgentDataScreen: React.FC<Props> = ({navigation}) => {
             pagingInfo?.totalPage &&
             pagingInfo.currentPage < pagingInfo.totalPage,
         );
-
         setHasMoreData(hasMore);
         setCurrentPage(pagingInfo?.currentPage ?? 1);
       } catch (error) {
@@ -154,7 +153,18 @@ const AgentDataScreen: React.FC<Props> = ({navigation}) => {
 
   return (
     <View style={styles.container}>
-      <Header<PartnerDrawerParamList> title="Agent's Property" />
+      <Header<PartnerDrawerParamList> title="Agent's Property">
+        <TouchableOpacity
+          style={styles.addButton}
+          onPress={() => {
+            navigation.navigate('AddAgentDataScreen', {
+              editMode: false,
+              propertyData: {} as AgentData,
+            });
+          }}>
+          <Text style={styles.buttonText}>+ Add</Text>
+        </TouchableOpacity>
+      </Header>
       <SearchHeader
         initialFilters={filters}
         onSearch={handleSearch}
@@ -208,6 +218,19 @@ const styles = StyleSheet.create({
   },
   fabStyle: {
     backgroundColor: Colors.main,
+  },
+  addButton: {
+    backgroundColor: Colors.main,
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+    borderRadius: 8,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  buttonText: {
+    color: '#fff',
+    fontSize: 14,
+    fontWeight: '600',
   },
 });
 

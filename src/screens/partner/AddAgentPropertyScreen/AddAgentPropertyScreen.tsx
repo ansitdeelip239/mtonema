@@ -16,12 +16,9 @@ import FilterOption from '../../../components/FilterOption';
 import {formatCurrency} from '../../../utils/currency';
 import Colors from '../../../constants/Colors';
 import PartnerService from '../../../services/PartnerService';
-// import {useAuth} from '../../../hooks/useAuth';
 import useForm from '../../../hooks/useForm';
-import {BottomTabScreenProps} from '@react-navigation/bottom-tabs';
 import Header from '../../../components/Header';
 import {
-  PartnerBottomTabParamList,
   PartnerDrawerParamList,
 } from '../../../types/navigation';
 import agentPropertyFormSchema, {
@@ -35,8 +32,11 @@ import {SearchInput} from './components/SearchInput';
 import {useKeyboard} from '../../../hooks/useKeyboard';
 import {useDialog} from '../../../hooks/useDialog';
 import {useAuth} from '../../../hooks/useAuth';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { AgentDataStackParamList } from '../../../navigator/components/AgentDataStack';
 
-type Props = BottomTabScreenProps<PartnerBottomTabParamList, 'AddProperty'>;
+// type Props = BottomTabScreenProps<PartnerBottomTabParamList, 'AddProperty'>;
+type Props = NativeStackScreenProps<AgentDataStackParamList, 'AddAgentDataScreen'>;
 
 const AddAgentPropertyScreen: React.FC<Props> = ({navigation, route}) => {
   const [errors, setErrors] = useState<
@@ -148,7 +148,7 @@ const AddAgentPropertyScreen: React.FC<Props> = ({navigation, route}) => {
               : 'Property added successfully',
           });
           setAgentPropertyUpdated(prev => !prev);
-          navigation.navigate('Property');
+          navigation.navigate('AgentDataScreen');
         } else {
           // Toast.show({
           //   type: 'error',
@@ -353,7 +353,7 @@ const AddAgentPropertyScreen: React.FC<Props> = ({navigation, route}) => {
       <Header<PartnerDrawerParamList>
         title={editMode ? "Edit Agent's Property" : "Add Agent's Property"}
         backButton={true}
-        onBackPress={() => navigation.navigate('Property')}
+        onBackPress={() => navigation.navigate('AgentDataScreen')}
       />
       <KeyboardAvoidingView
         style={styles.container}
