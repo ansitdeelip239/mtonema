@@ -60,7 +60,7 @@ const partnerPropertyFormSchema = z.object({
   isFeatured: z.boolean().nullable(),
   floor: z.number().int().or(z.string().transform(Number)).nullable(),
   lmUnit: z.string().nullable(),
-  rate: z.number().or(z.string().transform(Number)).nullable(),
+  // rate: z.number().or(z.string().transform(Number)).nullable(),
   openSide: z.string().nullable(),
   facing: z.string().nullable(),
 
@@ -110,7 +110,7 @@ const apiSubmissionSchema = partnerPropertyFormSchema
     area: typeof data.area === 'string' ? parseInt(data.area, 10) : data.area,
     floor:
       typeof data.floor === 'string' ? parseInt(data.floor, 10) : data.floor,
-    rate: typeof data.rate === 'string' ? parseInt(data.rate, 10) : data.rate,
+    // rate: typeof data.rate === 'string' ? parseInt(data.rate, 10) : data.rate,
     // Ensure tags are stringified for API
     tags: Array.isArray(data.tags) ? JSON.stringify(data.tags) : data.tags,
   }));

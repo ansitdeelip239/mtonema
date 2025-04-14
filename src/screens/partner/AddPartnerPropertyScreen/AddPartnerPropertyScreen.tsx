@@ -14,15 +14,22 @@ import useForm from '../../../hooks/useForm';
 import {PartnerDrawerParamList} from '../../../types/navigation';
 import FormStepper from './components/FormStepper';
 import BasicDetailsStep from './BasicDetailsStep';
-import {PartnerPropertyFormType} from '../../../schema/PartnerPropertyFormSchema';
+import {
+  PartnerPropertyApiSubmissionType,
+  PartnerPropertyFormType,
+} from '../../../schema/PartnerPropertyFormSchema';
 import PropertyDetailsStep from './PropertyDetailsStep';
 import MediaAndSubmitStep from './MediaAndSubmitStep';
+import PartnerService from '../../../services/PartnerService';
+import {useAuth} from '../../../hooks/useAuth';
+import Toast from 'react-native-toast-message';
 
 const steps = ['Basic Info', 'Property Details', 'Media & Submit'];
 
 const AddPartnerPropertyScreen = () => {
   const [currentStep, setCurrentStep] = useState(0);
   const animatedValue = useRef(new Animated.Value(0)).current;
+  const {user} = useAuth();
 
   const {formInput, handleInputChange, handleSelect, onSubmit, loading} =
     useForm<PartnerPropertyFormType>({
@@ -49,7 +56,7 @@ const AddPartnerPropertyScreen = () => {
         isFeatured: null,
         floor: null,
         lmUnit: null,
-        rate: null,
+        // rate: null,
         openSide: null,
         parking: null,
         facing: null,
@@ -60,12 +67,33 @@ const AddPartnerPropertyScreen = () => {
         propertyAge: null,
         surveillanceCameras: null,
         pantry: null,
-        tags: null,
+        tags: [],
       },
       onSubmit: async data => {
-        // Submit property data to your API
         console.log('Submitting property data:', data);
-        // TODO: Add your API call here
+        try {
+          const payload: PartnerPropertyApiSubmissionType = {
+            ...data,
+            userId: user?.id as number,
+            tags: ['#test'],
+          };
+          const response = await PartnerService.postPartnerProperty(payload);
+          console.log(response);
+
+          if (response.success) {
+            Toast.show({
+              type: 'success',
+              text1: 'Property added successfully',
+            });
+          }
+        } catch (error) {
+          console.error('Error submitting property data:', error);
+          Toast.show({
+            type: 'error',
+            text1: 'Failed to add property',
+            text2: 'Please try again later.',
+          });
+        }
       },
     });
 

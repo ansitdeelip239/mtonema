@@ -1,4 +1,5 @@
 import url from '../constants/api';
+import {PartnerPropertyApiSubmissionType} from '../schema/PartnerPropertyFormSchema';
 import {
   AgentPropertyRequestModel,
   Client,
@@ -328,6 +329,19 @@ class PartnerService {
       return response;
     } catch (error) {
       console.error('Error completing follow-up:', error);
+      throw error;
+    }
+  }
+
+  static async postPartnerProperty(payload: PartnerPropertyApiSubmissionType) {
+    try {
+      const response = await api.post<null>(
+        `${url.postPartnerProperty}`,
+        payload,
+      );
+      return response;
+    } catch (error) {
+      console.error('Error in postPartnerProperty', error);
       throw error;
     }
   }
