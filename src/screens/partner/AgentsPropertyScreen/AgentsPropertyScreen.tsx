@@ -153,7 +153,7 @@ const AgentDataScreen: React.FC<Props> = ({navigation}) => {
 
   return (
     <View style={styles.container}>
-      <Header<PartnerDrawerParamList> title="Agent's Property">
+      <Header<PartnerDrawerParamList> title="Agent's Property" titleSize={24}>
         <TouchableOpacity
           style={styles.addButton}
           onPress={() => {
@@ -162,7 +162,7 @@ const AgentDataScreen: React.FC<Props> = ({navigation}) => {
               propertyData: {} as AgentData,
             });
           }}>
-          <Text style={styles.buttonText}>+ Add</Text>
+          <Text style={styles.buttonText}>Add</Text>
         </TouchableOpacity>
       </Header>
       <SearchHeader

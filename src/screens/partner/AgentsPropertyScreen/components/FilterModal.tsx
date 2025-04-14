@@ -1,5 +1,13 @@
 import React, {useCallback, useEffect, useMemo, useState, useRef} from 'react';
-import {StyleSheet, Text, TouchableOpacity, View, Animated} from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+  Animated,
+  ScrollView,
+  TouchableWithoutFeedback,
+} from 'react-native';
 import Colors from '../../../../constants/Colors';
 import {useMaster} from '../../../../context/MasterProvider';
 import FilterOption from '../../../../components/FilterOption';
@@ -117,7 +125,8 @@ const FilterModal = ({
         onPress={handleClose}>
         <Animated.View
           style={[styles.modalContent, {transform: [{translateY: slideAnim}]}]}
-          onStartShouldSetResponder={() => true}>
+          onStartShouldSetResponder={() => true}
+          onTouchEnd={e => e.stopPropagation()}>
           <View style={styles.headerContainer}>
             <Text style={styles.modalTitle}>Filter Properties</Text>
             {hasActiveFilters && (
@@ -126,25 +135,39 @@ const FilterModal = ({
               </TouchableOpacity>
             )}
           </View>
-          
-          <FilterOption
-            label="Location"
-            options={mappedLocations}
-            selectedValue={filters.propertyLocation}
-            onSelect={value => handleSelect('propertyLocation', value)}
-          />
-          <FilterOption
-            label="Property Type"
-            options={propertyTypes}
-            selectedValue={filters.propertyType}
-            onSelect={value => handleSelect('propertyType', value)}
-          />
-          <FilterOption
-            label="BHK Type"
-            options={bhkTypes}
-            selectedValue={filters.bhkType}
-            onSelect={value => handleSelect('bhkType', value)}
-          />
+
+          <ScrollView
+            style={styles.scrollView}
+            showsVerticalScrollIndicator={true}
+            indicatorStyle="black"
+            contentContainerStyle={styles.scrollViewContent}
+            nestedScrollEnabled={true}
+            fadingEdgeLength={40}
+          >
+            <TouchableWithoutFeedback>
+              <View>
+                <FilterOption
+                  label="Location"
+                  options={mappedLocations}
+                  selectedValue={filters.propertyLocation}
+                  onSelect={value => handleSelect('propertyLocation', value)}
+                />
+                <FilterOption
+                  label="Property Type"
+                  options={propertyTypes}
+                  selectedValue={filters.propertyType}
+                  onSelect={value => handleSelect('propertyType', value)}
+                />
+                <FilterOption
+                  label="BHK Type"
+                  options={bhkTypes}
+                  selectedValue={filters.bhkType}
+                  onSelect={value => handleSelect('bhkType', value)}
+                />
+              </View>
+            </TouchableWithoutFeedback>
+          </ScrollView>
+
           <View style={styles.buttonContainer}>
             <TouchableOpacity
               style={[styles.button, styles.cancelButton]}
@@ -180,8 +203,10 @@ const styles = StyleSheet.create({
     borderTopRightRadius: 20,
     backgroundColor: 'white',
     padding: 20,
+    paddingRight: 15,
     elevation: 15,
     shadowColor: Colors.PRIMARY_1,
+    minHeight: '60%',
   },
   headerContainer: {
     flexDirection: 'row',
@@ -221,6 +246,14 @@ const styles = StyleSheet.create({
   },
   applyText: {
     color: 'white',
+  },
+  scrollView: {
+    maxHeight: 450,
+    paddingRight: 2,
+  },
+  scrollViewContent: {
+    flexGrow: 1,
+    paddingVertical: 8,
   },
 });
 

@@ -6,19 +6,23 @@ import {useDrawer} from '../hooks/useDrawer';
 import {ParamListBase} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 
+interface HeaderProps{
+  title: string;
+  children?: React.ReactNode;
+  backButton?: boolean;
+  navigation?: NativeStackNavigationProp<any>;
+  onBackPress?: () => void;
+  titleSize?: number;
+}
+
 export default function Header<T extends ParamListBase>({
   title,
   children,
   backButton,
   navigation,
   onBackPress,
-}: {
-  title: string;
-  children?: React.ReactNode;
-  backButton?: boolean;
-  navigation?: NativeStackNavigationProp<any>;
-  onBackPress?: () => void;
-}) {
+  titleSize = 26,
+}: HeaderProps) {
   const {openDrawer} = useDrawer<T>();
 
   const handleBackPress = () => {
@@ -39,7 +43,7 @@ export default function Header<T extends ParamListBase>({
           color={Colors.black}
         />
       </TouchableOpacity>
-      <Text style={styles.headerText}>{title}</Text>
+      <Text style={[styles.headerText, {fontSize: titleSize}]}>{title}</Text>
       <View style={styles.child}>{children}</View>
     </View>
   );
@@ -51,9 +55,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: 16,
     paddingVertical: 6,
+    minHeight: 60,
   },
   headerText: {
-    fontSize: 26,
     fontWeight: '600',
     color: Colors.black,
     padding: 18,

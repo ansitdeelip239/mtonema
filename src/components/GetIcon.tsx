@@ -61,7 +61,7 @@ const GetIcon = ({iconName, color, size}: IconProps) => {
     edit: require('../assets/Icon/Edit.png'),
     delete: require('../assets/Icon/recycle-bin.png'),
     property: require('../assets/Icon/addproperty.png'),
-    hamburgerMenu: require('../assets/Images/menu.png'),
+    hamburgerMenu: require('../assets/Icon/hamburger.png'),
     realEstate: require('../assets/Icon/real-estate.png'),
     home: require('../assets/Icon/home.png'),
     client: require('../assets/Icon/customer.png'),
