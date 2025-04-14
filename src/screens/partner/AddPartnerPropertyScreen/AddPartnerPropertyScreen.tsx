@@ -3,8 +3,6 @@ import {
   View,
   StyleSheet,
   Animated,
-  TouchableOpacity,
-  Text,
   KeyboardAvoidingView,
   Platform,
   ScrollView,
@@ -13,11 +11,10 @@ import Header from '../../../components/Header';
 import useForm from '../../../hooks/useForm';
 // import PropertyDetailsStep from './steps/PropertyDetailsStep';
 // import MediaDetailsStep from './steps/MediaDetailsStep';
-import Colors from '../../../constants/Colors';
 import {PartnerDrawerParamList} from '../../../types/navigation';
 import FormStepper from './components/FormStepper';
 import BasicDetailsStep from './BasicDetailsStep';
-import { PropertyFormData } from './types';
+import {PartnerPropertyFormType} from '../../../schema/PartnerPropertyFormSchema';
 
 const steps = ['Basic Info', 'Property Details', 'Media & Submit'];
 
@@ -25,19 +22,43 @@ const AddPartnerPropertyScreen = () => {
   const [currentStep, setCurrentStep] = useState(0);
   const animatedValue = useRef(new Animated.Value(0)).current;
 
-  const {formInput, handleInputChange, onSubmit} =
-    useForm<PropertyFormData>({
+  const {formInput, handleInputChange, handleSelect, onSubmit} =
+    useForm<PartnerPropertyFormType>({
       initialState: {
-        propertyTitle: '',
-        propertyType: '',
-        propertyLocation: '',
-        bedrooms: '',
-        bathrooms: '',
-        area: '',
-        price: '',
-        description: '',
-        images: [],
-        amenities: [],
+        propertyType: null,
+        city: null,
+        propertyFor: null,
+        sellerType: null,
+        location: null,
+        zipCode: null,
+        propertyName: null,
+        price: null,
+        imageURL: null,
+        alarmSystem: null,
+        videoURL: null,
+        shortDescription: null,
+        longDescription: null,
+        readyToMove: null,
+        bhkType: null,
+        propertyForType: null,
+        area: null,
+        furnishing: null,
+        boundaryWall: null,
+        isFeatured: null,
+        floor: null,
+        lmUnit: null,
+        rate: null,
+        openSide: null,
+        parking: null,
+        facing: null,
+        constructionDone: null,
+        ceilingHeight: null,
+        gatedSecurity: null,
+        lifts: null,
+        propertyAge: null,
+        surveillanceCameras: null,
+        pantry: null,
+        tags: null,
       },
       onSubmit: async data => {
         // Submit property data to your API
@@ -79,6 +100,9 @@ const AddPartnerPropertyScreen = () => {
           <BasicDetailsStep
             formInput={formInput}
             handleInputChange={handleInputChange}
+            handleSelect={handleSelect}
+            onNext={goToNextStep}
+            // No back button in first step
           />
         );
       case 1:
@@ -86,6 +110,10 @@ const AddPartnerPropertyScreen = () => {
           <BasicDetailsStep
             formInput={formInput}
             handleInputChange={handleInputChange}
+            handleSelect={handleSelect}
+            onNext={goToNextStep}
+            onBack={goToPreviousStep}
+            showBackButton={true}
           />
         );
       case 2:
@@ -93,6 +121,10 @@ const AddPartnerPropertyScreen = () => {
           <BasicDetailsStep
             formInput={formInput}
             handleInputChange={handleInputChange}
+            handleSelect={handleSelect}
+            onNext={onSubmit} // Final step submits the form
+            onBack={goToPreviousStep}
+            showBackButton={true}
           />
         );
       default:
@@ -102,36 +134,28 @@ const AddPartnerPropertyScreen = () => {
 
   return (
     <View style={styles.container}>
-      <Header<PartnerDrawerParamList> title="Add Property" backButton />
+      <Header<PartnerDrawerParamList> title="Add Property" />
+
+      {/* Fixed FormStepper */}
+      <View style={styles.stepperContainer}>
+        <FormStepper
+          steps={steps}
+          currentStep={currentStep}
+          animatedValue={animatedValue}
+        />
+      </View>
+
+      {/* Scrollable content */}
       <KeyboardAvoidingView
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         style={styles.keyboardAvoidingView}>
-        <ScrollView contentContainerStyle={styles.scrollContent}>
-          <FormStepper
-            steps={steps}
-            currentStep={currentStep}
-            animatedValue={animatedValue}
-          />
-
+        <ScrollView
+          contentContainerStyle={styles.scrollContent}
+          showsVerticalScrollIndicator={false}>
           <View style={styles.stepContent}>{renderStep()}</View>
 
-          <View style={styles.buttonsContainer}>
-            {currentStep > 0 && (
-              <TouchableOpacity
-                style={[styles.button, styles.backButton]}
-                onPress={goToPreviousStep}>
-                <Text style={styles.backButtonText}>Back</Text>
-              </TouchableOpacity>
-            )}
-
-            <TouchableOpacity
-              style={[styles.button, styles.nextButton]}
-              onPress={goToNextStep}>
-              <Text style={styles.nextButtonText}>
-                {currentStep === steps.length - 1 ? 'Submit' : 'Next'}
-              </Text>
-            </TouchableOpacity>
-          </View>
+          {/* Bottom padding to avoid content being hidden by tab bar */}
+          <View style={styles.bottomPadding} />
         </ScrollView>
       </KeyboardAvoidingView>
     </View>
@@ -143,48 +167,32 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#fff',
   },
+  stepperContainer: {
+    backgroundColor: '#fff',
+    zIndex: 10,
+    ...Platform.select({
+      ios: {
+        shadowColor: '#000',
+        shadowOffset: {width: 0, height: 2},
+        shadowOpacity: 0.1,
+        shadowRadius: 2,
+      },
+      android: {
+        elevation: 2,
+      },
+    }),
+  },
   keyboardAvoidingView: {
     flex: 1,
   },
   scrollContent: {
-    // flexGrow: 1,
-    // paddingBottom: 30,
+    flexGrow: 1,
   },
   stepContent: {
-    flex: 1,
     padding: 20,
   },
-  buttonsContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    paddingHorizontal: 20,
-    marginTop: 20,
-  },
-  button: {
-    paddingVertical: 12,
-    borderRadius: 8,
-    alignItems: 'center',
-    justifyContent: 'center',
-    minWidth: 120,
-  },
-  backButton: {
-    backgroundColor: '#f5f5f5',
-    borderWidth: 1,
-    borderColor: '#ddd',
-  },
-  nextButton: {
-    backgroundColor: Colors.main,
-    marginLeft: 'auto',
-  },
-  backButtonText: {
-    color: '#666',
-    fontWeight: '600',
-    fontSize: 16,
-  },
-  nextButtonText: {
-    color: 'white',
-    fontWeight: '600',
-    fontSize: 16,
+  bottomPadding: {
+    height: 80, // Padding to avoid tab bar overlap
   },
 });
 

@@ -13,7 +13,7 @@ const FilterOption = ({
 }: {
   label: string;
   options: MasterDetailModel[];
-  selectedValue: string | null;
+  selectedValue: string | null | undefined;
   onSelect: (value: string) => void;
   error?: string;
 }) => {
@@ -102,7 +102,7 @@ const FilterOption = ({
 
 const styles = StyleSheet.create({
   filterSection: {
-    marginBottom: 20,
+    // marginBottom: 20,
   },
   filterLabel: {
     fontSize: 16,

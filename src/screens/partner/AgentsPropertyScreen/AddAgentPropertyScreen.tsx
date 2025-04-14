@@ -402,6 +402,7 @@ const styles = StyleSheet.create({
   },
   dropdownField: {
     marginBottom: 4,
+    gap: 16,
   },
   switchContainer: {
     flexDirection: 'row',
