@@ -15,6 +15,7 @@ import {PartnerDrawerParamList} from '../../../types/navigation';
 import FormStepper from './components/FormStepper';
 import BasicDetailsStep from './BasicDetailsStep';
 import {PartnerPropertyFormType} from '../../../schema/PartnerPropertyFormSchema';
+import PropertyDetailsStep from './PropertyDetailsStep';
 
 const steps = ['Basic Info', 'Property Details', 'Media & Submit'];
 
@@ -107,7 +108,7 @@ const AddPartnerPropertyScreen = () => {
         );
       case 1:
         return (
-          <BasicDetailsStep
+          <PropertyDetailsStep
             formInput={formInput}
             handleInputChange={handleInputChange}
             handleSelect={handleSelect}
