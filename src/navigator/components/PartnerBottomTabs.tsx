@@ -8,6 +8,7 @@ import {CustomBottomBar, TabScreen} from './CustomBottomBar';
 import FollowUpScreenStack from './FollowUpScreenStack';
 import AgentDataScreenStack from './AgentDataStack';
 import UnderDevelopment from '../../screens/partner/UnderDevelopment';
+import AddPartnerPropertyScreen from '../../screens/partner/AddPartnerPropertyScreen/AddPartnerPropertyScreen';
 
 const Tab = createBottomTabNavigator<PartnerBottomTabParamList>();
 
@@ -32,7 +33,7 @@ const tabScreens: Array<TabScreen<PartnerBottomTabParamList>> = [
   },
   {
     name: 'AddProperty',
-    component: UnderDevelopment,
+    component: AddPartnerPropertyScreen,
     icon: 'listproperty',
     label: 'Add', // Shorter label for this tab
   },

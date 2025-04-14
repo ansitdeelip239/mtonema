@@ -1,6 +1,6 @@
 import React from 'react';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import AddAgentPropertyScreen from '../../screens/partner/AddAgentPropertyScreen/AddAgentPropertyScreen';
+import AddAgentPropertyScreen from '../../screens/partner/AgentsPropertyScreen/AddAgentPropertyScreen';
 import AgentDataScreen from '../../screens/partner/AgentsPropertyScreen/AgentsPropertyScreen';
 import {AgentData} from '../../types';
 
