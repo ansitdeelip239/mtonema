@@ -17,6 +17,7 @@ import {useFollowUps} from '../../../hooks/useFollowUps';
 import FollowUpListSection from './components/FollowUpListSection';
 import {usePartner} from '../../../context/PartnerProvider';
 import {navigate} from '../../../navigator/NavigationRef';
+import {Badge} from 'react-native-paper';
 
 type Props = NativeStackScreenProps<FollowUpStackParamList, 'FollowUpScreen'>;
 
@@ -149,17 +150,19 @@ const FollowUpScreen: React.FC<Props> = ({navigation}) => {
                 <GetIcon iconName="calendarOverdue" size={24} />
               </View>
               <View style={styles.navButtonTextContainer}>
-                <Text style={styles.navButtonTitle}>Overdue Follow-ups</Text>
+                <View style={styles.titleContainer}>
+                  <Text style={styles.navButtonTitle}>Overdue Follow-ups</Text>
+                  {overdueFollowUps.length > 0 && (
+                    <Badge style={styles.overdueBadge} size={22}>
+                      {overdueFollowUps.length}
+                    </Badge>
+                  )}
+                </View>
                 <Text style={styles.navButtonSubtitle}>
                   Follow-ups that have passed their due date
                 </Text>
               </View>
-              <View style={styles.countContainer}>
-                <Text style={[styles.count, styles.overdueCount]}>
-                  {overdueFollowUps.length}
-                </Text>
-                <GetIcon iconName="chevronRight" size={24} color="#666" />
-              </View>
+              <GetIcon iconName="chevronRight" size={24} color="#666" />
             </View>
           </TouchableOpacity>
 
@@ -175,17 +178,19 @@ const FollowUpScreen: React.FC<Props> = ({navigation}) => {
                 <GetIcon iconName="calendarUpcoming" size={24} />
               </View>
               <View style={styles.navButtonTextContainer}>
-                <Text style={styles.navButtonTitle}>Upcoming Follow-ups</Text>
+                <View style={styles.titleContainer}>
+                  <Text style={styles.navButtonTitle}>Upcoming Follow-ups</Text>
+                  {upcomingFollowUps.length > 0 && (
+                    <Badge style={styles.upcomingBadge} size={22}>
+                      {upcomingFollowUps.length}
+                    </Badge>
+                  )}
+                </View>
                 <Text style={styles.navButtonSubtitle}>
                   Follow-ups scheduled for the next 7 days
                 </Text>
               </View>
-              <View style={styles.countContainer}>
-                <Text style={[styles.count, styles.upcomingCount]}>
-                  {upcomingFollowUps.length}
-                </Text>
-                <GetIcon iconName="chevronRight" size={24} color="#666" />
-              </View>
+              <GetIcon iconName="chevronRight" size={24} color="#666" />
             </View>
           </TouchableOpacity>
 
@@ -201,17 +206,19 @@ const FollowUpScreen: React.FC<Props> = ({navigation}) => {
                 <GetIcon iconName="calendarSomeday" size={24} />
               </View>
               <View style={styles.navButtonTextContainer}>
-                <Text style={styles.navButtonTitle}>Someday Follow-ups</Text>
+                <View style={styles.titleContainer}>
+                  <Text style={styles.navButtonTitle}>Someday Follow-ups</Text>
+                  {somedayFollowUps.length > 0 && (
+                    <Badge style={styles.somedayBadge} size={22}>
+                      {somedayFollowUps.length}
+                    </Badge>
+                  )}
+                </View>
                 <Text style={styles.navButtonSubtitle}>
                   Follow-ups scheduled for later dates
                 </Text>
               </View>
-              <View style={styles.countContainer}>
-                <Text style={[styles.count, styles.somedayCount]}>
-                  {somedayFollowUps.length}
-                </Text>
-                <GetIcon iconName="chevronRight" size={24} color="#666" />
-              </View>
+              <GetIcon iconName="chevronRight" size={24} color="#666" />
             </View>
           </TouchableOpacity>
         </View>
@@ -271,65 +278,56 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   overdueButton: {
-    backgroundColor: '#fff0f0', // Light red background
+    backgroundColor: '#fff0f0',
     borderLeftWidth: 4,
-    borderLeftColor: '#e74c3c', // Red border
+    borderLeftColor: '#e74c3c',
   },
   overdueIconContainer: {
-    backgroundColor: '#e74c3c', // Red background for icon
+    backgroundColor: '#e74c3c',
   },
   upcomingIconContainer: {
-    backgroundColor: Colors.main, // Main app color for upcoming
+    backgroundColor: Colors.main,
   },
   somedayButton: {
-    backgroundColor: '#f5f5f5', // Light gray background
+    backgroundColor: '#f5f5f5',
     borderLeftWidth: 4,
-    borderLeftColor: '#95a5a6', // Gray border
+    borderLeftColor: '#95a5a6',
   },
   somedayIconContainer: {
-    backgroundColor: '#95a5a6', // Gray background for icon
+    backgroundColor: '#95a5a6',
   },
   navButtonTextContainer: {
     flex: 1,
-  },
-  navButtonTitle: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    color: '#333',
-    marginBottom: 4,
   },
   navButtonSubtitle: {
     fontSize: 14,
     color: '#666',
   },
   bottomPadding: {
-    height: 100, // Keeps the larger padding for bottom navigation
+    height: 100,
   },
-  countContainer: {
+  titleContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 8,
+    marginBottom: 4,
   },
-  count: {
+  navButtonTitle: {
     fontSize: 16,
     fontWeight: 'bold',
-    paddingHorizontal: 8,
-    paddingVertical: 4,
-    borderRadius: 12,
-    minWidth: 28,
-    textAlign: 'center',
+    color: '#333',
+    marginRight: 8,
   },
-  overdueCount: {
-    backgroundColor: '#ffe5e5',
-    color: '#e74c3c',
+  overdueBadge: {
+    backgroundColor: '#e74c3c',
+    color: 'white',
   },
-  upcomingCount: {
-    backgroundColor: Colors.main + '20',
-    color: Colors.main,
+  upcomingBadge: {
+    backgroundColor: Colors.main,
+    color: 'white',
   },
-  somedayCount: {
-    backgroundColor: '#ecf0f1',
-    color: '#95a5a6',
+  somedayBadge: {
+    backgroundColor: '#95a5a6',
+    color: 'white',
   },
 });
 
