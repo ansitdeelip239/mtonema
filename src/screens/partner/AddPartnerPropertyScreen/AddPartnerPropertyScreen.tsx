@@ -16,6 +16,7 @@ import FormStepper from './components/FormStepper';
 import BasicDetailsStep from './BasicDetailsStep';
 import {PartnerPropertyFormType} from '../../../schema/PartnerPropertyFormSchema';
 import PropertyDetailsStep from './PropertyDetailsStep';
+import MediaAndSubmitStep from './MediaAndSubmitStep';
 
 const steps = ['Basic Info', 'Property Details', 'Media & Submit'];
 
@@ -23,7 +24,7 @@ const AddPartnerPropertyScreen = () => {
   const [currentStep, setCurrentStep] = useState(0);
   const animatedValue = useRef(new Animated.Value(0)).current;
 
-  const {formInput, handleInputChange, handleSelect, onSubmit} =
+  const {formInput, handleInputChange, handleSelect, onSubmit, loading} =
     useForm<PartnerPropertyFormType>({
       initialState: {
         propertyType: null,
@@ -117,15 +118,16 @@ const AddPartnerPropertyScreen = () => {
             showBackButton={true}
           />
         );
+
       case 2:
         return (
-          <BasicDetailsStep
+          <MediaAndSubmitStep
             formInput={formInput}
             handleInputChange={handleInputChange}
-            handleSelect={handleSelect}
-            onNext={onSubmit} // Final step submits the form
+            onSubmit={onSubmit}
             onBack={goToPreviousStep}
             showBackButton={true}
+            isSubmitting={loading}
           />
         );
       default:
