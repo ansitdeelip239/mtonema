@@ -31,7 +31,7 @@ const AddPartnerPropertyScreen = () => {
   const animatedValue = useRef(new Animated.Value(0)).current;
   const {user} = useAuth();
 
-  const {formInput, handleInputChange, handleSelect, onSubmit, loading} =
+  const {formInput, handleInputChange, handleSelect, onSubmit, loading, resetForm} =
     useForm<PartnerPropertyFormType>({
       initialState: {
         propertyType: null,
@@ -67,7 +67,7 @@ const AddPartnerPropertyScreen = () => {
         propertyAge: null,
         surveillanceCameras: null,
         pantry: null,
-        tags: [],
+        tags: null,
       },
       onSubmit: async data => {
         console.log('Submitting property data:', data);
@@ -75,16 +75,18 @@ const AddPartnerPropertyScreen = () => {
           const payload: PartnerPropertyApiSubmissionType = {
             ...data,
             userId: user?.id as number,
-            tags: ['#test'],
+            tags: "['#test']",
           };
+          console.log('Payload for API:', payload);
+
           const response = await PartnerService.postPartnerProperty(payload);
-          console.log(response);
 
           if (response.success) {
             Toast.show({
               type: 'success',
               text1: 'Property added successfully',
             });
+            resetForm();
           }
         } catch (error) {
           console.error('Error submitting property data:', error);

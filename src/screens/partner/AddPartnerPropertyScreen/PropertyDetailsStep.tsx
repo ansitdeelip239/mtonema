@@ -67,6 +67,7 @@ const PropertyDetailsStep: React.FC<PropertyDetailsStepProps> = ({
     // Define field mappings for each property type
     const fieldMappings = {
       CoWorking: [
+        'propertyForType',
         'readyToMove',
         'lifts',
         'pantry',
@@ -74,6 +75,7 @@ const PropertyDetailsStep: React.FC<PropertyDetailsStepProps> = ({
         'furnishing',
         'parking',
         'facing',
+        'location',
         'zipCode',
         'price',
         'area',
@@ -82,12 +84,14 @@ const PropertyDetailsStep: React.FC<PropertyDetailsStepProps> = ({
         'longDescription',
       ],
       FOCP: [
+        'propertyForType',
         'lifts',
         'bhkType',
         'floor',
         'furnishing',
         'parking',
         'facing',
+        'location',
         'zipCode',
         'price',
         'area',
@@ -103,6 +107,7 @@ const PropertyDetailsStep: React.FC<PropertyDetailsStepProps> = ({
         'furnishing',
         'parking',
         'facing',
+        'location',
         'zipCode',
         'price',
         'area',
@@ -111,6 +116,7 @@ const PropertyDetailsStep: React.FC<PropertyDetailsStepProps> = ({
         'longDescription',
       ],
       Flat: [
+        'propertyForType',
         'readyToMove',
         'lifts',
         'bhkType',
@@ -118,6 +124,7 @@ const PropertyDetailsStep: React.FC<PropertyDetailsStepProps> = ({
         'furnishing',
         'parking',
         'facing',
+        'location',
         'zipCode',
         'price',
         'area',
@@ -126,6 +133,7 @@ const PropertyDetailsStep: React.FC<PropertyDetailsStepProps> = ({
         'longDescription',
       ],
       'Independent House': [
+        'propertyForType',
         'readyToMove',
         'lifts',
         'bhkType',
@@ -133,6 +141,7 @@ const PropertyDetailsStep: React.FC<PropertyDetailsStepProps> = ({
         'furnishing',
         'parking',
         'facing',
+        'location',
         'zipCode',
         'price',
         'area',
@@ -141,6 +150,7 @@ const PropertyDetailsStep: React.FC<PropertyDetailsStepProps> = ({
         'longDescription',
       ],
       Office: [
+        'propertyForType',
         'readyToMove',
         'lifts',
         'pantry',
@@ -148,6 +158,7 @@ const PropertyDetailsStep: React.FC<PropertyDetailsStepProps> = ({
         'furnishing',
         'parking',
         'facing',
+        'location',
         'zipCode',
         'price',
         'area',
@@ -156,6 +167,7 @@ const PropertyDetailsStep: React.FC<PropertyDetailsStepProps> = ({
         'longDescription',
       ],
       'PG/Hostel': [
+        'propertyForType',
         'readyToMove',
         'lifts',
         'bhkType',
@@ -163,6 +175,7 @@ const PropertyDetailsStep: React.FC<PropertyDetailsStepProps> = ({
         'furnishing',
         'parking',
         'facing',
+        'location',
         'zipCode',
         'price',
         'area',
@@ -171,10 +184,12 @@ const PropertyDetailsStep: React.FC<PropertyDetailsStepProps> = ({
         'longDescription',
       ],
       Plot: [
+        'propertyForType',
         'constructionDone',
         'boundaryWall',
         'openSide',
         'facing',
+        'location',
         'zipCode',
         'price',
         'area',
@@ -183,6 +198,7 @@ const PropertyDetailsStep: React.FC<PropertyDetailsStepProps> = ({
         'longDescription',
       ],
       'Retail Shop': [
+        'propertyForType',
         'readyToMove',
         'lifts',
         'ceilingHeight',
@@ -193,6 +209,7 @@ const PropertyDetailsStep: React.FC<PropertyDetailsStepProps> = ({
         'alarmSystem',
         'parking',
         'facing',
+        'location',
         'zipCode',
         'price',
         'area',
@@ -201,6 +218,7 @@ const PropertyDetailsStep: React.FC<PropertyDetailsStepProps> = ({
         'longDescription',
       ],
       Shop: [
+        'propertyForType',
         'readyToMove',
         'lifts',
         'ceilingHeight',
@@ -211,6 +229,7 @@ const PropertyDetailsStep: React.FC<PropertyDetailsStepProps> = ({
         'alarmSystem',
         'parking',
         'facing',
+        'location',
         'zipCode',
         'price',
         'area',
@@ -225,6 +244,7 @@ const PropertyDetailsStep: React.FC<PropertyDetailsStepProps> = ({
         'alarmSystem',
         'parking',
         'facing',
+        'location',
         'zipCode',
         'price',
         'area',
@@ -237,6 +257,24 @@ const PropertyDetailsStep: React.FC<PropertyDetailsStepProps> = ({
         'gatedSecurity',
         'surveillanceCameras',
         'alarmSystem',
+        'location',
+        'zipCode',
+        'price',
+        'area',
+        'lmUnit',
+        'shortDescription',
+        'longDescription',
+      ],
+      Others: [
+        'propertyAge',
+        'gatedSecurity',
+        'surveillanceCameras',
+        'alarmSystem',
+        'location',
+        'zipCode',
+        'price',
+        'area',
+        'lmUnit',
         'shortDescription',
         'longDescription',
       ],
@@ -267,6 +305,22 @@ const PropertyDetailsStep: React.FC<PropertyDetailsStepProps> = ({
   // Render the appropriate form field based on field type
   const renderField = (field: string) => {
     switch (field) {
+      case 'propertyForType':
+        return (
+          <FilterOption
+            key={field}
+            label="Property Category"
+            options={convertToMasterDetailModel(['Residential', 'Commercial'])}
+            selectedValue={
+              formInput.propertyForType === null
+                ? null
+                : formInput.propertyForType
+                ? 'Residential'
+                : 'Commercial'
+            }
+            onSelect={value => handleFieldSelect('propertyForType', value)}
+          />
+        );
       case 'readyToMove':
         return (
           <FilterOption
@@ -291,11 +345,7 @@ const PropertyDetailsStep: React.FC<PropertyDetailsStepProps> = ({
             label="Lift Available"
             options={convertToMasterDetailModel(['Yes', 'No'])}
             selectedValue={
-              formInput.lifts === null
-                ? null
-                : formInput.lifts
-                ? 'Yes'
-                : 'No'
+              formInput.lifts === null ? null : formInput.lifts ? 'Yes' : 'No'
             }
             onSelect={value => toggleBooleanField('lifts', value)}
           />
@@ -308,11 +358,7 @@ const PropertyDetailsStep: React.FC<PropertyDetailsStepProps> = ({
             label="Pantry"
             options={convertToMasterDetailModel(['Yes', 'No'])}
             selectedValue={
-              formInput.pantry === null
-                ? null
-                : formInput.pantry
-                ? 'Yes'
-                : 'No'
+              formInput.pantry === null ? null : formInput.pantry ? 'Yes' : 'No'
             }
             onSelect={value => toggleBooleanField('pantry', value)}
           />
@@ -366,6 +412,22 @@ const PropertyDetailsStep: React.FC<PropertyDetailsStepProps> = ({
             options={masterData?.Facing || []}
             selectedValue={formInput.facing}
             onSelect={value => handleFieldSelect('facing', value)}
+          />
+        );
+
+      case 'location':
+        return (
+          <MaterialTextInput
+            key={field}
+            field="location"
+            formInput={formInput}
+            setFormInput={handleInputChange}
+            label="Location"
+            mode="outlined"
+            placeholder="Enter property location"
+            autoCapitalize="words"
+            autoCorrect={false}
+            returnKeyType="done"
           />
         );
 
