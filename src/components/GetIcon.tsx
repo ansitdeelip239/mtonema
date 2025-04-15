@@ -45,7 +45,8 @@ export type IconEnum =
   | 'chevronRight'
   | 'time'
   | 'plus'
-  | 'checkmark';
+  | 'checkmark'
+  | 'greenCheck';
 
 type IconProps = {
   iconName: IconEnum;
@@ -99,6 +100,7 @@ const GetIcon = ({iconName, color, size}: IconProps) => {
     time: require('../assets/Icon/time.png'),
     plus: require('../assets/Icon/plus.png'),
     checkmark: require('../assets/Icon/check-mark.png'),
+    greenCheck: require('../assets/Icon/check.png'),
   };
 
   const imageStyle = [

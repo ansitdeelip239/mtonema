@@ -1,10 +1,10 @@
 import React, {useCallback} from 'react';
-import {View, StyleSheet, TouchableOpacity, Text} from 'react-native';
+import {View, StyleSheet} from 'react-native';
 import {MaterialTextInput} from '../../../components/MaterialTextInput';
 import {PartnerPropertyFormType} from '../../../schema/PartnerPropertyFormSchema';
 import FilterOption from '../../../components/FilterOption';
 import {useMaster} from '../../../context/MasterProvider';
-import Colors from '../../../constants/Colors';
+import FormNavigationButtons from './components/FormNavigationButtons';
 
 interface BasicDetailsStepProps {
   formInput: PartnerPropertyFormType;
@@ -30,14 +30,12 @@ const BasicDetailsStep: React.FC<BasicDetailsStepProps> = ({
 
   const handleFieldSelect = useCallback(
     (field: keyof PartnerPropertyFormType, value: string) => {
-      // validateField(field, value);
       handleSelect(field, value);
     },
     [handleSelect],
   );
 
   // Check if the required property type is selected
-  // Improve validation to handle all possible invalid states
   const isNextEnabled =
     formInput.propertyType !== null &&
     formInput.propertyType !== undefined &&
@@ -83,31 +81,12 @@ const BasicDetailsStep: React.FC<BasicDetailsStepProps> = ({
       />
 
       {/* Navigation buttons */}
-      <View style={styles.buttonsContainer}>
-        {showBackButton && (
-          <TouchableOpacity
-            style={[styles.button, styles.backButton]}
-            onPress={onBack}>
-            <Text style={styles.backButtonText}>Back</Text>
-          </TouchableOpacity>
-        )}
-
-        <TouchableOpacity
-          style={[
-            styles.button,
-            isNextEnabled ? styles.nextButton : styles.disabledButton,
-            showBackButton ? {} : styles.fullWidthButton,
-          ]}
-          onPress={isNextEnabled ? onNext : undefined}
-          disabled={!isNextEnabled}>
-          <Text
-            style={
-              isNextEnabled ? styles.nextButtonText : styles.disabledButtonText
-            }>
-            Next
-          </Text>
-        </TouchableOpacity>
-      </View>
+      <FormNavigationButtons
+        onNext={onNext}
+        onBack={onBack}
+        showBackButton={showBackButton}
+        isNextEnabled={isNextEnabled}
+      />
     </View>
   );
 };
@@ -115,59 +94,6 @@ const BasicDetailsStep: React.FC<BasicDetailsStepProps> = ({
 const styles = StyleSheet.create({
   container: {
     gap: 16,
-  },
-  stepTitle: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    marginBottom: 8,
-  },
-  stepDescription: {
-    fontSize: 14,
-    color: '#666',
-    marginBottom: 20,
-  },
-  buttonsContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginTop: 24,
-  },
-  button: {
-    paddingVertical: 12,
-    borderRadius: 8,
-    alignItems: 'center',
-    justifyContent: 'center',
-    minWidth: 120,
-  },
-  backButton: {
-    backgroundColor: '#f5f5f5',
-    borderWidth: 1,
-    borderColor: '#ddd',
-  },
-  nextButton: {
-    backgroundColor: Colors.main,
-    marginLeft: 'auto',
-  },
-  fullWidthButton: {
-    flex: 1,
-  },
-  backButtonText: {
-    color: '#666',
-    fontWeight: '600',
-    fontSize: 16,
-  },
-  nextButtonText: {
-    color: 'white',
-    fontWeight: '600',
-    fontSize: 16,
-  },
-  disabledButton: {
-    backgroundColor: '#cccccc',
-    marginLeft: 'auto',
-  },
-  disabledButtonText: {
-    color: '#888888',
-    fontWeight: '600',
-    fontSize: 16,
   },
 });
 

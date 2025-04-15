@@ -9,8 +9,6 @@ import {
 } from 'react-native';
 import Header from '../../../components/Header';
 import useForm from '../../../hooks/useForm';
-// import PropertyDetailsStep from './steps/PropertyDetailsStep';
-// import MediaDetailsStep from './steps/MediaDetailsStep';
 import {PartnerDrawerParamList} from '../../../types/navigation';
 import FormStepper from './components/FormStepper';
 import BasicDetailsStep from './BasicDetailsStep';
@@ -23,6 +21,7 @@ import MediaAndSubmitStep from './MediaAndSubmitStep';
 import PartnerService from '../../../services/PartnerService';
 import {useAuth} from '../../../hooks/useAuth';
 import Toast from 'react-native-toast-message';
+import {initialFormState} from '../../../utils/partner-property-form-initial-state';
 
 const steps = ['Basic Info', 'Property Details', 'Media & Submit'];
 
@@ -31,73 +30,42 @@ const AddPartnerPropertyScreen = () => {
   const animatedValue = useRef(new Animated.Value(0)).current;
   const {user} = useAuth();
 
-  const {formInput, handleInputChange, handleSelect, onSubmit, loading, resetForm} =
-    useForm<PartnerPropertyFormType>({
-      initialState: {
-        propertyType: null,
-        city: null,
-        propertyFor: null,
-        sellerType: null,
-        location: null,
-        zipCode: null,
-        propertyName: null,
-        price: null,
-        imageURL: null,
-        alarmSystem: null,
-        videoURL: 'https://youtu.be/YZWhTCO-0-g',
-        shortDescription: null,
-        longDescription: null,
-        readyToMove: null,
-        bhkType: null,
-        propertyForType: null,
-        area: null,
-        furnishing: null,
-        boundaryWall: null,
-        isFeatured: null,
-        floor: null,
-        lmUnit: null,
-        // rate: null,
-        openSide: null,
-        parking: null,
-        facing: null,
-        constructionDone: null,
-        ceilingHeight: null,
-        gatedSecurity: null,
-        lifts: null,
-        propertyAge: null,
-        surveillanceCameras: null,
-        pantry: null,
-        tags: null,
-      },
-      onSubmit: async data => {
-        console.log('Submitting property data:', data);
-        try {
-          const payload: PartnerPropertyApiSubmissionType = {
-            ...data,
-            userId: user?.id as number,
-            // tags: "['#test']",
-          };
-          console.log('Payload for API:', payload);
+  const {
+    formInput,
+    handleInputChange,
+    handleSelect,
+    onSubmit,
+    loading,
+    resetForm,
+  } = useForm<PartnerPropertyFormType>({
+    initialState: initialFormState,
+    onSubmit: async data => {
+      try {
+        const payload: PartnerPropertyApiSubmissionType = {
+          ...data,
+          userId: user?.id as number,
+        };
 
-          const response = await PartnerService.postPartnerProperty(payload);
+        const response = await PartnerService.postPartnerProperty(payload);
 
-          if (response.success) {
-            Toast.show({
-              type: 'success',
-              text1: 'Property added successfully',
-            });
-            resetForm();
-          }
-        } catch (error) {
-          console.error('Error submitting property data:', error);
+        if (response.success) {
           Toast.show({
-            type: 'error',
-            text1: 'Failed to add property',
-            text2: 'Please try again later.',
+            type: 'success',
+            text1: 'Property added successfully',
           });
+          resetForm();
+          // Optionally, navigate back to listings screen
         }
-      },
-    });
+      } catch (error) {
+        console.error('Error submitting property data:', error);
+        Toast.show({
+          type: 'error',
+          text1: 'Failed to add property',
+          text2: 'Please try again later.',
+        });
+      }
+    },
+  });
 
   const goToNextStep = () => {
     if (currentStep < steps.length - 1) {
@@ -125,6 +93,7 @@ const AddPartnerPropertyScreen = () => {
     }
   };
 
+  // Render the current step based on index
   const renderStep = () => {
     switch (currentStep) {
       case 0:
@@ -134,7 +103,6 @@ const AddPartnerPropertyScreen = () => {
             handleInputChange={handleInputChange}
             handleSelect={handleSelect}
             onNext={goToNextStep}
-            // No back button in first step
           />
         );
       case 1:
@@ -148,7 +116,6 @@ const AddPartnerPropertyScreen = () => {
             showBackButton={true}
           />
         );
-
       case 2:
         return (
           <MediaAndSubmitStep
