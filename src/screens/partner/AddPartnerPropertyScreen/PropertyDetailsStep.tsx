@@ -1,4 +1,4 @@
-import React, {useCallback, useMemo} from 'react';
+import React, {useCallback, useEffect, useMemo} from 'react';
 import {View, StyleSheet, Text} from 'react-native';
 import {PartnerPropertyFormType} from '../../../schema/PartnerPropertyFormSchema';
 import PropertyFieldRenderer from './components/PropertyFieldRenderer';
@@ -16,8 +16,6 @@ interface PropertyDetailsStepProps {
   onBack?: () => void;
   showBackButton?: boolean;
 }
-
-// Property type field mapping configuration
 
 const PropertyDetailsStep: React.FC<PropertyDetailsStepProps> = ({
   formInput,
@@ -68,15 +66,18 @@ const PropertyDetailsStep: React.FC<PropertyDetailsStepProps> = ({
   }, [formInput.propertyType]);
 
   // Common fields that appear in all property types
-  const commonFields = [
-    'location',
-    'zipCode',
-    'price',
-    'area',
-    'lmUnit',
-    'shortDescription',
-    'longDescription',
-  ];
+  const commonFields = useMemo(
+    () => [
+      'location',
+      'zipCode',
+      'price',
+      'area',
+      'lmUnit',
+      'shortDescription',
+      'longDescription',
+    ],
+    [],
+  );
 
   // Determine if form is valid for next step
   const isNextEnabled = useMemo(() => {
@@ -88,36 +89,46 @@ const PropertyDetailsStep: React.FC<PropertyDetailsStepProps> = ({
     return !!(formInput.price && formInput.area);
   }, [formInput]);
 
+  // Only render fields that are visible and relevant to the current property type
+  const visibleFields = useMemo(() => {
+    if (!formInput.propertyType) {
+      return [];
+    }
+
+    // Combine property-specific fields with common fields
+    return [...fieldsToRender, ...commonFields];
+  }, [fieldsToRender, commonFields, formInput.propertyType]);
+
+  useEffect(() => {
+    console.log(visibleFields);
+  }, [visibleFields]);
+
   return (
     <View style={styles.container}>
       {formInput.propertyType ? (
         <View>
           <View style={styles.fieldsContainer}>
-            {/* Render property-specific fields */}
-            {fieldsToRender.map(field => (
-              <View key={field} style={styles.fieldWrapper}>
+            {/* Key change: Map and render fields differently */}
+            {visibleFields.map(field => {
+              // Render the field and capture the result
+              const fieldComponent = (
                 <PropertyFieldRenderer
+                  key={field}
                   field={field}
                   formInput={formInput}
                   handleInputChange={handleInputChange}
                   handleFieldSelect={handleFieldSelect}
                   toggleBooleanField={toggleBooleanField}
                 />
-              </View>
-            ))}
+              );
 
-            {/* Render common fields */}
-            {commonFields.map(field => (
-              <View key={field} style={styles.fieldWrapper}>
-                <PropertyFieldRenderer
-                  field={field}
-                  formInput={formInput}
-                  handleInputChange={handleInputChange}
-                  handleFieldSelect={handleFieldSelect}
-                  toggleBooleanField={toggleBooleanField}
-                />
-              </View>
-            ))}
+              // Only wrap and render if fieldComponent isn't null
+              return fieldComponent ? (
+                <View key={field} style={styles.fieldWrapper}>
+                  {fieldComponent}
+                </View>
+              ) : null;
+            })}
           </View>
 
           {/* Navigation buttons */}

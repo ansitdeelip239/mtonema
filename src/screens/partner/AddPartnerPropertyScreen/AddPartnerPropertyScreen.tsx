@@ -6,6 +6,7 @@ import {
   KeyboardAvoidingView,
   Platform,
   ScrollView,
+  Dimensions,
 } from 'react-native';
 import Header from '../../../components/Header';
 import useForm from '../../../hooks/useForm';
@@ -23,12 +24,17 @@ import {useAuth} from '../../../hooks/useAuth';
 import Toast from 'react-native-toast-message';
 import {initialFormState} from '../../../utils/partner-property-form-initial-state';
 
+const {width} = Dimensions.get('window');
 const steps = ['Basic Info', 'Property Details', 'Media & Submit'];
 
 const AddPartnerPropertyScreen = () => {
   const [currentStep, setCurrentStep] = useState(0);
   const animatedValue = useRef(new Animated.Value(0)).current;
+  const slideAnimation = useRef(new Animated.Value(0)).current;
   const {user} = useAuth();
+
+  // Create refs for each ScrollView
+  const scrollViewRefs = useRef<(ScrollView | null)[]>([null, null, null]);
 
   const {
     formInput,
@@ -69,12 +75,27 @@ const AddPartnerPropertyScreen = () => {
 
   const goToNextStep = () => {
     if (currentStep < steps.length - 1) {
+      // Animate stepper
       Animated.timing(animatedValue, {
         toValue: currentStep + 1,
         duration: 300,
         useNativeDriver: false,
+      }).start();
+
+      // Animate slide
+      Animated.timing(slideAnimation, {
+        toValue: (currentStep + 1) * -width,
+        duration: 300,
+        useNativeDriver: true,
       }).start(() => {
+        // After animation completes, update current step and scroll to top
         setCurrentStep(currentStep + 1);
+
+        // Scroll the next step's ScrollView to the top
+        const nextScrollView = scrollViewRefs.current[currentStep + 1];
+        if (nextScrollView) {
+          nextScrollView.scrollTo({x: 0, y: 0, animated: true});
+        }
       });
     } else {
       onSubmit();
@@ -83,52 +104,28 @@ const AddPartnerPropertyScreen = () => {
 
   const goToPreviousStep = () => {
     if (currentStep > 0) {
+      // Animate stepper
       Animated.timing(animatedValue, {
         toValue: currentStep - 1,
         duration: 300,
         useNativeDriver: false,
-      }).start(() => {
-        setCurrentStep(currentStep - 1);
-      });
-    }
-  };
+      }).start();
 
-  // Render the current step based on index
-  const renderStep = () => {
-    switch (currentStep) {
-      case 0:
-        return (
-          <BasicDetailsStep
-            formInput={formInput}
-            handleInputChange={handleInputChange}
-            handleSelect={handleSelect}
-            onNext={goToNextStep}
-          />
-        );
-      case 1:
-        return (
-          <PropertyDetailsStep
-            formInput={formInput}
-            handleInputChange={handleInputChange}
-            handleSelect={handleSelect}
-            onNext={goToNextStep}
-            onBack={goToPreviousStep}
-            showBackButton={true}
-          />
-        );
-      case 2:
-        return (
-          <MediaAndSubmitStep
-            formInput={formInput}
-            handleInputChange={handleInputChange}
-            onSubmit={onSubmit}
-            onBack={goToPreviousStep}
-            showBackButton={true}
-            isSubmitting={loading}
-          />
-        );
-      default:
-        return null;
+      // Animate slide
+      Animated.timing(slideAnimation, {
+        toValue: (currentStep - 1) * -width,
+        duration: 300,
+        useNativeDriver: true,
+      }).start(() => {
+        // After animation completes, update current step and scroll to top
+        setCurrentStep(currentStep - 1);
+
+        // Scroll the previous step's ScrollView to the top
+        const prevScrollView = scrollViewRefs.current[currentStep - 1];
+        if (prevScrollView) {
+          prevScrollView.scrollTo({x: 0, y: 0, animated: true});
+        }
+      });
     }
   };
 
@@ -145,19 +142,73 @@ const AddPartnerPropertyScreen = () => {
         />
       </View>
 
-      {/* Scrollable content */}
+      {/* Main container for sliding animation */}
       <KeyboardAvoidingView
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         style={styles.keyboardAvoidingView}>
-        <ScrollView
-          contentContainerStyle={styles.scrollContent}
-          showsVerticalScrollIndicator={false}>
-          <View style={styles.stepContent}>{renderStep()}</View>
+        <Animated.View
+          style={[
+            styles.slidingContainer,
+            {transform: [{translateX: slideAnimation}]},
+          ]}>
+          {/* First step with its own ScrollView */}
+          <View style={styles.stepContainer}>
+            <ScrollView
+              ref={ref => (scrollViewRefs.current[0] = ref)}
+              contentContainerStyle={styles.scrollContent}
+              showsVerticalScrollIndicator={false}>
+              <View style={styles.stepWrapper}>
+                <BasicDetailsStep
+                  formInput={formInput}
+                  handleInputChange={handleInputChange}
+                  handleSelect={handleSelect}
+                  onNext={goToNextStep}
+                />
+              </View>
+            </ScrollView>
+          </View>
 
-          {/* Bottom padding to avoid content being hidden by tab bar */}
-          <View style={styles.bottomPadding} />
-        </ScrollView>
+          {/* Second step with its own ScrollView */}
+          <View style={styles.stepContainer}>
+            <ScrollView
+              ref={ref => (scrollViewRefs.current[1] = ref)}
+              contentContainerStyle={styles.scrollContent}
+              showsVerticalScrollIndicator={false}>
+              <View style={styles.stepWrapper}>
+                <PropertyDetailsStep
+                  formInput={formInput}
+                  handleInputChange={handleInputChange}
+                  handleSelect={handleSelect}
+                  onNext={goToNextStep}
+                  onBack={goToPreviousStep}
+                  showBackButton={true}
+                />
+              </View>
+            </ScrollView>
+          </View>
+
+          {/* Third step with its own ScrollView */}
+          <View style={styles.stepContainer}>
+            <ScrollView
+              ref={ref => (scrollViewRefs.current[2] = ref)}
+              contentContainerStyle={styles.scrollContent}
+              showsVerticalScrollIndicator={false}>
+              <View style={styles.stepWrapper}>
+                <MediaAndSubmitStep
+                  formInput={formInput}
+                  handleInputChange={handleInputChange}
+                  onSubmit={onSubmit}
+                  onBack={goToPreviousStep}
+                  showBackButton={true}
+                  isSubmitting={loading}
+                />
+              </View>
+            </ScrollView>
+          </View>
+        </Animated.View>
       </KeyboardAvoidingView>
+      {/* Bottom padding to avoid content being hidden by tab bar */}
+      <View style={styles.bottomPadding} />
     </View>
   );
 };
@@ -184,11 +235,22 @@ const styles = StyleSheet.create({
   },
   keyboardAvoidingView: {
     flex: 1,
+    overflow: 'hidden', // Important to clip content during animation
+  },
+  slidingContainer: {
+    flexDirection: 'row',
+    width: width * 3, // 3 steps
+    flex: 1,
+  },
+  stepContainer: {
+    width: width,
+    flex: 1,
   },
   scrollContent: {
     flexGrow: 1,
+    paddingBottom: 20,
   },
-  stepContent: {
+  stepWrapper: {
     padding: 20,
   },
   bottomPadding: {

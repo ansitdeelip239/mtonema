@@ -211,6 +211,76 @@ const PropertyFieldRenderer: React.FC<PropertyFieldRendererProps> = ({
         />
       );
 
+    case 'propertyAge':
+      return (
+        <FilterOption
+          key={field}
+          label="Age of Property"
+          options={convertToMasterDetailModel([
+            '0-5 Yrs',
+            '6-10 Yrs',
+            '11-15 Yrs',
+            '16-20 Yrs',
+            '20+ Yrs',
+          ])}
+          selectedValue={formInput.propertyAge}
+          onSelect={value => handleFieldSelect('propertyAge', value)}
+        />
+      );
+
+    case 'gatedSecurity':
+      return (
+        <FilterOption
+          key={field}
+          label="Gated Community Security"
+          options={convertToMasterDetailModel(['Yes', 'No'])}
+          selectedValue={
+            formInput.gatedSecurity === null
+              ? null
+              : formInput.gatedSecurity
+              ? 'Yes'
+              : 'No'
+          }
+          onSelect={value =>
+            handleInputChange('gatedSecurity', value === 'Yes')
+          }
+        />
+      );
+
+    case 'surveillanceCameras':
+      return (
+        <FilterOption
+          key={field}
+          label="Surveillance"
+          options={convertToMasterDetailModel(['Yes', 'No'])}
+          selectedValue={
+            formInput.surveillanceCameras === null
+              ? null
+              : formInput.surveillanceCameras
+              ? 'Yes'
+              : 'No'
+          }
+          onSelect={value => toggleBooleanField('surveillanceCameras', value)}
+        />
+      );
+
+    case 'alarmSystem':
+      return (
+        <FilterOption
+          key={field}
+          label="Alarm System"
+          options={convertToMasterDetailModel(['Yes', 'No'])}
+          selectedValue={
+            formInput.alarmSystem === null
+              ? null
+              : formInput.alarmSystem
+              ? 'Yes'
+              : 'No'
+          }
+          onSelect={value => toggleBooleanField('alarmSystem', value)}
+        />
+      );
+
     case 'shortDescription':
       return (
         <MaterialTextInput
@@ -241,7 +311,74 @@ const PropertyFieldRenderer: React.FC<PropertyFieldRendererProps> = ({
         />
       );
 
-    // Add all other field types...
+    case 'bhkType':
+      return (
+        <FilterOption
+          key={field}
+          label="Configuration"
+          options={masterData?.BhkType || []}
+          selectedValue={formInput.bhkType}
+          onSelect={value => handleFieldSelect('bhkType', value)}
+        />
+      );
+
+    case 'ceilingHeight':
+      return (
+        <MaterialTextInput
+          key={field}
+          field="ceilingHeight"
+          formInput={formInput}
+          setFormInput={handleInputChange}
+          label="Ceiling Height"
+          mode="outlined"
+          placeholder="Enter ceiling height"
+        />
+      );
+
+    case 'constructionDone':
+      return (
+        <FilterOption
+          key={field}
+          label="Any Construction"
+          options={convertToMasterDetailModel(['Yes', 'No'])}
+          selectedValue={
+            formInput.constructionDone === null
+              ? null
+              : formInput.constructionDone
+              ? 'Yes'
+              : 'No'
+          }
+          onSelect={value => toggleBooleanField('constructionDone', value)}
+        />
+      );
+
+    case 'boundaryWall':
+      return (
+        <FilterOption
+          key={field}
+          label="Boundary"
+          options={convertToMasterDetailModel(['Yes', 'No'])}
+          selectedValue={
+            formInput.boundaryWall === null
+              ? null
+              : formInput.boundaryWall
+              ? 'Yes'
+              : 'No'
+          }
+          onSelect={value => toggleBooleanField('boundaryWall', value)}
+        />
+      );
+
+    case 'openSide':
+      return (
+        <FilterOption
+          key={field}
+          label="No. of Open Side"
+          options={convertToMasterDetailModel(['One', 'Two', 'Three', 'Four'])}
+          selectedValue={formInput.openSide}
+          onSelect={value => handleFieldSelect('openSide', value)}
+        />
+      );
 
     default:
       return null;
