@@ -330,7 +330,7 @@ const MediaAndSubmitStep: React.FC<MediaAndSubmitStepProps> = ({
           mode="outlined"
           placeholder="Enter YouTube or Vimeo URL"
           keyboardType="url"
-          defaultValue={formInput.videoURL || 'https://youtu.be/YZWhTCO-0-g'}
+          // defaultValue={formInput.videoURL || 'https://youtu.be/YZWhTCO-0-g'}
         />
       </View>
 

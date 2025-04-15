@@ -44,7 +44,7 @@ const AddPartnerPropertyScreen = () => {
         price: null,
         imageURL: null,
         alarmSystem: null,
-        videoURL: null,
+        videoURL: 'https://youtu.be/YZWhTCO-0-g',
         shortDescription: null,
         longDescription: null,
         readyToMove: null,

@@ -64,7 +64,7 @@ const PropertyDetailsStep: React.FC<PropertyDetailsStepProps> = ({
       return [];
     }
 
-    // Define field mappings for each property type
+    // Define field mappings for each property type (specific fields only)
     const fieldMappings = {
       CoWorking: [
         'propertyForType',
@@ -75,13 +75,6 @@ const PropertyDetailsStep: React.FC<PropertyDetailsStepProps> = ({
         'furnishing',
         'parking',
         'facing',
-        'location',
-        'zipCode',
-        'price',
-        'area',
-        'lmUnit',
-        'shortDescription',
-        'longDescription',
       ],
       FOCP: [
         'propertyForType',
@@ -91,13 +84,6 @@ const PropertyDetailsStep: React.FC<PropertyDetailsStepProps> = ({
         'furnishing',
         'parking',
         'facing',
-        'location',
-        'zipCode',
-        'price',
-        'area',
-        'lmUnit',
-        'shortDescription',
-        'longDescription',
       ],
       'Farm House': [
         'propertyAge',
@@ -107,13 +93,6 @@ const PropertyDetailsStep: React.FC<PropertyDetailsStepProps> = ({
         'furnishing',
         'parking',
         'facing',
-        'location',
-        'zipCode',
-        'price',
-        'area',
-        'lmUnit',
-        'shortDescription',
-        'longDescription',
       ],
       Flat: [
         'propertyForType',
@@ -124,13 +103,6 @@ const PropertyDetailsStep: React.FC<PropertyDetailsStepProps> = ({
         'furnishing',
         'parking',
         'facing',
-        'location',
-        'zipCode',
-        'price',
-        'area',
-        'lmUnit',
-        'shortDescription',
-        'longDescription',
       ],
       'Independent House': [
         'propertyForType',
@@ -141,13 +113,6 @@ const PropertyDetailsStep: React.FC<PropertyDetailsStepProps> = ({
         'furnishing',
         'parking',
         'facing',
-        'location',
-        'zipCode',
-        'price',
-        'area',
-        'lmUnit',
-        'shortDescription',
-        'longDescription',
       ],
       Office: [
         'propertyForType',
@@ -158,13 +123,6 @@ const PropertyDetailsStep: React.FC<PropertyDetailsStepProps> = ({
         'furnishing',
         'parking',
         'facing',
-        'location',
-        'zipCode',
-        'price',
-        'area',
-        'lmUnit',
-        'shortDescription',
-        'longDescription',
       ],
       'PG/Hostel': [
         'propertyForType',
@@ -175,13 +133,6 @@ const PropertyDetailsStep: React.FC<PropertyDetailsStepProps> = ({
         'furnishing',
         'parking',
         'facing',
-        'location',
-        'zipCode',
-        'price',
-        'area',
-        'lmUnit',
-        'shortDescription',
-        'longDescription',
       ],
       Plot: [
         'propertyForType',
@@ -189,13 +140,6 @@ const PropertyDetailsStep: React.FC<PropertyDetailsStepProps> = ({
         'boundaryWall',
         'openSide',
         'facing',
-        'location',
-        'zipCode',
-        'price',
-        'area',
-        'lmUnit',
-        'shortDescription',
-        'longDescription',
       ],
       'Retail Shop': [
         'propertyForType',
@@ -209,13 +153,6 @@ const PropertyDetailsStep: React.FC<PropertyDetailsStepProps> = ({
         'alarmSystem',
         'parking',
         'facing',
-        'location',
-        'zipCode',
-        'price',
-        'area',
-        'lmUnit',
-        'shortDescription',
-        'longDescription',
       ],
       Shop: [
         'propertyForType',
@@ -229,13 +166,6 @@ const PropertyDetailsStep: React.FC<PropertyDetailsStepProps> = ({
         'alarmSystem',
         'parking',
         'facing',
-        'location',
-        'zipCode',
-        'price',
-        'area',
-        'lmUnit',
-        'shortDescription',
-        'longDescription',
       ],
       Villa: [
         'propertyAge',
@@ -244,39 +174,18 @@ const PropertyDetailsStep: React.FC<PropertyDetailsStepProps> = ({
         'alarmSystem',
         'parking',
         'facing',
-        'location',
-        'zipCode',
-        'price',
-        'area',
-        'lmUnit',
-        'shortDescription',
-        'longDescription',
       ],
       Warehouse: [
         'propertyAge',
         'gatedSecurity',
         'surveillanceCameras',
         'alarmSystem',
-        'location',
-        'zipCode',
-        'price',
-        'area',
-        'lmUnit',
-        'shortDescription',
-        'longDescription',
       ],
       Others: [
         'propertyAge',
         'gatedSecurity',
         'surveillanceCameras',
         'alarmSystem',
-        'location',
-        'zipCode',
-        'price',
-        'area',
-        'lmUnit',
-        'shortDescription',
-        'longDescription',
       ],
     };
 
@@ -284,23 +193,33 @@ const PropertyDetailsStep: React.FC<PropertyDetailsStepProps> = ({
     return fieldMappings[propertyType as keyof typeof fieldMappings] || [];
   }, [formInput.propertyType]);
 
+  // Common fields that appear in all property types
+  const commonFields = [
+    'location',
+    'zipCode',
+    'price',
+    'area',
+    'lmUnit',
+    'shortDescription',
+    'longDescription',
+  ];
+
   // Determine if form is valid for next step
-  // At minimum, require price and area for most property types
   const isNextEnabled = useMemo(() => {
-    if (fieldsToRender.length === 0) {
+    if (!formInput.propertyType) {
       return false;
     }
 
     // Basic validation - customize as needed
-    if (fieldsToRender.includes('price') && !formInput.price) {
+    if (!formInput.price) {
       return false;
     }
-    if (fieldsToRender.includes('area') && !formInput.area) {
+    if (!formInput.area) {
       return false;
     }
 
     return true;
-  }, [fieldsToRender, formInput]);
+  }, [formInput]);
 
   // Render the appropriate form field based on field type
   const renderField = (field: string) => {
@@ -374,7 +293,7 @@ const PropertyDetailsStep: React.FC<PropertyDetailsStepProps> = ({
             label="Floor"
             mode="outlined"
             placeholder="Enter floor number"
-            keyboardType="numeric"
+            keyboardType="number-pad"
           />
         );
 
@@ -668,10 +587,16 @@ const PropertyDetailsStep: React.FC<PropertyDetailsStepProps> = ({
     <View style={styles.container}>
       {formInput.propertyType ? (
         <View>
-          {/* <Text style={styles.stepTitle}>{formInput.propertyType} Details</Text> */}
-
           <View style={styles.fieldsContainer}>
+            {/* Render property-specific fields */}
             {fieldsToRender.map(field => (
+              <View key={field} style={styles.fieldWrapper}>
+                {renderField(field)}
+              </View>
+            ))}
+
+            {/* Render common fields */}
+            {commonFields.map(field => (
               <View key={field} style={styles.fieldWrapper}>
                 {renderField(field)}
               </View>
