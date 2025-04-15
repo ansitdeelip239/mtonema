@@ -7,8 +7,8 @@ import ClientScreenStack from './ClientScreenStack';
 import {CustomBottomBar, TabScreen} from './CustomBottomBar';
 import FollowUpScreenStack from './FollowUpScreenStack';
 import AgentDataScreenStack from './AgentDataStack';
-import UnderDevelopment from '../../screens/partner/UnderDevelopment';
 import AddPartnerPropertyScreen from '../../screens/partner/AddPartnerPropertyScreen/AddPartnerPropertyScreen';
+import ListingsScreen from '../../screens/partner/ListingsScreen/ListingsScreen';
 
 const Tab = createBottomTabNavigator<PartnerBottomTabParamList>();
 
@@ -17,7 +17,7 @@ const tabScreens: Array<TabScreen<PartnerBottomTabParamList>> = [
     name: 'FollowUp',
     component: FollowUpScreenStack,
     icon: 'calendar',
-    label: 'Follow Ups', // Add a custom label that will be used in display
+    label: 'Follow Ups',
   },
   {
     name: 'Clients',
@@ -35,11 +35,11 @@ const tabScreens: Array<TabScreen<PartnerBottomTabParamList>> = [
     name: 'AddProperty',
     component: AddPartnerPropertyScreen,
     icon: 'listproperty',
-    label: 'Add', // Shorter label for this tab
+    label: 'Add',
   },
   {
     name: 'Property',
-    component: UnderDevelopment,
+    component: ListingsScreen,
     icon: 'home',
     label: 'Listings',
   },
@@ -57,8 +57,8 @@ const PartnerBottomTabs = memo(() => (
     screenOptions={{
       headerShown: false,
       tabBarLabelStyle: {
-        fontSize: 10, // Reduce font size
-        lineHeight: 12, // Control line height
+        fontSize: 10,
+        lineHeight: 12,
       },
     }}
     // eslint-disable-next-line react/no-unstable-nested-components

@@ -1,5 +1,8 @@
 import url from '../constants/api';
-import {PartnerPropertyApiSubmissionType} from '../schema/PartnerPropertyFormSchema';
+import {
+  PartnerPropertyApiSubmissionType,
+} from '../schema/PartnerPropertyFormSchema';
+import { PropertiesResponse } from '../screens/partner/ListingsScreen/types';
 import {
   AgentPropertyRequestModel,
   Client,
@@ -342,6 +345,23 @@ class PartnerService {
       return response;
     } catch (error) {
       console.error('Error in postPartnerProperty', error);
+      throw error;
+    }
+  }
+
+  static async getPartnerPropertyByUserId(
+    userId: number,
+    pageNumber: number,
+    pageSize: number,
+  ) {
+    try {
+      const response = await api.get<PropertiesResponse>(
+        url.getPartnerProperty(userId) +
+          `?pageNumber=${pageNumber}&pageSize=${pageSize}`,
+      );
+      return response;
+    } catch (error) {
+      console.error('Error in getPartnerPropertyByUserId', error);
       throw error;
     }
   }

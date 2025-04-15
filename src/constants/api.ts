@@ -55,7 +55,12 @@ const url = {
   clients: BASE_URL + '/partners/clients',
   addEditClientActivity: BASE_URL + '/partners/addeditclient-activity',
   deleteClientActivity: BASE_URL + '/partners/deleteclient-activity',
+
+  //Partner Properties
   postPartnerProperty: BASE_URL + '/partners/properties',
+  getPartnerProperty: (userId: number) => {
+    return BASE_URL + '/users/' + userId + '/partner-properties';
+  },
 
   //Partner Follow-ups
   followUps: BASE_URL + '/partners/follow-ups',

@@ -46,7 +46,10 @@ export type IconEnum =
   | 'time'
   | 'plus'
   | 'checkmark'
-  | 'greenCheck';
+  | 'greenCheck'
+  | 'locationPin'
+  | 'doubleBed'
+  | 'area';
 
 type IconProps = {
   iconName: IconEnum;
@@ -101,6 +104,9 @@ const GetIcon = ({iconName, color, size}: IconProps) => {
     plus: require('../assets/Icon/plus.png'),
     checkmark: require('../assets/Icon/check-mark.png'),
     greenCheck: require('../assets/Icon/check.png'),
+    locationPin: require('../assets/Icon/pin.png'),
+    doubleBed: require('../assets/Icon/double-bed.png'),
+    area: require('../assets/Icon/maximize.png'),
   };
 
   const imageStyle = [
