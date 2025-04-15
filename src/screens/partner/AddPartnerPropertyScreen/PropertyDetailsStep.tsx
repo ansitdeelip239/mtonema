@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useMemo} from 'react';
+import React, {useCallback, useMemo} from 'react';
 import {View, StyleSheet, Text} from 'react-native';
 import {PartnerPropertyFormType} from '../../../schema/PartnerPropertyFormSchema';
 import PropertyFieldRenderer from './components/PropertyFieldRenderer';
@@ -98,10 +98,6 @@ const PropertyDetailsStep: React.FC<PropertyDetailsStepProps> = ({
     // Combine property-specific fields with common fields
     return [...fieldsToRender, ...commonFields];
   }, [fieldsToRender, commonFields, formInput.propertyType]);
-
-  useEffect(() => {
-    console.log(visibleFields);
-  }, [visibleFields]);
 
   return (
     <View style={styles.container}>
