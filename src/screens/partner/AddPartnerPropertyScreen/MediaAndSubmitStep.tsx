@@ -8,6 +8,7 @@ import {
   ScrollView,
   ActivityIndicator,
   Alert,
+  TextInput,
 } from 'react-native';
 import ImagePicker from 'react-native-image-crop-picker';
 import {MaterialTextInput} from '../../../components/MaterialTextInput';
@@ -15,6 +16,8 @@ import {PartnerPropertyFormType} from '../../../schema/PartnerPropertyFormSchema
 import Colors from '../../../constants/Colors';
 import Toast from 'react-native-toast-message';
 import GetIcon from '../../../components/GetIcon';
+import {Picker} from '@react-native-picker/picker';
+import {useMaster} from '../../../context/MasterProvider';
 
 interface MediaAndSubmitStepProps {
   formInput: PartnerPropertyFormType;
@@ -27,7 +30,7 @@ interface MediaAndSubmitStepProps {
 
 interface ImageData {
   imageUrl: string;
-  type: 'Default' | 'Others';
+  type: string;
   toggle: boolean;
   localUri?: string;
 }
@@ -40,12 +43,22 @@ const MediaAndSubmitStep: React.FC<MediaAndSubmitStepProps> = ({
   showBackButton = false,
   isSubmitting = false,
 }) => {
+  // Get image types from master data
+  const {masterData} = useMaster();
+  const imageTypes = useMemo(
+    () => masterData?.ImageType || [],
+    [masterData?.ImageType],
+  );
+
   // State for selected images
   const [images, setImages] = useState<ImageData[]>([]);
   const [uploading, setUploading] = useState(false);
   const [defaultImageIndex, setDefaultImageIndex] = useState<number | null>(
     null,
   );
+
+  // Add this state to manage tags input
+  const [tagInput, setTagInput] = useState<string>('');
 
   // Parse existing images if present in formInput
   React.useEffect(() => {
@@ -65,6 +78,19 @@ const MediaAndSubmitStep: React.FC<MediaAndSubmitStepProps> = ({
       }
     }
   }, [formInput.imageURL]);
+
+  // Add this effect to parse existing tags if present in formInput
+  React.useEffect(() => {
+    if (formInput.tags) {
+      try {
+        // No need to display the tags in the input field as we'll show them separately
+        // This is just to initialize the component state
+        JSON.parse(formInput.tags);
+      } catch (e) {
+        console.error('Failed to parse tags', e);
+      }
+    }
+  }, [formInput.tags]);
 
   // Add this effect to update formInput whenever images state changes
   React.useEffect(() => {
@@ -97,11 +123,15 @@ const MediaAndSubmitStep: React.FC<MediaAndSubmitStepProps> = ({
         // Process and upload each image
         setUploading(true);
 
+        // Define defaultType outside the map function
+        const defaultType =
+          imageTypes.length > 0 ? imageTypes[0].masterDetailName : 'Other';
+
         const uploadPromises = selectedImages.map(async image => {
           const imageData = {
             localUri: image.path,
             imageUrl: '',
-            type: 'Others' as const,
+            type: defaultType,
             toggle: false,
           };
 
@@ -130,7 +160,7 @@ const MediaAndSubmitStep: React.FC<MediaAndSubmitStepProps> = ({
             return newImages.map((img, idx) => ({
               ...img,
               toggle: idx === prevImages.length, // Only first new image is default
-              type: 'Others',
+              type: defaultType,
             }));
           }
 
@@ -161,7 +191,7 @@ const MediaAndSubmitStep: React.FC<MediaAndSubmitStepProps> = ({
     } finally {
       setUploading(false);
     }
-  }, [defaultImageIndex]);
+  }, [defaultImageIndex, imageTypes]);
 
   // Upload image to Cloudinary
   const uploadToCloudinary = async (imagePath: string): Promise<string> => {
@@ -202,7 +232,7 @@ const MediaAndSubmitStep: React.FC<MediaAndSubmitStepProps> = ({
       prevImages.map((img, idx) => ({
         ...img,
         toggle: idx === index,
-        type: 'Others',
+        type: img.type,
       })),
     );
   };
@@ -218,7 +248,11 @@ const MediaAndSubmitStep: React.FC<MediaAndSubmitStepProps> = ({
         if (newImages.length > 0) {
           // Make the first image the default
           setDefaultImageIndex(0);
-          newImages[0] = {...newImages[0], toggle: true, type: 'Others'};
+          newImages[0] = {
+            ...newImages[0],
+            toggle: true,
+            type: newImages[0].type,
+          };
         } else {
           setDefaultImageIndex(null);
         }
@@ -229,6 +263,54 @@ const MediaAndSubmitStep: React.FC<MediaAndSubmitStepProps> = ({
 
       return newImages;
     });
+  };
+
+  // Add a handleCategoryChange function
+  const handleCategoryChange = (index: number, type: string) => {
+    setImages(prevImages => {
+      const newImages = [...prevImages];
+      newImages[index] = {
+        ...newImages[index],
+        type: type,
+      };
+      return newImages;
+    });
+  };
+
+  // Add this function to handle adding a new tag
+  const handleAddTag = () => {
+    if (!tagInput.trim()) {
+      return;
+    }
+
+    try {
+      const currentTags = formInput.tags ? JSON.parse(formInput.tags) : [];
+      const newTag = tagInput.startsWith('#') ? tagInput : `#${tagInput}`;
+
+      // Only add if it doesn't already exist
+      if (!currentTags.includes(newTag)) {
+        const updatedTags = [...currentTags, newTag];
+        handleInputChange('tags', JSON.stringify(updatedTags));
+      }
+
+      // Clear the input field
+      setTagInput('');
+    } catch (e) {
+      console.error('Failed to update tags', e);
+    }
+  };
+
+  // Add this function to handle removing a tag
+  const handleRemoveTag = (tagToRemove: string) => {
+    try {
+      const currentTags = formInput.tags ? JSON.parse(formInput.tags) : [];
+      const updatedTags = currentTags.filter(
+        (tag: string) => tag !== tagToRemove,
+      );
+      handleInputChange('tags', JSON.stringify(updatedTags));
+    } catch (e) {
+      console.error('Failed to remove tag', e);
+    }
   };
 
   // Update form data on submit
@@ -287,31 +369,57 @@ const MediaAndSubmitStep: React.FC<MediaAndSubmitStepProps> = ({
             contentContainerStyle={styles.imageList}>
             {images.map((image, index) => (
               <View key={index} style={styles.imageContainer}>
-                <Image
-                  source={{uri: image.localUri || image.imageUrl}}
-                  style={styles.imagePreview}
-                />
-                <View style={styles.imageActions}>
-                  <TouchableOpacity
-                    style={[
-                      styles.defaultButton,
-                      defaultImageIndex === index && styles.defaultButtonActive,
-                    ]}
-                    onPress={() => handleSetDefaultImage(index)}>
-                    <Text
-                      style={[
-                        styles.defaultButtonText,
-                        defaultImageIndex === index &&
-                          styles.defaultButtonTextActive,
-                      ]}>
-                      {defaultImageIndex === index ? 'Default' : 'Set Default'}
+                <View style={styles.imageWrapper}>
+                  <Image
+                    source={{uri: image.localUri || image.imageUrl}}
+                    style={styles.imagePreview}
+                  />
+
+                  {/* Image counter indicator (top-center) */}
+                  <View style={styles.counterOverlay}>
+                    <Text style={styles.counterText}>
+                      {index + 1}/{images.length}
                     </Text>
-                  </TouchableOpacity>
+                  </View>
+
+                  {/* Default checkmark overlay (top-left) */}
+                  {defaultImageIndex === index && (
+                    <View style={styles.defaultOverlay}>
+                      <GetIcon iconName="checkmark" size={18} color="white" />
+                    </View>
+                  )}
+
+                  {/* Remove button overlay (top-right) */}
                   <TouchableOpacity
-                    style={styles.removeButton}
+                    style={styles.removeOverlay}
                     onPress={() => handleRemoveImage(index)}>
-                    <GetIcon iconName="clear" />
+                    <GetIcon iconName="clear" size={18} color="white" />
                   </TouchableOpacity>
+
+                  {/* Image tap to set default */}
+                  <TouchableOpacity
+                    style={styles.defaultSelector}
+                    onPress={() => handleSetDefaultImage(index)}
+                  />
+                </View>
+
+                {/* Category picker */}
+                <View style={styles.categoryPickerContainer}>
+                  <Picker
+                    selectedValue={image.type || ''}
+                    style={styles.categoryPicker}
+                    onValueChange={value => handleCategoryChange(index, value)}
+                    dropdownIconColor={Colors.main}
+                    placeholder="Select Category">
+                    {imageTypes.map(type => (
+                      <Picker.Item
+                        key={type.id}
+                        label={type.masterDetailName}
+                        value={type.masterDetailName}
+                        style={styles.pickerItem}
+                      />
+                    ))}
+                  </Picker>
                 </View>
               </View>
             ))}
@@ -329,9 +437,55 @@ const MediaAndSubmitStep: React.FC<MediaAndSubmitStepProps> = ({
           label="Video URL"
           mode="outlined"
           placeholder="Enter YouTube or Vimeo URL"
-          keyboardType="url"
           // defaultValue={formInput.videoURL || 'https://youtu.be/YZWhTCO-0-g'}
         />
+      </View>
+
+      {/* Tags input */}
+      <View style={styles.tagsSection}>
+        <Text style={styles.fieldTitle}>Property Tags</Text>
+        <View style={styles.tagInputContainer}>
+          <View style={styles.tagInputWrapper}>
+            <TextInput
+              value={tagInput}
+              onChangeText={setTagInput}
+              placeholder="Eg., #luxury"
+              style={styles.tagTextInput}
+              autoCapitalize="none"
+              returnKeyType="done"
+              placeholderTextColor={Colors.placeholderColor}
+              onSubmitEditing={handleAddTag}
+            />
+          </View>
+          <TouchableOpacity
+            style={[
+              styles.addTagButton,
+              !tagInput.trim() && styles.disabledAddButton,
+            ]}
+            onPress={handleAddTag}
+            disabled={!tagInput.trim()}>
+            <Text style={styles.addTagButtonText}>Add</Text>
+          </TouchableOpacity>
+        </View>
+
+        {/* Display added tags */}
+        {formInput.tags && (
+          <ScrollView
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            contentContainerStyle={styles.tagsContainer}>
+            {JSON.parse(formInput.tags).map((tag: string, index: number) => (
+              <View key={index} style={styles.tagItem}>
+                <Text style={styles.tagText}>{tag}</Text>
+                <TouchableOpacity
+                  style={styles.removeTagButton}
+                  onPress={() => handleRemoveTag(tag)}>
+                  <GetIcon iconName="clear" size={14} color="white" />
+                </TouchableOpacity>
+              </View>
+            ))}
+          </ScrollView>
+        )}
       </View>
 
       {/* Submit section */}
@@ -425,36 +579,82 @@ const styles = StyleSheet.create({
     marginRight: 12,
     width: 150,
   },
+  imageWrapper: {
+    position: 'relative',
+    width: 150,
+    height: 150,
+  },
   imagePreview: {
     width: 150,
     height: 150,
     borderRadius: 8,
     backgroundColor: '#f0f0f0',
   },
-  imageActions: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginTop: 6,
-  },
-  defaultButton: {
-    paddingVertical: 4,
+  counterOverlay: {
+    position: 'absolute',
+    top: 4,
+    alignSelf: 'center',
+    backgroundColor: 'rgba(0,0,0,0.7)',
+    borderRadius: 12,
     paddingHorizontal: 8,
-    borderRadius: 4,
-    backgroundColor: '#f0f0f0',
+    paddingVertical: 4,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
-  defaultButtonActive: {
-    backgroundColor: Colors.main,
-  },
-  defaultButtonText: {
-    fontSize: 12,
-    color: '#666',
-  },
-  defaultButtonTextActive: {
+  counterText: {
     color: 'white',
+    fontSize: 12,
+    fontWeight: 'bold',
   },
-  removeButton: {
-    padding: 2,
+  defaultOverlay: {
+    position: 'absolute',
+    top: 4,
+    left: 4,
+    backgroundColor: Colors.main,
+    borderRadius: 15,
+    width: 24,
+    height: 24,
+    justifyContent: 'center',
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: {width: 1, height: 1},
+    shadowOpacity: 0.3,
+    shadowRadius: 2,
+    elevation: 3,
+  },
+  removeOverlay: {
+    position: 'absolute',
+    top: 4, // Changed from 8 to 4
+    right: 4, // Changed from 8 to 4
+    backgroundColor: 'rgba(0,0,0,0.6)',
+    borderRadius: 15,
+    width: 24,
+    height: 24,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  defaultSelector: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundColor: 'transparent',
+  },
+  categoryPickerContainer: {
+    marginTop: 8,
+    borderWidth: 1,
+    borderColor: '#ddd',
+    borderRadius: 4,
+    backgroundColor: '#f9f9f9',
+    overflow: 'hidden',
+  },
+  categoryPicker: {
+    width: 150,
+    color: 'black',
+  },
+  pickerItem: {
+    fontSize: 12,
   },
   videoSection: {
     marginBottom: 20,
@@ -517,6 +717,69 @@ const styles = StyleSheet.create({
     color: '#888888',
     fontWeight: '600',
     fontSize: 16,
+  },
+  tagsSection: {
+    marginBottom: 20,
+  },
+  tagInputContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  tagInputWrapper: {
+    flex: 1,
+    marginRight: 8,
+  },
+  addTagButton: {
+    backgroundColor: Colors.main,
+    paddingVertical: 12,
+    paddingHorizontal: 16,
+    borderRadius: 8,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  disabledAddButton: {
+    backgroundColor: '#cccccc',
+  },
+  addTagButtonText: {
+    color: 'white',
+    fontWeight: '600',
+    fontSize: 16,
+  },
+  tagsContainer: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    marginTop: 8,
+  },
+  tagItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: Colors.main,
+    borderRadius: 16,
+    paddingVertical: 4,
+    paddingHorizontal: 8,
+    marginRight: 8,
+    marginBottom: 8,
+  },
+  tagText: {
+    color: 'white',
+    fontSize: 14,
+    marginRight: 4,
+  },
+  removeTagButton: {
+    // backgroundColor: 'rgba(0,0,0,0.6)',
+    borderRadius: 12,
+    width: 24,
+    height: 24,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  tagTextInput: {
+    borderWidth: 1,
+    borderColor: '#ddd',
+    borderRadius: 8,
+    padding: 10,
+    fontSize: 16,
+    backgroundColor: '#fff',
   },
 });
 

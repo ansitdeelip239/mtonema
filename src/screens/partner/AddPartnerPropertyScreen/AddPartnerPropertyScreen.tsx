@@ -75,7 +75,7 @@ const AddPartnerPropertyScreen = () => {
           const payload: PartnerPropertyApiSubmissionType = {
             ...data,
             userId: user?.id as number,
-            tags: "['#test']",
+            // tags: "['#test']",
           };
           console.log('Payload for API:', payload);
 

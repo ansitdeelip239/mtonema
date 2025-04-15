@@ -112,7 +112,7 @@ const apiSubmissionSchema = partnerPropertyFormSchema
       typeof data.floor === 'string' ? parseInt(data.floor, 10) : data.floor,
     // rate: typeof data.rate === 'string' ? parseInt(data.rate, 10) : data.rate,
     // Ensure tags are stringified for API
-    tags: Array.isArray(data.tags) ? JSON.stringify(data.tags) : data.tags,
+    // tags: Array.isArray(data.tags) ? JSON.stringify(data.tags) : data.tags,
   }));
 
 export type PartnerPropertyFormType = z.infer<typeof partnerPropertyFormSchema>;

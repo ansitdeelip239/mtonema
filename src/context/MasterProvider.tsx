@@ -43,6 +43,7 @@ const masterName = [
   'AgentPropertyType',
   'ActivityType',
   'GroupColor',
+  'ImageType',
 ];
 
 export const MasterProvider: React.FC<MasterProviderProps> = ({children}) => {
