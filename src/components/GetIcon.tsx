@@ -50,7 +50,9 @@ export type IconEnum =
   | 'locationPin'
   | 'doubleBed'
   | 'area'
-  | 'length';
+  | 'length'
+  | 'fold'
+  | 'unfold';
 
 type IconProps = {
   iconName: IconEnum;
@@ -109,6 +111,8 @@ const GetIcon = ({iconName, color, size}: IconProps) => {
     doubleBed: require('../assets/Icon/double-bed.png'),
     area: require('../assets/Icon/maximize.png'),
     length: require('../assets/Icon/length.png'),
+    fold: require('../assets/Icon/fold.png'),
+    unfold: require('../assets/Icon/unfold.png'),
   };
 
   const imageStyle = [

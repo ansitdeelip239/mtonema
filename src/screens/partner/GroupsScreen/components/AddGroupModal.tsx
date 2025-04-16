@@ -72,7 +72,7 @@ const AddGroupModal: React.FC<AddGroupModalProps> = ({
   const [selectedColorId, setSelectedColorId] = useState<number | null>(null);
   const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
   const {masterData} = useMaster();
-  
+
   // Determine if we're in edit mode
   const isEditMode = !!group;
 
@@ -193,11 +193,16 @@ const AddGroupModal: React.FC<AddGroupModalProps> = ({
               style={[
                 styles.modalButton,
                 styles.saveButton,
-                (!groupName.trim() || !selectedColorId || isLoading || isDeleting) &&
+                (!groupName.trim() ||
+                  !selectedColorId ||
+                  isLoading ||
+                  isDeleting) &&
                   modalStyles.disabledButton,
               ]}
               onPress={handleSave}
-              disabled={!groupName.trim() || !selectedColorId || isLoading || isDeleting}>
+              disabled={
+                !groupName.trim() || !selectedColorId || isLoading || isDeleting
+              }>
               {isLoading ? (
                 <ActivityIndicator size="small" color="#FFFFFF" />
               ) : (
@@ -205,7 +210,7 @@ const AddGroupModal: React.FC<AddGroupModalProps> = ({
               )}
             </TouchableOpacity>
           </View>
-          
+
           {/* Delete Confirmation */}
           {showDeleteConfirmation && (
             <View style={modalStyles.confirmationOverlay}>
