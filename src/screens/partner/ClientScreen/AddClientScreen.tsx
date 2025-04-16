@@ -208,7 +208,7 @@ const AddClientScreen: React.FC<Props> = ({navigation, route}) => {
   const [showAllGroups, setShowAllGroups] = useState(false);
 
   const renderGroupToggleButtons = useMemo(() => {
-    const initialGroupsToShow = 15;
+    const initialGroupsToShow = 10;
 
     // First, get all selected groups - these will always be shown
     const selectedGroups =

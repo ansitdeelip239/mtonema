@@ -68,9 +68,8 @@ const FilterOption = ({
             onPress={() => setVisibleLines(visibleLines + 1)}
             style={styles.moreLessButton}>
             <Chip
-              style={styles.chip}
-              textStyle={styles.chipText}
-              mode="outlined"
+              style={styles.moreChip}
+              textStyle={styles.moreChipText}
               compact>
               More..
             </Chip>
@@ -82,9 +81,8 @@ const FilterOption = ({
             onPress={() => setVisibleLines(1)}
             style={styles.moreLessButton}>
             <Chip
-              style={styles.chip}
-              textStyle={styles.chipText}
-              mode="outlined"
+              style={styles.moreChip}
+              textStyle={styles.moreChipText}
               compact>
               ..Less
             </Chip>
@@ -133,6 +131,17 @@ const styles = StyleSheet.create({
   },
   helperText: {
     marginTop: 4,
+  },
+  moreChip: {
+    marginRight: 8,
+    borderRadius: 20,
+    borderWidth: 1,
+    backgroundColor: '#f0f0f0',
+    borderColor: '#d0d0d0',
+  },
+  moreChipText: {
+    color: '#333',
+    fontSize: 13,
   },
 });
 

@@ -142,10 +142,9 @@ const FilterModal = ({
             indicatorStyle="black"
             contentContainerStyle={styles.scrollViewContent}
             nestedScrollEnabled={true}
-            fadingEdgeLength={40}
-          >
+            fadingEdgeLength={40}>
             <TouchableWithoutFeedback>
-              <View>
+              <View style={styles.filterOptionsContainer}>
                 <FilterOption
                   label="Location"
                   options={mappedLocations}
@@ -212,11 +211,11 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 20,
+    // marginBottom: 20,
   },
   modalTitle: {
     fontSize: 18,
-    fontWeight: 'bold',
+    fontWeight: '800',
   },
   clearAllText: {
     fontSize: 14,
@@ -254,6 +253,9 @@ const styles = StyleSheet.create({
   scrollViewContent: {
     flexGrow: 1,
     paddingVertical: 8,
+  },
+  filterOptionsContainer: {
+    gap: 20,
   },
 });
 

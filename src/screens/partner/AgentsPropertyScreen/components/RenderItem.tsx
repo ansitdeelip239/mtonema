@@ -82,10 +82,10 @@ const RenderItem: React.FC<RenderItemProps> = ({
               style={styles.actionButton}
             />
             <IconButton
-              icon={() => GetIcon({iconName: 'delete', color: Colors.red})}
+              icon={() => GetIcon({iconName: 'delete', color: Colors.main})}
               size={20}
               onPress={handleDeletePress}
-              iconColor={Colors.red || '#ff4444'}
+              iconColor={Colors.main}
               style={styles.actionButton}
             />
           </View>
@@ -114,6 +114,11 @@ const RenderItem: React.FC<RenderItemProps> = ({
             <Text style={[styles.value, styles.priceText]}>
               {formatCurrency(item.securityDepositAmount) || 'N/A'}
             </Text>
+          </View>
+
+          <View style={styles.row}>
+            <Text style={styles.label}>Contact No.:</Text>
+            <Text style={styles.value}>{item.agentContactNo || 'N/A'}</Text>
           </View>
 
           <View style={styles.row}>

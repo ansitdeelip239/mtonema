@@ -24,7 +24,7 @@ const SearchHeader = ({
     <View style={styles.container}>
       <View style={styles.searchContainer}>
         <Searchbar
-          placeholder="Search properties..."
+          placeholder="Search by name..."
           placeholderTextColor={Colors.placeholderColor}
           value={searchText}
           onChangeText={text => {
