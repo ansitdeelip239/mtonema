@@ -6,9 +6,7 @@ import {
   KeyboardAvoidingView,
   Platform,
   TouchableWithoutFeedback,
-  TouchableOpacity,
   Keyboard,
-  Text,
 } from 'react-native';
 import {Button} from 'react-native-paper';
 import {ClientForm} from '../../../types';
@@ -26,14 +24,13 @@ import {useAuth} from '../../../hooks/useAuth';
 import {z} from 'zod';
 import clientFormSchema from '../../../schema/ClientFormSchema';
 import {useDialog} from '../../../hooks/useDialog';
-import GetIcon from '../../../components/GetIcon';
-import AddGroupModal from '../GroupsScreen/components/AddGroupModal';
+import GroupsToggleComponent from './components/GroupsToggle';
 
 type Props = NativeStackScreenProps<ClientStackParamList, 'AddClientScreen'>;
 
 const AddClientScreen: React.FC<Props> = ({navigation, route}) => {
   const scrollViewRef = useRef<ScrollView>(null);
-  const {groups, setClientsUpdated} = usePartner();
+  const {setClientsUpdated} = usePartner();
   const {user} = useAuth();
   const {showError} = useDialog();
 
@@ -164,12 +161,6 @@ const AddClientScreen: React.FC<Props> = ({navigation, route}) => {
   });
 
   useEffect(() => {
-    if (fieldErrors.clientName) {
-      console.log('Client Name Error:', fieldErrors.clientName);
-    }
-  }, [fieldErrors]);
-
-  useEffect(() => {
     setFormInput(initialState);
   }, [setFormInput, initialState]);
 
@@ -196,267 +187,11 @@ const AddClientScreen: React.FC<Props> = ({navigation, route}) => {
     }, safeDelay);
   };
 
-  const toggleGroup = useCallback(
-    (groupId: number) => {
-      const updatedGroups = formInput.groups?.includes(groupId)
-        ? formInput.groups.filter(id => id !== groupId)
-        : Array.from(new Set([...(formInput.groups || []), groupId])); // Convert to array after Set operation
-
-      handleInputChange('groups', Array.from(new Set(updatedGroups)));
+  const handleGroupsChange = useCallback(
+    (groups: number[]) => {
+      handleInputChange('groups', groups);
     },
-    [formInput.groups, handleInputChange],
-  );
-
-  const [showAllGroups, setShowAllGroups] = useState(false);
-  const [showAddGroupModal, setShowAddGroupModal] = useState(false);
-
-  const renderGroupToggleButtons = useMemo(() => {
-    const initialGroupsToShow = 10;
-
-    // First, get all selected groups - these will always be shown
-    const selectedGroups =
-      groups?.filter(group => formInput.groups?.includes(group.id)) || [];
-
-    // Then, get unselected groups
-    const unselectedGroups =
-      groups?.filter(group => !formInput.groups?.includes(group.id)) || [];
-
-    // Determine which unselected groups to show
-    const unselectedToShow = showAllGroups
-      ? unselectedGroups
-      : unselectedGroups.slice(
-          0,
-          Math.max(0, initialGroupsToShow - selectedGroups.length),
-        );
-
-    // Combine the selected and unselected groups
-    const visibleGroups = [...selectedGroups, ...unselectedToShow];
-
-    // Determine if there are more unselected groups to show
-    const hasMoreGroups = unselectedGroups.length > unselectedToShow.length;
-
-    return (
-      <View style={styles.groupsContainer}>
-        {/* Header with Select Groups label and Add Group button */}
-        <View style={styles.groupsLabelRow}>
-          <TouchableOpacity
-            style={styles.groupLabelWithIcon}
-            onPress={() => setShowAllGroups(!showAllGroups)}>
-            <Text style={styles.groupsLabel}>Select Groups</Text>
-            <View style={styles.foldIconButton}>
-              <GetIcon
-                iconName={showAllGroups ? 'fold' : 'unfold'}
-                size={18}
-                color={Colors.main}
-              />
-            </View>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            onPress={() => setShowAddGroupModal(true)}
-            style={styles.addGroupButton}>
-            <GetIcon iconName="plus" size={16} color="white" />
-            <Text style={styles.addGroupButtonText}>Add Group</Text>
-          </TouchableOpacity>
-        </View>
-
-        {/* Group buttons container - remains unchanged */}
-        <View style={styles.groupButtonsContainer}>
-          {visibleGroups.map(group => (
-            <TouchableOpacity
-              key={group.id}
-              style={[
-                styles.groupButton,
-                formInput.groups?.some(g => g === group.id) && {
-                  backgroundColor: group.color.name,
-                  borderColor: group.color.name,
-                },
-              ]}
-              onPress={() => toggleGroup(group.id)}>
-              <Text
-                style={[
-                  styles.groupButtonText,
-                  formInput.groups?.some(g => g === group.id) &&
-                    styles.groupButtonTextSelected,
-                ]}>
-                {group.groupName}
-              </Text>
-            </TouchableOpacity>
-          ))}
-
-          {hasMoreGroups && !showAllGroups && (
-            <TouchableOpacity
-              style={[styles.groupButton, styles.moreButton]}
-              onPress={() => setShowAllGroups(true)}>
-              <Text style={styles.moreButtonText}>
-                +{unselectedGroups.length - unselectedToShow.length} More
-              </Text>
-            </TouchableOpacity>
-          )}
-
-          {showAllGroups && unselectedGroups.length > 0 && (
-            <TouchableOpacity
-              style={[styles.groupButton, styles.moreButton]}
-              onPress={() => setShowAllGroups(false)}>
-              <Text style={styles.moreButtonText}>Show Less</Text>
-            </TouchableOpacity>
-          )}
-        </View>
-
-        {/* Add Group Modal - unchanged */}
-        {showAddGroupModal && (
-          <AddGroupModal
-            visible={showAddGroupModal}
-            onClose={() => setShowAddGroupModal(false)}
-            onSave={(groupName, colorId) => {
-              // Call your API to add the group
-              console.log('Adding group:', groupName, 'with color:', colorId);
-              // You'd typically call a service or API here
-              // PartnerService.addGroup({ groupName, colorId })
-              //   .then(response => {
-              //     // Update your groups context
-              //     // refreshGroups();
-              //   })
-              //   .catch(error => console.error('Error adding group:', error));
-              setShowAddGroupModal(false);
-            }}
-            styles={{
-              modalContainer: {
-                flex: 1,
-                justifyContent: 'center',
-                alignItems: 'center',
-                backgroundColor: 'rgba(0, 0, 0, 0.5)',
-              },
-              modalContent: {
-                backgroundColor: 'white',
-                borderRadius: 12,
-                padding: 20,
-                width: '80%',
-                maxWidth: 400,
-              },
-              modalTitle: {
-                fontSize: 18,
-                fontWeight: 'bold',
-                marginBottom: 16,
-                color: Colors.main,
-              },
-              input: {
-                borderWidth: 1,
-                borderColor: '#ddd',
-                borderRadius: 8,
-                padding: 12,
-                fontSize: 16,
-                backgroundColor: '#f9f9f9',
-                marginBottom: 16,
-              },
-              modalButtons: {
-                flexDirection: 'row',
-                justifyContent: 'flex-end',
-                marginTop: 16,
-              },
-              modalButton: {
-                paddingVertical: 8,
-                paddingHorizontal: 16,
-                borderRadius: 8,
-                marginLeft: 12,
-              },
-              cancelButton: {
-                backgroundColor: '#f0f0f0',
-              },
-              saveButton: {
-                backgroundColor: Colors.main,
-              },
-              buttonText: {
-                fontWeight: 'bold',
-                fontSize: 14,
-              },
-            }}
-            isLoading={false}
-          />
-        )}
-      </View>
-    );
-  }, [groups, formInput.groups, toggleGroup, showAllGroups, showAddGroupModal]);
-
-  const renderForm = useMemo(
-    () => (
-      <View style={styles.formContainer}>
-        <MaterialTextInput<ClientForm>
-          style={styles.input}
-          label="Client Name*"
-          field="clientName"
-          formInput={formInput}
-          setFormInput={handleFieldChange}
-          mode="outlined"
-          placeholder="Eg. John Doe"
-          errorMessage={fieldErrors.clientName}
-        />
-
-        <MaterialTextInput<ClientForm>
-          style={styles.input}
-          label="Display Name"
-          field="displayName"
-          formInput={formInput}
-          setFormInput={handleFieldChange}
-          mode="outlined"
-          placeholder="Eg. John Doe"
-          errorMessage={fieldErrors.displayName}
-        />
-
-        <MaterialTextInput<ClientForm>
-          style={styles.input}
-          label="Mobile Number"
-          field="mobileNumber"
-          formInput={formInput}
-          setFormInput={handleFieldChange}
-          mode="outlined"
-          placeholder="Eg. 1234567890"
-          keyboardType="number-pad"
-          errorMessage={fieldErrors.mobileNumber}
-        />
-
-        <MaterialTextInput<ClientForm>
-          style={styles.input}
-          label="WhatsApp Number"
-          field="whatsappNumber"
-          formInput={formInput}
-          setFormInput={handleFieldChange}
-          mode="outlined"
-          placeholder="Eg. 1234567890"
-          keyboardType="number-pad"
-          errorMessage={fieldErrors.whatsappNumber}
-        />
-
-        <MaterialTextInput<ClientForm>
-          style={styles.input}
-          label="Email"
-          field="emailId"
-          formInput={formInput}
-          setFormInput={handleFieldChange}
-          mode="outlined"
-          placeholder="Eg. email@example.com"
-          keyboardType="email-address"
-          autoCapitalize="none"
-          errorMessage={fieldErrors.emailId}
-        />
-
-        {renderGroupToggleButtons}
-
-        <MaterialTextInput<ClientForm>
-          style={styles.input}
-          label="Notes"
-          field="notes"
-          formInput={formInput}
-          setFormInput={handleFieldChange}
-          mode="outlined"
-          placeholder="Add additional notes"
-          multiline
-          numberOfLines={4}
-          onFocus={() => scrollToEnd()}
-        />
-      </View>
-    ),
-    [formInput, handleFieldChange, renderGroupToggleButtons, fieldErrors],
+    [handleInputChange],
   );
 
   return (
@@ -477,7 +212,84 @@ const AddClientScreen: React.FC<Props> = ({navigation, route}) => {
             keyboardShouldPersistTaps="handled"
             showsVerticalScrollIndicator={false}
             nestedScrollEnabled={true}>
-            {renderForm}
+            <View style={styles.formContainer}>
+              <MaterialTextInput<ClientForm>
+                style={styles.input}
+                label="Client Name*"
+                field="clientName"
+                formInput={formInput}
+                setFormInput={handleFieldChange}
+                mode="outlined"
+                placeholder="Eg. John Doe"
+                errorMessage={fieldErrors.clientName}
+              />
+
+              <MaterialTextInput<ClientForm>
+                style={styles.input}
+                label="Display Name"
+                field="displayName"
+                formInput={formInput}
+                setFormInput={handleFieldChange}
+                mode="outlined"
+                placeholder="Eg. John Doe"
+                errorMessage={fieldErrors.displayName}
+              />
+
+              <MaterialTextInput<ClientForm>
+                style={styles.input}
+                label="Mobile Number"
+                field="mobileNumber"
+                formInput={formInput}
+                setFormInput={handleFieldChange}
+                mode="outlined"
+                placeholder="Eg. 1234567890"
+                keyboardType="number-pad"
+                errorMessage={fieldErrors.mobileNumber}
+              />
+
+              <MaterialTextInput<ClientForm>
+                style={styles.input}
+                label="WhatsApp Number"
+                field="whatsappNumber"
+                formInput={formInput}
+                setFormInput={handleFieldChange}
+                mode="outlined"
+                placeholder="Eg. 1234567890"
+                keyboardType="number-pad"
+                errorMessage={fieldErrors.whatsappNumber}
+              />
+
+              <MaterialTextInput<ClientForm>
+                style={styles.input}
+                label="Email"
+                field="emailId"
+                formInput={formInput}
+                setFormInput={handleFieldChange}
+                mode="outlined"
+                placeholder="Eg. email@example.com"
+                keyboardType="email-address"
+                autoCapitalize="none"
+                errorMessage={fieldErrors.emailId}
+              />
+
+              <GroupsToggleComponent
+                selectedGroups={formInput.groups || []}
+                onGroupsChange={handleGroupsChange}
+              />
+
+              <MaterialTextInput<ClientForm>
+                style={styles.input}
+                label="Notes"
+                field="notes"
+                formInput={formInput}
+                setFormInput={handleFieldChange}
+                mode="outlined"
+                placeholder="Add additional notes"
+                multiline
+                numberOfLines={4}
+                onFocus={() => scrollToEnd()}
+              />
+            </View>
 
             <Button
               mode="contained"
@@ -505,88 +317,11 @@ const styles = StyleSheet.create({
     gap: 16,
   },
   input: {
-    // marginBottom: 16,
     flex: 1,
   },
   formContainer: {
     flex: 1,
     gap: 16,
-  },
-  buttonText: {
-    color: '#fff',
-    fontSize: 14,
-    fontWeight: '600',
-  },
-  groupsContainer: {
-    marginBottom: 16,
-  },
-  groupsLabel: {
-    fontSize: 16,
-    color: '#000',
-    marginRight: 4, // Add space between text and icon
-  },
-  groupButtonsContainer: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    gap: 8,
-  },
-  groupButton: {
-    paddingHorizontal: 12,
-    paddingVertical: 6,
-    borderRadius: 16,
-    borderWidth: 1,
-    borderColor: Colors.main,
-  },
-  groupButtonText: {
-    color: Colors.main,
-    fontSize: 14,
-  },
-  groupButtonTextSelected: {
-    color: '#fff',
-  },
-  moreButton: {
-    backgroundColor: '#f0f0f0',
-    borderColor: '#d0d0d0',
-  },
-  moreButtonText: {
-    color: '#555',
-    fontSize: 14,
-    fontWeight: '500',
-  },
-  groupsLabelRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: 12,
-  },
-  showToggleButton: {
-    padding: 6,
-  },
-  showToggleButtonText: {
-    color: Colors.main,
-    fontSize: 14,
-    fontWeight: '500',
-  },
-  groupLabelWithIcon: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    padding: 4, // Add some padding to increase touch target
-  },
-  foldIconButton: {
-    marginLeft: 4,
-  },
-  addGroupButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: Colors.main,
-    paddingHorizontal: 12,
-    paddingVertical: 6,
-    borderRadius: 16,
-  },
-  addGroupButtonText: {
-    color: 'white',
-    marginLeft: 4,
-    fontSize: 14,
   },
 });
 
