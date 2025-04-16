@@ -49,7 +49,8 @@ export type IconEnum =
   | 'greenCheck'
   | 'locationPin'
   | 'doubleBed'
-  | 'area';
+  | 'area'
+  | 'length';
 
 type IconProps = {
   iconName: IconEnum;
@@ -107,6 +108,7 @@ const GetIcon = ({iconName, color, size}: IconProps) => {
     locationPin: require('../assets/Icon/pin.png'),
     doubleBed: require('../assets/Icon/double-bed.png'),
     area: require('../assets/Icon/maximize.png'),
+    length: require('../assets/Icon/length.png'),
   };
 
   const imageStyle = [
