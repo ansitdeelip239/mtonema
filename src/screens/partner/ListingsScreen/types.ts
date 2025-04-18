@@ -1,8 +1,15 @@
-import {PagingModel} from '../../../types';
-
 export interface PropertiesResponse {
-  pagination: PagingModel;
+  pagination: PaginationData;
   properties: Property[];
+}
+
+export interface PaginationData {
+  totalItems: number;
+  itemsPerPage: number;
+  currentPage: number;
+  totalPages: number;
+  hasNextPage: boolean;
+  hasPrevPage: boolean;
 }
 
 export interface Property {

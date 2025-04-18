@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useState, useRef} from 'react';
 import {
   View,
   StyleSheet,
@@ -6,92 +6,166 @@ import {
   ActivityIndicator,
   Text,
   RefreshControl,
+  TouchableOpacity,
+  Platform,
 } from 'react-native';
 import Header from '../../../components/Header';
 import PartnerService from '../../../services/PartnerService';
 import {useAuth} from '../../../hooks/useAuth';
-import {Property, PropertiesResponse} from './types';
+import {PropertiesResponse, Property} from './types';
 import Colors from '../../../constants/Colors';
 import PropertyCard from './components/PropertyCard';
 import EmptyListPlaceholder from './components/EmptyListPlaceholder';
 
-
 const ListingsScreen = () => {
   const [properties, setProperties] = useState<Property[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
+  const [initialLoading, setInitialLoading] = useState<boolean>(true);
+  const [loadingMore, setLoadingMore] = useState<boolean>(false);
   const [refreshing, setRefreshing] = useState<boolean>(false);
-  const [currentPage, setCurrentPage] = useState<number>(1);
   const [hasMorePages, setHasMorePages] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const pageSize = 10;
   const {user} = useAuth();
+  const flatListRef = useRef<FlatList<Property>>(null);
+
+  // Use a ref to track loading state to prevent duplicate requests
+  const isLoadingRef = useRef<boolean>(false);
+  // Use a ref to track the current page to avoid stale closures
+  const currentPageRef = useRef<number>(1);
+  // Reference to track if component is mounted
+  const isMountedRef = useRef<boolean>(true);
 
   // Fetch property listings
-  const fetchPropertyListings = useCallback(async (
-    page: number,
-    refresh: boolean = false,
-  ) => {
-    if (!user?.id) {
-      return;
-    }
-
-    try {
-      setError(null);
-      if (refresh) {
-        setRefreshing(true);
-      } else if (page === 1) {
-        setLoading(true);
+  const fetchPropertyListings = useCallback(
+    async (page: number, refresh: boolean = false) => {
+      if (!user?.id || isLoadingRef.current) {
+        return;
       }
 
-      const response = await PartnerService.getPartnerPropertyByUserId(
-        user.id,
-        page,
-        pageSize,
-      );
+      try {
+        isLoadingRef.current = true;
+        setError(null);
 
-      const data = response.data as PropertiesResponse;
+        if (refresh) {
+          setRefreshing(true);
+        } else if (page === 1) {
+          setInitialLoading(true);
+        } else {
+          // Loading more - only set loading more flag
+          setLoadingMore(true);
+        }
 
-      // Update pagination state
-      setHasMorePages(data.pagination.nextPage);
+        console.log(`Fetching page ${page} properties for user ${user.id}`);
 
-      // Update properties list
-      if (refresh || page === 1) {
-        setProperties(data.properties);
-      } else {
-        setProperties(prev => [...prev, ...data.properties]);
+        const response = await PartnerService.getPartnerPropertyByUserId(
+          user.id,
+          page,
+          pageSize,
+        );
+
+        // Prevent state updates if component unmounted during the API call
+        if (!isMountedRef.current) {
+          return;
+        }
+
+        const data = response.data as PropertiesResponse;
+        console.log(
+          `Received ${data.properties.length} properties, hasNextPage: ${data.pagination.hasNextPage}, ` +
+            `totalPages: ${data.pagination.totalPages}, currentPage: ${data.pagination.currentPage}`,
+        );
+
+        // Update pagination state
+        setHasMorePages(data.pagination.hasNextPage);
+
+        // Keep track of the current page in the ref
+        currentPageRef.current = page;
+
+        // Update properties list
+        if (refresh || page === 1) {
+          setProperties(data.properties);
+        } else {
+          setProperties(prev => [...prev, ...data.properties]);
+        }
+      } catch (err: any) {
+        // Explicitly type error as any since it could be various types
+        // Check if component is still mounted
+        if (!isMountedRef.current) {
+          return;
+        }
+
+        console.error('Error fetching property listings:', err);
+
+        // More specific error message based on network status
+        const isNetworkError =
+          err.message?.includes('Network') ||
+          err.message?.includes('network') ||
+          err.message?.includes('connection');
+
+        if (isNetworkError) {
+          setError(
+            'Network connection issue. Please check your internet connection and try again.',
+          );
+        } else {
+          setError('Failed to load properties. Please try again later.');
+        }
+      } finally {
+        // Only update state if the component is still mounted
+        if (isMountedRef.current) {
+          setInitialLoading(false);
+          setLoadingMore(false);
+          setRefreshing(false);
+          isLoadingRef.current = false;
+        }
       }
-    } catch (err) {
-      console.error('Error fetching property listings:', err);
-      setError('Failed to load properties. Please try again later.');
-    } finally {
-      setLoading(false);
-      setRefreshing(false);
-    }
-  }, [user?.id]);
+    },
+    [user?.id],
+  );
 
   // Initial data load
   useEffect(() => {
-    fetchPropertyListings(1);
+    if (user?.id) {
+      console.log('Initial data load triggered');
+      fetchPropertyListings(1);
+    }
+
+    // Cleanup function when component unmounts
+    return () => {
+      isMountedRef.current = false;
+    };
   }, [user?.id, fetchPropertyListings]);
 
   // Handle pull-to-refresh
   const handleRefresh = useCallback(() => {
-    setCurrentPage(1);
+    console.log('Pull-to-refresh triggered');
+    currentPageRef.current = 1;
     fetchPropertyListings(1, true);
+  }, [fetchPropertyListings]);
+
+  // Handle retry after error
+  const handleRetry = useCallback(() => {
+    fetchPropertyListings(currentPageRef.current);
   }, [fetchPropertyListings]);
 
   // Load more data when reaching the end of the list
   const handleLoadMore = useCallback(() => {
-    if (!hasMorePages || loading || refreshing) return;
+    // Only proceed if we're not already loading and there are more pages
+    if (isLoadingRef.current || !hasMorePages || refreshing || initialLoading) {
+      console.log(
+        'Skipping load more request - already loading or no more pages',
+      );
+      return;
+    }
 
-    const nextPage = currentPage + 1;
-    setCurrentPage(nextPage);
+    const nextPage = currentPageRef.current + 1;
+    console.log(`Loading more data - requesting page ${nextPage}`);
     fetchPropertyListings(nextPage);
-  }, [currentPage, hasMorePages, loading, refreshing, fetchPropertyListings]);
+  }, [hasMorePages, refreshing, initialLoading, fetchPropertyListings]);
 
   // Render footer with loading indicator when fetching more data
   const renderFooter = useCallback(() => {
-    if (!loading || refreshing) return null;
+    if (!loadingMore) {
+      return null;
+    }
 
     return (
       <View style={styles.footerLoader}>
@@ -99,9 +173,9 @@ const ListingsScreen = () => {
         <Text style={styles.loadingText}>Loading more properties...</Text>
       </View>
     );
-  }, [loading, refreshing]);
+  }, [loadingMore]);
 
-  // Render property card
+  // Render property card with memo for better performance
   const renderPropertyCard = useCallback(
     ({item}: {item: Property}) => <PropertyCard property={item} />,
     [],
@@ -111,7 +185,7 @@ const ListingsScreen = () => {
   const keyExtractor = useCallback((item: Property) => item.id.toString(), []);
 
   // Check if the list is empty
-  const isListEmpty = !loading && properties.length === 0;
+  const isListEmpty = !initialLoading && properties.length === 0;
 
   return (
     <View style={styles.container}>
@@ -120,24 +194,47 @@ const ListingsScreen = () => {
       {error ? (
         <View style={styles.errorContainer}>
           <Text style={styles.errorText}>{error}</Text>
+          <TouchableOpacity
+            style={styles.retryButton}
+            onPress={handleRetry}
+            activeOpacity={0.7}>
+            <Text style={styles.retryButtonText}>Retry</Text>
+          </TouchableOpacity>
         </View>
       ) : (
         <FlatList
+          ref={flatListRef}
           data={properties}
           renderItem={renderPropertyCard}
           keyExtractor={keyExtractor}
-          contentContainerStyle={styles.listContainer}
+          contentContainerStyle={[
+            styles.listContainer,
+            isListEmpty && styles.emptyListContainer,
+          ]}
           showsVerticalScrollIndicator={false}
           refreshControl={
-            <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
+            <RefreshControl
+              refreshing={refreshing}
+              onRefresh={handleRefresh}
+              colors={[Colors.main]}
+              tintColor={Colors.main}
+            />
           }
           onEndReached={handleLoadMore}
-          onEndReachedThreshold={0.3}
+          onEndReachedThreshold={0.5}
+          maintainVisibleContentPosition={{
+            minIndexForVisible: 0,
+          }}
           ListFooterComponent={renderFooter}
+          removeClippedSubviews={Platform.OS === 'android'} // Optimize memory usage
+          maxToRenderPerBatch={5} // Improve initial rendering time
+          updateCellsBatchingPeriod={50} // Group rendering for better performance
+          initialNumToRender={5} // Start with fewer items for faster first render
+          windowSize={10} // Control offscreen render windows
           ListEmptyComponent={
             isListEmpty ? (
               <EmptyListPlaceholder />
-            ) : loading ? (
+            ) : initialLoading ? (
               <View style={styles.loadingContainer}>
                 <ActivityIndicator size="large" color={Colors.main} />
                 <Text style={styles.loadingText}>Loading properties...</Text>
@@ -150,6 +247,7 @@ const ListingsScreen = () => {
   );
 };
 
+// Enhanced styles with retry button
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -158,6 +256,10 @@ const styles = StyleSheet.create({
   listContainer: {
     padding: 12,
     paddingBottom: 100, // Extra padding at bottom for better UX
+  },
+  emptyListContainer: {
+    flexGrow: 1,
+    justifyContent: 'center',
   },
   loadingContainer: {
     flex: 1,
@@ -186,6 +288,19 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     color: '#d32f2f',
     fontSize: 16,
+    marginBottom: 16,
+  },
+  retryButton: {
+    backgroundColor: Colors.main,
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 8,
+    marginTop: 12,
+  },
+  retryButtonText: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: '500',
   },
 });
 
