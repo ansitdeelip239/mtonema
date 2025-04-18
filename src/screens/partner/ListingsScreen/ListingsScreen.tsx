@@ -7,7 +7,6 @@ import {
   Text,
   RefreshControl,
   TouchableOpacity,
-  Platform,
 } from 'react-native';
 import Header from '../../../components/Header';
 import PartnerService from '../../../services/PartnerService';
@@ -187,6 +186,27 @@ const ListingsScreen = () => {
   // Check if the list is empty
   const isListEmpty = !initialLoading && properties.length === 0;
 
+  // Add getItemLayout function to provide fixed height information
+  const getItemLayout = useCallback(
+    (_data: any, index: number) => ({
+      length: 160, // CARD_HEIGHT value
+      offset: 160 * index + (index > 0 ? 16 * index : 0), // Account for marginBottom in card style
+      index,
+    }),
+    [],
+  );
+
+  // Clear property list function
+  // const clearPropertyList = () => {
+  //   // Clear the list
+  //   setProperties([]);
+
+  //   // Optional: Reset the animation tracking if you want animations to play again
+  //   // This requires making animatedPropertyIds exportable from PropertyCard.tsx
+  //   // import { resetAnimatedProperties } from './components/PropertyCard';
+  //   // resetAnimatedProperties();
+  // }
+
   return (
     <View style={styles.container}>
       <Header title="Property Listings" />
@@ -202,11 +222,13 @@ const ListingsScreen = () => {
           </TouchableOpacity>
         </View>
       ) : (
+        // Update your FlatList with these optimized props
         <FlatList
           ref={flatListRef}
           data={properties}
           renderItem={renderPropertyCard}
           keyExtractor={keyExtractor}
+          getItemLayout={getItemLayout}
           contentContainerStyle={[
             styles.listContainer,
             isListEmpty && styles.emptyListContainer,
@@ -220,17 +242,25 @@ const ListingsScreen = () => {
               tintColor={Colors.main}
             />
           }
+          // Enable onEndReached but don't use InteractionManager
           onEndReached={handleLoadMore}
-          onEndReachedThreshold={0.5}
+          onEndReachedThreshold={0.5} // Increase this value
+          ListFooterComponent={renderFooter}
+          // Critical performance settings
+          removeClippedSubviews={true}
+          maxToRenderPerBatch={10} // Increase from 3 to reduce flashing
+          updateCellsBatchingPeriod={50} // Reduce to update more frequently
+          initialNumToRender={10} // Increase for smoother initial render
+          windowSize={10} // Increase to keep more items in memory
+          // Keep these optimization props
+          disableVirtualization={false}
+          automaticallyAdjustContentInsets={false}
+          // Optional - may help with flickering
           maintainVisibleContentPosition={{
             minIndexForVisible: 0,
+            autoscrollToTopThreshold: 10,
           }}
-          ListFooterComponent={renderFooter}
-          removeClippedSubviews={Platform.OS === 'android'} // Optimize memory usage
-          maxToRenderPerBatch={5} // Improve initial rendering time
-          updateCellsBatchingPeriod={50} // Group rendering for better performance
-          initialNumToRender={5} // Start with fewer items for faster first render
-          windowSize={10} // Control offscreen render windows
+          // Other props remain the same
           ListEmptyComponent={
             isListEmpty ? (
               <EmptyListPlaceholder />

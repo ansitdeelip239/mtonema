@@ -1,12 +1,5 @@
-import React, {useRef, useEffect, memo} from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  Image,
-  Animated,
-  Dimensions,
-} from 'react-native';
+import React, {useMemo, memo} from 'react';
+import {View, Text, StyleSheet, Image, Dimensions} from 'react-native';
 import {Property} from '../types';
 import {formatCurrency} from '../../../../utils/currency';
 import Colors from '../../../../constants/Colors';
@@ -25,144 +18,144 @@ const CARD_HEIGHT = 160; // Reduced height for horizontal layout
 const IMAGE_WIDTH = CARD_WIDTH * 0.35; // 35% of card width for image
 const IMAGE_HEIGHT = CARD_HEIGHT - 24; // Maintain some padding
 
-const PropertyCard = memo(({property}: PropertyCardProps) => {
-  const fadeAnim = useRef(new Animated.Value(0)).current;
+// More aggressive memoization for PropertyCard
+const PropertyCard = memo(
+  ({property}: PropertyCardProps) => {
+    // Memoize expensive operations
+    const displayImage = useMemo(() => {
+      if (!property.imageURL) {
+        return null;
+      }
 
-  // Find toggled image or default to first image
-  const getDisplayImage = () => {
-    if (!property.imageURL) {
-      return null;
-    }
+      try {
+        const parsedImages = JSON.parse(property.imageURL);
+        const toggledImage = parsedImages.find(
+          (img: any) => img.toggle === true,
+        );
+        return toggledImage ? {url: toggledImage.imageUrl} : null;
+      } catch (error) {
+        console.error('Error parsing image URL:', error);
+        return null;
+      }
+    }, [property.imageURL]);
 
-    try {
-      const parsedImages = JSON.parse(property.imageURL);
-      // Find the image with toggle:true
-      const toggledImage = parsedImages.find((img: any) => img.toggle === true);
-      return toggledImage ? {url: toggledImage.imageUrl} : null;
-    } catch (error) {
-      console.error('Error parsing image URL:', error);
-      return null;
-    }
-  };
+    // Memoize formatted values
+    const formattedPrice = useMemo(
+      () =>
+        property.price ? formatCurrency(property.price) : 'Price on request',
+      [property.price],
+    );
 
-  // Get the image to display
-  const displayImage = getDisplayImage();
+    const formattedArea = useMemo(
+      () =>
+        property.area && property.lmunit
+          ? `${property.area} ${property.lmunit}`
+          : null,
+      [property.area, property.lmunit],
+    );
 
-  // Format price display
-  const formattedPrice = property.price
-    ? formatCurrency(property.price)
-    : 'Price on request';
+    return (
+      <View style={styles.card} testID="property-card">
+        <View style={styles.cardContent}>
+          {/* Property Image */}
+          <View style={styles.imageContainer}>
+            {displayImage ? (
+              <Image
+                source={{uri: displayImage.url}}
+                style={styles.image}
+                resizeMode="cover"
+                accessible={true}
+                accessibilityLabel={`Image of ${
+                  property.propertyName || 'property'
+                }`}
+                // Important for performance
+                fadeDuration={0}
+                // Add this for better image performance
+                progressiveRenderingEnabled={false}
+              />
+            ) : (
+              <Image
+                source={placeholderImage}
+                style={styles.image}
+                resizeMode="contain"
+                accessible={true}
+                accessibilityLabel="Property placeholder image"
+              />
+            )}
 
-  // Format area with unit
-  const formattedArea =
-    property.area && property.lmunit
-      ? `${property.area} ${property.lmunit}`
-      : null;
-
-  // Fade in animation
-  useEffect(() => {
-    Animated.timing(fadeAnim, {
-      toValue: 1,
-      duration: 500,
-      useNativeDriver: true,
-    }).start();
-  }, [fadeAnim]);
-
-  return (
-    <Animated.View
-      style={[styles.card, {opacity: fadeAnim}]}
-      testID="property-card">
-      <View style={styles.cardContent}>
-        {/* Property Image */}
-        <View style={styles.imageContainer}>
-          {displayImage ? (
-            <Image
-              source={{uri: displayImage.url}}
-              style={styles.image}
-              resizeMode="cover"
-              accessible={true}
-              accessibilityLabel={`Image of ${
-                property.propertyName || 'property'
-              }`}
-            />
-          ) : (
-            <Image
-              source={placeholderImage}
-              style={styles.image}
-              resizeMode="contain"
-              accessible={true}
-              accessibilityLabel="Property placeholder image"
-            />
-          )}
-
-          {/* Property For Label */}
-          <View style={styles.propertyForBadge}>
-            <Text style={styles.propertyForText}>
-              {property.propertyFor || 'For Sale'}
-            </Text>
-          </View>
-
-          {/* Featured Badge */}
-          {property.featured && (
-            <View style={styles.featuredBadge}>
-              <Text style={styles.featuredText}>Featured</Text>
-            </View>
-          )}
-        </View>
-
-        {/* Property Details */}
-        <View style={styles.detailsContainer}>
-          {/* Property Name */}
-          <Text style={styles.title} numberOfLines={2} ellipsizeMode="tail">
-            {property.propertyName || 'Unnamed Property'}
-          </Text>
-
-          {/* Price */}
-          <Text style={styles.price}>{formattedPrice}</Text>
-
-          {/* Location */}
-          <View style={styles.locationContainer}>
-            <GetIcon iconName="locationPin" color={Colors.main} size={14} />
-            <Text
-              style={styles.location}
-              numberOfLines={1}
-              ellipsizeMode="tail">
-              {property.location || 'Location not specified'}
-              {property.city ? `, ${property.city}` : ''}
-            </Text>
-          </View>
-
-          {/* Area (if available) */}
-          {formattedArea && (
-            <View style={styles.areaContainer}>
-              <GetIcon iconName="length" size={16} color={Colors.main} />
-              <Text style={styles.areaText}>{formattedArea}</Text>
-            </View>
-          )}
-
-          {/* Type and Furnishing in one row */}
-          <View style={styles.bottomRow}>
-            <View style={styles.typeContainer}>
-              <GetIcon iconName="home" size={14} color={Colors.main} />
-              <Text style={styles.typeText} numberOfLines={1}>
-                {property.propertyType || 'Not specified'}
+            {/* Property For Label */}
+            <View style={styles.propertyForBadge}>
+              <Text style={styles.propertyForText}>
+                {property.propertyFor || 'For Sale'}
               </Text>
             </View>
 
-            {property.furnishing && (
-              <View style={styles.furnishingContainer}>
-                <GetIcon iconName="doubleBed" size={14} color={Colors.main} />
-                <Text style={styles.furnishingText} numberOfLines={1}>
-                  {property.furnishing}
-                </Text>
+            {/* Featured Badge */}
+            {property.featured && (
+              <View style={styles.featuredBadge}>
+                <Text style={styles.featuredText}>Featured</Text>
               </View>
             )}
           </View>
+
+          {/* Property Details */}
+          <View style={styles.detailsContainer}>
+            {/* Property Name */}
+            <Text style={styles.title} numberOfLines={2} ellipsizeMode="tail">
+              {property.propertyName || 'Unnamed Property'}
+            </Text>
+
+            {/* Price */}
+            <Text style={styles.price}>{formattedPrice}</Text>
+
+            {/* Location */}
+            <View style={styles.locationContainer}>
+              <GetIcon iconName="locationPin" color={Colors.main} size={14} />
+              <Text
+                style={styles.location}
+                numberOfLines={1}
+                ellipsizeMode="tail">
+                {property.location || 'Location not specified'}
+                {property.city ? `, ${property.city}` : ''}
+              </Text>
+            </View>
+
+            {/* Area (if available) */}
+            {formattedArea && (
+              <View style={styles.areaContainer}>
+                <GetIcon iconName="length" size={16} color={Colors.main} />
+                <Text style={styles.areaText}>{formattedArea}</Text>
+              </View>
+            )}
+
+            {/* Type and Furnishing in one row */}
+            <View style={styles.bottomRow}>
+              <View style={styles.typeContainer}>
+                <GetIcon iconName="home" size={14} color={Colors.main} />
+                <Text style={styles.typeText} numberOfLines={1}>
+                  {property.propertyType || 'Not specified'}
+                </Text>
+              </View>
+
+              {property.furnishing && (
+                <View style={styles.furnishingContainer}>
+                  <GetIcon iconName="doubleBed" size={14} color={Colors.main} />
+                  <Text style={styles.furnishingText} numberOfLines={1}>
+                    {property.furnishing}
+                  </Text>
+                </View>
+              )}
+            </View>
+          </View>
         </View>
       </View>
-    </Animated.View>
-  );
-});
+    );
+  },
+  (prevProps, nextProps) => {
+    // Add a comparison function to prevent unnecessary re-renders
+    return prevProps.property.id === nextProps.property.id;
+  },
+);
 
 const styles = StyleSheet.create({
   card: {
