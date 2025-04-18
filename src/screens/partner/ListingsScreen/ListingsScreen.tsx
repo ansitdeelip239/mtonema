@@ -15,8 +15,15 @@ import {PropertiesResponse, Property} from './types';
 import Colors from '../../../constants/Colors';
 import PropertyCard from './components/PropertyCard';
 import EmptyListPlaceholder from './components/EmptyListPlaceholder';
+import {NativeStackScreenProps} from '@react-navigation/native-stack';
+import {ListingScreenStackParamList} from '../../../navigator/components/PropertyListingScreenStack';
 
-const ListingsScreen = () => {
+type Props = NativeStackScreenProps<
+  ListingScreenStackParamList,
+  'ListingsScreen'
+>;
+
+const ListingsScreen: React.FC<Props> = ({navigation}) => {
   const [properties, setProperties] = useState<Property[]>([]);
   const [initialLoading, setInitialLoading] = useState<boolean>(true);
   const [loadingMore, setLoadingMore] = useState<boolean>(false);
@@ -174,10 +181,31 @@ const ListingsScreen = () => {
     );
   }, [loadingMore]);
 
+  // Handle property card press - navigate to details
+  const handlePropertyPress = useCallback(
+    (property: Property) => {
+      // Navigate to the PropertyDetailsScreen with the property data
+      // navigation.navigate('PropertyDetails', {
+      //   propertyId: property.id,
+      //   propertyName: property.propertyName,
+      //   // You can pass the entire property object if needed
+      //   property: property,
+      // });
+      console.log(`Navigating to property details for ID: ${property.id}`);
+      
+      navigation.navigate('ListingsDetailScreen', {
+        propertyId: Number(property.id),
+      });
+    },
+    [navigation],
+  );
+
   // Render property card with memo for better performance
   const renderPropertyCard = useCallback(
-    ({item}: {item: Property}) => <PropertyCard property={item} />,
-    [],
+    ({item}: {item: Property}) => (
+      <PropertyCard property={item} onPress={handlePropertyPress} />
+    ),
+    [handlePropertyPress],
   );
 
   // Extract key for FlatList

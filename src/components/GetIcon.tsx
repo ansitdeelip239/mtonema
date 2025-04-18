@@ -52,7 +52,9 @@ export type IconEnum =
   | 'area'
   | 'length'
   | 'fold'
-  | 'unfold';
+  | 'unfold'
+  | 'compass'
+  | 'room';
 
 type IconProps = {
   iconName: IconEnum;
@@ -113,6 +115,8 @@ const GetIcon = ({iconName, color, size}: IconProps) => {
     length: require('../assets/Icon/length.png'),
     fold: require('../assets/Icon/fold.png'),
     unfold: require('../assets/Icon/unfold.png'),
+    compass: require('../assets/Icon/compass.png'),
+    room: require('../assets/Icon/living-room.png'),
   };
 
   const imageStyle = [

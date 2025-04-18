@@ -1,8 +1,6 @@
 import url from '../constants/api';
-import {
-  PartnerPropertyApiSubmissionType,
-} from '../schema/PartnerPropertyFormSchema';
-import { PropertiesResponse } from '../screens/partner/ListingsScreen/types';
+import {PartnerPropertyApiSubmissionType} from '../schema/PartnerPropertyFormSchema';
+import {PropertiesResponse, Property} from '../screens/partner/ListingsScreen/types';
 import {
   AgentPropertyRequestModel,
   Client,
@@ -339,7 +337,7 @@ class PartnerService {
   static async postPartnerProperty(payload: PartnerPropertyApiSubmissionType) {
     try {
       const response = await api.post<null>(
-        `${url.postPartnerProperty}`,
+        `${url.partnerProperty}`,
         payload,
       );
       return response;
@@ -362,6 +360,18 @@ class PartnerService {
       return response;
     } catch (error) {
       console.error('Error in getPartnerPropertyByUserId', error);
+      throw error;
+    }
+  }
+
+  static async getPartnerPropertyById(id: number) {
+    try {
+      const response = await api.get<Property>(
+        url.partnerProperty + `/${id}`,
+      );
+      return response;
+    } catch (error) {
+      console.error('Error in getPartnerPropertyById', error);
       throw error;
     }
   }

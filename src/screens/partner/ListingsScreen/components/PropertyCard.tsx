@@ -1,5 +1,12 @@
 import React, {useMemo, memo} from 'react';
-import {View, Text, StyleSheet, Image, Dimensions} from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  Image,
+  Dimensions,
+  TouchableOpacity,
+} from 'react-native';
 import {Property} from '../types';
 import {formatCurrency} from '../../../../utils/currency';
 import Colors from '../../../../constants/Colors';
@@ -10,6 +17,7 @@ const placeholderImage = require('../../../../assets/Images/dncr_black_logo.png'
 
 interface PropertyCardProps {
   property: Property;
+  onPress: (property: Property) => void; // Add onPress handler prop
 }
 
 const {width} = Dimensions.get('window');
@@ -20,7 +28,7 @@ const IMAGE_HEIGHT = CARD_HEIGHT - 24; // Maintain some padding
 
 // More aggressive memoization for PropertyCard
 const PropertyCard = memo(
-  ({property}: PropertyCardProps) => {
+  ({property, onPress}: PropertyCardProps) => {
     // Memoize expensive operations
     const displayImage = useMemo(() => {
       if (!property.imageURL) {
@@ -54,116 +62,135 @@ const PropertyCard = memo(
       [property.area, property.lmunit],
     );
 
+    // Memoize the onPress handler to improve performance
+    const handlePress = useMemo(() => {
+      return () => onPress(property);
+    }, [property, onPress]);
+
     return (
-      <View style={styles.card} testID="property-card">
-        <View style={styles.cardContent}>
-          {/* Property Image */}
-          <View style={styles.imageContainer}>
-            {displayImage ? (
-              <Image
-                source={{uri: displayImage.url}}
-                style={styles.image}
-                resizeMode="cover"
-                accessible={true}
-                accessibilityLabel={`Image of ${
-                  property.propertyName || 'property'
-                }`}
-                // Important for performance
-                fadeDuration={0}
-                // Add this for better image performance
-                progressiveRenderingEnabled={false}
-              />
-            ) : (
-              <Image
-                source={placeholderImage}
-                style={styles.image}
-                resizeMode="contain"
-                accessible={true}
-                accessibilityLabel="Property placeholder image"
-              />
-            )}
+      <TouchableOpacity
+        style={styles.touchable}
+        onPress={handlePress}
+        activeOpacity={0.9} // Keep opacity change subtle
+        testID="property-card-touchable">
+        <View style={styles.card} testID="property-card">
+          <View style={styles.cardContent}>
+            {/* Property Image */}
+            <View style={styles.imageContainer}>
+              {displayImage ? (
+                <Image
+                  source={{uri: displayImage.url}}
+                  style={styles.image}
+                  resizeMode="cover"
+                  accessible={true}
+                  accessibilityLabel={`Image of ${
+                    property.propertyName || 'property'
+                  }`}
+                  fadeDuration={0}
+                  progressiveRenderingEnabled={false}
+                />
+              ) : (
+                <Image
+                  source={placeholderImage}
+                  style={styles.image}
+                  resizeMode="contain"
+                  accessible={true}
+                  accessibilityLabel="Property placeholder image"
+                />
+              )}
 
-            {/* Property For Label */}
-            <View style={styles.propertyForBadge}>
-              <Text style={styles.propertyForText}>
-                {property.propertyFor || 'For Sale'}
-              </Text>
-            </View>
-
-            {/* Featured Badge */}
-            {property.featured && (
-              <View style={styles.featuredBadge}>
-                <Text style={styles.featuredText}>Featured</Text>
-              </View>
-            )}
-          </View>
-
-          {/* Property Details */}
-          <View style={styles.detailsContainer}>
-            {/* Property Name */}
-            <Text style={styles.title} numberOfLines={2} ellipsizeMode="tail">
-              {property.propertyName || 'Unnamed Property'}
-            </Text>
-
-            {/* Price */}
-            <Text style={styles.price}>{formattedPrice}</Text>
-
-            {/* Location */}
-            <View style={styles.locationContainer}>
-              <GetIcon iconName="locationPin" color={Colors.main} size={14} />
-              <Text
-                style={styles.location}
-                numberOfLines={1}
-                ellipsizeMode="tail">
-                {property.location || 'Location not specified'}
-                {property.city ? `, ${property.city}` : ''}
-              </Text>
-            </View>
-
-            {/* Area (if available) */}
-            {formattedArea && (
-              <View style={styles.areaContainer}>
-                <GetIcon iconName="length" size={16} color={Colors.main} />
-                <Text style={styles.areaText}>{formattedArea}</Text>
-              </View>
-            )}
-
-            {/* Type and Furnishing in one row */}
-            <View style={styles.bottomRow}>
-              <View style={styles.typeContainer}>
-                <GetIcon iconName="home" size={14} color={Colors.main} />
-                <Text style={styles.typeText} numberOfLines={1}>
-                  {property.propertyType || 'Not specified'}
+              {/* Property For Label */}
+              <View style={styles.propertyForBadge}>
+                <Text style={styles.propertyForText}>
+                  {property.propertyFor || 'For Sale'}
                 </Text>
               </View>
 
-              {property.furnishing && (
-                <View style={styles.furnishingContainer}>
-                  <GetIcon iconName="doubleBed" size={14} color={Colors.main} />
-                  <Text style={styles.furnishingText} numberOfLines={1}>
-                    {property.furnishing}
-                  </Text>
+              {/* Featured Badge */}
+              {property.featured && (
+                <View style={styles.featuredBadge}>
+                  <Text style={styles.featuredText}>Featured</Text>
                 </View>
               )}
             </View>
+
+            {/* Property Details */}
+            <View style={styles.detailsContainer}>
+              {/* Property Name */}
+              <Text style={styles.title} numberOfLines={2} ellipsizeMode="tail">
+                {property.propertyName || 'Unnamed Property'}
+              </Text>
+
+              {/* Price */}
+              <Text style={styles.price}>{formattedPrice}</Text>
+
+              {/* Location */}
+              <View style={styles.locationContainer}>
+                <GetIcon iconName="locationPin" color={Colors.main} size={14} />
+                <Text
+                  style={styles.location}
+                  numberOfLines={1}
+                  ellipsizeMode="tail">
+                  {property.location || 'Location not specified'}
+                  {property.city ? `, ${property.city}` : ''}
+                </Text>
+              </View>
+
+              {/* Area (if available) */}
+              {formattedArea && (
+                <View style={styles.areaContainer}>
+                  <GetIcon iconName="length" size={16} color={Colors.main} />
+                  <Text style={styles.areaText}>{formattedArea}</Text>
+                </View>
+              )}
+
+              {/* Type and Furnishing in one row */}
+              <View style={styles.bottomRow}>
+                <View style={styles.typeContainer}>
+                  <GetIcon iconName="home" size={14} color={Colors.main} />
+                  <Text style={styles.typeText} numberOfLines={1}>
+                    {property.propertyType || 'Not specified'}
+                  </Text>
+                </View>
+
+                {property.furnishing && (
+                  <View style={styles.furnishingContainer}>
+                    <GetIcon
+                      iconName="doubleBed"
+                      size={14}
+                      color={Colors.main}
+                    />
+                    <Text style={styles.furnishingText} numberOfLines={1}>
+                      {property.furnishing}
+                    </Text>
+                  </View>
+                )}
+              </View>
+            </View>
           </View>
         </View>
-      </View>
+      </TouchableOpacity>
     );
   },
   (prevProps, nextProps) => {
-    // Add a comparison function to prevent unnecessary re-renders
+    // Only re-render if essential properties change
     return prevProps.property.id === nextProps.property.id;
   },
 );
 
 const styles = StyleSheet.create({
+  touchable: {
+    width: '100%',
+    marginBottom: 16,
+    borderRadius: 12,
+    // Remove overflow hidden from the touchable
+  },
   card: {
     width: '100%',
     height: CARD_HEIGHT,
     backgroundColor: 'white',
     borderRadius: 12,
-    marginBottom: 16,
+    // iOS shadow
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
@@ -171,13 +198,16 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 0.1,
     shadowRadius: 4,
-    elevation: 3,
-    overflow: 'hidden',
+    // Android elevation
+    elevation: 5,
+    // Only apply overflow hidden to inner content, not the card itself
   },
   cardContent: {
     flexDirection: 'row',
     height: '100%',
     padding: 12,
+    borderRadius: 12, // Match the card's border radius
+    overflow: 'hidden', // Move overflow hidden here
   },
   imageContainer: {
     width: IMAGE_WIDTH,
