@@ -29,13 +29,11 @@ const LocationComponent = ({
     };
   };
 
-  // Fetch location suggestions from your backend API
   const searchLocationSuggestion = async (keyword: string) => {
     try {
       const response = await BuyerService.getPlaces(keyword, 'India');
       console.log(response);
 
-      // Check if response is defined and has the expected structure
       if (response && response.predictions) {
         // Extract the descriptions from the predictions array
         const suggestions = response.predictions.map(

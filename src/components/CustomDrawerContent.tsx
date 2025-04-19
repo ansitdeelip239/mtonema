@@ -25,7 +25,6 @@ const CustomDrawerContent = (props: any) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [loadingModalVisible, setLoadingModalVisible] = useState(false);
 
-  // Add this effect to update the userName when user context changes
   useEffect(() => {
     if (user?.name) {
       setUserName(user.name);

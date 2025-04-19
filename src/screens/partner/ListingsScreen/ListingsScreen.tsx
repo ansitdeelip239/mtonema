@@ -192,7 +192,7 @@ const ListingsScreen: React.FC<Props> = ({navigation}) => {
       //   property: property,
       // });
       console.log(`Navigating to property details for ID: ${property.id}`);
-      
+
       navigation.navigate('ListingsDetailScreen', {
         propertyId: Number(property.id),
       });

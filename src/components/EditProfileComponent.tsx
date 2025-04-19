@@ -47,7 +47,6 @@ const EditProfileComponent = () => {
       },
       onSubmit: async formData => {
         try {
-          // Add your API call here
           const requestBody = {
             id: user?.id as number,
             name: formData.name,
@@ -72,7 +71,6 @@ const EditProfileComponent = () => {
               });
             }
           }
-          // After successful submission
           setEditingFields({
             name: false,
             email: false,
@@ -92,7 +90,6 @@ const EditProfileComponent = () => {
         [field]: !prev[field],
       };
 
-      // Schedule scrolling to the end if field is being enabled
       if (newEditingFields[field]) {
         setTimeout(() => {
           scrollViewRef.current?.scrollToEnd({animated: true});
@@ -134,7 +131,6 @@ const EditProfileComponent = () => {
 
   // Determine which field is being edited to provide appropriate padding
   const getAdaptivePadding = () => {
-    // More padding for fields at the bottom of the form
     if (editingFields.phone) {
       return screenHeight * 0.05; // 5% for phone field
     }

@@ -10,6 +10,8 @@ import {
   TouchableOpacity,
   Linking,
   Platform,
+  FlatList,
+  useWindowDimensions,
 } from 'react-native';
 import {ListingScreenStackParamList} from '../../../navigator/components/PropertyListingScreenStack';
 import {Property} from './types';
@@ -32,6 +34,8 @@ const ListingDetailScreen: React.FC<Props> = ({route, navigation}) => {
   const [property, setProperty] = useState<Property | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const {width} = useWindowDimensions();
 
   useEffect(() => {
     const fetchPropertyDetails = async () => {
@@ -59,20 +63,54 @@ const ListingDetailScreen: React.FC<Props> = ({route, navigation}) => {
   }, [propertyId]); // Add dependency to prevent infinite fetch loop
 
   // Process main property image
-  const displayImage = useMemo(() => {
+  const displayImages = useMemo(() => {
     if (!property?.imageURL) {
-      return null;
+      return [];
     }
 
     try {
-      const parsedImages = JSON.parse(property.imageURL);
-      const toggledImage = parsedImages.find((img: any) => img.toggle === true);
-      return toggledImage ? {uri: toggledImage.imageUrl} : null;
+      // First, remove any extra quotes at the beginning and end if present
+      let imageData = property.imageURL.trim();
+      if (imageData.startsWith('"') && imageData.endsWith('"')) {
+        imageData = imageData.slice(1, -1);
+      }
+
+      // Try to parse the JSON
+      const parsedImages = JSON.parse(imageData);
+      console.log(parsedImages);
+
+      // Handle if the result is a string (double encoded)
+      if (typeof parsedImages === 'string') {
+        return JSON.parse(parsedImages);
+      }
+
+      // Sort images to put the toggled image first
+      return parsedImages.sort((a: any, b: any) => {
+        if (a.toggle && !b.toggle) {
+          return -1;
+        }
+        if (!a.toggle && b.toggle) {
+          return 1;
+        }
+        return 0;
+      });
     } catch (err) {
       console.error('Error parsing image URL:', err);
-      return null;
+      console.log('Raw imageURL value:', property.imageURL);
+      return [];
     }
   }, [property?.imageURL]);
+
+  // Function to handle image scroll events
+  const handleImageScroll = (event: any) => {
+    const slideIndex = Math.ceil(
+      event.nativeEvent.contentOffset.x /
+        event.nativeEvent.layoutMeasurement.width,
+    );
+    if (slideIndex !== currentImageIndex) {
+      setCurrentImageIndex(slideIndex);
+    }
+  };
 
   // Process tags
   const displayTags = useMemo(() => {
@@ -81,9 +119,26 @@ const ListingDetailScreen: React.FC<Props> = ({route, navigation}) => {
     }
 
     try {
+      // Special handling for Python-style array strings
+      if (property.tags.includes("['") && property.tags.includes("']")) {
+        // Python-style string list - extract tags manually
+        return property.tags
+          .replace(/^\[\'|\'\]$/g, '') // Remove outer ['...']
+          .split("','") // Split by ','
+          .map(tag => tag.trim()); // Clean up each tag
+      }
+
+      // Standard JSON parsing attempt
       return JSON.parse(property.tags);
     } catch (err) {
       console.error('Error parsing tags:', err);
+      console.log('Raw tags value:', property.tags);
+
+      // Last resort: if it's a simple string, return it as a single tag
+      if (typeof property.tags === 'string') {
+        return [property.tags.replace(/[\[\]\'\"]/g, '')];
+      }
+
       return [];
     }
   }, [property?.tags]);
@@ -140,14 +195,50 @@ const ListingDetailScreen: React.FC<Props> = ({route, navigation}) => {
         style={styles.scrollView}
         contentContainerStyle={styles.contentContainer}
         showsVerticalScrollIndicator={false}>
-        {/* Property Image */}
+        {/* Property Image Slider */}
         <View style={styles.imageContainer}>
-          {displayImage ? (
-            <Image
-              source={displayImage}
-              style={styles.propertyImage}
-              resizeMode="cover"
-            />
+          {displayImages.length > 0 ? (
+            <>
+              <FlatList
+                data={displayImages}
+                keyExtractor={(item, index) => `image-${index}`}
+                renderItem={({item}) => (
+                  <View style={[styles.imageSlide, {width}]}>
+                    <Image
+                      source={{uri: item.imageUrl}}
+                      style={styles.propertyImage}
+                      resizeMode="cover"
+                    />
+                    {item.type && (
+                      <View style={styles.imageTypeContainer}>
+                        <Text style={styles.imageTypeText}>{item.type}</Text>
+                      </View>
+                    )}
+                  </View>
+                )}
+                horizontal
+                pagingEnabled
+                showsHorizontalScrollIndicator={false}
+                onScroll={handleImageScroll}
+                scrollEventThrottle={16}
+              />
+
+              {/* Pagination Indicators */}
+              {displayImages.length > 1 && (
+                <View style={styles.paginationContainer}>
+                  {displayImages.map((_: unknown, index: number) => (
+                    <View
+                      key={`dot-${index}`}
+                      style={[
+                        styles.paginationDot,
+                        currentImageIndex === index &&
+                          styles.paginationDotActive,
+                      ]}
+                    />
+                  ))}
+                </View>
+              )}
+            </>
           ) : (
             <View style={styles.placeholderContainer}>
               <Image
@@ -264,7 +355,9 @@ const ListingDetailScreen: React.FC<Props> = ({route, navigation}) => {
                 </View>
                 <View style={styles.overviewTextContainer}>
                   <Text style={styles.overviewLabel}>Furnishing</Text>
-                  <Text style={styles.overviewValue}>{property.furnishing}</Text>
+                  <Text style={styles.overviewValue}>
+                    {property.furnishing}
+                  </Text>
                 </View>
               </View>
             )}
@@ -283,7 +376,6 @@ const ListingDetailScreen: React.FC<Props> = ({route, navigation}) => {
             )}
           </View>
         </View>
-
 
         {/* Description */}
         {(property.shortDescription || property.longDescription) && (
@@ -574,6 +666,9 @@ const ListingDetailScreen: React.FC<Props> = ({route, navigation}) => {
 };
 
 const styles = StyleSheet.create({
+  imageSlide: {
+    height: 250,
+  },
   container: {
     flex: 1,
     backgroundColor: '#f8f8f8',
@@ -583,7 +678,7 @@ const styles = StyleSheet.create({
   },
   contentContainer: {
     paddingBottom: 100, // Update to 100 for tab bar
-    paddingTop: 0,      // Add this for consistency
+    paddingTop: 0, // Add this for consistency
   },
   loadingContainer: {
     flex: 1,
@@ -623,11 +718,11 @@ const styles = StyleSheet.create({
     height: 250,
     backgroundColor: '#e1e1e1',
     position: 'relative',
-    marginBottom: 12, // Add this line for spacing
+    marginBottom: 12,
   },
   propertyImage: {
-    width: '100%',
-    height: '100%',
+    height: 250,
+    // width is dynamically set based on screen dimensions
   },
   placeholderContainer: {
     width: '100%',
@@ -873,7 +968,42 @@ const styles = StyleSheet.create({
     color: Colors.main,
   },
   bottomSpacing: {
-    height: 70,
+    // height: 40,
+  },
+  paginationContainer: {
+    position: 'absolute',
+    bottom: 16,
+    left: 0,
+    right: 0,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  paginationDot: {
+    width: 8,
+    height: 8,
+    borderRadius: 4,
+    backgroundColor: 'rgba(255, 255, 255, 0.5)',
+    marginHorizontal: 4,
+  },
+  paginationDotActive: {
+    backgroundColor: '#fff',
+    width: 10,
+    height: 10,
+    borderRadius: 5,
+  },
+  imageTypeContainer: {
+    position: 'absolute',
+    top: 16,
+    right: 16,
+    backgroundColor: 'rgba(0, 0, 0, 0.6)',
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    borderRadius: 4,
+  },
+  imageTypeText: {
+    color: '#fff',
+    fontSize: 12,
   },
 });
 
