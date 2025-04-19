@@ -224,7 +224,7 @@ const styles = StyleSheet.create({
   featuredBadge: {
     position: 'absolute',
     top: 8,
-    left: 8,
+    right: 8,  // Changed from left to right
     backgroundColor: Colors.main,
     paddingHorizontal: 6,
     paddingVertical: 2,
