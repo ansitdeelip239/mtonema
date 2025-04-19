@@ -7,6 +7,7 @@ import {usePartner} from '../context/PartnerProvider';
 export const useClientData = () => {
   const [clients, setClients] = useState<Client[]>([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [isLoadingMore, setIsLoadingMore] = useState(false); // Add separate state for pagination loading
   const [error, setError] = useState<string | null>(null);
   const [refreshing, setRefreshing] = useState(false);
   const [paging, setPaging] = useState<PagingModel>({
@@ -57,12 +58,12 @@ export const useClientData = () => {
   );
 
   const loadMoreClients = useCallback(async () => {
-    if (paging.nextPage && !isLoading) {
-      setIsLoading(true);
+    if (paging.nextPage && !isLoadingMore) {
+      setIsLoadingMore(true);
       await fetchClients(paging.currentPage + 1);
-      setIsLoading(false);
+      setIsLoadingMore(false);
     }
-  }, [fetchClients, paging.nextPage, paging.currentPage, isLoading]);
+  }, [fetchClients, paging.nextPage, paging.currentPage, isLoadingMore]);
 
   useEffect(() => {
     setIsLoading(true);
@@ -78,6 +79,7 @@ export const useClientData = () => {
   return {
     clients,
     isLoading,
+    isLoadingMore,
     error,
     refreshing,
     fetchClients,

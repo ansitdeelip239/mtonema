@@ -23,6 +23,7 @@ const ClientScreen: React.FC<Props> = ({navigation}) => {
   const {
     clients,
     isLoading,
+    isLoadingMore,
     error,
     refreshing,
     onRefresh,
@@ -37,20 +38,23 @@ const ClientScreen: React.FC<Props> = ({navigation}) => {
     setIsSearching(false);
   };
 
+  // Update renderFooter to use isLoadingMore instead of isLoading
   const renderFooter = () => {
-    if (!isLoading) {
+    if (!isLoadingMore) {
       return null;
     }
 
     return (
       <View style={styles.footerLoader}>
         <ActivityIndicator size="small" color="#0066cc" />
+        <Text style={styles.loadingMoreText}>Loading more clients...</Text>
       </View>
     );
   };
 
   const renderContent = () => {
-    if (isLoading || isSearching) {
+    // Only show full-page loader on initial load or search, not during pagination
+    if ((isLoading && clients.length === 0) || isSearching) {
       return (
         <View style={styles.centerContainer}>
           <ActivityIndicator size="large" color="#0066cc" />
@@ -179,8 +183,15 @@ const styles = StyleSheet.create({
     color: Colors.placeholderColor,
   },
   footerLoader: {
-    paddingVertical: 20,
+    flexDirection: 'row',
+    justifyContent: 'center',
     alignItems: 'center',
+    paddingVertical: 20,
+  },
+  loadingMoreText: {
+    marginLeft: 8,
+    color: '#666',
+    fontSize: 14,
   },
 });
 
