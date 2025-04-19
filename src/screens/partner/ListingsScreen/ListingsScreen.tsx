@@ -105,6 +105,7 @@ const ListingsScreen: React.FC<Props> = ({navigation}) => {
         console.log(
           `Received ${data.properties.length} properties, hasNextPage: ${data.pagination.hasNextPage}`,
         );
+        console.log('First few properties:', data.properties.slice(0, 2));
 
         // Update pagination state
         setHasMorePages(data.pagination.hasNextPage);
@@ -112,9 +113,11 @@ const ListingsScreen: React.FC<Props> = ({navigation}) => {
         // Keep track of the current page in the ref
         currentPageRef.current = page;
 
-        // Update properties list
+        // Force UI update by creating new array reference
         if (isRefreshing || page === 1) {
-          setProperties(data.properties);
+          console.log('Replacing properties with filtered data');
+          // Create a completely new array to ensure React detects the state change
+          setProperties([...data.properties]);
         } else {
           setProperties(prev => [...prev, ...data.properties]);
         }
@@ -270,44 +273,49 @@ const ListingsScreen: React.FC<Props> = ({navigation}) => {
   // Handle search
   const handleSearch = useCallback(
     (text: string) => {
-      console.log(`Searching for: ${text}`);
       setSearchQuery(text);
-      currentPageRef.current = 1;
-      fetchPropertyListings(1);
     },
-    [fetchPropertyListings],
+    [],
   );
 
-  // Handle filter
+  // Add this function
+  const resetListState = useCallback(() => {
+    setProperties([]);
+    setInitialLoading(true);
+    setError(null);
+    currentPageRef.current = 1;
+    setHasMorePages(true);
+  }, []);
+
+  // Handle filter with list clearing for better UX
   const handleFilter = useCallback(
     (appliedFilters: {
       propertyFor: string | null;
       status: string | null;
       city: string | null;
     }) => {
-      console.log('Filters applied:', appliedFilters);
-      setFilters({
-        propertyFor: appliedFilters.propertyFor,
-        status: appliedFilters.status,
-        city: appliedFilters.city,
-      });
-
-      currentPageRef.current = 1;
-      fetchPropertyListings(1);
+      resetListState();
+      setFilters(appliedFilters);
     },
-    [fetchPropertyListings],
+    [resetListState],
   );
+
+  // Effect to run whenever searchQuery or filters change
+  useEffect(() => {
+    if (!user?.id) return;
+
+    currentPageRef.current = 1;
+    setProperties([]);            // clear old list so UI shows spinner
+    setInitialLoading(true);
+    fetchPropertyListings(1);
+  }, [searchQuery, filters, fetchPropertyListings, user?.id]);
 
   return (
     <View style={styles.container}>
       <Header title="Property Listings" />
 
       <SearchAndFilter
-        initialFilters={{
-          propertyFor: filters.propertyFor,
-          status: filters.status,
-          city: filters.city,
-        }}
+        initialFilters={filters}
         onSearch={handleSearch}
         onFilter={handleFilter}
       />
@@ -324,6 +332,7 @@ const ListingsScreen: React.FC<Props> = ({navigation}) => {
         </View>
       ) : (
         <FlatList
+          key={`property-list-${searchQuery}-${filters.propertyFor}-${filters.status}-${filters.city}`}
           ref={flatListRef}
           data={properties}
           renderItem={renderPropertyCard}
