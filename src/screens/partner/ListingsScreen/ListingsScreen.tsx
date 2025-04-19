@@ -19,11 +19,19 @@ import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {ListingScreenStackParamList} from '../../../navigator/components/PropertyListingScreenStack';
 // import {usePartner} from '../../../context/PartnerProvider';
 import {useFocusEffect} from '@react-navigation/native';
+import SearchAndFilter from './components/SearchAndFilter';
 
 type Props = NativeStackScreenProps<
   ListingScreenStackParamList,
   'ListingsScreen'
 >;
+
+// Define the correct filter structure
+interface PropertyFilters {
+  propertyFor: string | null;
+  status: string | null;
+  city: string | null; // This corresponds to propertyLocation in the API
+}
 
 const ListingsScreen: React.FC<Props> = ({navigation}) => {
   const [properties, setProperties] = useState<Property[]>([]);
@@ -44,7 +52,15 @@ const ListingsScreen: React.FC<Props> = ({navigation}) => {
   // Track if we returned from detail screen
   const returnedFromDetailRef = useRef<boolean>(false);
 
-  // Simplified fetch property listings
+  // Search and filter states with the correct filter types
+  const [searchQuery, setSearchQuery] = useState<string>('');
+  const [filters, setFilters] = useState<PropertyFilters>({
+    propertyFor: null,
+    status: null,
+    city: null,
+  });
+
+  // Simplified fetch property listings with search and filter
   const fetchPropertyListings = useCallback(
     async (page: number, isRefreshing: boolean = false) => {
       // Guard clause with better logging
@@ -67,11 +83,17 @@ const ListingsScreen: React.FC<Props> = ({navigation}) => {
         setError(null);
 
         console.log(`Fetching page ${page} properties for user ${user.id}`);
+        console.log('With search:', searchQuery);
+        console.log('With filters:', filters);
 
         const response = await PartnerService.getPartnerPropertyByUserId(
           user.id,
           page,
           pageSize,
+          searchQuery || undefined,
+          filters.propertyFor || undefined,
+          filters.status || undefined,
+          filters.city || undefined, // This maps to propertyLocation in the API
         );
 
         // Prevent state updates if component unmounted during the API call
@@ -98,7 +120,9 @@ const ListingsScreen: React.FC<Props> = ({navigation}) => {
         }
       } catch (err: any) {
         // Check if component is still mounted
-        if (!isMountedRef.current) return;
+        if (!isMountedRef.current) {
+          return;
+        }
 
         console.error('Error fetching property listings:', err);
 
@@ -129,7 +153,7 @@ const ListingsScreen: React.FC<Props> = ({navigation}) => {
         }
       }
     },
-    [user?.id],
+    [user?.id, searchQuery, filters], // Include filters in dependencies
   );
 
   // Initial load effect
@@ -243,9 +267,50 @@ const ListingsScreen: React.FC<Props> = ({navigation}) => {
     [],
   );
 
+  // Handle search
+  const handleSearch = useCallback(
+    (text: string) => {
+      console.log(`Searching for: ${text}`);
+      setSearchQuery(text);
+      currentPageRef.current = 1;
+      fetchPropertyListings(1);
+    },
+    [fetchPropertyListings],
+  );
+
+  // Handle filter
+  const handleFilter = useCallback(
+    (appliedFilters: {
+      propertyFor: string | null;
+      status: string | null;
+      city: string | null;
+    }) => {
+      console.log('Filters applied:', appliedFilters);
+      setFilters({
+        propertyFor: appliedFilters.propertyFor,
+        status: appliedFilters.status,
+        city: appliedFilters.city,
+      });
+
+      currentPageRef.current = 1;
+      fetchPropertyListings(1);
+    },
+    [fetchPropertyListings],
+  );
+
   return (
     <View style={styles.container}>
       <Header title="Property Listings" />
+
+      <SearchAndFilter
+        initialFilters={{
+          propertyFor: filters.propertyFor,
+          status: filters.status,
+          city: filters.city,
+        }}
+        onSearch={handleSearch}
+        onFilter={handleFilter}
+      />
 
       {error ? (
         <View style={styles.errorContainer}>

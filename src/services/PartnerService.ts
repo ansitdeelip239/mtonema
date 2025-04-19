@@ -1,6 +1,9 @@
 import url from '../constants/api';
 import {PartnerPropertyApiSubmissionType} from '../schema/PartnerPropertyFormSchema';
-import {PropertiesResponse, Property} from '../screens/partner/ListingsScreen/types';
+import {
+  PropertiesResponse,
+  Property,
+} from '../screens/partner/ListingsScreen/types';
 import {
   AgentPropertyRequestModel,
   Client,
@@ -336,10 +339,7 @@ class PartnerService {
 
   static async postPartnerProperty(payload: PartnerPropertyApiSubmissionType) {
     try {
-      const response = await api.post<null>(
-        `${url.partnerProperty}`,
-        payload,
-      );
+      const response = await api.post<null>(`${url.partnerProperty}`, payload);
       return response;
     } catch (error) {
       console.error('Error in postPartnerProperty', error);
@@ -351,11 +351,23 @@ class PartnerService {
     userId: number,
     pageNumber: number,
     pageSize: number,
+    searchQuery?: string,
+    propertyFor?: string,
+    status?: string,
+    location?: string,
   ) {
     try {
+      const params = new URLSearchParams({
+        pageNumber: pageNumber.toString(),
+        pageSize: pageSize.toString(),
+        ...(searchQuery && {searchQuery}),
+        ...(propertyFor && {propertyFor}),
+        ...(status && {status}),
+        ...(location && {location}),
+      }).toString();
+
       const response = await api.get<PropertiesResponse>(
-        url.getPartnerProperty(userId) +
-          `?pageNumber=${pageNumber}&pageSize=${pageSize}`,
+        url.getPartnerProperty(userId) + `?${params}`,
       );
       return response;
     } catch (error) {
@@ -366,9 +378,7 @@ class PartnerService {
 
   static async getPartnerPropertyById(id: number) {
     try {
-      const response = await api.get<Property>(
-        url.partnerProperty + `/${id}`,
-      );
+      const response = await api.get<Property>(url.partnerProperty + `/${id}`);
       return response;
     } catch (error) {
       console.error('Error in getPartnerPropertyById', error);
@@ -382,7 +392,7 @@ class PartnerService {
         `${url.partnerProperty}/${propertyId}`,
         {
           isFeatured: isFeatured,
-        }
+        },
       );
       return response;
     } catch (error) {

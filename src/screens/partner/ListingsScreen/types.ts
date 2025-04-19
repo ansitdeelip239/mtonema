@@ -67,3 +67,9 @@ export const parseTags = (tagsString: string): string[] => {
     return [];
   }
 };
+
+export interface FilterValues {
+  propertyFor: string | null;
+  status: string | null;
+  city: string | null;
+}

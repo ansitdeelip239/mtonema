@@ -11,7 +11,6 @@ import PartnerService from '../../../services/PartnerService';
 import {useAuth} from '../../../hooks/useAuth';
 import {AgentData, FilterValues, PagingModel} from '../../../types';
 import renderFooter from './components/RenderFooter';
-import SearchHeader from './components/SearchHeader';
 import Colors from '../../../constants/Colors';
 import Header from '../../../components/Header';
 import {PartnerDrawerParamList} from '../../../types/navigation';
@@ -19,6 +18,7 @@ import {usePartner} from '../../../context/PartnerProvider';
 import RenderItem from './components/RenderItem';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {AgentDataStackParamList} from '../../../navigator/components/AgentDataStack';
+import SearchAndFilter from './components/SearchAndFilter';
 
 // type Props = BottomTabScreenProps<PartnerBottomTabParamList, 'Property'>;
 type Props = NativeStackScreenProps<AgentDataStackParamList, 'AgentDataScreen'>;
@@ -165,7 +165,7 @@ const AgentDataScreen: React.FC<Props> = ({navigation}) => {
           <Text style={styles.buttonText}>Add</Text>
         </TouchableOpacity>
       </Header>
-      <SearchHeader
+      <SearchAndFilter
         initialFilters={filters}
         onSearch={handleSearch}
         onFilter={handleFilter}

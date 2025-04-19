@@ -1,7 +1,7 @@
 import React from 'react';
 import {View, Text, StyleSheet} from 'react-native';
-import Header from '../../components/Header';
-import {PartnerDrawerParamList} from '../../types/navigation';
+import Header from './Header';
+import {PartnerDrawerParamList} from '../types/navigation';
 
 const UnderDevelopment: React.FC = () => {
   return (

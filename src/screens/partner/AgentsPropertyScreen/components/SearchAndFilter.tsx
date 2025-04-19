@@ -6,7 +6,7 @@ import Colors from '../../../../constants/Colors';
 import FilterModal from './FilterModal';
 import GetIcon from '../../../../components/GetIcon';
 
-const SearchHeader = ({
+const SearchAndFilter = ({
   initialFilters,
   onSearch,
   onFilter,
@@ -124,4 +124,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default SearchHeader;
+export default SearchAndFilter;
