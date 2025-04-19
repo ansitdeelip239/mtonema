@@ -22,6 +22,7 @@ import {formatCurrency} from '../../../utils/currency';
 import Header from '../../../components/Header';
 import YoutubeVideoPlayer from '../../../components/YoutubeVideoPlayer';
 import Toast from 'react-native-toast-message';
+import {usePartner} from '../../../context/PartnerProvider';
 
 type Props = NativeStackScreenProps<
   ListingScreenStackParamList,
@@ -39,6 +40,7 @@ const ListingDetailScreen: React.FC<Props> = ({route, navigation}) => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const {width} = useWindowDimensions();
   const [isFeatured, setIsFeatured] = useState(false);
+  const {partnerPropertyUpdated, setPartnerPropertyUpdated} = usePartner();
 
   const handleFeaturedToggle = async (newValue: boolean) => {
     setIsFeatured(newValue);
@@ -67,6 +69,8 @@ const ListingDetailScreen: React.FC<Props> = ({route, navigation}) => {
         if (property) {
           setProperty({...property, featured: newValue});
         }
+
+        setPartnerPropertyUpdated(!partnerPropertyUpdated);
       }
     } catch (err) {
       console.error('Error updating property interest:', err);
@@ -77,14 +81,6 @@ const ListingDetailScreen: React.FC<Props> = ({route, navigation}) => {
         visibilityTime: 2000,
       });
     }
-
-    // You'll replace this with your API call later
-    // Example:
-    // if (newValue) {
-    //   APIService.markPropertyInterest(propertyId);
-    // } else {
-    //   APIService.removePropertyInterest(propertyId);
-    // }
   };
 
   useEffect(() => {

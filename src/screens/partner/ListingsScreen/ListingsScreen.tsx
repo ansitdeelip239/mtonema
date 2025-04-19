@@ -17,6 +17,8 @@ import PropertyCard from './components/PropertyCard';
 import EmptyListPlaceholder from './components/EmptyListPlaceholder';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {ListingScreenStackParamList} from '../../../navigator/components/PropertyListingScreenStack';
+// import {usePartner} from '../../../context/PartnerProvider';
+import {useFocusEffect} from '@react-navigation/native';
 
 type Props = NativeStackScreenProps<
   ListingScreenStackParamList,
@@ -33,33 +35,36 @@ const ListingsScreen: React.FC<Props> = ({navigation}) => {
   const pageSize = 10;
   const {user} = useAuth();
   const flatListRef = useRef<FlatList<Property>>(null);
+  // const {partnerPropertyUpdated} = usePartner();
 
-  // Use a ref to track loading state to prevent duplicate requests
-  const isLoadingRef = useRef<boolean>(false);
-  // Use a ref to track the current page to avoid stale closures
+  // Just keep a single ref for current page
   const currentPageRef = useRef<number>(1);
   // Reference to track if component is mounted
   const isMountedRef = useRef<boolean>(true);
+  // Track if we returned from detail screen
+  const returnedFromDetailRef = useRef<boolean>(false);
 
-  // Fetch property listings
+  // Simplified fetch property listings
   const fetchPropertyListings = useCallback(
-    async (page: number, refresh: boolean = false) => {
-      if (!user?.id || isLoadingRef.current) {
+    async (page: number, isRefreshing: boolean = false) => {
+      // Guard clause with better logging
+      if (!user?.id) {
+        console.log('Fetch aborted: No user ID available');
         return;
       }
 
       try {
-        isLoadingRef.current = true;
-        setError(null);
-
-        if (refresh) {
+        // Set loading states based on operation type
+        if (isRefreshing) {
           setRefreshing(true);
         } else if (page === 1) {
           setInitialLoading(true);
         } else {
-          // Loading more - only set loading more flag
           setLoadingMore(true);
         }
+
+        // Clear any previous errors
+        setError(null);
 
         console.log(`Fetching page ${page} properties for user ${user.id}`);
 
@@ -76,8 +81,7 @@ const ListingsScreen: React.FC<Props> = ({navigation}) => {
 
         const data = response.data as PropertiesResponse;
         console.log(
-          `Received ${data.properties.length} properties, hasNextPage: ${data.pagination.hasNextPage}, ` +
-            `totalPages: ${data.pagination.totalPages}, currentPage: ${data.pagination.currentPage}`,
+          `Received ${data.properties.length} properties, hasNextPage: ${data.pagination.hasNextPage}`,
         );
 
         // Update pagination state
@@ -87,17 +91,14 @@ const ListingsScreen: React.FC<Props> = ({navigation}) => {
         currentPageRef.current = page;
 
         // Update properties list
-        if (refresh || page === 1) {
+        if (isRefreshing || page === 1) {
           setProperties(data.properties);
         } else {
           setProperties(prev => [...prev, ...data.properties]);
         }
       } catch (err: any) {
-        // Explicitly type error as any since it could be various types
         // Check if component is still mounted
-        if (!isMountedRef.current) {
-          return;
-        }
+        if (!isMountedRef.current) return;
 
         console.error('Error fetching property listings:', err);
 
@@ -117,30 +118,51 @@ const ListingsScreen: React.FC<Props> = ({navigation}) => {
       } finally {
         // Only update state if the component is still mounted
         if (isMountedRef.current) {
-          setInitialLoading(false);
-          setLoadingMore(false);
-          setRefreshing(false);
-          isLoadingRef.current = false;
+          // Reset loading states
+          if (isRefreshing) {
+            setRefreshing(false);
+          } else if (page === 1) {
+            setInitialLoading(false);
+          } else {
+            setLoadingMore(false);
+          }
         }
       }
     },
     [user?.id],
   );
 
-  // Initial data load
+  // Initial load effect
   useEffect(() => {
     if (user?.id) {
-      console.log('Initial data load triggered');
+      console.log('Initial load: Fetching properties');
       fetchPropertyListings(1);
     }
 
-    // Cleanup function when component unmounts
     return () => {
       isMountedRef.current = false;
     };
   }, [user?.id, fetchPropertyListings]);
 
-  // Handle pull-to-refresh
+  // Focus effect to handle refresh when returning from details
+  useFocusEffect(
+    useCallback(() => {
+      // Check if we're returning from detail screen and partnerPropertyUpdated changed
+      if (returnedFromDetailRef.current && user?.id) {
+        console.log('Returning to screen: Refreshing properties list');
+        currentPageRef.current = 1;
+        fetchPropertyListings(1);
+        returnedFromDetailRef.current = false;
+      }
+
+      return () => {
+        // When leaving the screen, mark that we're navigating away
+        returnedFromDetailRef.current = true;
+      };
+    }, [user?.id, fetchPropertyListings]),
+  );
+
+  // Simplified pull-to-refresh
   const handleRefresh = useCallback(() => {
     console.log('Pull-to-refresh triggered');
     currentPageRef.current = 1;
@@ -149,23 +171,27 @@ const ListingsScreen: React.FC<Props> = ({navigation}) => {
 
   // Handle retry after error
   const handleRetry = useCallback(() => {
+    setError(null);
     fetchPropertyListings(currentPageRef.current);
   }, [fetchPropertyListings]);
 
-  // Load more data when reaching the end of the list
+  // Simplified load more function
   const handleLoadMore = useCallback(() => {
-    // Only proceed if we're not already loading and there are more pages
-    if (isLoadingRef.current || !hasMorePages || refreshing || initialLoading) {
-      console.log(
-        'Skipping load more request - already loading or no more pages',
-      );
+    // Don't load more if already loading or no more pages
+    if (loadingMore || refreshing || initialLoading || !hasMorePages) {
       return;
     }
 
     const nextPage = currentPageRef.current + 1;
     console.log(`Loading more data - requesting page ${nextPage}`);
     fetchPropertyListings(nextPage);
-  }, [hasMorePages, refreshing, initialLoading, fetchPropertyListings]);
+  }, [
+    hasMorePages,
+    loadingMore,
+    refreshing,
+    initialLoading,
+    fetchPropertyListings,
+  ]);
 
   // Render footer with loading indicator when fetching more data
   const renderFooter = useCallback(() => {
@@ -184,13 +210,6 @@ const ListingsScreen: React.FC<Props> = ({navigation}) => {
   // Handle property card press - navigate to details
   const handlePropertyPress = useCallback(
     (property: Property) => {
-      // Navigate to the PropertyDetailsScreen with the property data
-      // navigation.navigate('PropertyDetails', {
-      //   propertyId: property.id,
-      //   propertyName: property.propertyName,
-      //   // You can pass the entire property object if needed
-      //   property: property,
-      // });
       console.log(`Navigating to property details for ID: ${property.id}`);
 
       navigation.navigate('ListingsDetailScreen', {
@@ -224,17 +243,6 @@ const ListingsScreen: React.FC<Props> = ({navigation}) => {
     [],
   );
 
-  // Clear property list function
-  // const clearPropertyList = () => {
-  //   // Clear the list
-  //   setProperties([]);
-
-  //   // Optional: Reset the animation tracking if you want animations to play again
-  //   // This requires making animatedPropertyIds exportable from PropertyCard.tsx
-  //   // import { resetAnimatedProperties } from './components/PropertyCard';
-  //   // resetAnimatedProperties();
-  // }
-
   return (
     <View style={styles.container}>
       <Header title="Property Listings" />
@@ -250,7 +258,6 @@ const ListingsScreen: React.FC<Props> = ({navigation}) => {
           </TouchableOpacity>
         </View>
       ) : (
-        // Update your FlatList with these optimized props
         <FlatList
           ref={flatListRef}
           data={properties}
@@ -268,27 +275,24 @@ const ListingsScreen: React.FC<Props> = ({navigation}) => {
               onRefresh={handleRefresh}
               colors={[Colors.main]}
               tintColor={Colors.main}
+              progressBackgroundColor="#fff"
             />
           }
-          // Enable onEndReached but don't use InteractionManager
           onEndReached={handleLoadMore}
-          onEndReachedThreshold={0.5} // Increase this value
+          onEndReachedThreshold={0.5}
           ListFooterComponent={renderFooter}
-          // Critical performance settings
+          // Performance settings
           removeClippedSubviews={true}
-          maxToRenderPerBatch={10} // Increase from 3 to reduce flashing
-          updateCellsBatchingPeriod={50} // Reduce to update more frequently
-          initialNumToRender={10} // Increase for smoother initial render
-          windowSize={10} // Increase to keep more items in memory
-          // Keep these optimization props
+          maxToRenderPerBatch={10}
+          updateCellsBatchingPeriod={50}
+          initialNumToRender={10}
+          windowSize={10}
           disableVirtualization={false}
           automaticallyAdjustContentInsets={false}
-          // Optional - may help with flickering
           maintainVisibleContentPosition={{
             minIndexForVisible: 0,
             autoscrollToTopThreshold: 10,
           }}
-          // Other props remain the same
           ListEmptyComponent={
             isListEmpty ? (
               <EmptyListPlaceholder />
