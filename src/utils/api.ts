@@ -50,6 +50,7 @@ interface API {
   post<T>(endpoint: string, data: any): Promise<Response<T>>;
   put<T>(endpoint: string, data: any): Promise<Response<T>>;
   delete<T>(endpoint: string): Promise<Response<T>>;
+  patch<T>(endpoint: string, data: any): Promise<Response<T>>;
 }
 
 export const api: API = {
@@ -68,4 +69,12 @@ export const api: API = {
       body: JSON.stringify(data),
     }),
   delete: <T>(endpoint: string) => fetchAPI<T>(endpoint, {method: 'DELETE'}),
+  patch: <T>(endpoint: string, data: any) =>
+    fetchAPI<T>(endpoint, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    }),
 };

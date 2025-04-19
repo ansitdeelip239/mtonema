@@ -375,6 +375,21 @@ class PartnerService {
       throw error;
     }
   }
+
+  static async featuredProperty(propertyId: number, isFeatured: boolean) {
+    try {
+      const response = await api.patch<null>(
+        `${url.partnerProperty}/${propertyId}`,
+        {
+          isFeatured: isFeatured,
+        }
+      );
+      return response;
+    } catch (error) {
+      console.error('Error in featuredProperty', error);
+      throw error;
+    }
+  }
 }
 
 export default PartnerService;

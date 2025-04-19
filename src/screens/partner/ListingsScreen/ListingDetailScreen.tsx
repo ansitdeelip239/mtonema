@@ -8,10 +8,10 @@ import {
   Image,
   ActivityIndicator,
   TouchableOpacity,
-  Linking,
   Platform,
   FlatList,
   useWindowDimensions,
+  Switch,
 } from 'react-native';
 import {ListingScreenStackParamList} from '../../../navigator/components/PropertyListingScreenStack';
 import {Property} from './types';
@@ -20,6 +20,8 @@ import Colors from '../../../constants/Colors';
 import GetIcon from '../../../components/GetIcon';
 import {formatCurrency} from '../../../utils/currency';
 import Header from '../../../components/Header';
+import YoutubeVideoPlayer from '../../../components/YoutubeVideoPlayer';
+import Toast from 'react-native-toast-message';
 
 type Props = NativeStackScreenProps<
   ListingScreenStackParamList,
@@ -36,6 +38,54 @@ const ListingDetailScreen: React.FC<Props> = ({route, navigation}) => {
   const [error, setError] = useState<string | null>(null);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const {width} = useWindowDimensions();
+  const [isFeatured, setIsFeatured] = useState(false);
+
+  const handleFeaturedToggle = async (newValue: boolean) => {
+    setIsFeatured(newValue);
+    console.log(
+      `Interest toggled: ${
+        newValue ? 'Interested' : 'Not interested'
+      } in property ${propertyId}`,
+    );
+
+    try {
+      const response = await PartnerService.featuredProperty(
+        propertyId,
+        newValue,
+      );
+
+      if (response.success) {
+        Toast.show({
+          type: 'success',
+          text1: `Property ${
+            newValue ? 'marked as' : 'unmarked from'
+          } featured`,
+          position: 'top',
+          visibilityTime: 2000,
+        });
+
+        if (property) {
+          setProperty({...property, featured: newValue});
+        }
+      }
+    } catch (err) {
+      console.error('Error updating property interest:', err);
+      Toast.show({
+        type: 'error',
+        text1: 'Error updating property interest',
+        position: 'top',
+        visibilityTime: 2000,
+      });
+    }
+
+    // You'll replace this with your API call later
+    // Example:
+    // if (newValue) {
+    //   APIService.markPropertyInterest(propertyId);
+    // } else {
+    //   APIService.removePropertyInterest(propertyId);
+    // }
+  };
 
   useEffect(() => {
     const fetchPropertyDetails = async () => {
@@ -48,6 +98,7 @@ const ListingDetailScreen: React.FC<Props> = ({route, navigation}) => {
         );
         if (response.success) {
           setProperty(response.data);
+          setIsFeatured(response.data.featured || false);
         } else {
           setError('Could not load property details');
         }
@@ -64,42 +115,47 @@ const ListingDetailScreen: React.FC<Props> = ({route, navigation}) => {
 
   // Process main property image
   const displayImages = useMemo(() => {
-    if (!property?.imageURL) {
-      return [];
+    const images = [];
+
+    if (property?.imageURL) {
+      try {
+        // First, remove any extra quotes at the beginning and end if present
+        let imageData = property.imageURL.trim();
+        if (imageData.startsWith('"') && imageData.endsWith('"')) {
+          imageData = imageData.slice(1, -1);
+        }
+
+        // Try to parse the JSON
+        const parsedImages = JSON.parse(imageData);
+
+        // Sort images to put the toggled image first
+        images.push(
+          ...parsedImages.sort((a: any, b: any) => {
+            if (a.toggle && !b.toggle) {
+              return -1;
+            }
+            if (!a.toggle && b.toggle) {
+              return 1;
+            }
+            return 0;
+          }),
+        );
+      } catch (err) {
+        console.error('Error parsing image URL:', err);
+      }
     }
 
-    try {
-      // First, remove any extra quotes at the beginning and end if present
-      let imageData = property.imageURL.trim();
-      if (imageData.startsWith('"') && imageData.endsWith('"')) {
-        imageData = imageData.slice(1, -1);
-      }
-
-      // Try to parse the JSON
-      const parsedImages = JSON.parse(imageData);
-      console.log(parsedImages);
-
-      // Handle if the result is a string (double encoded)
-      if (typeof parsedImages === 'string') {
-        return JSON.parse(parsedImages);
-      }
-
-      // Sort images to put the toggled image first
-      return parsedImages.sort((a: any, b: any) => {
-        if (a.toggle && !b.toggle) {
-          return -1;
-        }
-        if (!a.toggle && b.toggle) {
-          return 1;
-        }
-        return 0;
+    // If there's a video URL, add a special item for the video
+    if (property?.videoURL) {
+      images.push({
+        isVideo: true,
+        videoUrl: property.videoURL,
+        type: 'Video Tour',
       });
-    } catch (err) {
-      console.error('Error parsing image URL:', err);
-      console.log('Raw imageURL value:', property.imageURL);
-      return [];
     }
-  }, [property?.imageURL]);
+
+    return images;
+  }, [property?.imageURL, property?.videoURL]);
 
   // Function to handle image scroll events
   const handleImageScroll = (event: any) => {
@@ -123,7 +179,7 @@ const ListingDetailScreen: React.FC<Props> = ({route, navigation}) => {
       if (property.tags.includes("['") && property.tags.includes("']")) {
         // Python-style string list - extract tags manually
         return property.tags
-          .replace(/^\[\'|\'\]$/g, '') // Remove outer ['...']
+          .replace(/^\['|'\]$/g, '') // Remove outer ['...']
           .split("','") // Split by ','
           .map(tag => tag.trim()); // Clean up each tag
       }
@@ -136,30 +192,12 @@ const ListingDetailScreen: React.FC<Props> = ({route, navigation}) => {
 
       // Last resort: if it's a simple string, return it as a single tag
       if (typeof property.tags === 'string') {
-        return [property.tags.replace(/[\[\]\'\"]/g, '')];
+        return [property.tags.replace(/[[\]'"]/g, '')];
       }
 
       return [];
     }
   }, [property?.tags]);
-
-  // Handle video URL click
-  const handleVideoPress = async () => {
-    if (!property?.videoURL) {
-      return;
-    }
-
-    try {
-      const supported = await Linking.canOpenURL(property.videoURL);
-      if (supported) {
-        await Linking.openURL(property.videoURL);
-      } else {
-        console.log("Can't open URL: " + property.videoURL);
-      }
-    } catch (err) {
-      console.error('Error opening video URL:', err);
-    }
-  };
 
   if (loading) {
     return (
@@ -204,11 +242,21 @@ const ListingDetailScreen: React.FC<Props> = ({route, navigation}) => {
                 keyExtractor={(item, index) => `image-${index}`}
                 renderItem={({item}) => (
                   <View style={[styles.imageSlide, {width}]}>
-                    <Image
-                      source={{uri: item.imageUrl}}
-                      style={styles.propertyImage}
-                      resizeMode="cover"
-                    />
+                    {item.isVideo ? (
+                      // Render YouTube player for video items
+                      <YoutubeVideoPlayer
+                        videoId={item.videoUrl}
+                        height={250}
+                        width={width}
+                      />
+                    ) : (
+                      // Render image for image items
+                      <Image
+                        source={{uri: item.imageUrl}}
+                        style={styles.propertyImage}
+                        resizeMode="cover"
+                      />
+                    )}
                     {item.type && (
                       <View style={styles.imageTypeContainer}>
                         <Text style={styles.imageTypeText}>{item.type}</Text>
@@ -399,6 +447,25 @@ const ListingDetailScreen: React.FC<Props> = ({route, navigation}) => {
             )}
           </View>
         )}
+
+        {/* Interest Toggle Card - Add this section */}
+        <View style={styles.section}>
+          <View style={styles.featuredContainer}>
+            <View style={styles.featuredTextContainer}>
+              <Text style={styles.featuredTitle}>
+                {isFeatured ? 'Featured' : 'Not Featured'}
+              </Text>
+            </View>
+
+            <Switch
+              trackColor={{false: '#dddddd', true: Colors.main + '80'}}
+              thumbColor={isFeatured ? Colors.main : '#f4f3f4'}
+              ios_backgroundColor="#dddddd"
+              onValueChange={handleFeaturedToggle}
+              value={isFeatured}
+            />
+          </View>
+        </View>
 
         {/* Additional Features */}
         <View style={styles.section}>
@@ -607,19 +674,6 @@ const ListingDetailScreen: React.FC<Props> = ({route, navigation}) => {
             )}
           </View>
         </View>
-
-        {/* Video Link */}
-        {property.videoURL && (
-          <View style={styles.section}>
-            <Text style={styles.sectionTitle}>Property Video</Text>
-            <TouchableOpacity
-              style={styles.videoButton}
-              onPress={handleVideoPress}>
-              {/* <GetIcon iconName="play" size={24} color="#fff" /> */}
-              <Text style={styles.videoButtonText}>Watch Video</Text>
-            </TouchableOpacity>
-          </View>
-        )}
 
         {/* Tags */}
         {displayTags.length > 0 && (
@@ -1004,6 +1058,22 @@ const styles = StyleSheet.create({
   imageTypeText: {
     color: '#fff',
     fontSize: 12,
+  },
+  featuredContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingVertical: 8,
+  },
+  featuredTextContainer: {
+    flex: 1,
+    marginRight: 16,
+  },
+  featuredTitle: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: '#333',
+    marginBottom: 4,
   },
 });
 
