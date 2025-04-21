@@ -128,6 +128,13 @@ const ListingDetailScreen: React.FC<Props> = ({route, navigation}) => {
   const handleEditProperty = () => {
     closeMenu();
     // navigation.navigate('EditPropertyScreen', {propertyId});
+
+    const parentNavigation = navigation.getParent();
+
+    parentNavigation?.navigate('AddProperty', {
+      editMode: true,
+      propertyData: property,
+    });
   };
 
   useEffect(() => {
