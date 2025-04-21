@@ -52,6 +52,17 @@ export const MaterialTextInput = <T,>({
     );
   }, [field, setFormInput]);
 
+  // Convert the value to string, handling all data types
+  const getStringValue = (): string => {
+    const value = formInput[field];
+    // Check if the value is null/undefined
+    if (value === null || value === undefined) {
+      return '';
+    }
+    // Convert to string (works for numbers, booleans, etc.)
+    return String(value);
+  };
+
   const renderRight = () => {
     if (loading) {
       // eslint-disable-next-line react/no-unstable-nested-components
@@ -91,7 +102,7 @@ export const MaterialTextInput = <T,>({
     <View style={styles.container}>
       <TextInput
         {...props}
-        value={formInput[field] as string}
+        value={getStringValue()}
         onChangeText={(text: string) => setFormInput(field, text)}
         right={renderRight()}
         outlineStyle={styles.textInput}

@@ -77,6 +77,7 @@ const AddPartnerPropertyScreen: React.FC<Props> = ({route, navigation}) => {
           response = await PartnerService.postPartnerProperty(payload);
         }
 
+        // Update your onSubmit handler
         if (response.success) {
           Toast.show({
             type: 'success',
@@ -85,24 +86,14 @@ const AddPartnerPropertyScreen: React.FC<Props> = ({route, navigation}) => {
               : 'Property added successfully',
           });
 
+          // Set the flag to refresh listings screen
+          setPartnerPropertyUpdated(prev => !prev);
+
+          // Navigate back to listings screen
           navigation.navigate('Property', {screen: 'ListingsScreen'});
 
-          resetForm();
-          setCurrentStep(0);
-
-          Animated.timing(animatedValue, {
-            toValue: 0,
-            duration: 300,
-            useNativeDriver: false,
-          }).start();
-
-          Animated.timing(slideAnimation, {
-            toValue: 0,
-            duration: 300,
-            useNativeDriver: true,
-          }).start();
-
-          setPartnerPropertyUpdated(prev => !prev);
+          // Use the complete reset function
+          completeReset();
         }
       } catch (error) {
         console.error('Error submitting property data:', error);
@@ -154,6 +145,14 @@ const AddPartnerPropertyScreen: React.FC<Props> = ({route, navigation}) => {
       }
     }
   }, [editMode, propertyData, setFormInput, animatedValue, slideAnimation]);
+
+  // Add this useEffect for cleanup when component unmounts
+  useEffect(() => {
+    return () => {
+      // Clean up when component unmounts
+      resetForm(); // This uses the internal resetForm
+    };
+  }, [resetForm]);
 
   const goToNextStep = () => {
     if (currentStep < steps.length - 1) {
@@ -209,6 +208,28 @@ const AddPartnerPropertyScreen: React.FC<Props> = ({route, navigation}) => {
         }
       });
     }
+  };
+
+  // Add this function to your component
+  const completeReset = () => {
+    // Reset form data to initial empty state
+    setFormInput(initialFormState);
+
+    // Reset current step
+    setCurrentStep(0);
+
+    // Reset animations
+    Animated.timing(animatedValue, {
+      toValue: 0,
+      duration: 0,
+      useNativeDriver: false,
+    }).start();
+
+    Animated.timing(slideAnimation, {
+      toValue: 0,
+      duration: 0,
+      useNativeDriver: true,
+    }).start();
   };
 
   return (
