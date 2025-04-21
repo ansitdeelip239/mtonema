@@ -23,6 +23,8 @@ import Header from '../../../components/Header';
 import YoutubeVideoPlayer from '../../../components/YoutubeVideoPlayer';
 import Toast from 'react-native-toast-message';
 import {usePartner} from '../../../context/PartnerProvider';
+import {Appbar, Menu} from 'react-native-paper';
+import ConfirmationModal from '../../../components/ConfirmationModal';
 
 type Props = NativeStackScreenProps<
   ListingScreenStackParamList,
@@ -34,12 +36,17 @@ const placeholderImage = require('../../../assets/Images/dncr_black_logo.png');
 
 const ListingDetailScreen: React.FC<Props> = ({route, navigation}) => {
   const {propertyId} = route.params;
+
   const [property, setProperty] = useState<Property | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
-  const {width} = useWindowDimensions();
   const [isFeatured, setIsFeatured] = useState(false);
+  const [menuVisible, setMenuVisible] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
+
+  const {width} = useWindowDimensions();
   const {setPartnerPropertyUpdated} = usePartner();
 
   const handleFeaturedToggle = async (newValue: boolean) => {
@@ -81,6 +88,46 @@ const ListingDetailScreen: React.FC<Props> = ({route, navigation}) => {
         visibilityTime: 2000,
       });
     }
+  };
+
+  // Add menu handler functions
+  const openMenu = () => setMenuVisible(true);
+  const closeMenu = () => setMenuVisible(false);
+
+  // Handle delete property
+  const handleDeleteProperty = async () => {
+    try {
+      setIsDeleting(true);
+      const response = await PartnerService.deletePartnerProperty(propertyId);
+
+      if (response.success) {
+        Toast.show({
+          type: 'success',
+          text1: 'Property deleted successfully',
+          position: 'top',
+          visibilityTime: 2000,
+        });
+        setPartnerPropertyUpdated(prev => !prev);
+        navigation.goBack();
+      }
+    } catch (err) {
+      console.error('Error deleting property:', err);
+      Toast.show({
+        type: 'error',
+        text1: 'Failed to delete property',
+        position: 'top',
+        visibilityTime: 2000,
+      });
+    } finally {
+      setIsDeleting(false);
+      setShowDeleteModal(false);
+    }
+  };
+
+  // Handle edit property
+  const handleEditProperty = () => {
+    closeMenu();
+    // navigation.navigate('EditPropertyScreen', {propertyId});
   };
 
   useEffect(() => {
@@ -222,8 +269,41 @@ const ListingDetailScreen: React.FC<Props> = ({route, navigation}) => {
       <Header
         title={property.propertyName || 'Property Details'}
         backButton={true}
-        onBackPress={() => navigation.goBack()}
-      />
+        onBackPress={() => navigation.goBack()}>
+        <Menu
+          visible={menuVisible}
+          onDismiss={closeMenu}
+          anchor={
+            <Appbar.Action
+              // eslint-disable-next-line react/no-unstable-nested-components
+              icon={() => <GetIcon iconName="threeDots" />}
+              onPress={openMenu}
+              style={styles.threeDotsIcon}
+            />
+          }
+          contentStyle={styles.menuContent}>
+          <Menu.Item
+            onPress={() => {
+              closeMenu();
+              handleEditProperty();
+            }}
+            title="Edit"
+            titleStyle={styles.menuItemTitle}
+            // eslint-disable-next-line react/no-unstable-nested-components
+            leadingIcon={() => <GetIcon iconName="edit" />}
+          />
+          <Menu.Item
+            onPress={() => {
+              closeMenu();
+              setShowDeleteModal(true);
+            }}
+            title="Delete"
+            titleStyle={styles.menuItemTitle}
+            // eslint-disable-next-line react/no-unstable-nested-components
+            leadingIcon={() => <GetIcon iconName="delete" />}
+          />
+        </Menu>
+      </Header>
 
       <ScrollView
         style={styles.scrollView}
@@ -252,7 +332,11 @@ const ListingDetailScreen: React.FC<Props> = ({route, navigation}) => {
                             styles.propertyImage,
                             styles.videoPlaceholder,
                           ]}>
-                          <GetIcon iconName="playButton" size={48} color="#fff" />
+                          <GetIcon
+                            iconName="playButton"
+                            size={48}
+                            color="#fff"
+                          />
                         </View>
                       )
                     ) : (
@@ -717,6 +801,16 @@ const ListingDetailScreen: React.FC<Props> = ({route, navigation}) => {
             </View>
           </View>
         </View>
+
+        {/* Add at the bottom of your component return statement */}
+        <ConfirmationModal
+          visible={showDeleteModal}
+          title="Delete Property"
+          message="Are you sure you want to delete this property?"
+          onConfirm={handleDeleteProperty}
+          onCancel={() => setShowDeleteModal(false)}
+          isLoading={isDeleting}
+        />
       </ScrollView>
       {/* Bottom Spacing */}
       <View style={styles.bottomSpacing} />
@@ -1084,6 +1178,15 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     color: '#333',
     marginBottom: 4,
+  },
+  menuContent: {
+    backgroundColor: 'white',
+  },
+  menuItemTitle: {
+    color: 'black',
+  },
+  threeDotsIcon: {
+    marginRight: -10,
   },
 });
 
