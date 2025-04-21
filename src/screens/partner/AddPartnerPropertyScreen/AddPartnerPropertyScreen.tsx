@@ -120,6 +120,22 @@ const AddPartnerPropertyScreen: React.FC<Props> = ({route, navigation}) => {
   // Add this useEffect to handle initial data processing for edit mode
   useEffect(() => {
     if (editMode && propertyData) {
+      // Reset to first step when entering edit mode
+      setCurrentStep(0);
+
+      // Reset animations as well
+      Animated.timing(animatedValue, {
+        toValue: 0,
+        duration: 0, // immediate
+        useNativeDriver: false,
+      }).start();
+
+      Animated.timing(slideAnimation, {
+        toValue: 0,
+        duration: 0, // immediate
+        useNativeDriver: true,
+      }).start();
+
       // Handle special fields like images that might need parsing
       if (propertyData.imageURL && typeof propertyData.imageURL === 'string') {
         try {
@@ -137,7 +153,7 @@ const AddPartnerPropertyScreen: React.FC<Props> = ({route, navigation}) => {
         setFormInput(propertyData);
       }
     }
-  }, [editMode, propertyData, setFormInput]);
+  }, [editMode, propertyData, setFormInput, animatedValue, slideAnimation]);
 
   const goToNextStep = () => {
     if (currentStep < steps.length - 1) {

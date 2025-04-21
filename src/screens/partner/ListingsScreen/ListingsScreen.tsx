@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useState, useRef} from 'react';
 import {
   View,
   FlatList,
@@ -50,6 +50,8 @@ const ListingScreen: React.FC<Props> = ({navigation}) => {
   });
 
   const {user} = useAuth();
+
+  const swipeableRefs = useRef<Map<number, Swipeable>>(new Map());
 
   const fetchProperties = useCallback(
     async (page: number, shouldRefresh = false) => {
@@ -175,9 +177,13 @@ const ListingScreen: React.FC<Props> = ({navigation}) => {
       style={styles.editButton}
       onPress={() => {
         console.log(`Navigating to edit property for ID: ${propertyItem.id}`);
+        swipeableRefs.current.get(propertyItem.id)?.close();
         const parentNavigation = navigation.getParent();
 
-        parentNavigation?.navigate('AddProperty', {editMode: true, propertyData: propertyItem})
+        parentNavigation?.navigate('AddProperty', {
+          editMode: true,
+          propertyData: propertyItem,
+        });
       }}>
       <Text style={styles.editButtonText}>Edit</Text>
     </TouchableOpacity>
@@ -188,6 +194,7 @@ const ListingScreen: React.FC<Props> = ({navigation}) => {
     <TouchableOpacity
       style={styles.deleteButton}
       onPress={() => {
+        swipeableRefs.current.get(propertyId)?.close();
         setDeletingId(propertyId);
         setShowDeleteModal(true);
       }}>
@@ -198,6 +205,13 @@ const ListingScreen: React.FC<Props> = ({navigation}) => {
   // Update renderItem to use Swipeable with both left and right actions
   const renderItem = ({item}: {item: Property}) => (
     <Swipeable
+      ref={(ref: Swipeable) => {
+        if (ref) {
+          swipeableRefs.current.set(item.id, ref);
+        } else {
+          swipeableRefs.current.delete(item.id);
+        }
+      }}
       renderLeftActions={() => renderLeftActions(item)}
       renderRightActions={() => renderRightActions(item.id)}>
       <View style={styles.propertyCardContainer}>
