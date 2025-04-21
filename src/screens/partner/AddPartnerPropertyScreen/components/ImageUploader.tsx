@@ -44,7 +44,7 @@ const ImageUploader: React.FC<ImageUploaderProps> = ({
           const imageData = {
             localUri: image.path,
             imageUrl: '',
-            type: 'Other', // Default type
+            type: 'Others', // Default type
             toggle: false,
           };
 

@@ -85,8 +85,14 @@ const ImagePreviewList: React.FC<ImagePreviewListProps> = ({
                 selectedValue={image.type || ''}
                 style={styles.categoryPicker}
                 onValueChange={value => onCategoryChange(index, value)}
-                dropdownIconColor={Colors.main}
-                placeholder="Select Category">
+                dropdownIconColor={Colors.main}>
+                {/* Add placeholder as first item */}
+                <Picker.Item
+                  label="Select Category"
+                  value=""
+                  style={styles.placeholderPickerItem}
+                  enabled={false}
+                />
                 {imageTypes.map(type => (
                   <Picker.Item
                     key={type.id}
@@ -196,6 +202,10 @@ const styles = StyleSheet.create({
   },
   pickerItem: {
     fontSize: 12,
+  },
+  placeholderPickerItem: {
+    fontSize: 12,
+    color: '#888',
   },
 });
 

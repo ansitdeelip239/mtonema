@@ -55,6 +55,9 @@ const MediaAndSubmitStep: React.FC<MediaAndSubmitStepProps> = ({
       } catch (e) {
         console.error('Failed to parse images', e);
       }
+    } else {
+      setImages([]);
+      setDefaultImageIndex(null);
     }
   }, [formInput.imageURL]);
 
@@ -88,14 +91,20 @@ const MediaAndSubmitStep: React.FC<MediaAndSubmitStepProps> = ({
   const handleImagesSelected = useCallback(
     (newImages: ImageData[]) => {
       setImages(prevImages => {
-        const updatedImages = [...prevImages, ...newImages];
+        // Map new images to ensure they have a default type property
+        const processedNewImages = newImages.map(img => ({
+          ...img,
+          type: img.type || 'Others', // Explicitly set default if not provided
+        }));
 
-        // If no default image is selected yet and we have at least one image
+        const updatedImages = [...prevImages, ...processedNewImages];
+
+        // Rest of your logic...
         if (defaultImageIndex === null && updatedImages.length > 0) {
-          setDefaultImageIndex(prevImages.length); // Make the first new image default
+          setDefaultImageIndex(prevImages.length);
           return updatedImages.map((img, idx) => ({
             ...img,
-            toggle: idx === prevImages.length, // Only first new image is default
+            toggle: idx === prevImages.length,
           }));
         }
 
@@ -145,6 +154,8 @@ const MediaAndSubmitStep: React.FC<MediaAndSubmitStepProps> = ({
 
   // Handle category change
   const handleCategoryChange = (index: number, type: string) => {
+    console.log(`Category changed for image ${index}: ${type}`);
+
     setImages(prevImages => {
       const newImages = [...prevImages];
       newImages[index] = {
@@ -165,6 +176,19 @@ const MediaAndSubmitStep: React.FC<MediaAndSubmitStepProps> = ({
     // Submit the form
     onSubmit();
   }, [images, onSubmit]);
+
+  // Add this effect to debug image state changes
+  useEffect(() => {
+    if (images.length > 0) {
+      console.log(
+        'Current images state:',
+        images.map(img => ({
+          url: img.imageUrl.substring(0, 20) + '...',
+          type: img.type,
+        })),
+      );
+    }
+  }, [images]);
 
   // Determine if form is valid for submission
   const isSubmitEnabled = useMemo(() => {

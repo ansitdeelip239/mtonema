@@ -67,9 +67,26 @@ const AddPartnerPropertyScreen: React.FC<Props> = ({navigation}) => {
             type: 'success',
             text1: 'Property added successfully',
           });
-          resetForm();
-          setPartnerPropertyUpdated(prev => !prev);
+
           navigation.navigate('Property', {screen: 'ListingsScreen'});
+
+          resetForm();
+
+          setCurrentStep(0);
+
+          Animated.timing(animatedValue, {
+            toValue: 0,
+            duration: 300,
+            useNativeDriver: false,
+          }).start();
+
+          Animated.timing(slideAnimation, {
+            toValue: 0,
+            duration: 300,
+            useNativeDriver: true,
+          }).start();
+
+          setPartnerPropertyUpdated(prev => !prev);
         }
       } catch (error) {
         console.error('Error submitting property data:', error);
