@@ -6,6 +6,7 @@ import {
   RefreshControl,
   Text,
   StyleSheet,
+  ToastAndroid,
 } from 'react-native';
 import PartnerService from '../../../services/PartnerService';
 import {useAuth} from '../../../hooks/useAuth';
@@ -15,6 +16,7 @@ import SearchAndFilter from './components/SearchAndFilter';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {ListingScreenStackParamList} from '../../../navigator/components/PropertyListingScreenStack';
 import Header from '../../../components/Header';
+import { usePartner } from '../../../context/PartnerProvider';
 
 const PAGE_SIZE = 10;
 
@@ -30,6 +32,8 @@ const ListingScreen: React.FC<Props> = ({navigation}) => {
   const [hasMoreData, setHasMoreData] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
   const [error, setError] = useState<string | null>(null);
+
+  const {partnerPropertyUpdated} = usePartner();
 
   const [searchQuery, setSearchQuery] = useState('');
   const [filters, setFilters] = useState({
@@ -75,7 +79,7 @@ const ListingScreen: React.FC<Props> = ({navigation}) => {
         setHasMoreData(data.pagination?.hasNextPage ?? false);
         setCurrentPage(data.pagination?.currentPage ?? 1);
       } catch (err) {
-        setError('Failed to load properties');
+        setError((err as Error).message || 'Failed to fetch properties');
       } finally {
         if (shouldRefresh) {
           setIsRefreshing(false);
@@ -93,7 +97,11 @@ const ListingScreen: React.FC<Props> = ({navigation}) => {
     return () => {
       isMountedRef.current = false;
     };
-  }, [fetchProperties]);
+  }, [fetchProperties, partnerPropertyUpdated]);
+
+  useEffect(() => {
+    fetchProperties(1, true);
+  }, [filters, searchQuery, fetchProperties]);
 
   const handleRefresh = useCallback(() => {
     fetchProperties(1, true);
@@ -108,17 +116,15 @@ const ListingScreen: React.FC<Props> = ({navigation}) => {
   const handleSearch = useCallback(
     (text: string) => {
       setSearchQuery(text);
-      fetchProperties(1, true);
     },
-    [fetchProperties],
+    [],
   );
 
   const handleFilter = useCallback(
     (newFilters: typeof filters) => {
       setFilters(newFilters);
-      fetchProperties(1, true);
     },
-    [fetchProperties],
+    [],
   );
 
   const handlePropertyPress = useCallback(
@@ -139,6 +145,13 @@ const ListingScreen: React.FC<Props> = ({navigation}) => {
         <Text style={styles.loadingText}>Loading more properties...</Text>
       </View>
     ) : null;
+
+  // Show toast when error changes
+  useEffect(() => {
+    if (error) {
+      ToastAndroid.show(error, ToastAndroid.LONG);
+    }
+  }, [error]);
 
   return (
     <View style={styles.container}>
@@ -173,11 +186,6 @@ const ListingScreen: React.FC<Props> = ({navigation}) => {
           )
         }
       />
-      {error && (
-        <View style={styles.errorContainer}>
-          <Text style={styles.errorText}>{error}</Text>
-        </View>
-      )}
     </View>
   );
 };
@@ -208,10 +216,11 @@ const styles = StyleSheet.create({
     fontWeight: '500',
   },
   errorContainer: {
-    position: 'absolute',
-    top: 60,
-    left: 0,
-    right: 0,
+    marginHorizontal: 16,
+    marginBottom: 8,
+    padding: 10,
+    backgroundColor: '#ffeaea',
+    borderRadius: 6,
     alignItems: 'center',
   },
   errorText: {

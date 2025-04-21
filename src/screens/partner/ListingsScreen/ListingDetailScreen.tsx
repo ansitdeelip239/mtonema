@@ -40,7 +40,7 @@ const ListingDetailScreen: React.FC<Props> = ({route, navigation}) => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const {width} = useWindowDimensions();
   const [isFeatured, setIsFeatured] = useState(false);
-  const {partnerPropertyUpdated, setPartnerPropertyUpdated} = usePartner();
+  const {setPartnerPropertyUpdated} = usePartner();
 
   const handleFeaturedToggle = async (newValue: boolean) => {
     setIsFeatured(newValue);
@@ -70,7 +70,7 @@ const ListingDetailScreen: React.FC<Props> = ({route, navigation}) => {
           setProperty({...property, featured: newValue});
         }
 
-        setPartnerPropertyUpdated(!partnerPropertyUpdated);
+        setPartnerPropertyUpdated(prev => !prev);
       }
     } catch (err) {
       console.error('Error updating property interest:', err);
