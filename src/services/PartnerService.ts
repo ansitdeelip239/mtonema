@@ -400,6 +400,18 @@ class PartnerService {
       throw error;
     }
   }
+
+  static async deletePartnerProperty(propertyId: number) {
+    try {
+      const response = await api.delete<null>(
+        url.deletePartnerPropertyById(propertyId),
+      );
+      return response;
+    } catch (error) {
+      console.error('Error in deletePartnerProperty', error);
+      throw error;
+    }
+  }
 }
 
 export default PartnerService;

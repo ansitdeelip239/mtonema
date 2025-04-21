@@ -61,6 +61,9 @@ const url = {
     return BASE_URL + '/users/' + userId + '/partner-properties';
   },
   partnerProperty: BASE_URL + '/partners/properties',
+  deletePartnerPropertyById: (propertyId: number) => {
+    return BASE_URL + '/partner/properties/' + propertyId;
+  },
 
   //Partner Follow-ups
   followUps: BASE_URL + '/partners/follow-ups',

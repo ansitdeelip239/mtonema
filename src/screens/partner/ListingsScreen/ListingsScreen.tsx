@@ -145,9 +145,11 @@ const ListingScreen: React.FC<Props> = ({navigation}) => {
     }
     setIsDeleting(true);
     try {
-      // await PartnerService.deletePartnerProperty(deletingId);
-      setProperties(prev => prev.filter(p => p.id !== deletingId));
-      ToastAndroid.show('Property deleted', ToastAndroid.SHORT);
+      const response = await PartnerService.deletePartnerProperty(deletingId);
+      if (response.success) {
+        setProperties(prev => prev.filter(p => p.id !== deletingId));
+        ToastAndroid.show('Property deleted', ToastAndroid.SHORT);
+      }
     } catch (err) {
       ToastAndroid.show('Failed to delete property', ToastAndroid.LONG);
     } finally {
@@ -184,8 +186,7 @@ const ListingScreen: React.FC<Props> = ({navigation}) => {
   const renderItem = ({item}: {item: Property}) => (
     <Swipeable
       renderLeftActions={() => renderLeftActions(item.id)}
-      renderRightActions={() => renderRightActions(item.id)}
-      >
+      renderRightActions={() => renderRightActions(item.id)}>
       <View style={styles.propertyCardContainer}>
         <PropertyCard property={item} onPress={handlePropertyPress} />
       </View>
