@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useRef} from 'react';
 import {
   View,
   StyleSheet,
@@ -21,10 +21,21 @@ const YoutubeVideoPlayer: React.FC<YoutubeVideoPlayerProps> = ({
   width = Dimensions.get('window').width,
 }) => {
   const [loading, setLoading] = useState(true);
+  const webviewRef = useRef<WebView>(null);
 
+  // This will inject JavaScript to pause the video when component unmounts
   useEffect(() => {
+    const webview = webviewRef.current;
     return () => {
-      // Cleanup logic, e.g., pause video, release resources
+      if (webview) {
+        // Inject JavaScript to pause YouTube video
+        webview.injectJavaScript(`
+          if (document.querySelector('iframe')) {
+            document.querySelector('iframe').contentWindow.postMessage('{"event":"command","func":"pauseVideo","args":""}', '*');
+          }
+          true;
+        `);
+      }
     };
   }, []);
 
@@ -56,7 +67,7 @@ const YoutubeVideoPlayer: React.FC<YoutubeVideoPlayerProps> = ({
 
   const extractedVideoId = getYoutubeVideoId(videoId);
 
-  // Using iframe-based embed with fixed styling
+  // Use the YouTube iframe API with enablejsapi=1 to allow JavaScript control
   const htmlContent = `
     <!DOCTYPE html>
     <html>
@@ -82,9 +93,11 @@ const YoutubeVideoPlayer: React.FC<YoutubeVideoPlayerProps> = ({
       </head>
       <body>
         <iframe 
-          src="https://www.youtube.com/embed/${extractedVideoId}?playsinline=1&rel=0"
+          id="ytplayer"
+          src="https://www.youtube.com/embed/${extractedVideoId}?playsinline=1&rel=0&enablejsapi=1"
           frameborder="0" 
           allowfullscreen="allowfullscreen"
+          allow="autoplay; encrypted-media"
           mozallowfullscreen="mozallowfullscreen" 
           msallowfullscreen="msallowfullscreen" 
           oallowfullscreen="oallowfullscreen" 
@@ -97,6 +110,7 @@ const YoutubeVideoPlayer: React.FC<YoutubeVideoPlayerProps> = ({
   return (
     <View style={[styles.container, { width, height }]}>
       <WebView
+        ref={webviewRef}
         source={{html: htmlContent}}
         style={styles.webview}
         javaScriptEnabled={true}
@@ -105,7 +119,10 @@ const YoutubeVideoPlayer: React.FC<YoutubeVideoPlayerProps> = ({
         mediaPlaybackRequiresUserAction={Platform.OS === 'ios'}
         allowsInlineMediaPlayback={true}
         onLoadEnd={() => setLoading(false)}
-        scrollEnabled={false}  // Prevent scrolling within WebView
+        scrollEnabled={false}
+        onError={(syntheticEvent) => {
+          console.log('WebView error: ', syntheticEvent.nativeEvent);
+        }}
       />
       {loading && (
         <View style={styles.loadingContainer}>
