@@ -17,6 +17,8 @@ import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {ListingScreenStackParamList} from '../../../navigator/components/PropertyListingScreenStack';
 import Header from '../../../components/Header';
 import { usePartner } from '../../../context/PartnerProvider';
+import { Swipeable } from 'react-native-gesture-handler';
+import { TouchableOpacity } from 'react-native';
 
 const PAGE_SIZE = 10;
 
@@ -138,6 +140,52 @@ const ListingScreen: React.FC<Props> = ({navigation}) => {
     [navigation],
   );
 
+  // Delete property handler
+  const handleDeleteProperty = useCallback(
+    async (propertyId: number) => {
+      try {
+        // await PartnerService.deletePartnerProperty(propertyId);
+        setProperties(prev => prev.filter(p => p.id !== propertyId));
+        ToastAndroid.show('Property deleted', ToastAndroid.SHORT);
+      } catch (err) {
+        ToastAndroid.show('Failed to delete property', ToastAndroid.LONG);
+      }
+    },
+    [],
+  );
+
+  // Render left action for swipe (Edit)
+  const renderLeftActions = (propertyId: number) => (
+    <TouchableOpacity
+      style={styles.editButton}
+      onPress={() => {
+        console.log(`Navigating to edit property for ID: ${propertyId}`);
+      }}
+    >
+      <Text style={styles.editButtonText}>Edit</Text>
+    </TouchableOpacity>
+  );
+
+  // Render right action for swipe (Delete)
+  const renderRightActions = (propertyId: number) => (
+    <TouchableOpacity
+      style={styles.deleteButton}
+      onPress={() => handleDeleteProperty(propertyId)}
+    >
+      <Text style={styles.deleteButtonText}>Delete</Text>
+    </TouchableOpacity>
+  );
+
+  // Update renderItem to use Swipeable with both left and right actions
+  const renderItem = ({item}: {item: Property}) => (
+    <Swipeable
+      renderLeftActions={() => renderLeftActions(item.id)}
+      renderRightActions={() => renderRightActions(item.id)}
+    >
+      <PropertyCard property={item} onPress={handlePropertyPress} />
+    </Swipeable>
+  );
+
   const renderFooter = () =>
     isLoading && properties.length > 0 ? (
       <View style={styles.footerLoader}>
@@ -163,9 +211,7 @@ const ListingScreen: React.FC<Props> = ({navigation}) => {
       />
       <FlatList
         data={properties}
-        renderItem={({item}) => (
-          <PropertyCard property={item} onPress={handlePropertyPress} />
-        )}
+        renderItem={renderItem}
         keyExtractor={item => item.id.toString()}
         contentContainerStyle={styles.listContent}
         refreshControl={
@@ -225,6 +271,32 @@ const styles = StyleSheet.create({
   },
   errorText: {
     color: 'red',
+  },
+  editButton: {
+    backgroundColor: '#1976d2',
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: 90,
+    height: '91%',
+    borderRadius: 12,
+  },
+  editButtonText: {
+    color: '#fff',
+    fontWeight: 'bold',
+    fontSize: 16,
+  },
+  deleteButton: {
+    backgroundColor: '#ff4444',
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: 90,
+    height: '91%',
+    borderRadius: 12,
+  },
+  deleteButtonText: {
+    color: '#fff',
+    fontWeight: 'bold',
+    fontSize: 16,
   },
 });
 
