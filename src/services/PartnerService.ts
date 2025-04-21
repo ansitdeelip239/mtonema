@@ -412,6 +412,22 @@ class PartnerService {
       throw error;
     }
   }
+
+  static async updatePartnerProperty(
+    propertyId: number,
+    data: PartnerPropertyApiSubmissionType,
+  ) {
+    try {
+      const response = await api.put(
+        `${url.partnerProperty}/${propertyId}`,
+        data,
+      );
+      return response;
+    } catch (error) {
+      console.error('Error updating partner property:', error);
+      throw error;
+    }
+  }
 }
 
 export default PartnerService;

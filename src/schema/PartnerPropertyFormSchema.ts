@@ -1,6 +1,8 @@
 import {z} from 'zod';
 
 const partnerPropertyFormSchema = z.object({
+  id: z.number().int().positive().optional(),
+
   // Seller information
   sellerType: z.string().nullable(),
 

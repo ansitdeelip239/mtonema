@@ -16,6 +16,7 @@ interface MediaAndSubmitStepProps {
   onBack?: () => void;
   showBackButton?: boolean;
   isSubmitting?: boolean;
+  submitButtonText?: string;
 }
 
 const MediaAndSubmitStep: React.FC<MediaAndSubmitStepProps> = ({
@@ -25,6 +26,7 @@ const MediaAndSubmitStep: React.FC<MediaAndSubmitStepProps> = ({
   onBack,
   showBackButton = false,
   isSubmitting = false,
+  submitButtonText = 'Submit',
 }) => {
   // Get image types from master data
   const {masterData} = useMaster();
@@ -252,7 +254,7 @@ const MediaAndSubmitStep: React.FC<MediaAndSubmitStepProps> = ({
         showBackButton={showBackButton}
         isNextEnabled={isSubmitEnabled}
         isSubmitting={isSubmitting}
-        nextButtonText="Submit"
+        nextButtonText={submitButtonText}
       />
     </View>
   );

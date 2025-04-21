@@ -170,11 +170,14 @@ const ListingScreen: React.FC<Props> = ({navigation}) => {
   }, [deletingId]);
 
   // Render left action for swipe (Edit)
-  const renderLeftActions = (propertyId: number) => (
+  const renderLeftActions = (propertyItem: Property) => (
     <TouchableOpacity
       style={styles.editButton}
       onPress={() => {
-        console.log(`Navigating to edit property for ID: ${propertyId}`);
+        console.log(`Navigating to edit property for ID: ${propertyItem.id}`);
+        const parentNavigation = navigation.getParent();
+
+        parentNavigation?.navigate('AddProperty', {editMode: true, propertyData: propertyItem})
       }}>
       <Text style={styles.editButtonText}>Edit</Text>
     </TouchableOpacity>
@@ -195,7 +198,7 @@ const ListingScreen: React.FC<Props> = ({navigation}) => {
   // Update renderItem to use Swipeable with both left and right actions
   const renderItem = ({item}: {item: Property}) => (
     <Swipeable
-      renderLeftActions={() => renderLeftActions(item.id)}
+      renderLeftActions={() => renderLeftActions(item)}
       renderRightActions={() => renderRightActions(item.id)}>
       <View style={styles.propertyCardContainer}>
         <PropertyCard property={item} onPress={handlePropertyPress} />

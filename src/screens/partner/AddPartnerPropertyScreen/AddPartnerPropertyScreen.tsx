@@ -1,4 +1,4 @@
-import React, {useState, useRef} from 'react';
+import React, {useState, useRef, useEffect} from 'react';
 import {
   View,
   StyleSheet,
@@ -34,7 +34,10 @@ const steps = ['Basic Info', 'Property Details', 'Media & Submit'];
 
 type Props = BottomTabScreenProps<PartnerBottomTabParamList, 'AddProperty'>;
 
-const AddPartnerPropertyScreen: React.FC<Props> = ({navigation}) => {
+const AddPartnerPropertyScreen: React.FC<Props> = ({route, navigation}) => {
+  const editMode = route.params?.editMode;
+  const propertyData = route.params?.propertyData;
+
   const [currentStep, setCurrentStep] = useState(0);
   const animatedValue = useRef(new Animated.Value(0)).current;
   const slideAnimation = useRef(new Animated.Value(0)).current;
@@ -51,8 +54,10 @@ const AddPartnerPropertyScreen: React.FC<Props> = ({navigation}) => {
     onSubmit,
     loading,
     resetForm,
+    setFormInput, // Make sure your useForm hook returns this
   } = useForm<PartnerPropertyFormType>({
-    initialState: initialFormState,
+    // Use propertyData in edit mode, otherwise use initialFormState
+    initialState: editMode && propertyData ? propertyData : initialFormState,
     onSubmit: async data => {
       try {
         const payload: PartnerPropertyApiSubmissionType = {
@@ -60,18 +65,29 @@ const AddPartnerPropertyScreen: React.FC<Props> = ({navigation}) => {
           userId: user?.id as number,
         };
 
-        const response = await PartnerService.postPartnerProperty(payload);
+        let response;
+
+        // Different API call based on mode
+        if (editMode && propertyData?.id) {
+          response = await PartnerService.updatePartnerProperty(
+            propertyData.id,
+            payload,
+          );
+        } else {
+          response = await PartnerService.postPartnerProperty(payload);
+        }
 
         if (response.success) {
           Toast.show({
             type: 'success',
-            text1: 'Property added successfully',
+            text1: editMode
+              ? 'Property updated successfully'
+              : 'Property added successfully',
           });
 
           navigation.navigate('Property', {screen: 'ListingsScreen'});
 
           resetForm();
-
           setCurrentStep(0);
 
           Animated.timing(animatedValue, {
@@ -92,12 +108,36 @@ const AddPartnerPropertyScreen: React.FC<Props> = ({navigation}) => {
         console.error('Error submitting property data:', error);
         Toast.show({
           type: 'error',
-          text1: 'Failed to add property',
+          text1: editMode
+            ? 'Failed to update property'
+            : 'Failed to add property',
           text2: 'Please try again later.',
         });
       }
     },
   });
+
+  // Add this useEffect to handle initial data processing for edit mode
+  useEffect(() => {
+    if (editMode && propertyData) {
+      // Handle special fields like images that might need parsing
+      if (propertyData.imageURL && typeof propertyData.imageURL === 'string') {
+        try {
+          // Parse image URLs if they're stored as JSON strings
+          const imageData = JSON.parse(propertyData.imageURL);
+          setFormInput({
+            ...propertyData,
+            imageURL: JSON.stringify(imageData), // Ensure it's in the right format
+          });
+        } catch (e) {
+          console.error('Error parsing image data:', e);
+          setFormInput(propertyData);
+        }
+      } else {
+        setFormInput(propertyData);
+      }
+    }
+  }, [editMode, propertyData, setFormInput]);
 
   const goToNextStep = () => {
     if (currentStep < steps.length - 1) {
@@ -157,7 +197,9 @@ const AddPartnerPropertyScreen: React.FC<Props> = ({navigation}) => {
 
   return (
     <View style={styles.container}>
-      <Header<PartnerDrawerParamList> title="Add Property" />
+      <Header<PartnerDrawerParamList>
+        title={editMode ? 'Edit Property' : 'Add Property'}
+      />
 
       {/* Fixed FormStepper */}
       <View style={styles.stepperContainer}>
@@ -227,6 +269,7 @@ const AddPartnerPropertyScreen: React.FC<Props> = ({navigation}) => {
                   onBack={goToPreviousStep}
                   showBackButton={true}
                   isSubmitting={loading}
+                  submitButtonText={editMode ? 'Update Property' : 'Submit'} // Add this prop
                 />
               </View>
             </ScrollView>
