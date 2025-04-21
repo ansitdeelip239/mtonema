@@ -236,17 +236,26 @@ const ListingDetailScreen: React.FC<Props> = ({route, navigation}) => {
               <FlatList
                 data={displayImages}
                 keyExtractor={(item, index) => `image-${index}`}
-                renderItem={({item}) => (
+                renderItem={({item, index}) => (
                   <View style={[styles.imageSlide, {width}]}>
                     {item.isVideo ? (
-                      // Render YouTube player for video items
-                      <YoutubeVideoPlayer
-                        videoId={item.videoUrl}
-                        height={250}
-                        width={width}
-                      />
+                      currentImageIndex === index ? (
+                        <YoutubeVideoPlayer
+                          key={`video-${index}-${currentImageIndex}`} // force remount
+                          videoId={item.videoUrl}
+                          height={250}
+                          width={width}
+                        />
+                      ) : (
+                        <View
+                          style={[
+                            styles.propertyImage,
+                            styles.videoPlaceholder,
+                          ]}>
+                          <GetIcon iconName="playButton" size={48} color="#fff" />
+                        </View>
+                      )
                     ) : (
-                      // Render image for image items
                       <Image
                         source={{uri: item.imageUrl}}
                         style={styles.propertyImage}
@@ -780,6 +789,11 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#f0f0f0',
+  },
+  videoPlaceholder: {
+    backgroundColor: '#000',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   placeholderImage: {
     width: '50%',

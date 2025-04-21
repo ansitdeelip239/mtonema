@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   View,
   StyleSheet,
@@ -21,6 +21,12 @@ const YoutubeVideoPlayer: React.FC<YoutubeVideoPlayerProps> = ({
   width = Dimensions.get('window').width,
 }) => {
   const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    return () => {
+      // Cleanup logic, e.g., pause video, release resources
+    };
+  }, []);
 
   // Extract YouTube video ID from different YouTube URL formats
   const getYoutubeVideoId = (url: string): string => {
