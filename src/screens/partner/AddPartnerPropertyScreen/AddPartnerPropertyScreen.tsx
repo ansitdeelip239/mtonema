@@ -10,7 +10,10 @@ import {
 } from 'react-native';
 import Header from '../../../components/Header';
 import useForm from '../../../hooks/useForm';
-import {PartnerDrawerParamList} from '../../../types/navigation';
+import {
+  PartnerBottomTabParamList,
+  PartnerDrawerParamList,
+} from '../../../types/navigation';
 import FormStepper from './components/FormStepper';
 import BasicDetailsStep from './BasicDetailsStep';
 import {
@@ -24,11 +27,14 @@ import {useAuth} from '../../../hooks/useAuth';
 import Toast from 'react-native-toast-message';
 import {initialFormState} from '../../../utils/partner-property-form-initial-state';
 import {usePartner} from '../../../context/PartnerProvider';
+import {BottomTabScreenProps} from '@react-navigation/bottom-tabs';
 
 const {width} = Dimensions.get('window');
 const steps = ['Basic Info', 'Property Details', 'Media & Submit'];
 
-const AddPartnerPropertyScreen = () => {
+type Props = BottomTabScreenProps<PartnerBottomTabParamList, 'AddProperty'>;
+
+const AddPartnerPropertyScreen: React.FC<Props> = ({navigation}) => {
   const [currentStep, setCurrentStep] = useState(0);
   const animatedValue = useRef(new Animated.Value(0)).current;
   const slideAnimation = useRef(new Animated.Value(0)).current;
@@ -63,7 +69,7 @@ const AddPartnerPropertyScreen = () => {
           });
           resetForm();
           setPartnerPropertyUpdated(prev => !prev);
-          // Optionally, navigate back to listings screen
+          navigation.navigate('Property', {screen: 'ListingsScreen'});
         }
       } catch (error) {
         console.error('Error submitting property data:', error);
