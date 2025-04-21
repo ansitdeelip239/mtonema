@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useRef, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {
   View,
   FlatList,
@@ -38,6 +38,7 @@ const ListingScreen: React.FC<Props> = ({navigation}) => {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [deletingId, setDeletingId] = useState<number | null>(null);
   const [isDeleting, setIsDeleting] = useState(false);
+  const [debouncedSearchQuery, setDebouncedSearchQuery] = useState('');
 
   const {partnerPropertyUpdated} = usePartner();
 
@@ -49,7 +50,6 @@ const ListingScreen: React.FC<Props> = ({navigation}) => {
   });
 
   const {user} = useAuth();
-  const isMountedRef = useRef(true);
 
   const fetchProperties = useCallback(
     async (page: number, shouldRefresh = false) => {
@@ -67,7 +67,7 @@ const ListingScreen: React.FC<Props> = ({navigation}) => {
           user.id,
           page,
           PAGE_SIZE,
-          searchQuery || undefined,
+          debouncedSearchQuery || undefined, // <-- use debounced value here
           filters.propertyFor || undefined,
           filters.status || undefined,
           filters.city || undefined,
@@ -94,29 +94,34 @@ const ListingScreen: React.FC<Props> = ({navigation}) => {
         }
       }
     },
-    [user?.id, searchQuery, filters],
+    [user?.id, debouncedSearchQuery, filters], // <-- use debouncedSearchQuery here
   );
 
   useEffect(() => {
-    isMountedRef.current = true;
+    // When filters, search, or partnerPropertyUpdated change,
+    // always treat it like a refresh from the start.
+    setProperties([]);
+    setCurrentPage(1);
+    setHasMoreData(true);
     fetchProperties(1, true);
-    return () => {
-      isMountedRef.current = false;
-    };
-  }, [fetchProperties, partnerPropertyUpdated]);
+  }, [filters, debouncedSearchQuery, partnerPropertyUpdated, fetchProperties]);
 
   useEffect(() => {
-    fetchProperties(1, true);
-  }, [filters, searchQuery, fetchProperties]);
+    const handler = setTimeout(() => {
+      setDebouncedSearchQuery(searchQuery);
+    }, 400); // 400ms debounce
+
+    return () => {
+      clearTimeout(handler);
+    };
+  }, [searchQuery]);
 
   const handleRefresh = useCallback(() => {
     setProperties([]);
+    setCurrentPage(1);
+    setHasMoreData(true);
     fetchProperties(1, true);
   }, [fetchProperties]);
-
-  useEffect(() => {
-    handleRefresh();
-  }, [partnerPropertyUpdated, handleRefresh]);
 
   const handleLoadMore = useCallback(() => {
     if (hasMoreData && !isLoading && !isRefreshing) {

@@ -23,6 +23,7 @@ import PartnerService from '../../../services/PartnerService';
 import {useAuth} from '../../../hooks/useAuth';
 import Toast from 'react-native-toast-message';
 import {initialFormState} from '../../../utils/partner-property-form-initial-state';
+import {usePartner} from '../../../context/PartnerProvider';
 
 const {width} = Dimensions.get('window');
 const steps = ['Basic Info', 'Property Details', 'Media & Submit'];
@@ -32,6 +33,7 @@ const AddPartnerPropertyScreen = () => {
   const animatedValue = useRef(new Animated.Value(0)).current;
   const slideAnimation = useRef(new Animated.Value(0)).current;
   const {user} = useAuth();
+  const {setPartnerPropertyUpdated} = usePartner();
 
   // Create refs for each ScrollView
   const scrollViewRefs = useRef<(ScrollView | null)[]>([null, null, null]);
@@ -60,6 +62,7 @@ const AddPartnerPropertyScreen = () => {
             text1: 'Property added successfully',
           });
           resetForm();
+          setPartnerPropertyUpdated(prev => !prev);
           // Optionally, navigate back to listings screen
         }
       } catch (error) {
