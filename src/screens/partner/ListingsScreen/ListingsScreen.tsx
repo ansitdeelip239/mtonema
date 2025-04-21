@@ -16,9 +16,10 @@ import SearchAndFilter from './components/SearchAndFilter';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {ListingScreenStackParamList} from '../../../navigator/components/PropertyListingScreenStack';
 import Header from '../../../components/Header';
-import { usePartner } from '../../../context/PartnerProvider';
-import { Swipeable } from 'react-native-gesture-handler';
-import { TouchableOpacity } from 'react-native';
+import {usePartner} from '../../../context/PartnerProvider';
+import Swipeable from 'react-native-gesture-handler/Swipeable';
+import {TouchableOpacity} from 'react-native';
+import ConfirmationModal from '../../../components/ConfirmationModal';
 
 const PAGE_SIZE = 10;
 
@@ -34,6 +35,9 @@ const ListingScreen: React.FC<Props> = ({navigation}) => {
   const [hasMoreData, setHasMoreData] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
   const [error, setError] = useState<string | null>(null);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [deletingId, setDeletingId] = useState<number | null>(null);
+  const [isDeleting, setIsDeleting] = useState(false);
 
   const {partnerPropertyUpdated} = usePartner();
 
@@ -115,19 +119,13 @@ const ListingScreen: React.FC<Props> = ({navigation}) => {
     }
   }, [hasMoreData, isLoading, isRefreshing, fetchProperties, currentPage]);
 
-  const handleSearch = useCallback(
-    (text: string) => {
-      setSearchQuery(text);
-    },
-    [],
-  );
+  const handleSearch = useCallback((text: string) => {
+    setSearchQuery(text);
+  }, []);
 
-  const handleFilter = useCallback(
-    (newFilters: typeof filters) => {
-      setFilters(newFilters);
-    },
-    [],
-  );
+  const handleFilter = useCallback((newFilters: typeof filters) => {
+    setFilters(newFilters);
+  }, []);
 
   const handlePropertyPress = useCallback(
     (property: Property) => {
@@ -140,19 +138,24 @@ const ListingScreen: React.FC<Props> = ({navigation}) => {
     [navigation],
   );
 
-  // Delete property handler
-  const handleDeleteProperty = useCallback(
-    async (propertyId: number) => {
-      try {
-        // await PartnerService.deletePartnerProperty(propertyId);
-        setProperties(prev => prev.filter(p => p.id !== propertyId));
-        ToastAndroid.show('Property deleted', ToastAndroid.SHORT);
-      } catch (err) {
-        ToastAndroid.show('Failed to delete property', ToastAndroid.LONG);
-      }
-    },
-    [],
-  );
+  // Delete property handler (now only deletes after confirmation)
+  const handleDeleteProperty = useCallback(async () => {
+    if (deletingId == null) {
+      return;
+    }
+    setIsDeleting(true);
+    try {
+      // await PartnerService.deletePartnerProperty(deletingId);
+      setProperties(prev => prev.filter(p => p.id !== deletingId));
+      ToastAndroid.show('Property deleted', ToastAndroid.SHORT);
+    } catch (err) {
+      ToastAndroid.show('Failed to delete property', ToastAndroid.LONG);
+    } finally {
+      setIsDeleting(false);
+      setShowDeleteModal(false);
+      setDeletingId(null);
+    }
+  }, [deletingId]);
 
   // Render left action for swipe (Edit)
   const renderLeftActions = (propertyId: number) => (
@@ -160,8 +163,7 @@ const ListingScreen: React.FC<Props> = ({navigation}) => {
       style={styles.editButton}
       onPress={() => {
         console.log(`Navigating to edit property for ID: ${propertyId}`);
-      }}
-    >
+      }}>
       <Text style={styles.editButtonText}>Edit</Text>
     </TouchableOpacity>
   );
@@ -170,8 +172,10 @@ const ListingScreen: React.FC<Props> = ({navigation}) => {
   const renderRightActions = (propertyId: number) => (
     <TouchableOpacity
       style={styles.deleteButton}
-      onPress={() => handleDeleteProperty(propertyId)}
-    >
+      onPress={() => {
+        setDeletingId(propertyId);
+        setShowDeleteModal(true);
+      }}>
       <Text style={styles.deleteButtonText}>Delete</Text>
     </TouchableOpacity>
   );
@@ -181,8 +185,10 @@ const ListingScreen: React.FC<Props> = ({navigation}) => {
     <Swipeable
       renderLeftActions={() => renderLeftActions(item.id)}
       renderRightActions={() => renderRightActions(item.id)}
-    >
-      <PropertyCard property={item} onPress={handlePropertyPress} />
+      >
+      <View style={styles.propertyCardContainer}>
+        <PropertyCard property={item} onPress={handlePropertyPress} />
+      </View>
     </Swipeable>
   );
 
@@ -232,6 +238,17 @@ const ListingScreen: React.FC<Props> = ({navigation}) => {
           )
         }
       />
+      <ConfirmationModal
+        visible={showDeleteModal}
+        title="Delete Property"
+        message="Are you sure you want to delete this property?"
+        onConfirm={handleDeleteProperty}
+        onCancel={() => {
+          setShowDeleteModal(false);
+          setDeletingId(null);
+        }}
+        isLoading={isDeleting}
+      />
     </View>
   );
 };
@@ -240,8 +257,11 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
-  listContent: {
+  propertyCardContainer: {
     paddingHorizontal: 16,
+  },
+  listContent: {
+    // paddingHorizontal: 16,
     paddingBottom: 110,
     paddingTop: 4,
   },
@@ -279,6 +299,7 @@ const styles = StyleSheet.create({
     width: 90,
     height: '91%',
     borderRadius: 12,
+    marginLeft: 16,
   },
   editButtonText: {
     color: '#fff',
@@ -292,6 +313,7 @@ const styles = StyleSheet.create({
     width: 90,
     height: '91%',
     borderRadius: 12,
+    marginRight: 16,
   },
   deleteButtonText: {
     color: '#fff',
