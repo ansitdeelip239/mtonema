@@ -89,11 +89,15 @@ const AddPartnerPropertyScreen: React.FC<Props> = ({route, navigation}) => {
           // Set the flag to refresh listings screen
           setPartnerPropertyUpdated(prev => !prev);
 
-          // Navigate back to listings screen
-          navigation.navigate('Property', {screen: 'ListingsScreen'});
-
-          // Use the complete reset function
+          // Use the complete reset function before navigation
           completeReset();
+
+          // Navigate back to listings screen with reset params
+          // This will clear the editMode and propertyData parameters
+          navigation.reset({
+            index: 0,
+            routes: [{name: 'Property', params: {screen: 'ListingsScreen'}}],
+          });
         }
       } catch (error) {
         console.error('Error submitting property data:', error);
@@ -210,7 +214,7 @@ const AddPartnerPropertyScreen: React.FC<Props> = ({route, navigation}) => {
     }
   };
 
-  // Add this function to your component
+  // Enhance the complete reset function
   const completeReset = () => {
     // Reset form data to initial empty state
     setFormInput(initialFormState);
