@@ -110,8 +110,13 @@ const ListingScreen: React.FC<Props> = ({navigation}) => {
   }, [filters, searchQuery, fetchProperties]);
 
   const handleRefresh = useCallback(() => {
+    setProperties([]);
     fetchProperties(1, true);
   }, [fetchProperties]);
+
+  useEffect(() => {
+    handleRefresh();
+  }, [partnerPropertyUpdated, handleRefresh]);
 
   const handleLoadMore = useCallback(() => {
     if (hasMoreData && !isLoading && !isRefreshing) {
