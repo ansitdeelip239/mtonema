@@ -1,11 +1,5 @@
 import React, {useState, useEffect, useRef} from 'react';
-import {
-  View,
-  StyleSheet,
-  ActivityIndicator,
-  Dimensions,
-  Platform,
-} from 'react-native';
+import {View, StyleSheet, ActivityIndicator, Dimensions} from 'react-native';
 import {WebView} from 'react-native-webview';
 import Colors from '../constants/Colors';
 
@@ -13,12 +7,14 @@ interface YoutubeVideoPlayerProps {
   videoId: string;
   height?: number;
   width?: number;
+  autoplay?: boolean; // Add this prop
 }
 
 const YoutubeVideoPlayer: React.FC<YoutubeVideoPlayerProps> = ({
   videoId,
   height = 250,
   width = Dimensions.get('window').width,
+  autoplay = true, // Default to true since we want autoplay
 }) => {
   const [loading, setLoading] = useState(true);
   const webviewRef = useRef<WebView>(null);
@@ -67,7 +63,10 @@ const YoutubeVideoPlayer: React.FC<YoutubeVideoPlayerProps> = ({
 
   const extractedVideoId = getYoutubeVideoId(videoId);
 
-  // Use the YouTube iframe API with enablejsapi=1 to allow JavaScript control
+  // Add the autoplay parameter to the YouTube embed URL
+  const autoplayParam = autoplay ? '&autoplay=1' : '';
+
+  // Use the YouTube iframe API with enablejsapi=1 and autoplay=1
   const htmlContent = `
     <!DOCTYPE html>
     <html>
@@ -94,7 +93,7 @@ const YoutubeVideoPlayer: React.FC<YoutubeVideoPlayerProps> = ({
       <body>
         <iframe 
           id="ytplayer"
-          src="https://www.youtube.com/embed/${extractedVideoId}?playsinline=1&rel=0&enablejsapi=1"
+          src="https://www.youtube.com/embed/${extractedVideoId}?playsinline=1&rel=0&enablejsapi=1${autoplayParam}"
           frameborder="0" 
           allowfullscreen="allowfullscreen"
           allow="autoplay; encrypted-media"
@@ -108,7 +107,7 @@ const YoutubeVideoPlayer: React.FC<YoutubeVideoPlayerProps> = ({
   `;
 
   return (
-    <View style={[styles.container, { width, height }]}>
+    <View style={[styles.container, {width, height}]}>
       <WebView
         ref={webviewRef}
         source={{html: htmlContent}}
@@ -116,11 +115,11 @@ const YoutubeVideoPlayer: React.FC<YoutubeVideoPlayerProps> = ({
         javaScriptEnabled={true}
         domStorageEnabled={true}
         allowsFullscreenVideo={true}
-        mediaPlaybackRequiresUserAction={Platform.OS === 'ios'}
+        mediaPlaybackRequiresUserAction={false} // Important! Set this to false to allow autoplay
         allowsInlineMediaPlayback={true}
         onLoadEnd={() => setLoading(false)}
         scrollEnabled={false}
-        onError={(syntheticEvent) => {
+        onError={syntheticEvent => {
           console.log('WebView error: ', syntheticEvent.nativeEvent);
         }}
       />

@@ -25,6 +25,7 @@ import Toast from 'react-native-toast-message';
 import {usePartner} from '../../../context/PartnerProvider';
 import {Appbar, Menu} from 'react-native-paper';
 import ConfirmationModal from '../../../components/ConfirmationModal';
+import { getYouTubeThumbnailUrl } from '../../../utils/formUtils';
 
 type Props = NativeStackScreenProps<
   ListingScreenStackParamList,
@@ -45,6 +46,9 @@ const ListingDetailScreen: React.FC<Props> = ({route, navigation}) => {
   const [menuVisible, setMenuVisible] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
+  const [activeVideoSlides, setActiveVideoSlides] = useState<{
+    [key: number]: boolean;
+  }>({});
 
   const {width} = useWindowDimensions();
   const {setPartnerPropertyUpdated} = usePartner();
@@ -208,7 +212,19 @@ const ListingDetailScreen: React.FC<Props> = ({route, navigation}) => {
       event.nativeEvent.contentOffset.x /
         event.nativeEvent.layoutMeasurement.width,
     );
+
     if (slideIndex !== currentImageIndex) {
+      // If we're leaving a video slide, mark it inactive
+      if (
+        displayImages[currentImageIndex]?.isVideo &&
+        activeVideoSlides[currentImageIndex]
+      ) {
+        setActiveVideoSlides(prev => ({
+          ...prev,
+          [currentImageIndex]: false, // This will force the video to be replaced with placeholder
+        }));
+      }
+
       setCurrentImageIndex(slideIndex);
     }
   };
@@ -321,25 +337,45 @@ const ListingDetailScreen: React.FC<Props> = ({route, navigation}) => {
                 renderItem={({item, index}) => (
                   <View style={[styles.imageSlide, {width}]}>
                     {item.isVideo ? (
-                      currentImageIndex === index ? (
+                      // Only render the YouTube player if this is the current slide AND it's active
+                      currentImageIndex === index &&
+                      activeVideoSlides[index] ? (
                         <YoutubeVideoPlayer
-                          key={`video-${index}-${currentImageIndex}`} // force remount
+                          key={`video-${index}-${Math.random()}`} // Force remount with random key
                           videoId={item.videoUrl}
                           height={250}
                           width={width}
                         />
                       ) : (
-                        <View
-                          style={[
-                            styles.propertyImage,
-                            styles.videoPlaceholder,
-                          ]}>
-                          <GetIcon
-                            iconName="playButton"
-                            size={48}
-                            color="#fff"
+                        // Show a thumbnail with play button overlay
+                        <TouchableOpacity
+                          style={[styles.propertyImage]}
+                          onPress={() => {
+                            if (currentImageIndex === index) {
+                              // Only activate if this is the current slide
+                              setActiveVideoSlides(prev => ({
+                                ...prev,
+                                [index]: true,
+                              }));
+                            }
+                          }}
+                          activeOpacity={0.8}>
+                          <Image
+                            source={{ uri: getYouTubeThumbnailUrl(item.videoUrl) }}
+                            style={styles.videoThumbnail}
+                            resizeMode="cover"
                           />
-                        </View>
+                          <View style={styles.videoPlayOverlay}>
+                            <View style={styles.playButtonContainer}>
+                              <GetIcon
+                                iconName="playButton"
+                                size={48}
+                                color="#fff"
+                              />
+                              <Text style={styles.playVideoText}>Play Video</Text>
+                            </View>
+                          </View>
+                        </TouchableOpacity>
                       )
                     ) : (
                       <Image
@@ -462,7 +498,11 @@ const ListingDetailScreen: React.FC<Props> = ({route, navigation}) => {
             {property.zipCode && (
               <View style={styles.overviewItem}>
                 <View style={styles.overviewIconWrapper}>
-                  <GetIcon iconName="locationPin" size={20} color={Colors.main} />
+                  <GetIcon
+                    iconName="locationPin"
+                    size={20}
+                    color={Colors.main}
+                  />
                 </View>
                 <View style={styles.overviewTextContainer}>
                   <Text style={styles.overviewLabel}>ZIP Code</Text>
@@ -479,7 +519,9 @@ const ListingDetailScreen: React.FC<Props> = ({route, navigation}) => {
                 </View>
                 <View style={styles.overviewTextContainer}>
                   <Text style={styles.overviewLabel}>Seller Type</Text>
-                  <Text style={styles.overviewValue}>{property.sellerType}</Text>
+                  <Text style={styles.overviewValue}>
+                    {property.sellerType}
+                  </Text>
                 </View>
               </View>
             )}
@@ -1215,6 +1257,30 @@ const styles = StyleSheet.create({
   },
   threeDotsIcon: {
     marginRight: -10,
+  },
+  playVideoText: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: '600',
+    marginTop: 8,
+  },
+  videoThumbnail: {
+    height: 250,
+    width: '100%',
+  },
+  videoPlayOverlay: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  },
+  playButtonContainer: {
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });
 
