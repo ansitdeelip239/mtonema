@@ -7,6 +7,8 @@ import {
   Platform,
   ScrollView,
   Dimensions,
+  TouchableOpacity,
+  Text,
 } from 'react-native';
 import Header from '../../../components/Header';
 import useForm from '../../../hooks/useForm';
@@ -54,7 +56,7 @@ const AddPartnerPropertyScreen: React.FC<Props> = ({route, navigation}) => {
     onSubmit,
     loading,
     resetForm,
-    setFormInput, // Make sure your useForm hook returns this
+    setFormInput,
   } = useForm<PartnerPropertyFormType>({
     // Use propertyData in edit mode, otherwise use initialFormState
     initialState: editMode && propertyData ? propertyData : initialFormState,
@@ -216,19 +218,13 @@ const AddPartnerPropertyScreen: React.FC<Props> = ({route, navigation}) => {
 
   // Enhance the complete reset function
   const completeReset = () => {
-    // Reset form data to initial empty state
     setFormInput(initialFormState);
-
-    // Reset current step
     setCurrentStep(0);
-
-    // Reset animations
     Animated.timing(animatedValue, {
       toValue: 0,
       duration: 0,
       useNativeDriver: false,
     }).start();
-
     Animated.timing(slideAnimation, {
       toValue: 0,
       duration: 0,
@@ -236,11 +232,20 @@ const AddPartnerPropertyScreen: React.FC<Props> = ({route, navigation}) => {
     }).start();
   };
 
+  // Clear button component
+  const ClearButton = (
+    <TouchableOpacity onPress={completeReset} style={styles.clearButton}>
+      <Text style={styles.clearButtonText}>Clear</Text>
+    </TouchableOpacity>
+  );
+
   return (
     <View style={styles.container}>
       <Header<PartnerDrawerParamList>
         title={editMode ? 'Edit Property' : 'Add Property'}
-      />
+      >
+        {ClearButton}
+      </Header>
 
       {/* Fixed FormStepper */}
       <View style={styles.stepperContainer}>
@@ -365,6 +370,15 @@ const styles = StyleSheet.create({
   },
   bottomPadding: {
     height: 80, // Padding to avoid tab bar overlap
+  },
+  clearButton: {
+    padding: 10,
+    backgroundColor: '#f00',
+    borderRadius: 5,
+  },
+  clearButtonText: {
+    color: '#fff',
+    fontWeight: 'bold',
   },
 });
 
