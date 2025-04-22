@@ -41,7 +41,7 @@ const SearchAndFilter = ({
               : undefined
           }
           inputStyle={styles.searchInputText}
-          elevation={5}
+          elevation={1}
           theme={{
             mode: 'adaptive',
           }}
@@ -82,7 +82,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     paddingHorizontal: 16,
-    paddingVertical: 10,
+    // paddingVertical: 10,
+    paddingBottom: 10,
     backgroundColor: 'transparent',
   },
   searchContainer: {

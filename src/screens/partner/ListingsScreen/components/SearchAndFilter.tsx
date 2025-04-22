@@ -4,7 +4,7 @@ import {Searchbar} from 'react-native-paper';
 import Colors from '../../../../constants/Colors';
 import GetIcon from '../../../../components/GetIcon';
 import FilterModal from './FilterModal';
-import { FilterValues } from '../types';
+import {FilterValues} from '../types';
 
 const SearchAndFilter = ({
   initialFilters,
@@ -39,7 +39,7 @@ const SearchAndFilter = ({
               : undefined
           }
           inputStyle={styles.searchInputText}
-          elevation={5}
+          elevation={1}
           theme={{
             mode: 'adaptive',
           }}
@@ -79,7 +79,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     paddingHorizontal: 16,
-    paddingVertical: 10,
+    // paddingVertical: 10,
+    paddingBottom: 10,
     backgroundColor: 'transparent',
   },
   searchContainer: {
