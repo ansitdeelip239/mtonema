@@ -1,11 +1,14 @@
-import React, {useCallback, useState} from 'react';
+import React, {useCallback, useState, useEffect} from 'react';
 import {View, StyleSheet, Text} from 'react-native';
 import FormNavigationButtons from './components/FormNavigationButtons';
-import {PartnerPropertyFormType} from '../../../../schema/PartnerPropertyFormSchema';
+import partnerPropertyFormSchema, {
+  PartnerPropertyFormType,
+} from '../../../../schema/PartnerPropertyFormSchema';
 import {useMaster} from '../../../../context/MasterProvider';
 import {MaterialTextInput} from '../../../../components/MaterialTextInput';
 import FilterOption from '../../../../components/FilterOption';
 import {formatCurrency} from '../../../../utils/currency';
+import {z} from 'zod';
 
 interface BasicDetailsStepProps {
   formInput: PartnerPropertyFormType;
@@ -29,85 +32,136 @@ const BasicDetailsStep: React.FC<BasicDetailsStepProps> = ({
 }) => {
   const {masterData} = useMaster();
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const [isFormValid, setIsFormValid] = useState(false);
+  const [attemptedSubmit, setAttemptedSubmit] = useState(false);
+  const [shouldShowErrors, setShouldShowErrors] = useState(false);
+
+  // Validate and show errors while typing
+  const validateField = useCallback(
+    (field: keyof PartnerPropertyFormType, value: any) => {
+      try {
+        // Create a partial schema with just the field being validated
+        const fieldSchema = z.object({
+          [field]: partnerPropertyFormSchema.shape[field],
+        });
+
+        fieldSchema.parse({[field]: value});
+        setErrors(prev => ({...prev, [field]: ''}));
+      } catch (error) {
+        if (error instanceof z.ZodError) {
+          const fieldError = error.errors.find(err => err.path[0] === field);
+          if (fieldError && shouldShowErrors) {
+            setErrors(prev => ({...prev, [field]: fieldError.message}));
+          }
+        }
+      }
+    },
+    [shouldShowErrors],
+  );
+
+  // Perform silent validation for next button
+  const validateFormSilently = useCallback(() => {
+    try {
+      const step1Fields = [
+        'propertyName',
+        'sellerType',
+        'city',
+        'propertyFor',
+        'propertyType',
+        'location',
+        'price',
+      ];
+
+      const step1Data = Object.fromEntries(
+        step1Fields.map(field => [
+          field,
+          formInput[field as keyof PartnerPropertyFormType],
+        ]),
+      );
+
+      partnerPropertyFormSchema.parse(step1Data);
+      return true;
+    } catch (error) {
+      return false;
+    }
+  }, [formInput]);
+
+  useEffect(() => {
+    const isValid = validateFormSilently();
+    setIsFormValid(isValid);
+
+    // If all fields are empty, reset all states
+    const allEmpty = Object.values(formInput).every(
+      value => value === '' || value === null || value === undefined,
+    );
+
+    if (allEmpty) {
+      setErrors({});
+      setAttemptedSubmit(false);
+      setShouldShowErrors(false);
+    }
+  }, [formInput, validateFormSilently]);
 
   const handleFieldSelect = useCallback(
     (field: keyof PartnerPropertyFormType, value: string) => {
       handleSelect(field, value);
-      // Clear error for this field when a value is selected
-      if (errors[field]) {
-        setErrors(prev => ({...prev, [field]: ''}));
-      }
+      validateField(field, value);
     },
-    [handleSelect, errors],
+    [handleSelect, validateField],
   );
 
-  const validateFields = () => {
-    const newErrors: Record<string, string> = {};
-
-    // Check required fields
-    if (!formInput.propertyName || formInput.propertyName.trim() === '') {
-      newErrors.propertyName = 'Property name is required';
-    }
-
-    if (!formInput.sellerType) {
-      newErrors.sellerType = 'Seller type is required';
-    }
-
-    if (!formInput.city) {
-      newErrors.city = 'City is required';
-    }
-
-    if (!formInput.propertyFor) {
-      newErrors.propertyFor = 'Property for is required';
-    }
-
-    if (!formInput.propertyType) {
-      newErrors.propertyType = 'Property type is required';
-    }
-
-    if (!formInput.location || formInput.location.trim() === '') {
-      newErrors.location = 'Location is required';
-    }
-
-    if (!formInput.price) {
-      newErrors.price = 'Price is required';
-    } else if (Number(formInput.price) <= 0) {
-      newErrors.price = 'Price must be greater than 0';
-    }
-
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
-
-  const handleNext = () => {
-    if (validateFields()) {
-      onNext();
-    }
-  };
-
-  // Clear errors when input changes
   const handleTextInputChange = (
     field: keyof PartnerPropertyFormType,
     value: any,
   ) => {
-    if (errors[field]) {
-      setErrors(prev => ({...prev, [field]: ''}));
-    }
     handleInputChange(field, value);
+    setShouldShowErrors(true);
+    validateField(field, value);
   };
 
-  // Check if the form is valid
-  const isNextEnabled: boolean =
-    Boolean(formInput.propertyName) &&
-    formInput.propertyName?.trim() !== '' &&
-    Boolean(formInput.sellerType) &&
-    Boolean(formInput.city) &&
-    Boolean(formInput.propertyFor) &&
-    Boolean(formInput.propertyType) &&
-    Boolean(formInput.location) &&
-    formInput.location?.trim() !== '' &&
-    Boolean(formInput.price) &&
-    Number(formInput.price ?? 0) > 0;
+  const handleNext = () => {
+    setAttemptedSubmit(true);
+    setShouldShowErrors(true);
+
+    try {
+      const step1Fields = [
+        'propertyName',
+        'sellerType',
+        'city',
+        'propertyFor',
+        'propertyType',
+        'location',
+        'price',
+      ];
+
+      const step1Data = Object.fromEntries(
+        step1Fields.map(field => [
+          field,
+          formInput[field as keyof PartnerPropertyFormType],
+        ]),
+      );
+
+      partnerPropertyFormSchema.parse(step1Data);
+      onNext();
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        const newErrors: Record<string, string> = {};
+        error.errors.forEach(err => {
+          const field = err.path[0] as string;
+          newErrors[field] = err.message;
+        });
+        setErrors(newErrors);
+      }
+    }
+  };
+
+  // Get error message based on validation state
+  const getErrorMessage = (field: keyof PartnerPropertyFormType) => {
+    if (shouldShowErrors || attemptedSubmit) {
+      return errors[field];
+    }
+    return undefined;
+  };
 
   return (
     <View style={styles.container}>
@@ -118,7 +172,7 @@ const BasicDetailsStep: React.FC<BasicDetailsStepProps> = ({
         label="Property Name*"
         mode="outlined"
         placeholder="Enter a property name"
-        errorMessage={errors.propertyName}
+        errorMessage={getErrorMessage('propertyName')}
       />
 
       <FilterOption
@@ -126,7 +180,7 @@ const BasicDetailsStep: React.FC<BasicDetailsStepProps> = ({
         options={masterData?.SellerType || []}
         selectedValue={formInput.sellerType}
         onSelect={value => handleFieldSelect('sellerType', value)}
-        error={errors.sellerType}
+        error={getErrorMessage('sellerType')}
       />
 
       <FilterOption
@@ -134,7 +188,7 @@ const BasicDetailsStep: React.FC<BasicDetailsStepProps> = ({
         options={masterData?.ProjectLocation || []}
         selectedValue={formInput.city}
         onSelect={value => handleFieldSelect('city', value)}
-        error={errors.city}
+        error={getErrorMessage('city')}
       />
 
       <FilterOption
@@ -142,7 +196,7 @@ const BasicDetailsStep: React.FC<BasicDetailsStepProps> = ({
         options={masterData?.PropertyFor || []}
         selectedValue={formInput.propertyFor}
         onSelect={value => handleFieldSelect('propertyFor', value)}
-        error={errors.propertyFor}
+        error={getErrorMessage('propertyFor')}
       />
 
       <FilterOption
@@ -150,7 +204,7 @@ const BasicDetailsStep: React.FC<BasicDetailsStepProps> = ({
         options={masterData?.PropertyType || []}
         selectedValue={formInput.propertyType}
         onSelect={value => handleFieldSelect('propertyType', value)}
-        error={errors.propertyType}
+        error={getErrorMessage('propertyType')}
       />
 
       <MaterialTextInput
@@ -160,7 +214,7 @@ const BasicDetailsStep: React.FC<BasicDetailsStepProps> = ({
         label="Location*"
         mode="outlined"
         placeholder="Enter location details"
-        errorMessage={errors.location}
+        errorMessage={getErrorMessage('location')}
       />
 
       <MaterialTextInput
@@ -171,7 +225,7 @@ const BasicDetailsStep: React.FC<BasicDetailsStepProps> = ({
         mode="outlined"
         placeholder="Enter property price"
         keyboardType="number-pad"
-        errorMessage={errors.price}
+        errorMessage={getErrorMessage('price')}
         rightComponent={<Text>{formatCurrency(formInput.price)}</Text>}
       />
 
@@ -180,7 +234,7 @@ const BasicDetailsStep: React.FC<BasicDetailsStepProps> = ({
         onNext={handleNext}
         onBack={onBack}
         showBackButton={showBackButton}
-        isNextEnabled={isNextEnabled}
+        isNextEnabled={isFormValid}
       />
     </View>
   );

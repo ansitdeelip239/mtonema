@@ -6,7 +6,11 @@ const requiredStep1Fields = {
   propertyName: z
     .string()
     .min(3, 'Property name must be at least 3 characters')
-    .max(100),
+    .max(100)
+    .regex(
+      /^[a-zA-Z\s]+$/,
+      'Property name can only contain letters and spaces',
+    ),
   sellerType: z.string(),
   city: z.string(),
   propertyFor: z.string(),
