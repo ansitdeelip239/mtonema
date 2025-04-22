@@ -9,6 +9,7 @@ import {
   Client,
   ClientForm,
   ClientResponseModel,
+  CustomerTestimonialResponse,
   FollowUp,
   FollowUpType,
   Group2Response,
@@ -425,6 +426,28 @@ class PartnerService {
       return response;
     } catch (error) {
       console.error('Error updating partner property:', error);
+      throw error;
+    }
+  }
+
+  static async getPartnerCustomerTestimonial(
+    createdBy: string,
+    pageNumber: number,
+    pageSize: number,
+  ) {
+    try {
+      const params = new URLSearchParams({
+        createdBy,
+        pageNumber: pageNumber.toString(),
+        pageSize: pageSize.toString(),
+      }).toString();
+
+      const response = await api.get<CustomerTestimonialResponse>(
+        `${url.feedback}?${params}`,
+      );
+      return response;
+    } catch (error) {
+      console.error('Error in getPartnerCustomerTestimonial', error);
       throw error;
     }
   }

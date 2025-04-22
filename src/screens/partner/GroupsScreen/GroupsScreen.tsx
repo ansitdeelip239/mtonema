@@ -35,6 +35,7 @@ const GroupItem = memo(
       <View
         style={[
           styles.colorIndicator,
+          // eslint-disable-next-line react-native/no-inline-styles
           {
             backgroundColor:
               item.color && item.color.id

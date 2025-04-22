@@ -43,6 +43,7 @@ export type PartnerDrawerParamList = {
   'Home': NavigatorScreenParams<PartnerBottomTabParamList>;
   'Groups': undefined;
   'Profile Screen': undefined;
+  'Feedback': undefined
 };
 
 export type AdminDrawerParamList = {

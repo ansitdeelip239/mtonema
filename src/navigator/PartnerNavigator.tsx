@@ -7,6 +7,7 @@ import PartnerBottomTabs from './components/PartnerBottomTabs';
 import GroupsScreen from '../screens/partner/GroupsScreen/GroupsScreen';
 import GetIcon from '../components/GetIcon';
 import PartnerProfileScreen from '../screens/partner/ProfileScreen/ProfileScreen';
+import FeedbackScreenStack from './components/FeedbackScreenStack';
 
 const Drawer = createDrawerNavigator<PartnerDrawerParamList>();
 
@@ -48,7 +49,19 @@ const PartnerNavigator = memo(() => (
         headerShown: false,
         // eslint-disable-next-line react/no-unstable-nested-components
         drawerIcon: ({color}) => (
-          <GetIcon iconName="globe" color={color} size="25" />
+          <GetIcon iconName="group" color={color} size="25" />
+        ),
+      }}
+    />
+
+    <Drawer.Screen
+      name="Feedback"
+      component={FeedbackScreenStack}
+      options={{
+        headerShown: false,
+        // eslint-disable-next-line react/no-unstable-nested-components
+        drawerIcon: ({color}) => (
+          <GetIcon iconName="feedback" color={color} size="25" />
         ),
       }}
     />

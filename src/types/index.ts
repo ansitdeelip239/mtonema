@@ -216,7 +216,7 @@ export interface Group2 {
   color: {
     id: number;
     name: string;
-  }
+  };
 }
 
 export interface Group2Response {
@@ -237,14 +237,14 @@ export interface Client {
   createdOn: string;
   activity: string;
   status: number;
-  followUp?: FollowUp
+  followUp?: FollowUp;
 }
 
 export interface FollowUp {
-    id: number;
-    date: string;
-    status: 'Pending' | 'Completed';
-    userId: number;
+  id: number;
+  date: string;
+  status: 'Pending' | 'Completed';
+  userId: number;
 }
 
 export interface FollowUpType {
@@ -279,4 +279,23 @@ export interface SearchIntellisenseResponse {
   agentName: string | null;
   agentContactNo: string | null;
   location: string | null;
+}
+
+export interface CustomerTestimonialResponse {
+  testimonials: CustomerTestimonial[];
+  pagination: PagingModel;
+}
+
+export interface CustomerTestimonial {
+  id: number;
+  userType: string;
+  customerName: string;
+  feedbackText: string;
+  imageURL: string;
+  videoURL: string | null;
+  createdBy: string;
+  createdOn: string;
+  updatedBy: string | null;
+  updatedOn: string | null;
+  recordStatus: string;
 }

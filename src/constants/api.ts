@@ -72,6 +72,9 @@ const url = {
   groups: BASE_URL + '/partners/groups',
   addGroups: BASE_URL + '/partners/addedit-groups',
 
+  //Partner Feedback
+  feedback: BASE_URL + '/testimonials/by-createdby',
+
   //Admin
   getAllProperties: BASE_URL + '/property/getAllProperty',
   getAllUsers: BASE_URL + '/User/GetAllUser',
