@@ -198,51 +198,131 @@ const PartnerPropertyForm: React.FC<PartnerPropertyFormProps> = ({
     };
   }, [resetForm]);
 
-  const goToNextStep = () => {
-    if (currentStep < steps.length - 1) {
-      Animated.timing(animatedValue, {
-        toValue: currentStep + 1,
-        duration: 300,
-        useNativeDriver: false,
-      }).start();
+  // Add validation functions for each step
+  const validateStep = React.useCallback(
+    (stepIndex: number): boolean => {
+      switch (stepIndex) {
+        case 0:
+          // Basic info validation
+          return !!(
+            formInput.propertyType !== null &&
+            formInput.propertyType !== undefined &&
+            formInput.propertyType !== ''
+          );
+        case 1:
+          // Property details validation
+          return !!(
+            formInput.propertyType &&
+            formInput.price &&
+            formInput.area
+          );
+        case 2:
+          // Media & Submit validation
+          // You're already at the last step, so return true
+          return true;
+        default:
+          return false;
+      }
+    },
+    [formInput],
+  );
 
-      Animated.timing(slideAnimation, {
-        toValue: (currentStep + 1) * -width,
-        duration: 300,
-        useNativeDriver: true,
-      }).start(() => {
-        setCurrentStep(currentStep + 1);
+  // Add this state to track if current step is valid
+  const [currentStepIsValid, setCurrentStepIsValid] = useState<boolean>(false);
 
-        const nextScrollView = scrollViewRefs.current[currentStep + 1];
-        if (nextScrollView) {
-          nextScrollView.scrollTo({x: 0, y: 0, animated: true});
-        }
+  // Add a useEffect to check validation whenever inputs change
+  useEffect(() => {
+    // Update current step validation status whenever form inputs change
+    const isValid = validateStep(currentStep);
+    setCurrentStepIsValid(isValid);
+  }, [formInput, currentStep, validateStep]);
+
+  // Handle step navigation
+  const handleStepPress = (stepIndex: number) => {
+    // We can always go back to previous steps
+    if (stepIndex < currentStep) {
+      animateToStep(stepIndex);
+      return;
+    }
+
+    // If trying to go to the next step
+    if (stepIndex === currentStep + 1) {
+      // Validate current step
+      if (validateStep(currentStep)) {
+        animateToStep(stepIndex);
+      } else {
+        Toast.show({
+          type: 'error',
+          text1: 'Validation Error',
+          text2: 'Please complete the current step before moving forward.',
+        });
+      }
+      return;
+    }
+
+    // If trying to skip steps
+    if (stepIndex > currentStep + 1) {
+      Toast.show({
+        type: 'error',
+        text1: 'Cannot skip steps',
+        text2: 'Please complete steps in order.',
       });
+      return;
+    }
+
+    // If clicking the current step, do nothing
+    if (stepIndex === currentStep) {
+      return;
+    }
+  };
+
+  // Helper to animate to a specific step
+  const animateToStep = (stepIndex: number) => {
+    // Animate to the selected step
+    Animated.timing(animatedValue, {
+      toValue: stepIndex,
+      duration: 300,
+      useNativeDriver: false,
+    }).start();
+
+    Animated.timing(slideAnimation, {
+      toValue: stepIndex * -width,
+      duration: 300,
+      useNativeDriver: true,
+    }).start(() => {
+      setCurrentStep(stepIndex);
+
+      // Scroll to top of the selected step
+      const selectedScrollView = scrollViewRefs.current[stepIndex];
+      if (selectedScrollView) {
+        selectedScrollView.scrollTo({x: 0, y: 0, animated: false});
+      }
+    });
+  };
+
+  // Existing functions for step navigation
+  const goToNextStep = () => {
+    // Existing implementation
+    if (currentStep < steps.length - 1) {
+      if (!validateStep(currentStep)) {
+        Toast.show({
+          type: 'error',
+          text1: 'Validation Error',
+          text2: 'Please fill in all required fields before proceeding.',
+        });
+        return;
+      }
+
+      handleStepPress(currentStep + 1);
     } else {
       onSubmit();
     }
   };
 
   const goToPreviousStep = () => {
+    // Existing implementation
     if (currentStep > 0) {
-      Animated.timing(animatedValue, {
-        toValue: currentStep - 1,
-        duration: 300,
-        useNativeDriver: false,
-      }).start();
-
-      Animated.timing(slideAnimation, {
-        toValue: (currentStep - 1) * -width,
-        duration: 300,
-        useNativeDriver: true,
-      }).start(() => {
-        setCurrentStep(currentStep - 1);
-
-        const prevScrollView = scrollViewRefs.current[currentStep - 1];
-        if (prevScrollView) {
-          prevScrollView.scrollTo({x: 0, y: 0, animated: true});
-        }
-      });
+      handleStepPress(currentStep - 1);
     }
   };
 
@@ -286,6 +366,8 @@ const PartnerPropertyForm: React.FC<PartnerPropertyFormProps> = ({
           steps={steps}
           currentStep={currentStep}
           animatedValue={animatedValue}
+          onStepPress={handleStepPress}
+          canMoveToNextStep={currentStepIsValid}
         />
       </View>
 

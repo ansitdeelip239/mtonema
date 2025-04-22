@@ -5,6 +5,7 @@ import {
   StyleSheet,
   Animated,
   useWindowDimensions,
+  TouchableOpacity,
 } from 'react-native';
 import Colors from '../../../../../constants/Colors';
 
@@ -12,12 +13,16 @@ interface FormStepperProps {
   steps: string[];
   currentStep: number;
   animatedValue: Animated.Value;
+  onStepPress?: (stepIndex: number) => void;
+  canMoveToNextStep?: boolean; // New prop to indicate if next step is available
 }
 
 const FormStepper: React.FC<FormStepperProps> = ({
   steps,
   currentStep,
   animatedValue,
+  onStepPress,
+  canMoveToNextStep = false, // Default to false
 }) => {
   const {width} = useWindowDimensions();
 
@@ -26,13 +31,20 @@ const FormStepper: React.FC<FormStepperProps> = ({
   const containerPadding = 20; // From container style paddingHorizontal
   const lineAdjustment = 6; // Small adjustment to shorten line slightly
 
-  const lineWidth = width - 2 * containerPadding - 2 * circleRadius - lineAdjustment;
+  const lineWidth =
+    width - 2 * containerPadding - 2 * circleRadius - lineAdjustment;
 
   const progressWidth = animatedValue.interpolate({
     inputRange: [0, steps.length - 1],
     outputRange: [circleRadius, lineWidth - circleRadius],
     extrapolate: 'clamp',
   });
+
+  const handleStepPress = (index: number) => {
+    if (onStepPress) {
+      onStepPress(index);
+    }
+  };
 
   return (
     <View style={styles.container}>
@@ -42,7 +54,7 @@ const FormStepper: React.FC<FormStepperProps> = ({
           styles.lineContainer,
           {
             width: lineWidth,
-            left: containerPadding + circleRadius + (lineAdjustment / 2), // Center the adjusted line
+            left: containerPadding + circleRadius + lineAdjustment / 2,
           },
         ]}>
         <View style={styles.backgroundLine} />
@@ -53,32 +65,50 @@ const FormStepper: React.FC<FormStepperProps> = ({
         {steps.map((step, index) => {
           const isCompleted = index < currentStep;
           const isActive = index === currentStep;
+          // Allow navigation to completed steps, current step, and next step if validation passes
+          const canNavigate = 
+            index <= currentStep || 
+            (index === currentStep + 1 && canMoveToNextStep);
 
           return (
             <View key={index} style={styles.stepContainer}>
-              <View
+              <TouchableOpacity
+                activeOpacity={canNavigate ? 0.7 : 1}
+                disabled={!onStepPress || !canNavigate}
+                onPress={() => handleStepPress(index)}
                 style={[
-                  styles.circle,
-                  isActive && styles.activeCircle,
-                  isCompleted && styles.completedCircle,
+                  styles.stepTouchable,
+                  canNavigate && styles.clickableStep,
                 ]}>
+                <View
+                  style={[
+                    styles.circle,
+                    isActive && styles.activeCircle,
+                    isCompleted && styles.completedCircle,
+                    !canNavigate && styles.disabledCircle,
+                  ]}>
+                  <Text
+                    style={[
+                      styles.stepNumber,
+                      isActive && styles.activeStepNumber,
+                      isCompleted && styles.completedStepNumber,
+                      !canNavigate && styles.disabledStepNumber,
+                    ]}>
+                    {index + 1}
+                  </Text>
+                </View>
                 <Text
                   style={[
-                    styles.stepNumber,
-                    isActive && styles.activeStepNumber,
-                    isCompleted && styles.completedStepNumber,
+                    styles.stepLabel,
+                    isActive && styles.activeStepLabel,
+                    isCompleted && styles.completedStepLabel,
+                    !canNavigate && styles.disabledStepLabel,
+                    // Add a visual cue for the next available step
+                    index === currentStep + 1 && canMoveToNextStep && styles.nextAvailableStep,
                   ]}>
-                  {index + 1}
+                  {step}
                 </Text>
-              </View>
-              <Text
-                style={[
-                  styles.stepLabel,
-                  isActive && styles.activeStepLabel,
-                  isCompleted && styles.completedStepLabel,
-                ]}>
-                {step}
-              </Text>
+              </TouchableOpacity>
             </View>
           );
         })}
@@ -102,6 +132,9 @@ const styles = StyleSheet.create({
   stepContainer: {
     alignItems: 'center',
     flex: 1,
+  },
+  stepTouchable: {
+    alignItems: 'center',
   },
   lineContainer: {
     position: 'absolute',
@@ -146,6 +179,9 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.main,
     borderColor: Colors.main,
   },
+  disabledCircle: {
+    opacity: 0.5,
+  },
   stepNumber: {
     fontSize: 14,
     fontWeight: 'bold',
@@ -156,6 +192,9 @@ const styles = StyleSheet.create({
   },
   completedStepNumber: {
     color: 'white',
+  },
+  disabledStepNumber: {
+    color: '#aaa',
   },
   stepLabel: {
     fontSize: 12,
@@ -169,6 +208,16 @@ const styles = StyleSheet.create({
   },
   completedStepLabel: {
     color: Colors.main,
+  },
+  disabledStepLabel: {
+    color: '#aaa',
+  },
+  clickableStep: {
+    opacity: 1,
+  },
+  nextAvailableStep: {
+    color: Colors.main,
+    opacity: 0.8,
   },
 });
 
