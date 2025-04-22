@@ -7,9 +7,9 @@ import {
 } from 'react-native';
 import ImagePicker from 'react-native-image-crop-picker';
 import Toast from 'react-native-toast-message';
-import GetIcon from '../../../../components/GetIcon';
-import Colors from '../../../../constants/Colors';
-import {ImageData} from '../../../../types/image';
+import {ImageData} from '../../../../../types/image';
+import Colors from '../../../../../constants/Colors';
+import GetIcon from '../../../../../components/GetIcon';
 
 interface ImageUploaderProps {
   onImagesSelected: (images: ImageData[]) => void;

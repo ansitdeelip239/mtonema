@@ -1,7 +1,6 @@
 import {NavigatorScreenParams} from '@react-navigation/native';
 import {ClientStackParamList} from '../navigator/components/ClientScreenStack';
 import { ListingScreenStackParamList } from '../navigator/components/PropertyListingScreenStack';
-import { PartnerPropertyFormType } from '../schema/PartnerPropertyFormSchema';
 
 export type AgentStackParamList = {
   AgentPropertyList: undefined;
@@ -27,7 +26,7 @@ export type BuyerSellerAdminBottomTabParamList = {
 export type PartnerBottomTabParamList = {
   FollowUp: undefined;
   Property: { screen: keyof ListingScreenStackParamList } | undefined;
-  AddProperty: {editMode: boolean; propertyData: PartnerPropertyFormType} | undefined;
+  AddProperty: undefined;
   Clients: NavigatorScreenParams<ClientStackParamList>;
   AgentData: undefined;
 };

@@ -6,8 +6,8 @@ import {
   TouchableOpacity,
   TextInput,
 } from 'react-native';
-import GetIcon from '../../../../components/GetIcon';
-import Colors from '../../../../constants/Colors';
+import Colors from '../../../../../constants/Colors';
+import GetIcon from '../../../../../components/GetIcon';
 
 interface TagsInputProps {
   tags: string | null;

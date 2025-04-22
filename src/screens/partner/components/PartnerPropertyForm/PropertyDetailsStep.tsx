@@ -1,9 +1,9 @@
 import React, {useCallback, useMemo} from 'react';
 import {View, StyleSheet, Text} from 'react-native';
-import {PartnerPropertyFormType} from '../../../schema/PartnerPropertyFormSchema';
 import PropertyFieldRenderer from './components/PropertyFieldRenderer';
-import {propertyTypeFieldMappings} from '../../../utils/property-type-field-mappings';
 import FormNavigationButtons from './components/FormNavigationButtons';
+import { PartnerPropertyFormType } from '../../../../schema/PartnerPropertyFormSchema';
+import { propertyTypeFieldMappings } from '../../../../utils/property-type-field-mappings';
 
 interface PropertyDetailsStepProps {
   formInput: PartnerPropertyFormType;

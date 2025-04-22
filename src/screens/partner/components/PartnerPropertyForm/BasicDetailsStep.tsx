@@ -1,10 +1,10 @@
 import React, {useCallback} from 'react';
 import {View, StyleSheet} from 'react-native';
-import {MaterialTextInput} from '../../../components/MaterialTextInput';
-import {PartnerPropertyFormType} from '../../../schema/PartnerPropertyFormSchema';
-import FilterOption from '../../../components/FilterOption';
-import {useMaster} from '../../../context/MasterProvider';
 import FormNavigationButtons from './components/FormNavigationButtons';
+import {PartnerPropertyFormType} from '../../../../schema/PartnerPropertyFormSchema';
+import {useMaster} from '../../../../context/MasterProvider';
+import {MaterialTextInput} from '../../../../components/MaterialTextInput';
+import FilterOption from '../../../../components/FilterOption';
 
 interface BasicDetailsStepProps {
   formInput: PartnerPropertyFormType;

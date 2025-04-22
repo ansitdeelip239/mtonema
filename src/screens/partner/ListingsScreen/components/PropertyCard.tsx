@@ -56,10 +56,10 @@ const PropertyCard = memo(
 
     const formattedArea = useMemo(
       () =>
-        property.area && property.lmunit
-          ? `${property.area} ${property.lmunit}`
+        property.area && property.lmUnit
+          ? `${property.area} ${property.lmUnit}`
           : null,
-      [property.area, property.lmunit],
+      [property.area, property.lmUnit],
     );
 
     // Memoize the onPress handler to improve performance

@@ -37,7 +37,7 @@ const placeholderImage = require('../../../assets/Images/dncr_black_logo.png');
 const ListingDetailScreen: React.FC<Props> = ({route, navigation}) => {
   const {propertyId} = route.params;
 
-  const [property, setProperty] = useState<Property | null>(null);
+  const [property, setProperty] = useState<Property>();
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
@@ -127,12 +127,7 @@ const ListingDetailScreen: React.FC<Props> = ({route, navigation}) => {
   // Handle edit property
   const handleEditProperty = () => {
     closeMenu();
-    // navigation.navigate('EditPropertyScreen', {propertyId});
-
-    const parentNavigation = navigation.getParent();
-
-    parentNavigation?.navigate('AddProperty', {
-      editMode: true,
+    navigation.navigate('EditPartnerProperty', {
       propertyData: property,
     });
   };
@@ -427,7 +422,7 @@ const ListingDetailScreen: React.FC<Props> = ({route, navigation}) => {
             <Text style={styles.infoText}>
               {property.location || ''}
               {property.city ? `, ${property.city}` : ''}
-              {property.zipcode ? ` - ${property.zipcode}` : ''}
+              {property.zipCode ? ` - ${property.zipCode}` : ''}
             </Text>
           </View>
         </View>
@@ -485,7 +480,7 @@ const ListingDetailScreen: React.FC<Props> = ({route, navigation}) => {
                 <View style={styles.overviewTextContainer}>
                   <Text style={styles.overviewLabel}>Area</Text>
                   <Text style={styles.overviewValue}>
-                    {property.area} {property.lmunit || 'sq ft'}
+                    {property.area} {property.lmUnit || 'sq ft'}
                   </Text>
                 </View>
               </View>

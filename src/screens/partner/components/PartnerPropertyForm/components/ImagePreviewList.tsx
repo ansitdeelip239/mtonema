@@ -8,10 +8,10 @@ import {
   ScrollView,
 } from 'react-native';
 import {Picker} from '@react-native-picker/picker';
-import GetIcon from '../../../../components/GetIcon';
-import Colors from '../../../../constants/Colors';
-import {ImageData} from '../../../../types/image';
-import {MasterDetailModel} from '../../../../types';
+import GetIcon from '../../../../../components/GetIcon';
+import Colors from '../../../../../constants/Colors';
+import {ImageData} from '../../../../../types/image';
+import {MasterDetailModel} from '../../../../../types';
 
 interface ImagePreviewListProps {
   images: ImageData[];

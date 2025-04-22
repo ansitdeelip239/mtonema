@@ -20,7 +20,7 @@ export interface Property {
   sellerType: string | null;
   location: string | null;
   city: string | null;
-  zipcode: string | null;
+  zipCode: string | null;
   propertyName: string | null;
   price: number | null;
   propertyFor: string | null;
@@ -42,7 +42,7 @@ export interface Property {
   furnishing: string | null;
   featured: boolean | null;
   floor: string | null;
-  lmunit: string | null;
+  lmUnit: string | null;
   openSide: string | null;
   facing: string | null;
   boundaryWall: boolean | null;

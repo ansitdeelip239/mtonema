@@ -7,8 +7,8 @@ import ClientScreenStack from './ClientScreenStack';
 import {CustomBottomBar, TabScreen} from './CustomBottomBar';
 import FollowUpScreenStack from './FollowUpScreenStack';
 import AgentDataScreenStack from './AgentDataStack';
-import AddPartnerPropertyScreen from '../../screens/partner/AddPartnerPropertyScreen/AddPartnerPropertyScreen';
 import ListingScreenStack from './PropertyListingScreenStack';
+import AddPartnerPropertyScreen from '../../screens/partner/AddPartnerPropertyScreen/AddPartnerPropertyScreen';
 
 const Tab = createBottomTabNavigator<PartnerBottomTabParamList>();
 

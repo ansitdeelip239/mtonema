@@ -178,10 +178,7 @@ const ListingScreen: React.FC<Props> = ({navigation}) => {
       onPress={() => {
         console.log(`Navigating to edit property for ID: ${propertyItem.id}`);
         swipeableRefs.current.get(propertyItem.id)?.close();
-        const parentNavigation = navigation.getParent();
-
-        parentNavigation?.navigate('AddProperty', {
-          editMode: true,
+        navigation.navigate('EditPartnerProperty', {
           propertyData: propertyItem,
         });
       }}>

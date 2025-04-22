@@ -6,7 +6,7 @@ import {
   Animated,
   useWindowDimensions,
 } from 'react-native';
-import Colors from '../../../../constants/Colors';
+import Colors from '../../../../../constants/Colors';
 
 interface FormStepperProps {
   steps: string[];

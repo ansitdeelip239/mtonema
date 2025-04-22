@@ -1,13 +1,13 @@
 import React, {useState, useCallback, useMemo, useEffect} from 'react';
 import {View, Text, StyleSheet, Alert} from 'react-native';
-import {MaterialTextInput} from '../../../components/MaterialTextInput';
-import {PartnerPropertyFormType} from '../../../schema/PartnerPropertyFormSchema';
-import {useMaster} from '../../../context/MasterProvider';
-import ImageUploader from './components/ImageUploader';
 import ImagePreviewList from './components/ImagePreviewList';
 import TagsInput from './components/TagsInput';
-import {ImageData} from '../../../types/image';
 import FormNavigationButtons from './components/FormNavigationButtons';
+import { PartnerPropertyFormType } from '../../../../schema/PartnerPropertyFormSchema';
+import { useMaster } from '../../../../context/MasterProvider';
+import { ImageData } from '../../../../types/image';
+import ImageUploader from './components/ImageUploader';
+import { MaterialTextInput } from '../../../../components/MaterialTextInput';
 
 interface MediaAndSubmitStepProps {
   formInput: PartnerPropertyFormType;
