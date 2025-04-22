@@ -3,9 +3,9 @@ import {Text} from 'react-native';
 import {PartnerPropertyFormType} from '../../../../../schema/PartnerPropertyFormSchema';
 import {useMaster} from '../../../../../context/MasterProvider';
 import FilterOption from '../../../../../components/FilterOption';
-import {convertToMasterDetailModel} from '../../../../../utils/formUtils';
 import {MaterialTextInput} from '../../../../../components/MaterialTextInput';
 import {formatCurrency} from '../../../../../utils/currency';
+import { convertToMasterDetailModel } from '../../../../../utils/formUtils';
 
 interface PropertyFieldRendererProps {
   field: string;
