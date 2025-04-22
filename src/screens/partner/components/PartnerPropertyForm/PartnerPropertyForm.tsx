@@ -55,41 +55,44 @@ const PartnerPropertyForm: React.FC<PartnerPropertyFormProps> = ({
   // Create refs for each ScrollView
   const scrollViewRefs = useRef<(ScrollView | null)[]>([null, null, null]);
 
-  const propertyDataMapping = React.useMemo<PartnerPropertyFormType>(() => ({
-    isFeatured: propertyData?.featured ?? null,
-    sellerType: propertyData?.sellerType ?? null,
-    location: propertyData?.location ?? null,
-    city: propertyData?.city ?? null,
-    zipCode: propertyData?.zipCode ?? null,
-    propertyName: propertyData?.propertyName ?? null,
-    price: propertyData?.price ?? null,
-    propertyFor: propertyData?.propertyFor ?? null,
-    propertyType: propertyData?.propertyType ?? null,
-    imageURL: propertyData?.imageURL ?? null,
-    videoURL: propertyData?.videoURL ?? null,
-    shortDescription: propertyData?.shortDescription ?? null,
-    longDescription: propertyData?.longDescription ?? null,
-    readyToMove: propertyData?.readyToMove ?? null,
-    furnishing: propertyData?.furnishing ?? null,
-    parking: propertyData?.parking ?? null,
-    propertyAge: propertyData?.propertyAge ?? null,
-    facing: propertyData?.facing ?? null,
-    tags: propertyData?.tags ?? null,
-    alarmSystem: propertyData?.alarmSystem ?? null,
-    surveillanceCameras: propertyData?.surveillanceCameras ?? null,
-    gatedSecurity: propertyData?.gatedSecurity ?? null,
-    ceilingHeight: propertyData?.ceilingHeight ?? null,
-    pantry: propertyData?.pantry ?? null,
-    boundaryWall: propertyData?.boundaryWall ?? null,
-    constructionDone: propertyData?.constructionDone ?? null,
-    bhkType: propertyData?.bhkType ?? null,
-    propertyForType: propertyData?.propertyForType ?? null,
-    area: propertyData?.area ?? null,
-    lmUnit: propertyData?.lmUnit ?? null,
-    floor: Number(propertyData?.floor) ?? null,
-    openSide: propertyData?.openSide ?? null,
-    lifts: propertyData?.lifts ?? null,
-  }), [propertyData]);
+  const propertyDataMapping = React.useMemo<PartnerPropertyFormType>(
+    () => ({
+      isFeatured: propertyData?.featured ?? null,
+      sellerType: propertyData?.sellerType ?? null,
+      location: propertyData?.location ?? null,
+      city: propertyData?.city ?? null,
+      zipCode: propertyData?.zipCode ?? null,
+      propertyName: propertyData?.propertyName ?? null,
+      price: propertyData?.price ?? null,
+      propertyFor: propertyData?.propertyFor ?? null,
+      propertyType: propertyData?.propertyType ?? null,
+      imageURL: propertyData?.imageURL ?? null,
+      videoURL: propertyData?.videoURL ?? null,
+      shortDescription: propertyData?.shortDescription ?? null,
+      longDescription: propertyData?.longDescription ?? null,
+      readyToMove: propertyData?.readyToMove ?? null,
+      furnishing: propertyData?.furnishing ?? null,
+      parking: propertyData?.parking ?? null,
+      propertyAge: propertyData?.propertyAge ?? null,
+      facing: propertyData?.facing ?? null,
+      tags: propertyData?.tags ?? null,
+      alarmSystem: propertyData?.alarmSystem ?? null,
+      surveillanceCameras: propertyData?.surveillanceCameras ?? null,
+      gatedSecurity: propertyData?.gatedSecurity ?? null,
+      ceilingHeight: propertyData?.ceilingHeight ?? null,
+      pantry: propertyData?.pantry ?? null,
+      boundaryWall: propertyData?.boundaryWall ?? null,
+      constructionDone: propertyData?.constructionDone ?? null,
+      bhkType: propertyData?.bhkType ?? null,
+      propertyForType: propertyData?.propertyForType ?? null,
+      area: propertyData?.area ?? null,
+      lmUnit: propertyData?.lmUnit ?? null,
+      floor: Number(propertyData?.floor) ?? null,
+      openSide: propertyData?.openSide ?? null,
+      lifts: propertyData?.lifts ?? null,
+    }),
+    [propertyData],
+  );
 
   const {
     formInput,
@@ -180,7 +183,14 @@ const PartnerPropertyForm: React.FC<PartnerPropertyFormProps> = ({
         setFormInput(propertyDataMapping);
       }
     }
-  }, [editMode, propertyDataMapping, setFormInput, animatedValue, slideAnimation, propertyData]);
+  }, [
+    editMode,
+    propertyDataMapping,
+    setFormInput,
+    animatedValue,
+    slideAnimation,
+    propertyData,
+  ]);
 
   useEffect(() => {
     return () => {
@@ -259,7 +269,17 @@ const PartnerPropertyForm: React.FC<PartnerPropertyFormProps> = ({
 
   return (
     <View style={styles.container}>
-      <Header<PartnerDrawerParamList> title={headerTitle}>{ClearButton}</Header>
+      <Header<PartnerDrawerParamList>
+        title={headerTitle}
+        backButton={editMode}
+        onBackPress={() => {
+          navigation.reset({
+            index: 0,
+            routes: [{name: 'Property', params: {screen: 'ListingsScreen'}}],
+          });
+        }}>
+        {ClearButton}
+      </Header>
 
       <View style={styles.stepperContainer}>
         <FormStepper

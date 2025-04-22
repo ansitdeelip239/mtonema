@@ -416,7 +416,7 @@ const ListingDetailScreen: React.FC<Props> = ({route, navigation}) => {
               : 'Price on request'}
           </Text>
 
-          {/* Location */}
+          {/* Location with ZIP code - Updated for better formatting */}
           <View style={styles.infoRow}>
             <GetIcon iconName="locationPin" size={18} color={Colors.main} />
             <Text style={styles.infoText}>
@@ -457,6 +457,32 @@ const ListingDetailScreen: React.FC<Props> = ({route, navigation}) => {
                 </Text>
               </View>
             </View>
+
+            {/* ZIP Code - Added explicitly to the overview section */}
+            {property.zipCode && (
+              <View style={styles.overviewItem}>
+                <View style={styles.overviewIconWrapper}>
+                  <GetIcon iconName="locationPin" size={20} color={Colors.main} />
+                </View>
+                <View style={styles.overviewTextContainer}>
+                  <Text style={styles.overviewLabel}>ZIP Code</Text>
+                  <Text style={styles.overviewValue}>{property.zipCode}</Text>
+                </View>
+              </View>
+            )}
+
+            {/* Seller Type - Adding this to overview grid */}
+            {property.sellerType && (
+              <View style={styles.overviewItem}>
+                <View style={styles.overviewIconWrapper}>
+                  <GetIcon iconName="user" size={20} color={Colors.main} />
+                </View>
+                <View style={styles.overviewTextContainer}>
+                  <Text style={styles.overviewLabel}>Seller Type</Text>
+                  <Text style={styles.overviewValue}>{property.sellerType}</Text>
+                </View>
+              </View>
+            )}
 
             {/* BHK Type */}
             {property.bhkType && (
