@@ -182,7 +182,7 @@ const styles = StyleSheet.create({
   },
   defaultSelector: {
     position: 'absolute',
-    top: 0,
+    top: 32, // Leave space for the controls at the top
     left: 0,
     right: 0,
     bottom: 0,

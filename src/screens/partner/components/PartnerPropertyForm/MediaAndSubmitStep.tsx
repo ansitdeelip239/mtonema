@@ -3,11 +3,11 @@ import {View, Text, StyleSheet, Alert} from 'react-native';
 import ImagePreviewList from './components/ImagePreviewList';
 import TagsInput from './components/TagsInput';
 import FormNavigationButtons from './components/FormNavigationButtons';
-import { PartnerPropertyFormType } from '../../../../schema/PartnerPropertyFormSchema';
-import { useMaster } from '../../../../context/MasterProvider';
-import { ImageData } from '../../../../types/image';
+import {PartnerPropertyFormType} from '../../../../schema/PartnerPropertyFormSchema';
+import {useMaster} from '../../../../context/MasterProvider';
+import {ImageData} from '../../../../types/image';
 import ImageUploader from './components/ImageUploader';
-import { MaterialTextInput } from '../../../../components/MaterialTextInput';
+import {MaterialTextInput} from '../../../../components/MaterialTextInput';
 
 interface MediaAndSubmitStepProps {
   formInput: PartnerPropertyFormType;
@@ -41,27 +41,37 @@ const MediaAndSubmitStep: React.FC<MediaAndSubmitStepProps> = ({
     null,
   );
 
-  // Parse existing images if present in formInput
+  // State to track if we're currently syncing from formInput
+  const [isLoadingFromFormInput, setIsLoadingFromFormInput] = useState(false);
+
+  // Parse existing images if present in formInput - only on initial load
   useEffect(() => {
-    if (formInput.imageURL) {
+    if (formInput.imageURL && !isLoadingFromFormInput) {
       try {
+        setIsLoadingFromFormInput(true);
         const parsedImages = JSON.parse(formInput.imageURL);
         if (Array.isArray(parsedImages)) {
-          setImages(parsedImages);
+          // Process images, ensuring all required properties exist
+          const processedImages = parsedImages.map(img => ({
+            imageUrl: img.imageUrl || '',
+            type: img.type || 'Others',
+            toggle: !!img.toggle,
+          }));
+
+          setImages(processedImages);
+
           // Find default image if exists
-          const defaultIndex = parsedImages.findIndex(img => img.toggle);
-          if (defaultIndex !== -1) {
-            setDefaultImageIndex(defaultIndex);
-          }
+          const defaultIndex = processedImages.findIndex(img => img.toggle);
+          setDefaultImageIndex(defaultIndex !== -1 ? defaultIndex : null);
         }
       } catch (e) {
         console.error('Failed to parse images', e);
+      } finally {
+        setIsLoadingFromFormInput(false);
       }
-    } else {
-      setImages([]);
-      setDefaultImageIndex(null);
     }
-  }, [formInput.imageURL]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []); // Only run once on component mount
 
   // Initialize component state for tags
   useEffect(() => {
@@ -72,22 +82,24 @@ const MediaAndSubmitStep: React.FC<MediaAndSubmitStepProps> = ({
         console.error('Failed to parse tags', e);
       }
     }
-  }, [formInput.tags]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
-  // Update formInput whenever images state changes
+  // Update formInput whenever images state changes - but not during loading
   useEffect(() => {
-    if (images.length > 0) {
+    if (images.length > 0 && !isLoadingFromFormInput) {
       const imageURLString = JSON.stringify(
         images.map(img => ({
           imageUrl: img.imageUrl,
-          type: img.type,
-          toggle: img.toggle,
+          type: img.type || 'Others',
+          toggle: img.toggle || false,
         })),
       );
-
       handleInputChange('imageURL', imageURLString);
+    } else if (images.length === 0 && !isLoadingFromFormInput) {
+      handleInputChange('imageURL', null);
     }
-  }, [images, handleInputChange]);
+  }, [images, handleInputChange, isLoadingFromFormInput]);
 
   // Handle newly selected images
   const handleImagesSelected = useCallback(
@@ -96,17 +108,20 @@ const MediaAndSubmitStep: React.FC<MediaAndSubmitStepProps> = ({
         // Map new images to ensure they have a default type property
         const processedNewImages = newImages.map(img => ({
           ...img,
-          type: img.type || 'Others', // Explicitly set default if not provided
+          type: img.type || 'Others',
+          toggle: false, // New images are not default by default
         }));
 
         const updatedImages = [...prevImages, ...processedNewImages];
 
-        // Rest of your logic...
+        // If no default image is set yet, set the first image as default
         if (defaultImageIndex === null && updatedImages.length > 0) {
-          setDefaultImageIndex(prevImages.length);
+          const newDefaultIndex = 0;
+          setDefaultImageIndex(newDefaultIndex);
+
           return updatedImages.map((img, idx) => ({
             ...img,
-            toggle: idx === prevImages.length,
+            toggle: idx === newDefaultIndex,
           }));
         }
 
@@ -116,49 +131,67 @@ const MediaAndSubmitStep: React.FC<MediaAndSubmitStepProps> = ({
     [defaultImageIndex],
   );
 
-  // Handle setting default image
-  const handleSetDefaultImage = (index: number) => {
-    setDefaultImageIndex(index);
-    setImages(prevImages =>
-      prevImages.map((img, idx) => ({
-        ...img,
-        toggle: idx === index,
-      })),
-    );
-  };
-
-  // Remove image
-  const handleRemoveImage = (index: number) => {
-    setImages(prevImages => {
-      const newImages = [...prevImages];
-      newImages.splice(index, 1);
-
-      // If we removed the default image, adjust defaultImageIndex
-      if (index === defaultImageIndex) {
-        if (newImages.length > 0) {
-          // Make the first image the default
-          setDefaultImageIndex(0);
-          newImages[0] = {
-            ...newImages[0],
-            toggle: true,
-          };
-        } else {
-          setDefaultImageIndex(null);
-        }
-      } else if (defaultImageIndex !== null && index < defaultImageIndex) {
-        // If we removed an image before the default, adjust the index
-        setDefaultImageIndex(defaultImageIndex - 1);
+  // Handle setting default image - completely revised to avoid loops
+  const handleSetDefaultImage = useCallback(
+    (index: number) => {
+      if (index !== defaultImageIndex) {
+        setDefaultImageIndex(index);
+        setImages(prevImages =>
+          prevImages.map((img, idx) => ({
+            ...img,
+            toggle: idx === index,
+          })),
+        );
       }
+    },
+    [defaultImageIndex],
+  );
 
-      return newImages;
-    });
-  };
+  // Remove image - fixed to properly handle image deletion
+  const handleRemoveImage = useCallback(
+    (index: number) => {
+      setImages(prevImages => {
+        // Create a new array without the removed image
+        const newImages = prevImages.filter((_, idx) => idx !== index);
+
+        // If we removed the default image
+        if (index === defaultImageIndex) {
+          if (newImages.length > 0) {
+            // Make the first image the default
+            setTimeout(() => {
+              setDefaultImageIndex(0);
+            }, 0);
+
+            return newImages.map((img, idx) => ({
+              ...img,
+              toggle: idx === 0, // Set first image as default
+            }));
+          } else {
+            // No images left
+            setTimeout(() => {
+              setDefaultImageIndex(null);
+            }, 0);
+          }
+        } else if (defaultImageIndex !== null && index < defaultImageIndex) {
+          // If we removed an image before the default, adjust the index
+          setTimeout(() => {
+            setDefaultImageIndex(defaultImageIndex - 1);
+          }, 0);
+        }
+
+        return newImages;
+      });
+    },
+    [defaultImageIndex],
+  );
 
   // Handle category change
-  const handleCategoryChange = (index: number, type: string) => {
-    console.log(`Category changed for image ${index}: ${type}`);
-
+  const handleCategoryChange = useCallback((index: number, type: string) => {
     setImages(prevImages => {
+      if (index < 0 || index >= prevImages.length) {
+        return prevImages; // Invalid index, return unchanged
+      }
+
       const newImages = [...prevImages];
       newImages[index] = {
         ...newImages[index],
@@ -166,7 +199,7 @@ const MediaAndSubmitStep: React.FC<MediaAndSubmitStepProps> = ({
       };
       return newImages;
     });
-  };
+  }, []);
 
   // Handle submit
   const handleSubmit = useCallback(() => {
@@ -179,23 +212,10 @@ const MediaAndSubmitStep: React.FC<MediaAndSubmitStepProps> = ({
     onSubmit();
   }, [images, onSubmit]);
 
-  // Add this effect to debug image state changes
-  useEffect(() => {
-    if (images.length > 0) {
-      console.log(
-        'Current images state:',
-        images.map(img => ({
-          url: img.imageUrl.substring(0, 20) + '...',
-          type: img.type,
-        })),
-      );
-    }
-  }, [images]);
-
   // Determine if form is valid for submission
   const isSubmitEnabled = useMemo(() => {
     return images.length > 0 && defaultImageIndex !== null && !isSubmitting;
-  }, [images, defaultImageIndex, isSubmitting]);
+  }, [images.length, defaultImageIndex, isSubmitting]);
 
   return (
     <View style={styles.container}>
