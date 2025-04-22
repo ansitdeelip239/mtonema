@@ -173,30 +173,44 @@ const ListingScreen: React.FC<Props> = ({navigation}) => {
 
   // Render left action for swipe (Edit)
   const renderLeftActions = (propertyItem: Property) => (
-    <TouchableOpacity
-      style={styles.editButton}
-      onPress={() => {
-        console.log(`Navigating to edit property for ID: ${propertyItem.id}`);
-        swipeableRefs.current.get(propertyItem.id)?.close();
-        navigation.navigate('EditPartnerProperty', {
-          propertyData: propertyItem,
-        });
-      }}>
-      <Text style={styles.editButtonText}>Edit</Text>
-    </TouchableOpacity>
+    <View>
+      <TouchableOpacity
+        style={styles.editButton}
+        activeOpacity={0.7}
+        onPress={() => {
+          console.log(`Navigating to edit property for ID: ${propertyItem.id}`);
+          // First close the swipeable
+          swipeableRefs.current.get(propertyItem.id)?.close();
+          // Then navigate with a slight delay to ensure the swipeable closes first
+          setTimeout(() => {
+            navigation.navigate('EditPartnerProperty', {
+              propertyData: propertyItem,
+            });
+          }, 100);
+        }}>
+        <Text style={styles.editButtonText}>Edit</Text>
+      </TouchableOpacity>
+    </View>
   );
 
   // Render right action for swipe (Delete)
   const renderRightActions = (propertyId: number) => (
-    <TouchableOpacity
-      style={styles.deleteButton}
-      onPress={() => {
-        swipeableRefs.current.get(propertyId)?.close();
-        setDeletingId(propertyId);
-        setShowDeleteModal(true);
-      }}>
-      <Text style={styles.deleteButtonText}>Delete</Text>
-    </TouchableOpacity>
+    <View>
+      <TouchableOpacity
+        style={styles.deleteButton}
+        activeOpacity={0.7}
+        onPress={() => {
+          // First close the swipeable
+          swipeableRefs.current.get(propertyId)?.close();
+          // Then open delete modal with slight delay
+          setTimeout(() => {
+            setDeletingId(propertyId);
+            setShowDeleteModal(true);
+          }, 100);
+        }}>
+        <Text style={styles.deleteButtonText}>Delete</Text>
+      </TouchableOpacity>
+    </View>
   );
 
   // Update renderItem to use Swipeable with both left and right actions
@@ -210,7 +224,20 @@ const ListingScreen: React.FC<Props> = ({navigation}) => {
         }
       }}
       renderLeftActions={() => renderLeftActions(item)}
-      renderRightActions={() => renderRightActions(item.id)}>
+      renderRightActions={() => renderRightActions(item.id)}
+      friction={6}
+      overshootLeft={false}
+      overshootRight={false}
+      leftThreshold={30}
+      rightThreshold={30}
+      onSwipeableOpen={() => {
+        // Prevent other swipeables from being open simultaneously
+        Array.from(swipeableRefs.current.entries()).forEach(([id, ref]) => {
+          if (id !== item.id && ref) {
+            ref.close();
+          }
+        });
+      }}>
       <View style={styles.propertyCardContainer}>
         <PropertyCard property={item} onPress={handlePropertyPress} />
       </View>
@@ -345,6 +372,10 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: 16,
   },
+  // actionContainer: {
+  //   flexDirection: 'row',
+  //   alignItems: 'center',
+  // },
 });
 
 export default ListingScreen;
