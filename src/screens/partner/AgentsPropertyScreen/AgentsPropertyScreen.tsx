@@ -6,6 +6,7 @@ import {
   RefreshControl,
   Text,
   TouchableOpacity,
+  ActivityIndicator,
 } from 'react-native';
 import PartnerService from '../../../services/PartnerService';
 import {useAuth} from '../../../hooks/useAuth';
@@ -27,6 +28,8 @@ const AgentDataScreen: React.FC<Props> = ({navigation}) => {
   const [agentData, setAgentData] = useState<AgentData[]>([]);
   const [locations, setLocations] = useState<string[]>([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [isInitialLoading, setIsInitialLoading] = useState(true);
+  const [isPaginationLoading, setIsPaginationLoading] = useState(false);
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [hasMoreData, setHasMoreData] = useState(true);
@@ -67,6 +70,12 @@ const AgentDataScreen: React.FC<Props> = ({navigation}) => {
   const fetchAgentData = useCallback(
     async (page: number, shouldRefresh = false) => {
       try {
+        if (shouldRefresh) {
+          setIsInitialLoading(true);
+        } else {
+          setIsPaginationLoading(true);
+        }
+
         setIsLoading(true);
         const response = await PartnerService.getAgentProperties(
           page,
@@ -110,6 +119,8 @@ const AgentDataScreen: React.FC<Props> = ({navigation}) => {
       } finally {
         setIsLoading(false);
         setIsRefreshing(false);
+        setIsInitialLoading(false);
+        setIsPaginationLoading(false);
       }
     },
     [user?.email, searchQuery, filters, DEFAULT_PAGING_MODEL],
@@ -145,11 +156,17 @@ const AgentDataScreen: React.FC<Props> = ({navigation}) => {
     }
   };
 
-  const renderEmptyComponent = () => (
-    <View style={styles.emptyContainer}>
-      <Text style={styles.emptyText}>No properties available</Text>
-    </View>
-  );
+  const renderEmptyComponent = () => {
+    if (isInitialLoading) {
+      return null;
+    }
+
+    return (
+      <View style={styles.emptyContainer}>
+        <Text style={styles.emptyText}>No properties available</Text>
+      </View>
+    );
+  };
 
   return (
     <View style={styles.container}>
@@ -171,27 +188,39 @@ const AgentDataScreen: React.FC<Props> = ({navigation}) => {
         onFilter={handleFilter}
         locations={locations}
       />
-      <FlatList
-        data={agentData}
-        renderItem={({item}) => (
-          <RenderItem
-            item={item}
-            onDataUpdate={() => setAgentPropertyUpdated(prev => !prev)}
-            navigation={navigation}
-          />
-        )}
-        keyExtractor={(item, index) =>
-          `${item.id?.toString() || 'item'}-${index}`
-        }
-        contentContainerStyle={styles.listContainer}
-        refreshControl={
-          <RefreshControl refreshing={isRefreshing} onRefresh={handleRefresh} />
-        }
-        onEndReached={handleLoadMore}
-        onEndReachedThreshold={0.5}
-        ListFooterComponent={renderFooter({isLoading})}
-        ListEmptyComponent={renderEmptyComponent}
-      />
+
+      {isInitialLoading ? (
+        <View style={styles.centerLoaderContainer}>
+          <ActivityIndicator size="large" color={Colors.main} />
+        </View>
+      ) : (
+        <FlatList
+          data={agentData}
+          renderItem={({item}) => (
+            <RenderItem
+              item={item}
+              onDataUpdate={() => setAgentPropertyUpdated(prev => !prev)}
+              navigation={navigation}
+            />
+          )}
+          keyExtractor={(item, index) =>
+            `${item.id?.toString() || 'item'}-${index}`
+          }
+          contentContainerStyle={styles.listContainer}
+          refreshControl={
+            <RefreshControl
+              refreshing={isRefreshing}
+              onRefresh={handleRefresh}
+            />
+          }
+          onEndReached={handleLoadMore}
+          onEndReachedThreshold={0.5}
+          ListFooterComponent={
+            isPaginationLoading ? renderFooter({isLoading: true}) : null
+          }
+          ListEmptyComponent={renderEmptyComponent}
+        />
+      )}
     </View>
   );
 };
@@ -211,6 +240,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+    paddingVertical: 40,
   },
   emptyText: {
     fontSize: 16,
@@ -231,6 +261,11 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 14,
     fontWeight: '600',
+  },
+  centerLoaderContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });
 
