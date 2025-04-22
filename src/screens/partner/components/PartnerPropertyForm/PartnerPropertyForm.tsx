@@ -58,14 +58,14 @@ const PartnerPropertyForm: React.FC<PartnerPropertyFormProps> = ({
   const propertyDataMapping = React.useMemo<PartnerPropertyFormType>(
     () => ({
       isFeatured: propertyData?.featured ?? null,
-      sellerType: propertyData?.sellerType ?? null,
-      location: propertyData?.location ?? null,
-      city: propertyData?.city ?? null,
+      sellerType: propertyData?.sellerType as string,
+      location: propertyData?.location as string,
+      city: propertyData?.city as string,
       zipCode: propertyData?.zipCode ?? null,
-      propertyName: propertyData?.propertyName ?? null,
-      price: propertyData?.price ?? null,
-      propertyFor: propertyData?.propertyFor ?? null,
-      propertyType: propertyData?.propertyType ?? null,
+      propertyName: propertyData?.propertyName as string,
+      price: propertyData?.price as number,
+      propertyFor: propertyData?.propertyFor as string,
+      propertyType: propertyData?.propertyType as string,
       imageURL: propertyData?.imageURL ?? null,
       videoURL: propertyData?.videoURL ?? null,
       shortDescription: propertyData?.shortDescription ?? null,
@@ -110,6 +110,8 @@ const PartnerPropertyForm: React.FC<PartnerPropertyFormProps> = ({
         const payload: PartnerPropertyApiSubmissionType = {
           ...data,
           userId: user?.id as number,
+          area: data.area ?? null,
+          floor: data.floor ?? null,
         };
 
         let response;
@@ -203,22 +205,24 @@ const PartnerPropertyForm: React.FC<PartnerPropertyFormProps> = ({
     (stepIndex: number): boolean => {
       switch (stepIndex) {
         case 0:
-          // Basic info validation
+          // Basic info validation - all fields are required
           return !!(
-            formInput.propertyType !== null &&
-            formInput.propertyType !== undefined &&
-            formInput.propertyType !== ''
+            formInput.propertyName &&
+            formInput.propertyName.trim() !== '' &&
+            formInput.sellerType &&
+            formInput.city &&
+            formInput.propertyFor &&
+            formInput.propertyType &&
+            formInput.location &&
+            formInput.location.trim() !== '' &&
+            formInput.price &&
+            Number(formInput.price) > 0
           );
         case 1:
-          // Property details validation
-          return !!(
-            formInput.propertyType &&
-            formInput.price &&
-            formInput.area
-          );
+          // Property details validation - all fields optional now
+          return true;
         case 2:
-          // Media & Submit validation
-          // You're already at the last step, so return true
+          // Media & Submit validation - all fields optional
           return true;
         default:
           return false;

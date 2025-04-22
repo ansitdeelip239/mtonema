@@ -37,7 +37,9 @@ const FilterOption = ({
 
   return (
     <View style={styles.filterSection}>
-      <Text style={styles.filterLabel}>{label}</Text>
+      <Text style={[styles.filterLabel, error ? styles.errorLabel : null]}>
+        {label}
+      </Text>
       <View style={styles.chipContainer}>
         {finalVisibleButtons.map(option => (
           <Chip
@@ -47,6 +49,7 @@ const FilterOption = ({
             style={[
               styles.chip,
               selectedValue === option.masterDetailName && styles.selectedChip,
+              error ? styles.errorChip : null,
             ]}
             showSelectedCheck={false}
             selectedColor={Colors.PRIMARY_1}
@@ -90,7 +93,7 @@ const FilterOption = ({
         )}
       </View>
       {error && (
-        <HelperText type="error" style={styles.helperText}>
+        <HelperText type="error" visible={!!error} style={styles.helperText}>
           {error}
         </HelperText>
       )}
@@ -100,12 +103,15 @@ const FilterOption = ({
 
 const styles = StyleSheet.create({
   filterSection: {
-    // marginBottom: 20,
+    marginBottom: 5,
   },
   filterLabel: {
     fontSize: 16,
     fontWeight: '600',
     marginBottom: 10,
+  },
+  errorLabel: {
+    color: '#cc0000',
   },
   chipContainer: {
     flexDirection: 'row',
@@ -120,6 +126,9 @@ const styles = StyleSheet.create({
   selectedChip: {
     backgroundColor: Colors.main,
   },
+  errorChip: {
+    borderColor: '#cc0000',
+  },
   chipText: {
     color: Colors.black,
   },
@@ -131,6 +140,8 @@ const styles = StyleSheet.create({
   },
   helperText: {
     marginTop: 4,
+    color: '#cc0000',
+    fontSize: 12,
   },
   moreChip: {
     marginRight: 8,

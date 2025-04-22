@@ -2,8 +2,8 @@ import React, {useCallback, useMemo} from 'react';
 import {View, StyleSheet, Text} from 'react-native';
 import PropertyFieldRenderer from './components/PropertyFieldRenderer';
 import FormNavigationButtons from './components/FormNavigationButtons';
-import { PartnerPropertyFormType } from '../../../../schema/PartnerPropertyFormSchema';
-import { propertyTypeFieldMappings } from '../../../../utils/property-type-field-mappings';
+import {PartnerPropertyFormType} from '../../../../schema/PartnerPropertyFormSchema';
+import {propertyTypeFieldMappings} from '../../../../utils/property-type-field-mappings';
 
 interface PropertyDetailsStepProps {
   formInput: PartnerPropertyFormType;
@@ -65,29 +65,14 @@ const PropertyDetailsStep: React.FC<PropertyDetailsStepProps> = ({
     );
   }, [formInput.propertyType]);
 
-  // Common fields that appear in all property types
+  // Common fields that appear in all property types (without location and price)
   const commonFields = useMemo(
-    () => [
-      'location',
-      'zipCode',
-      'price',
-      'area',
-      'lmUnit',
-      'shortDescription',
-      'longDescription',
-    ],
+    () => ['zipCode', 'area', 'lmUnit', 'shortDescription', 'longDescription'],
     [],
   );
 
-  // Determine if form is valid for next step
-  const isNextEnabled = useMemo(() => {
-    if (!formInput.propertyType) {
-      return false;
-    }
-
-    // Basic validation - customize as needed
-    return !!(formInput.price && formInput.area);
-  }, [formInput]);
+  // All fields are now optional in this step, so Next is always enabled
+  const isNextEnabled = true;
 
   // Only render fields that are visible and relevant to the current property type
   const visibleFields = useMemo(() => {
@@ -103,6 +88,11 @@ const PropertyDetailsStep: React.FC<PropertyDetailsStepProps> = ({
     <View style={styles.container}>
       {formInput.propertyType ? (
         <View>
+          <Text style={styles.optionalStepText}>
+            This step is optional. You can proceed without filling these
+            details.
+          </Text>
+
           <View style={styles.fieldsContainer}>
             {/* Key change: Map and render fields differently */}
             {visibleFields.map(field => {
@@ -159,6 +149,7 @@ const styles = StyleSheet.create({
   },
   fieldsContainer: {
     gap: 8,
+    marginTop: 10,
   },
   fieldWrapper: {
     marginBottom: 8,
@@ -172,6 +163,12 @@ const styles = StyleSheet.create({
     color: '#666',
     textAlign: 'center',
     marginBottom: 20,
+  },
+  optionalStepText: {
+    fontSize: 14,
+    color: '#666',
+    fontStyle: 'italic',
+    marginBottom: 10,
   },
 });
 

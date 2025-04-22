@@ -1,5 +1,5 @@
 import React, {useState, useCallback, useMemo, useEffect} from 'react';
-import {View, Text, StyleSheet, Alert} from 'react-native';
+import {View, Text, StyleSheet} from 'react-native';
 import ImagePreviewList from './components/ImagePreviewList';
 import TagsInput from './components/TagsInput';
 import FormNavigationButtons from './components/FormNavigationButtons';
@@ -201,24 +201,15 @@ const MediaAndSubmitStep: React.FC<MediaAndSubmitStepProps> = ({
     });
   }, []);
 
-  // Handle submit
-  const handleSubmit = useCallback(() => {
-    if (images.length === 0) {
-      Alert.alert('Warning', 'Please upload at least one image');
-      return;
-    }
-
-    // Submit the form
-    onSubmit();
-  }, [images, onSubmit]);
-
-  // Determine if form is valid for submission
-  const isSubmitEnabled = useMemo(() => {
-    return images.length > 0 && defaultImageIndex !== null && !isSubmitting;
-  }, [images.length, defaultImageIndex, isSubmitting]);
+  // This step is optional, so the form is valid for submission as long as we're not submitting already
+  const isSubmitEnabled = !isSubmitting;
 
   return (
     <View style={styles.container}>
+      <Text style={styles.optionalStepText}>
+        This step is optional. You can proceed without filling these details.
+      </Text>
+
       <Text style={styles.sectionTitle}>Property Images</Text>
       <Text style={styles.sectionDescription}>
         Upload images of your property. Select one image as the default display
@@ -269,7 +260,7 @@ const MediaAndSubmitStep: React.FC<MediaAndSubmitStepProps> = ({
 
       {/* Navigation buttons */}
       <FormNavigationButtons
-        onNext={handleSubmit}
+        onNext={onSubmit}
         onBack={onBack}
         showBackButton={showBackButton}
         isNextEnabled={isSubmitEnabled}
@@ -284,6 +275,12 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingVertical: 10,
+  },
+  optionalStepText: {
+    fontSize: 14,
+    color: '#666',
+    fontStyle: 'italic',
+    marginBottom: 16,
   },
   sectionTitle: {
     fontSize: 18,
