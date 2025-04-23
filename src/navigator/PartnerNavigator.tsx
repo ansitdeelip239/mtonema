@@ -7,7 +7,6 @@ import PartnerBottomTabs from './components/PartnerBottomTabs';
 import GroupsScreen from '../screens/partner/GroupsScreen/GroupsScreen';
 import GetIcon from '../components/GetIcon';
 import PartnerProfileScreen from '../screens/partner/ProfileScreen/ProfileScreen';
-import FeedbackScreenStack from './components/FeedbackScreenStack';
 
 const Drawer = createDrawerNavigator<PartnerDrawerParamList>();
 
@@ -54,7 +53,7 @@ const PartnerNavigator = memo(() => (
       }}
     />
 
-    <Drawer.Screen
+    {/* <Drawer.Screen
       name="Feedback"
       component={FeedbackScreenStack}
       options={{
@@ -64,7 +63,7 @@ const PartnerNavigator = memo(() => (
           <GetIcon iconName="feedback" color={color} size="25" />
         ),
       }}
-    />
+    /> */}
 
     <Drawer.Screen
       name="Profile Screen"
