@@ -237,7 +237,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#f5f5f5',
   },
   applyButton: {
-    backgroundColor: '#cc0e74',
+    backgroundColor: Colors.MT_PRIMARY_1,
   },
   buttonText: {
     textAlign: 'center',

@@ -273,6 +273,7 @@ export interface ClientForm {
   notes?: string;
   groups?: number[];
   partnerId: string;
+  id?: number;
 }
 
 export interface SearchIntellisenseResponse {

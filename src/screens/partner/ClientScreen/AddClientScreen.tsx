@@ -108,6 +108,10 @@ const AddClientScreen: React.FC<Props> = ({navigation, route}) => {
           partnerId: formData.partnerId,
         };
 
+        if (editMode && clientData) {
+          cleanedData.id = clientData.id;
+        }
+
         if (!cleanedData.clientName) {
           setFieldErrors(prev => ({
             ...prev,
