@@ -1,20 +1,34 @@
-import React, {useRef} from 'react';
+import React, {useRef, useEffect} from 'react';
 import {
   View,
   Text,
   StyleSheet,
   TouchableOpacity,
-  ImageBackground,
   Image,
+  Platform,
+  StatusBar,
+  Dimensions,
+  Animated,
+  KeyboardAvoidingView,
+  SafeAreaView,
+  ScrollView,
 } from 'react-native';
 import {OtpInput} from 'react-native-otp-entry';
 import {useDialog} from '../hooks/useDialog';
+import LinearGradient from 'react-native-linear-gradient';
+import Colors from '../constants/Colors';
+import Images from '../constants/Images';
+import GetIcon from './GetIcon';
+import {useKeyboard} from '../hooks/useKeyboard';
+
+const {width} = Dimensions.get('window');
 
 interface OtpModelProps {
   value: string;
   onChangeText: (text: string) => void;
   onPress: () => void;
   isLoading?: boolean;
+  onBack?: () => void;
 }
 
 const OtpModel: React.FC<OtpModelProps> = ({
@@ -22,9 +36,15 @@ const OtpModel: React.FC<OtpModelProps> = ({
   onChangeText,
   onPress,
   isLoading = false,
+  onBack,
 }) => {
   const otpInputRef = useRef(null);
   const {showError} = useDialog();
+  const {keyboardVisible} = useKeyboard();
+
+  // Simplified animation values - matching SignUpScreen2
+  const logoHeight = useRef(new Animated.Value(150)).current;
+  const logoOpacity = useRef(new Animated.Value(1)).current;
 
   const handleSubmit = () => {
     if (value.length !== 6) {
@@ -34,86 +54,247 @@ const OtpModel: React.FC<OtpModelProps> = ({
     onPress();
   };
 
+  // Handle logo animation when keyboard shows/hides - simplified to match SignUpScreen2
+  useEffect(() => {
+    if (keyboardVisible) {
+      // Animate logo sliding up and fading out
+      Animated.parallel([
+        Animated.timing(logoHeight, {
+          toValue: 0,
+          duration: 300,
+          useNativeDriver: false,
+        }),
+        Animated.timing(logoOpacity, {
+          toValue: 0,
+          duration: 250,
+          useNativeDriver: false,
+        }),
+      ]).start();
+    } else {
+      // Animate logo sliding down and fading in
+      Animated.parallel([
+        Animated.timing(logoHeight, {
+          toValue: 150,
+          duration: 300,
+          useNativeDriver: false,
+        }),
+        Animated.timing(logoOpacity, {
+          toValue: 1,
+          duration: 350,
+          useNativeDriver: false,
+        }),
+      ]).start();
+    }
+  }, [keyboardVisible, logoHeight, logoOpacity]); // Remove animation values from dependencies
+
   return (
-    <ImageBackground
-      source={require('../assets/Images/bgimg1.png')}
-      style={styles.backgroundImage}
-      resizeMode="cover">
-      <View style={styles.container}>
-        <Image
-          source={require('../assets/Images/dncrlogo.png')}
-          style={styles.logo}
-          resizeMode="contain"
-        />
+    <SafeAreaView style={styles.container}>
+      <StatusBar
+        backgroundColor={Colors.MT_PRIMARY_1}
+        barStyle="light-content"
+      />
 
-        <View style={styles.otpModelContainer}>
-          <Text style={styles.heading}>Enter OTP</Text>
-          <Text style={styles.subHeading}>
-            We've sent a 6-digit code to your registered E-mail address
-          </Text>
-
-          <OtpInput
-            ref={otpInputRef}
-            numberOfDigits={6}
-            onTextChange={onChangeText}
-            onFilled={onChangeText}
-            theme={{
-              pinCodeContainerStyle: styles.otpBox,
-              focusedPinCodeContainerStyle: styles.activeOtpBox,
-            }}
-            focusColor="#4a90e2"
-          />
-
-          <TouchableOpacity
-            style={[
-              styles.submitButton,
-              (value.length !== 6 || isLoading) && styles.disabledButton,
-            ]}
-            onPress={handleSubmit}
-            disabled={value.length !== 6 || isLoading}>
-            <Text style={styles.buttonText}>
-              {isLoading ? 'Verifying...' : 'Verify OTP'}
-            </Text>
-          </TouchableOpacity>
+      {/* Header */}
+      <LinearGradient
+        colors={[Colors.MT_PRIMARY_1, '#1e5799']}
+        style={styles.headerGradient}>
+        <View style={styles.headerContent}>
+          {onBack && (
+            <TouchableOpacity style={styles.backButton} onPress={onBack}>
+              <GetIcon iconName="back" color="white" size="24" />
+            </TouchableOpacity>
+          )}
+          {!onBack && <View style={styles.spacer} />}
+          <Text style={styles.headerText}>Verify OTP</Text>
+          <View style={styles.spacer} />
         </View>
-      </View>
-    </ImageBackground>
+      </LinearGradient>
+
+      <KeyboardAvoidingView
+        behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+        style={styles.keyboardAvoid}
+        keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 0}>
+        <ScrollView
+          contentContainerStyle={styles.scrollContent}
+          bounces={false}
+          showsVerticalScrollIndicator={false}
+          keyboardShouldPersistTaps="handled">
+          {/* Logo with animation */}
+          <View style={styles.contentContainer}>
+            <Animated.View
+              style={[
+                styles.logoContainer,
+                {
+                  opacity: logoOpacity,
+                  height: logoHeight,
+                  overflow: 'hidden',
+                },
+              ]}>
+              <Image
+                source={Images.MTESTATES_LOGO}
+                style={styles.logo}
+                resizeMode="contain"
+              />
+            </Animated.View>
+
+            <View style={styles.formCard}>
+              <View style={styles.welcomeSection}>
+                <Text style={styles.welcomeTitle}>Enter OTP</Text>
+                <Text style={styles.welcomeSubtitle}>
+                  We've sent a 6-digit code to your registered E-mail address
+                </Text>
+              </View>
+
+              <View style={styles.otpContainer}>
+                <OtpInput
+                  ref={otpInputRef}
+                  numberOfDigits={6}
+                  onTextChange={onChangeText}
+                  onFilled={onChangeText}
+                  theme={{
+                    pinCodeContainerStyle: styles.otpBox,
+                    focusedPinCodeContainerStyle: styles.activeOtpBox,
+                  }}
+                  focusColor={Colors.MT_PRIMARY_1}
+                />
+              </View>
+
+              <TouchableOpacity
+                style={styles.primaryButton}
+                onPress={handleSubmit}
+                disabled={value.length !== 6 || isLoading}>
+                <LinearGradient
+                  colors={
+                    value.length !== 6 || isLoading
+                      ? ['#a8c7f0', '#b8e0f7'] // Light blue gradient for disabled state
+                      : ['#3a7bd5', '#00d2ff']
+                  }
+                  start={{x: 0, y: 0}}
+                  end={{x: 1, y: 0}}
+                  style={styles.buttonGradient}>
+                  <View style={styles.buttonContentWrapper}>
+                    <Text
+                      style={[
+                        styles.buttonText,
+                        (value.length !== 6 || isLoading) &&
+                          styles.disabledButtonText,
+                      ]}>
+                      {isLoading ? 'Verifying...' : 'Verify OTP'}
+                    </Text>
+                    {!isLoading && value.length === 6 && (
+                      <GetIcon iconName="chevronRight" color="white" size="20" />
+                    )}
+                  </View>
+                </LinearGradient>
+              </TouchableOpacity>
+
+              <View style={styles.resendContainer}>
+                <Text style={styles.resendText}>
+                  Didn't receive the code?{' '}
+                  <Text style={styles.resendLink} onPress={() => {}}>
+                    Resend OTP
+                  </Text>
+                </Text>
+              </View>
+            </View>
+            
+            {/* Add padding at the bottom to ensure the card doesn't get hidden by keyboard */}
+            <View style={{height: keyboardVisible ? 120 : 40}} />
+          </View>
+        </ScrollView>
+      </KeyboardAvoidingView>
+    </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
-  backgroundImage: {
-    flex: 1,
+  spacer: {
+    width: 24,
   },
   container: {
     flex: 1,
+    backgroundColor: '#f5f5f5',
+  },
+  headerGradient: {
+    paddingTop: Platform.OS === 'ios' ? 50 : 20,
+    paddingBottom: 20,
+    borderBottomLeftRadius: 30,
+    borderBottomRightRadius: 30,
+  },
+  headerContent: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: 20,
+  },
+  headerText: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: 'white',
+  },
+  backButton: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: 'rgba(255,255,255,0.2)',
+    justifyContent: 'center',
     alignItems: 'center',
   },
-  otpModelContainer: {
-    padding: 25,
-    borderRadius: 15,
-    borderWidth: 2,
-    borderColor: '#cc0e74',
-    width: '90%',
-    marginHorizontal: 20,
+  keyboardAvoid: {
+    flex: 1,
+  },
+  scrollContent: {
+    flexGrow: 1,
+  },
+  contentContainer: {
+    flex: 1,
+    paddingHorizontal: 20,
+    paddingTop: 20,
+    justifyContent: 'center',
+  },
+  logoContainer: {
+    alignItems: 'center',
+    marginBottom: 20,
+    // Use a fixed minHeight instead of justifyContent center
+    minHeight: 0,
   },
   logo: {
-    width: 200,
-    height: 200,
-    marginBottom: 30,
+    width: width * 0.7, // Match sizing from SignUpScreen2
+    height: 150,
   },
-  heading: {
-    fontSize: 28,
+  formCard: {
+    backgroundColor: 'white',
+    borderRadius: 20,
+    padding: 24,
+    ...Platform.select({
+      ios: {
+        shadowColor: '#000',
+        shadowOffset: {width: 0, height: 5},
+        shadowOpacity: 0.1,
+        shadowRadius: 15,
+      },
+      android: {
+        elevation: 5,
+      },
+    }),
+  },
+  welcomeSection: {
+    marginBottom: 24,
+  },
+  welcomeTitle: {
+    fontSize: 24,
     fontWeight: 'bold',
-    color: '#1a1a1a',
-    marginBottom: 10,
+    color: Colors.MT_PRIMARY_1,
     textAlign: 'center',
   },
-  subHeading: {
-    fontSize: 16,
+  welcomeSubtitle: {
+    fontSize: 14,
     color: '#666',
+    marginTop: 8,
     textAlign: 'center',
-    marginBottom: 40,
+  },
+  otpContainer: {
+    marginVertical: 24,
   },
   otpBox: {
     backgroundColor: '#f5f5f5',
@@ -124,23 +305,43 @@ const styles = StyleSheet.create({
     width: 45,
   },
   activeOtpBox: {
-    borderColor: '#cc0e74',
+    borderColor: Colors.MT_PRIMARY_1,
     backgroundColor: '#e8f0fe',
   },
-  submitButton: {
-    backgroundColor: '#cc0e74',
-    padding: 15,
-    borderRadius: 10,
-    marginTop: 30,
-    alignItems: 'center',
+  primaryButton: {
+    width: '100%',
+    borderRadius: 15,
+    overflow: 'hidden',
+    ...Platform.select({
+      ios: {
+        shadowColor: '#000',
+        shadowOffset: {width: 0, height: 4},
+        shadowOpacity: 0.15,
+        shadowRadius: 8,
+      },
+      android: {
+        elevation: 5,
+      },
+    }),
   },
-  disabledButton: {
-    backgroundColor: '#c0c0c0',
+  buttonGradient: {
+    borderRadius: 15,
+    paddingVertical: 15,
+  },
+  buttonContentWrapper: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   buttonText: {
     color: 'white',
-    fontSize: 16,
-    fontWeight: '600',
+    fontSize: 17,
+    fontWeight: 'bold',
+    marginHorizontal: 5,
+    textAlign: 'center',
+  },
+  disabledButtonText: {
+    color: Colors.MT_SECONDARY_3 || 'rgba(255,255,255,0.7)',
   },
   resendContainer: {
     marginTop: 20,
@@ -149,13 +350,9 @@ const styles = StyleSheet.create({
   resendText: {
     color: '#666',
   },
-  timerText: {
-    color: '#ff4444',
-  },
   resendLink: {
-    color: '#cc0e74',
+    color: Colors.MT_PRIMARY_1,
     fontWeight: 'bold',
-    top: 4,
   },
 });
 
