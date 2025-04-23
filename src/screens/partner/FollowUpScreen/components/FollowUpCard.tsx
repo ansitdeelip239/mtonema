@@ -60,7 +60,7 @@ const FollowUpCard: React.FC<FollowUpCardProps> = ({item, filterType}) => {
                   </Text>
                 )}
                 <View style={styles.timeWrapper}>
-                  <GetIcon iconName="time" size={14} color={Colors.main} />
+                  <GetIcon iconName="time" size={14} color={Colors.MT_PRIMARY_1} />
                   <Text style={styles.followUpTime}>
                     {formatTime(localFollowUpDate)}
                   </Text>
@@ -138,7 +138,7 @@ const styles = StyleSheet.create({
   },
   followUpTime: {
     fontSize: 14,
-    color: Colors.main,
+    color: Colors.MT_PRIMARY_1,
     fontWeight: 'bold',
     marginLeft: 4,
   },

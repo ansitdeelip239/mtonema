@@ -542,8 +542,8 @@ const styles = StyleSheet.create({
     height: 55,
   },
   selectedGridItem: {
-    backgroundColor: Colors.main,
-    borderColor: Colors.main,
+    backgroundColor: Colors.MT_PRIMARY_1,
+    borderColor: Colors.MT_PRIMARY_1,
     borderWidth: 1.5,
   },
   gridItemText: {
@@ -572,8 +572,8 @@ const styles = StyleSheet.create({
     height: 48,
   },
   selectedToggleButton: {
-    backgroundColor: Colors.main,
-    borderColor: Colors.main,
+    backgroundColor: Colors.MT_PRIMARY_1,
+    borderColor: Colors.MT_PRIMARY_1,
     color: 'white',
   },
   toggleButtonText: {
@@ -583,7 +583,7 @@ const styles = StyleSheet.create({
   saveButton: {
     marginTop: 24,
     marginBottom: 90,
-    backgroundColor: Colors.main,
+    backgroundColor: Colors.MT_PRIMARY_1,
     borderRadius: 8,
     height: 48,
     justifyContent: 'center',

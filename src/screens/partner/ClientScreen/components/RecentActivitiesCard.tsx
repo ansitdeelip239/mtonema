@@ -78,7 +78,7 @@ const styles = StyleSheet.create({
     marginBottom: 12,
   },
   addActivityButton: {
-    backgroundColor: Colors.main,
+    backgroundColor: Colors.MT_PRIMARY_1,
     paddingHorizontal: 12,
     paddingVertical: 6,
     borderRadius: 8,

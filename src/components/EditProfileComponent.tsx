@@ -160,7 +160,7 @@ const EditProfileComponent = () => {
           keyboardShouldPersistTaps="handled">
           <View style={styles.container}>
             <View style={styles.profileImageContainer}>
-              <Image source={Images.DNCR_LOGO} style={styles.profileImage} />
+              <Image source={Images.MTESTATES_LOGO} style={styles.profileImage} />
             </View>
             <MaterialTextInput
               field="name"
@@ -270,7 +270,7 @@ const styles = StyleSheet.create({
   },
   submitButton: {
     marginTop: 16,
-    backgroundColor: Colors.main,
+    backgroundColor: Colors.MT_PRIMARY_1,
   },
   profileImageContainer: {
     alignSelf: 'center',

@@ -25,7 +25,7 @@ import Toast from 'react-native-toast-message';
 import {usePartner} from '../../../context/PartnerProvider';
 import {Appbar, Menu} from 'react-native-paper';
 import ConfirmationModal from '../../../components/ConfirmationModal';
-import { getYouTubeThumbnailUrl } from '../../../utils/formUtils';
+import {getYouTubeThumbnailUrl} from '../../../utils/formUtils';
 
 type Props = NativeStackScreenProps<
   ListingScreenStackParamList,
@@ -263,7 +263,7 @@ const ListingDetailScreen: React.FC<Props> = ({route, navigation}) => {
   if (loading) {
     return (
       <View style={styles.loadingContainer}>
-        <ActivityIndicator size="large" color={Colors.main} />
+        <ActivityIndicator size="large" color={Colors.MT_PRIMARY_1} />
         <Text style={styles.loadingText}>Loading property details...</Text>
       </View>
     );
@@ -294,7 +294,7 @@ const ListingDetailScreen: React.FC<Props> = ({route, navigation}) => {
           anchor={
             <Appbar.Action
               // eslint-disable-next-line react/no-unstable-nested-components
-              icon={() => <GetIcon iconName="threeDots" />}
+              icon={() => <GetIcon iconName="threeDots" color="white" />}
               onPress={openMenu}
               style={styles.threeDotsIcon}
             />
@@ -361,7 +361,9 @@ const ListingDetailScreen: React.FC<Props> = ({route, navigation}) => {
                           }}
                           activeOpacity={0.8}>
                           <Image
-                            source={{ uri: getYouTubeThumbnailUrl(item.videoUrl) }}
+                            source={{
+                              uri: getYouTubeThumbnailUrl(item.videoUrl),
+                            }}
                             style={styles.videoThumbnail}
                             resizeMode="cover"
                           />
@@ -372,7 +374,9 @@ const ListingDetailScreen: React.FC<Props> = ({route, navigation}) => {
                                 size={48}
                                 color="#fff"
                               />
-                              <Text style={styles.playVideoText}>Play Video</Text>
+                              <Text style={styles.playVideoText}>
+                                Play Video
+                              </Text>
                             </View>
                           </View>
                         </TouchableOpacity>
@@ -454,7 +458,11 @@ const ListingDetailScreen: React.FC<Props> = ({route, navigation}) => {
 
           {/* Location with ZIP code - Updated for better formatting */}
           <View style={styles.infoRow}>
-            <GetIcon iconName="locationPin" size={18} color={Colors.main} />
+            <GetIcon
+              iconName="locationPin"
+              size={18}
+              color={Colors.MT_PRIMARY_1}
+            />
             <Text style={styles.infoText}>
               {property.location || ''}
               {property.city ? `, ${property.city}` : ''}
@@ -471,7 +479,11 @@ const ListingDetailScreen: React.FC<Props> = ({route, navigation}) => {
             {/* Property Type */}
             <View style={styles.overviewItem}>
               <View style={styles.overviewIconWrapper}>
-                <GetIcon iconName="home" size={20} color={Colors.main} />
+                <GetIcon
+                  iconName="home"
+                  size={20}
+                  color={Colors.MT_PRIMARY_1}
+                />
               </View>
               <View style={styles.overviewTextContainer}>
                 <Text style={styles.overviewLabel}>Type</Text>
@@ -484,7 +496,11 @@ const ListingDetailScreen: React.FC<Props> = ({route, navigation}) => {
             {/* Property For Type */}
             <View style={styles.overviewItem}>
               <View style={styles.overviewIconWrapper}>
-                <GetIcon iconName="realEstate" size={20} color={Colors.main} />
+                <GetIcon
+                  iconName="realEstate"
+                  size={20}
+                  color={Colors.MT_PRIMARY_1}
+                />
               </View>
               <View style={styles.overviewTextContainer}>
                 <Text style={styles.overviewLabel}>Category</Text>
@@ -501,7 +517,7 @@ const ListingDetailScreen: React.FC<Props> = ({route, navigation}) => {
                   <GetIcon
                     iconName="locationPin"
                     size={20}
-                    color={Colors.main}
+                    color={Colors.MT_PRIMARY_1}
                   />
                 </View>
                 <View style={styles.overviewTextContainer}>
@@ -515,7 +531,11 @@ const ListingDetailScreen: React.FC<Props> = ({route, navigation}) => {
             {property.sellerType && (
               <View style={styles.overviewItem}>
                 <View style={styles.overviewIconWrapper}>
-                  <GetIcon iconName="user" size={20} color={Colors.main} />
+                  <GetIcon
+                    iconName="user"
+                    size={20}
+                    color={Colors.MT_PRIMARY_1}
+                  />
                 </View>
                 <View style={styles.overviewTextContainer}>
                   <Text style={styles.overviewLabel}>Seller Type</Text>
@@ -530,7 +550,11 @@ const ListingDetailScreen: React.FC<Props> = ({route, navigation}) => {
             {property.bhkType && (
               <View style={styles.overviewItem}>
                 <View style={styles.overviewIconWrapper}>
-                  <GetIcon iconName="room" size={20} color={Colors.main} />
+                  <GetIcon
+                    iconName="room"
+                    size={20}
+                    color={Colors.MT_PRIMARY_1}
+                  />
                 </View>
                 <View style={styles.overviewTextContainer}>
                   <Text style={styles.overviewLabel}>Configuration</Text>
@@ -543,7 +567,11 @@ const ListingDetailScreen: React.FC<Props> = ({route, navigation}) => {
             {property.area && (
               <View style={styles.overviewItem}>
                 <View style={styles.overviewIconWrapper}>
-                  <GetIcon iconName="length" size={20} color={Colors.main} />
+                  <GetIcon
+                    iconName="length"
+                    size={20}
+                    color={Colors.MT_PRIMARY_1}
+                  />
                 </View>
                 <View style={styles.overviewTextContainer}>
                   <Text style={styles.overviewLabel}>Area</Text>
@@ -558,7 +586,11 @@ const ListingDetailScreen: React.FC<Props> = ({route, navigation}) => {
             {property.furnishing && (
               <View style={styles.overviewItem}>
                 <View style={styles.overviewIconWrapper}>
-                  <GetIcon iconName="doubleBed" size={20} color={Colors.main} />
+                  <GetIcon
+                    iconName="doubleBed"
+                    size={20}
+                    color={Colors.MT_PRIMARY_1}
+                  />
                 </View>
                 <View style={styles.overviewTextContainer}>
                   <Text style={styles.overviewLabel}>Furnishing</Text>
@@ -573,7 +605,11 @@ const ListingDetailScreen: React.FC<Props> = ({route, navigation}) => {
             {property.facing && (
               <View style={styles.overviewItem}>
                 <View style={styles.overviewIconWrapper}>
-                  <GetIcon iconName="compass" size={20} color={Colors.main} />
+                  <GetIcon
+                    iconName="compass"
+                    size={20}
+                    color={Colors.MT_PRIMARY_1}
+                  />
                 </View>
                 <View style={styles.overviewTextContainer}>
                   <Text style={styles.overviewLabel}>Facing</Text>
@@ -617,8 +653,8 @@ const ListingDetailScreen: React.FC<Props> = ({route, navigation}) => {
             </View>
 
             <Switch
-              trackColor={{false: '#dddddd', true: Colors.main + '80'}}
-              thumbColor={isFeatured ? Colors.main : '#f4f3f4'}
+              trackColor={{false: '#dddddd', true: Colors.MT_PRIMARY_1 + '80'}}
+              thumbColor={isFeatured ? Colors.MT_PRIMARY_1 : '#f4f3f4'}
               ios_backgroundColor="#dddddd"
               onValueChange={handleFeaturedToggle}
               value={isFeatured}
@@ -855,7 +891,11 @@ const ListingDetailScreen: React.FC<Props> = ({route, navigation}) => {
           <View style={styles.sellerCard}>
             <View style={styles.sellerDetails}>
               <View style={styles.sellerIconContainer}>
-                <GetIcon iconName="user" size={24} color={Colors.main} />
+                <GetIcon
+                  iconName="user"
+                  size={24}
+                  color={Colors.MT_PRIMARY_1}
+                />
               </View>
               <View style={styles.sellerInfo}>
                 <Text style={styles.sellerName}>
@@ -926,7 +966,7 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
   retryButton: {
-    backgroundColor: Colors.main,
+    backgroundColor: Colors.MT_PRIMARY_1,
     paddingVertical: 12,
     paddingHorizontal: 24,
     borderRadius: 8,
@@ -980,7 +1020,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(0,0,0,0.7)',
   },
   featuredBadge: {
-    backgroundColor: Colors.main,
+    backgroundColor: Colors.MT_PRIMARY_1,
   },
   badgeText: {
     color: 'white',
@@ -1014,7 +1054,7 @@ const styles = StyleSheet.create({
   propertyPrice: {
     fontSize: 20,
     fontWeight: 'bold',
-    color: Colors.main,
+    color: Colors.MT_PRIMARY_1,
     marginBottom: 12,
   },
   infoRow: {
@@ -1096,7 +1136,7 @@ const styles = StyleSheet.create({
     marginRight: 8,
   },
   featureActive: {
-    backgroundColor: Colors.main,
+    backgroundColor: Colors.MT_PRIMARY_1,
   },
   featureInactive: {
     backgroundColor: '#e0e0e0',
@@ -1125,7 +1165,7 @@ const styles = StyleSheet.create({
     color: '#333',
   },
   videoButton: {
-    backgroundColor: Colors.main,
+    backgroundColor: Colors.MT_PRIMARY_1,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
@@ -1193,7 +1233,7 @@ const styles = StyleSheet.create({
   },
   sellerEmail: {
     fontSize: 14,
-    color: Colors.main,
+    color: Colors.MT_PRIMARY_1,
   },
   bottomSpacing: {
     // height: 40,

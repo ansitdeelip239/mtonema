@@ -227,7 +227,7 @@ const ScheduleFollowUpModal: React.FC<ScheduleFollowUpModalProps> = ({
                     <GetIcon
                       iconName="calendar"
                       size={20}
-                      color={Colors.main}
+                      color={Colors.MT_PRIMARY_1}
                     />
                     <Text style={styles.dateTimeText}>
                       {formatDisplayDate(finalDate)}
@@ -251,7 +251,7 @@ const ScheduleFollowUpModal: React.FC<ScheduleFollowUpModalProps> = ({
                     <TouchableOpacity
                       style={styles.timeSelectButton}
                       onPress={() => setShowTimePicker(true)}>
-                      <GetIcon iconName="time" size={24} color={Colors.main} />
+                      <GetIcon iconName="time" size={24} color={Colors.MT_PRIMARY_1} />
                     </TouchableOpacity>
                   </View>
                 )}
@@ -402,8 +402,8 @@ const styles = StyleSheet.create({
     borderColor: '#e0e0e0',
   },
   selectedOption: {
-    backgroundColor: Colors.main + '20',
-    borderColor: Colors.main,
+    backgroundColor: Colors.MT_PRIMARY_1 + '20',
+    borderColor: Colors.MT_PRIMARY_1,
   },
   optionText: {
     marginLeft: 8,
@@ -476,7 +476,7 @@ const styles = StyleSheet.create({
   },
   submitButton: {
     flex: 1,
-    backgroundColor: Colors.main,
+    backgroundColor: Colors.MT_PRIMARY_1,
     paddingVertical: 12,
     borderRadius: 8,
     alignItems: 'center',
@@ -532,7 +532,7 @@ const styles = StyleSheet.create({
   timeSelectText: {
     marginLeft: 8,
     fontSize: 14,
-    color: Colors.main,
+    color: Colors.MT_PRIMARY_1,
   },
 });
 

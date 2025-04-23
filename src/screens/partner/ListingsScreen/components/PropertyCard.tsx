@@ -126,7 +126,7 @@ const PropertyCard = memo(
 
               {/* Location */}
               <View style={styles.locationContainer}>
-                <GetIcon iconName="locationPin" color={Colors.main} size={14} />
+                <GetIcon iconName="locationPin" color={Colors.MT_PRIMARY_1} size={14} />
                 <Text
                   style={styles.location}
                   numberOfLines={1}
@@ -139,7 +139,7 @@ const PropertyCard = memo(
               {/* Area (if available) */}
               {formattedArea && (
                 <View style={styles.areaContainer}>
-                  <GetIcon iconName="length" size={16} color={Colors.main} />
+                  <GetIcon iconName="length" size={16} color={Colors.MT_PRIMARY_1} />
                   <Text style={styles.areaText}>{formattedArea}</Text>
                 </View>
               )}
@@ -147,7 +147,7 @@ const PropertyCard = memo(
               {/* Type and Furnishing in one row */}
               <View style={styles.bottomRow}>
                 <View style={styles.typeContainer}>
-                  <GetIcon iconName="home" size={14} color={Colors.main} />
+                  <GetIcon iconName="home" size={14} color={Colors.MT_PRIMARY_1} />
                   <Text style={styles.typeText} numberOfLines={1}>
                     {property.propertyType || 'Not specified'}
                   </Text>
@@ -158,7 +158,7 @@ const PropertyCard = memo(
                     <GetIcon
                       iconName="doubleBed"
                       size={14}
-                      color={Colors.main}
+                      color={Colors.MT_PRIMARY_1}
                     />
                     <Text style={styles.furnishingText} numberOfLines={1}>
                       {property.furnishing}
@@ -225,7 +225,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: 8,
     right: 8,  // Changed from left to right
-    backgroundColor: Colors.main,
+    backgroundColor: Colors.MT_PRIMARY_1,
     paddingHorizontal: 6,
     paddingVertical: 2,
     borderRadius: 4,
@@ -264,7 +264,7 @@ const styles = StyleSheet.create({
   price: {
     fontSize: 16,
     fontWeight: 'bold',
-    color: Colors.main,
+    color: Colors.MT_PRIMARY_1,
     marginVertical: 4,
   },
   areaContainer: {

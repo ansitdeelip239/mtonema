@@ -133,7 +133,7 @@ const GroupsToggleComponent: React.FC<GroupsToggleComponentProps> = ({
             <GetIcon
               iconName={showAllGroups ? 'fold' : 'unfold'}
               size={18}
-              color={Colors.main}
+              color={Colors.MT_PRIMARY_1}
             />
           </View>
         </TouchableOpacity>
@@ -213,7 +213,7 @@ const GroupsToggleComponent: React.FC<GroupsToggleComponentProps> = ({
               fontSize: 18,
               fontWeight: 'bold',
               marginBottom: 16,
-              color: Colors.main,
+              color: Colors.MT_PRIMARY_1,
             },
             input: {
               borderWidth: 1,
@@ -239,7 +239,7 @@ const GroupsToggleComponent: React.FC<GroupsToggleComponentProps> = ({
               backgroundColor: '#f0f0f0',
             },
             saveButton: {
-              backgroundColor: Colors.main,
+              backgroundColor: Colors.MT_PRIMARY_1,
             },
             buttonText: {
               fontWeight: 'bold',
@@ -273,10 +273,10 @@ const styles = StyleSheet.create({
     paddingVertical: 6,
     borderRadius: 16,
     borderWidth: 1,
-    borderColor: Colors.main,
+    borderColor: Colors.MT_PRIMARY_1,
   },
   groupButtonText: {
-    color: Colors.main,
+    color: Colors.MT_PRIMARY_1,
     fontSize: 14,
   },
   groupButtonTextSelected: {
@@ -308,7 +308,7 @@ const styles = StyleSheet.create({
   addGroupButton: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: Colors.main,
+    backgroundColor: Colors.MT_PRIMARY_1,
     paddingHorizontal: 12,
     paddingVertical: 6,
     borderRadius: 16,

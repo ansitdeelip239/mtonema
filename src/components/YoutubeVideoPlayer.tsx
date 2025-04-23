@@ -141,7 +141,7 @@ const YoutubeVideoPlayer: React.FC<YoutubeVideoPlayerProps> = ({
       />
       {loading && (
         <View style={styles.loadingContainer}>
-          <ActivityIndicator color={Colors.main} size="large" />
+          <ActivityIndicator color={Colors.MT_PRIMARY_1} size="large" />
         </View>
       )}
     </View>

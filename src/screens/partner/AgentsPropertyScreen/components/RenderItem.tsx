@@ -75,17 +75,17 @@ const RenderItem: React.FC<RenderItemProps> = ({
           </View>
           <View style={styles.actions}>
             <IconButton
-              icon={() => GetIcon({iconName: 'edit', color: Colors.main})}
+              icon={() => GetIcon({iconName: 'edit', color: Colors.MT_PRIMARY_1})}
               size={20}
               onPress={() => onEdit()}
-              iconColor={Colors.main}
+              iconColor={Colors.MT_PRIMARY_1}
               style={styles.actionButton}
             />
             <IconButton
-              icon={() => GetIcon({iconName: 'delete', color: Colors.main})}
+              icon={() => GetIcon({iconName: 'delete', color: Colors.MT_PRIMARY_1})}
               size={20}
               onPress={handleDeletePress}
-              iconColor={Colors.main}
+              iconColor={Colors.MT_PRIMARY_1}
               style={styles.actionButton}
             />
           </View>
@@ -190,18 +190,18 @@ const styles = StyleSheet.create({
   name: {
     fontSize: 20,
     fontWeight: '700',
-    color: Colors.main,
+    color: Colors.MT_PRIMARY_1,
     marginBottom: 4,
   },
   badge: {
-    backgroundColor: Colors.main + '15',
+    backgroundColor: Colors.MT_PRIMARY_1 + '15',
     paddingHorizontal: 8,
     paddingVertical: 4,
     borderRadius: 12,
     alignSelf: 'flex-start',
   },
   badgeText: {
-    color: Colors.main,
+    color: Colors.MT_PRIMARY_1,
     fontSize: 12,
     fontWeight: '600',
   },
@@ -237,7 +237,7 @@ const styles = StyleSheet.create({
   },
   priceText: {
     fontWeight: '700',
-    color: Colors.main,
+    color: Colors.MT_PRIMARY_1,
   },
   notes: {
     padding: 16,

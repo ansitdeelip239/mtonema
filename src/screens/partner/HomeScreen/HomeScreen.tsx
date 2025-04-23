@@ -103,8 +103,8 @@ const HomeScreen: React.FC<Props> = ({navigation}) => {
           <RefreshControl
             refreshing={refreshing}
             onRefresh={onRefresh}
-            colors={[Colors.main]}
-            tintColor={Colors.main}
+            colors={[Colors.MT_PRIMARY_1]}
+            tintColor={Colors.MT_PRIMARY_1}
           />
         }>
         <View style={styles.gridContainer}>
@@ -169,7 +169,7 @@ const styles = StyleSheet.create({
   cardCount: {
     fontSize: 32,
     fontWeight: '700',
-    color: Colors.main,
+    color: Colors.MT_PRIMARY_1,
     marginTop: 12,
   },
   cardLabel: {

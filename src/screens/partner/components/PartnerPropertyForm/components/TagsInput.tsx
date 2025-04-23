@@ -115,7 +115,7 @@ const styles = StyleSheet.create({
     marginRight: 8,
   },
   addTagButton: {
-    backgroundColor: Colors.main,
+    backgroundColor: Colors.MT_PRIMARY_1,
     paddingVertical: 12,
     paddingHorizontal: 16,
     borderRadius: 8,
@@ -138,7 +138,7 @@ const styles = StyleSheet.create({
   tagItem: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: Colors.main,
+    backgroundColor: Colors.MT_PRIMARY_1,
     borderRadius: 16,
     paddingVertical: 4,
     paddingHorizontal: 8,

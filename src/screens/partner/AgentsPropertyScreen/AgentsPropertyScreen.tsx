@@ -191,7 +191,7 @@ const AgentDataScreen: React.FC<Props> = ({navigation}) => {
 
       {isInitialLoading ? (
         <View style={styles.centerLoaderContainer}>
-          <ActivityIndicator size="large" color={Colors.main} />
+          <ActivityIndicator size="large" color={Colors.MT_PRIMARY_1} />
         </View>
       ) : (
         <FlatList
@@ -247,10 +247,10 @@ const styles = StyleSheet.create({
     color: '#888',
   },
   fabStyle: {
-    backgroundColor: Colors.main,
+    backgroundColor: Colors.MT_PRIMARY_1,
   },
   addButton: {
-    backgroundColor: Colors.main,
+    backgroundColor: Colors.MT_PRIMARY_1,
     paddingHorizontal: 16,
     paddingVertical: 8,
     borderRadius: 8,

@@ -108,7 +108,7 @@ const LocationComponent = ({
           }}
           theme={{
             colors: {
-              primary: color || Colors.main, // Label color when focused
+              primary: color || Colors.MT_PRIMARY_1, // Label color when focused
               onSurfaceVariant: borderColor || Colors.ligthGray, // Label color when not focused
               background: backgroundcolor || '#f0f0f0', // Background color of the input field
               text: 'black', // Text color of the input field

@@ -165,7 +165,7 @@ const FeedbackScreen: React.FC<Props> = () => {
 
     return (
       <View style={styles.footerLoader}>
-        <ActivityIndicator size="small" color={Colors.main} />
+        <ActivityIndicator size="small" color={Colors.MT_PRIMARY_1} />
         <Text style={styles.loadingMoreText}>Loading more testimonials...</Text>
       </View>
     );
@@ -193,7 +193,7 @@ const FeedbackScreen: React.FC<Props> = () => {
 
       {isLoading ? (
         <View style={styles.loadingContainer}>
-          <ActivityIndicator size="large" color={Colors.main} />
+          <ActivityIndicator size="large" color={Colors.MT_PRIMARY_1} />
           <Text style={styles.loadingText}>Loading testimonials...</Text>
         </View>
       ) : (
@@ -207,7 +207,7 @@ const FeedbackScreen: React.FC<Props> = () => {
             <RefreshControl
               refreshing={isRefreshing}
               onRefresh={handleRefresh}
-              colors={[Colors.main]}
+              colors={[Colors.MT_PRIMARY_1]}
             />
           }
           onEndReached={handleLoadMore}

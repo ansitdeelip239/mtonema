@@ -146,11 +146,11 @@ const AddActivityModal: React.FC<AddActivityModalProps> = ({
               multiline
               numberOfLines={4}
               style={styles.input}
-              outlineColor={Colors.main}
-              activeOutlineColor={Colors.main}
+              outlineColor={Colors.MT_PRIMARY_1}
+              activeOutlineColor={Colors.MT_PRIMARY_1}
               theme={{
                 colors: {
-                  primary: Colors.main,
+                  primary: Colors.MT_PRIMARY_1,
                   background: 'white',
                   placeholder: '#666',
                   text: '#000',
@@ -230,15 +230,15 @@ const styles = StyleSheet.create({
     marginHorizontal: 8,
   },
   cancelButton: {
-    borderColor: Colors.main,
+    borderColor: Colors.MT_PRIMARY_1,
   },
   cancelButtonText: {
-    color: Colors.main,
+    color: Colors.MT_PRIMARY_1,
     textAlign: 'center',
     fontWeight: 'bold',
   },
   submitButton: {
-    backgroundColor: Colors.main,
+    backgroundColor: Colors.MT_PRIMARY_1,
   },
   buttonText: {
     color: 'white',

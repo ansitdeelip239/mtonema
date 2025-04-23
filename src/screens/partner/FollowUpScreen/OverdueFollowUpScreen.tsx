@@ -59,8 +59,8 @@ const OverdueFollowUpScreen: React.FC<Props> = ({navigation, route}) => {
           <RefreshControl
             refreshing={refreshing}
             onRefresh={onRefresh}
-            colors={[Colors.main]}
-            tintColor={Colors.main}
+            colors={[Colors.MT_PRIMARY_1]}
+            tintColor={Colors.MT_PRIMARY_1}
           />
         }>
         <FollowUpListSection

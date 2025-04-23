@@ -214,7 +214,7 @@ const styles = StyleSheet.create({
   },
   clearAllText: {
     fontSize: 14,
-    color: Colors.main,
+    color: Colors.MT_PRIMARY_1,
     fontWeight: '500',
   },
   buttonContainer: {

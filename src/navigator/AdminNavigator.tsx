@@ -14,9 +14,9 @@ const Drawer = createDrawerNavigator<AdminDrawerParamList>();
 const drawerStyles = {
   drawerType: 'front' as const,
   drawerActiveTintColor: 'white',
-  drawerActiveBackgroundColor: Colors.main,
+  drawerActiveBackgroundColor: Colors.MT_PRIMARY_1,
   drawerStyle: {width: 240},
-  headerStyle: {backgroundColor: Colors.main},
+  headerStyle: {backgroundColor: Colors.MT_PRIMARY_1},
   headerTintColor: Colors.SECONDARY_3,
 };
 

@@ -59,7 +59,7 @@ export const CustomBottomBar = <T extends ParamListBase>({
               <View style={styles.tabContent}>
                 {descriptors[route.key].options.tabBarIcon?.({
                   focused: state.index === index,
-                  color: state.index === index ? Colors.main : '#666',
+                  color: state.index === index ? Colors.MT_PRIMARY_1 : '#666',
                   size: 24,
                 })}
                 <Text
@@ -72,7 +72,7 @@ export const CustomBottomBar = <T extends ParamListBase>({
                   'function'
                     ? (descriptors[route.key].options.tabBarLabel as Function)({
                         focused: state.index === index,
-                        color: state.index === index ? Colors.main : '#666',
+                        color: state.index === index ? Colors.MT_PRIMARY_1 : '#666',
                         position: 'below-icon',
                         children: route.name,
                       })
@@ -136,7 +136,7 @@ export const CustomBottomBar = <T extends ParamListBase>({
                   focused: state.index === index + middleIndex + 1,
                   color:
                     state.index === index + middleIndex + 1
-                      ? Colors.main
+                      ? Colors.MT_PRIMARY_1
                       : '#666',
                   size: 24,
                 })}
@@ -153,7 +153,7 @@ export const CustomBottomBar = <T extends ParamListBase>({
                         focused: state.index === index + middleIndex + 1,
                         color:
                           state.index === index + middleIndex + 1
-                            ? Colors.main
+                            ? Colors.MT_PRIMARY_1
                             : '#666',
                         position: 'below-icon',
                         children: route.name,
@@ -203,7 +203,7 @@ const styles = StyleSheet.create({
     flexShrink: 1,
   },
   activeTabLabel: {
-    color: Colors.main,
+    color: Colors.MT_PRIMARY_1,
     fontWeight: 'bold',
   },
   tabSection: {
@@ -222,10 +222,10 @@ const styles = StyleSheet.create({
     // margin: 2,
   },
   activeTabColor: {
-    color: Colors.main + '20',
+    color: Colors.MT_PRIMARY_1 + '20',
   },
   centerTab: {
-    backgroundColor: Colors.main,
+    backgroundColor: Colors.MT_PRIMARY_1,
     // width: 48,
     // height: 48,
     // borderRadius: 24,
@@ -237,7 +237,7 @@ const styles = StyleSheet.create({
     width: 50,
   },
   activeCenterTab: {
-    backgroundColor: Colors.main,
+    backgroundColor: Colors.MT_PRIMARY_1,
     transform: [{scale: 1.1}],
   },
 });

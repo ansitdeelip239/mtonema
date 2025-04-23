@@ -363,7 +363,7 @@ const ClientProfileScreen: React.FC<Props> = ({route, navigation}) => {
           anchor={
             <Appbar.Action
               // eslint-disable-next-line react/no-unstable-nested-components
-              icon={() => <GetIcon iconName="threeDots" />}
+              icon={() => <GetIcon iconName="threeDots" color="white" />}
               onPress={openMenu}
               style={styles.threeDotsIcon}
             />

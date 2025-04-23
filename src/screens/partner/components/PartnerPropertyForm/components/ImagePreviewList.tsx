@@ -85,7 +85,7 @@ const ImagePreviewList: React.FC<ImagePreviewListProps> = ({
                 selectedValue={image.type || ''}
                 style={styles.categoryPicker}
                 onValueChange={value => onCategoryChange(index, value)}
-                dropdownIconColor={Colors.main}>
+                dropdownIconColor={Colors.MT_PRIMARY_1}>
                 {/* Add placeholder as first item */}
                 <Picker.Item
                   label="Select Category"

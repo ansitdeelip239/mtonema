@@ -156,7 +156,7 @@ const styles = StyleSheet.create({
     top: 0,
     left: 0,
     height: 4,
-    backgroundColor: Colors.main,
+    backgroundColor: Colors.MT_PRIMARY_1,
     borderRadius: 2,
   },
   circle: {
@@ -173,11 +173,11 @@ const styles = StyleSheet.create({
   },
   activeCircle: {
     backgroundColor: 'white',
-    borderColor: Colors.main,
+    borderColor: Colors.MT_PRIMARY_1,
   },
   completedCircle: {
-    backgroundColor: Colors.main,
-    borderColor: Colors.main,
+    backgroundColor: Colors.MT_PRIMARY_1,
+    borderColor: Colors.MT_PRIMARY_1,
   },
   disabledCircle: {
     opacity: 0.5,
@@ -188,7 +188,7 @@ const styles = StyleSheet.create({
     color: '#888',
   },
   activeStepNumber: {
-    color: Colors.main,
+    color: Colors.MT_PRIMARY_1,
   },
   completedStepNumber: {
     color: 'white',
@@ -203,11 +203,11 @@ const styles = StyleSheet.create({
     marginTop: 4,
   },
   activeStepLabel: {
-    color: Colors.main,
+    color: Colors.MT_PRIMARY_1,
     fontWeight: 'bold',
   },
   completedStepLabel: {
-    color: Colors.main,
+    color: Colors.MT_PRIMARY_1,
   },
   disabledStepLabel: {
     color: '#aaa',
@@ -216,7 +216,7 @@ const styles = StyleSheet.create({
     opacity: 1,
   },
   nextAvailableStep: {
-    color: Colors.main,
+    color: Colors.MT_PRIMARY_1,
     opacity: 0.8,
   },
 });

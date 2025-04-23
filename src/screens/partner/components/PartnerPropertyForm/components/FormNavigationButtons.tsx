@@ -82,7 +82,7 @@ const styles = StyleSheet.create({
     borderColor: '#ddd',
   },
   nextButton: {
-    backgroundColor: Colors.main,
+    backgroundColor: Colors.MT_PRIMARY_1,
     marginLeft: 'auto',
   },
   fullWidthButton: {

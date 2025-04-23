@@ -73,7 +73,7 @@ const PartnerBottomTabs = memo(() => (
           tabBarLabel: label, // Use the custom label if provided
           // eslint-disable-next-line react/no-unstable-nested-components
           tabBarIcon: ({focused, color}) => (
-            <GetIcon iconName={icon} color={focused ? Colors.main : color} />
+            <GetIcon iconName={icon} color={focused ? Colors.MT_PRIMARY_1 : color} />
           ),
         }}
         listeners={listeners}

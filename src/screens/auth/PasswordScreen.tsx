@@ -236,7 +236,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   color: {
-    backgroundColor: Colors.main,
+    backgroundColor: Colors.MT_PRIMARY_1,
   },
 });
 

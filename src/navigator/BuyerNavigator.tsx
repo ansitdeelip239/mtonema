@@ -35,13 +35,13 @@ const BuyerNavigator = memo(() => {
       screenOptions={{
         drawerType: 'front',
         drawerActiveTintColor: 'white',
-        drawerActiveBackgroundColor: Colors.main,
+        drawerActiveBackgroundColor: Colors.MT_PRIMARY_1,
         headerShown: true,
         drawerStyle: {
           width: 240,
         },
         headerStyle: {
-          backgroundColor: Colors.main,
+          backgroundColor: Colors.MT_PRIMARY_1,
         },
         headerTintColor: Colors.SECONDARY_3,
       }}>

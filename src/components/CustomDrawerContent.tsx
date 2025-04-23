@@ -17,6 +17,7 @@ import {
 import Strings from '../constants/Strings';
 import Colors from '../constants/Colors';
 import GetIcon from './GetIcon';
+import Images from '../constants/Images';
 
 const CustomDrawerContent = (props: any) => {
   const {user, logout} = useAuth();
@@ -56,7 +57,7 @@ const CustomDrawerContent = (props: any) => {
       <TouchableOpacity onPress={navigateToProfile}>
         <View style={styles.profileContainer}>
           <Image
-            source={require('../assets/Images/dncrlogo.png')}
+            source={Images.MTESTATES_LOGO}
             style={styles.logo}
           />
           <Text style={styles.name}>{userName}</Text>
@@ -180,7 +181,7 @@ const styles = StyleSheet.create({
   drawerItemText: {
     marginLeft: 16,
     fontSize: 16,
-    color: Colors.main,
+    color: Colors.MT_PRIMARY_1,
   },
   profileContainer: {
     alignItems: 'center',
@@ -208,7 +209,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   logout: {
-    backgroundColor: '#cc0e74',
+    backgroundColor: Colors.MT_PRIMARY_1,
     padding: 8,
     paddingVertical: 2,
     marginLeft: 20,

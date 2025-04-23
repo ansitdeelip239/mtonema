@@ -238,7 +238,7 @@ const styles = StyleSheet.create({
     alignItems: 'center', // Center the text inside
   },
   touchableOpacity: {
-    backgroundColor: Colors.main, // Set background color
+    backgroundColor: Colors.MT_PRIMARY_1, // Set background color
     paddingVertical: 10, // Vertical padding to make the button taller
     borderRadius: 8, // Rounded corners
     justifyContent: 'center', // Vertically center the text
@@ -291,8 +291,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#ffffff',
   },
   selectedChip: {
-    backgroundColor: Colors.main,
-    borderColor: Colors.main,
+    backgroundColor: Colors.MT_PRIMARY_1,
+    borderColor: Colors.MT_PRIMARY_1,
     color: 'white',
   },
   moreButton: {

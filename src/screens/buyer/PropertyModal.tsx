@@ -509,7 +509,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   yesButton: {
-    backgroundColor: Colors.main,
+    backgroundColor: Colors.MT_PRIMARY_1,
   },
   noButton: {
     backgroundColor: 'white', // White background for No button

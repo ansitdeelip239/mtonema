@@ -602,7 +602,7 @@ const isFormValid = () => {
                     }
                     style={styles.input}
                     outlineColor="#ddd"
-                    activeOutlineColor={Colors.main}
+                    activeOutlineColor={Colors.MT_PRIMARY_1}
                   />
                 </View>
               )}
@@ -788,8 +788,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center', // Ensure text is centered vertically
   },
   selectedOption: {
-    backgroundColor: Colors.main,
-    borderColor: Colors.main,
+    backgroundColor: Colors.MT_PRIMARY_1,
+    borderColor: Colors.MT_PRIMARY_1,
   },
   optionText: {
     color: '#333',
@@ -828,7 +828,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   touchableOpacity: {
-    backgroundColor: Colors.main,
+    backgroundColor: Colors.MT_PRIMARY_1,
     paddingVertical: 10,
     borderRadius: 8,
     justifyContent: 'center',

@@ -266,7 +266,7 @@ const removeImage = (imageId: string) => {
 
         {loadingImage && (
           <View style={styles.loaderContainer}>
-            <ActivityIndicator size="large" color={Colors.main} />
+            <ActivityIndicator size="large" color={Colors.MT_PRIMARY_1} />
             <Text style={styles.loaderText}>Uploading image...</Text>
           </View>
         )}
@@ -412,7 +412,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   listPropertyButton: {
-    backgroundColor: Colors.main,
+    backgroundColor: Colors.MT_PRIMARY_1,
   paddingVertical: 15,  // Keeps padding uniform
   paddingHorizontal: 30,
   borderRadius: 25,
@@ -423,7 +423,7 @@ const styles = StyleSheet.create({
   left:50,
   width: 250, // Fixed width (adjust as needed)
   height: 55, // Fixed height to prevent resizing
-    // backgroundColor: Colors.main,
+    // backgroundColor: Colors.MT_PRIMARY_1,
     // padding: 15,
     // borderRadius: 25,
     // alignItems: 'center',

@@ -124,7 +124,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
   },
   selectedChip: {
-    backgroundColor: Colors.main,
+    backgroundColor: Colors.MT_PRIMARY_1,
   },
   errorChip: {
     borderColor: '#cc0000',

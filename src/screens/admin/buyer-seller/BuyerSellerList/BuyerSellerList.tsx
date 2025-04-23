@@ -102,7 +102,7 @@ const BuyerSellerList: React.FC<Props> = ({viewType = 'buyerseller'}) => {
         screenOptions={{
           tabBarStyle: styles.tabBar,
           tabBarIndicatorStyle: styles.indicator,
-          tabBarActiveTintColor: Colors.main,
+          tabBarActiveTintColor: Colors.MT_PRIMARY_1,
           tabBarInactiveTintColor: '#666',
           tabBarLabelStyle: styles.tabLabel,
         }}>
@@ -150,7 +150,7 @@ const styles = StyleSheet.create({
     borderBottomColor: '#f0f0f0',
   },
   indicator: {
-    backgroundColor: Colors.main,
+    backgroundColor: Colors.MT_PRIMARY_1,
     height: 3,
   },
   tabLabel: {

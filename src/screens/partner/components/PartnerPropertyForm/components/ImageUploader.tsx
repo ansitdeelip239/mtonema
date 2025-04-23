@@ -132,7 +132,7 @@ const ImageUploader: React.FC<ImageUploaderProps> = ({
       onPress={handleSelectImages}
       disabled={uploading || disabled}>
       {uploading ? (
-        <ActivityIndicator color={Colors.main} size="small" />
+        <ActivityIndicator color={Colors.MT_PRIMARY_1} size="small" />
       ) : (
         <>
           <GetIcon iconName="calendarSomeday" size={20} />
@@ -149,14 +149,14 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     borderWidth: 1,
-    borderColor: Colors.main,
+    borderColor: Colors.MT_PRIMARY_1,
     borderStyle: 'dashed',
     borderRadius: 8,
     padding: 20,
     marginBottom: 20,
   },
   uploadButtonText: {
-    color: Colors.main,
+    color: Colors.MT_PRIMARY_1,
     marginLeft: 8,
     fontSize: 16,
     fontWeight: '500',

@@ -475,7 +475,7 @@ const styles = StyleSheet.create({
     lineHeight: 16,
   },
   savebuttonText: {
-    color: Colors.main,
+    color: Colors.MT_PRIMARY_1,
     fontSize: 16,
     fontWeight: 'bold',
   },
@@ -487,7 +487,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     alignItems: 'center',
     elevation: 3,
-    // shadowColor: Colors.main,
+    // shadowColor: Colors.MT_PRIMARY_1,
     shadowColor: Colors.black,
     shadowOffset: {width: 2, height: 2},
     shadowOpacity: 0.25,

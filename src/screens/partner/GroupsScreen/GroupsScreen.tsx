@@ -54,7 +54,7 @@ const EmptyList = memo(({isLoading}: {isLoading: boolean}) => {
   if (isLoading) {
     return (
       <View style={styles.loaderContainer}>
-        <ActivityIndicator size="large" color={Colors.main} />
+        <ActivityIndicator size="large" color={Colors.MT_PRIMARY_1} />
       </View>
     );
   }
@@ -283,8 +283,8 @@ const GroupsScreen = () => {
             <RefreshControl
               refreshing={refreshing}
               onRefresh={onRefresh}
-              colors={[Colors.main]}
-              tintColor={Colors.main}
+              colors={[Colors.MT_PRIMARY_1]}
+              tintColor={Colors.MT_PRIMARY_1}
             />
           }
           ListEmptyComponent={renderEmptyList}
@@ -383,7 +383,7 @@ const styles = StyleSheet.create({
     color: '#666',
   },
   addButton: {
-    backgroundColor: Colors.main,
+    backgroundColor: Colors.MT_PRIMARY_1,
     paddingHorizontal: 12,
     paddingVertical: 6,
     borderRadius: 6,
@@ -434,7 +434,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#444444',
   },
   saveButton: {
-    backgroundColor: Colors.main,
+    backgroundColor: Colors.MT_PRIMARY_1,
   },
   buttonText: {
     fontWeight: 'bold',

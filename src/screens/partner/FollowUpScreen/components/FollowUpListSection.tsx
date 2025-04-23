@@ -54,7 +54,7 @@ const FollowUpListSection: React.FC<FollowUpListSectionProps> = ({
 
       {isLoading ? (
         <View style={styles.loaderContainer}>
-          <ActivityIndicator size="large" color={Colors.main} />
+          <ActivityIndicator size="large" color={Colors.MT_PRIMARY_1} />
           <Text style={styles.loaderText}>Loading follow-ups...</Text>
         </View>
       ) : followUps && followUps.length > 0 ? (
