@@ -20,4 +20,10 @@ export default {
   placeholderColor: '#a1a19f',
   red: '#ff0000',
   textLight: '#a1a19f',
+
+  MT_PRIMARY_1: '#183A65',
+  MT_PRIMARY_2: '#C7A580',
+  MT_SECONDARY_1: '#231f20',
+  MT_SECONDARY_2: '#484848',
+  MT_SECONDARY_3: '#ffffff',
 };

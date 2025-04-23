@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useRef, useEffect} from 'react';
 import {
   StyleSheet,
   ScrollView,
@@ -8,9 +8,12 @@ import {
   Keyboard,
   Image,
   View,
+  Text,
+  StatusBar,
+  Dimensions,
+  TouchableOpacity,
+  Animated,
 } from 'react-native';
-import {Button} from 'react-native-paper';
-import {BackgroundWrapper} from '../../components/BackgroundWrapper';
 import {MaterialTextInput} from '../../components/MaterialTextInput';
 import useForm from '../../hooks/useForm';
 import SignUpFormSchema, {
@@ -26,7 +29,10 @@ import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import Roles, {RoleTypes} from '../../constants/Roles';
 import {AuthStackParamList} from '../../navigator/AuthNavigator';
 import Images from '../../constants/Images';
+import LinearGradient from 'react-native-linear-gradient';
+import GetIcon from '../../components/GetIcon';
 
+const {width} = Dimensions.get('window');
 type Props = NativeStackScreenProps<AuthStackParamList, 'SignUpScreen'>;
 
 const SignUpScreen: React.FC<Props> = ({navigation, route}) => {
@@ -35,9 +41,47 @@ const SignUpScreen: React.FC<Props> = ({navigation, route}) => {
   >({});
   const [locationSuggestions, setLocationSuggestions] = useState<string[]>([]);
   const [isLoadingLocations, setIsLoadingLocations] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const {keyboardVisible} = useKeyboard();
   const {showError} = useDialog();
+
+  // Animation values for logo
+  const logoHeight = useRef(new Animated.Value(150)).current;
+  const logoOpacity = useRef(new Animated.Value(1)).current;
+
+  // Animate logo on keyboard visibility change
+  useEffect(() => {
+    if (keyboardVisible) {
+      // Animate logo sliding up and fading out
+      Animated.parallel([
+        Animated.timing(logoHeight, {
+          toValue: 0,
+          duration: 300,
+          useNativeDriver: false,
+        }),
+        Animated.timing(logoOpacity, {
+          toValue: 0,
+          duration: 250,
+          useNativeDriver: false,
+        }),
+      ]).start();
+    } else {
+      // Animate logo sliding down and fading in
+      Animated.parallel([
+        Animated.timing(logoHeight, {
+          toValue: 150,
+          duration: 300,
+          useNativeDriver: false,
+        }),
+        Animated.timing(logoOpacity, {
+          toValue: 1,
+          duration: 350,
+          useNativeDriver: false,
+        }),
+      ]).start();
+    }
+  }, [keyboardVisible, logoHeight, logoOpacity]);
 
   const initialState: SignupFormType = {
     name: '',
@@ -108,6 +152,7 @@ const SignUpScreen: React.FC<Props> = ({navigation, route}) => {
   } = useForm<SignupFormType>({
     initialState,
     onSubmit: async formData => {
+      setIsLoading(true);
       try {
         const role = (route.params?.role || Roles.BUYER) as
           | RoleTypes['BUYER']
@@ -134,6 +179,8 @@ const SignUpScreen: React.FC<Props> = ({navigation, route}) => {
           setErrors(newErrors);
         }
         showError('Please check your input and try again');
+      } finally {
+        setIsLoading(false);
       }
     },
   });
@@ -149,132 +196,313 @@ const SignUpScreen: React.FC<Props> = ({navigation, route}) => {
   };
 
   return (
-    <BackgroundWrapper>
+    <View style={styles.container}>
+      <StatusBar
+        backgroundColor={Colors.MT_PRIMARY_1}
+        barStyle="light-content"
+      />
+
+      {/* Header */}
+      <LinearGradient
+        colors={[Colors.MT_PRIMARY_1, '#1e5799']}
+        style={styles.headerGradient}>
+        <View style={styles.headerContent}>
+          <TouchableOpacity
+            style={styles.backButton}
+            onPress={navigation.goBack}>
+            <GetIcon iconName="back" color="white" size="24" />
+          </TouchableOpacity>
+          <Text style={styles.headerText}>Sign Up</Text>
+          <View style={styles.spacer} />
+        </View>
+      </LinearGradient>
+
       <KeyboardAvoidingView
-        style={styles.container}
+        style={styles.keyboardAvoid}
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-        keyboardVerticalOffset={Platform.OS === 'ios' ? 64 : 0}>
+        keyboardVerticalOffset={Platform.OS === 'ios' ? 20 : 0}>
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
           <ScrollView
-            contentContainerStyle={[
-              styles.scrollContainer,
-              // eslint-disable-next-line react-native/no-inline-styles
-              {paddingBottom: keyboardVisible ? 60 : 120},
-            ]}
+            contentContainerStyle={styles.scrollContent}
             keyboardShouldPersistTaps="handled"
             showsVerticalScrollIndicator={false}>
-            <View style={styles.logoContainer}>
+            {/* Logo with animation */}
+            <Animated.View
+              style={[
+                styles.logoContainer,
+                {
+                  opacity: logoOpacity,
+                  height: logoHeight,
+                  overflow: 'hidden' as const,
+                },
+              ]}>
               <Image
-                source={Images.DNCR_LOGO}
-                style={styles.image}
+                source={Images.MTESTATES_LOGO}
+                style={styles.logo}
                 resizeMode="contain"
               />
+            </Animated.View>
+
+            {/* Form Card */}
+            <View style={styles.formCard}>
+              <View style={styles.welcomeSection}>
+                <Text style={styles.welcomeTitle}>Create Account</Text>
+                <Text style={styles.welcomeSubtitle}>
+                  Please fill in your details to get started
+                </Text>
+              </View>
+
+              <View style={styles.formContainer}>
+                <MaterialTextInput<SignupFormType>
+                  label="Full Name*"
+                  field="name"
+                  formInput={formInput}
+                  setFormInput={handleFieldChange}
+                  mode="outlined"
+                  placeholder="Enter your full name"
+                  errorMessage={errors.name}
+                />
+
+                <View style={styles.inputSpacing} />
+
+                <MaterialTextInput<SignupFormType>
+                  label="Email*"
+                  field="email"
+                  formInput={formInput}
+                  setFormInput={handleFieldChange}
+                  mode="outlined"
+                  placeholder="Enter your email"
+                  keyboardType="email-address"
+                  autoCapitalize="none"
+                  errorMessage={errors.email}
+                />
+
+                <View style={styles.inputSpacing} />
+
+                <MaterialTextInput<SignupFormType>
+                  label="Location*"
+                  field="location"
+                  formInput={formInput}
+                  setFormInput={handleLocationChange}
+                  mode="outlined"
+                  placeholder="Enter your location"
+                  errorMessage={errors.location}
+                  suggestions={locationSuggestions}
+                  onSuggestionSelect={handleLocationSelect}
+                  loading={isLoadingLocations}
+                />
+
+                <View style={styles.inputSpacing} />
+
+                <MaterialTextInput<SignupFormType>
+                  label="Phone Number*"
+                  field="phone"
+                  formInput={formInput}
+                  setFormInput={handleFieldChange}
+                  mode="outlined"
+                  placeholder="Enter your phone number"
+                  keyboardType="number-pad"
+                  maxLength={10}
+                  errorMessage={errors.phone}
+                />
+
+                <View style={styles.actionsSection}>
+                  <TouchableOpacity
+                    style={styles.primaryButton}
+                    onPress={handleSubmit}
+                    disabled={isLoading || loading}>
+                    <LinearGradient
+                      colors={
+                        isLoading || loading
+                          ? ['#a8c7f0', '#b8e0f7'] // Light blue gradient for disabled state
+                          : ['#3a7bd5', '#00d2ff']
+                      }
+                      start={{x: 0, y: 0}}
+                      end={{x: 1, y: 0}}
+                      style={styles.buttonGradient}>
+                      <View style={styles.buttonContentWrapper}>
+                        <Text
+                          style={[
+                            styles.buttonText,
+                            (isLoading || loading) && styles.disabledButtonText,
+                          ]}>
+                          {isLoading || loading
+                            ? 'Creating Account...'
+                            : 'Sign Up'}
+                        </Text>
+                        {!isLoading && !loading && (
+                          <GetIcon
+                            iconName="chevronRight"
+                            color="white"
+                            size="20"
+                          />
+                        )}
+                      </View>
+                    </LinearGradient>
+                  </TouchableOpacity>
+                </View>
+              </View>
             </View>
-            <View style={styles.formContainer}>
-              <MaterialTextInput<SignupFormType>
-                style={styles.input}
-                label="Full Name*"
-                field="name"
-                formInput={formInput}
-                setFormInput={handleFieldChange}
-                mode="outlined"
-                placeholder="Enter your full name"
-                errorMessage={errors.name}
-              />
 
-              <MaterialTextInput<SignupFormType>
-                style={styles.input}
-                label="Email*"
-                field="email"
-                formInput={formInput}
-                setFormInput={handleFieldChange}
-                mode="outlined"
-                placeholder="Enter your email"
-                keyboardType="email-address"
-                autoCapitalize="none"
-                errorMessage={errors.email}
-              />
-
-              <MaterialTextInput<SignupFormType>
-                style={styles.input}
-                label="Location*"
-                field="location"
-                formInput={formInput}
-                setFormInput={handleLocationChange}
-                mode="outlined"
-                placeholder="Enter your location"
-                errorMessage={errors.location}
-                suggestions={locationSuggestions}
-                onSuggestionSelect={handleLocationSelect}
-                loading={isLoadingLocations}
-              />
-
-              <MaterialTextInput<SignupFormType>
-                style={styles.input}
-                label="Phone Number*"
-                field="phone"
-                formInput={formInput}
-                setFormInput={handleFieldChange}
-                mode="outlined"
-                placeholder="Enter your phone number"
-                keyboardType="number-pad"
-                maxLength={10}
-                errorMessage={errors.phone}
-              />
-
-              <Button
-                mode="contained"
-                onPress={handleSubmit}
-                buttonColor={Colors.main}
-                textColor="white"
-                loading={loading}
-                style={styles.button}>
-                Sign Up
-              </Button>
+            <View style={styles.footer}>
+              <Text style={styles.footerText}>
+                Already have an account?{' '}
+                <Text
+                  style={styles.loginText}
+                  onPress={() =>
+                    navigation.navigate('EmailScreen', {
+                      role: [Roles.BUYER, Roles.SELLER],
+                    })
+                  }>
+                  Log In
+                </Text>
+              </Text>
             </View>
           </ScrollView>
         </TouchableWithoutFeedback>
       </KeyboardAvoidingView>
-    </BackgroundWrapper>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
+  spacer: {
+    width: 24,
+  },
   container: {
     flex: 1,
+    backgroundColor: '#f5f5f5',
   },
-  scrollContainer: {
-    padding: 16,
+  headerGradient: {
+    paddingTop: Platform.OS === 'ios' ? 50 : 20,
+    paddingBottom: 20,
+    borderBottomLeftRadius: 30,
+    borderBottomRightRadius: 30,
+  },
+  headerContent: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: 20,
+  },
+  headerText: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: 'white',
+  },
+  backButton: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: 'rgba(255,255,255,0.2)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  keyboardAvoid: {
+    flex: 1,
+  },
+  scrollContent: {
     flexGrow: 1,
+    paddingVertical: 20,
+    paddingHorizontal: 20,
+  },
+  logoContainer: {
+    alignItems: 'center',
+    marginBottom: 20,
+  },
+  logo: {
+    width: width * 0.7,
+    height: 150,
+  },
+  formCard: {
+    backgroundColor: 'white',
+    borderRadius: 20,
+    padding: 24,
+    ...Platform.select({
+      ios: {
+        shadowColor: '#000',
+        shadowOffset: {width: 0, height: 5},
+        shadowOpacity: 0.1,
+        shadowRadius: 15,
+      },
+      android: {
+        elevation: 5,
+      },
+    }),
+  },
+  welcomeSection: {
+    marginBottom: 24,
+    alignItems: 'center',
+  },
+  welcomeTitle: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    color: Colors.MT_PRIMARY_1,
+    textAlign: 'center',
+  },
+  welcomeSubtitle: {
+    fontSize: 14,
+    color: '#666',
+    marginTop: 8,
+    textAlign: 'center',
   },
   formContainer: {
     display: 'flex',
     flexDirection: 'column',
-    gap: 16,
   },
-  input: {
-    // marginBottom: 16,
+  inputSpacing: {
+    height: 16,
   },
-  button: {
+  actionsSection: {
+    alignItems: 'center',
     marginTop: 24,
-    paddingVertical: 5,
   },
-  logoContainer: {
+  primaryButton: {
+    width: '100%',
+    borderRadius: 15,
+    overflow: 'hidden',
+    ...Platform.select({
+      ios: {
+        shadowColor: '#000',
+        shadowOffset: {width: 0, height: 4},
+        shadowOpacity: 0.15,
+        shadowRadius: 8,
+      },
+      android: {
+        elevation: 5,
+      },
+    }),
+  },
+  buttonGradient: {
+    borderRadius: 15,
+    paddingVertical: 15,
+  },
+  buttonContentWrapper: {
+    flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    marginVertical: 24,
   },
-  image: {
-    width: 180,
-    height: 180,
+  buttonText: {
+    color: 'white',
+    fontSize: 17,
+    fontWeight: 'bold',
+    marginHorizontal: 5,
+    textAlign: 'center',
   },
-  mainText: {
-    fontSize: 16,
-    color: '#000',
+  disabledButtonText: {
+    color: Colors.MT_SECONDARY_3,
   },
-  secondaryText: {
+  footer: {
+    padding: 20,
+    alignItems: 'center',
+  },
+  footerText: {
     fontSize: 14,
-    color: '#666',
+    color: '#555',
+  },
+  loginText: {
+    color: Colors.MT_PRIMARY_1,
+    fontWeight: 'bold',
   },
 });
 

@@ -1,4 +1,4 @@
-import React, {useCallback, useState} from 'react';
+import React, {useCallback, useEffect, useRef, useState} from 'react';
 import {
   View,
   Text,
@@ -6,6 +6,10 @@ import {
   Image,
   KeyboardAvoidingView,
   Platform,
+  TouchableOpacity,
+  Dimensions,
+  StatusBar,
+  Animated,
 } from 'react-native';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import Toast from 'react-native-toast-message';
@@ -17,8 +21,12 @@ import {useDialog} from '../../hooks/useDialog';
 import {MaterialTextInput} from '../../components/MaterialTextInput';
 import useForm from '../../hooks/useForm';
 import {EmailFormData, emailSchema} from '../../schema/LoginSchema';
-import {Button} from 'react-native-paper';
+import Images from '../../constants/Images';
+import LinearGradient from 'react-native-linear-gradient';
+import GetIcon from '../../components/GetIcon';
+import {useKeyboard} from '../../hooks/useKeyboard';
 
+const {width} = Dimensions.get('window');
 type Props = NativeStackScreenProps<AuthStackParamList, 'EmailScreen'>;
 
 const EmailScreen: React.FC<Props> = ({navigation, route}) => {
@@ -28,13 +36,19 @@ const EmailScreen: React.FC<Props> = ({navigation, route}) => {
     isClickable?: boolean;
   }>({message: '', isClickable: false});
 
+  // Use the keyboard hook to track keyboard status
+  const {keyboardVisible} = useKeyboard();
+
   const {setNavigateToPostProperty} = useAuth();
   const {showError} = useDialog();
   const {role} = route.params;
 
+  const logoHeight = useRef(new Animated.Value(200)).current;
+  const logoOpacity = useRef(new Animated.Value(1)).current;
+  const logoMarginTop = useRef(new Animated.Value(0)).current;
+
   const onSubmit = async (_data: EmailFormData) => {
     // This is just to maintain the form submission structure
-    // Actual submission is handled by handleOtpVerification
   };
 
   const {
@@ -52,9 +66,7 @@ const EmailScreen: React.FC<Props> = ({navigation, route}) => {
     async (emailToCheck: string) => {
       try {
         setEmailError({message: '', isClickable: false});
-
         const response = await AuthService.verifyLoginInput(emailToCheck);
-        console.log(response.message);
 
         if (!response.success) {
           setEmailError({
@@ -82,6 +94,49 @@ const EmailScreen: React.FC<Props> = ({navigation, route}) => {
     [role, showError],
   );
 
+  // Add this after your keyboard hook usage
+  useEffect(() => {
+    if (keyboardVisible) {
+      // Animate logo sliding up and fading out
+      Animated.parallel([
+        Animated.timing(logoHeight, {
+          toValue: 0,
+          duration: 300,
+          useNativeDriver: false,
+        }),
+        Animated.timing(logoOpacity, {
+          toValue: 0,
+          duration: 250,
+          useNativeDriver: false,
+        }),
+        Animated.timing(logoMarginTop, {
+          toValue: -30, // Move it slightly up as it collapses
+          duration: 300,
+          useNativeDriver: false,
+        }),
+      ]).start();
+    } else {
+      // Animate logo sliding down and fading in
+      Animated.parallel([
+        Animated.timing(logoHeight, {
+          toValue: 200,
+          duration: 300,
+          useNativeDriver: false,
+        }),
+        Animated.timing(logoOpacity, {
+          toValue: 1,
+          duration: 350,
+          useNativeDriver: false,
+        }),
+        Animated.timing(logoMarginTop, {
+          toValue: 0,
+          duration: 300,
+          useNativeDriver: false,
+        }),
+      ]).start();
+    }
+  }, [keyboardVisible, logoHeight, logoOpacity, logoMarginTop]);
+
   const handleOtpVerification = useCallback(
     async (skipEmailCheck = false) => {
       const validationResult = emailSchema.safeParse(formInput);
@@ -98,13 +153,13 @@ const EmailScreen: React.FC<Props> = ({navigation, route}) => {
         if (!skipEmailCheck) {
           const isValidEmail = await checkEmail(formInput.email);
           if (!isValidEmail) {
+            setIsLoading(false);
             return;
           }
         }
 
         const response = await AuthService.otpVerification(formInput.email);
         if (response.success) {
-          console.log('API Response:', response);
           navigation.navigate('OtpScreen', {email: formInput.email});
           if (!skipEmailCheck) {
             setNavigateToPostProperty(false);
@@ -130,180 +185,284 @@ const EmailScreen: React.FC<Props> = ({navigation, route}) => {
   }, [handleOtpVerification]);
 
   return (
-    <KeyboardAvoidingView
-      style={styles.mainScreen}
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
-      <View style={styles.upperPart}>
-        <Image
-          source={require('../../assets/Images/houselogo.png')}
-          style={styles.image}
-          resizeMode="contain"
-        />
-      </View>
-      <View style={styles.lowerPart}>
-        <View style={styles.titleContainer}>
-          <Text style={styles.titleText}>LOGIN</Text>
-        </View>
-        <View style={styles.txtpadding}>
-          <MaterialTextInput
-            label="Email"
-            placeholder="Please Enter user email"
-            field="email"
-            formInput={formInput}
-            setFormInput={handleInputChange}
-            keyboardType="email-address"
-            autoCapitalize="none"
-            autoCorrect={false}
-            mode="outlined"
-            errorMessage={emailError.message}
-          />
-        </View>
+    <View style={styles.container}>
+      <StatusBar
+        backgroundColor={Colors.MT_PRIMARY_1}
+        barStyle="light-content"
+      />
 
-        <View style={styles.btnsection}>
-          {emailError.isClickable ? (
-            <Button
-              mode="contained"
-              onPress={handleVerifyNow}
-              disabled={isLoading || formLoading}
-              loading={isLoading}
-              buttonColor={Colors.main}
-              textColor={isLoading || formLoading ? Colors.grey : 'white'}
-              style={[
-                styles.paperButton,
-                (isLoading || formLoading) && styles.disabledButton,
-              ]}>
-              Verify Now
-            </Button>
-          ) : (
-            <Button
-              mode="contained"
-              onPress={handleContinue}
-              disabled={!formInput.email || isLoading || formLoading}
-              loading={isLoading}
-              buttonColor={Colors.main}
-              textColor={
-                !formInput.email || isLoading || formLoading
-                  ? Colors.grey
-                  : 'white'
-              }
-              style={[
-                styles.paperButton,
-                (!formInput.email || isLoading || formLoading) &&
-                  styles.disabledButton,
-              ]}>
-              Continue
-            </Button>
-          )}
-
-          <Button
-            mode="contained"
-            onPress={navigation.goBack}
-            buttonColor={Colors.main}
-            textColor={Colors.white}
-            // buttonColor={Colors.main}
-            style={styles.paperButton}>
-            Back
-          </Button>
+      <LinearGradient
+        colors={[Colors.MT_PRIMARY_1, '#1e5799']}
+        style={styles.headerGradient}>
+        <View style={styles.headerContent}>
+          <TouchableOpacity
+            style={styles.backButton}
+            onPress={navigation.goBack}>
+            <GetIcon iconName="back" color="white" size="24" />
+          </TouchableOpacity>
+          <Text style={styles.headerText}>Sign In</Text>
+          <View style={styles.spacer} />
         </View>
+      </LinearGradient>
+
+      <KeyboardAvoidingView
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        style={styles.keyboardAvoid}>
+        <View style={styles.mainContent}>
+          {/* Only show logo when keyboard is not visible */}
+          <Animated.View
+            style={[
+              styles.logoContainer,
+              {
+                opacity: logoOpacity,
+                height: logoHeight,
+                marginTop: logoMarginTop,
+                overflow: 'hidden' as const,
+              },
+            ]}>
+            <Image
+              source={Images.MTESTATES_LOGO}
+              style={styles.logo}
+              resizeMode="contain"
+            />
+          </Animated.View>
+
+          <View style={styles.formCard}>
+            <View style={styles.welcomeSection}>
+              <Text style={styles.welcomeTitle}>Welcome Back</Text>
+              <Text style={styles.welcomeSubtitle}>
+                Please enter your email address to continue
+              </Text>
+            </View>
+
+            <View style={styles.inputSection}>
+              <MaterialTextInput
+                label="Email"
+                placeholder="Enter your email address"
+                field="email"
+                formInput={formInput}
+                setFormInput={handleInputChange}
+                keyboardType="email-address"
+                autoCapitalize="none"
+                autoCorrect={false}
+                mode="outlined"
+                errorMessage={emailError.message}
+              />
+            </View>
+
+            <View style={styles.actionsSection}>
+              {emailError.isClickable ? (
+                <TouchableOpacity
+                  style={styles.primaryButton}
+                  onPress={handleVerifyNow}
+                  disabled={isLoading || formLoading}>
+                  <LinearGradient
+                    colors={
+                      isLoading || formLoading
+                        ? ['#a8c7f0', '#b8e0f7'] // Light blue gradient for disabled state
+                        : ['#3a7bd5', '#00d2ff']
+                    }
+                    start={{x: 0, y: 0}}
+                    end={{x: 1, y: 0}}
+                    style={styles.buttonGradient}>
+                    <Text
+                      style={[
+                        styles.buttonText,
+                        (isLoading || formLoading) && styles.disabledButtonText,
+                      ]}>
+                      {isLoading ? 'Verifying...' : 'Verify Now'}
+                    </Text>
+                  </LinearGradient>
+                </TouchableOpacity>
+              ) : (
+                <TouchableOpacity
+                  style={styles.primaryButton}
+                  onPress={handleContinue}
+                  disabled={!formInput.email || isLoading || formLoading}>
+                  <LinearGradient
+                    colors={
+                      !formInput.email || isLoading || formLoading
+                        ? ['#a8c7f0', '#b8e0f7'] // Light blue gradient for disabled state
+                        : ['#3a7bd5', '#00d2ff']
+                    } // Regular blue gradient for active state
+                    start={{x: 0, y: 0}}
+                    end={{x: 1, y: 0}}
+                    style={styles.buttonGradient}>
+                    <View style={styles.buttonContentWrapper}>
+                      <Text
+                        style={[
+                          styles.buttonText,
+                          (!formInput.email || isLoading || formLoading) &&
+                            styles.disabledButtonText,
+                        ]}>
+                        {isLoading ? 'Sending OTP...' : 'Continue'}
+                      </Text>
+                      {!isLoading && (
+                        <GetIcon
+                          iconName="chevronRight"
+                          color={
+                            !formInput.email || formLoading
+                              ? '#ffffff80'
+                              : 'white'
+                          }
+                          size="20"
+                        />
+                      )}
+                    </View>
+                  </LinearGradient>
+                </TouchableOpacity>
+              )}
+            </View>
+          </View>
+        </View>
+      </KeyboardAvoidingView>
+
+      <View style={styles.footer}>
+        <Text style={styles.footerText}>
+          Don't have an account?{' '}
+          <Text style={styles.signupText} onPress={() => navigation.goBack()}>
+            Sign Up
+          </Text>
+        </Text>
       </View>
+
       <Toast />
-    </KeyboardAvoidingView>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
-  disabledButton: {
-    opacity: 0.7,
-    backgroundColor: Colors.main,
+  spacer: {
+    width: 24,
   },
-  titleContainer: {
-    width: '100%',
+  container: {
+    flex: 1,
+    backgroundColor: '#f5f5f5',
+  },
+  headerGradient: {
+    paddingTop: Platform.OS === 'ios' ? 50 : 20,
+    paddingBottom: 20,
+    borderBottomLeftRadius: 30,
+    borderBottomRightRadius: 30,
+  },
+  headerContent: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: 20,
+  },
+  headerText: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: 'white',
+  },
+  backButton: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: 'rgba(255,255,255,0.2)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  keyboardAvoid: {
+    flex: 1,
+  },
+  mainContent: {
+    flex: 1,
+    justifyContent: 'center',
+    padding: 20,
+  },
+  logoContainer: {
     alignItems: 'center',
     marginBottom: 30,
   },
-  titleText: {
-    fontSize: 28,
-    fontWeight: '700',
-    color: '#880e4f',
-    letterSpacing: 1,
+  logo: {
+    width: width * 0.8,
+    height: 200,
   },
-  verifyButton: {
-    backgroundColor: Colors.main,
+  formCard: {
+    backgroundColor: 'white',
+    borderRadius: 20,
+    padding: 24,
+    ...Platform.select({
+      ios: {
+        shadowColor: '#000',
+        shadowOffset: {width: 0, height: 5},
+        shadowOpacity: 0.1,
+        shadowRadius: 15,
+      },
+      android: {
+        elevation: 5,
+      },
+    }),
   },
-  mainScreen: {
-    flex: 1,
-    backgroundColor: '#cc0e74',
+  welcomeSection: {
+    marginBottom: 24,
   },
-  button: {
-    backgroundColor: '#cc0e74',
-    padding: 15,
-    borderRadius: 15,
-    marginVertical: 10,
-    width: '90%',
+  welcomeTitle: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    color: Colors.MT_PRIMARY_1,
+    textAlign: 'center',
+  },
+  welcomeSubtitle: {
+    fontSize: 14,
+    color: '#666',
+    marginTop: 8,
+    textAlign: 'center',
+  },
+  inputSection: {
+    marginBottom: 24,
+  },
+  actionsSection: {
     alignItems: 'center',
-    justifyContent: 'center',
-    shadowColor: '#000',
-    shadowOffset: {width: 0, height: 2},
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 5,
-    minHeight: 50,
   },
-  color: {
-    backgroundColor: Colors.main,
-  },
-  txtpadding: {
-    paddingLeft: 25,
-    width: '95%',
-    marginBottom: 16,
-  },
-  btnsection: {
+  primaryButton: {
     width: '100%',
-    alignItems: 'center',
-    paddingHorizontal: 16,
+    borderRadius: 15,
+    overflow: 'hidden',
+    ...Platform.select({
+      ios: {
+        shadowColor: '#000',
+        shadowOffset: {width: 0, height: 4},
+        shadowOpacity: 0.15,
+        shadowRadius: 8,
+      },
+      android: {
+        elevation: 5,
+      },
+    }),
   },
-  upperPart: {
-    flex: 2,
+  buttonGradient: {
+    borderRadius: 15,
+    paddingVertical: 15,
+  },
+  buttonContentWrapper: {
+    flexDirection: 'row',
+    alignItems: 'center',
     justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#cc0e74',
-    borderBottomRightRadius: 60,
-  },
-  lowerPart: {
-    flex: 3,
-    backgroundColor: '#ffffff',
-    borderTopLeftRadius: 70,
-    paddingVertical: 60,
-  },
-  image: {
-    width: '70%',
-    height: '100%',
-  },
-  input: {
-    backgroundColor: 'transparent',
-    fontSize: 16,
-    color: '#000000',
-  },
-  errorText: {
-    color: 'red',
-    marginTop: 5,
-  },
-  inputError: {
-    borderColor: 'red',
-  },
-  spacing: {
-    marginBottom: 10,
   },
   buttonText: {
-    color: '#ffffff',
-    fontSize: 16,
+    color: 'white',
+    fontSize: 17,
     fontWeight: 'bold',
+    marginHorizontal: 5,
+    textAlign: 'center',
   },
-  paperButton: {
-    width: '90%',
-    marginVertical: 8,
-    borderRadius: 15,
-    paddingVertical: 5,
+  disabledButtonText: {
+    color: Colors.MT_SECONDARY_3, // Semi-transparent white for disabled state
+  },
+  footer: {
+    padding: 20,
+    alignItems: 'center',
+  },
+  footerText: {
+    fontSize: 14,
+    color: '#555',
+  },
+  signupText: {
+    color: Colors.MT_PRIMARY_1,
+    fontWeight: 'bold',
   },
 });
 
