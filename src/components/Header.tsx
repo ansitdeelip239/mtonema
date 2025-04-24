@@ -71,7 +71,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     paddingHorizontal: 16,
-    paddingVertical: 6,
+    paddingBottom: 6,
+    paddingTop: 0,
   },
   headerText: {
     fontWeight: 'bold',

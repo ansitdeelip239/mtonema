@@ -25,6 +25,7 @@ import Images from '../../constants/Images';
 import LinearGradient from 'react-native-linear-gradient';
 import GetIcon from '../../components/GetIcon';
 import {useKeyboard} from '../../hooks/useKeyboard';
+import Roles from '../../constants/Roles';
 
 const {width} = Dimensions.get('window');
 type Props = NativeStackScreenProps<AuthStackParamList, 'EmailScreen'>;
@@ -200,7 +201,13 @@ const EmailScreen: React.FC<Props> = ({navigation, route}) => {
             onPress={navigation.goBack}>
             <GetIcon iconName="back" color="white" size="24" />
           </TouchableOpacity>
-          <Text style={styles.headerText}>Sign In</Text>
+          {
+            route.params.role.includes(Roles.PARTNER) ? (
+              <Text style={styles.headerText}>Partner Sign In</Text>
+            ) : (
+              <Text style={styles.headerText}>Buyer/Seller Sign In</Text>
+            )
+          }
           <View style={styles.spacer} />
         </View>
       </LinearGradient>
@@ -340,7 +347,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#f5f5f5',
   },
   headerGradient: {
-    paddingTop: Platform.OS === 'ios' ? 50 : 20,
+    paddingTop: Platform.OS === 'ios' ? 50 : 10,
     paddingBottom: 20,
     borderBottomLeftRadius: 30,
     borderBottomRightRadius: 30,

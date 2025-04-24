@@ -56,11 +56,16 @@ const CustomDrawerContent = (props: any) => {
     <DrawerContentScrollView {...props} contentContainerStyle={styles.flexOne}>
       <TouchableOpacity onPress={navigateToProfile}>
         <View style={styles.profileContainer}>
-          <Image
-            source={Images.MTESTATES_LOGO}
-            style={styles.logo}
-          />
-          <Text style={styles.name}>{userName}</Text>
+          <Image source={Images.MTESTATES_LOGO} style={styles.logo} />
+
+          <View style={styles.nameContainer}>
+            <Text style={styles.name}>{userName}</Text>
+            <TouchableOpacity
+              style={styles.editIconContainer}
+              onPress={navigateToProfile}>
+              <GetIcon iconName="edit" color={Colors.MT_PRIMARY_1} size="20" />
+            </TouchableOpacity>
+          </View>
         </View>
       </TouchableOpacity>
 
@@ -187,6 +192,16 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  nameContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: 50,
+  },
+  editIconContainer: {
+    marginLeft: 10,
+    padding: 5,
+  },
   logouttxt: {
     color: '#fff',
     marginLeft: 10,
@@ -197,7 +212,6 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginTop: 1,
     textAlign: 'center',
-    marginBottom: 50,
   },
   logo: {
     width: '90%',
@@ -266,7 +280,7 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 10,
     margin: 5,
-    backgroundColor: '#cc0e74',
+    backgroundColor: Colors.MT_PRIMARY_1,
     borderRadius: 5,
     alignItems: 'center',
   },

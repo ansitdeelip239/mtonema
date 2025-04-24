@@ -27,6 +27,7 @@ import BasicDetailsStep from './BasicDetailsStep';
 import PropertyDetailsStep from './PropertyDetailsStep';
 import MediaAndSubmitStep from './MediaAndSubmitStep';
 import {Property} from '../../ListingsScreen/types';
+import Colors from '../../../../constants/Colors';
 
 const {width} = Dimensions.get('window');
 const steps = ['Basic Info', 'Property Details', 'Media & Submit'];
@@ -487,8 +488,9 @@ const styles = StyleSheet.create({
   },
   clearButton: {
     padding: 10,
-    backgroundColor: '#f00',
-    borderRadius: 5,
+    backgroundColor: Colors.MT_PRIMARY_2,
+    borderRadius: 10,
+    paddingHorizontal: 15,
   },
   clearButtonText: {
     color: '#fff',

@@ -52,7 +52,7 @@ export const MainScreen: React.FC<Props> = ({navigation}) => {
           style={styles.headerGradient}>
           <View style={styles.headerContent}>
             <View style={styles.spacer} />
-            <Text style={styles.headerText}>MTEstates</Text>
+            <Text style={styles.headerText}>App & CRM</Text>
             <View style={styles.spacer} />
           </View>
         </LinearGradient>
@@ -71,7 +71,6 @@ export const MainScreen: React.FC<Props> = ({navigation}) => {
           <View style={styles.cardContainer}>
             <View style={styles.card}>
               <View style={styles.welcomeSection}>
-                <Text style={styles.welcomeText}>Welcome to MTEstates</Text>
                 {/* <Text style={styles.subtitleText}>
                   Find your perfect property
                 </Text> */}
@@ -111,6 +110,9 @@ export const MainScreen: React.FC<Props> = ({navigation}) => {
               <View style={styles.divider} />
 
               <View style={styles.section}>
+                <Text style={styles.sectionTitle}>
+                  Want to list your property?
+                </Text>
                 <TouchableOpacity
                   style={styles.secondaryButton}
                   onPress={onSellerSignup}>
@@ -121,7 +123,7 @@ export const MainScreen: React.FC<Props> = ({navigation}) => {
                       size="20"
                     />
                     <Text style={styles.secondaryButtonText}>
-                      List Your Property
+                      Sign Up as Seller
                     </Text>
                   </View>
                 </TouchableOpacity>
@@ -138,7 +140,7 @@ export const MainScreen: React.FC<Props> = ({navigation}) => {
                     style={styles.gradientPartnerButton}>
                     <GetIcon iconName="partner3" color="white" size="24" />
                     <Text style={styles.partnerButtonText}>
-                      Login as Partner
+                      Log In as Partner
                     </Text>
                   </LinearGradient>
                 </TouchableOpacity>
@@ -191,7 +193,7 @@ const styles = StyleSheet.create({
   },
   image: {
     width: '80%',
-    height: 180, // Adjust height slightly
+    height: 220, // Adjust height slightly
   },
 
   // Rest of your existing styles remain the same
