@@ -236,7 +236,7 @@ const GroupsToggleComponent: React.FC<GroupsToggleComponentProps> = ({
               marginLeft: 12,
             },
             cancelButton: {
-              backgroundColor: '#f0f0f0',
+              backgroundColor: Colors.ligthGray,
             },
             saveButton: {
               backgroundColor: Colors.MT_PRIMARY_1,
@@ -244,6 +244,7 @@ const GroupsToggleComponent: React.FC<GroupsToggleComponentProps> = ({
             buttonText: {
               fontWeight: 'bold',
               fontSize: 14,
+              color: 'white',
             },
           }}
           isLoading={isAddingGroup} // Pass loading state to show spinner

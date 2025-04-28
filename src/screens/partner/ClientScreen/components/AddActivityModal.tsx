@@ -19,6 +19,7 @@ interface AddActivityModalProps {
   onDelete?: (activityId: number) => void;
   closeMenu?: () => void;
   isDeletingActivity?: boolean;
+  initialActivityType?: number | null; // Add this prop
 }
 
 interface ActivityFormData {
@@ -36,6 +37,7 @@ const AddActivityModal: React.FC<AddActivityModalProps> = ({
   onDelete,
   closeMenu,
   isDeletingActivity = false,
+  initialActivityType = null, // Default to null
 }) => {
   const [formData, setFormData] = React.useState<ActivityFormData>({
     activityType: null,
@@ -47,7 +49,7 @@ const AddActivityModal: React.FC<AddActivityModalProps> = ({
   useEffect(() => {
     if (!visible) {
       setFormData({
-        activityType: 106,
+        activityType: null,
         description: '',
       });
     } else if (editMode && activityToEdit) {
@@ -55,8 +57,14 @@ const AddActivityModal: React.FC<AddActivityModalProps> = ({
         activityType: activityToEdit.activityType.id,
         description: activityToEdit.description,
       });
+    } else if (initialActivityType) {
+      // Use the initialActivityType if provided
+      setFormData(prev => ({
+        ...prev,
+        activityType: initialActivityType,
+      }));
     }
-  }, [visible, editMode, activityToEdit]);
+  }, [visible, editMode, activityToEdit, initialActivityType]);
 
   const handleSubmit = () => {
     if (formData.activityType) {

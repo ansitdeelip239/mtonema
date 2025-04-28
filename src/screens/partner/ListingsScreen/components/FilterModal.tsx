@@ -35,7 +35,7 @@ const FilterModal = ({
   );
 
   const statusTypes = useMemo(
-    () => convertToMasterDetailModel(['Active', 'Inactive', 'Deleted', 'All']),
+    () => convertToMasterDetailModel(['Active', 'Inactive', 'Deleted']),
     [],
   );
 

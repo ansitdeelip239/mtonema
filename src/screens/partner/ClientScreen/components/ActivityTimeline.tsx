@@ -3,6 +3,7 @@ import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
 import GetIcon from '../../../../components/GetIcon';
 import {ClientActivityDataModel} from '../../../../types';
 import {formatDate} from '../../../../utils/dateUtils';
+import Colors from '../../../../constants/Colors';
 
 const getActivityIcon = (activityType: string) => {
   const type = activityType.toLowerCase();
@@ -15,48 +16,77 @@ const getActivityIcon = (activityType: string) => {
   return 'notes';
 };
 
+const getActivityColor = (activityType: string) => {
+  const type = activityType.toLowerCase();
+  if (type.includes('phone call')) {
+    return Colors.MT_PRIMARY_1;
+  }
+  if (type.includes('whatsapp message')) {
+    return '#25D366'; // WhatsApp green
+  }
+  return '#666'; // Default gray for notes
+};
+
 interface ActivityTimelineProps {
   activity: ClientActivityDataModel;
+  isFirst?: boolean; // Add isFirst prop
   isLast?: boolean;
   onPress: (activity: ClientActivityDataModel) => void;
 }
 
 const ActivityTimeline: React.FC<ActivityTimelineProps> = ({
   activity,
+  isFirst = false,
   isLast = false,
   onPress,
-}) => (
-  <TouchableOpacity
-    style={styles.touchableContainer}
-    onPress={() => onPress(activity)}>
-    <View style={styles.timelineSection}>
-      <View style={styles.iconContainer}>
-        <GetIcon
-          iconName={getActivityIcon(activity.activityType.name)}
-          size="16"
-          color="white"
-        />
+}) => {
+  const activityColor = getActivityColor(activity.activityType.name);
+
+  return (
+    <TouchableOpacity
+      style={styles.touchableContainer}
+      onPress={() => onPress(activity)}>
+      <View style={styles.timelineSection}>
+        {/* Line coming from above (only if it's not the first item) */}
+        {!isFirst && <View style={[styles.verticalLineTop, {backgroundColor: '#e0e0e0'}]} />}
+
+        {/* Icon container */}
+        <View style={[styles.iconContainer, {backgroundColor: activityColor}]}>
+          <GetIcon
+            iconName={getActivityIcon(activity.activityType.name)}
+            size="16"
+            color="white"
+          />
+        </View>
+
+        {/* Line extending below (except for last item) */}
+        {!isLast && (
+          <View
+            style={[styles.verticalLineBottom, {backgroundColor: '#e0e0e0'}]}
+          />
+        )}
       </View>
-      {!isLast && <View style={styles.verticalLine} />}
-    </View>
-    <View style={styles.contentSection}>
-      <View style={styles.activityHeader}>
-        <Text style={styles.activityType} numberOfLines={1}>
-          {activity.activityType.name}
-        </Text>
-        <Text style={styles.activityDate}>
-          {formatDate(activity.createdOn, 'PPp')}
-        </Text>
+
+      <View style={styles.contentSection}>
+        <View style={styles.activityHeader}>
+          <Text
+            style={[styles.activityType, {color: activityColor}]}
+            numberOfLines={1}>
+            {activity.activityType.name}
+          </Text>
+          <Text style={styles.activityDate}>
+            {formatDate(activity.createdOn, 'PPp')}
+          </Text>
+        </View>
+        {activity.description && activity.description !== '-' && (
+          <Text style={styles.activityDescription} numberOfLines={2}>
+            {activity.description}
+          </Text>
+        )}
       </View>
-      <Text style={styles.activityDescription} numberOfLines={2}>
-        {activity.description}
-      </Text>
-      <Text style={styles.assignedTo} numberOfLines={1}>
-        Assigned to: {activity.assignedTo.name}
-      </Text>
-    </View>
-  </TouchableOpacity>
-);
+    </TouchableOpacity>
+  );
+};
 
 const styles = StyleSheet.create({
   touchableContainer: {
@@ -68,6 +98,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     width: 40,
     marginRight: 12,
+    position: 'relative',
   },
   iconContainer: {
     width: 32,
@@ -76,12 +107,25 @@ const styles = StyleSheet.create({
     backgroundColor: '#666',
     justifyContent: 'center',
     alignItems: 'center',
-    marginBottom: 4,
+    zIndex: 2, // Ensure icon appears above the lines
   },
-  verticalLine: {
+  verticalLineTop: {
+    position: 'absolute',
+    top: -8, // Extend upward beyond the top padding
+    height: 16, // Half above the icon
     width: 2,
-    flex: 1,
     backgroundColor: '#e0e0e0',
+    alignSelf: 'center',
+    zIndex: 1,
+  },
+  verticalLineBottom: {
+    position: 'absolute',
+    top: 32, // Start from the bottom of the icon
+    bottom: -8, // Extend downward to connect to the next icon
+    width: 2,
+    backgroundColor: '#e0e0e0',
+    alignSelf: 'center',
+    zIndex: 1,
   },
   contentSection: {
     flex: 1,
@@ -96,7 +140,6 @@ const styles = StyleSheet.create({
   activityType: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#0066cc',
     flex: 1,
     marginRight: 8,
   },

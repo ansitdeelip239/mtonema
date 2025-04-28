@@ -30,8 +30,9 @@ const RecentActivitiesCard: React.FC<RecentActivitiesCardProps> = ({
 
     return sortedActivities.map((activity, index) => (
       <ActivityTimeline
-        key={`activity-${activity.id}`}
+        key={activity.id}
         activity={activity}
+        isFirst={index === 0}
         isLast={index === sortedActivities.length - 1}
         onPress={onActivityPress}
       />

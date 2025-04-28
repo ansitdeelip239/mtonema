@@ -57,7 +57,7 @@ const ClientScreen: React.FC<Props> = ({navigation}) => {
     if ((isLoading && clients.length === 0) || isSearching) {
       return (
         <View style={styles.centerContainer}>
-          <ActivityIndicator size="large" color="#0066cc" />
+          <ActivityIndicator size="large" color={Colors.MT_PRIMARY_1} />
         </View>
       );
     }
@@ -70,14 +70,6 @@ const ClientScreen: React.FC<Props> = ({navigation}) => {
       );
     }
 
-    if (clients.length === 0) {
-      return (
-        <View style={styles.centerContainer}>
-          <Text style={styles.emptyText}>No Clients Found</Text>
-        </View>
-      );
-    }
-
     return (
       <FlatList
         data={clients}
@@ -85,19 +77,30 @@ const ClientScreen: React.FC<Props> = ({navigation}) => {
           <ClientCard client={item} navigation={navigation} />
         )}
         keyExtractor={client => client.id.toString()}
-        contentContainerStyle={styles.listContainer}
+        contentContainerStyle={[
+          styles.listContainer,
+          clients.length === 0 && styles.emptyListContainer,
+        ]}
         showsVerticalScrollIndicator={false}
         refreshControl={
           <RefreshControl
             refreshing={refreshing}
             onRefresh={onRefresh}
-            colors={['#0066cc']}
-            tintColor="#0066cc"
+            colors={[Colors.MT_PRIMARY_1]}
+            tintColor={Colors.MT_PRIMARY_1}
           />
         }
         onEndReached={loadMoreClients}
         onEndReachedThreshold={0.5}
         ListFooterComponent={renderFooter}
+        ListEmptyComponent={
+          <View style={styles.emptyStateContainer}>
+            <Text style={styles.emptyText}>No Clients Found</Text>
+            <Text style={styles.pullToRefreshHint}>
+              Pull down to refresh
+            </Text>
+          </View>
+        }
       />
     );
   };
@@ -147,7 +150,8 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     margin: 16,
     color: '#666',
-    fontSize: 15,
+    fontSize: 16,
+    fontWeight: '500',
   },
   addButton: {
     backgroundColor: Colors.MT_PRIMARY_1,
@@ -192,6 +196,23 @@ const styles = StyleSheet.create({
     marginLeft: 8,
     color: '#666',
     fontSize: 14,
+  },
+  emptyStateContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 20,
+    height: 300, // Ensure there's enough space to enable pull-to-refresh
+  },
+  pullToRefreshHint: {
+    color: '#999',
+    fontSize: 14,
+    textAlign: 'center',
+  },
+  emptyListContainer: {
+    flexGrow: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });
 

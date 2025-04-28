@@ -1,5 +1,5 @@
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState, useCallback} from 'react';
 import {
   View,
   StyleSheet,
@@ -32,6 +32,9 @@ import GroupsCard from './components/GroupsCard';
 import NotesCard from './components/NotesCard';
 import RecentActivitiesCard from './components/RecentActivitiesCard';
 
+// Add import for useMaster
+import {useMaster} from '../../../context/MasterProvider';
+
 type Props = NativeStackScreenProps<
   ClientStackParamList,
   'ClientProfileScreen'
@@ -51,11 +54,17 @@ const ClientProfileScreen: React.FC<Props> = ({route, navigation}) => {
   const [isDeletingActivity, setIsDeletingActivity] = useState(false);
   const [isFollowUpModalVisible, setIsFollowUpModalVisible] = useState(false);
   const [schedulingFollowUp, setSchedulingFollowUp] = useState(false);
+  // Add this to your existing state variables
+  const [preSelectedActivityType, setPreSelectedActivityType] = useState<
+    number | null
+  >(null);
 
   const {clientsUpdated, setClientsUpdated} = usePartner();
   const {keyboardVisible} = useKeyboard();
   const {user} = useAuth();
   const {showError} = useDialog();
+  // Get activity type master data
+  const {masterData} = useMaster();
 
   const fetchClient = React.useCallback(async () => {
     try {
@@ -102,11 +111,34 @@ const ClientProfileScreen: React.FC<Props> = ({route, navigation}) => {
     fetchClient();
   }, [fetchClient]);
 
+  // Helper function to get activity type ID by name
+  const getActivityTypeIdByName = useCallback(
+    (activityTypeName: string): number | null => {
+      if (!masterData?.ActivityType) {
+        return null;
+      }
+
+      const activityType = masterData.ActivityType.find(
+        type => type.masterDetailName === activityTypeName,
+      );
+
+      return activityType?.id || null;
+    },
+    [masterData?.ActivityType],
+  );
+
   const handleContact = React.useCallback(
     (type: 'phone' | 'whatsapp' | 'email') => {
       if (!client) {
         return;
       }
+
+      // Map contact types to activity type names
+      const activityTypeNameMap: Record<string, string> = {
+        phone: 'Phone Call',
+        whatsapp: 'Whatsapp Message',
+        email: 'Notes',
+      };
 
       switch (type) {
         case 'phone':
@@ -121,8 +153,25 @@ const ClientProfileScreen: React.FC<Props> = ({route, navigation}) => {
           Linking.openURL(`mailto:${client.emailId}`);
           break;
       }
+
+      // After a delay, open activity modal with pre-selected type
+      // Only for phone and whatsapp (not email)
+      if (
+        (type === 'phone' || type === 'whatsapp') &&
+        activityTypeNameMap[type]
+      ) {
+        setTimeout(() => {
+          const activityTypeId = getActivityTypeIdByName(
+            activityTypeNameMap[type],
+          );
+          if (activityTypeId) {
+            setPreSelectedActivityType(activityTypeId);
+            setIsActivityModalVisible(true);
+          }
+        }, 1000); // 3 seconds delay
+      }
     },
-    [client],
+    [client, getActivityTypeIdByName],
   );
 
   const openMenu = () => setVisible(true);
@@ -435,6 +484,7 @@ const ClientProfileScreen: React.FC<Props> = ({route, navigation}) => {
         onClose={() => {
           setIsActivityModalVisible(false);
           setSelectedActivity(undefined);
+          setPreSelectedActivityType(null); // Reset pre-selected type
         }}
         onSubmit={handleAddEditActivity}
         onDelete={handleDeleteActivity}
@@ -443,6 +493,7 @@ const ClientProfileScreen: React.FC<Props> = ({route, navigation}) => {
         editMode={!!selectedActivity}
         activityToEdit={selectedActivity}
         closeMenu={closeActivityModal}
+        initialActivityType={preSelectedActivityType} // Pass the pre-selected type
       />
 
       <ScheduleFollowUpModal

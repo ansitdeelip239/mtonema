@@ -62,6 +62,9 @@ const PropertyCard = memo(
       [property.area, property.lmUnit],
     );
 
+    // Check if property is deleted
+    const isDeleted = property.recordstatus === 'Deleted';
+
     // Memoize the onPress handler to improve performance
     const handlePress = useMemo(() => {
       return () => onPress(property);
@@ -112,6 +115,13 @@ const PropertyCard = memo(
                   <Text style={styles.featuredText}>Featured</Text>
                 </View>
               )}
+
+              {/* Deleted Badge */}
+              {isDeleted && (
+                <View style={styles.deletedBadge}>
+                  <Text style={styles.deletedText}>Deleted</Text>
+                </View>
+              )}
             </View>
 
             {/* Property Details */}
@@ -126,7 +136,11 @@ const PropertyCard = memo(
 
               {/* Location */}
               <View style={styles.locationContainer}>
-                <GetIcon iconName="locationPin" color={Colors.MT_PRIMARY_1} size={14} />
+                <GetIcon
+                  iconName="locationPin"
+                  color={Colors.MT_PRIMARY_1}
+                  size={14}
+                />
                 <Text
                   style={styles.location}
                   numberOfLines={1}
@@ -139,7 +153,11 @@ const PropertyCard = memo(
               {/* Area (if available) */}
               {formattedArea && (
                 <View style={styles.areaContainer}>
-                  <GetIcon iconName="length" size={16} color={Colors.MT_PRIMARY_1} />
+                  <GetIcon
+                    iconName="length"
+                    size={16}
+                    color={Colors.MT_PRIMARY_1}
+                  />
                   <Text style={styles.areaText}>{formattedArea}</Text>
                 </View>
               )}
@@ -147,7 +165,11 @@ const PropertyCard = memo(
               {/* Type and Furnishing in one row */}
               <View style={styles.bottomRow}>
                 <View style={styles.typeContainer}>
-                  <GetIcon iconName="home" size={14} color={Colors.MT_PRIMARY_1} />
+                  <GetIcon
+                    iconName="home"
+                    size={14}
+                    color={Colors.MT_PRIMARY_1}
+                  />
                   <Text style={styles.typeText} numberOfLines={1}>
                     {property.propertyType || 'Not specified'}
                   </Text>
@@ -183,7 +205,6 @@ const styles = StyleSheet.create({
     width: '100%',
     marginBottom: 16,
     borderRadius: 12,
-    // Remove overflow hidden from the touchable
   },
   card: {
     width: '100%',
@@ -200,14 +221,13 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     // Android elevation
     elevation: 5,
-    // Only apply overflow hidden to inner content, not the card itself
   },
   cardContent: {
     flexDirection: 'row',
     height: '100%',
     padding: 12,
-    borderRadius: 12, // Match the card's border radius
-    overflow: 'hidden', // Move overflow hidden here
+    borderRadius: 12,
+    overflow: 'hidden',
   },
   imageContainer: {
     width: IMAGE_WIDTH,
@@ -224,7 +244,7 @@ const styles = StyleSheet.create({
   featuredBadge: {
     position: 'absolute',
     top: 8,
-    right: 8,  // Changed from left to right
+    right: 8,
     backgroundColor: Colors.MT_PRIMARY_1,
     paddingHorizontal: 6,
     paddingVertical: 2,
@@ -232,6 +252,21 @@ const styles = StyleSheet.create({
     zIndex: 10,
   },
   featuredText: {
+    color: 'white',
+    fontSize: 10,
+    fontWeight: 'bold',
+  },
+  deletedBadge: {
+    position: 'absolute',
+    bottom: 8,
+    right: 8,
+    backgroundColor: '#d32f2f',
+    paddingHorizontal: 6,
+    paddingVertical: 2,
+    borderRadius: 4,
+    zIndex: 10,
+  },
+  deletedText: {
     color: 'white',
     fontSize: 10,
     fontWeight: 'bold',
