@@ -13,6 +13,7 @@ export interface AuthContextType {
   setDataUpdated: (value: boolean) => void;
   navigateToPostProperty: boolean;
   setNavigateToPostProperty: (value: boolean) => void;
+  isLoading: boolean;
 }
 
 export interface User {

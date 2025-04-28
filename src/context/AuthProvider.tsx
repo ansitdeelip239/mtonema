@@ -4,7 +4,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import {jwtDecode} from 'jwt-decode';
 import AuthContext from './AuthContext';
 import {User} from '../types';
-import { usePropertyForm } from './PropertyFormContext';
+import {usePropertyForm} from './PropertyFormContext';
 
 interface AuthProviderProps {
   children: React.ReactNode;
@@ -14,13 +14,17 @@ interface DecodedToken {
   exp: number;
   [key: string]: any;
 }
+
 export const AuthProvider: React.FC<AuthProviderProps> = ({children}) => {
-   const {resetForm} = usePropertyForm();
+  const {resetForm} = usePropertyForm();
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [user, setUser] = useState<User | null>(null);
   const [authToken, setAuthToken] = useState<string | null>(null);
   const [dataUpdated, setDataUpdated] = useState(false);
-  const [navigateToPostProperty,setNavigateToPostProperty] = useState(false);
+  const [navigateToPostProperty, setNavigateToPostProperty] = useState(false);
+  // Add loading state
+  const [isLoading, setIsLoading] = useState(true);
+
   // Use useRef for timer to prevent memory leaks
   const tokenExpiryTimer = useRef<NodeJS.Timeout>();
   const logout = useCallback(async () => {
@@ -149,21 +153,23 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({children}) => {
 
           if (currentTime >= expiryTime) {
             console.log('Token expired during app closure, logging out');
-            logout();
-            return;
-          }
-
-          const userData = await AuthService.getUserData();
-          if (userData) {
-            setUser(userData);
-            setIsAuthenticated(true);
-            setAuthToken(token);
-            handleTokenExpiry(token);
+            await logout();
+          } else {
+            const userData = await AuthService.getUserData();
+            if (userData) {
+              setUser(userData);
+              setIsAuthenticated(true);
+              setAuthToken(token);
+              handleTokenExpiry(token);
+            }
           }
         }
       } catch (error) {
         console.error('Error checking auth status:', error);
-        logout();
+        await logout();
+      } finally {
+        // Set loading to false when authentication check is complete
+        setIsLoading(false);
       }
     };
 
@@ -188,6 +194,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({children}) => {
     setDataUpdated,
     setNavigateToPostProperty,
     navigateToPostProperty,
+    isLoading, // Expose the loading state
   };
 
   return (

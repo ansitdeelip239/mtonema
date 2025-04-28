@@ -14,5 +14,6 @@ const AuthContext = createContext<AuthContextType>({
   setDataUpdated: () => {},
   setNavigateToPostProperty: () => {},
   navigateToPostProperty: false,
+  isLoading: false,
 });
 export default AuthContext;
