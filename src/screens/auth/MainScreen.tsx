@@ -23,7 +23,7 @@ type Props = NativeStackScreenProps<AuthStackParamList, 'MainScreen'>;
 
 export const MainScreen: React.FC<Props> = ({navigation}) => {
   const onLogin = (role: string[]) => {
-    navigation.navigate('EmailScreen', {role});
+    navigation.navigate('PartnerZoneScreen', {role});
   };
 
   const onBuyerSignup = () => {

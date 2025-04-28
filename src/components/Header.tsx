@@ -1,5 +1,12 @@
 import React from 'react';
-import {StyleSheet, Text, TouchableOpacity, View, Platform, StatusBar} from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+  Platform,
+  StatusBar,
+} from 'react-native';
 import GetIcon from './GetIcon';
 import Colors from '../constants/Colors';
 import {useDrawer} from '../hooks/useDrawer';
@@ -14,6 +21,8 @@ interface HeaderProps {
   navigation?: NativeStackNavigationProp<any>;
   onBackPress?: () => void;
   titleSize?: number;
+  hideDrawerButton?: boolean; // Prop to hide the drawer button
+  centerTitle?: boolean; // New prop to center the title
 }
 
 export default function Header<T extends ParamListBase>({
@@ -23,6 +32,8 @@ export default function Header<T extends ParamListBase>({
   navigation,
   onBackPress,
   titleSize = 20,
+  hideDrawerButton = false,
+  centerTitle = false, // Default is false (left-aligned title)
 }: HeaderProps) {
   const {openDrawer} = useDrawer<T>();
 
@@ -43,16 +54,27 @@ export default function Header<T extends ParamListBase>({
         barStyle="light-content"
       />
       <View style={styles.headerContainer}>
-        <TouchableOpacity
-          onPress={backButton ? () => handleBackPress() : openDrawer}
-          style={styles.menuButton}>
-          <GetIcon
-            iconName={backButton ? 'back' : 'hamburgerMenu'}
-            color="white"
-            size="24"
-          />
-        </TouchableOpacity>
-        <Text style={[styles.headerText, {fontSize: titleSize}]}>{title}</Text>
+        {!hideDrawerButton && (
+          <TouchableOpacity
+            onPress={backButton ? () => handleBackPress() : openDrawer}
+            style={styles.menuButton}>
+            <GetIcon
+              iconName={backButton ? 'back' : 'hamburgerMenu'}
+              color="white"
+              size="24"
+            />
+          </TouchableOpacity>
+        )}
+        <Text
+          style={[
+            styles.headerText,
+            {fontSize: titleSize},
+            // Apply different styles based on props
+            hideDrawerButton ? { paddingLeft: 0 as number } : {},
+            centerTitle ? styles.centeredTitle : {},
+          ]}>
+          {title}
+        </Text>
         <View style={styles.child}>{children}</View>
       </View>
     </LinearGradient>
@@ -80,11 +102,14 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingLeft: 16,
   },
+  centeredTitle: {
+    textAlign: 'center',
+    // paddingRight: 40, // Compensate for the left menu button width to ensure true center
+  },
   menuButton: {
     width: 40,
     height: 40,
     borderRadius: 20,
-    // backgroundColor: 'rgba(255,255,255,0.2)',
     justifyContent: 'center',
     alignItems: 'center',
   },

@@ -6,12 +6,12 @@ import {
   StyleSheet,
   TouchableOpacity,
   Image,
-  Alert,
+  // Alert,
   ActivityIndicator,
 } from 'react-native';
-import {api} from '../../utils/api';
-import url from '../../constants/api';
-import {useAuth} from '../../hooks/useAuth';
+// import {api} from '../../utils/api';
+// import url from '../../constants/api';
+// import {useAuth} from '../../hooks/useAuth';
 import Header from '../../components/Header';
 
 const ChangePasswordScreen = () => {
@@ -25,7 +25,7 @@ const ChangePasswordScreen = () => {
   const [showOldPassword, setShowOldPassword] = useState(false);
   const [showNewPassword, setShowNewPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const {user} = useAuth();
+  // const {user} = useAuth();
 
   const handleSubmit = async () => {
     let hasError = false;
@@ -60,22 +60,22 @@ const ChangePasswordScreen = () => {
 
     try {
       setLoading(true);
-      const response = await api.post(url.ChangePassword, {
-        Email: user?.Email,
-        oldPassword: oldPassword,
-        Password: newPassword,
-      });
-      console.log('Response:', response);
-      if (response.Success) {
-        Alert.alert('Success', 'Password changed successfully');
-        setOldPassword('');
-        setNewPassword('');
-        setConfirmPassword('');
-      } else if (response.httpStatus === 404) {
-        setOldPasswordError('Old password does not match');
-      } else {
-        setConfirmPasswordError(response.Message || 'Failed to change password');
-      }
+      // const response = await api.post(url.ChangePassword, {
+      //   Email: user?.Email,
+      //   oldPassword: oldPassword,
+      //   Password: newPassword,
+      // });
+      // console.log('Response:', response);
+      // if (response.Success) {
+      //   Alert.alert('Success', 'Password changed successfully');
+      //   setOldPassword('');
+      //   setNewPassword('');
+      //   setConfirmPassword('');
+      // } else if (response.httpStatus === 404) {
+      //   setOldPasswordError('Old password does not match');
+      // } else {
+      //   setConfirmPasswordError(response.Message || 'Failed to change password');
+      // }
     } catch (error) {
       console.error('Error changing password:', error);
       setConfirmPasswordError((error as any).message || 'Failed to change password');

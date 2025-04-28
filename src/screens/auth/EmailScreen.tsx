@@ -21,11 +21,11 @@ import {useDialog} from '../../hooks/useDialog';
 import {MaterialTextInput} from '../../components/MaterialTextInput';
 import useForm from '../../hooks/useForm';
 import {EmailFormData, emailSchema} from '../../schema/LoginSchema';
-import Images from '../../constants/Images';
 import LinearGradient from 'react-native-linear-gradient';
 import GetIcon from '../../components/GetIcon';
 import {useKeyboard} from '../../hooks/useKeyboard';
 import Roles from '../../constants/Roles';
+import Images from '../../constants/Images';
 
 const {width} = Dimensions.get('window');
 type Props = NativeStackScreenProps<AuthStackParamList, 'EmailScreen'>;
@@ -42,7 +42,25 @@ const EmailScreen: React.FC<Props> = ({navigation, route}) => {
 
   const {setNavigateToPostProperty} = useAuth();
   const {showError} = useDialog();
-  const {role} = route.params;
+  const {role, location} = route.params;
+  const [partnerInfo, setPartnerInfo] = useState<{
+    imageUrl?: string;
+    name?: string;
+    domain?: string;
+  }>({});
+
+  // Parse the location description JSON on component mount
+  useEffect(() => {
+    try {
+      if (location && location.description) {
+        const parsedDescription = JSON.parse(location.description);
+        setPartnerInfo(parsedDescription);
+        console.log('Parsed location info:', parsedDescription);
+      }
+    } catch (error) {
+      console.error('Failed to parse location description:', error);
+    }
+  }, [location]);
 
   const logoHeight = useRef(new Animated.Value(200)).current;
   const logoOpacity = useRef(new Animated.Value(1)).current;
@@ -201,13 +219,11 @@ const EmailScreen: React.FC<Props> = ({navigation, route}) => {
             onPress={navigation.goBack}>
             <GetIcon iconName="back" color="white" size="24" />
           </TouchableOpacity>
-          {
-            route.params.role.includes(Roles.PARTNER) ? (
-              <Text style={styles.headerText}>Partner Sign In</Text>
-            ) : (
-              <Text style={styles.headerText}>Buyer/Seller Sign In</Text>
-            )
-          }
+          {route.params.role.includes(Roles.PARTNER) ? (
+            <Text style={styles.headerText}>Partner Sign In</Text>
+          ) : (
+            <Text style={styles.headerText}>Buyer/Seller Sign In</Text>
+          )}
           <View style={styles.spacer} />
         </View>
       </LinearGradient>
@@ -227,11 +243,19 @@ const EmailScreen: React.FC<Props> = ({navigation, route}) => {
                 overflow: 'hidden' as const,
               },
             ]}>
-            <Image
-              source={Images.MTESTATES_LOGO}
-              style={styles.logo}
-              resizeMode="contain"
-            />
+            {partnerInfo.imageUrl ? (
+              <Image
+                source={{uri: partnerInfo.imageUrl}}
+                style={styles.logo}
+                resizeMode="contain"
+              />
+            ) : (
+              <Image
+                source={Images.MTESTATES_LOGO}
+                style={styles.logo}
+                resizeMode="contain"
+              />
+            )}
           </Animated.View>
 
           <View style={styles.formCard}>
@@ -386,6 +410,7 @@ const styles = StyleSheet.create({
   logo: {
     width: width * 0.8,
     height: 200,
+    mixBlendMode: 'multiply',
   },
   formCard: {
     backgroundColor: 'white',

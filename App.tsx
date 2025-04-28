@@ -7,6 +7,7 @@ import Toast from 'react-native-toast-message';
 import {PropertyFormProvider} from './src/context/PropertyFormContext';
 import {PaperProvider} from 'react-native-paper';
 import {DialogProvider} from './src/context/DialogProvider';
+import {MasterProvider} from './src/context/MasterProvider';
 
 const App = () => {
   return (
@@ -14,10 +15,12 @@ const App = () => {
       <DialogProvider>
         <PropertyFormProvider>
           <AuthProvider>
-            <SafeAreaProvider>
-              <RootNavigator />
-              <Toast />
-            </SafeAreaProvider>
+            <MasterProvider>
+              <SafeAreaProvider>
+                <RootNavigator />
+                <Toast />
+              </SafeAreaProvider>
+            </MasterProvider>
           </AuthProvider>
         </PropertyFormProvider>
       </DialogProvider>

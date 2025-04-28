@@ -133,8 +133,9 @@ export interface PlacesResponse {
 }
 
 export interface MasterDetailModel {
-  masterDetailName: string;
   id: number;
+  masterDetailName: string;
+  description: string;
 }
 
 export interface AgentData {

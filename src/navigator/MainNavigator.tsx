@@ -4,7 +4,6 @@ import SellerNavigator from './SellerNavigator';
 import BuyerNavigator from './BuyerNavigator';
 import {useAuth} from '../hooks/useAuth';
 import {BuyerProvider} from '../context/BuyerProvider';
-import {MasterProvider} from '../context/MasterProvider';
 import PartnerNavigator from './PartnerNavigator';
 import {PartnerProvider} from '../context/PartnerProvider';
 import {PropertyFormProvider} from '../context/PropertyFormContext';
@@ -15,7 +14,7 @@ const MainNavigator = () => {
   const {user} = useAuth();
 
   return (
-    <MasterProvider>
+    <>
       {user?.role === Roles.BUYER ? (
         <BuyerProvider>
           <BuyerNavigator />
@@ -31,7 +30,7 @@ const MainNavigator = () => {
       ) : user?.role === Roles.ADMIN ? (
         <AdminNavigator />
       ) : null}
-    </MasterProvider>
+    </>
   );
 };
 export default MainNavigator;

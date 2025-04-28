@@ -20,6 +20,7 @@ interface MasterData {
   AgentPropertyType: MasterDetailModel[];
   ActivityType: MasterDetailModel[];
   GroupColor: MasterDetailModel[];
+  PartnerLocation: MasterDetailModel[];
 }
 
 interface MasterContextProps {
@@ -44,6 +45,7 @@ const masterName = [
   'ActivityType',
   'GroupColor',
   'ImageType',
+  'PartnerLocation',
 ];
 
 export const MasterProvider: React.FC<MasterProviderProps> = ({children}) => {
