@@ -251,38 +251,113 @@ const ClientProfileScreen: React.FC<Props> = ({route, navigation}) => {
       );
 
       if (response.success) {
-        // If we're adding a new activity (not editing) and there's an active follow-up,
-        // mark the follow-up as completed
+        // Only process follow-ups for new activities (not edits)
         if (!activityId && client?.followUp?.status === 'Pending') {
-          try {
-            // Call API to update follow-up status to completed
-            const followUpResponse = await PartnerService.completeFollowUp(
-              client.followUp.id as number,
-              'Completed',
-            );
+          // Check if follow-up is scheduled for today
+          const isFollowUpToday = () => {
+            if (!client.followUp?.date) {
+              return false;
+            }
 
-            if (followUpResponse.success) {
+            const followUpDate = new Date(client.followUp.date);
+            const today = new Date();
+
+            return (
+              followUpDate.getDate() === today.getDate() &&
+              followUpDate.getMonth() === today.getMonth() &&
+              followUpDate.getFullYear() === today.getFullYear()
+            );
+          };
+
+          if (isFollowUpToday()) {
+            // Reschedule follow-up for 3 days later
+            try {
+              // Create a new date 3 days in the future
+              const newFollowUpDate = new Date();
+              newFollowUpDate.setDate(newFollowUpDate.getDate() + 3);
+
+              // Ensure the time is set to a reasonable hour (e.g., 10:00 AM)
+              newFollowUpDate.setHours(10, 0, 0, 0);
+
+              // Format the date for the API
+              const year = newFollowUpDate.getFullYear();
+              const month = String(newFollowUpDate.getMonth() + 1).padStart(
+                2,
+                '0',
+              );
+              const day = String(newFollowUpDate.getDate()).padStart(2, '0');
+              const hours = String(newFollowUpDate.getHours()).padStart(2, '0');
+              const minutes = String(newFollowUpDate.getMinutes()).padStart(
+                2,
+                '0',
+              );
+
+              const followUpDateString = `${year}-${month}-${day}T${hours}:${minutes}`;
+
+              // Schedule the new follow-up
+              const followUpPayload = {
+                clientId: client.id as number,
+                userId: user?.id as number,
+                followUpDate: followUpDateString,
+                status: 'Pending',
+                id: client.followUp.id, // Use the existing follow-up ID to update it
+              };
+
+              const followUpResponse = await PartnerService.scheduleFollowUp(
+                followUpPayload,
+              );
+
+              if (followUpResponse.success) {
+                Toast.show({
+                  type: 'success',
+                  text1: 'Success',
+                  text2:
+                    'Activity added and follow-up rescheduled for 3 days later',
+                });
+              } else {
+                Toast.show({
+                  type: 'success',
+                  text1: 'Activity Added',
+                  text2: 'Activity added but could not reschedule follow-up',
+                });
+              }
+            } catch (followUpError) {
+              console.error('Error rescheduling follow-up:', followUpError);
               Toast.show({
                 type: 'success',
-                text1: 'Success',
-                text2: 'Activity added and follow-up marked as completed',
+                text1: 'Activity Added',
+                text2: 'Activity added but could not reschedule follow-up',
               });
-            } else {
-              // Still show success for the activity, but note the follow-up status issue
+            }
+          } else {
+            // For non-today follow-ups, mark as completed (keep existing behavior)
+            try {
+              const followUpResponse = await PartnerService.completeFollowUp(
+                client.followUp.id as number,
+                'Completed',
+              );
+
+              if (followUpResponse.success) {
+                Toast.show({
+                  type: 'success',
+                  text1: 'Success',
+                  text2: 'Activity added and follow-up marked as completed',
+                });
+              } else {
+                Toast.show({
+                  type: 'success',
+                  text1: 'Activity Added',
+                  text2: 'Activity added but could not update follow-up status',
+                });
+              }
+            } catch (followUpError) {
+              console.error('Error updating follow-up status:', followUpError);
               Toast.show({
                 type: 'success',
                 text1: 'Activity Added',
                 text2: 'Activity added but could not update follow-up status',
               });
             }
-          } catch (followUpError) {
-            console.error('Error updating follow-up status:', followUpError);
-            // Still consider the overall operation successful if the activity was added
-            Toast.show({
-              type: 'success',
-              text1: 'Activity Added',
-              text2: 'Activity added but could not update follow-up status',
-            });
           }
         } else {
           // Regular success message for edits or when no follow-up exists
