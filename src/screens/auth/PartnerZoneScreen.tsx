@@ -55,14 +55,14 @@ const PartnerZoneScreen: React.FC<Props> = ({navigation, route}) => {
           contentContainerStyle={styles.scrollViewContent}
           showsVerticalScrollIndicator={false}>
           {masterData.PartnerLocation.map(location => (
-            <TouchableOpacity
+            location.masterDetailName !== 'Individual' && (<TouchableOpacity
               key={location.id}
               style={styles.locationButton}
               onPress={() => handleLocationPress(location)}>
               <Text style={styles.locationText}>
                 {location.masterDetailName}
               </Text>
-            </TouchableOpacity>
+            </TouchableOpacity>)
           ))}
         </ScrollView>
       )}
