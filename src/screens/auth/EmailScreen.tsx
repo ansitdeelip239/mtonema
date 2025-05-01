@@ -347,16 +347,6 @@ const EmailScreen: React.FC<Props> = ({navigation, route}) => {
           </View>
         </View>
       </KeyboardAvoidingView>
-
-      <View style={styles.footer}>
-        <Text style={styles.footerText}>
-          Don't have an account?{' '}
-          <Text style={styles.signupText} onPress={() => navigation.goBack()}>
-            Sign Up
-          </Text>
-        </Text>
-      </View>
-
       <Toast />
     </View>
   );
