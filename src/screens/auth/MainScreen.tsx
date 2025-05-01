@@ -18,12 +18,30 @@ import Images from '../../constants/Images';
 import {BackgroundWrapper} from '../../components/BackgroundWrapper';
 import Colors from '../../constants/Colors';
 import LinearGradient from 'react-native-linear-gradient';
+import {useMaster} from '../../context/MasterProvider';
+import { MasterDetailModel } from '../../types';
 
 type Props = NativeStackScreenProps<AuthStackParamList, 'MainScreen'>;
 
 export const MainScreen: React.FC<Props> = ({navigation}) => {
-  const onLogin = (role: string[]) => {
-    navigation.navigate('PartnerZoneScreen', {role});
+  const {masterData} = useMaster();
+
+  const onPartnerLogin = () => {
+    // Partners and admins go to location selection screen
+    navigation.navigate('PartnerZoneScreen', {
+      role: [Roles.PARTNER, Roles.ADMIN],
+    });
+  };
+
+  const onBuyerSellerLogin = () => {
+    const individualLocation = masterData?.PartnerLocation?.find(
+      location => location.masterDetailName === 'Individual',
+    );
+
+    navigation.navigate('EmailScreen', {
+      role: [Roles.BUYER, Roles.SELLER],
+      location: individualLocation as MasterDetailModel,
+    });
   };
 
   const onBuyerSignup = () => {
@@ -82,7 +100,7 @@ export const MainScreen: React.FC<Props> = ({navigation}) => {
                 </Text>
                 <TouchableOpacity
                   style={styles.primaryButton}
-                  onPress={() => onLogin([Roles.BUYER, Roles.SELLER])}>
+                  onPress={onBuyerSellerLogin}>
                   <LinearGradient
                     colors={[Colors.MT_PRIMARY_1, '#2c7fb8']}
                     style={styles.gradientButton}>
@@ -132,7 +150,7 @@ export const MainScreen: React.FC<Props> = ({navigation}) => {
               <View style={styles.section}>
                 <TouchableOpacity
                   style={styles.partnerButton}
-                  onPress={() => onLogin([Roles.PARTNER, Roles.ADMIN])}>
+                  onPress={onPartnerLogin}>
                   <LinearGradient
                     colors={['#3a7bd5', '#00d2ff']}
                     start={{x: 0, y: 0}}
