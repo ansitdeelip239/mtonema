@@ -288,7 +288,8 @@ const styles = StyleSheet.create({
   profileImage: {
     width: 200,
     height: 200,
-    borderRadius: 50,
+    mixBlendMode: 'multiply',
+    // borderRadius: 50,
   },
   bottomPadding: {
     height: 150,
