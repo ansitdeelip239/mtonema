@@ -13,16 +13,16 @@ const App = () => {
   return (
     <PaperProvider>
       <DialogProvider>
-        <PropertyFormProvider>
-          <MasterProvider>
-            <AuthProvider>
+        <MasterProvider>
+          <AuthProvider>
+            <PropertyFormProvider>
               <SafeAreaProvider>
                 <RootNavigator />
                 <Toast />
               </SafeAreaProvider>
-            </AuthProvider>
-          </MasterProvider>
-        </PropertyFormProvider>
+            </PropertyFormProvider>
+          </AuthProvider>
+        </MasterProvider>
       </DialogProvider>
     </PaperProvider>
   );

@@ -31,6 +31,8 @@ import {AuthStackParamList} from '../../navigator/AuthNavigator';
 import Images from '../../constants/Images';
 import LinearGradient from 'react-native-linear-gradient';
 import GetIcon from '../../components/GetIcon';
+import { useMaster } from '../../context/MasterProvider';
+import { MasterDetailModel } from '../../types';
 
 const {width} = Dimensions.get('window');
 type Props = NativeStackScreenProps<AuthStackParamList, 'SignUpScreen'>;
@@ -45,6 +47,7 @@ const SignUpScreen: React.FC<Props> = ({navigation, route}) => {
 
   const {keyboardVisible} = useKeyboard();
   const {showError} = useDialog();
+  const {masterData} = useMaster();
 
   // Animation values for logo
   const logoHeight = useRef(new Animated.Value(150)).current;
@@ -124,6 +127,17 @@ const SignUpScreen: React.FC<Props> = ({navigation, route}) => {
   const handleLocationSelect = (suggestion: string) => {
     handleFieldChange('location', suggestion);
     setLocationSuggestions([]);
+  };
+
+  const onBuyerSellerLogin = () => {
+    const individualLocation = masterData?.PartnerLocation?.find(
+      location => location.masterDetailName === 'Individual',
+    );
+
+    navigation.navigate('EmailScreen', {
+      role: [Roles.BUYER, Roles.SELLER],
+      location: individualLocation as MasterDetailModel,
+    });
   };
 
   const validateField = (field: keyof SignupFormType, value: string) => {
@@ -347,13 +361,7 @@ const SignUpScreen: React.FC<Props> = ({navigation, route}) => {
             <View style={styles.footer}>
               <Text style={styles.footerText}>
                 Already have an account?{' '}
-                <Text
-                  style={styles.loginText}
-                  onPress={() =>
-                    navigation.navigate('EmailScreen', {
-                      role: [Roles.BUYER, Roles.SELLER],
-                    })
-                  }>
+                <Text style={styles.loginText} onPress={onBuyerSellerLogin}>
                   Log In
                 </Text>
               </Text>
