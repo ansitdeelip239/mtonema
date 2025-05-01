@@ -12,7 +12,7 @@ const OtpScreen: React.FC<Props> = ({route}) => {
   const [isLoading, setIsLoading] = useState(false);
   const {storeToken, login, storeUser} = useAuth();
   const [OTP, setOtp] = useState('');
-  const {email} = route.params;
+  const {email, logoUrl} = route.params;
   const {showError, hideDialog} = useDialog();
 
   const handleSubmit = useCallback(async () => {
@@ -59,6 +59,7 @@ const OtpScreen: React.FC<Props> = ({route}) => {
       onChangeText={setOtp}
       onPress={handleSubmit}
       isLoading={isLoading}
+      logoUrl={logoUrl}
     />
   );
 };

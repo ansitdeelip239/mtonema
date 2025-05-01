@@ -179,7 +179,7 @@ const EmailScreen: React.FC<Props> = ({navigation, route}) => {
 
         const response = await AuthService.otpVerification(formInput.email);
         if (response.success) {
-          navigation.navigate('OtpScreen', {email: formInput.email});
+          navigation.navigate('OtpScreen', {email: formInput.email, logoUrl: partnerInfo.imageUrl});
           if (!skipEmailCheck) {
             setNavigateToPostProperty(false);
           }
@@ -192,7 +192,7 @@ const EmailScreen: React.FC<Props> = ({navigation, route}) => {
         setIsLoading(false);
       }
     },
-    [formInput, checkEmail, navigation, setNavigateToPostProperty, showError],
+    [formInput, checkEmail, navigation, setNavigateToPostProperty, showError, partnerInfo.imageUrl],
   );
 
   const handleVerifyNow = useCallback(() => {

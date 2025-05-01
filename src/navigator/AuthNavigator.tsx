@@ -16,7 +16,7 @@ export type AuthStackParamList = {
   MainScreen: undefined;
   // ChangePasswordScreen: undefined;
   PasswordScreen: {email: string};
-  OtpScreen: {email: string; isForgetPassword?: boolean};
+  OtpScreen: {email: string; isForgetPassword?: boolean, logoUrl?: string};
   PostProperty: undefined;
   OtpModel: {email: string};
   // ForgetPassword: undefined;

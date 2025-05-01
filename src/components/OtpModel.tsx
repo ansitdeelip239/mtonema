@@ -29,6 +29,7 @@ interface OtpModelProps {
   onPress: () => void;
   isLoading?: boolean;
   onBack?: () => void;
+  logoUrl?: string;
 }
 
 const OtpModel: React.FC<OtpModelProps> = ({
@@ -37,6 +38,7 @@ const OtpModel: React.FC<OtpModelProps> = ({
   onPress,
   isLoading = false,
   onBack,
+  logoUrl,
 }) => {
   const otpInputRef = useRef(null);
   const {showError} = useDialog();
@@ -127,14 +129,22 @@ const OtpModel: React.FC<OtpModelProps> = ({
                 {
                   opacity: logoOpacity,
                   height: logoHeight,
-                  overflow: 'hidden',
+                  overflow: 'hidden' as const,
                 },
               ]}>
-              <Image
-                source={Images.MTESTATES_LOGO}
-                style={styles.logo}
-                resizeMode="contain"
-              />
+              {logoUrl ? (
+                <Image
+                  source={{uri: logoUrl}}
+                  style={styles.logo}
+                  resizeMode="contain"
+                />
+              ) : (
+                <Image
+                  source={Images.MTESTATES_LOGO}
+                  style={styles.logo}
+                  resizeMode="contain"
+                />
+              )}
             </Animated.View>
 
             <View style={styles.formCard}>
@@ -182,7 +192,11 @@ const OtpModel: React.FC<OtpModelProps> = ({
                       {isLoading ? 'Verifying...' : 'Verify OTP'}
                     </Text>
                     {!isLoading && value.length === 6 && (
-                      <GetIcon iconName="chevronRight" color="white" size="20" />
+                      <GetIcon
+                        iconName="chevronRight"
+                        color="white"
+                        size="20"
+                      />
                     )}
                   </View>
                 </LinearGradient>
@@ -197,7 +211,7 @@ const OtpModel: React.FC<OtpModelProps> = ({
                 </Text>
               </View>
             </View>
-            
+
             {/* Add padding at the bottom to ensure the card doesn't get hidden by keyboard */}
             <View style={{height: keyboardVisible ? 120 : 40}} />
           </View>
@@ -261,6 +275,7 @@ const styles = StyleSheet.create({
   logo: {
     width: width * 0.7, // Match sizing from SignUpScreen2
     height: 150,
+    mixBlendMode: 'multiply',
   },
   formCard: {
     backgroundColor: 'white',
