@@ -392,6 +392,8 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     padding: 20,
+    paddingTop: 0,
+    // gap: 10,
   },
   logoContainer: {
     alignItems: 'center',

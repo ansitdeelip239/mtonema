@@ -22,6 +22,7 @@ import CommonService from '../services/CommonService';
 import {useAuth} from '../hooks/useAuth';
 import Colors from '../constants/Colors';
 import {useKeyboard} from '../hooks/useKeyboard';
+import {useLogoStorage} from '../hooks/useLogoStorage';
 
 const EditProfileComponent = () => {
   const [editingFields, setEditingFields] = useState<
@@ -36,6 +37,7 @@ const EditProfileComponent = () => {
   const {user, setUser} = useAuth();
   const {keyboardVisible} = useKeyboard();
   const scrollViewRef = useRef<ScrollView>(null);
+  const {logoUrl} = useLogoStorage();
 
   const {formInput, handleInputChange, loading, onSubmit, setFormInput} =
     useForm<ProfileFormData>({
@@ -160,7 +162,14 @@ const EditProfileComponent = () => {
           keyboardShouldPersistTaps="handled">
           <View style={styles.container}>
             <View style={styles.profileImageContainer}>
-              <Image source={Images.MTESTATES_LOGO} style={styles.profileImage} />
+              {logoUrl ? (
+                <Image source={{uri: logoUrl}} style={styles.profileImage} />
+              ) : (
+                <Image
+                  source={Images.MTESTATES_LOGO}
+                  style={styles.profileImage}
+                />
+              )}
             </View>
             <MaterialTextInput
               field="name"
@@ -277,7 +286,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   profileImage: {
-    width: 150,
+    width: 200,
     height: 200,
     borderRadius: 50,
   },

@@ -1,5 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import {useAuth} from '../hooks/useAuth';
+import {useLogoStorage} from '../hooks/useLogoStorage';
 import {
   DrawerContentScrollView,
   DrawerItemList,
@@ -26,11 +27,14 @@ const CustomDrawerContent = (props: any) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [loadingModalVisible, setLoadingModalVisible] = useState(false);
 
+  const {logoUrl} = useLogoStorage();
+
   useEffect(() => {
     if (user?.name) {
       setUserName(user.name);
     }
   }, [user?.name]);
+
 
   const handleCustomButtonPress = () => {
     props.navigation.closeDrawer();
@@ -56,7 +60,11 @@ const CustomDrawerContent = (props: any) => {
     <DrawerContentScrollView {...props} contentContainerStyle={styles.flexOne}>
       <TouchableOpacity onPress={navigateToProfile}>
         <View style={styles.profileContainer}>
-          <Image source={Images.MTESTATES_LOGO} style={styles.logo} />
+          {logoUrl ? (
+            <Image source={{uri: logoUrl}} style={styles.logo} />
+          ) : (
+            <Image source={Images.MTESTATES_LOGO} style={styles.logo} />
+          )}
 
           <View style={styles.nameContainer}>
             <Text style={styles.name}>{userName}</Text>
@@ -191,12 +199,14 @@ const styles = StyleSheet.create({
   profileContainer: {
     alignItems: 'center',
     justifyContent: 'center',
+    gap: 20,
+    marginTop: 20,
   },
   nameContainer: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    marginBottom: 50,
+    marginBottom: 20,
   },
   editIconContainer: {
     marginLeft: 10,
@@ -214,8 +224,8 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   logo: {
-    width: '90%',
-    height: 150,
+    width: 130,
+    height: 130,
     resizeMode: 'contain',
     alignSelf: 'center',
   },

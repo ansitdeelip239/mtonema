@@ -14,14 +14,14 @@ const App = () => {
     <PaperProvider>
       <DialogProvider>
         <PropertyFormProvider>
-          <AuthProvider>
-            <MasterProvider>
+          <MasterProvider>
+            <AuthProvider>
               <SafeAreaProvider>
                 <RootNavigator />
                 <Toast />
               </SafeAreaProvider>
-            </MasterProvider>
-          </AuthProvider>
+            </AuthProvider>
+          </MasterProvider>
         </PropertyFormProvider>
       </DialogProvider>
     </PaperProvider>

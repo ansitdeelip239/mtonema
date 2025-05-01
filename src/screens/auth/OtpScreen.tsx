@@ -5,6 +5,7 @@ import AuthService from '../../services/AuthService';
 import {useAuth} from '../../hooks/useAuth';
 import OtpModel from '../../components/OtpModel';
 import {useDialog} from '../../hooks/useDialog';
+import {useLogoStorage} from '../../hooks/useLogoStorage';
 
 type Props = NativeStackScreenProps<AuthStackParamList, 'OtpScreen'>;
 
@@ -14,6 +15,9 @@ const OtpScreen: React.FC<Props> = ({route}) => {
   const [OTP, setOtp] = useState('');
   const {email, logoUrl} = route.params;
   const {showError, hideDialog} = useDialog();
+
+  // Use the enhanced hook
+  const {storeLogoData, extractLogoFromPartnerLocation} = useLogoStorage();
 
   const handleSubmit = useCallback(async () => {
     if (OTP.length !== 6) {
@@ -29,6 +33,21 @@ const OtpScreen: React.FC<Props> = ({route}) => {
         if (response.data) {
           const userResponse = await AuthService.getUserByToken(response.data);
           await storeUser(userResponse.data);
+
+          // Store the logo URL if we have it from route params
+          if (logoUrl) {
+            await storeLogoData({
+              imageUrl: logoUrl,
+              // You can provide other data if available
+            });
+          }
+
+          // If user has a partner location, extract and store its logo
+          if (userResponse.data && userResponse.data.partnerLocation) {
+            await extractLogoFromPartnerLocation(
+              userResponse.data.partnerLocation,
+            );
+          }
         }
 
         await storeToken(response.data as string);
@@ -51,7 +70,18 @@ const OtpScreen: React.FC<Props> = ({route}) => {
     } finally {
       setIsLoading(false);
     }
-  }, [OTP, showError, email, storeToken, login, hideDialog, storeUser]);
+  }, [
+    OTP,
+    showError,
+    email,
+    storeToken,
+    login,
+    hideDialog,
+    storeUser,
+    logoUrl,
+    storeLogoData,
+    extractLogoFromPartnerLocation,
+  ]);
 
   return (
     <OtpModel
