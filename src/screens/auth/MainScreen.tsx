@@ -64,13 +64,13 @@ export const MainScreen: React.FC<Props> = ({navigation}) => {
           barStyle="light-content"
         />
 
-        {/* Add header here */}
+        {/* Updated header with MT Estates */}
         <LinearGradient
           colors={[Colors.MT_PRIMARY_1, '#1e5799']}
           style={styles.headerGradient}>
           <View style={styles.headerContent}>
             <View style={styles.spacer} />
-            <Text style={styles.headerText}>App & CRM</Text>
+            <Text style={styles.headerText}>MT Estates</Text>
             <View style={styles.spacer} />
           </View>
         </LinearGradient>
@@ -84,14 +84,14 @@ export const MainScreen: React.FC<Props> = ({navigation}) => {
               style={styles.image}
               resizeMode="contain"
             />
+            {/* Added App & CRM text below logo */}
+            <Text style={styles.appCrmText}>App & CRM</Text>
           </View>
 
           <View style={styles.cardContainer}>
             <View style={styles.card}>
               <View style={styles.welcomeSection}>
-                {/* <Text style={styles.subtitleText}>
-                  Find your perfect property
-                </Text> */}
+                {/* Empty section, can be used later */}
               </View>
 
               <View style={styles.section}>
@@ -172,12 +172,12 @@ export const MainScreen: React.FC<Props> = ({navigation}) => {
 };
 
 const styles = StyleSheet.create({
-  // Add header styles
+  // Header styles
   spacer: {
     width: 24,
   },
   headerGradient: {
-    paddingTop: Platform.OS === 'ios' ? 50 : 20, // Change from 20:10 to 50:20
+    paddingTop: Platform.OS === 'ios' ? 50 : 20,
     paddingBottom: 20,
     borderBottomLeftRadius: 30,
     borderBottomRightRadius: 30,
@@ -189,32 +189,55 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
   },
   headerText: {
-    fontSize: 20, // Change from 22 to 20
+    fontSize: 22,
     fontWeight: 'bold',
     color: 'white',
   },
 
-  // Your existing styles
+  // Main styles
   mainScreen: {
     flex: 1,
     backgroundColor: 'transparent',
   },
   scrollContent: {
     flexGrow: 1,
-    paddingTop: 10, // Add space between header and content
+    paddingTop: 10,
   },
   logoContainer: {
-    height: 200, // Slightly smaller to account for header
     justifyContent: 'center',
     alignItems: 'center',
     paddingVertical: 10,
   },
   image: {
     width: '80%',
-    height: 220, // Adjust height slightly
+    height: 160,
+  },
+  // New style for App & CRM text
+  appCrmText: {
+    fontSize: 20,
+    fontWeight: '700',
+    color: '#333',
+    marginTop: 5,
+    marginBottom: 10,
+    textAlign: 'center',
+    letterSpacing: 1,
+    // Add subtle text shadow for emphasis
+    ...Platform.select({
+      ios: {
+        textShadowColor: 'rgba(0, 0, 0, 0.2)',
+        textShadowOffset: {width: 0, height: 1},
+        textShadowRadius: 2,
+      },
+      android: {
+        elevation: 1,
+        textShadowColor: 'rgba(0, 0, 0, 0.2)',
+        textShadowOffset: {width: 0, height: 1},
+        textShadowRadius: 1,
+      },
+    }),
   },
 
-  // Rest of your existing styles remain the same
+  // Card content styles
   cardContainer: {
     flex: 1,
     paddingHorizontal: 20,
@@ -243,7 +266,6 @@ const styles = StyleSheet.create({
   welcomeText: {
     fontSize: 22,
     fontWeight: 'bold',
-    color: Colors.MT_PRIMARY_1,
     textAlign: 'center',
   },
   subtitleText: {
@@ -291,7 +313,6 @@ const styles = StyleSheet.create({
   secondaryButton: {
     backgroundColor: 'white',
     borderWidth: 2,
-    borderColor: Colors.MT_PRIMARY_1,
     borderRadius: 15,
     padding: 10,
     ...Platform.select({
@@ -312,7 +333,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   secondaryButtonText: {
-    color: Colors.MT_PRIMARY_1,
     fontSize: 17,
     fontWeight: '600',
     marginLeft: 10,
