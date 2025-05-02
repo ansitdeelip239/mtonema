@@ -21,6 +21,7 @@ import {formatDate} from '../../../utils/dateUtils';
 import GetIcon from '../../../components/GetIcon';
 import YoutubeVideoPlayer from '../../../components/YoutubeVideoPlayer';
 import {getYoutubeVideoId} from '../../../utils/formUtils';
+import { useTheme } from '../../../context/ThemeProvider';
 
 const {width} = Dimensions.get('window');
 const PAGE_SIZE = 5;
@@ -37,6 +38,7 @@ const FeedbackScreen: React.FC<Props> = () => {
   const [activeVideoId, setActiveVideoId] = useState<number | null>(null);
 
   const {user} = useAuth();
+  const {theme} = useTheme();
 
   const fetchTestimonials = useCallback(
     async (page: number, refresh = false) => {
@@ -165,7 +167,7 @@ const FeedbackScreen: React.FC<Props> = () => {
 
     return (
       <View style={styles.footerLoader}>
-        <ActivityIndicator size="small" color={Colors.MT_PRIMARY_1} />
+        <ActivityIndicator size="small" color={theme.primaryColor} />
         <Text style={styles.loadingMoreText}>Loading more testimonials...</Text>
       </View>
     );
@@ -193,7 +195,7 @@ const FeedbackScreen: React.FC<Props> = () => {
 
       {isLoading ? (
         <View style={styles.loadingContainer}>
-          <ActivityIndicator size="large" color={Colors.MT_PRIMARY_1} />
+          <ActivityIndicator size="large" color={theme.primaryColor} />
           <Text style={styles.loadingText}>Loading testimonials...</Text>
         </View>
       ) : (
@@ -207,7 +209,7 @@ const FeedbackScreen: React.FC<Props> = () => {
             <RefreshControl
               refreshing={isRefreshing}
               onRefresh={handleRefresh}
-              colors={[Colors.MT_PRIMARY_1]}
+              colors={[theme.primaryColor]}
             />
           }
           onEndReached={handleLoadMore}

@@ -16,6 +16,7 @@ import Colors from '../../../constants/Colors';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {ClientStackParamList} from '../../../navigator/components/ClientScreenStack';
 import SearchHeader from '../../../components/SearchHeader';
+import { useTheme } from '../../../context/ThemeProvider';
 
 type Props = NativeStackScreenProps<ClientStackParamList, 'ClientScreen'>;
 
@@ -31,6 +32,7 @@ const ClientScreen: React.FC<Props> = ({navigation}) => {
     loadMoreClients,
   } = useClientData();
   const [isSearching, setIsSearching] = useState(false);
+  const {theme} = useTheme();
 
   const handleSearchWithLoading = async (text: string) => {
     setIsSearching(true);
@@ -57,7 +59,7 @@ const ClientScreen: React.FC<Props> = ({navigation}) => {
     if ((isLoading && clients.length === 0) || isSearching) {
       return (
         <View style={styles.centerContainer}>
-          <ActivityIndicator size="large" color={Colors.MT_PRIMARY_1} />
+          <ActivityIndicator size="large" color={theme.primaryColor} />
         </View>
       );
     }
@@ -86,8 +88,8 @@ const ClientScreen: React.FC<Props> = ({navigation}) => {
           <RefreshControl
             refreshing={refreshing}
             onRefresh={onRefresh}
-            colors={[Colors.MT_PRIMARY_1]}
-            tintColor={Colors.MT_PRIMARY_1}
+            colors={[theme.primaryColor]}
+            tintColor={theme.primaryColor}
           />
         }
         onEndReached={loadMoreClients}
@@ -109,7 +111,7 @@ const ClientScreen: React.FC<Props> = ({navigation}) => {
     <View style={styles.container}>
       <Header<PartnerDrawerParamList> title="Clients">
         <TouchableOpacity
-          style={styles.addButton}
+          style={[styles.addButton, {backgroundColor: theme.secondaryColor}]}
           onPress={() => {
             navigation.navigate('AddClientScreen', {editMode: false});
           }}>
@@ -154,7 +156,6 @@ const styles = StyleSheet.create({
     fontWeight: '500',
   },
   addButton: {
-    backgroundColor: Colors.MT_PRIMARY_1,
     paddingHorizontal: 16,
     paddingVertical: 8,
     borderRadius: 8,

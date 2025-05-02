@@ -6,7 +6,7 @@ import {
   StyleSheet,
   ActivityIndicator,
 } from 'react-native';
-import Colors from '../../../../../constants/Colors';
+import {useTheme} from '../../../../../context/ThemeProvider';
 
 interface FormNavigationButtonsProps {
   onNext?: () => void;
@@ -25,6 +25,8 @@ const FormNavigationButtons: React.FC<FormNavigationButtonsProps> = ({
   isSubmitting = false,
   nextButtonText = 'Next',
 }) => {
+  const {theme} = useTheme();
+
   return (
     <View style={styles.buttonsContainer}>
       {showBackButton && (
@@ -39,7 +41,8 @@ const FormNavigationButtons: React.FC<FormNavigationButtonsProps> = ({
       <TouchableOpacity
         style={[
           styles.button,
-          isNextEnabled ? styles.nextButton : styles.disabledButton,
+          // eslint-disable-next-line react-native/no-inline-styles
+          isNextEnabled ? {backgroundColor: theme.primaryColor, marginLeft: 'auto'} : styles.disabledButton,
           showBackButton ? {} : styles.fullWidthButton,
         ]}
         onPress={isNextEnabled ? onNext : undefined}
@@ -80,10 +83,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#f5f5f5',
     borderWidth: 1,
     borderColor: '#ddd',
-  },
-  nextButton: {
-    backgroundColor: Colors.MT_PRIMARY_1,
-    marginLeft: 'auto',
   },
   fullWidthButton: {
     flex: 1,

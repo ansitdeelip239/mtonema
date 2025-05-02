@@ -2,7 +2,7 @@ import React from 'react';
 import {View, Text, TouchableOpacity, StyleSheet} from 'react-native';
 import {ClientActivityDataModel} from '../../../../types';
 import ActivityTimeline from './ActivityTimeline';
-import Colors from '../../../../constants/Colors';
+import { useTheme } from '../../../../context/ThemeProvider';
 
 interface RecentActivitiesCardProps {
   activities: ClientActivityDataModel[];
@@ -15,6 +15,7 @@ const RecentActivitiesCard: React.FC<RecentActivitiesCardProps> = ({
   onAddActivity,
   onActivityPress,
 }) => {
+  const {theme} = useTheme();
   const renderActivities = () => {
     if (!activities || activities.length === 0) {
       return <Text style={styles.noActivityText}>No activities yet</Text>;
@@ -44,7 +45,7 @@ const RecentActivitiesCard: React.FC<RecentActivitiesCardProps> = ({
       <View style={styles.activityHeader}>
         <Text style={styles.sectionTitle}>Recent Activities</Text>
         <TouchableOpacity
-          style={styles.addActivityButton}
+          style={[styles.addActivityButton, {backgroundColor: theme.primaryColor}]}
           onPress={onAddActivity}>
           <Text style={styles.addActivityButtonText}>Add Activity</Text>
         </TouchableOpacity>
@@ -79,7 +80,6 @@ const styles = StyleSheet.create({
     marginBottom: 12,
   },
   addActivityButton: {
-    backgroundColor: Colors.MT_PRIMARY_1,
     paddingHorizontal: 12,
     paddingVertical: 6,
     borderRadius: 8,

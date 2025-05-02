@@ -9,8 +9,8 @@ import {
 } from 'react-native';
 import {Property} from '../types';
 import {formatCurrency} from '../../../../utils/currency';
-import Colors from '../../../../constants/Colors';
 import GetIcon from '../../../../components/GetIcon';
+import { useTheme } from '../../../../context/ThemeProvider';
 
 // Default placeholder image for when no images are available
 const placeholderImage = require('../../../../assets/Images/dncr_black_logo.png');
@@ -29,6 +29,7 @@ const IMAGE_HEIGHT = CARD_HEIGHT - 24; // Maintain some padding
 // More aggressive memoization for PropertyCard
 const PropertyCard = memo(
   ({property, onPress}: PropertyCardProps) => {
+    const {theme} = useTheme();
     // Memoize expensive operations
     const displayImage = useMemo(() => {
       if (!property.imageURL) {
@@ -111,7 +112,7 @@ const PropertyCard = memo(
 
               {/* Featured Badge */}
               {property.featured && (
-                <View style={styles.featuredBadge}>
+                <View style={[styles.featuredBadge, {backgroundColor: theme.primaryColor}]}>
                   <Text style={styles.featuredText}>Featured</Text>
                 </View>
               )}
@@ -132,13 +133,13 @@ const PropertyCard = memo(
               </Text>
 
               {/* Price */}
-              <Text style={styles.price}>{formattedPrice}</Text>
+              <Text style={[styles.price, {color: theme.primaryColor}]}>{formattedPrice}</Text>
 
               {/* Location */}
               <View style={styles.locationContainer}>
                 <GetIcon
                   iconName="locationPin"
-                  color={Colors.MT_PRIMARY_1}
+                  color={theme.primaryColor}
                   size={14}
                 />
                 <Text
@@ -156,7 +157,7 @@ const PropertyCard = memo(
                   <GetIcon
                     iconName="length"
                     size={16}
-                    color={Colors.MT_PRIMARY_1}
+                    color={theme.primaryColor}
                   />
                   <Text style={styles.areaText}>{formattedArea}</Text>
                 </View>
@@ -168,7 +169,7 @@ const PropertyCard = memo(
                   <GetIcon
                     iconName="home"
                     size={14}
-                    color={Colors.MT_PRIMARY_1}
+                    color={theme.primaryColor}
                   />
                   <Text style={styles.typeText} numberOfLines={1}>
                     {property.propertyType || 'Not specified'}
@@ -180,7 +181,7 @@ const PropertyCard = memo(
                     <GetIcon
                       iconName="doubleBed"
                       size={14}
-                      color={Colors.MT_PRIMARY_1}
+                      color={theme.primaryColor}
                     />
                     <Text style={styles.furnishingText} numberOfLines={1}>
                       {property.furnishing}
@@ -245,7 +246,6 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: 8,
     right: 8,
-    backgroundColor: Colors.MT_PRIMARY_1,
     paddingHorizontal: 6,
     paddingVertical: 2,
     borderRadius: 4,
@@ -299,7 +299,6 @@ const styles = StyleSheet.create({
   price: {
     fontSize: 16,
     fontWeight: 'bold',
-    color: Colors.MT_PRIMARY_1,
     marginVertical: 4,
   },
   areaContainer: {

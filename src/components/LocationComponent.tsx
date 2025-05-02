@@ -3,6 +3,7 @@ import {View, FlatList, Keyboard, StyleSheet, Image} from 'react-native';
 import {TextInput, Text} from 'react-native-paper';
 import BuyerService from '../services/BuyerService';
 import Colors from '../constants/Colors';
+import { useTheme } from '../context/ThemeProvider';
 
 const LocationComponent = ({
   onLocationChange,
@@ -19,6 +20,8 @@ const LocationComponent = ({
   const [locationQuery, setLocationQuery] = useState('');
   const [locationSuggestions, setLocationSuggestions] = useState<string[]>([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
+
+  const {theme} = useTheme();
 
   // Debounce function
   const debounce = (func: (...args: any[]) => void, wait: number) => {
@@ -108,7 +111,7 @@ const LocationComponent = ({
           }}
           theme={{
             colors: {
-              primary: color || Colors.MT_PRIMARY_1, // Label color when focused
+              primary: color || theme.primaryColor, // Label color when focused
               onSurfaceVariant: borderColor || Colors.ligthGray, // Label color when not focused
               background: backgroundcolor || '#f0f0f0', // Background color of the input field
               text: 'black', // Text color of the input field

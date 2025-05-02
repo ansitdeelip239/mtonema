@@ -9,11 +9,11 @@ import {
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {FollowUpStackParamList} from '../../../navigator/components/FollowUpScreenStack';
 import Header from '../../../components/Header';
-import Colors from '../../../constants/Colors';
 import {useFollowUps} from '../../../hooks/useFollowUps';
 import FollowUpListSection from './components/FollowUpListSection';
 import {navigate} from '../../../navigator/NavigationRef';
 import {FollowUpType} from '../../../types';
+import { useTheme } from '../../../context/ThemeProvider';
 
 type Props = NativeStackScreenProps<
   FollowUpStackParamList,
@@ -28,6 +28,7 @@ const OverdueFollowUpScreen: React.FC<Props> = ({navigation, route}) => {
 
   // Hook for refresh functionality only
   const {followUps, isLoading, refreshing, onRefresh} = useFollowUps('overdue');
+  const {theme} = useTheme();
 
   const handleFollowUpPress = (clientId: number) => {
     navigate('Clients', {
@@ -59,8 +60,8 @@ const OverdueFollowUpScreen: React.FC<Props> = ({navigation, route}) => {
           <RefreshControl
             refreshing={refreshing}
             onRefresh={onRefresh}
-            colors={[Colors.MT_PRIMARY_1]}
-            tintColor={Colors.MT_PRIMARY_1}
+            colors={[theme.primaryColor]}
+            tintColor={theme.primaryColor}
           />
         }>
         <FollowUpListSection

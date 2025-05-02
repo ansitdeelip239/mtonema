@@ -19,9 +19,11 @@ import Strings from '../constants/Strings';
 import Colors from '../constants/Colors';
 import GetIcon from './GetIcon';
 import Images from '../constants/Images';
+import { useTheme } from '../context/ThemeProvider';
 
 const CustomDrawerContent = (props: any) => {
   const {user, logout} = useAuth();
+  const {theme} = useTheme();
   const [userName, setUserName] = useState(user?.name || '');
   const [isLoggingOut, setIsLoggingOut] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
@@ -71,7 +73,7 @@ const CustomDrawerContent = (props: any) => {
             <TouchableOpacity
               style={styles.editIconContainer}
               onPress={navigateToProfile}>
-              <GetIcon iconName="edit" color={Colors.MT_PRIMARY_1} size="20" />
+              <GetIcon iconName="edit" color={theme.primaryColor} size="20" />
             </TouchableOpacity>
           </View>
         </View>
@@ -106,7 +108,7 @@ const CustomDrawerContent = (props: any) => {
       <View style={styles.p15}>
         <TouchableOpacity
           onPress={handleCustomButtonPress}
-          style={styles.logout}
+          style={[styles.logout, {backgroundColor: theme.primaryColor}]}
           disabled={isLoggingOut}>
           <View style={styles.drawerItem}>
             <GetIcon iconName="logout" color={Colors.white} size="25" />
@@ -133,7 +135,7 @@ const CustomDrawerContent = (props: any) => {
                 <Text style={styles.textBlack}>Cancel</Text>
               </TouchableOpacity>
               <TouchableOpacity
-                style={styles.redButton}
+                style={[styles.redButton, {backgroundColor: theme.primaryColor}]}
                 onPress={confirmLogout}
                 disabled={isLoggingOut}>
                 <Text style={styles.textWhite}>Log out</Text>
@@ -191,11 +193,6 @@ const styles = StyleSheet.create({
     fontWeight: '500',
     color: 'black',
   },
-  drawerItemText: {
-    marginLeft: 16,
-    fontSize: 16,
-    color: Colors.MT_PRIMARY_1,
-  },
   profileContainer: {
     alignItems: 'center',
     justifyContent: 'center',
@@ -233,7 +230,6 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   logout: {
-    backgroundColor: Colors.MT_PRIMARY_1,
     padding: 8,
     paddingVertical: 2,
     marginLeft: 20,
@@ -290,7 +286,6 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 10,
     margin: 5,
-    backgroundColor: Colors.MT_PRIMARY_1,
     borderRadius: 5,
     alignItems: 'center',
   },

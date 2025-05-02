@@ -8,6 +8,7 @@ import {
 } from 'react-native';
 import Colors from '../../../../../constants/Colors';
 import GetIcon from '../../../../../components/GetIcon';
+import { useTheme } from '../../../../../context/ThemeProvider';
 
 interface TagsInputProps {
   tags: string | null;
@@ -16,6 +17,7 @@ interface TagsInputProps {
 
 const TagsInput: React.FC<TagsInputProps> = ({tags, onTagsChange}) => {
   const [tagInput, setTagInput] = useState<string>('');
+  const {theme} = useTheme();
 
   const handleAddTag = () => {
     if (!tagInput.trim()) {
@@ -70,6 +72,7 @@ const TagsInput: React.FC<TagsInputProps> = ({tags, onTagsChange}) => {
         <TouchableOpacity
           style={[
             styles.addTagButton,
+            {backgroundColor: theme.primaryColor},
             !tagInput.trim() && styles.disabledAddButton,
           ]}
           onPress={handleAddTag}
@@ -82,7 +85,7 @@ const TagsInput: React.FC<TagsInputProps> = ({tags, onTagsChange}) => {
       {tags && (
         <View style={styles.tagsContainer}>
           {JSON.parse(tags).map((tag: string, index: number) => (
-            <View key={index} style={styles.tagItem}>
+            <View key={index} style={[styles.tagItem, {backgroundColor: theme.primaryColor}]}>
               <Text style={styles.tagText}>{tag}</Text>
               <TouchableOpacity
                 style={styles.removeTagButton}
@@ -115,7 +118,6 @@ const styles = StyleSheet.create({
     marginRight: 8,
   },
   addTagButton: {
-    backgroundColor: Colors.MT_PRIMARY_1,
     paddingVertical: 12,
     paddingHorizontal: 16,
     borderRadius: 8,
@@ -138,7 +140,6 @@ const styles = StyleSheet.create({
   tagItem: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: Colors.MT_PRIMARY_1,
     borderRadius: 16,
     paddingVertical: 4,
     paddingHorizontal: 8,

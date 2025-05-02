@@ -7,7 +7,7 @@ import {
   useWindowDimensions,
   TouchableOpacity,
 } from 'react-native';
-import Colors from '../../../../../constants/Colors';
+import {useTheme} from '../../../../../context/ThemeProvider';
 
 interface FormStepperProps {
   steps: string[];
@@ -25,6 +25,7 @@ const FormStepper: React.FC<FormStepperProps> = ({
   canMoveToNextStep = false, // Default to false
 }) => {
   const {width} = useWindowDimensions();
+  const {theme} = useTheme();
 
   const circleWidth = 34; // Width of the circle
   const circleRadius = circleWidth / 2;
@@ -58,7 +59,7 @@ const FormStepper: React.FC<FormStepperProps> = ({
           },
         ]}>
         <View style={styles.backgroundLine} />
-        <Animated.View style={[styles.progressLine, {width: progressWidth}]} />
+        <Animated.View style={[styles.progressLine, {backgroundColor: theme.primaryColor}, {width: progressWidth}]} />
       </View>
 
       <View style={styles.stepsContainer}>
@@ -66,8 +67,8 @@ const FormStepper: React.FC<FormStepperProps> = ({
           const isCompleted = index < currentStep;
           const isActive = index === currentStep;
           // Allow navigation to completed steps, current step, and next step if validation passes
-          const canNavigate = 
-            index <= currentStep || 
+          const canNavigate =
+            index <= currentStep ||
             (index === currentStep + 1 && canMoveToNextStep);
 
           return (
@@ -84,13 +85,14 @@ const FormStepper: React.FC<FormStepperProps> = ({
                   style={[
                     styles.circle,
                     isActive && styles.activeCircle,
-                    isCompleted && styles.completedCircle,
+                    isActive && {borderColor: theme.primaryColor},
+                    isCompleted && {backgroundColor: theme.primaryColor, borderColor: theme.primaryColor},
                     !canNavigate && styles.disabledCircle,
                   ]}>
                   <Text
                     style={[
                       styles.stepNumber,
-                      isActive && styles.activeStepNumber,
+                      isActive && {color: theme.primaryColor},
                       isCompleted && styles.completedStepNumber,
                       !canNavigate && styles.disabledStepNumber,
                     ]}>
@@ -101,10 +103,16 @@ const FormStepper: React.FC<FormStepperProps> = ({
                   style={[
                     styles.stepLabel,
                     isActive && styles.activeStepLabel,
-                    isCompleted && styles.completedStepLabel,
+                    isActive && {color: theme.primaryColor},
+                    isCompleted && {color: theme.primaryColor},
                     !canNavigate && styles.disabledStepLabel,
                     // Add a visual cue for the next available step
-                    index === currentStep + 1 && canMoveToNextStep && styles.nextAvailableStep,
+                    index === currentStep + 1 &&
+                      canMoveToNextStep &&
+                      styles.nextAvailableStep,
+                    index === currentStep + 1 &&
+                      canMoveToNextStep &&
+                      {color: theme.primaryColor},
                   ]}>
                   {step}
                 </Text>
@@ -156,7 +164,6 @@ const styles = StyleSheet.create({
     top: 0,
     left: 0,
     height: 4,
-    backgroundColor: Colors.MT_PRIMARY_1,
     borderRadius: 2,
   },
   circle: {
@@ -173,11 +180,6 @@ const styles = StyleSheet.create({
   },
   activeCircle: {
     backgroundColor: 'white',
-    borderColor: Colors.MT_PRIMARY_1,
-  },
-  completedCircle: {
-    backgroundColor: Colors.MT_PRIMARY_1,
-    borderColor: Colors.MT_PRIMARY_1,
   },
   disabledCircle: {
     opacity: 0.5,
@@ -186,9 +188,6 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: 'bold',
     color: '#888',
-  },
-  activeStepNumber: {
-    color: Colors.MT_PRIMARY_1,
   },
   completedStepNumber: {
     color: 'white',
@@ -203,11 +202,7 @@ const styles = StyleSheet.create({
     marginTop: 4,
   },
   activeStepLabel: {
-    color: Colors.MT_PRIMARY_1,
     fontWeight: 'bold',
-  },
-  completedStepLabel: {
-    color: Colors.MT_PRIMARY_1,
   },
   disabledStepLabel: {
     color: '#aaa',
@@ -216,7 +211,6 @@ const styles = StyleSheet.create({
     opacity: 1,
   },
   nextAvailableStep: {
-    color: Colors.MT_PRIMARY_1,
     opacity: 0.8,
   },
 });

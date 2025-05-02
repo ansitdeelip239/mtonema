@@ -18,6 +18,7 @@ import FollowUpListSection from './components/FollowUpListSection';
 import {usePartner} from '../../../context/PartnerProvider';
 import {navigate} from '../../../navigator/NavigationRef';
 import {Badge} from 'react-native-paper';
+import {useTheme} from '../../../context/ThemeProvider';
 
 type Props = NativeStackScreenProps<FollowUpStackParamList, 'FollowUpScreen'>;
 
@@ -40,6 +41,7 @@ const FollowUpScreen: React.FC<Props> = ({navigation}) => {
 
   const [isRefreshing, setIsRefreshing] = useState(false);
   const {clientsUpdated} = usePartner();
+  const {theme} = useTheme();
 
   // Helper function to determine if a date is today
   const isToday = useCallback((dateString: string | null): boolean => {
@@ -131,8 +133,8 @@ const FollowUpScreen: React.FC<Props> = ({navigation}) => {
           <RefreshControl
             refreshing={isRefreshing}
             onRefresh={handleRefresh}
-            colors={[Colors.MT_PRIMARY_1]}
-            tintColor={Colors.MT_PRIMARY_1}
+            colors={[theme.primaryColor]}
+            tintColor={theme.primaryColor}
           />
         }>
         {/* Navigation Buttons */}
@@ -145,6 +147,7 @@ const FollowUpScreen: React.FC<Props> = ({navigation}) => {
                 style={[
                   styles.navButtonIconContainer,
                   styles.overdueIconContainer,
+                  {backgroundColor: theme.primaryColor},
                 ]}>
                 <GetIcon
                   iconName="calendarOverdue"
@@ -180,7 +183,7 @@ const FollowUpScreen: React.FC<Props> = ({navigation}) => {
               <View
                 style={[
                   styles.navButtonIconContainer,
-                  styles.upcomingIconContainer,
+                  {backgroundColor: theme.primaryColor},
                 ]}>
                 <GetIcon
                   iconName="calendarUpcoming"
@@ -192,7 +195,7 @@ const FollowUpScreen: React.FC<Props> = ({navigation}) => {
                 <View style={styles.titleContainer}>
                   <Text style={styles.navButtonTitle}>Upcoming Follow-ups</Text>
                   {upcomingFollowUps.length > 0 && (
-                    <Badge style={styles.upcomingBadge} size={22}>
+                    <Badge style={{backgroundColor: theme.primaryColor, color: theme.backgroundColor}} size={22}>
                       {upcomingFollowUps.length}
                     </Badge>
                   )}
@@ -210,13 +213,13 @@ const FollowUpScreen: React.FC<Props> = ({navigation}) => {
           </TouchableOpacity>
 
           <TouchableOpacity
-            style={[styles.navButton, styles.somedayButton]}
+            style={[styles.navButton, styles.somedayButton, {borderLeftColor: theme.secondaryColor}]}
             onPress={() => navigateToScreen('someday')}>
             <View style={styles.navButtonContent}>
               <View
                 style={[
                   styles.navButtonIconContainer,
-                  styles.somedayIconContainer,
+                  {backgroundColor: theme.secondaryColor},
                 ]}>
                 <GetIcon
                   iconName="calendarSomeday"
@@ -228,7 +231,7 @@ const FollowUpScreen: React.FC<Props> = ({navigation}) => {
                 <View style={styles.titleContainer}>
                   <Text style={styles.navButtonTitle}>Someday Follow-ups</Text>
                   {somedayFollowUps.length > 0 && (
-                    <Badge style={styles.somedayBadge} size={22}>
+                    <Badge style={[styles.somedayBadge, {backgroundColor: theme.secondaryColor}]} size={22}>
                       {somedayFollowUps.length}
                     </Badge>
                   )}
@@ -297,7 +300,6 @@ const styles = StyleSheet.create({
     width: 40,
     height: 40,
     borderRadius: 20,
-    backgroundColor: Colors.MT_PRIMARY_1,
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -309,16 +311,9 @@ const styles = StyleSheet.create({
   overdueIconContainer: {
     backgroundColor: '#c33140',
   },
-  upcomingIconContainer: {
-    backgroundColor: Colors.MT_PRIMARY_1,
-  },
   somedayButton: {
     backgroundColor: '#f5f7f7',
     borderLeftWidth: 4,
-    borderLeftColor: Colors.MT_PRIMARY_2,
-  },
-  somedayIconContainer: {
-    backgroundColor: Colors.MT_PRIMARY_2,
   },
   navButtonTextContainer: {
     flex: 1,
@@ -345,12 +340,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#c33140',
     color: Colors.MT_SECONDARY_3,
   },
-  upcomingBadge: {
-    backgroundColor: Colors.MT_PRIMARY_1,
-    color: Colors.MT_SECONDARY_3,
-  },
   somedayBadge: {
-    backgroundColor: Colors.MT_PRIMARY_2,
     color: Colors.MT_SECONDARY_3,
   },
 });

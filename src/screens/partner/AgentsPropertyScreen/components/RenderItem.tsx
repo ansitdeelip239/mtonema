@@ -3,13 +3,13 @@ import {StyleSheet, Text, View} from 'react-native';
 import {AgentData} from '../../../../types';
 import {formatCurrency} from '../../../../utils/currency';
 import {IconButton, Surface} from 'react-native-paper';
-import Colors from '../../../../constants/Colors';
 import GetIcon from '../../../../components/GetIcon';
 import PartnerService from '../../../../services/PartnerService';
 import Toast from 'react-native-toast-message';
 import ConfirmationModal from '../../../../components/ConfirmationModal';
 import {AgentDataStackParamList} from '../../../../navigator/components/AgentDataStack';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
+import { useTheme } from '../../../../context/ThemeProvider';
 
 interface RenderItemProps {
   item: AgentData;
@@ -26,6 +26,8 @@ const RenderItem: React.FC<RenderItemProps> = ({
   navigation,
 }) => {
   const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false);
+
+  const {theme} = useTheme();
 
   const onEdit = () => {
     navigation.navigate('AddAgentDataScreen', {
@@ -66,26 +68,26 @@ const RenderItem: React.FC<RenderItemProps> = ({
       <Surface style={styles.card}>
         <View style={styles.header}>
           <View style={styles.titleContainer}>
-            <Text style={styles.name}>{item.agentName || 'N/A'}</Text>
-            <View style={styles.badge}>
-              <Text style={styles.badgeText}>
+            <Text style={[styles.name, {color: theme.primaryColor}]}>{item.agentName || 'N/A'}</Text>
+            <View style={[styles.badge, {backgroundColor: theme.primaryColor + '15'}]}>
+              <Text style={[styles.badgeText, {color: theme.primaryColor}]}>
                 {item.negotiable ? 'Negotiable' : 'Fixed Price'}
               </Text>
             </View>
           </View>
           <View style={styles.actions}>
             <IconButton
-              icon={() => GetIcon({iconName: 'edit', color: Colors.MT_PRIMARY_1})}
+              icon={() => GetIcon({iconName: 'edit', color: theme.primaryColor})}
               size={20}
               onPress={() => onEdit()}
-              iconColor={Colors.MT_PRIMARY_1}
+              iconColor={theme.primaryColor}
               style={styles.actionButton}
             />
             <IconButton
-              icon={() => GetIcon({iconName: 'delete', color: Colors.MT_PRIMARY_1})}
+              icon={() => GetIcon({iconName: 'delete', color: theme.primaryColor})}
               size={20}
               onPress={handleDeletePress}
-              iconColor={Colors.MT_PRIMARY_1}
+              iconColor={theme.primaryColor}
               style={styles.actionButton}
             />
           </View>
@@ -105,13 +107,13 @@ const RenderItem: React.FC<RenderItemProps> = ({
 
           <View style={styles.row}>
             <Text style={styles.label}>Demand Price:</Text>
-            <Text style={[styles.value, styles.priceText]}>
+            <Text style={[styles.value, styles.priceText, {color: theme.primaryColor}]}>
               {formatCurrency(item.demandPrice) || 'N/A'}
             </Text>
           </View>
           <View style={styles.row}>
             <Text style={styles.label}>Security Deposit:</Text>
-            <Text style={[styles.value, styles.priceText]}>
+            <Text style={[styles.value, styles.priceText, {color: theme.primaryColor}]}>
               {formatCurrency(item.securityDepositAmount) || 'N/A'}
             </Text>
           </View>
@@ -190,18 +192,15 @@ const styles = StyleSheet.create({
   name: {
     fontSize: 20,
     fontWeight: '700',
-    color: Colors.MT_PRIMARY_1,
     marginBottom: 4,
   },
   badge: {
-    backgroundColor: Colors.MT_PRIMARY_1 + '15',
     paddingHorizontal: 8,
     paddingVertical: 4,
     borderRadius: 12,
     alignSelf: 'flex-start',
   },
   badgeText: {
-    color: Colors.MT_PRIMARY_1,
     fontSize: 12,
     fontWeight: '600',
   },
@@ -237,7 +236,6 @@ const styles = StyleSheet.create({
   },
   priceText: {
     fontWeight: '700',
-    color: Colors.MT_PRIMARY_1,
   },
   notes: {
     padding: 16,

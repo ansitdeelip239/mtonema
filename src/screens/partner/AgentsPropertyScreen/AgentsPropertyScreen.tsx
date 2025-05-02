@@ -12,7 +12,6 @@ import PartnerService from '../../../services/PartnerService';
 import {useAuth} from '../../../hooks/useAuth';
 import {AgentData, FilterValues, PagingModel} from '../../../types';
 import renderFooter from './components/RenderFooter';
-import Colors from '../../../constants/Colors';
 import Header from '../../../components/Header';
 import {PartnerDrawerParamList} from '../../../types/navigation';
 import {usePartner} from '../../../context/PartnerProvider';
@@ -20,6 +19,7 @@ import RenderItem from './components/RenderItem';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {AgentDataStackParamList} from '../../../navigator/components/AgentDataStack';
 import SearchAndFilter from './components/SearchAndFilter';
+import { useTheme } from '../../../context/ThemeProvider';
 
 // type Props = BottomTabScreenProps<PartnerBottomTabParamList, 'Property'>;
 type Props = NativeStackScreenProps<AgentDataStackParamList, 'AgentDataScreen'>;
@@ -41,6 +41,7 @@ const AgentDataScreen: React.FC<Props> = ({navigation}) => {
   });
   const {user} = useAuth();
   const {agentPropertyUpdated, setAgentPropertyUpdated} = usePartner();
+  const {theme} = useTheme();
   const PAGE_SIZE = 10;
 
   const isInitialRender = useRef(true);
@@ -172,7 +173,7 @@ const AgentDataScreen: React.FC<Props> = ({navigation}) => {
     <View style={styles.container}>
       <Header<PartnerDrawerParamList> title="Agent's Property" titleSize={24}>
         <TouchableOpacity
-          style={styles.addButton}
+          style={[styles.addButton, {backgroundColor: theme.secondaryColor}]}
           onPress={() => {
             navigation.navigate('AddAgentDataScreen', {
               editMode: false,
@@ -191,7 +192,7 @@ const AgentDataScreen: React.FC<Props> = ({navigation}) => {
 
       {isInitialLoading ? (
         <View style={styles.centerLoaderContainer}>
-          <ActivityIndicator size="large" color={Colors.MT_PRIMARY_1} />
+          <ActivityIndicator size="large" color={theme.primaryColor} />
         </View>
       ) : (
         <FlatList
@@ -246,11 +247,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: '#888',
   },
-  fabStyle: {
-    backgroundColor: Colors.MT_PRIMARY_1,
-  },
   addButton: {
-    backgroundColor: Colors.MT_PRIMARY_1,
     paddingHorizontal: 16,
     paddingVertical: 8,
     borderRadius: 8,

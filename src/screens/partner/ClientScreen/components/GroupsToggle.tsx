@@ -7,6 +7,7 @@ import AddGroupModal from '../../GroupsScreen/components/AddGroupModal';
 import PartnerService from '../../../../services/PartnerService';
 import Toast from 'react-native-toast-message';
 import {useAuth} from '../../../../hooks/useAuth';
+import {useTheme} from '../../../../context/ThemeProvider';
 
 interface GroupsToggleComponentProps {
   selectedGroups: number[];
@@ -19,6 +20,7 @@ const GroupsToggleComponent: React.FC<GroupsToggleComponentProps> = ({
 }) => {
   const {groups, reloadGroups} = usePartner();
   const {user} = useAuth();
+  const {theme} = useTheme();
   const [showAllGroups, setShowAllGroups] = useState(false);
   const [showAddGroupModal, setShowAddGroupModal] = useState(false);
   const [isAddingGroup, setIsAddingGroup] = useState(false);
@@ -133,14 +135,14 @@ const GroupsToggleComponent: React.FC<GroupsToggleComponentProps> = ({
             <GetIcon
               iconName={showAllGroups ? 'fold' : 'unfold'}
               size={18}
-              color={Colors.MT_PRIMARY_1}
+              color={theme.primaryColor}
             />
           </View>
         </TouchableOpacity>
 
         <TouchableOpacity
           onPress={() => setShowAddGroupModal(true)}
-          style={styles.addGroupButton}>
+          style={[styles.addGroupButton, {backgroundColor: theme.primaryColor}]}>
           <GetIcon iconName="plus" size={16} color="white" />
           <Text style={styles.addGroupButtonText}>Add Group</Text>
         </TouchableOpacity>
@@ -153,6 +155,7 @@ const GroupsToggleComponent: React.FC<GroupsToggleComponentProps> = ({
             key={group.id}
             style={[
               styles.groupButton,
+              {borderColor: theme.primaryColor},
               selectedGroups.includes(group.id) && {
                 backgroundColor: group.color.name,
                 borderColor: group.color.name,
@@ -162,6 +165,7 @@ const GroupsToggleComponent: React.FC<GroupsToggleComponentProps> = ({
             <Text
               style={[
                 styles.groupButtonText,
+                {color: theme.primaryColor},
                 selectedGroups.includes(group.id) &&
                   styles.groupButtonTextSelected,
               ]}>
@@ -172,7 +176,11 @@ const GroupsToggleComponent: React.FC<GroupsToggleComponentProps> = ({
 
         {hasMoreGroups && !showAllGroups && (
           <TouchableOpacity
-            style={[styles.groupButton, styles.moreButton]}
+            style={[
+              styles.groupButton,
+              styles.moreButton,
+              {borderColor: theme.primaryColor},
+            ]}
             onPress={() => setShowAllGroups(true)}>
             <Text style={styles.moreButtonText}>
               +{unselectedGroups.length - unselectedToShow.length} More
@@ -182,7 +190,11 @@ const GroupsToggleComponent: React.FC<GroupsToggleComponentProps> = ({
 
         {showAllGroups && unselectedGroups.length > 0 && (
           <TouchableOpacity
-            style={[styles.groupButton, styles.moreButton]}
+            style={[
+              styles.groupButton,
+              styles.moreButton,
+              {borderColor: theme.primaryColor},
+            ]}
             onPress={() => setShowAllGroups(false)}>
             <Text style={styles.moreButtonText}>Show Less</Text>
           </TouchableOpacity>
@@ -213,7 +225,7 @@ const GroupsToggleComponent: React.FC<GroupsToggleComponentProps> = ({
               fontSize: 18,
               fontWeight: 'bold',
               marginBottom: 16,
-              color: Colors.MT_PRIMARY_1,
+              color: theme.primaryColor,
             },
             input: {
               borderWidth: 1,
@@ -239,7 +251,7 @@ const GroupsToggleComponent: React.FC<GroupsToggleComponentProps> = ({
               backgroundColor: Colors.ligthGray,
             },
             saveButton: {
-              backgroundColor: Colors.MT_PRIMARY_1,
+              backgroundColor: theme.primaryColor,
             },
             buttonText: {
               fontWeight: 'bold',
@@ -274,10 +286,8 @@ const styles = StyleSheet.create({
     paddingVertical: 6,
     borderRadius: 16,
     borderWidth: 1,
-    borderColor: Colors.MT_PRIMARY_1,
   },
   groupButtonText: {
-    color: Colors.MT_PRIMARY_1,
     fontSize: 14,
   },
   groupButtonTextSelected: {
@@ -309,7 +319,6 @@ const styles = StyleSheet.create({
   addGroupButton: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: Colors.MT_PRIMARY_1,
     paddingHorizontal: 12,
     paddingVertical: 6,
     borderRadius: 16,

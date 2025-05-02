@@ -1,7 +1,7 @@
 import React, {useState, useEffect, useRef} from 'react';
 import {View, StyleSheet, ActivityIndicator, Dimensions, Platform} from 'react-native';
 import {WebView} from 'react-native-webview';
-import Colors from '../constants/Colors';
+import { useTheme } from '../context/ThemeProvider';
 
 interface YoutubeVideoPlayerProps {
   videoId: string;
@@ -18,6 +18,7 @@ const YoutubeVideoPlayer: React.FC<YoutubeVideoPlayerProps> = ({
 }) => {
   const [loading, setLoading] = useState(true);
   const webviewRef = useRef<WebView>(null);
+  const {theme} = useTheme();
 
   // This will inject JavaScript to pause the video when component unmounts
   useEffect(() => {
@@ -141,7 +142,7 @@ const YoutubeVideoPlayer: React.FC<YoutubeVideoPlayerProps> = ({
       />
       {loading && (
         <View style={styles.loadingContainer}>
-          <ActivityIndicator color={Colors.MT_PRIMARY_1} size="large" />
+          <ActivityIndicator color={theme.primaryColor} size="large" />
         </View>
       )}
     </View>

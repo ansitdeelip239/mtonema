@@ -8,6 +8,7 @@ import {Button} from 'react-native-paper';
 import {ClientActivityDataModel} from '../../../../types';
 import GetIcon from '../../../../components/GetIcon';
 import ConfirmationModal from '../../../../components/ConfirmationModal';
+import { useTheme } from '../../../../context/ThemeProvider';
 
 interface AddActivityModalProps {
   visible: boolean;
@@ -45,6 +46,7 @@ const AddActivityModal: React.FC<AddActivityModalProps> = ({
   });
   const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false);
   const {masterData} = useMaster();
+  const {theme} = useTheme();
 
   useEffect(() => {
     if (!visible) {
@@ -154,11 +156,11 @@ const AddActivityModal: React.FC<AddActivityModalProps> = ({
               multiline
               numberOfLines={4}
               style={styles.input}
-              outlineColor={Colors.MT_PRIMARY_1}
-              activeOutlineColor={Colors.MT_PRIMARY_1}
+              outlineColor={theme.primaryColor}
+              activeOutlineColor={theme.primaryColor}
               theme={{
                 colors: {
-                  primary: Colors.MT_PRIMARY_1,
+                  primary: theme.primaryColor,
                   background: 'white',
                   placeholder: '#666',
                   text: '#000',
@@ -172,15 +174,15 @@ const AddActivityModal: React.FC<AddActivityModalProps> = ({
             <View style={styles.modalButtons}>
               <Button
                 mode="outlined"
-                style={[styles.modalButton, styles.cancelButton]}
-                labelStyle={styles.cancelButtonText}
+                style={[styles.modalButton, {borderColor: theme.primaryColor}]}
+                labelStyle={[styles.cancelButtonText, {color: theme.primaryColor}]}
                 onPress={onClose}>
                 Cancel
               </Button>
 
               <Button
                 mode="contained"
-                style={[styles.modalButton, styles.submitButton]}
+                style={[styles.modalButton, {backgroundColor: theme.primaryColor}]}
                 labelStyle={styles.buttonText}
                 onPress={handleSubmit}
                 loading={isLoading}
@@ -237,16 +239,9 @@ const styles = StyleSheet.create({
     flex: 1,
     marginHorizontal: 8,
   },
-  cancelButton: {
-    borderColor: Colors.MT_PRIMARY_1,
-  },
   cancelButtonText: {
-    color: Colors.MT_PRIMARY_1,
     textAlign: 'center',
     fontWeight: 'bold',
-  },
-  submitButton: {
-    backgroundColor: Colors.MT_PRIMARY_1,
   },
   buttonText: {
     color: 'white',

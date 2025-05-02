@@ -23,6 +23,7 @@ import {useAuth} from '../hooks/useAuth';
 import Colors from '../constants/Colors';
 import {useKeyboard} from '../hooks/useKeyboard';
 import {useLogoStorage} from '../hooks/useLogoStorage';
+import { useTheme } from '../context/ThemeProvider';
 
 const EditProfileComponent = () => {
   const [editingFields, setEditingFields] = useState<
@@ -38,6 +39,7 @@ const EditProfileComponent = () => {
   const {keyboardVisible} = useKeyboard();
   const scrollViewRef = useRef<ScrollView>(null);
   const {logoUrl} = useLogoStorage();
+  const {theme} = useTheme();
 
   const {formInput, handleInputChange, loading, onSubmit, setFormInput} =
     useForm<ProfileFormData>({
@@ -252,7 +254,7 @@ const EditProfileComponent = () => {
                 onPress={onSubmit}
                 loading={loading}
                 textColor={Colors.white}
-                style={styles.submitButton}>
+                style={[styles.submitButton, {backgroundColor: theme.primaryColor}]}>
                 Save Changes
               </Button>
             )}
@@ -279,7 +281,6 @@ const styles = StyleSheet.create({
   },
   submitButton: {
     marginTop: 16,
-    backgroundColor: Colors.MT_PRIMARY_1,
   },
   profileImageContainer: {
     alignSelf: 'center',

@@ -3,6 +3,7 @@ import {StyleSheet, Text, View, TouchableOpacity} from 'react-native';
 import {MasterDetailModel} from '../types';
 import {Chip, HelperText} from 'react-native-paper';
 import Colors from '../constants/Colors';
+import { useTheme } from '../context/ThemeProvider';
 
 const FilterOption = ({
   label,
@@ -17,6 +18,7 @@ const FilterOption = ({
   onSelect: (value: string) => void;
   error?: string;
 }) => {
+  const {theme} = useTheme();
   const [visibleLines, setVisibleLines] = useState(1);
   const buttonsPerLine = 4;
 
@@ -48,7 +50,7 @@ const FilterOption = ({
             onPress={() => onSelect(option.masterDetailName)}
             style={[
               styles.chip,
-              selectedValue === option.masterDetailName && styles.selectedChip,
+              selectedValue === option.masterDetailName && {backgroundColor: theme.primaryColor},
               error ? styles.errorChip : null,
             ]}
             showSelectedCheck={false}
@@ -122,9 +124,6 @@ const styles = StyleSheet.create({
     marginRight: 8,
     borderRadius: 20,
     backgroundColor: 'white',
-  },
-  selectedChip: {
-    backgroundColor: Colors.MT_PRIMARY_1,
   },
   errorChip: {
     borderColor: '#cc0000',

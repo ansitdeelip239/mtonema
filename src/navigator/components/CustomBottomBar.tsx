@@ -2,9 +2,9 @@ import React from 'react';
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {BottomTabBarProps} from '@react-navigation/bottom-tabs';
 import {CommonActions, ParamListBase} from '@react-navigation/native';
-import Colors from '../../constants/Colors';
 import {useKeyboard} from '../../hooks/useKeyboard';
 import GetIcon, {IconEnum} from '../../components/GetIcon';
+import {useTheme} from '../../context/ThemeProvider';
 
 export type TabScreen<T extends ParamListBase> = {
   name: keyof T;
@@ -29,6 +29,7 @@ export const CustomBottomBar = <T extends ParamListBase>({
 }: CustomBottomBarProps<T>) => {
   const middleIndex = Math.floor(tabScreens.length / 2);
   const {keyboardVisible} = useKeyboard();
+  const {theme} = useTheme();
 
   if (keyboardVisible) {
     return null;
@@ -59,7 +60,7 @@ export const CustomBottomBar = <T extends ParamListBase>({
               <View style={styles.tabContent}>
                 {descriptors[route.key].options.tabBarIcon?.({
                   focused: state.index === index,
-                  color: state.index === index ? Colors.MT_PRIMARY_1 : '#666',
+                  color: state.index === index ? theme.primaryColor : '#666',
                   size: 24,
                 })}
                 <Text
@@ -67,12 +68,14 @@ export const CustomBottomBar = <T extends ParamListBase>({
                   style={[
                     styles.tabLabel,
                     state.index === index && styles.activeTabLabel,
+                    state.index === index && {color: theme.primaryColor},
                   ]}>
                   {typeof descriptors[route.key].options.tabBarLabel ===
                   'function'
                     ? (descriptors[route.key].options.tabBarLabel as Function)({
                         focused: state.index === index,
-                        color: state.index === index ? Colors.MT_PRIMARY_1 : '#666',
+                        color:
+                          state.index === index ? theme.primaryColor : '#666',
                         position: 'below-icon',
                         children: route.name,
                       })
@@ -87,6 +90,7 @@ export const CustomBottomBar = <T extends ParamListBase>({
           key={state.routes[middleIndex].key}
           style={[
             styles.centerTab,
+            {backgroundColor: theme.primaryColor},
             state.index === middleIndex && styles.activeCenterTab,
           ]}
           onPress={() => {
@@ -103,7 +107,10 @@ export const CustomBottomBar = <T extends ParamListBase>({
               });
             }
           }}>
-          <GetIcon iconName={tabScreens[middleIndex].icon} color="#fff" />
+          <GetIcon
+            iconName={tabScreens[middleIndex].icon}
+            color={theme.textColor === '#000000' ? '#fff' : theme.textColor}
+          />
         </TouchableOpacity>
 
         <View style={styles.tabSection}>
@@ -112,10 +119,7 @@ export const CustomBottomBar = <T extends ParamListBase>({
               key={route.key}
               style={[
                 styles.tab,
-                state.index === index + middleIndex + 1 && [
-                  styles.activeTab,
-                  styles.activeTabColor,
-                ],
+                state.index === index + middleIndex + 1 && [styles.activeTab],
               ]}
               onPress={() => {
                 const event = navigation.emit({
@@ -136,7 +140,7 @@ export const CustomBottomBar = <T extends ParamListBase>({
                   focused: state.index === index + middleIndex + 1,
                   color:
                     state.index === index + middleIndex + 1
-                      ? Colors.MT_PRIMARY_1
+                      ? theme.primaryColor
                       : '#666',
                   size: 24,
                 })}
@@ -146,6 +150,9 @@ export const CustomBottomBar = <T extends ParamListBase>({
                     styles.tabLabel,
                     state.index === index + middleIndex + 1 &&
                       styles.activeTabLabel,
+                    state.index === index + middleIndex + 1 && {
+                      color: theme.primaryColor,
+                    },
                   ]}>
                   {typeof descriptors[route.key].options.tabBarLabel ===
                   'function'
@@ -153,7 +160,7 @@ export const CustomBottomBar = <T extends ParamListBase>({
                         focused: state.index === index + middleIndex + 1,
                         color:
                           state.index === index + middleIndex + 1
-                            ? Colors.MT_PRIMARY_1
+                            ? theme.primaryColor
                             : '#666',
                         position: 'below-icon',
                         children: route.name,
@@ -203,7 +210,6 @@ const styles = StyleSheet.create({
     flexShrink: 1,
   },
   activeTabLabel: {
-    color: Colors.MT_PRIMARY_1,
     fontWeight: 'bold',
   },
   tabSection: {
@@ -221,11 +227,7 @@ const styles = StyleSheet.create({
     // borderRadius: 16,
     // margin: 2,
   },
-  activeTabColor: {
-    color: Colors.MT_PRIMARY_1 + '20',
-  },
   centerTab: {
-    backgroundColor: Colors.MT_PRIMARY_1,
     // width: 48,
     // height: 48,
     // borderRadius: 24,
@@ -237,7 +239,6 @@ const styles = StyleSheet.create({
     width: 50,
   },
   activeCenterTab: {
-    backgroundColor: Colors.MT_PRIMARY_1,
     transform: [{scale: 1.1}],
   },
 });

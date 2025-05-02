@@ -13,6 +13,7 @@ import {useMaster} from '../../../../context/MasterProvider';
 import FilterOption from '../../../../components/FilterOption';
 import {FilterValues} from '../types';
 import {convertToMasterDetailModel} from '../../../../utils/formUtils';
+import { useTheme } from '../../../../context/ThemeProvider';
 
 const FilterModal = ({
   initialFilters,
@@ -25,6 +26,7 @@ const FilterModal = ({
 }) => {
   const [filters, setFilters] = useState<FilterValues>(initialFilters);
   const {masterData} = useMaster();
+  const {theme} = useTheme();
 
   const fadeAnim = useRef(new Animated.Value(0)).current;
   const slideAnim = useRef(new Animated.Value(300)).current;
@@ -126,7 +128,7 @@ const FilterModal = ({
             <Text style={styles.modalTitle}>Filter Properties</Text>
             {hasActiveFilters && (
               <TouchableOpacity onPress={handleClearAllFilters}>
-                <Text style={styles.clearAllText}>Clear All</Text>
+                <Text style={[styles.clearAllText, {color: theme.primaryColor}]}>Clear All</Text>
               </TouchableOpacity>
             )}
           </View>
@@ -169,7 +171,7 @@ const FilterModal = ({
               <Text style={styles.buttonText}>Cancel</Text>
             </TouchableOpacity>
             <TouchableOpacity
-              style={[styles.button, styles.applyButton]}
+              style={[styles.button, {backgroundColor: theme.primaryColor}]}
               onPress={handleApplyFilter}>
               <Text style={[styles.buttonText, styles.applyText]}>
                 Apply Filters
@@ -214,7 +216,6 @@ const styles = StyleSheet.create({
   },
   clearAllText: {
     fontSize: 14,
-    color: Colors.MT_PRIMARY_1,
     fontWeight: '500',
   },
   buttonContainer: {
@@ -230,9 +231,6 @@ const styles = StyleSheet.create({
   },
   cancelButton: {
     backgroundColor: '#f5f5f5',
-  },
-  applyButton: {
-    backgroundColor: Colors.MT_PRIMARY_1,
   },
   buttonText: {
     textAlign: 'center',

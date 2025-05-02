@@ -11,7 +11,6 @@ import {
 import {Button} from 'react-native-paper';
 import {ClientForm} from '../../../types';
 import {MaterialTextInput} from '../../../components/MaterialTextInput';
-import Colors from '../../../constants/Colors';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {ClientStackParamList} from '../../../navigator/components/ClientScreenStack';
 import Header from '../../../components/Header';
@@ -25,6 +24,7 @@ import {z} from 'zod';
 import clientFormSchema from '../../../schema/ClientFormSchema';
 import {useDialog} from '../../../hooks/useDialog';
 import GroupsToggleComponent from './components/GroupsToggle';
+import { useTheme } from '../../../context/ThemeProvider';
 
 type Props = NativeStackScreenProps<ClientStackParamList, 'AddClientScreen'>;
 
@@ -32,6 +32,7 @@ const AddClientScreen: React.FC<Props> = ({navigation, route}) => {
   const scrollViewRef = useRef<ScrollView>(null);
   const {setClientsUpdated} = usePartner();
   const {user} = useAuth();
+  const {theme} = useTheme();
   const {showError} = useDialog();
 
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
@@ -298,7 +299,7 @@ const AddClientScreen: React.FC<Props> = ({navigation, route}) => {
             <Button
               mode="contained"
               onPress={handleSubmit}
-              buttonColor={Colors.MT_PRIMARY_1}
+              buttonColor={theme.primaryColor}
               textColor="white"
               loading={formLoading}>
               Submit

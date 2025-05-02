@@ -5,6 +5,7 @@ import {FollowUpType} from '../../../../types';
 import {formatFollowUpDate, formatTime} from '../../../../utils/dateUtils';
 import GetIcon from '../../../../components/GetIcon';
 import Colors from '../../../../constants/Colors';
+import { useTheme } from '../../../../context/ThemeProvider';
 
 interface FollowUpCardProps {
   item: FollowUpType;
@@ -13,6 +14,7 @@ interface FollowUpCardProps {
 
 const FollowUpCard: React.FC<FollowUpCardProps> = ({item, filterType}) => {
   // Helper function to convert UTC date to local time
+  const {theme} = useTheme();
   const getLocalDate = (dateString: string) => {
     if (!dateString) {
       return null;
@@ -60,8 +62,8 @@ const FollowUpCard: React.FC<FollowUpCardProps> = ({item, filterType}) => {
                   </Text>
                 )}
                 <View style={styles.timeWrapper}>
-                  <GetIcon iconName="time" size={14} color={Colors.MT_PRIMARY_1} />
-                  <Text style={styles.followUpTime}>
+                  <GetIcon iconName="time" size={14} color={theme.primaryColor} />
+                  <Text style={[styles.followUpTime, {color: theme.primaryColor}]}>
                     {formatTime(localFollowUpDate)}
                   </Text>
                 </View>
@@ -138,7 +140,6 @@ const styles = StyleSheet.create({
   },
   followUpTime: {
     fontSize: 14,
-    color: Colors.MT_PRIMARY_1,
     fontWeight: 'bold',
     marginLeft: 4,
   },

@@ -9,9 +9,9 @@ import {
 } from 'react-native';
 import {Picker} from '@react-native-picker/picker';
 import GetIcon from '../../../../../components/GetIcon';
-import Colors from '../../../../../constants/Colors';
 import {ImageData} from '../../../../../types/image';
 import {MasterDetailModel} from '../../../../../types';
+import { useTheme } from '../../../../../context/ThemeProvider';
 
 interface ImagePreviewListProps {
   images: ImageData[];
@@ -30,6 +30,8 @@ const ImagePreviewList: React.FC<ImagePreviewListProps> = ({
   onRemoveImage,
   onCategoryChange,
 }) => {
+  const {theme} = useTheme();
+
   if (images.length === 0) {
     return null;
   }
@@ -85,7 +87,7 @@ const ImagePreviewList: React.FC<ImagePreviewListProps> = ({
                 selectedValue={image.type || ''}
                 style={styles.categoryPicker}
                 onValueChange={value => onCategoryChange(index, value)}
-                dropdownIconColor={Colors.MT_PRIMARY_1}>
+                dropdownIconColor={theme.primaryColor}>
                 {/* Add placeholder as first item */}
                 <Picker.Item
                   label="Select Category"

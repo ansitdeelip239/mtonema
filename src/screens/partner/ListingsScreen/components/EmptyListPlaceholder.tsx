@@ -2,10 +2,11 @@ import React from 'react';
 import {View, Text, StyleSheet, Image} from 'react-native';
 // import {useNavigation} from '@react-navigation/native';
 import {Button} from 'react-native-paper';
-import Colors from '../../../../constants/Colors';
+import { useTheme } from '../../../../context/ThemeProvider';
 
 const EmptyListPlaceholder = () => {
   // const navigation = useNavigation();
+  const {theme} = useTheme();
 
   return (
     <View style={styles.container}>
@@ -21,7 +22,7 @@ const EmptyListPlaceholder = () => {
       </Text>
       <Button
         mode="contained"
-        style={styles.button}
+        style={[styles.button, {backgroundColor: theme.primaryColor}]}
         labelStyle={styles.buttonLabel}
         // onPress={() => navigation.navigate('AddProperty')}
         >
@@ -57,7 +58,6 @@ const styles = StyleSheet.create({
     marginBottom: 24,
   },
   button: {
-    backgroundColor: Colors.MT_PRIMARY_1,
     paddingHorizontal: 16,
     borderRadius: 8,
   },

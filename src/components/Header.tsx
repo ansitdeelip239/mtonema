@@ -8,11 +8,11 @@ import {
   StatusBar,
 } from 'react-native';
 import GetIcon from './GetIcon';
-import Colors from '../constants/Colors';
 import {useDrawer} from '../hooks/useDrawer';
 import {ParamListBase} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import LinearGradient from 'react-native-linear-gradient';
+import { useTheme } from '../context/ThemeProvider';
 
 interface HeaderProps {
   title: string;
@@ -36,6 +36,7 @@ export default function Header<T extends ParamListBase>({
   centerTitle = false, // Default is false (left-aligned title)
 }: HeaderProps) {
   const {openDrawer} = useDrawer<T>();
+  const {theme} = useTheme();
 
   const handleBackPress = () => {
     if (onBackPress) {
@@ -47,10 +48,10 @@ export default function Header<T extends ParamListBase>({
 
   return (
     <LinearGradient
-      colors={[Colors.MT_PRIMARY_1, '#1e5799']}
+      colors={[theme.primaryColor, theme.primaryColor]}
       style={styles.headerGradient}>
       <StatusBar
-        backgroundColor={Colors.MT_PRIMARY_1}
+        backgroundColor={theme.primaryColor}
         barStyle="light-content"
       />
       <View style={styles.headerContainer}>

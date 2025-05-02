@@ -11,6 +11,7 @@ import FollowUpCard from './FollowUpCard';
 import {FollowUpType} from '../../../../types';
 import GetIcon, {IconEnum} from '../../../../components/GetIcon';
 import Colors from '../../../../constants/Colors';
+import { useTheme } from '../../../../context/ThemeProvider';
 
 interface FollowUpListSectionProps {
   title?: string;
@@ -33,6 +34,7 @@ const FollowUpListSection: React.FC<FollowUpListSectionProps> = ({
   onFollowUpPress,
   filterType,
 }) => {
+  const {theme} = useTheme();
   const renderFollowUpItem = ({item}: {item: FollowUpType}) => (
     <TouchableOpacity onPress={() => onFollowUpPress?.(item.client.id)}>
       {!filterType ? (
@@ -54,7 +56,7 @@ const FollowUpListSection: React.FC<FollowUpListSectionProps> = ({
 
       {isLoading ? (
         <View style={styles.loaderContainer}>
-          <ActivityIndicator size="large" color={Colors.MT_PRIMARY_1} />
+          <ActivityIndicator size="large" color={theme.primaryColor} />
           <Text style={styles.loaderText}>Loading follow-ups...</Text>
         </View>
       ) : followUps && followUps.length > 0 ? (

@@ -8,8 +8,8 @@ import {
 import ImagePicker from 'react-native-image-crop-picker';
 import Toast from 'react-native-toast-message';
 import {ImageData} from '../../../../../types/image';
-import Colors from '../../../../../constants/Colors';
 import GetIcon from '../../../../../components/GetIcon';
+import { useTheme } from '../../../../../context/ThemeProvider';
 
 interface ImageUploaderProps {
   onImagesSelected: (images: ImageData[]) => void;
@@ -21,6 +21,7 @@ const ImageUploader: React.FC<ImageUploaderProps> = ({
   disabled = false,
 }) => {
   const [uploading, setUploading] = useState(false);
+  const {theme} = useTheme();
 
   const handleSelectImages = useCallback(async () => {
     if (disabled) {
@@ -128,15 +129,15 @@ const ImageUploader: React.FC<ImageUploaderProps> = ({
 
   return (
     <TouchableOpacity
-      style={styles.uploadButton}
+      style={[styles.uploadButton, {borderColor: theme.primaryColor}]}
       onPress={handleSelectImages}
       disabled={uploading || disabled}>
       {uploading ? (
-        <ActivityIndicator color={Colors.MT_PRIMARY_1} size="small" />
+        <ActivityIndicator color={theme.primaryColor} size="small" />
       ) : (
         <>
           <GetIcon iconName="calendarSomeday" size={20} />
-          <Text style={styles.uploadButtonText}>Select Images</Text>
+          <Text style={[styles.uploadButtonText, {color: theme.primaryColor}]}>Select Images</Text>
         </>
       )}
     </TouchableOpacity>
@@ -149,14 +150,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     borderWidth: 1,
-    borderColor: Colors.MT_PRIMARY_1,
     borderStyle: 'dashed',
     borderRadius: 8,
     padding: 20,
     marginBottom: 20,
   },
   uploadButtonText: {
-    color: Colors.MT_PRIMARY_1,
     marginLeft: 8,
     fontSize: 16,
     fontWeight: '500',

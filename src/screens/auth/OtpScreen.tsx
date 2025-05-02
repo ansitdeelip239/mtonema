@@ -6,6 +6,8 @@ import {useAuth} from '../../hooks/useAuth';
 import OtpModel from '../../components/OtpModel';
 import {useDialog} from '../../hooks/useDialog';
 import {useLogoStorage} from '../../hooks/useLogoStorage';
+import MasterService from '../../services/MasterService';
+import {useTheme} from '../../context/ThemeProvider';
 
 type Props = NativeStackScreenProps<AuthStackParamList, 'OtpScreen'>;
 
@@ -15,6 +17,7 @@ const OtpScreen: React.FC<Props> = ({route}) => {
   const [OTP, setOtp] = useState('');
   const {email, logoUrl} = route.params;
   const {showError, hideDialog} = useDialog();
+  const {updateTheme} = useTheme();
 
   // Use the enhanced hook
   const {storeLogoData, extractLogoFromPartnerLocation} = useLogoStorage();
@@ -33,6 +36,21 @@ const OtpScreen: React.FC<Props> = ({route}) => {
         if (response.data) {
           const userResponse = await AuthService.getUserByToken(response.data);
           await storeUser(userResponse.data);
+
+          const masterResponse = await MasterService.getMasterDetailsById(
+            userResponse.data.partnerLocation,
+          );
+
+          if (masterResponse.success) {
+            const description = JSON.parse(masterResponse.data.description);
+            const theme = {
+              primaryColor: description.colorScheme.primaryColor,
+              secondaryColor: description.colorScheme.secondaryColor,
+              backgroundColor: description.colorScheme.backgroundColor,
+              textColor: description.colorScheme.textColor,
+            };
+            await updateTheme(theme);
+          }
 
           // Store the logo URL if we have it from route params
           if (logoUrl) {
@@ -81,6 +99,7 @@ const OtpScreen: React.FC<Props> = ({route}) => {
     logoUrl,
     storeLogoData,
     extractLogoFromPartnerLocation,
+    updateTheme,
   ]);
 
   return (

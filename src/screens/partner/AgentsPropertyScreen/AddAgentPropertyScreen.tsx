@@ -14,7 +14,6 @@ import {MaterialTextInput} from '../../../components/MaterialTextInput';
 import {useMaster} from '../../../context/MasterProvider';
 import FilterOption from '../../../components/FilterOption';
 import {formatCurrency} from '../../../utils/currency';
-import Colors from '../../../constants/Colors';
 import PartnerService from '../../../services/PartnerService';
 import useForm from '../../../hooks/useForm';
 import Header from '../../../components/Header';
@@ -34,6 +33,7 @@ import {useDialog} from '../../../hooks/useDialog';
 import {useAuth} from '../../../hooks/useAuth';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { AgentDataStackParamList } from '../../../navigator/components/AgentDataStack';
+import { useTheme } from '../../../context/ThemeProvider';
 
 // type Props = BottomTabScreenProps<PartnerBottomTabParamList, 'AddProperty'>;
 type Props = NativeStackScreenProps<AgentDataStackParamList, 'AddAgentDataScreen'>;
@@ -50,6 +50,7 @@ const AddAgentPropertyScreen: React.FC<Props> = ({navigation, route}) => {
   const {keyboardVisible} = useKeyboard();
   const {showError} = useDialog();
   const {user} = useAuth();
+  const {theme} = useTheme();
 
   const editMode = route.params?.editMode;
   const propertyData = route.params?.propertyData;
@@ -374,7 +375,7 @@ const AddAgentPropertyScreen: React.FC<Props> = ({navigation, route}) => {
             <Button
               mode="contained"
               onPress={handleSubmit}
-              buttonColor={Colors.MT_PRIMARY_1}
+              buttonColor={theme.primaryColor}
               textColor="white"
               loading={loading}>
               Submit

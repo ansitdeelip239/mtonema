@@ -13,6 +13,16 @@ class MasterService {
     }
   }
 
+  static async getMasterDetailsById(id:number) {
+    try {
+      const response = await api.get<any>(`${url.getMasterDetail}/${id}`);
+      return response;
+    } catch (error) {
+      console.error('Error in getMasterDetails', error);
+      throw error;
+    }
+  }
+
   static async searchIntellisense(searchType: string, searchKey: string) {
     try {
       const response = await api.get<SearchIntellisenseResponse[]>(

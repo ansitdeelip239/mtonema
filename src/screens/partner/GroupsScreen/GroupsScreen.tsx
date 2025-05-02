@@ -19,8 +19,30 @@ import {useMaster} from '../../../context/MasterProvider';
 import AddGroupModal from './components/AddGroupModal';
 import Toast from 'react-native-toast-message';
 import {usePartner} from '../../../context/PartnerProvider';
+import {useTheme} from '../../../context/ThemeProvider'; // Added theme import
 
-// Memoized GroupItem component - now clickable
+// Updated EmptyList component to use theme
+const EmptyList = memo(
+  ({isLoading, themeColor}: {isLoading: boolean; themeColor: string}) => {
+    if (isLoading) {
+      return (
+        <View style={styles.loaderContainer}>
+          <ActivityIndicator size="large" color={themeColor} />
+        </View>
+      );
+    }
+
+    return (
+      <View style={styles.emptyContainer}>
+        <Text style={styles.emptyText}>
+          No groups available. Groups will appear here when created.
+        </Text>
+      </View>
+    );
+  },
+);
+
+// GroupItem stays the same
 const GroupItem = memo(
   ({
     item,
@@ -49,26 +71,10 @@ const GroupItem = memo(
   ),
 );
 
-// Memoized EmptyList component
-const EmptyList = memo(({isLoading}: {isLoading: boolean}) => {
-  if (isLoading) {
-    return (
-      <View style={styles.loaderContainer}>
-        <ActivityIndicator size="large" color={Colors.MT_PRIMARY_1} />
-      </View>
-    );
-  }
-
-  return (
-    <View style={styles.emptyContainer}>
-      <Text style={styles.emptyText}>
-        No groups available. Groups will appear here when created.
-      </Text>
-    </View>
-  );
-});
-
 const GroupsScreen = () => {
+  // Get theme from context
+  const {theme} = useTheme();
+
   const [groups, setGroups] = useState<Group2[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
@@ -254,10 +260,10 @@ const GroupsScreen = () => {
   // Keyextractor for FlatList
   const keyExtractor = useCallback((item: Group2) => item.id.toString(), []);
 
-  // Render empty list
+  // Render empty list with theme color
   const renderEmptyList = useCallback(
-    () => <EmptyList isLoading={isLoading} />,
-    [isLoading],
+    () => <EmptyList isLoading={isLoading} themeColor={theme.primaryColor} />,
+    [isLoading, theme.primaryColor],
   );
 
   return (
@@ -267,7 +273,7 @@ const GroupsScreen = () => {
         children={
           <TouchableOpacity
             onPress={toggleModal}
-            style={styles.addButton}
+            style={[styles.addButton, {backgroundColor: theme.secondaryColor}]} // Updated with theme
             disabled={isSaving || isDeleting}>
             <Text style={styles.addButtonText}>+ Add Group</Text>
           </TouchableOpacity>
@@ -283,8 +289,8 @@ const GroupsScreen = () => {
             <RefreshControl
               refreshing={refreshing}
               onRefresh={onRefresh}
-              colors={[Colors.MT_PRIMARY_1]}
-              tintColor={Colors.MT_PRIMARY_1}
+              colors={[theme.primaryColor]} // Updated with theme
+              tintColor={theme.primaryColor} // Updated with theme
             />
           }
           ListEmptyComponent={renderEmptyList}
@@ -302,7 +308,13 @@ const GroupsScreen = () => {
         onClose={closeModal}
         onSave={handleSaveGroup}
         onDelete={handleDeleteGroup}
-        styles={styles}
+        styles={{
+          ...styles,
+          saveButton: {
+            ...styles.saveButton,
+            backgroundColor: theme.primaryColor, // Updated with theme
+          },
+        }}
         isLoading={isSaving}
         isDeleting={isDeleting}
         group={selectedGroup}
@@ -312,7 +324,7 @@ const GroupsScreen = () => {
 };
 
 const styles = StyleSheet.create({
-  // Styles remain the same
+  // Most styles remain unchanged
   container: {
     flex: 1,
     backgroundColor: '#f5f5f5',
@@ -383,7 +395,7 @@ const styles = StyleSheet.create({
     color: '#666',
   },
   addButton: {
-    backgroundColor: Colors.MT_PRIMARY_1,
+    // backgroundColor is applied dynamically now
     paddingHorizontal: 12,
     paddingVertical: 6,
     borderRadius: 6,
@@ -434,7 +446,13 @@ const styles = StyleSheet.create({
     backgroundColor: '#444444',
   },
   saveButton: {
-    backgroundColor: Colors.MT_PRIMARY_1,
+    // backgroundColor is applied dynamically now
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 4,
+    flex: 1,
+    marginHorizontal: 5,
+    alignItems: 'center',
   },
   buttonText: {
     fontWeight: 'bold',

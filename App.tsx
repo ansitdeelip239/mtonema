@@ -8,22 +8,25 @@ import {PropertyFormProvider} from './src/context/PropertyFormContext';
 import {PaperProvider} from 'react-native-paper';
 import {DialogProvider} from './src/context/DialogProvider';
 import {MasterProvider} from './src/context/MasterProvider';
+import { ThemeProvider } from './src/context/ThemeProvider';
 
 const App = () => {
   return (
     <PaperProvider>
-      <DialogProvider>
-        <MasterProvider>
-          <AuthProvider>
-            <PropertyFormProvider>
-              <SafeAreaProvider>
-                <RootNavigator />
-                <Toast />
-              </SafeAreaProvider>
-            </PropertyFormProvider>
-          </AuthProvider>
-        </MasterProvider>
-      </DialogProvider>
+      <ThemeProvider>
+        <DialogProvider>
+          <MasterProvider>
+            <AuthProvider>
+              <PropertyFormProvider>
+                <SafeAreaProvider>
+                  <RootNavigator />
+                  <Toast />
+                </SafeAreaProvider>
+              </PropertyFormProvider>
+            </AuthProvider>
+          </MasterProvider>
+        </DialogProvider>
+      </ThemeProvider>
     </PaperProvider>
   );
 };
