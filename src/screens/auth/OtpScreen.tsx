@@ -1,4 +1,5 @@
 import React, {useState, useCallback} from 'react';
+import {StyleSheet, SafeAreaView} from 'react-native';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {AuthStackParamList} from '../../navigator/AuthNavigator';
 import AuthService from '../../services/AuthService';
@@ -8,10 +9,11 @@ import {useDialog} from '../../hooks/useDialog';
 import {useLogoStorage} from '../../hooks/useLogoStorage';
 import MasterService from '../../services/MasterService';
 import {useTheme} from '../../context/ThemeProvider';
+import HeaderComponent from './components/HeaderComponent';
 
 type Props = NativeStackScreenProps<AuthStackParamList, 'OtpScreen'>;
 
-const OtpScreen: React.FC<Props> = ({route}) => {
+const OtpScreen: React.FC<Props> = ({navigation, route}) => {
   const [isLoading, setIsLoading] = useState(false);
   const {storeToken, login, storeUser} = useAuth();
   const [OTP, setOtp] = useState('');
@@ -34,6 +36,7 @@ const OtpScreen: React.FC<Props> = ({route}) => {
 
       if (response.success) {
         if (response.data) {
+          // Existing authentication logic
           const userResponse = await AuthService.getUserByToken(response.data);
           await storeUser(userResponse.data);
 
@@ -56,7 +59,6 @@ const OtpScreen: React.FC<Props> = ({route}) => {
           if (logoUrl) {
             await storeLogoData({
               imageUrl: logoUrl,
-              // You can provide other data if available
             });
           }
 
@@ -103,14 +105,25 @@ const OtpScreen: React.FC<Props> = ({route}) => {
   ]);
 
   return (
-    <OtpModel
-      value={OTP}
-      onChangeText={setOtp}
-      onPress={handleSubmit}
-      isLoading={isLoading}
-      logoUrl={logoUrl}
-    />
+    <SafeAreaView style={styles.container}>
+      <HeaderComponent title="Verify OTP" onBackPress={navigation.goBack} />
+
+      <OtpModel
+        value={OTP}
+        onChangeText={setOtp}
+        onPress={handleSubmit}
+        isLoading={isLoading}
+        logoUrl={logoUrl}
+      />
+    </SafeAreaView>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#f5f5f5',
+  },
+});
 
 export default OtpScreen;

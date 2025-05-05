@@ -7,8 +7,6 @@ import {
   Image,
   Platform,
   ScrollView,
-  SafeAreaView,
-  StatusBar,
 } from 'react-native';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {AuthStackParamList} from '../../navigator/AuthNavigator';
@@ -19,7 +17,8 @@ import {BackgroundWrapper} from '../../components/BackgroundWrapper';
 import Colors from '../../constants/Colors';
 import LinearGradient from 'react-native-linear-gradient';
 import {useMaster} from '../../context/MasterProvider';
-import { MasterDetailModel } from '../../types';
+import {MasterDetailModel} from '../../types';
+import HeaderComponent from './components/HeaderComponent';
 
 type Props = NativeStackScreenProps<AuthStackParamList, 'MainScreen'>;
 
@@ -58,22 +57,8 @@ export const MainScreen: React.FC<Props> = ({navigation}) => {
 
   return (
     <BackgroundWrapper>
-      <SafeAreaView style={styles.mainScreen}>
-        <StatusBar
-          backgroundColor={Colors.MT_PRIMARY_1}
-          barStyle="light-content"
-        />
-
-        {/* Updated header with MT Estates */}
-        <LinearGradient
-          colors={[Colors.MT_PRIMARY_1, '#1e5799']}
-          style={styles.headerGradient}>
-          <View style={styles.headerContent}>
-            <View style={styles.spacer} />
-            <Text style={styles.headerText}>MT Estates</Text>
-            <View style={styles.spacer} />
-          </View>
-        </LinearGradient>
+      <View style={styles.mainScreen}>
+        <HeaderComponent title="MT Estates" showBackButton={false} />
 
         <ScrollView
           contentContainerStyle={styles.scrollContent}
@@ -166,35 +151,13 @@ export const MainScreen: React.FC<Props> = ({navigation}) => {
             </View>
           </View>
         </ScrollView>
-      </SafeAreaView>
+      </View>
     </BackgroundWrapper>
   );
 };
 
+// Update styles to remove header-specific styles
 const styles = StyleSheet.create({
-  // Header styles
-  spacer: {
-    width: 24,
-  },
-  headerGradient: {
-    paddingTop: Platform.OS === 'ios' ? 50 : 40,
-    paddingBottom: 20,
-    borderBottomLeftRadius: 30,
-    borderBottomRightRadius: 30,
-  },
-  headerContent: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingHorizontal: 20,
-  },
-  headerText: {
-    fontSize: 22,
-    fontWeight: 'bold',
-    color: 'white',
-  },
-
-  // Main styles
   mainScreen: {
     flex: 1,
     backgroundColor: 'transparent',

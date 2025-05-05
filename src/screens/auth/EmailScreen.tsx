@@ -8,7 +8,6 @@ import {
   Platform,
   TouchableOpacity,
   Dimensions,
-  StatusBar,
   Animated,
 } from 'react-native';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
@@ -26,6 +25,7 @@ import GetIcon from '../../components/GetIcon';
 import {useKeyboard} from '../../hooks/useKeyboard';
 import Roles from '../../constants/Roles';
 import Images from '../../constants/Images';
+import HeaderComponent from './components/HeaderComponent';
 
 const {width} = Dimensions.get('window');
 type Props = NativeStackScreenProps<AuthStackParamList, 'EmailScreen'>;
@@ -179,7 +179,10 @@ const EmailScreen: React.FC<Props> = ({navigation, route}) => {
 
         const response = await AuthService.otpVerification(formInput.email);
         if (response.success) {
-          navigation.navigate('OtpScreen', {email: formInput.email, logoUrl: partnerInfo.imageUrl});
+          navigation.navigate('OtpScreen', {
+            email: formInput.email,
+            logoUrl: partnerInfo.imageUrl,
+          });
           if (!skipEmailCheck) {
             setNavigateToPostProperty(false);
           }
@@ -192,7 +195,14 @@ const EmailScreen: React.FC<Props> = ({navigation, route}) => {
         setIsLoading(false);
       }
     },
-    [formInput, checkEmail, navigation, setNavigateToPostProperty, showError, partnerInfo.imageUrl],
+    [
+      formInput,
+      checkEmail,
+      navigation,
+      setNavigateToPostProperty,
+      showError,
+      partnerInfo.imageUrl,
+    ],
   );
 
   const handleVerifyNow = useCallback(() => {
@@ -205,28 +215,14 @@ const EmailScreen: React.FC<Props> = ({navigation, route}) => {
 
   return (
     <View style={styles.container}>
-      <StatusBar
-        backgroundColor={Colors.MT_PRIMARY_1}
-        barStyle="light-content"
+      <HeaderComponent
+        title={
+          route.params.role.includes(Roles.PARTNER)
+            ? 'Partner Sign In'
+            : 'Buyer/Seller Sign In'
+        }
+        onBackPress={navigation.goBack}
       />
-
-      <LinearGradient
-        colors={[Colors.MT_PRIMARY_1, '#1e5799']}
-        style={styles.headerGradient}>
-        <View style={styles.headerContent}>
-          <TouchableOpacity
-            style={styles.backButton}
-            onPress={navigation.goBack}>
-            <GetIcon iconName="back" color="white" size="24" />
-          </TouchableOpacity>
-          {route.params.role.includes(Roles.PARTNER) ? (
-            <Text style={styles.headerText}>Partner Sign In</Text>
-          ) : (
-            <Text style={styles.headerText}>Buyer/Seller Sign In</Text>
-          )}
-          <View style={styles.spacer} />
-        </View>
-      </LinearGradient>
 
       <KeyboardAvoidingView
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
@@ -352,39 +348,13 @@ const EmailScreen: React.FC<Props> = ({navigation, route}) => {
   );
 };
 
+// Update styles to remove header-specific styles that are now in the component
 const styles = StyleSheet.create({
-  spacer: {
-    width: 24,
-  },
   container: {
     flex: 1,
     backgroundColor: '#f5f5f5',
   },
-  headerGradient: {
-    paddingTop: Platform.OS === 'ios' ? 50 : 30,
-    paddingBottom: 20,
-    borderBottomLeftRadius: 30,
-    borderBottomRightRadius: 30,
-  },
-  headerContent: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingHorizontal: 20,
-  },
-  headerText: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    color: 'white',
-  },
-  backButton: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    backgroundColor: 'rgba(255,255,255,0.2)',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
+  // ...other styles (remove headerGradient, headerContent, headerText, backButton)...
   keyboardAvoid: {
     flex: 1,
   },

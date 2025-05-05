@@ -1,3 +1,4 @@
+/* eslint-disable react-native/no-inline-styles */
 import React, {useRef, useEffect} from 'react';
 import {
   View,
@@ -6,12 +7,10 @@ import {
   TouchableOpacity,
   Image,
   Platform,
-  StatusBar,
-  Dimensions,
   Animated,
   KeyboardAvoidingView,
-  SafeAreaView,
   ScrollView,
+  Dimensions,
 } from 'react-native';
 import {OtpInput} from 'react-native-otp-entry';
 import {useDialog} from '../hooks/useDialog';
@@ -28,7 +27,6 @@ interface OtpModelProps {
   onChangeText: (text: string) => void;
   onPress: () => void;
   isLoading?: boolean;
-  onBack?: () => void;
   logoUrl?: string;
 }
 
@@ -37,7 +35,6 @@ const OtpModel: React.FC<OtpModelProps> = ({
   onChangeText,
   onPress,
   isLoading = false,
-  onBack,
   logoUrl,
 }) => {
   const otpInputRef = useRef(null);
@@ -56,7 +53,7 @@ const OtpModel: React.FC<OtpModelProps> = ({
     onPress();
   };
 
-  // Handle logo animation when keyboard shows/hides - simplified to match SignUpScreen2
+  // Handle logo animation when keyboard shows/hides
   useEffect(() => {
     if (keyboardVisible) {
       // Animate logo sliding up and fading out
@@ -87,31 +84,10 @@ const OtpModel: React.FC<OtpModelProps> = ({
         }),
       ]).start();
     }
-  }, [keyboardVisible, logoHeight, logoOpacity]); // Remove animation values from dependencies
+  }, [keyboardVisible, logoHeight, logoOpacity]);
 
   return (
-    <SafeAreaView style={styles.container}>
-      <StatusBar
-        backgroundColor={Colors.MT_PRIMARY_1}
-        barStyle="light-content"
-      />
-
-      {/* Header */}
-      <LinearGradient
-        colors={[Colors.MT_PRIMARY_1, '#1e5799']}
-        style={styles.headerGradient}>
-        <View style={styles.headerContent}>
-          {onBack && (
-            <TouchableOpacity style={styles.backButton} onPress={onBack}>
-              <GetIcon iconName="back" color="white" size="24" />
-            </TouchableOpacity>
-          )}
-          {!onBack && <View style={styles.spacer} />}
-          <Text style={styles.headerText}>Verify OTP</Text>
-          <View style={styles.spacer} />
-        </View>
-      </LinearGradient>
-
+    <View style={styles.container}>
       <KeyboardAvoidingView
         behavior={Platform.OS === 'ios' ? 'padding' : undefined}
         style={styles.keyboardAvoid}
@@ -124,14 +100,14 @@ const OtpModel: React.FC<OtpModelProps> = ({
           {/* Logo with animation */}
           <View style={styles.contentContainer}>
             <Animated.View
-              style={[
-                styles.logoContainer,
-                {
-                  opacity: logoOpacity,
-                  height: logoHeight,
-                  overflow: 'hidden' as const,
-                },
-              ]}>
+                style={[
+                  styles.logoContainer,
+                  {
+                    opacity: logoOpacity,
+                    height: logoHeight,
+                  } as any,
+                  { overflow: 'hidden' as 'hidden' },
+                ]}>
               {logoUrl ? (
                 <Image
                   source={{uri: logoUrl}}
@@ -217,42 +193,14 @@ const OtpModel: React.FC<OtpModelProps> = ({
           </View>
         </ScrollView>
       </KeyboardAvoidingView>
-    </SafeAreaView>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
-  spacer: {
-    width: 24,
-  },
   container: {
     flex: 1,
     backgroundColor: '#f5f5f5',
-  },
-  headerGradient: {
-    paddingTop: Platform.OS === 'ios' ? 50 : 40,
-    paddingBottom: 20,
-    borderBottomLeftRadius: 30,
-    borderBottomRightRadius: 30,
-  },
-  headerContent: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingHorizontal: 20,
-  },
-  headerText: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    color: 'white',
-  },
-  backButton: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    backgroundColor: 'rgba(255,255,255,0.2)',
-    justifyContent: 'center',
-    alignItems: 'center',
   },
   keyboardAvoid: {
     flex: 1,
@@ -269,11 +217,10 @@ const styles = StyleSheet.create({
   logoContainer: {
     alignItems: 'center',
     marginBottom: 20,
-    // Use a fixed minHeight instead of justifyContent center
     minHeight: 0,
   },
   logo: {
-    width: width * 0.7, // Match sizing from SignUpScreen2
+    width: width * 0.7,
     height: 150,
     mixBlendMode: 'multiply',
   },

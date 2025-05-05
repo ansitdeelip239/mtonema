@@ -9,7 +9,6 @@ import {
   Image,
   View,
   Text,
-  StatusBar,
   Dimensions,
   TouchableOpacity,
   Animated,
@@ -31,8 +30,9 @@ import {AuthStackParamList} from '../../navigator/AuthNavigator';
 import Images from '../../constants/Images';
 import LinearGradient from 'react-native-linear-gradient';
 import GetIcon from '../../components/GetIcon';
-import { useMaster } from '../../context/MasterProvider';
-import { MasterDetailModel } from '../../types';
+import {useMaster} from '../../context/MasterProvider';
+import {MasterDetailModel} from '../../types';
+import HeaderComponent from './components/HeaderComponent';
 
 const {width} = Dimensions.get('window');
 type Props = NativeStackScreenProps<AuthStackParamList, 'SignUpScreen'>;
@@ -211,25 +211,11 @@ const SignUpScreen: React.FC<Props> = ({navigation, route}) => {
 
   return (
     <View style={styles.container}>
-      <StatusBar
-        backgroundColor={Colors.MT_PRIMARY_1}
-        barStyle="light-content"
+      {/* Replace header with HeaderComponent */}
+      <HeaderComponent
+        title={`Sign Up as ${route.params.role}`}
+        onBackPress={navigation.goBack}
       />
-
-      {/* Header */}
-      <LinearGradient
-        colors={[Colors.MT_PRIMARY_1, '#1e5799']}
-        style={styles.headerGradient}>
-        <View style={styles.headerContent}>
-          <TouchableOpacity
-            style={styles.backButton}
-            onPress={navigation.goBack}>
-            <GetIcon iconName="back" color="white" size="24" />
-          </TouchableOpacity>
-          <Text style={styles.headerText}>Sign Up as {route.params.role}</Text>
-          <View style={styles.spacer} />
-        </View>
-      </LinearGradient>
 
       <KeyboardAvoidingView
         style={styles.keyboardAvoid}
@@ -380,31 +366,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#f5f5f5',
-  },
-  headerGradient: {
-    paddingTop: Platform.OS === 'ios' ? 50 : 30,
-    paddingBottom: 20,
-    borderBottomLeftRadius: 30,
-    borderBottomRightRadius: 30,
-  },
-  headerContent: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingHorizontal: 20,
-  },
-  headerText: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    color: 'white',
-  },
-  backButton: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    backgroundColor: 'rgba(255,255,255,0.2)',
-    justifyContent: 'center',
-    alignItems: 'center',
   },
   keyboardAvoid: {
     flex: 1,

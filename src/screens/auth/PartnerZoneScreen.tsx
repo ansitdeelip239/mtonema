@@ -7,7 +7,6 @@ import {
   ScrollView,
   ActivityIndicator,
   Image,
-  Platform,
 } from 'react-native';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {AuthStackParamList} from '../../navigator/AuthNavigator';
@@ -15,7 +14,7 @@ import {useMaster} from '../../context/MasterProvider';
 import Colors from '../../constants/Colors';
 import Images from '../../constants/Images';
 import {MasterDetailModel} from '../../types';
-import LinearGradient from 'react-native-linear-gradient';
+import HeaderComponent from './components/HeaderComponent';
 
 type Props = NativeStackScreenProps<AuthStackParamList, 'PartnerZoneScreen'>;
 
@@ -32,16 +31,8 @@ const PartnerZoneScreen: React.FC<Props> = ({navigation, route}) => {
 
   return (
     <View style={styles.container}>
-      {/* Add header here */}
-      <LinearGradient
-        colors={[Colors.MT_PRIMARY_1, '#1e5799']}
-        style={styles.headerGradient}>
-        <View style={styles.headerContent}>
-          <View style={styles.spacer} />
-          <Text style={styles.headerText}>Partner Zone</Text>
-          <View style={styles.spacer} />
-        </View>
-      </LinearGradient>
+      {/* Replace header with HeaderComponent */}
+      <HeaderComponent title="Partner Zone" showBackButton={true} onBackPress={() => navigation.goBack()} />
 
       <View style={styles.headerContainer}>
         <Image
@@ -88,23 +79,8 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#f8f9fa',
   },
-  headerGradient: {
-    paddingTop: Platform.OS === 'ios' ? 50 : 40, // Change from 20:10 to 50:20
-    paddingBottom: 20,
-    borderBottomLeftRadius: 30,
-    borderBottomRightRadius: 30,
-  },
-  headerContent: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingHorizontal: 20,
-  },
-  headerText: {
-    fontSize: 20, // Change from 22 to 20
-    fontWeight: 'bold',
-    color: 'white',
-  },
+  // Remove header-related styles:
+  // headerGradient, headerContent, headerText, spacer
   headerContainer: {
     alignItems: 'center',
     paddingVertical: 20,
