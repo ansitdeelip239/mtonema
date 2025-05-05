@@ -12,7 +12,8 @@ import {useDrawer} from '../hooks/useDrawer';
 import {ParamListBase} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import LinearGradient from 'react-native-linear-gradient';
-import { useTheme } from '../context/ThemeProvider';
+import {useTheme} from '../context/ThemeProvider';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 interface HeaderProps {
   title: string;
@@ -37,6 +38,7 @@ export default function Header<T extends ParamListBase>({
 }: HeaderProps) {
   const {openDrawer} = useDrawer<T>();
   const {theme} = useTheme();
+  const insets = useSafeAreaInsets(); // Get safe area insets
 
   const handleBackPress = () => {
     if (onBackPress) {
@@ -49,7 +51,11 @@ export default function Header<T extends ParamListBase>({
   return (
     <LinearGradient
       colors={[theme.primaryColor, theme.primaryColor]}
-      style={styles.headerGradient}>
+      style={[
+        styles.headerGradient,
+        // Apply dynamic padding based on safe area insets
+        {paddingTop: insets.top},
+      ]}>
       <StatusBar
         backgroundColor={theme.primaryColor}
         barStyle="light-content"
@@ -71,7 +77,7 @@ export default function Header<T extends ParamListBase>({
             styles.headerText,
             {fontSize: titleSize},
             // Apply different styles based on props
-            hideDrawerButton ? { paddingLeft: 0 as number } : {},
+            hideDrawerButton ? {paddingLeft: 0 as number} : {},
             centerTitle ? styles.centeredTitle : {},
           ]}>
           {title}
@@ -84,18 +90,22 @@ export default function Header<T extends ParamListBase>({
 
 const styles = StyleSheet.create({
   headerGradient: {
-    paddingTop: Platform.OS === 'ios' ? 50 : 20,
+    // Remove specific paddingTop since SafeAreaView handles it now
     paddingBottom: 10,
     borderBottomLeftRadius: 30,
     borderBottomRightRadius: 30,
     marginBottom: 10,
+  },
+  safeArea: {
+    // Add additional padding on Android to account for status bar
+    paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0,
   },
   headerContainer: {
     flexDirection: 'row',
     alignItems: 'center',
     paddingHorizontal: 16,
     paddingBottom: 6,
-    paddingTop: 0,
+    paddingTop: Platform.OS === 'ios' ? 10 : 15, // Add some top padding for visual spacing
   },
   headerText: {
     fontWeight: 'bold',
@@ -105,7 +115,6 @@ const styles = StyleSheet.create({
   },
   centeredTitle: {
     textAlign: 'center',
-    // paddingRight: 40, // Compensate for the left menu button width to ensure true center
   },
   menuButton: {
     width: 40,

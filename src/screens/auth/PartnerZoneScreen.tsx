@@ -89,7 +89,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#f8f9fa',
   },
   headerGradient: {
-    paddingTop: Platform.OS === 'ios' ? 50 : 20, // Change from 20:10 to 50:20
+    paddingTop: Platform.OS === 'ios' ? 50 : 40, // Change from 20:10 to 50:20
     paddingBottom: 20,
     borderBottomLeftRadius: 30,
     borderBottomRightRadius: 30,

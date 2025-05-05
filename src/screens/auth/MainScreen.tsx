@@ -177,7 +177,7 @@ const styles = StyleSheet.create({
     width: 24,
   },
   headerGradient: {
-    paddingTop: Platform.OS === 'ios' ? 50 : 20,
+    paddingTop: Platform.OS === 'ios' ? 50 : 40,
     paddingBottom: 20,
     borderBottomLeftRadius: 30,
     borderBottomRightRadius: 30,

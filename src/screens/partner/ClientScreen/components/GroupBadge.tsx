@@ -1,6 +1,5 @@
 import React from 'react';
 import {View, Text, StyleSheet} from 'react-native';
-import {getLighterColor} from '../../../../utils/colorUtils';
 
 interface GroupBadgesProps {
   groups: Array<{
@@ -10,25 +9,35 @@ interface GroupBadgesProps {
   }>;
 }
 
-const GroupBadges: React.FC<GroupBadgesProps> = ({groups}) => (
-  <View style={styles.badgeContainer}>
-    {groups.map((group, index) => (
-      <View
-        key={index}
-        style={[
-          styles.badge,
-          {
-            backgroundColor: getLighterColor(group.groupColor),
-            borderColor: group.groupColor,
-          },
-        ]}>
-        <Text style={[styles.badgeText, {color: group.groupColor}]}>
-          {group.name}
-        </Text>
-      </View>
-    ))}
-  </View>
-);
+const GroupBadges: React.FC<GroupBadgesProps> = ({groups}) => {
+  // Maximum number of badges to display
+  const MAX_VISIBLE_BADGES = 5;
+  const visibleGroups = groups.slice(0, MAX_VISIBLE_BADGES);
+  const remainingCount = Math.max(0, groups.length - MAX_VISIBLE_BADGES);
+
+  return (
+    <View style={styles.badgeContainer}>
+      {visibleGroups.map((group, index) => (
+        <View
+          key={index}
+          style={[
+            styles.badge,
+            {
+              backgroundColor: group.groupColor,
+            },
+          ]}>
+          <Text style={styles.badgeText}>{group.name}</Text>
+        </View>
+      ))}
+
+      {remainingCount > 0 && (
+        <View style={[styles.badge, styles.moreBadge]}>
+          <Text style={styles.badgeText}>+{remainingCount} more</Text>
+        </View>
+      )}
+    </View>
+  );
+};
 
 const styles = StyleSheet.create({
   badgeContainer: {
@@ -40,12 +49,16 @@ const styles = StyleSheet.create({
   badge: {
     paddingHorizontal: 12,
     paddingVertical: 6,
-    borderRadius: 20,
-    borderWidth: 1,
+    borderRadius: 3,
+    // Removed borderWidth as solid background with same color border isn't needed
   },
   badgeText: {
     fontSize: 12,
     fontWeight: '600',
+    color: 'white', // Set text color to white for all badges
+  },
+  moreBadge: {
+    backgroundColor: '#666', // Darker gray for the "more" badge
   },
 });
 
