@@ -5,7 +5,8 @@ import {FollowUpType} from '../../../../types';
 import {formatFollowUpDate, formatTime} from '../../../../utils/dateUtils';
 import GetIcon from '../../../../components/GetIcon';
 import Colors from '../../../../constants/Colors';
-import { useTheme } from '../../../../context/ThemeProvider';
+import {useTheme} from '../../../../context/ThemeProvider';
+import GroupBadges from '../../ClientScreen/components/GroupBadge';
 
 interface FollowUpCardProps {
   item: FollowUpType;
@@ -74,19 +75,7 @@ const FollowUpCard: React.FC<FollowUpCardProps> = ({item, filterType}) => {
 
         <View style={styles.groupsContainer}>
           {item.client.groups && item.client.groups.length > 0 ? (
-            item.client.groups.map(group => (
-              <View
-                key={group.id}
-                style={[
-                  styles.groupTag,
-                  {backgroundColor: group.groupColor + '20'},
-                  {borderColor: group.groupColor},
-                ]}>
-                <Text style={[styles.groupText, {color: group.groupColor}]}>
-                  {group.name}
-                </Text>
-              </View>
-            ))
+            <GroupBadges groups={item.client.groups} />
           ) : (
             <Text style={styles.noGroupText}>No Group</Text>
           )}
@@ -149,27 +138,14 @@ const styles = StyleSheet.create({
     marginTop: 6,
   },
   groupsContainer: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
     marginVertical: 4,
-  },
-  groupTag: {
-    borderRadius: 12,
-    paddingHorizontal: 8,
-    paddingVertical: 2,
-    marginRight: 6,
-    marginBottom: 4,
-    borderWidth: 1,
-  },
-  groupText: {
-    fontSize: 12,
-    fontWeight: '500',
   },
   noGroupText: {
     fontSize: 12,
     color: '#888',
     fontStyle: 'italic',
   },
+  // Removed groupTag and groupText styles as they're no longer needed
 });
 
 export default FollowUpCard;

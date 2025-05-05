@@ -1,6 +1,7 @@
 import React from 'react';
 import {View, Text, StyleSheet} from 'react-native';
 import {Client} from '../../../../types';
+import GroupBadges from './GroupBadge';
 
 interface GroupsCardProps {
   client: Client;
@@ -14,20 +15,7 @@ const GroupsCard: React.FC<GroupsCardProps> = ({client}) => {
   return (
     <View style={styles.infoCard}>
       <Text style={styles.sectionTitle}>Groups</Text>
-      <View style={styles.groupsContainer}>
-        {client.groups.map((group, index) => (
-          <View
-            key={`group-${group.id}-${group.name}-${index}`}
-            style={[
-              styles.groupBadge,
-              {backgroundColor: `${group.groupColor}20`},
-            ]}>
-            <Text style={[styles.groupText, {color: group.groupColor}]}>
-              {group.name}
-            </Text>
-          </View>
-        ))}
-      </View>
+      <GroupBadges groups={client.groups} />
     </View>
   );
 };
@@ -49,20 +37,6 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: '#1a1a1a',
     marginBottom: 12,
-  },
-  groupsContainer: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    gap: 8,
-  },
-  groupBadge: {
-    paddingHorizontal: 12,
-    paddingVertical: 6,
-    borderRadius: 16,
-  },
-  groupText: {
-    fontSize: 12,
-    fontWeight: '500',
   },
 });
 
