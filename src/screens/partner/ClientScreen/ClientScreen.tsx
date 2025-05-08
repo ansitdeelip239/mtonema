@@ -18,6 +18,13 @@ import {ClientStackParamList} from '../../../navigator/components/ClientScreenSt
 import SearchHeader from '../../../components/SearchHeader';
 import {useTheme} from '../../../context/ThemeProvider';
 import {getGradientColors} from '../../../utils/colorUtils';
+import {Client} from '../../../types';
+import {useMaster} from '../../../context/MasterProvider';
+import AddActivityModal from './components/AddActivityModal';
+import Toast from 'react-native-toast-message';
+import {usePartner} from '../../../context/PartnerProvider';
+import PartnerService from '../../../services/PartnerService';
+import {useAuth} from '../../../hooks/useAuth';
 
 type Props = NativeStackScreenProps<ClientStackParamList, 'ClientScreen'>;
 
@@ -34,6 +41,17 @@ const ClientScreen: React.FC<Props> = ({navigation}) => {
   } = useClientData();
   const [isSearching, setIsSearching] = useState(false);
   const {theme} = useTheme();
+  const {masterData} = useMaster();
+  const {setClientsUpdated} = usePartner();
+  const {user} = useAuth();
+
+  // Activity modal states
+  const [isActivityModalVisible, setIsActivityModalVisible] = useState(false);
+  const [selectedClient, setSelectedClient] = useState<Client | null>(null);
+  const [preSelectedActivityType, setPreSelectedActivityType] = useState<
+    number | null
+  >(null);
+  const [addingActivity, setAddingActivity] = useState(false);
 
   // Create gradient colors from theme using the same utility function as EmailScreen
   const headerGradientColors = useMemo(() => {
@@ -44,6 +62,81 @@ const ClientScreen: React.FC<Props> = ({navigation}) => {
     setIsSearching(true);
     await handleSearch(text);
     setIsSearching(false);
+  };
+
+  // Helper function to get activity type ID by name - same as ClientProfileScreen
+  const getActivityTypeIdByName = (activityTypeName: string): number | null => {
+    if (!masterData?.ActivityType) {
+      return null;
+    }
+
+    const activityType = masterData.ActivityType.find(
+      type => type.masterDetailName === activityTypeName,
+    );
+
+    return activityType?.id || null;
+  };
+
+  // Handle contact actions (phone/whatsapp)
+  const handleContactPress = (type: 'phone' | 'whatsapp', client: Client) => {
+    // Set a timeout to show the activity modal after a brief delay (same as ClientProfileScreen)
+    setTimeout(() => {
+      setSelectedClient(client);
+
+      // Set the appropriate activity type based on contact type
+      if (type === 'phone') {
+        const phoneCallActivityTypeId = getActivityTypeIdByName('Phone Call');
+        setPreSelectedActivityType(phoneCallActivityTypeId);
+      } else if (type === 'whatsapp') {
+        const whatsappActivityTypeId =
+          getActivityTypeIdByName('Whatsapp Message');
+        setPreSelectedActivityType(whatsappActivityTypeId);
+      }
+
+      // Show the activity modal
+      setIsActivityModalVisible(true);
+    }, 500); // 500ms delay
+  };
+
+  // Handle activity modal submission
+  const handleAddActivity = async (
+    type: number,
+    description: string,
+    clientId: number,
+  ) => {
+    setAddingActivity(true);
+
+    try {
+      // Here you would make the API call to add the activity
+      // Example:
+      await PartnerService.addEditClientActivity(
+        type,
+        clientId,
+        description,
+        user?.email as string,
+      );
+
+      // Update UI
+      setClientsUpdated(true);
+      Toast.show({
+        type: 'success',
+        text1: 'Success',
+        text2: 'Activity added successfully',
+      });
+
+      // Close modal and reset state
+      setIsActivityModalVisible(false);
+      setSelectedClient(null);
+      setPreSelectedActivityType(null);
+    } catch (err) {
+      Toast.show({
+        type: 'error',
+        text1: 'Error',
+        text2: 'Failed to add activity',
+      });
+    } finally {
+      setAddingActivity(false);
+    }
   };
 
   // Update renderFooter to use isLoadingMore instead of isLoading
@@ -82,7 +175,11 @@ const ClientScreen: React.FC<Props> = ({navigation}) => {
       <FlatList
         data={clients}
         renderItem={({item}) => (
-          <ClientCard client={item} navigation={navigation} />
+          <ClientCard
+            client={item}
+            navigation={navigation}
+            onContactPress={handleContactPress}
+          />
         )}
         keyExtractor={client => client.id.toString()}
         contentContainerStyle={[
@@ -116,8 +213,7 @@ const ClientScreen: React.FC<Props> = ({navigation}) => {
       <Header<PartnerDrawerParamList>
         title="Clients"
         gradientColors={headerGradientColors}
-        compact={true} // Add compact mode to match EmailScreen's style
-      >
+        compact={true}>
         <TouchableOpacity
           style={[styles.addButton, {backgroundColor: theme.secondaryColor}]}
           onPress={() => {
@@ -131,6 +227,25 @@ const ClientScreen: React.FC<Props> = ({navigation}) => {
         onSearch={handleSearchWithLoading}
       />
       {renderContent()}
+
+      {/* Activity Modal */}
+      {selectedClient && (
+        <AddActivityModal
+          visible={isActivityModalVisible}
+          onClose={() => {
+            setIsActivityModalVisible(false);
+            setSelectedClient(null);
+            setPreSelectedActivityType(null);
+          }}
+          onSubmit={(type, description) => {
+            // Adapt your handleAddActivity function to use the type and description
+            // You'll need to modify handleAddActivity to accept these parameters
+            handleAddActivity(type, description, selectedClient.id);
+          }}
+          isLoading={addingActivity} // Changed from loading to isLoading
+          initialActivityType={preSelectedActivityType} // Changed from preSelectedActivityType to initialActivityType
+        />
+      )}
     </View>
   );
 };

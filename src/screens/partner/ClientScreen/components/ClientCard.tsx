@@ -20,17 +20,38 @@ interface ClientCardProps {
     'ClientScreen',
     undefined
   >;
+  onContactPress?: (
+    type: 'phone' | 'whatsapp',
+    client: Client,
+    activityTypeId?: number | null,
+  ) => void;
 }
 
-export const ClientCard: React.FC<ClientCardProps> = ({client, navigation}) => {
+export const ClientCard: React.FC<ClientCardProps> = ({
+  client,
+  navigation,
+  onContactPress,
+}) => {
   const handleWhatsapp = () => {
+    // Open WhatsApp
     Linking.openURL(
       `https://api.whatsapp.com/send?phone=${client.whatsappNumber}`,
     );
+
+    // Trigger activity recording if handler is provided
+    if (onContactPress) {
+      onContactPress('whatsapp', client);
+    }
   };
 
   const handlePhone = () => {
+    // Make phone call
     Linking.openURL(`tel:${client.mobileNumber}`);
+
+    // Trigger activity recording if handler is provided
+    if (onContactPress) {
+      onContactPress('phone', client);
+    }
   };
 
   const handleCardPress = () => {
