@@ -4,11 +4,27 @@ export const formatDate = (
   date: string | Date,
   formatString: string,
 ): string => {
-  if (typeof date === 'string') {
-    // Parse ISO string using parseISO which handles various ISO 8601 formats better
-    return format(parseISO(date), formatString);
+  try {
+    let dateObj: Date;
+
+    if (typeof date === 'string') {
+      // Check if the date string ends with 'Z' (UTC indicator)
+      // If not, append 'Z' to ensure it's treated as UTC
+      const dateStr = date.endsWith('Z') ? date : `${date}Z`;
+      dateObj = parseISO(dateStr);
+    } else {
+      dateObj = new Date(date);
+    }
+
+    // Convert UTC date to local time
+    // This creates a new Date object representing the same moment in local time
+    const localDate = new Date(dateObj.getTime());
+
+    return format(localDate, formatString);
+  } catch (error) {
+    console.warn('Error formatting date:', error);
+    return 'Invalid date';
   }
-  return format(date, formatString);
 };
 
 // Add these helper functions for date and time formatting
