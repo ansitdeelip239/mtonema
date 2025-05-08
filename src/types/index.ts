@@ -36,7 +36,7 @@ export interface Response<T> {
   message: string;
   data: T;
   httpStatus: number;
-  predictions?: any;
+  predictions?: PlacePrediction[];
 }
 
 export interface PropertyModel {

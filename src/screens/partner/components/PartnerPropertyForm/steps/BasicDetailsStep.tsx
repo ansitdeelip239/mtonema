@@ -1,14 +1,16 @@
-import React, {useCallback, useState, useEffect} from 'react';
+import React, {useCallback, useState, useEffect, useRef} from 'react';
 import {View, StyleSheet, Text} from 'react-native';
-import FormNavigationButtons from './components/FormNavigationButtons';
+import FormNavigationButtons from '../components/FormNavigationButtons';
 import partnerPropertyFormSchema, {
   PartnerPropertyFormType,
-} from '../../../../schema/PartnerPropertyFormSchema';
-import {useMaster} from '../../../../context/MasterProvider';
-import {MaterialTextInput} from '../../../../components/MaterialTextInput';
-import FilterOption from '../../../../components/FilterOption';
-import {formatCurrency} from '../../../../utils/currency';
+} from '../../../../../schema/PartnerPropertyFormSchema';
+import {useMaster} from '../../../../../context/MasterProvider';
+import {MaterialTextInput} from '../../../../../components/MaterialTextInput';
+import FilterOption from '../../../../../components/FilterOption';
+import {formatCurrency} from '../../../../../utils/currency';
 import {z} from 'zod';
+import MasterService from '../../../../../services/MasterService';
+import {PlacePrediction} from '../../../../../types/googlePlaces';
 
 interface BasicDetailsStepProps {
   formInput: PartnerPropertyFormType;
@@ -35,6 +37,17 @@ const BasicDetailsStep: React.FC<BasicDetailsStepProps> = ({
   const [isFormValid, setIsFormValid] = useState(false);
   const [attemptedSubmit, setAttemptedSubmit] = useState(false);
   const [shouldShowErrors, setShouldShowErrors] = useState(false);
+
+  // Add state for location suggestions
+  const [locationSuggestions, setLocationSuggestions] = useState<string[]>([]);
+  const [isLoadingSuggestions, setIsLoadingSuggestions] = useState(false);
+  const locationTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const [placePredictions, setPlacePredictions] = useState<PlacePrediction[]>(
+    [],
+  );
+
+  // Add a ref to track if location was just selected
+  const justSelectedRef = useRef(false);
 
   // Validate and show errors while typing
   const validateField = useCallback(
@@ -110,6 +123,93 @@ const BasicDetailsStep: React.FC<BasicDetailsStepProps> = ({
     [handleSelect, validateField],
   );
 
+  // Debounced function to fetch location suggestions using Google Places API
+  const fetchLocationSuggestions = useCallback(async (searchText: string) => {
+    console.log('fetchLocationSuggestions called with:', searchText);
+
+    if (searchText.length < 3) {
+      console.log('Search text too short, clearing suggestions');
+      setLocationSuggestions([]);
+      setPlacePredictions([]);
+      return;
+    }
+
+    // Clear previous timeout if exists
+    if (locationTimeoutRef.current) {
+      clearTimeout(locationTimeoutRef.current);
+    }
+
+    // Set a new timeout for debouncing
+    locationTimeoutRef.current = setTimeout(async () => {
+      try {
+        setIsLoadingSuggestions(true);
+
+        // Call Google Places API
+        const response = await MasterService.getGooglePlaces(searchText);
+
+        if (response && response.predictions) {
+          console.log(`Got ${response.predictions.length} predictions`);
+
+          // Store full prediction objects for later use
+          setPlacePredictions(
+            response.predictions as unknown as PlacePrediction[],
+          );
+
+          // Extract just the descriptions for display
+          const descriptions = response.predictions.map(
+            prediction => prediction.description,
+          );
+
+          setLocationSuggestions(descriptions);
+        } else {
+          console.log('No predictions found in response');
+          setLocationSuggestions([]);
+          setPlacePredictions([]);
+        }
+      } catch (error) {
+        console.error('Error fetching Google Places suggestions:', error);
+        setLocationSuggestions([]);
+        setPlacePredictions([]);
+      } finally {
+        setIsLoadingSuggestions(false);
+      }
+    }, 500); // 500ms debounce delay
+  }, []);
+
+  // Handle suggestion selection
+  const handleLocationSuggestionSelect = useCallback(
+    (suggestion: string) => {
+      // Set the ref to true - we just selected from suggestions
+      justSelectedRef.current = true;
+
+      handleInputChange('location', suggestion);
+
+      // Find the selected prediction to get additional data if needed
+      const selectedPrediction = placePredictions.find(
+        prediction => prediction.description === suggestion,
+      );
+
+      // You can use additional data from the prediction if needed
+      if (selectedPrediction) {
+        // Example: store place_id in another field if needed
+        // handleInputChange('locationPlaceId', selectedPrediction.place_id);
+
+        // For now, we'll just use the description
+        console.log('Selected place_id:', selectedPrediction.place_id);
+      }
+
+      // Clear suggestions after selection
+      setLocationSuggestions([]);
+      setPlacePredictions([]);
+
+      // Reset the flag after a short delay
+      setTimeout(() => {
+        justSelectedRef.current = false;
+      }, 100);
+    },
+    [handleInputChange, placePredictions],
+  );
+
   const handleTextInputChange = (
     field: keyof PartnerPropertyFormType,
     value: any,
@@ -117,6 +217,11 @@ const BasicDetailsStep: React.FC<BasicDetailsStepProps> = ({
     handleInputChange(field, value);
     setShouldShowErrors(true);
     validateField(field, value);
+
+    // Fetch suggestions if this is a location field input
+    if (field === 'location') {
+      fetchLocationSuggestions(value);
+    }
   };
 
   const handleNext = () => {
@@ -155,6 +260,10 @@ const BasicDetailsStep: React.FC<BasicDetailsStepProps> = ({
     }
   };
 
+  useEffect(() => {
+    console.log(locationSuggestions);
+  }, [locationSuggestions]);
+
   // Get error message based on validation state
   const getErrorMessage = (field: keyof PartnerPropertyFormType) => {
     if (shouldShowErrors || attemptedSubmit) {
@@ -162,6 +271,27 @@ const BasicDetailsStep: React.FC<BasicDetailsStepProps> = ({
     }
     return undefined;
   };
+
+  // Update useEffect to watch for city changes to refresh location suggestions
+  useEffect(() => {
+    // Skip API call if we just selected from suggestions
+    if (justSelectedRef.current) {
+      return;
+    }
+
+    if (formInput.location && formInput.location.length >= 3) {
+      fetchLocationSuggestions(formInput.location);
+    }
+  }, [formInput.city, fetchLocationSuggestions, formInput.location]);
+
+  // Cleanup on unmount
+  useEffect(() => {
+    return () => {
+      if (locationTimeoutRef.current) {
+        clearTimeout(locationTimeoutRef.current);
+      }
+    };
+  }, []);
 
   return (
     <View style={styles.container}>
@@ -215,6 +345,9 @@ const BasicDetailsStep: React.FC<BasicDetailsStepProps> = ({
         mode="outlined"
         placeholder="Enter location details"
         errorMessage={getErrorMessage('location')}
+        suggestions={locationSuggestions}
+        onSuggestionSelect={handleLocationSuggestionSelect}
+        loading={isLoadingSuggestions}
       />
 
       <MaterialTextInput
@@ -225,6 +358,7 @@ const BasicDetailsStep: React.FC<BasicDetailsStepProps> = ({
         mode="outlined"
         placeholder="Enter property price"
         keyboardType="number-pad"
+        maxLength={10}
         errorMessage={getErrorMessage('price')}
         rightComponent={<Text>{formatCurrency(formInput.price)}</Text>}
       />

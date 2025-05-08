@@ -1,10 +1,11 @@
-import React, {useCallback, useRef} from 'react';
+import React, {useCallback, useRef, useState, useEffect} from 'react';
 import {
   TextInput,
   TextInputProps,
   HelperText,
   Text,
   ActivityIndicator,
+  Portal, // Import Portal
 } from 'react-native-paper';
 import {
   TouchableOpacity,
@@ -37,7 +38,26 @@ export const MaterialTextInput = <T,>({
   loading,
   ...props
 }: MaterialTextInputProps<T>) => {
-  const suggestionTimeoutRef = useRef<NodeJS.Timeout>();
+  const suggestionTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  // Add state to track input position for portal
+  const [inputLayout, setInputLayout] = useState({
+    x: 0,
+    y: 0,
+    width: 0,
+    height: 0,
+  });
+  const inputRef = useRef<View>(null);
+
+  // Measure input position when mounted and when window size changes
+  useEffect(() => {
+    if (inputRef.current && suggestions && suggestions.length > 0) {
+      setTimeout(() => {
+        inputRef.current?.measureInWindow((x, y, width, height) => {
+          setInputLayout({x, y, width, height});
+        });
+      }, 100);
+    }
+  }, [suggestions]);
 
   const CrossButton = useCallback(() => {
     return (
@@ -99,7 +119,7 @@ export const MaterialTextInput = <T,>({
   );
 
   return (
-    <View style={styles.container}>
+    <View style={styles.container} ref={inputRef}>
       <TextInput
         {...props}
         value={getStringValue()}
@@ -127,6 +147,7 @@ export const MaterialTextInput = <T,>({
           },
         }}
       />
+
       {errorMessage && (
         <HelperText
           type="error"
@@ -135,25 +156,36 @@ export const MaterialTextInput = <T,>({
           {errorMessage}
         </HelperText>
       )}
+
       {suggestions && suggestions.length > 0 && (
-        <View style={styles.suggestionsContainer}>
-          <ScrollView
-            style={styles.suggestionsList}
-            nestedScrollEnabled
-            keyboardShouldPersistTaps="handled"
-            showsVerticalScrollIndicator={true}
-            indicatorStyle="black">
-            {suggestions.map((suggestion, index) => (
-              <TouchableOpacity
-                key={index}
-                style={styles.suggestionItem}
-                activeOpacity={0.7}
-                onPress={() => handleSuggestionPress(suggestion)}>
-                <Text style={styles.suggestionText}>{suggestion}</Text>
-              </TouchableOpacity>
-            ))}
-          </ScrollView>
-        </View>
+        <Portal>
+          <View
+            style={[
+              styles.suggestionsContainer,
+              {
+                top: inputLayout.y + 60, // Position below input
+                left: inputLayout.x,
+                width: inputLayout.width,
+              },
+            ]}>
+            <ScrollView
+              style={styles.suggestionsList}
+              nestedScrollEnabled
+              keyboardShouldPersistTaps="handled"
+              showsVerticalScrollIndicator={true}
+              indicatorStyle="black">
+              {suggestions.map((suggestion, index) => (
+                <TouchableOpacity
+                  key={index}
+                  style={styles.suggestionItem}
+                  activeOpacity={0.7}
+                  onPress={() => handleSuggestionPress(suggestion)}>
+                  <Text style={styles.suggestionText}>{suggestion}</Text>
+                </TouchableOpacity>
+              ))}
+            </ScrollView>
+          </View>
+        </Portal>
       )}
     </View>
   );
@@ -172,7 +204,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
   },
   helperText: {
-    marginTop: 4, // Change from -12 to 0
+    marginTop: 4,
     marginBottom: 0,
     paddingBottom: 0,
     color: '#cc0000',
@@ -180,15 +212,12 @@ const styles = StyleSheet.create({
   },
   suggestionsContainer: {
     position: 'absolute',
-    top: 60,
-    left: 0,
-    right: 0,
     backgroundColor: 'white',
     borderWidth: 1,
     borderColor: '#ccc',
     borderRadius: 4,
-    zIndex: 1000,
-    elevation: 5,
+    zIndex: 9999, // Much higher z-index
+    elevation: 20, // Higher elevation for Android
     maxHeight: 200,
     overflow: 'hidden',
     shadowColor: '#000',

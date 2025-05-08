@@ -73,12 +73,6 @@ const PartnerZoneScreen: React.FC<Props> = ({navigation, route}) => {
                 </Text>
               </View>
             )}
-            <Text
-              style={styles.locationText}
-              numberOfLines={2}
-              ellipsizeMode="tail">
-              {item.masterDetailName}
-            </Text>
           </View>
         </LinearGradient>
       </TouchableOpacity>
@@ -100,7 +94,7 @@ const PartnerZoneScreen: React.FC<Props> = ({navigation, route}) => {
           resizeMode="contain"
         />
         <Text style={styles.subtitle}>
-          Select your preferred location to continue
+          Select your preferred working location
         </Text>
       </View>
 
@@ -196,33 +190,25 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     width: '100%',
-    // Remove the aspectRatio and let content determine height
+    height: 100, // Fixed height for consistent button size
   },
   partnerLogo: {
-    width: '90%',
-    height: 80, // Fixed height instead of percentage
-    marginBottom: 12,
+    width: 100, // Adjust width for proper centering
+    height: 100, // Adjust height for proper centering
+    resizeMode: 'contain', // Ensure the logo fits within the bounds
   },
   placeholderLogo: {
     width: 60,
-    height: 60, // Slightly smaller
+    height: 60,
     borderRadius: 30,
     backgroundColor: Colors.MT_PRIMARY_1,
     justifyContent: 'center',
     alignItems: 'center',
-    marginBottom: 12,
   },
   placeholderText: {
-    fontSize: 24, // Slightly smaller
+    fontSize: 24,
     fontWeight: 'bold',
     color: 'white',
-  },
-  locationText: {
-    fontSize: 14,
-    color: Colors.MT_SECONDARY_1,
-    fontWeight: '600',
-    textAlign: 'center',
-    marginBottom: 8, // Add bottom margin to ensure spacing
   },
 });
 

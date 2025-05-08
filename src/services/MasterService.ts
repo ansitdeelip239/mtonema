@@ -1,11 +1,14 @@
 import {SearchIntellisenseResponse} from '../types';
 import {api} from '../utils/api';
 import url from '../constants/api';
+import {GooglePlacesResponse} from '../types/googlePlaces';
 
 class MasterService {
   static async getMasterDetails(masterName: string) {
     try {
-      const response = await api.get<any>(`${url.getMasterDetail}?masterName=${masterName}`);
+      const response = await api.get<any>(
+        `${url.getMasterDetail}?masterName=${masterName}`,
+      );
       return response;
     } catch (error) {
       console.error('Error in getMasterDetails', error);
@@ -13,7 +16,7 @@ class MasterService {
     }
   }
 
-  static async getMasterDetailsById(id:number) {
+  static async getMasterDetailsById(id: number) {
     try {
       const response = await api.get<any>(`${url.getMasterDetail}/${id}`);
       return response;
@@ -31,6 +34,24 @@ class MasterService {
       return response;
     } catch (error) {
       console.error('Error in searchIntellisense', error);
+      throw error;
+    }
+  }
+
+  static async getGooglePlaces(text: string, city?: string) {
+    try {
+      if (city) {
+        const response = await api.get<GooglePlacesResponse>(
+          `${url.getPlaces}?text=${text}&city=${city}`,
+        );
+        return response;
+      }
+      const response = await api.get<GooglePlacesResponse>(
+        `${url.getPlaces}?text=${text}`,
+      );
+      return response;
+    } catch (error) {
+      console.error('Error in getGooglePlaces', error);
       throw error;
     }
   }
