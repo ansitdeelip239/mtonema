@@ -4,6 +4,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import {jwtDecode} from 'jwt-decode';
 import AuthContext from './AuthContext';
 import {User} from '../types';
+import {useLogoStorage} from '../hooks/useLogoStorage';
 
 interface AuthProviderProps {
   children: React.ReactNode;
@@ -23,14 +24,18 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({children}) => {
   // Add loading state
   const [isLoading, setIsLoading] = useState(true);
 
+  const {clearLogoData} = useLogoStorage();
+
   // Use useRef for timer to prevent memory leaks
-  const tokenExpiryTimer = useRef<NodeJS.Timeout>();
+  const tokenExpiryTimer = useRef<NodeJS.Timeout | undefined>(undefined);
+
   const logout = useCallback(async () => {
     try {
       await AsyncStorage.removeItem('propertyFormData');
       await AuthService.removeUserData();
       await AsyncStorage.removeItem('tokenExpiry');
       await AsyncStorage.removeItem('token');
+      await clearLogoData();
       setUser(null);
       setAuthToken(null);
       setIsAuthenticated(false);
@@ -45,7 +50,8 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({children}) => {
       setAuthToken(null);
       setIsAuthenticated(false);
     }
-  }, []);
+  }, [clearLogoData]);
+
   const handleTokenExpiry = useCallback(
     (token: string) => {
       if (!token) {
