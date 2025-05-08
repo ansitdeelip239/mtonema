@@ -1,3 +1,5 @@
+import Colors from '../constants/Colors';
+
 export const getLighterColor = (color: string): string => {
   if (color.startsWith('#')) {
     const r = parseInt(color.slice(1, 3), 16);
@@ -78,4 +80,19 @@ export const lightenColor = (color: string, amount: number): string => {
     console.error('Error lightening color:', e);
     return '#a8c7f0'; // Fallback color
   }
+};
+
+/**
+ * Generates gradient colors based on partner info or falls back to default colors
+ * @param primaryColor Optional primary color from partner info
+ * @returns Array of gradient colors for header, buttons, etc.
+ */
+export const getGradientColors = (primaryColor?: string): string[] => {
+  if (primaryColor) {
+    // If primary color exists, create a gradient based on it
+    return [primaryColor, darkenColor(primaryColor, 0.2)];
+  }
+
+  // Default colors if no partner-specific colors are available
+  return [Colors.MT_PRIMARY_1, '#1e5799'];
 };

@@ -26,7 +26,11 @@ import {useKeyboard} from '../../hooks/useKeyboard';
 import Roles from '../../constants/Roles';
 import Images from '../../constants/Images';
 import HeaderComponent from './components/HeaderComponent';
-import {darkenColor, lightenColor} from '../../utils/colorUtils';
+import {
+  darkenColor,
+  lightenColor,
+  getGradientColors,
+} from '../../utils/colorUtils';
 
 const {width} = Dimensions.get('window');
 type Props = NativeStackScreenProps<AuthStackParamList, 'EmailScreen'>;
@@ -67,18 +71,9 @@ const EmailScreen: React.FC<Props> = ({navigation, route}) => {
     }
   }, [location]);
 
-
   // Derive header colors from partner info or use defaults
   const headerGradientColors = useMemo(() => {
-    if (partnerInfo.colorScheme?.primaryColor) {
-      // If primary color exists in partner info, create a gradient based on it
-      const primaryColor = partnerInfo.colorScheme.primaryColor;
-      // Create a slightly darker shade for the second color in the gradient
-      return [primaryColor, darkenColor(primaryColor, 0.2)];
-    }
-
-    // Default colors if no partner-specific colors are available
-    return [Colors.MT_PRIMARY_1, '#1e5799'];
+    return getGradientColors(partnerInfo.colorScheme?.primaryColor);
   }, [partnerInfo.colorScheme]);
 
   const logoHeight = useRef(new Animated.Value(200)).current;
@@ -187,6 +182,7 @@ const EmailScreen: React.FC<Props> = ({navigation, route}) => {
           navigation.navigate('OtpScreen', {
             email: formInput.email,
             logoUrl: partnerInfo.imageUrl,
+            location: location,
           });
           if (!skipEmailCheck) {
             setNavigateToPostProperty(false);
@@ -207,6 +203,7 @@ const EmailScreen: React.FC<Props> = ({navigation, route}) => {
       setNavigateToPostProperty,
       showError,
       partnerInfo.imageUrl,
+      location,
     ],
   );
 

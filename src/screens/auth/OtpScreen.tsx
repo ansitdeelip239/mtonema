@@ -1,4 +1,4 @@
-import React, {useState, useCallback} from 'react';
+import React, {useState, useCallback, useEffect, useMemo} from 'react';
 import {StyleSheet, SafeAreaView} from 'react-native';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {AuthStackParamList} from '../../navigator/AuthNavigator';
@@ -10,6 +10,7 @@ import {useLogoStorage} from '../../hooks/useLogoStorage';
 import MasterService from '../../services/MasterService';
 import {useTheme} from '../../context/ThemeProvider';
 import HeaderComponent from './components/HeaderComponent';
+import {getGradientColors} from '../../utils/colorUtils';
 
 type Props = NativeStackScreenProps<AuthStackParamList, 'OtpScreen'>;
 
@@ -17,9 +18,37 @@ const OtpScreen: React.FC<Props> = ({navigation, route}) => {
   const [isLoading, setIsLoading] = useState(false);
   const {storeToken, login, storeUser} = useAuth();
   const [OTP, setOtp] = useState('');
-  const {email, logoUrl} = route.params;
+  const {email, logoUrl, location} = route.params;
   const {showError, hideDialog} = useDialog();
   const {updateTheme} = useTheme();
+
+  // Partner info state
+  const [partnerInfo, setPartnerInfo] = useState<{
+    imageUrl?: string;
+    name?: string;
+    domain?: string;
+    colorScheme?: {
+      primaryColor?: string;
+      secondaryColor?: string;
+    };
+  }>({});
+
+  // Parse the location description JSON on component mount
+  useEffect(() => {
+    try {
+      if (location && location.description) {
+        const parsedDescription = JSON.parse(location.description);
+        setPartnerInfo(parsedDescription);
+      }
+    } catch (error) {
+      console.error('Failed to parse location description:', error);
+    }
+  }, [location]);
+
+  // Derive header colors from partner info or use defaults
+  const headerGradientColors = useMemo(() => {
+    return getGradientColors(partnerInfo.colorScheme?.primaryColor);
+  }, [partnerInfo.colorScheme]);
 
   // Use the enhanced hook
   const {storeLogoData, extractLogoFromPartnerLocation} = useLogoStorage();
@@ -106,7 +135,11 @@ const OtpScreen: React.FC<Props> = ({navigation, route}) => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <HeaderComponent title="Verify OTP" onBackPress={navigation.goBack} />
+      <HeaderComponent
+        title="Verify OTP"
+        onBackPress={navigation.goBack}
+        gradientColors={headerGradientColors}
+      />
 
       <OtpModel
         value={OTP}
@@ -114,6 +147,7 @@ const OtpScreen: React.FC<Props> = ({navigation, route}) => {
         onPress={handleSubmit}
         isLoading={isLoading}
         logoUrl={logoUrl}
+        themeColor={partnerInfo.colorScheme?.primaryColor}
       />
     </SafeAreaView>
   );

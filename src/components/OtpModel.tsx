@@ -19,6 +19,7 @@ import Colors from '../constants/Colors';
 import Images from '../constants/Images';
 import GetIcon from './GetIcon';
 import {useKeyboard} from '../hooks/useKeyboard';
+import {darkenColor, lightenColor} from '../utils/colorUtils';
 
 const {width} = Dimensions.get('window');
 
@@ -28,6 +29,7 @@ interface OtpModelProps {
   onPress: () => void;
   isLoading?: boolean;
   logoUrl?: string;
+  themeColor?: string;
 }
 
 const OtpModel: React.FC<OtpModelProps> = ({
@@ -36,6 +38,7 @@ const OtpModel: React.FC<OtpModelProps> = ({
   onPress,
   isLoading = false,
   logoUrl,
+  themeColor,
 }) => {
   const otpInputRef = useRef(null);
   const {showError} = useDialog();
@@ -100,14 +103,14 @@ const OtpModel: React.FC<OtpModelProps> = ({
           {/* Logo with animation */}
           <View style={styles.contentContainer}>
             <Animated.View
-                style={[
-                  styles.logoContainer,
-                  {
-                    opacity: logoOpacity,
-                    height: logoHeight,
-                  } as any,
-                  { overflow: 'hidden' as 'hidden' },
-                ]}>
+              style={[
+                styles.logoContainer,
+                {
+                  opacity: logoOpacity,
+                  height: logoHeight,
+                } as any,
+                {overflow: 'hidden' as 'hidden'},
+              ]}>
               {logoUrl ? (
                 <Image
                   source={{uri: logoUrl}}
@@ -125,7 +128,13 @@ const OtpModel: React.FC<OtpModelProps> = ({
 
             <View style={styles.formCard}>
               <View style={styles.welcomeSection}>
-                <Text style={styles.welcomeTitle}>Enter OTP</Text>
+                <Text
+                  style={[
+                    styles.welcomeTitle,
+                    themeColor ? {color: themeColor} : null,
+                  ]}>
+                  Enter OTP
+                </Text>
                 <Text style={styles.welcomeSubtitle}>
                   We've sent a 6-digit code to your registered E-mail address
                 </Text>
@@ -139,9 +148,17 @@ const OtpModel: React.FC<OtpModelProps> = ({
                   onFilled={onChangeText}
                   theme={{
                     pinCodeContainerStyle: styles.otpBox,
-                    focusedPinCodeContainerStyle: styles.activeOtpBox,
+                    focusedPinCodeContainerStyle: StyleSheet.flatten([
+                      styles.activeOtpBox,
+                      themeColor
+                        ? {
+                            borderColor: themeColor,
+                            backgroundColor: lightenColor(themeColor, 0.9),
+                          }
+                        : null,
+                    ]),
                   }}
-                  focusColor={Colors.MT_PRIMARY_1}
+                  focusColor={themeColor || Colors.MT_PRIMARY_1}
                 />
               </View>
 
@@ -152,7 +169,14 @@ const OtpModel: React.FC<OtpModelProps> = ({
                 <LinearGradient
                   colors={
                     value.length !== 6 || isLoading
-                      ? ['#a8c7f0', '#b8e0f7'] // Light blue gradient for disabled state
+                      ? themeColor
+                        ? [
+                            lightenColor(themeColor, 0.4),
+                            lightenColor(themeColor, 0.2),
+                          ]
+                        : ['#a8c7f0', '#b8e0f7'] // Default light blue gradient for disabled state
+                      : themeColor
+                      ? [themeColor, darkenColor(themeColor, 0.2)]
                       : ['#3a7bd5', '#00d2ff']
                   }
                   start={{x: 0, y: 0}}
@@ -181,7 +205,12 @@ const OtpModel: React.FC<OtpModelProps> = ({
               <View style={styles.resendContainer}>
                 <Text style={styles.resendText}>
                   Didn't receive the code?{' '}
-                  <Text style={styles.resendLink} onPress={() => {}}>
+                  <Text
+                    style={[
+                      styles.resendLink,
+                      themeColor ? {color: themeColor} : null,
+                    ]}
+                    onPress={() => {}}>
                     Resend OTP
                   </Text>
                 </Text>
