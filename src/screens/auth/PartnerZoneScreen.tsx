@@ -190,12 +190,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     width: '100%',
-    height: 100, // Fixed height for consistent button size
+    height: 100,
   },
   partnerLogo: {
-    width: 100, // Adjust width for proper centering
-    height: 100, // Adjust height for proper centering
-    resizeMode: 'contain', // Ensure the logo fits within the bounds
+    width: 100,
+    height: 100,
+    resizeMode: 'contain',
+    mixBlendMode: 'multiply',
   },
   placeholderLogo: {
     width: 60,

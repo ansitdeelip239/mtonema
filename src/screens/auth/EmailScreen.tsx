@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useRef, useState} from 'react';
+import React, {useCallback, useEffect, useRef, useState, useMemo} from 'react';
 import {
   View,
   Text,
@@ -26,6 +26,7 @@ import {useKeyboard} from '../../hooks/useKeyboard';
 import Roles from '../../constants/Roles';
 import Images from '../../constants/Images';
 import HeaderComponent from './components/HeaderComponent';
+import {darkenColor, lightenColor} from '../../utils/colorUtils';
 
 const {width} = Dimensions.get('window');
 type Props = NativeStackScreenProps<AuthStackParamList, 'EmailScreen'>;
@@ -47,6 +48,10 @@ const EmailScreen: React.FC<Props> = ({navigation, route}) => {
     imageUrl?: string;
     name?: string;
     domain?: string;
+    colorScheme?: {
+      primaryColor?: string;
+      secondaryColor?: string;
+    };
   }>({});
 
   // Parse the location description JSON on component mount
@@ -61,6 +66,20 @@ const EmailScreen: React.FC<Props> = ({navigation, route}) => {
       console.error('Failed to parse location description:', error);
     }
   }, [location]);
+
+
+  // Derive header colors from partner info or use defaults
+  const headerGradientColors = useMemo(() => {
+    if (partnerInfo.colorScheme?.primaryColor) {
+      // If primary color exists in partner info, create a gradient based on it
+      const primaryColor = partnerInfo.colorScheme.primaryColor;
+      // Create a slightly darker shade for the second color in the gradient
+      return [primaryColor, darkenColor(primaryColor, 0.2)];
+    }
+
+    // Default colors if no partner-specific colors are available
+    return [Colors.MT_PRIMARY_1, '#1e5799'];
+  }, [partnerInfo.colorScheme]);
 
   const logoHeight = useRef(new Animated.Value(200)).current;
   const logoOpacity = useRef(new Animated.Value(1)).current;
@@ -116,26 +135,12 @@ const EmailScreen: React.FC<Props> = ({navigation, route}) => {
   // Add this after your keyboard hook usage
   useEffect(() => {
     if (keyboardVisible) {
-      // Animate logo sliding up and fading out
-      Animated.parallel([
-        Animated.timing(logoHeight, {
-          toValue: 0,
-          duration: 300,
-          useNativeDriver: false,
-        }),
-        Animated.timing(logoOpacity, {
-          toValue: 0,
-          duration: 250,
-          useNativeDriver: false,
-        }),
-        Animated.timing(logoMarginTop, {
-          toValue: -30, // Move it slightly up as it collapses
-          duration: 300,
-          useNativeDriver: false,
-        }),
-      ]).start();
+      // Immediately hide the logo when keyboard appears (no animation)
+      logoHeight.setValue(0);
+      logoOpacity.setValue(0);
+      logoMarginTop.setValue(-30);
     } else {
-      // Animate logo sliding down and fading in
+      // Animate logo sliding down and fading in when keyboard hides
       Animated.parallel([
         Animated.timing(logoHeight, {
           toValue: 200,
@@ -222,6 +227,7 @@ const EmailScreen: React.FC<Props> = ({navigation, route}) => {
             : 'Buyer/Seller Sign In'
         }
         onBackPress={navigation.goBack}
+        gradientColors={headerGradientColors}
       />
 
       <KeyboardAvoidingView
@@ -286,8 +292,27 @@ const EmailScreen: React.FC<Props> = ({navigation, route}) => {
                   <LinearGradient
                     colors={
                       isLoading || formLoading
-                        ? ['#a8c7f0', '#b8e0f7'] // Light blue gradient for disabled state
-                        : ['#3a7bd5', '#00d2ff']
+                        ? partnerInfo.colorScheme?.primaryColor
+                          ? [
+                              lightenColor(
+                                partnerInfo.colorScheme.primaryColor,
+                                0.4,
+                              ),
+                              lightenColor(
+                                partnerInfo.colorScheme.primaryColor,
+                                0.2,
+                              ),
+                            ]
+                          : ['#a8c7f0', '#b8e0f7'] // Default light blue if no partner color
+                        : partnerInfo.colorScheme?.primaryColor
+                        ? [
+                            partnerInfo.colorScheme.primaryColor,
+                            darkenColor(
+                              partnerInfo.colorScheme.primaryColor,
+                              0.2,
+                            ),
+                          ]
+                        : headerGradientColors
                     }
                     start={{x: 0, y: 0}}
                     end={{x: 1, y: 0}}
@@ -309,9 +334,28 @@ const EmailScreen: React.FC<Props> = ({navigation, route}) => {
                   <LinearGradient
                     colors={
                       !formInput.email || isLoading || formLoading
-                        ? ['#a8c7f0', '#b8e0f7'] // Light blue gradient for disabled state
-                        : ['#3a7bd5', '#00d2ff']
-                    } // Regular blue gradient for active state
+                        ? partnerInfo.colorScheme?.primaryColor
+                          ? [
+                              lightenColor(
+                                partnerInfo.colorScheme.primaryColor,
+                                0.4,
+                              ),
+                              lightenColor(
+                                partnerInfo.colorScheme.primaryColor,
+                                0.2,
+                              ),
+                            ]
+                          : ['#a8c7f0', '#b8e0f7'] // Default light blue if no partner color
+                        : partnerInfo.colorScheme?.primaryColor
+                        ? [
+                            partnerInfo.colorScheme.primaryColor,
+                            darkenColor(
+                              partnerInfo.colorScheme.primaryColor,
+                              0.2,
+                            ),
+                          ]
+                        : headerGradientColors
+                    }
                     start={{x: 0, y: 0}}
                     end={{x: 1, y: 0}}
                     style={styles.buttonGradient}>
@@ -445,18 +489,6 @@ const styles = StyleSheet.create({
   },
   disabledButtonText: {
     color: Colors.MT_SECONDARY_3, // Semi-transparent white for disabled state
-  },
-  footer: {
-    padding: 20,
-    alignItems: 'center',
-  },
-  footerText: {
-    fontSize: 14,
-    color: '#555',
-  },
-  signupText: {
-    color: Colors.MT_PRIMARY_1,
-    fontWeight: 'bold',
   },
 });
 
