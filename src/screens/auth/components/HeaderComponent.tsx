@@ -18,6 +18,7 @@ interface HeaderComponentProps {
   showBackButton?: boolean;
   rightComponent?: ReactNode;
   gradientColors?: string[];
+  compact?: boolean; // New prop to allow for a more compact header
 }
 
 const HeaderComponent: React.FC<HeaderComponentProps> = ({
@@ -26,9 +27,17 @@ const HeaderComponent: React.FC<HeaderComponentProps> = ({
   showBackButton = true,
   rightComponent,
   gradientColors = [Colors.MT_PRIMARY_1, '#1e5799'],
+  compact = false, // Default to false for backward compatibility
 }) => {
   // Get safe area insets
   const insets = useSafeAreaInsets();
+
+  // Reduced top padding for all screens
+  const topPadding =
+    insets.top > 0 ? insets.top : Platform.OS === 'ios' ? 20 : 8;
+
+  // Smaller bottom padding
+  const bottomPadding = compact ? 8 : 10;
 
   return (
     <>
@@ -38,14 +47,14 @@ const HeaderComponent: React.FC<HeaderComponentProps> = ({
         style={[
           styles.headerGradient,
           {
-            paddingTop:
-              insets.top > 0 ? insets.top : Platform.OS === 'ios' ? 50 : 30,
+            paddingTop: topPadding,
+            paddingBottom: bottomPadding,
           },
         ]}>
         <View style={styles.headerContent}>
           {showBackButton ? (
             <TouchableOpacity style={styles.backButton} onPress={onBackPress}>
-              <GetIcon iconName="back" color="white" size="24" />
+              <GetIcon iconName="back" color="white" size="20" />
             </TouchableOpacity>
           ) : (
             <View style={styles.spacer} />
@@ -62,32 +71,33 @@ const HeaderComponent: React.FC<HeaderComponentProps> = ({
 
 const styles = StyleSheet.create({
   headerGradient: {
-    // paddingTop handled dynamically with insets
-    paddingBottom: 20,
-    borderBottomLeftRadius: 30,
-    borderBottomRightRadius: 30,
+    // paddingTop handled dynamically
+    // paddingBottom handled dynamically
+    borderBottomLeftRadius: 25, // Slightly smaller radius
+    borderBottomRightRadius: 25,
   },
   headerContent: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    paddingHorizontal: 20,
+    paddingHorizontal: 16, // Reduced from 20
+    height: 40, // Reduced from 45
   },
   headerText: {
-    fontSize: 20,
+    fontSize: 18, // Reduced from 20
     fontWeight: 'bold',
     color: 'white',
   },
   backButton: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
+    width: 36, // Reduced from 40
+    height: 36, // Reduced from 40
+    borderRadius: 18,
     backgroundColor: 'rgba(255,255,255,0.2)',
     justifyContent: 'center',
     alignItems: 'center',
   },
   spacer: {
-    width: 40,
+    width: 36, // Match the button width
   },
 });
 

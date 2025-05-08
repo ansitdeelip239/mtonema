@@ -27,7 +27,7 @@ import BasicDetailsStep from './BasicDetailsStep';
 import PropertyDetailsStep from './PropertyDetailsStep';
 import MediaAndSubmitStep from './MediaAndSubmitStep';
 import {Property} from '../../ListingsScreen/types';
-import Colors from '../../../../constants/Colors';
+import { useTheme } from '../../../../context/ThemeProvider';
 
 const {width} = Dimensions.get('window');
 const steps = ['Basic Info', 'Property Details', 'Media & Submit'];
@@ -52,6 +52,7 @@ const PartnerPropertyForm: React.FC<PartnerPropertyFormProps> = ({
   const slideAnimation = useRef(new Animated.Value(0)).current;
   const {user} = useAuth();
   const {setPartnerPropertyUpdated} = usePartner();
+  const {theme} = useTheme();
 
   // Create refs for each ScrollView
   const scrollViewRefs = useRef<(ScrollView | null)[]>([null, null, null]);
@@ -347,7 +348,7 @@ const PartnerPropertyForm: React.FC<PartnerPropertyFormProps> = ({
   };
 
   const ClearButton = (
-    <TouchableOpacity onPress={completeReset} style={styles.clearButton}>
+    <TouchableOpacity onPress={completeReset} style={[styles.clearButton, {backgroundColor: theme.secondaryColor}]}>
       <Text style={styles.clearButtonText}>Clear</Text>
     </TouchableOpacity>
   );
@@ -386,7 +387,9 @@ const PartnerPropertyForm: React.FC<PartnerPropertyFormProps> = ({
           ]}>
           <View style={styles.stepContainer}>
             <ScrollView
-              ref={ref => (scrollViewRefs.current[0] = ref)}
+              ref={ref => {
+                scrollViewRefs.current[0] = ref;
+              }}
               contentContainerStyle={styles.scrollContent}
               showsVerticalScrollIndicator={false}>
               <View style={styles.stepWrapper}>
@@ -402,7 +405,9 @@ const PartnerPropertyForm: React.FC<PartnerPropertyFormProps> = ({
 
           <View style={styles.stepContainer}>
             <ScrollView
-              ref={ref => (scrollViewRefs.current[1] = ref)}
+              ref={ref => {
+                scrollViewRefs.current[1] = ref;
+              }}
               contentContainerStyle={styles.scrollContent}
               showsVerticalScrollIndicator={false}>
               <View style={styles.stepWrapper}>
@@ -420,7 +425,9 @@ const PartnerPropertyForm: React.FC<PartnerPropertyFormProps> = ({
 
           <View style={styles.stepContainer}>
             <ScrollView
-              ref={ref => (scrollViewRefs.current[2] = ref)}
+              ref={ref => {
+                scrollViewRefs.current[2] = ref;
+              }}
               contentContainerStyle={styles.scrollContent}
               showsVerticalScrollIndicator={false}>
               <View style={styles.stepWrapper}>
@@ -488,7 +495,6 @@ const styles = StyleSheet.create({
   },
   clearButton: {
     padding: 10,
-    backgroundColor: Colors.MT_PRIMARY_2,
     borderRadius: 10,
     paddingHorizontal: 15,
   },

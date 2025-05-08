@@ -4,9 +4,10 @@ import {
   Text,
   StyleSheet,
   TouchableOpacity,
-  ScrollView,
+  FlatList,
   ActivityIndicator,
   Image,
+  Dimensions,
 } from 'react-native';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {AuthStackParamList} from '../../navigator/AuthNavigator';
@@ -15,7 +16,9 @@ import Colors from '../../constants/Colors';
 import Images from '../../constants/Images';
 import {MasterDetailModel} from '../../types';
 import HeaderComponent from './components/HeaderComponent';
+import LinearGradient from 'react-native-linear-gradient';
 
+const {width} = Dimensions.get('window');
 type Props = NativeStackScreenProps<AuthStackParamList, 'PartnerZoneScreen'>;
 
 const PartnerZoneScreen: React.FC<Props> = ({navigation, route}) => {
@@ -29,10 +32,66 @@ const PartnerZoneScreen: React.FC<Props> = ({navigation, route}) => {
     });
   };
 
+  // Helper function to extract the logo URL from the description JSON
+  const getLogoUrl = (description: string | undefined) => {
+    if (!description) {
+      return null;
+    }
+
+    try {
+      const parsedDesc = JSON.parse(description);
+      return parsedDesc?.imageUrl || null;
+    } catch (error) {
+      console.error('Error parsing location description:', error);
+      return null;
+    }
+  };
+
+  // Render each partner location item
+  const renderLocationItem = ({item}: {item: MasterDetailModel}) => {
+    const logoUrl = getLogoUrl(item.description);
+
+    return (
+      <TouchableOpacity
+        style={styles.locationButton}
+        onPress={() => handleLocationPress(item)}
+        activeOpacity={0.7}>
+        <LinearGradient
+          colors={['#ffffff', '#f8f9fa']}
+          style={styles.gradientContainer}>
+          <View style={styles.locationContent}>
+            {logoUrl ? (
+              <Image
+                source={{uri: logoUrl}}
+                style={styles.partnerLogo}
+                resizeMode="contain"
+              />
+            ) : (
+              <View style={styles.placeholderLogo}>
+                <Text style={styles.placeholderText}>
+                  {item.masterDetailName.charAt(0)}
+                </Text>
+              </View>
+            )}
+            <Text
+              style={styles.locationText}
+              numberOfLines={2}
+              ellipsizeMode="tail">
+              {item.masterDetailName}
+            </Text>
+          </View>
+        </LinearGradient>
+      </TouchableOpacity>
+    );
+  };
+
   return (
     <View style={styles.container}>
-      {/* Replace header with HeaderComponent */}
-      <HeaderComponent title="Partner Zone" showBackButton={true} onBackPress={() => navigation.goBack()} />
+      <HeaderComponent
+        title="Partner Zone"
+        showBackButton={true}
+        onBackPress={() => navigation.goBack()}
+      />
 
       <View style={styles.headerContainer}>
         <Image
@@ -51,24 +110,15 @@ const PartnerZoneScreen: React.FC<Props> = ({navigation, route}) => {
           <Text style={styles.loadingText}>Loading locations...</Text>
         </View>
       ) : (
-        <ScrollView
-          style={styles.scrollView}
-          contentContainerStyle={styles.scrollViewContent}
-          showsVerticalScrollIndicator={false}>
-          {masterData.PartnerLocation.map(
-            location =>
-              location.masterDetailName !== 'Individual' && (
-                <TouchableOpacity
-                  key={location.id}
-                  style={styles.locationButton}
-                  onPress={() => handleLocationPress(location)}>
-                  <Text style={styles.locationText}>
-                    {location.masterDetailName}
-                  </Text>
-                </TouchableOpacity>
-              ),
-          )}
-        </ScrollView>
+        <FlatList
+          data={masterData.PartnerLocation.sort((a, b) => a.id - b.id)}
+          renderItem={renderLocationItem}
+          keyExtractor={item => item.id.toString()}
+          numColumns={2}
+          columnWrapperStyle={styles.columnWrapper}
+          contentContainerStyle={styles.listContent}
+          showsVerticalScrollIndicator={false}
+        />
       )}
     </View>
   );
@@ -79,26 +129,32 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#f8f9fa',
   },
-  // Remove header-related styles:
-  // headerGradient, headerContent, headerText, spacer
   headerContainer: {
     alignItems: 'center',
     paddingVertical: 20,
-  },
-  spacer: {
-    width: 24,
+    backgroundColor: 'white',
+    marginBottom: 10,
+    borderBottomLeftRadius: 20,
+    borderBottomRightRadius: 20,
+    shadowColor: '#000',
+    shadowOffset: {width: 0, height: 2},
+    shadowOpacity: 0.05,
+    shadowRadius: 10,
+    elevation: 2,
+    paddingHorizontal: 16,
   },
   logo: {
-    width: 150,
-    height: 80,
-    marginBottom: 16,
+    width: 140,
+    height: 70,
+    marginBottom: 12,
   },
   subtitle: {
     fontSize: 16,
     textAlign: 'center',
     color: Colors.MT_SECONDARY_1,
-    paddingHorizontal: 32,
-    marginBottom: 16,
+    paddingHorizontal: 16,
+    marginBottom: 8,
+    fontWeight: '500',
   },
   loadingContainer: {
     flex: 1,
@@ -110,31 +166,63 @@ const styles = StyleSheet.create({
     color: Colors.MT_SECONDARY_2,
     fontSize: 14,
   },
-  scrollView: {
-    flex: 1,
+  listContent: {
+    paddingHorizontal: 12,
+    paddingBottom: 24,
+    paddingTop: 8,
   },
-  scrollViewContent: {
-    paddingHorizontal: 24,
-    paddingBottom: 40,
+  columnWrapper: {
+    justifyContent: 'space-between',
   },
   locationButton: {
-    backgroundColor: Colors.MT_SECONDARY_3,
-    padding: 16,
-    borderRadius: 12,
-    marginBottom: 12,
-    alignItems: 'center',
+    width: (width - 36) / 2, // Account for horizontal padding and gap
+    marginBottom: 16,
+    borderRadius: 16,
+    overflow: 'hidden',
     shadowColor: '#000',
-    shadowOffset: {width: 0, height: 2},
+    shadowOffset: {width: 0, height: 3},
     shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 3,
+    shadowRadius: 6,
+    elevation: 4,
+  },
+  gradientContainer: {
+    width: '100%',
+    padding: 12,
     borderWidth: 1,
-    borderColor: Colors.MT_PRIMARY_1 + '20',
+    borderColor: 'rgba(0, 0, 0, 0.05)',
+    borderRadius: 16,
+  },
+  locationContent: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: '100%',
+    // Remove the aspectRatio and let content determine height
+  },
+  partnerLogo: {
+    width: '90%',
+    height: 80, // Fixed height instead of percentage
+    marginBottom: 12,
+  },
+  placeholderLogo: {
+    width: 60,
+    height: 60, // Slightly smaller
+    borderRadius: 30,
+    backgroundColor: Colors.MT_PRIMARY_1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 12,
+  },
+  placeholderText: {
+    fontSize: 24, // Slightly smaller
+    fontWeight: 'bold',
+    color: 'white',
   },
   locationText: {
-    fontSize: 16,
+    fontSize: 14,
     color: Colors.MT_SECONDARY_1,
-    fontWeight: '500',
+    fontWeight: '600',
+    textAlign: 'center',
+    marginBottom: 8, // Add bottom margin to ensure spacing
   },
 });
 
