@@ -29,7 +29,7 @@ const getActivityColor = (activityType: string) => {
 
 interface ActivityTimelineProps {
   activity: ClientActivityDataModel;
-  isFirst?: boolean; // Add isFirst prop
+  isFirst?: boolean;
   isLast?: boolean;
   onPress: (activity: ClientActivityDataModel) => void;
 }
@@ -41,6 +41,7 @@ const ActivityTimeline: React.FC<ActivityTimelineProps> = ({
   onPress,
 }) => {
   const activityColor = getActivityColor(activity.activityType.name);
+  const hasDescription = activity.description && activity.description !== '-';
 
   return (
     <TouchableOpacity
@@ -48,7 +49,9 @@ const ActivityTimeline: React.FC<ActivityTimelineProps> = ({
       onPress={() => onPress(activity)}>
       <View style={styles.timelineSection}>
         {/* Line coming from above (only if it's not the first item) */}
-        {!isFirst && <View style={[styles.verticalLineTop, {backgroundColor: '#e0e0e0'}]} />}
+        {!isFirst && (
+          <View style={[styles.verticalLineTop, styles.lineColor]} />
+        )}
 
         {/* Icon container */}
         <View style={[styles.iconContainer, {backgroundColor: activityColor}]}>
@@ -61,13 +64,15 @@ const ActivityTimeline: React.FC<ActivityTimelineProps> = ({
 
         {/* Line extending below (except for last item) */}
         {!isLast && (
-          <View
-            style={[styles.verticalLineBottom, {backgroundColor: '#e0e0e0'}]}
-          />
+          <View style={[styles.verticalLineBottom, styles.lineColor]} />
         )}
       </View>
 
-      <View style={styles.contentSection}>
+      <View
+        style={[
+          styles.contentSection,
+          !hasDescription && styles.contentSectionCentered,
+        ]}>
         <View style={styles.activityHeader}>
           <Text
             style={[styles.activityType, {color: activityColor}]}
@@ -78,7 +83,7 @@ const ActivityTimeline: React.FC<ActivityTimelineProps> = ({
             {formatDate(activity.createdOn, 'PPp')}
           </Text>
         </View>
-        {activity.description && activity.description !== '-' && (
+        {hasDescription && (
           <Text style={styles.activityDescription} numberOfLines={2}>
             {activity.description}
           </Text>
@@ -114,22 +119,28 @@ const styles = StyleSheet.create({
     top: -8, // Extend upward beyond the top padding
     height: 16, // Half above the icon
     width: 2,
-    backgroundColor: '#e0e0e0',
     alignSelf: 'center',
     zIndex: 1,
+  },
+  lineColor: {
+    backgroundColor: '#e0e0e0',
   },
   verticalLineBottom: {
     position: 'absolute',
     top: 32, // Start from the bottom of the icon
     bottom: -8, // Extend downward to connect to the next icon
     width: 2,
-    backgroundColor: '#e0e0e0',
     alignSelf: 'center',
     zIndex: 1,
   },
   contentSection: {
     flex: 1,
     paddingBottom: 8,
+  },
+  // New style for centering content when there's no description
+  contentSectionCentered: {
+    justifyContent: 'center',
+    paddingBottom: 0,
   },
   activityHeader: {
     flexDirection: 'row',
@@ -150,7 +161,7 @@ const styles = StyleSheet.create({
   activityDescription: {
     fontSize: 14,
     color: '#333',
-    marginBottom: 4,
+    // marginBottom: 4,
     lineHeight: 20,
   },
   assignedTo: {
