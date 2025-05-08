@@ -171,7 +171,7 @@ const AgentDataScreen: React.FC<Props> = ({navigation}) => {
 
   return (
     <View style={styles.container}>
-      <Header<PartnerDrawerParamList> title="Agent's Property" titleSize={24}>
+      <Header<PartnerDrawerParamList> title="Agent's Property">
         <TouchableOpacity
           style={[styles.addButton, {backgroundColor: theme.secondaryColor}]}
           onPress={() => {

@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useMemo} from 'react';
 import {
   ActivityIndicator,
   StyleSheet,
@@ -16,7 +16,8 @@ import Colors from '../../../constants/Colors';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {ClientStackParamList} from '../../../navigator/components/ClientScreenStack';
 import SearchHeader from '../../../components/SearchHeader';
-import { useTheme } from '../../../context/ThemeProvider';
+import {useTheme} from '../../../context/ThemeProvider';
+import {getGradientColors} from '../../../utils/colorUtils';
 
 type Props = NativeStackScreenProps<ClientStackParamList, 'ClientScreen'>;
 
@@ -33,6 +34,11 @@ const ClientScreen: React.FC<Props> = ({navigation}) => {
   } = useClientData();
   const [isSearching, setIsSearching] = useState(false);
   const {theme} = useTheme();
+
+  // Create gradient colors from theme using the same utility function as EmailScreen
+  const headerGradientColors = useMemo(() => {
+    return getGradientColors(theme.primaryColor);
+  }, [theme.primaryColor]);
 
   const handleSearchWithLoading = async (text: string) => {
     setIsSearching(true);
@@ -98,9 +104,7 @@ const ClientScreen: React.FC<Props> = ({navigation}) => {
         ListEmptyComponent={
           <View style={styles.emptyStateContainer}>
             <Text style={styles.emptyText}>No Clients Found</Text>
-            <Text style={styles.pullToRefreshHint}>
-              Pull down to refresh
-            </Text>
+            <Text style={styles.pullToRefreshHint}>Pull down to refresh</Text>
           </View>
         }
       />
@@ -109,7 +113,11 @@ const ClientScreen: React.FC<Props> = ({navigation}) => {
 
   return (
     <View style={styles.container}>
-      <Header<PartnerDrawerParamList> title="Clients">
+      <Header<PartnerDrawerParamList>
+        title="Clients"
+        gradientColors={headerGradientColors}
+        compact={true} // Add compact mode to match EmailScreen's style
+      >
         <TouchableOpacity
           style={[styles.addButton, {backgroundColor: theme.secondaryColor}]}
           onPress={() => {

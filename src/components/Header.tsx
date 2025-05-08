@@ -14,6 +14,7 @@ import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import LinearGradient from 'react-native-linear-gradient';
 import {useTheme} from '../context/ThemeProvider';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
+import {getGradientColors} from '../utils/colorUtils';
 
 interface HeaderProps {
   title: string;
@@ -22,8 +23,10 @@ interface HeaderProps {
   navigation?: NativeStackNavigationProp<any>;
   onBackPress?: () => void;
   titleSize?: number;
-  hideDrawerButton?: boolean; // Prop to hide the drawer button
-  centerTitle?: boolean; // New prop to center the title
+  hideDrawerButton?: boolean;
+  centerTitle?: boolean;
+  gradientColors?: string[];
+  compact?: boolean;
 }
 
 export default function Header<T extends ParamListBase>({
@@ -32,13 +35,25 @@ export default function Header<T extends ParamListBase>({
   backButton,
   navigation,
   onBackPress,
-  titleSize = 20,
+  titleSize = 18,
   hideDrawerButton = false,
-  centerTitle = false, // Default is false (left-aligned title)
+  centerTitle = false,
+  gradientColors,
+  compact = false,
 }: HeaderProps) {
   const {openDrawer} = useDrawer<T>();
   const {theme} = useTheme();
-  const insets = useSafeAreaInsets(); // Get safe area insets
+  const insets = useSafeAreaInsets();
+
+  // Get safe area insets
+  const topPadding =
+    insets.top > 0 ? insets.top : Platform.OS === 'ios' ? 20 : 8;
+
+  // Smaller bottom padding like HeaderComponent
+  const bottomPadding = compact ? 8 : 10;
+
+  // Use provided gradientColors or fallback to calculated ones
+  const headerColors = gradientColors || getGradientColors(theme.primaryColor);
 
   const handleBackPress = () => {
     if (onBackPress) {
@@ -49,63 +64,59 @@ export default function Header<T extends ParamListBase>({
   };
 
   return (
-    <LinearGradient
-      colors={[theme.primaryColor, theme.primaryColor]}
-      style={[
-        styles.headerGradient,
-        // Apply dynamic padding based on safe area insets
-        {paddingTop: insets.top},
-      ]}>
-      <StatusBar
-        backgroundColor={theme.primaryColor}
-        barStyle="light-content"
-      />
-      <View style={styles.headerContainer}>
-        {!hideDrawerButton && (
-          <TouchableOpacity
-            onPress={backButton ? () => handleBackPress() : openDrawer}
-            style={styles.menuButton}>
-            <GetIcon
-              iconName={backButton ? 'back' : 'hamburgerMenu'}
-              color="white"
-              size="24"
-            />
-          </TouchableOpacity>
-        )}
-        <Text
-          style={[
-            styles.headerText,
-            {fontSize: titleSize},
-            // Apply different styles based on props
-            hideDrawerButton ? {paddingLeft: 0 as number} : {},
-            centerTitle ? styles.centeredTitle : {},
-          ]}>
-          {title}
-        </Text>
-        <View style={styles.child}>{children}</View>
-      </View>
-    </LinearGradient>
+    <>
+      <StatusBar backgroundColor={headerColors[0]} barStyle="light-content" />
+      <LinearGradient
+        colors={headerColors}
+        // Remove explicit start/end to match HeaderComponent's behavior
+        style={[
+          styles.headerGradient,
+          {
+            paddingTop: topPadding,
+            paddingBottom: bottomPadding,
+          },
+        ]}>
+        <View style={styles.headerContainer}>
+          {!hideDrawerButton && (
+            <TouchableOpacity
+              onPress={backButton ? () => handleBackPress() : openDrawer}
+              style={styles.menuButton}>
+              <GetIcon
+                iconName={backButton ? 'back' : 'hamburgerMenu'}
+                color="white"
+                size="20" // Changed from 24 to match HeaderComponent
+              />
+            </TouchableOpacity>
+          )}
+          <Text
+            style={[
+              styles.headerText,
+              {fontSize: titleSize},
+              hideDrawerButton ? styles.noPaddingLeft : {},
+              centerTitle ? styles.centeredTitle : {},
+            ]}>
+            {title}
+          </Text>
+          <View style={styles.child}>{children}</View>
+        </View>
+      </LinearGradient>
+    </>
   );
 }
 
 const styles = StyleSheet.create({
   headerGradient: {
-    // Remove specific paddingTop since SafeAreaView handles it now
-    paddingBottom: 10,
-    borderBottomLeftRadius: 30,
-    borderBottomRightRadius: 30,
+    // Update to match HeaderComponent
+    borderBottomLeftRadius: 25, // Changed from 30 to match HeaderComponent
+    borderBottomRightRadius: 25,
     marginBottom: 10,
-  },
-  safeArea: {
-    // Add additional padding on Android to account for status bar
-    paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0,
   },
   headerContainer: {
     flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'space-between', // Added to match HeaderComponent
     paddingHorizontal: 16,
-    paddingBottom: 6,
-    paddingTop: Platform.OS === 'ios' ? 10 : 15, // Add some top padding for visual spacing
+    height: 40, // Match HeaderComponent height
   },
   headerText: {
     fontWeight: 'bold',
@@ -117,13 +128,17 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   menuButton: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
+    width: 36, // Changed from 40 to match HeaderComponent
+    height: 36, // Changed from 40 to match HeaderComponent
+    borderRadius: 18,
+    // backgroundColor: 'rgba(255,255,255,0.2)', // Added background like HeaderComponent
     justifyContent: 'center',
     alignItems: 'center',
   },
   child: {
     marginRight: 8,
+  },
+  noPaddingLeft: {
+    paddingLeft: 0,
   },
 });
