@@ -74,6 +74,13 @@ const PartnerZoneScreen: React.FC<Props> = ({navigation, route}) => {
               </View>
             )}
           </View>
+
+          <Text
+            style={styles.locationName}
+            numberOfLines={2}
+            ellipsizeMode="tail">
+            {item.masterDetailName}
+          </Text>
         </LinearGradient>
       </TouchableOpacity>
     );
@@ -94,7 +101,7 @@ const PartnerZoneScreen: React.FC<Props> = ({navigation, route}) => {
           resizeMode="contain"
         />
         <Text style={styles.subtitle}>
-          Select your preferred working location
+          Select your working Agency / Location
         </Text>
       </View>
 
@@ -210,6 +217,14 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: 'bold',
     color: 'white',
+  },
+  locationName: {
+    textAlign: 'center',
+    fontSize: 14,
+    fontWeight: '500',
+    color: Colors.MT_SECONDARY_1,
+    marginTop: 8,
+    paddingHorizontal: 4,
   },
 });
 

@@ -11,7 +11,7 @@ import FollowUpCard from './FollowUpCard';
 import {FollowUpType} from '../../../../types';
 import GetIcon, {IconEnum} from '../../../../components/GetIcon';
 import Colors from '../../../../constants/Colors';
-import { useTheme } from '../../../../context/ThemeProvider';
+import {useTheme} from '../../../../context/ThemeProvider';
 
 interface FollowUpListSectionProps {
   title?: string;
@@ -22,6 +22,8 @@ interface FollowUpListSectionProps {
   showTitle?: boolean;
   onFollowUpPress?: (clientId: number) => void;
   filterType?: string;
+  onEndReached?: () => void;
+  isLoadingMore?: boolean;
 }
 
 const FollowUpListSection: React.FC<FollowUpListSectionProps> = ({
@@ -33,6 +35,8 @@ const FollowUpListSection: React.FC<FollowUpListSectionProps> = ({
   showTitle = true,
   onFollowUpPress,
   filterType,
+  onEndReached,
+  isLoadingMore = false,
 }) => {
   const {theme} = useTheme();
   const renderFollowUpItem = ({item}: {item: FollowUpType}) => (
@@ -44,6 +48,18 @@ const FollowUpListSection: React.FC<FollowUpListSectionProps> = ({
       )}
     </TouchableOpacity>
   );
+
+  const renderFooter = () => {
+    if (!isLoadingMore) {
+      return null;
+    }
+
+    return (
+      <View style={styles.footerLoader}>
+        <ActivityIndicator size="small" color={Colors.MT_PRIMARY_1} />
+      </View>
+    );
+  };
 
   return (
     <View style={styles.sectionContainer}>
@@ -65,6 +81,9 @@ const FollowUpListSection: React.FC<FollowUpListSectionProps> = ({
           renderItem={renderFollowUpItem}
           keyExtractor={item => item.id.toString()}
           scrollEnabled={false}
+          onEndReached={onEndReached}
+          onEndReachedThreshold={0.5}
+          ListFooterComponent={renderFooter}
         />
       ) : (
         <View style={styles.emptyContainer}>
@@ -122,6 +141,10 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: Colors.textLight || '#999',
     textAlign: 'center',
+  },
+  footerLoader: {
+    padding: 10,
+    alignItems: 'center',
   },
 });
 

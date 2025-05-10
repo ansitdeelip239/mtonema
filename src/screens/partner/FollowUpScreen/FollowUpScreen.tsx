@@ -6,6 +6,8 @@ import {
   TouchableOpacity,
   ScrollView,
   RefreshControl,
+  NativeScrollEvent,
+  NativeSyntheticEvent,
 } from 'react-native';
 import Colors from '../../../constants/Colors';
 import GetIcon from '../../../components/GetIcon';
@@ -23,25 +25,48 @@ import {useTheme} from '../../../context/ThemeProvider';
 type Props = NativeStackScreenProps<FollowUpStackParamList, 'FollowUpScreen'>;
 
 const FollowUpScreen: React.FC<Props> = ({navigation}) => {
-  // Existing component logic remains the same
   const {
     followUps: todayFollowUps,
     isLoading: isTodayLoading,
     fetchFollowUps: fetchTodayFollowUps,
+    loadMoreFollowUps: loadMoreTodayFollowUps,
+    isLoadingMore: isLoadingMoreToday,
+    hasMoreData: hasMoreTodayData,
   } = useFollowUps('today');
 
-  const {followUps: overdueFollowUps, fetchFollowUps: fetchOverdueFollowUps} =
-    useFollowUps('overdue');
+  const {
+    followUps: overdueFollowUps,
+    fetchFollowUps: fetchOverdueFollowUps,
+    pagination: overduePagination,
+    // loadMoreFollowUps: loadMoreOverdueFollowUps,
+    // isLoadingMore: isLoadingMoreOverdue,
+    // hasMoreData: hasMoreOverdueData,
+  } = useFollowUps('overdue', 1);
 
-  const {followUps: upcomingFollowUps, fetchFollowUps: fetchUpcomingFollowUps} =
-    useFollowUps('upcoming');
+  const {
+    followUps: upcomingFollowUps,
+    fetchFollowUps: fetchUpcomingFollowUps,
+    pagination: upcomingPagination,
+    // loadMoreFollowUps: loadMoreUpcomingFollowUps,
+    // isLoadingMore: isLoadingMoreUpcoming,
+    // hasMoreData: hasMoreUpcomingData,
+  } = useFollowUps('upcoming', 1);
 
-  const {followUps: somedayFollowUps, fetchFollowUps: fetchSomedayFollowUps} =
-    useFollowUps('someday');
+  const {
+    followUps: somedayFollowUps,
+    fetchFollowUps: fetchSomedayFollowUps,
+    pagination: somedayPagination,
+    // loadMoreFollowUps: loadMoreSomedayFollowUps,
+    // isLoadingMore: isLoadingMoreSomeday,
+    // hasMoreData: hasMoreSomedayData,
+  } = useFollowUps('someday', 1);
 
   const [isRefreshing, setIsRefreshing] = useState(false);
   const {clientsUpdated} = usePartner();
   const {theme} = useTheme();
+
+  // Track scroll position to determine which list to load more from
+  const [activeSection, setActiveSection] = useState<string | null>(null);
 
   // Helper function to determine if a date is today
   const isToday = useCallback((dateString: string | null): boolean => {
@@ -102,17 +127,11 @@ const FollowUpScreen: React.FC<Props> = ({navigation}) => {
 
   const navigateToScreen = (screenType: string) => {
     if (screenType === 'overdue') {
-      navigation.navigate('OverdueFollowUpScreen', {
-        followUps: overdueFollowUps,
-      });
+      navigation.navigate('OverdueFollowUpScreen');
     } else if (screenType === 'upcoming') {
-      navigation.navigate('UpcomingFollowUpScreen', {
-        followUps: upcomingFollowUps,
-      });
+      navigation.navigate('UpcomingFollowUpScreen');
     } else if (screenType === 'someday') {
-      navigation.navigate('SomedayFollowUpScreen', {
-        followUps: somedayFollowUps,
-      });
+      navigation.navigate('SomedayFollowUpScreen');
     }
   };
 
@@ -121,6 +140,27 @@ const FollowUpScreen: React.FC<Props> = ({navigation}) => {
       screen: 'ClientProfileScreen',
       params: {clientId},
     });
+  };
+
+  // Handle scroll events to detect when user reaches end of list
+  const handleScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
+    const {layoutMeasurement, contentOffset, contentSize} = event.nativeEvent;
+    const paddingToBottom = 20; // How far from the bottom to trigger loading more
+    const isCloseToBottom =
+      layoutMeasurement.height + contentOffset.y >=
+      contentSize.height - paddingToBottom;
+
+    if (isCloseToBottom) {
+      // Load more data based on which section is visible
+      if (activeSection === 'today' && hasMoreTodayData) {
+        loadMoreTodayFollowUps();
+      }
+    }
+  };
+
+  // Function to set active section when a section becomes visible
+  const setCurrentSection = (section: string) => {
+    setActiveSection(section);
   };
 
   return (
@@ -136,7 +176,10 @@ const FollowUpScreen: React.FC<Props> = ({navigation}) => {
             colors={[theme.primaryColor]}
             tintColor={theme.primaryColor}
           />
-        }>
+        }
+        onScroll={handleScroll}
+        scrollEventThrottle={400} // Control how often scroll events fire
+      >
         {/* Navigation Buttons */}
         <View style={styles.navButtonsContainer}>
           <TouchableOpacity
@@ -160,7 +203,7 @@ const FollowUpScreen: React.FC<Props> = ({navigation}) => {
                   <Text style={styles.navButtonTitle}>Overdue Follow-ups</Text>
                   {overdueFollowUps.length > 0 && (
                     <Badge style={styles.overdueBadge} size={22}>
-                      {overdueFollowUps.length}
+                      {overduePagination?.totalCount}
                     </Badge>
                   )}
                 </View>
@@ -195,8 +238,13 @@ const FollowUpScreen: React.FC<Props> = ({navigation}) => {
                 <View style={styles.titleContainer}>
                   <Text style={styles.navButtonTitle}>Upcoming Follow-ups</Text>
                   {upcomingFollowUps.length > 0 && (
-                    <Badge style={{backgroundColor: theme.primaryColor, color: theme.backgroundColor}} size={22}>
-                      {upcomingFollowUps.length}
+                    <Badge
+                      style={{
+                        backgroundColor: theme.primaryColor,
+                        color: theme.backgroundColor,
+                      }}
+                      size={22}>
+                      {upcomingPagination?.totalCount}
                     </Badge>
                   )}
                 </View>
@@ -213,7 +261,11 @@ const FollowUpScreen: React.FC<Props> = ({navigation}) => {
           </TouchableOpacity>
 
           <TouchableOpacity
-            style={[styles.navButton, styles.somedayButton, {borderLeftColor: theme.secondaryColor}]}
+            style={[
+              styles.navButton,
+              styles.somedayButton,
+              {borderLeftColor: theme.secondaryColor},
+            ]}
             onPress={() => navigateToScreen('someday')}>
             <View style={styles.navButtonContent}>
               <View
@@ -231,8 +283,13 @@ const FollowUpScreen: React.FC<Props> = ({navigation}) => {
                 <View style={styles.titleContainer}>
                   <Text style={styles.navButtonTitle}>Someday Follow-ups</Text>
                   {somedayFollowUps.length > 0 && (
-                    <Badge style={[styles.somedayBadge, {backgroundColor: theme.secondaryColor}]} size={22}>
-                      {somedayFollowUps.length}
+                    <Badge
+                      style={[
+                        styles.somedayBadge,
+                        {backgroundColor: theme.secondaryColor},
+                      ]}
+                      size={22}>
+                      {somedayPagination?.totalCount}
                     </Badge>
                   )}
                 </View>
@@ -250,15 +307,25 @@ const FollowUpScreen: React.FC<Props> = ({navigation}) => {
         </View>
 
         {/* Today's Follow-ups Section */}
-        <FollowUpListSection
-          title="Today's Follow-ups"
-          iconName="calendarToday"
-          isLoading={isTodayLoading}
-          followUps={getTodayFollowUps()}
-          emptyText="No follow-ups scheduled for today"
-          onFollowUpPress={handleFollowUpPress}
-          filterType="today"
-        />
+        <View
+          onLayout={() => setCurrentSection('today')}
+          style={styles.sectionContainer}>
+          <FollowUpListSection
+            title="Today's Follow-ups"
+            iconName="calendarToday"
+            isLoading={isTodayLoading}
+            followUps={getTodayFollowUps()}
+            emptyText="No follow-ups scheduled for today"
+            onFollowUpPress={handleFollowUpPress}
+            filterType="today"
+            onEndReached={() => {
+              if (hasMoreTodayData) {
+                loadMoreTodayFollowUps();
+              }
+            }}
+            isLoadingMore={isLoadingMoreToday}
+          />
+        </View>
 
         {/* Increase bottom padding to prevent content from being hidden under bottom navigation */}
         <View style={styles.bottomPadding} />
@@ -270,7 +337,10 @@ const FollowUpScreen: React.FC<Props> = ({navigation}) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f8f9fa', // Lighter background to match new theme
+    backgroundColor: '#f8f9fa',
+  },
+  sectionContainer: {
+    flex: 1,
   },
   content: {
     flex: 1,
@@ -342,6 +412,17 @@ const styles = StyleSheet.create({
   },
   somedayBadge: {
     color: Colors.MT_SECONDARY_3,
+  },
+  loadingMoreContainer: {
+    padding: 16,
+    alignItems: 'center',
+    flexDirection: 'row',
+    justifyContent: 'center',
+  },
+  loadingMoreText: {
+    marginLeft: 8,
+    color: Colors.MT_SECONDARY_2,
+    fontSize: 14,
   },
 });
 

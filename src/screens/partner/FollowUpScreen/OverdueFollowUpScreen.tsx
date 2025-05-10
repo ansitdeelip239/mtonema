@@ -1,10 +1,12 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect} from 'react';
 import {
   View,
   StyleSheet,
   ScrollView,
   RefreshControl,
   SafeAreaView,
+  NativeScrollEvent,
+  NativeSyntheticEvent,
 } from 'react-native';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {FollowUpStackParamList} from '../../../navigator/components/FollowUpScreenStack';
@@ -12,23 +14,32 @@ import Header from '../../../components/Header';
 import {useFollowUps} from '../../../hooks/useFollowUps';
 import FollowUpListSection from './components/FollowUpListSection';
 import {navigate} from '../../../navigator/NavigationRef';
-import {FollowUpType} from '../../../types';
-import { useTheme } from '../../../context/ThemeProvider';
+import {useTheme} from '../../../context/ThemeProvider';
 
 type Props = NativeStackScreenProps<
   FollowUpStackParamList,
   'OverdueFollowUpScreen'
 >;
 
-const OverdueFollowUpScreen: React.FC<Props> = ({navigation, route}) => {
-  // Get initial follow-ups from route params
-  const initialFollowUps = route.params?.followUps || [];
-  const [displayedFollowUps, setDisplayedFollowUps] =
-    useState<FollowUpType[]>(initialFollowUps);
+const OverdueFollowUpScreen: React.FC<Props> = ({navigation}) => {
+  // Updated hook usage with pagination properties
+  const {
+    followUps,
+    isLoading,
+    refreshing,
+    onRefresh,
+    loadMoreFollowUps,
+    isLoadingMore,
+    hasMoreData,
+    fetchFollowUps,
+  } = useFollowUps('overdue');
 
-  // Hook for refresh functionality only
-  const {followUps, isLoading, refreshing, onRefresh} = useFollowUps('overdue');
   const {theme} = useTheme();
+
+  // Add useEffect to fetch data when component mounts
+  useEffect(() => {
+    fetchFollowUps();
+  }, [fetchFollowUps]);
 
   const handleFollowUpPress = (clientId: number) => {
     navigate('Clients', {
@@ -37,14 +48,18 @@ const OverdueFollowUpScreen: React.FC<Props> = ({navigation, route}) => {
     });
   };
 
-  // Remove the initial fetch effect - we don't need it anymore
+  // Handle scroll to implement infinite scrolling
+  const handleScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
+    const {layoutMeasurement, contentOffset, contentSize} = event.nativeEvent;
+    const paddingToBottom = 20; // How far from the bottom to trigger loading more
+    const isCloseToBottom =
+      layoutMeasurement.height + contentOffset.y >=
+      contentSize.height - paddingToBottom;
 
-  // Update displayed follow-ups when hook data updates after a refresh
-  useEffect(() => {
-    if (followUps && followUps.length > 0) {
-      setDisplayedFollowUps(followUps);
+    if (isCloseToBottom && hasMoreData && !isLoadingMore) {
+      loadMoreFollowUps();
     }
-  }, [followUps]);
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -63,13 +78,21 @@ const OverdueFollowUpScreen: React.FC<Props> = ({navigation, route}) => {
             colors={[theme.primaryColor]}
             tintColor={theme.primaryColor}
           />
-        }>
+        }
+        onScroll={handleScroll}
+        scrollEventThrottle={400}>
         <FollowUpListSection
-          isLoading={isLoading && displayedFollowUps.length === 0}
-          followUps={displayedFollowUps}
+          isLoading={isLoading}
+          followUps={followUps || []}
           emptyText="No overdue follow-ups"
           showTitle={false}
           onFollowUpPress={handleFollowUpPress}
+          onEndReached={() => {
+            if (hasMoreData) {
+              loadMoreFollowUps();
+            }
+          }}
+          isLoadingMore={isLoadingMore}
         />
 
         <View style={styles.bottomPadding} />

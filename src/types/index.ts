@@ -250,6 +250,11 @@ export interface FollowUp {
   userId: number;
 }
 
+export interface FollowUpResponseModel {
+  responsePagingModel: PagingModel;
+  followUpDataModel: FollowUpType[];
+}
+
 export interface FollowUpType {
   id: number;
   userId: number;

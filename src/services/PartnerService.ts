@@ -11,6 +11,7 @@ import {
   ClientResponseModel,
   CustomerTestimonialResponse,
   FollowUp,
+  FollowUpResponseModel,
   FollowUpType,
   Group2Response,
   GroupResponse,
@@ -281,14 +282,16 @@ class PartnerService {
     }
   }
 
-  static async getFollowUpByUserId(userId: number, filter: string) {
+  static async getFollowUpByUserId(userId: number, filter: string, pageNumber: number, pageSize: number) {
     try {
       const params = new URLSearchParams({
         userId: userId.toString(),
         filter,
+        pageNumber: pageNumber.toString(),
+        pageSize: pageSize.toString(),
       }).toString();
 
-      const response = await api.get<FollowUpType[]>(
+      const response = await api.get<FollowUpResponseModel>(
         `${url.followUps}?${params}`,
       );
       return response;
