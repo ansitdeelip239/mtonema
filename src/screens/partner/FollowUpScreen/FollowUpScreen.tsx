@@ -190,7 +190,7 @@ const FollowUpScreen: React.FC<Props> = ({navigation}) => {
                 style={[
                   styles.navButtonIconContainer,
                   styles.overdueIconContainer,
-                  {backgroundColor: theme.primaryColor},
+                  {backgroundColor: Colors.red},
                 ]}>
                 <GetIcon
                   iconName="calendarOverdue"
