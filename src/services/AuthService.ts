@@ -43,9 +43,18 @@ class AuthService {
     }
   }
 
-  static async otpVerification(email: string, otp?: string) {
+  static async otpVerification(email: string, otp?: string, domain?: string) {
     try {
-      const requestBody = otp ? {email, otp} : {email};
+      let requestBody: any = {email};
+
+      if (otp) {
+        requestBody.otp = otp;
+      }
+
+      if (domain) {
+        requestBody.domain = domain;
+      }
+
       const response = await api.post<string | null>(
         url.otpVerification,
         requestBody,

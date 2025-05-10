@@ -177,7 +177,7 @@ const EmailScreen: React.FC<Props> = ({navigation, route}) => {
           }
         }
 
-        const response = await AuthService.otpVerification(formInput.email);
+        const response = await AuthService.otpVerification(formInput.email, undefined, JSON.parse(location.description).domain);
         if (response.success) {
           navigation.navigate('OtpScreen', {
             email: formInput.email,
