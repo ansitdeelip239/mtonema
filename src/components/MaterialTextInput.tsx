@@ -1,11 +1,10 @@
-import React, {useCallback, useRef, useState, useEffect} from 'react';
+import React, { useCallback, useRef, useState } from 'react';
 import {
   TextInput,
   TextInputProps,
   HelperText,
   Text,
   ActivityIndicator,
-  Portal, // Import Portal
 } from 'react-native-paper';
 import {
   TouchableOpacity,
@@ -14,6 +13,7 @@ import {
   View,
   ScrollView,
   Keyboard,
+  Platform,
 } from 'react-native';
 
 interface MaterialTextInputProps<T> extends TextInputProps {
@@ -39,31 +39,14 @@ export const MaterialTextInput = <T,>({
   ...props
 }: MaterialTextInputProps<T>) => {
   const suggestionTimeoutRef = useRef<NodeJS.Timeout | null>(null);
-  // Add state to track input position for portal
-  const [inputLayout, setInputLayout] = useState({
-    x: 0,
-    y: 0,
-    width: 0,
-    height: 0,
-  });
   const inputRef = useRef<View>(null);
-
-  // Measure input position when mounted and when window size changes
-  useEffect(() => {
-    if (inputRef.current && suggestions && suggestions.length > 0) {
-      setTimeout(() => {
-        inputRef.current?.measureInWindow((x, y, width, height) => {
-          setInputLayout({x, y, width, height});
-        });
-      }, 100);
-    }
-  }, [suggestions]);
+  const [isFocused, setIsFocused] = useState(false); // Add focus state
 
   const CrossButton = useCallback(() => {
     return (
       <TouchableOpacity
         onPress={() => setFormInput(field, '')}
-        hitSlop={{top: 10, bottom: 10, left: 10, right: 10}}>
+        hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}>
         <Image
           source={require('../assets/Icon/crossicon.png')}
           style={styles.crossIcon}
@@ -72,27 +55,22 @@ export const MaterialTextInput = <T,>({
     );
   }, [field, setFormInput]);
 
-  // Convert the value to string, handling all data types
   const getStringValue = (): string => {
     const value = formInput[field];
-    // Check if the value is null/undefined
     if (value === null || value === undefined) {
       return '';
     }
-    // Convert to string (works for numbers, booleans, etc.)
     return String(value);
   };
 
   const renderRight = () => {
     if (loading) {
-      // eslint-disable-next-line react/no-unstable-nested-components
       return <TextInput.Icon icon={() => <ActivityIndicator size={20} />} />;
     }
     if (rightComponent) {
       return <TextInput.Affix text={rightComponent as string} />;
     }
     if (formInput[field]) {
-      // eslint-disable-next-line react/no-unstable-nested-components
       return <TextInput.Icon icon={() => <CrossButton />} />;
     }
     return null;
@@ -100,15 +78,10 @@ export const MaterialTextInput = <T,>({
 
   const handleSuggestionPress = useCallback(
     (suggestion: string) => {
-      // Clear any existing timeouts
       if (suggestionTimeoutRef.current) {
         clearTimeout(suggestionTimeoutRef.current);
       }
-
-      // Dismiss keyboard first
       Keyboard.dismiss();
-
-      // Delay the selection slightly to ensure keyboard dismiss completes
       suggestionTimeoutRef.current = setTimeout(() => {
         if (onSuggestionSelect) {
           onSuggestionSelect(suggestion);
@@ -118,56 +91,62 @@ export const MaterialTextInput = <T,>({
     [onSuggestionSelect],
   );
 
+  // Determine if suggestions should be shown
+  const showSuggestions = isFocused && suggestions && suggestions.length > 0;
+
+  // Dynamically adjust outerContainer style
+  const outerContainerStyle = [
+    styles.outerContainer,
+    {
+      zIndex: showSuggestions ? 1000 : 100,
+      elevation: Platform.OS === 'android' ? (showSuggestions ? 1000 : 100) : undefined,
+    },
+  ];
+
   return (
-    <View style={styles.container} ref={inputRef}>
-      <TextInput
-        {...props}
-        value={getStringValue()}
-        onChangeText={(text: string) => setFormInput(field, text)}
-        right={renderRight()}
-        outlineStyle={styles.textInput}
-        error={!!errorMessage}
-        // eslint-disable-next-line react-native/no-inline-styles
-        contentStyle={{
-          minHeight: props.multiline ? 100 : undefined,
-          color: 'black',
-        }}
-        theme={{
-          colors: {
-            background: 'white',
-            placeholder: !errorMessage ? 'black' : '#666666',
-            text: 'black',
-            primary: errorMessage ? '#FF0000' : 'black',
-            outline: errorMessage ? '#FF0000' : 'black',
-            onSurfaceVariant: '#555555',
-            error: '#FF0000',
-            onSurface: 'black',
-            surfaceDisabled: 'transparent',
-            onSurfaceDisabled: 'rgba(0, 0, 0, 0.6)',
-          },
-        }}
-      />
+    <View style={outerContainerStyle}>
+      <View style={styles.container} ref={inputRef}>
+        <TextInput
+          {...props}
+          value={getStringValue()}
+          onChangeText={(text: string) => setFormInput(field, text)}
+          right={renderRight()}
+          outlineStyle={styles.textInput}
+          error={!!errorMessage}
+          onFocus={() => setIsFocused(true)} // Set focus state
+          onBlur={() => setIsFocused(false)} // Reset focus state
+          contentStyle={{
+            minHeight: props.multiline ? 100 : undefined,
+            color: 'black',
+          }}
+          theme={{
+            colors: {
+              background: 'white',
+              placeholder: !errorMessage ? 'black' : '#666666',
+              text: 'black',
+              primary: errorMessage ? '#FF0000' : 'black',
+              outline: errorMessage ? '#FF0000' : 'black',
+              onSurfaceVariant: '#555555',
+              error: '#FF0000',
+              onSurface: 'black',
+              surfaceDisabled: 'transparent',
+              onSurfaceDisabled: 'rgba(0, 0, 0, 0.6)',
+            },
+          }}
+        />
 
-      {errorMessage && (
-        <HelperText
-          type="error"
-          visible={!!errorMessage}
-          style={styles.helperText}>
-          {errorMessage}
-        </HelperText>
-      )}
+        {errorMessage && (
+          <HelperText
+            type="error"
+            visible={!!errorMessage}
+            style={styles.helperText}>
+            {errorMessage}
+          </HelperText>
+        )}
 
-      {suggestions && suggestions.length > 0 && (
-        <Portal>
-          <View
-            style={[
-              styles.suggestionsContainer,
-              {
-                top: inputLayout.y + 60, // Position below input
-                left: inputLayout.x,
-                width: inputLayout.width,
-              },
-            ]}>
+        {/* Render suggestions only when focused and suggestions exist */}
+        {showSuggestions && (
+          <View style={styles.suggestionsContainer}>
             <ScrollView
               style={styles.suggestionsList}
               nestedScrollEnabled
@@ -185,15 +164,21 @@ export const MaterialTextInput = <T,>({
               ))}
             </ScrollView>
           </View>
-        </Portal>
-      )}
+        )}
+      </View>
     </View>
   );
 };
 
+// Styles remain unchanged
 const styles = StyleSheet.create({
+  outerContainer: {
+    zIndex: 100,
+    elevation: Platform.OS === 'android' ? 100 : undefined,
+  },
   container: {
     position: 'relative',
+    zIndex: 100,
   },
   crossIcon: {
     width: 20,
@@ -208,7 +193,7 @@ const styles = StyleSheet.create({
     marginBottom: 0,
     paddingBottom: 0,
     color: '#cc0000',
-    fontSize: 12, // Add specific font size for better readability
+    fontSize: 12,
   },
   suggestionsContainer: {
     position: 'absolute',
@@ -216,8 +201,8 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#ccc',
     borderRadius: 4,
-    zIndex: 9999, // Much higher z-index
-    elevation: 20, // Higher elevation for Android
+    zIndex: 1000,
+    elevation: Platform.OS === 'android' ? 1000 : undefined,
     maxHeight: 200,
     overflow: 'hidden',
     shadowColor: '#000',
@@ -227,6 +212,9 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
+    left: 0,
+    right: 0,
+    top: '100%',
   },
   suggestionsList: {
     flex: 1,

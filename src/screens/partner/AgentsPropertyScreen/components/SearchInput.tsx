@@ -4,9 +4,10 @@ import {SearchIntellisenseResponse} from '../../../../types';
 import {MaterialTextInput} from '../../../../components/MaterialTextInput';
 import {InteractionManager} from 'react-native';
 import {ViewStyle} from 'react-native';
+import { useAuth } from '../../../../hooks/useAuth';
 
 const useDebounce = (callback: Function, delay: number) => {
-  const timeoutRef = useRef<NodeJS.Timeout>();
+  const timeoutRef = useRef<NodeJS.Timeout>(null);
   useEffect(() => {
     return () => {
       if (timeoutRef.current) {
@@ -60,6 +61,8 @@ export const SearchInput = <T,>({
   const isSelectingRef = useRef(false);
   const mounted = useRef(true);
 
+  const {user} = useAuth();
+
   useEffect(() => {
     mounted.current = true;
     return () => {
@@ -75,6 +78,7 @@ export const SearchInput = <T,>({
           const response = await MasterService.searchIntellisense(
             searchType,
             query,
+            user?.email,
           );
           if (response.success && response.data && mounted.current) {
             setSearchData(response.data);
@@ -107,7 +111,7 @@ export const SearchInput = <T,>({
         setShowSuggestions(false);
       }
     },
-    [searchType],
+    [searchType, user?.email],
   );
 
   const debouncedSearch = useDebounce(searchIntellisense, 300);

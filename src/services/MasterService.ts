@@ -26,10 +26,23 @@ class MasterService {
     }
   }
 
-  static async searchIntellisense(searchType: string, searchKey: string) {
+  static async searchIntellisense(
+    searchType: string,
+    searchKey: string,
+    email?: string,
+  ) {
     try {
+      const params = new URLSearchParams({
+        searchType,
+        searchKey,
+      });
+
+      if (email) {
+        params.append('email', email);
+      }
+
       const response = await api.get<SearchIntellisenseResponse[]>(
-        `${url.searchIntellisense}?searchType=${searchType}&searchKey=${searchKey}`,
+        `${url.searchIntellisense}?${params.toString()}`,
       );
       return response;
     } catch (error) {

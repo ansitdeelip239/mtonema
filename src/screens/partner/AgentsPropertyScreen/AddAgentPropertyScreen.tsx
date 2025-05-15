@@ -17,9 +17,7 @@ import {formatCurrency} from '../../../utils/currency';
 import PartnerService from '../../../services/PartnerService';
 import useForm from '../../../hooks/useForm';
 import Header from '../../../components/Header';
-import {
-  PartnerDrawerParamList,
-} from '../../../types/navigation';
+import {PartnerDrawerParamList} from '../../../types/navigation';
 import agentPropertyFormSchema, {
   AgentPropertyFormType,
   apiSubmissionSchema,
@@ -31,12 +29,15 @@ import {SearchInput} from './components/SearchInput';
 import {useKeyboard} from '../../../hooks/useKeyboard';
 import {useDialog} from '../../../hooks/useDialog';
 import {useAuth} from '../../../hooks/useAuth';
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { AgentDataStackParamList } from '../../../navigator/components/AgentDataStack';
-import { useTheme } from '../../../context/ThemeProvider';
+import {NativeStackScreenProps} from '@react-navigation/native-stack';
+import {AgentDataStackParamList} from '../../../navigator/components/AgentDataStack';
+import {useTheme} from '../../../context/ThemeProvider';
 
 // type Props = BottomTabScreenProps<PartnerBottomTabParamList, 'AddProperty'>;
-type Props = NativeStackScreenProps<AgentDataStackParamList, 'AddAgentDataScreen'>;
+type Props = NativeStackScreenProps<
+  AgentDataStackParamList,
+  'AddAgentDataScreen'
+>;
 
 const AddAgentPropertyScreen: React.FC<Props> = ({navigation, route}) => {
   const [errors, setErrors] = useState<
@@ -127,8 +128,15 @@ const AddAgentPropertyScreen: React.FC<Props> = ({navigation, route}) => {
           propertyLocation: validatedApiData.propertyLocation.trim(),
           propertyType: validatedApiData.propertyType?.trim() || undefined,
           bhkType: validatedApiData.bhkType?.trim() || undefined,
-          demandPrice: validatedApiData.demandPrice ? parseInt(validatedApiData.demandPrice.toString().trim(), 10) : undefined,
-          securityDepositAmount: validatedApiData.securityDepositAmount ? parseInt(validatedApiData.securityDepositAmount.toString().trim(), 10) : undefined,
+          demandPrice: validatedApiData.demandPrice
+            ? parseInt(validatedApiData.demandPrice.toString().trim(), 10)
+            : undefined,
+          securityDepositAmount: validatedApiData.securityDepositAmount
+            ? parseInt(
+                validatedApiData.securityDepositAmount.toString().trim(),
+                10,
+              )
+            : undefined,
           negotiable: validatedApiData.negotiable,
           propertyNotes: validatedApiData.propertyNotes?.trim() || undefined,
         };
