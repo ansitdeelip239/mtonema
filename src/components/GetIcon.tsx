@@ -57,7 +57,9 @@ export type IconEnum =
   | 'room'
   | 'playButton'
   | 'group'
-  | 'feedback';
+  | 'feedback'
+  | 'ascending'
+  | 'descending';
 
 type IconProps = {
   iconName: IconEnum;
@@ -123,6 +125,8 @@ const GetIcon = ({iconName, color, size}: IconProps) => {
     playButton: require('../assets/Icon/play-button.png'),
     group: require('../assets/Icon/connection.png'),
     feedback: require('../assets/Icon/feedback.png'),
+    ascending: require('../assets/Icon/ascending.png'),
+    descending: require('../assets/Icon/descending.png'),
   };
 
   const imageStyle = [

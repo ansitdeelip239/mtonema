@@ -46,14 +46,17 @@ export const ThemeProvider: React.FC<ThemeProviderProps> = ({children}) => {
   useEffect(() => {
     const loadTheme = async (): Promise<void> => {
       try {
-        const storedTheme = await AsyncStorage.getItem(THEME_KEY);
-        if (storedTheme) {
-          const parsedTheme = JSON.parse(storedTheme) as Theme;
-          setTheme(parsedTheme);
+        const storedThemeString = await AsyncStorage.getItem(THEME_KEY);
+        if (storedThemeString) {
+          // Parse stored theme as a partial Theme object
+          const storedTheme = JSON.parse(storedThemeString) as Partial<Theme>;
+          // Merge with defaultTheme to ensure all properties are present
+          setTheme({...defaultTheme, ...storedTheme});
+        } else {
+          setTheme(defaultTheme);
         }
       } catch (err) {
         console.error('Failed to load theme', err);
-        // Fallback to default theme on error
         setTheme(defaultTheme);
       }
     };

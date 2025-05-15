@@ -25,6 +25,7 @@ import Toast from 'react-native-toast-message';
 import {usePartner} from '../../../context/PartnerProvider';
 import PartnerService from '../../../services/PartnerService';
 import {useAuth} from '../../../hooks/useAuth';
+import GetIcon from '../../../components/GetIcon';
 
 type Props = NativeStackScreenProps<ClientStackParamList, 'ClientScreen'>;
 
@@ -38,6 +39,8 @@ const ClientScreen: React.FC<Props> = ({navigation}) => {
     onRefresh,
     handleSearch,
     loadMoreClients,
+    handleSort,
+    sortDirection,
   } = useClientData();
   const [isSearching, setIsSearching] = useState(false);
   const {theme} = useTheme();
@@ -222,10 +225,26 @@ const ClientScreen: React.FC<Props> = ({navigation}) => {
           <Text style={styles.buttonText}>Add Client</Text>
         </TouchableOpacity>
       </Header>
-      <SearchHeader
-        placeholder="Search Clients..."
-        onSearch={handleSearchWithLoading}
-      />
+
+      {/* Search and sort row */}
+      <View style={styles.searchSortContainer}>
+        <View style={styles.searchContainer}>
+          <SearchHeader
+            placeholder="Search Clients..."
+            onSearch={handleSearchWithLoading}
+          />
+        </View>
+        <TouchableOpacity
+          style={[styles.sortButton, {backgroundColor: theme.secondaryColor}]}
+          onPress={handleSort}>
+          {sortDirection === 'asc' ? (
+            <GetIcon iconName="descending" color="#fff" />
+          ) : (
+            <GetIcon iconName="ascending" color="#fff" />
+          )}
+        </TouchableOpacity>
+      </View>
+
       {renderContent()}
 
       {/* Activity Modal */}
@@ -238,12 +257,10 @@ const ClientScreen: React.FC<Props> = ({navigation}) => {
             setPreSelectedActivityType(null);
           }}
           onSubmit={(type, description) => {
-            // Adapt your handleAddActivity function to use the type and description
-            // You'll need to modify handleAddActivity to accept these parameters
             handleAddActivity(type, description, selectedClient.id);
           }}
-          isLoading={addingActivity} // Changed from loading to isLoading
-          initialActivityType={preSelectedActivityType} // Changed from preSelectedActivityType to initialActivityType
+          isLoading={addingActivity}
+          initialActivityType={preSelectedActivityType}
         />
       )}
     </View>
@@ -292,7 +309,7 @@ const styles = StyleSheet.create({
   },
   searchContainer: {
     flex: 1,
-    marginRight: 12,
+    // marginRight: 12,
   },
   searchInput: {
     backgroundColor: 'white',
@@ -337,6 +354,27 @@ const styles = StyleSheet.create({
     flexGrow: 1,
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  searchSortContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingRight: 10,
+  },
+  sortButton: {
+    width: 46,
+    height: 46,
+    borderRadius: 23,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: 10,
+    elevation: 5,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.15,
+    shadowRadius: 4,
   },
 });
 

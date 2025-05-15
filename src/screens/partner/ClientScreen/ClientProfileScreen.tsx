@@ -464,14 +464,6 @@ const ClientProfileScreen: React.FC<Props> = ({route, navigation}) => {
     }
   };
 
-  if (loading) {
-    return (
-      <View style={styles.loadingContainer}>
-        <ActivityIndicator size="large" color="#0066cc" />
-      </View>
-    );
-  }
-
   return (
     <View style={styles.container}>
       <Header
@@ -517,42 +509,48 @@ const ClientProfileScreen: React.FC<Props> = ({route, navigation}) => {
           />
         </Menu>
       </Header>
-      <ScrollView
-        style={styles.scrollView}
-        contentContainerStyle={styles.scrollViewContent}
-        refreshControl={
-          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-        }>
-        {client && (
-          <>
-            <ProfileHeader client={client} />
 
-            <ContactButtons client={client} handleContact={handleContact} />
+      {loading ? (
+        // Only replace the content area with the loading indicator
+        <View style={styles.contentLoadingContainer}>
+          <ActivityIndicator size="large" color="#0066cc" />
+        </View>
+      ) : (
+        <ScrollView
+          style={styles.scrollView}
+          contentContainerStyle={styles.scrollViewContent}
+          refreshControl={
+            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+          }>
+          {client && (
+            <>
+              <ProfileHeader client={client} />
+              <ContactButtons client={client} handleContact={handleContact} />
+              <View style={styles.infoSection}>
+                <FollowUpCard
+                  client={client}
+                  onPress={() => setIsFollowUpModalVisible(true)}
+                />
 
-            <View style={styles.infoSection}>
-              <FollowUpCard
-                client={client}
-                onPress={() => setIsFollowUpModalVisible(true)}
-              />
+                <ContactInfoCard client={client} />
 
-              <ContactInfoCard client={client} />
+                <GroupsCard client={client} />
 
-              <GroupsCard client={client} />
+                <NotesCard notes={client.notes} />
 
-              <NotesCard notes={client.notes} />
+                <RecentActivitiesCard
+                  activities={client.clientActivityDataModels}
+                  onAddActivity={() => setIsActivityModalVisible(true)}
+                  onActivityPress={handleActivityPress}
+                />
 
-              <RecentActivitiesCard
-                activities={client.clientActivityDataModels}
-                onAddActivity={() => setIsActivityModalVisible(true)}
-                onActivityPress={handleActivityPress}
-              />
-
-              {/* Add bottom padding when keyboard is visible */}
-              {keyboardVisible && <View style={styles.keyboardSpacing} />}
-            </View>
-          </>
-        )}
-      </ScrollView>
+                {/* Add bottom padding when keyboard is visible */}
+                {keyboardVisible && <View style={styles.keyboardSpacing} />}
+              </View>
+            </>
+          )}
+        </ScrollView>
+      )}
 
       <AddActivityModal
         visible={isActivityModalVisible}
@@ -626,6 +624,12 @@ const styles = StyleSheet.create({
   },
   keyboardSpacing: {
     height: 60,
+  },
+  contentLoadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#f8f9fa',
   },
 });
 

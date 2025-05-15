@@ -32,6 +32,23 @@ interface MasterContextProps {
   dataSource: 'cache' | 'api' | 'cache-updated' | null;
 }
 
+const defaultMasterData: MasterData = {
+  PropertyType: [],
+  SellerType: [],
+  PropertyFor: [],
+  ImageType: [],
+  BhkType: [],
+  ProjectLocation: [],
+  AmountUnit: [],
+  AreaUnit: [],
+  FurnishType: [],
+  Facing: [],
+  AgentPropertyType: [],
+  ActivityType: [],
+  GroupColor: [],
+  PartnerLocation: [],
+};
+
 const MasterContext = createContext<MasterContextProps | undefined>(undefined);
 
 // Key for storing master data in AsyncStorage
@@ -56,7 +73,7 @@ const masterName = [
 ];
 
 export const MasterProvider: React.FC<MasterProviderProps> = ({children}) => {
-  const [masterData, setMasterData] = useState<MasterData | null>(null);
+  const [masterData, setMasterData] = useState<MasterData>(defaultMasterData);
   const [isLoading, setIsLoading] = useState(true);
   const [dataSource, setDataSource] = useState<
     'cache' | 'api' | 'cache-updated' | null

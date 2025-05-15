@@ -37,6 +37,7 @@ type Props = NativeStackScreenProps<
 const placeholderImage = require('../../../assets/Images/dncr_black_logo.png');
 
 const ListingDetailScreen: React.FC<Props> = ({route, navigation}) => {
+  // ...existing state variables and handlers...
   const {propertyId} = route.params;
 
   const [property, setProperty] = useState<Property>();
@@ -262,669 +263,675 @@ const ListingDetailScreen: React.FC<Props> = ({route, navigation}) => {
     }
   }, [property?.tags]);
 
-  if (loading) {
-    return (
-      <View style={styles.loadingContainer}>
-        <ActivityIndicator size="large" color={theme.primaryColor} />
-        <Text style={styles.loadingText}>Loading property details...</Text>
-      </View>
-    );
-  }
-
-  if (error || !property) {
-    return (
-      <View style={styles.errorContainer}>
-        <Text style={styles.errorText}>{error || 'Property not found'}</Text>
-        <TouchableOpacity
-          style={[styles.retryButton, {backgroundColor: theme.primaryColor}]}
-          onPress={() => navigation.goBack()}>
-          <Text style={styles.buttonText}>Go Back</Text>
-        </TouchableOpacity>
-      </View>
-    );
-  }
-
   return (
     <View style={styles.container}>
       <Header
-        title={property.propertyName || 'Property Details'}
+        title={property?.propertyName || 'Property Details'}
         backButton={true}
         onBackPress={() => navigation.goBack()}>
-        <Menu
-          visible={menuVisible}
-          onDismiss={closeMenu}
-          anchor={
-            <Appbar.Action
+        {!loading && property && (
+          <Menu
+            visible={menuVisible}
+            onDismiss={closeMenu}
+            anchor={
+              <Appbar.Action
+                // eslint-disable-next-line react/no-unstable-nested-components
+                icon={() => <GetIcon iconName="threeDots" color="white" />}
+                onPress={openMenu}
+                style={styles.threeDotsIcon}
+              />
+            }
+            contentStyle={styles.menuContent}>
+            <Menu.Item
+              onPress={() => {
+                closeMenu();
+                handleEditProperty();
+              }}
+              title="Edit"
+              titleStyle={styles.menuItemTitle}
               // eslint-disable-next-line react/no-unstable-nested-components
-              icon={() => <GetIcon iconName="threeDots" color="white" />}
-              onPress={openMenu}
-              style={styles.threeDotsIcon}
+              leadingIcon={() => <GetIcon iconName="edit" />}
             />
-          }
-          contentStyle={styles.menuContent}>
-          <Menu.Item
-            onPress={() => {
-              closeMenu();
-              handleEditProperty();
-            }}
-            title="Edit"
-            titleStyle={styles.menuItemTitle}
-            // eslint-disable-next-line react/no-unstable-nested-components
-            leadingIcon={() => <GetIcon iconName="edit" />}
-          />
-          <Menu.Item
-            onPress={() => {
-              closeMenu();
-              setShowDeleteModal(true);
-            }}
-            title="Delete"
-            titleStyle={styles.menuItemTitle}
-            // eslint-disable-next-line react/no-unstable-nested-components
-            leadingIcon={() => <GetIcon iconName="delete" />}
-          />
-        </Menu>
+            <Menu.Item
+              onPress={() => {
+                closeMenu();
+                setShowDeleteModal(true);
+              }}
+              title="Delete"
+              titleStyle={styles.menuItemTitle}
+              // eslint-disable-next-line react/no-unstable-nested-components
+              leadingIcon={() => <GetIcon iconName="delete" />}
+            />
+          </Menu>
+        )}
       </Header>
 
-      <ScrollView
-        style={styles.scrollView}
-        contentContainerStyle={styles.contentContainer}
-        showsVerticalScrollIndicator={false}>
-        {/* Property Image Slider */}
-        <View style={styles.imageContainer}>
-          {displayImages.length > 0 ? (
-            <>
-              <FlatList
-                data={displayImages}
-                keyExtractor={(item, index) => `image-${index}`}
-                renderItem={({item, index}) => (
-                  <View style={[styles.imageSlide, {width}]}>
-                    {item.isVideo ? (
-                      // Only render the YouTube player if this is the current slide AND it's active
-                      currentImageIndex === index &&
-                      activeVideoSlides[index] ? (
-                        <YoutubeVideoPlayer
-                          key={`video-${index}-${Math.random()}`} // Force remount with random key
-                          videoId={item.videoUrl}
-                          height={250}
-                          width={width}
-                        />
-                      ) : (
-                        // Show a thumbnail with play button overlay
-                        <TouchableOpacity
-                          style={[styles.propertyImage]}
-                          onPress={() => {
-                            if (currentImageIndex === index) {
-                              // Only activate if this is the current slide
-                              setActiveVideoSlides(prev => ({
-                                ...prev,
-                                [index]: true,
-                              }));
-                            }
-                          }}
-                          activeOpacity={0.8}>
-                          <Image
-                            source={{
-                              uri: getYouTubeThumbnailUrl(item.videoUrl),
-                            }}
-                            style={styles.videoThumbnail}
-                            resizeMode="cover"
+      {/* Content area - conditionally render based on state */}
+      {loading ? (
+        <View style={styles.contentLoadingContainer}>
+          <ActivityIndicator size="large" color={theme.primaryColor} />
+          <Text style={styles.loadingText}>Loading property details...</Text>
+        </View>
+      ) : error || !property ? (
+        <View style={styles.contentErrorContainer}>
+          <Text style={styles.errorText}>{error || 'Property not found'}</Text>
+          <TouchableOpacity
+            style={[styles.retryButton, {backgroundColor: theme.primaryColor}]}
+            onPress={() => navigation.goBack()}>
+            <Text style={styles.buttonText}>Go Back</Text>
+          </TouchableOpacity>
+        </View>
+      ) : (
+        <ScrollView
+          style={styles.scrollView}
+          contentContainerStyle={styles.contentContainer}
+          showsVerticalScrollIndicator={false}>
+          {/* Property Image Slider */}
+          <View style={styles.imageContainer}>
+            {displayImages.length > 0 ? (
+              <>
+                <FlatList
+                  data={displayImages}
+                  keyExtractor={(item, index) => `image-${index}`}
+                  renderItem={({item, index}) => (
+                    <View style={[styles.imageSlide, {width}]}>
+                      {item.isVideo ? (
+                        // Only render the YouTube player if this is the current slide AND it's active
+                        currentImageIndex === index &&
+                        activeVideoSlides[index] ? (
+                          <YoutubeVideoPlayer
+                            key={`video-${index}-${Math.random()}`} // Force remount with random key
+                            videoId={item.videoUrl}
+                            height={250}
+                            width={width}
                           />
-                          <View style={styles.videoPlayOverlay}>
-                            <View style={styles.playButtonContainer}>
-                              <GetIcon
-                                iconName="playButton"
-                                size={48}
-                                color="#fff"
-                              />
-                              <Text style={styles.playVideoText}>
-                                Play Video
-                              </Text>
+                        ) : (
+                          // Show a thumbnail with play button overlay
+                          <TouchableOpacity
+                            style={[styles.propertyImage]}
+                            onPress={() => {
+                              if (currentImageIndex === index) {
+                                // Only activate if this is the current slide
+                                setActiveVideoSlides(prev => ({
+                                  ...prev,
+                                  [index]: true,
+                                }));
+                              }
+                            }}
+                            activeOpacity={0.8}>
+                            <Image
+                              source={{
+                                uri: getYouTubeThumbnailUrl(item.videoUrl),
+                              }}
+                              style={styles.videoThumbnail}
+                              resizeMode="cover"
+                            />
+                            <View style={styles.videoPlayOverlay}>
+                              <View style={styles.playButtonContainer}>
+                                <GetIcon
+                                  iconName="playButton"
+                                  size={48}
+                                  color="#fff"
+                                />
+                                <Text style={styles.playVideoText}>
+                                  Play Video
+                                </Text>
+                              </View>
                             </View>
-                          </View>
-                        </TouchableOpacity>
-                      )
-                    ) : (
-                      <Image
-                        source={{uri: item.imageUrl}}
-                        style={styles.propertyImage}
-                        resizeMode="cover"
+                          </TouchableOpacity>
+                        )
+                      ) : (
+                        <Image
+                          source={{uri: item.imageUrl}}
+                          style={styles.propertyImage}
+                          resizeMode="cover"
+                        />
+                      )}
+                      {item.type && (
+                        <View style={styles.imageTypeContainer}>
+                          <Text style={styles.imageTypeText}>{item.type}</Text>
+                        </View>
+                      )}
+                    </View>
+                  )}
+                  horizontal
+                  pagingEnabled
+                  showsHorizontalScrollIndicator={false}
+                  onScroll={handleImageScroll}
+                  scrollEventThrottle={16}
+                />
+
+                {/* Pagination Indicators */}
+                {displayImages.length > 1 && (
+                  <View style={styles.paginationContainer}>
+                    {displayImages.map((_: unknown, index: number) => (
+                      <View
+                        key={`dot-${index}`}
+                        style={[
+                          styles.paginationDot,
+                          currentImageIndex === index &&
+                            styles.paginationDotActive,
+                        ]}
                       />
-                    )}
-                    {item.type && (
-                      <View style={styles.imageTypeContainer}>
-                        <Text style={styles.imageTypeText}>{item.type}</Text>
-                      </View>
-                    )}
+                    ))}
                   </View>
                 )}
-                horizontal
-                pagingEnabled
-                showsHorizontalScrollIndicator={false}
-                onScroll={handleImageScroll}
-                scrollEventThrottle={16}
-              />
+              </>
+            ) : (
+              <View style={styles.placeholderContainer}>
+                <Image
+                  source={placeholderImage}
+                  style={styles.placeholderImage}
+                  resizeMode="contain"
+                />
+              </View>
+            )}
 
-              {/* Pagination Indicators */}
-              {displayImages.length > 1 && (
-                <View style={styles.paginationContainer}>
-                  {displayImages.map((_: unknown, index: number) => (
-                    <View
-                      key={`dot-${index}`}
-                      style={[
-                        styles.paginationDot,
-                        currentImageIndex === index &&
-                          styles.paginationDotActive,
-                      ]}
-                    />
-                  ))}
+            {/* Property Status Badges */}
+            <View style={styles.badgeContainer}>
+              <View style={[styles.badge, styles.mainBadge]}>
+                <Text style={styles.badgeText}>
+                  For {property.propertyFor || 'Sale'}
+                </Text>
+              </View>
+
+              {property.featured && (
+                <View
+                  style={[styles.badge, {backgroundColor: theme.primaryColor}]}>
+                  <Text style={styles.badgeText}>Featured</Text>
                 </View>
               )}
-            </>
-          ) : (
-            <View style={styles.placeholderContainer}>
-              <Image
-                source={placeholderImage}
-                style={styles.placeholderImage}
-                resizeMode="contain"
+            </View>
+          </View>
+
+          {/* Property Title & Price Section */}
+          <View style={styles.section}>
+            <Text style={styles.propertyTitle}>
+              {property.propertyName || 'Unnamed Property'}
+            </Text>
+
+            <Text style={[styles.propertyPrice, {color: theme.primaryColor}]}>
+              {property.price
+                ? formatCurrency(property.price)
+                : 'Price on request'}
+            </Text>
+
+            {/* Location with ZIP code - Updated for better formatting */}
+            <View style={styles.infoRow}>
+              <GetIcon
+                iconName="locationPin"
+                size={18}
+                color={theme.primaryColor}
               />
+              <Text style={styles.infoText}>
+                {property.location || ''}
+                {property.city ? `, ${property.city}` : ''}
+                {property.zipCode ? ` - ${property.zipCode}` : ''}
+              </Text>
+            </View>
+          </View>
+
+          {/* Property Overview */}
+          <View style={[styles.section, styles.overviewSection]}>
+            <Text style={styles.sectionTitle}>Overview</Text>
+
+            <View style={styles.overviewGrid}>
+              {/* Property Type */}
+              <View style={styles.overviewItem}>
+                <View style={styles.overviewIconWrapper}>
+                  <GetIcon
+                    iconName="home"
+                    size={20}
+                    color={theme.primaryColor}
+                  />
+                </View>
+                <View style={styles.overviewTextContainer}>
+                  <Text style={styles.overviewLabel}>Type</Text>
+                  <Text style={styles.overviewValue}>
+                    {property.propertyType || 'Not specified'}
+                  </Text>
+                </View>
+              </View>
+
+              {/* Property For Type */}
+              <View style={styles.overviewItem}>
+                <View style={styles.overviewIconWrapper}>
+                  <GetIcon
+                    iconName="realEstate"
+                    size={20}
+                    color={theme.primaryColor}
+                  />
+                </View>
+                <View style={styles.overviewTextContainer}>
+                  <Text style={styles.overviewLabel}>Category</Text>
+                  <Text style={styles.overviewValue}>
+                    {property.propertyForType || 'Not specified'}
+                  </Text>
+                </View>
+              </View>
+
+              {/* ZIP Code - Added explicitly to the overview section */}
+              {property.zipCode && (
+                <View style={styles.overviewItem}>
+                  <View style={styles.overviewIconWrapper}>
+                    <GetIcon
+                      iconName="locationPin"
+                      size={20}
+                      color={theme.primaryColor}
+                    />
+                  </View>
+                  <View style={styles.overviewTextContainer}>
+                    <Text style={styles.overviewLabel}>ZIP Code</Text>
+                    <Text style={styles.overviewValue}>{property.zipCode}</Text>
+                  </View>
+                </View>
+              )}
+
+              {/* Seller Type - Adding this to overview grid */}
+              {property.sellerType && (
+                <View style={styles.overviewItem}>
+                  <View style={styles.overviewIconWrapper}>
+                    <GetIcon
+                      iconName="user"
+                      size={20}
+                      color={theme.primaryColor}
+                    />
+                  </View>
+                  <View style={styles.overviewTextContainer}>
+                    <Text style={styles.overviewLabel}>Seller Type</Text>
+                    <Text style={styles.overviewValue}>
+                      {property.sellerType}
+                    </Text>
+                  </View>
+                </View>
+              )}
+
+              {/* BHK Type */}
+              {property.bhkType && (
+                <View style={styles.overviewItem}>
+                  <View style={styles.overviewIconWrapper}>
+                    <GetIcon
+                      iconName="room"
+                      size={20}
+                      color={theme.primaryColor}
+                    />
+                  </View>
+                  <View style={styles.overviewTextContainer}>
+                    <Text style={styles.overviewLabel}>Configuration</Text>
+                    <Text style={styles.overviewValue}>{property.bhkType}</Text>
+                  </View>
+                </View>
+              )}
+
+              {/* Area */}
+              {property.area && (
+                <View style={styles.overviewItem}>
+                  <View style={styles.overviewIconWrapper}>
+                    <GetIcon
+                      iconName="length"
+                      size={20}
+                      color={theme.primaryColor}
+                    />
+                  </View>
+                  <View style={styles.overviewTextContainer}>
+                    <Text style={styles.overviewLabel}>Area</Text>
+                    <Text style={styles.overviewValue}>
+                      {property.area} {property.lmUnit || 'sq ft'}
+                    </Text>
+                  </View>
+                </View>
+              )}
+
+              {/* Furnishing */}
+              {property.furnishing && (
+                <View style={styles.overviewItem}>
+                  <View style={styles.overviewIconWrapper}>
+                    <GetIcon
+                      iconName="doubleBed"
+                      size={20}
+                      color={theme.primaryColor}
+                    />
+                  </View>
+                  <View style={styles.overviewTextContainer}>
+                    <Text style={styles.overviewLabel}>Furnishing</Text>
+                    <Text style={styles.overviewValue}>
+                      {property.furnishing}
+                    </Text>
+                  </View>
+                </View>
+              )}
+
+              {/* Facing */}
+              {property.facing && (
+                <View style={styles.overviewItem}>
+                  <View style={styles.overviewIconWrapper}>
+                    <GetIcon
+                      iconName="compass"
+                      size={20}
+                      color={theme.primaryColor}
+                    />
+                  </View>
+                  <View style={styles.overviewTextContainer}>
+                    <Text style={styles.overviewLabel}>Facing</Text>
+                    <Text style={styles.overviewValue}>{property.facing}</Text>
+                  </View>
+                </View>
+              )}
+            </View>
+          </View>
+
+          {/* Description */}
+          {(property.shortDescription || property.longDescription) && (
+            <View style={styles.section}>
+              <Text style={styles.sectionTitle}>Description</Text>
+
+              {property.shortDescription && (
+                <View style={styles.descriptionContainer}>
+                  <Text style={styles.descriptionText}>
+                    {property.shortDescription.replace(/<[^>]*>/g, '')}
+                  </Text>
+                </View>
+              )}
+
+              {property.longDescription && (
+                <View style={styles.descriptionContainer}>
+                  <Text style={styles.descriptionText}>
+                    {property.longDescription.replace(/<[^>]*>/g, '')}
+                  </Text>
+                </View>
+              )}
             </View>
           )}
 
-          {/* Property Status Badges */}
-          <View style={styles.badgeContainer}>
-            <View style={[styles.badge, styles.mainBadge]}>
-              <Text style={styles.badgeText}>
-                For {property.propertyFor || 'Sale'}
-              </Text>
-            </View>
-
-            {property.featured && (
-              <View
-                style={[styles.badge, {backgroundColor: theme.primaryColor}]}>
-                <Text style={styles.badgeText}>Featured</Text>
-              </View>
-            )}
-          </View>
-        </View>
-
-        {/* Property Title & Price Section */}
-        <View style={styles.section}>
-          <Text style={styles.propertyTitle}>
-            {property.propertyName || 'Unnamed Property'}
-          </Text>
-
-          <Text style={[styles.propertyPrice, {color: theme.primaryColor}]}>
-            {property.price
-              ? formatCurrency(property.price)
-              : 'Price on request'}
-          </Text>
-
-          {/* Location with ZIP code - Updated for better formatting */}
-          <View style={styles.infoRow}>
-            <GetIcon
-              iconName="locationPin"
-              size={18}
-              color={theme.primaryColor}
-            />
-            <Text style={styles.infoText}>
-              {property.location || ''}
-              {property.city ? `, ${property.city}` : ''}
-              {property.zipCode ? ` - ${property.zipCode}` : ''}
-            </Text>
-          </View>
-        </View>
-
-        {/* Property Overview */}
-        <View style={[styles.section, styles.overviewSection]}>
-          <Text style={styles.sectionTitle}>Overview</Text>
-
-          <View style={styles.overviewGrid}>
-            {/* Property Type */}
-            <View style={styles.overviewItem}>
-              <View style={styles.overviewIconWrapper}>
-                <GetIcon iconName="home" size={20} color={theme.primaryColor} />
-              </View>
-              <View style={styles.overviewTextContainer}>
-                <Text style={styles.overviewLabel}>Type</Text>
-                <Text style={styles.overviewValue}>
-                  {property.propertyType || 'Not specified'}
+          {/* Interest Toggle Card - Add this section */}
+          <View style={styles.section}>
+            <View style={styles.featuredContainer}>
+              <View style={styles.featuredTextContainer}>
+                <Text style={styles.featuredTitle}>
+                  {isFeatured ? 'Featured' : 'Not Featured'}
                 </Text>
               </View>
-            </View>
 
-            {/* Property For Type */}
-            <View style={styles.overviewItem}>
-              <View style={styles.overviewIconWrapper}>
-                <GetIcon
-                  iconName="realEstate"
-                  size={20}
-                  color={theme.primaryColor}
-                />
-              </View>
-              <View style={styles.overviewTextContainer}>
-                <Text style={styles.overviewLabel}>Category</Text>
-                <Text style={styles.overviewValue}>
-                  {property.propertyForType || 'Not specified'}
-                </Text>
-              </View>
+              <Switch
+                trackColor={{false: '#dddddd', true: theme.primaryColor + '80'}}
+                thumbColor={isFeatured ? theme.primaryColor : '#f4f3f4'}
+                ios_backgroundColor="#dddddd"
+                onValueChange={handleFeaturedToggle}
+                value={isFeatured}
+              />
             </View>
+          </View>
 
-            {/* ZIP Code - Added explicitly to the overview section */}
-            {property.zipCode && (
-              <View style={styles.overviewItem}>
-                <View style={styles.overviewIconWrapper}>
+          {/* Additional Features */}
+          <View style={styles.section}>
+            <Text style={styles.sectionTitle}>Features</Text>
+
+            <View style={styles.featuresGrid}>
+              {/* Ready to Move */}
+              <View style={styles.featureItem}>
+                <View
+                  style={[
+                    styles.featureIcon,
+                    property.readyToMove
+                      ? [
+                          styles.featureActive,
+                          {backgroundColor: theme.primaryColor},
+                        ]
+                      : styles.featureInactive,
+                  ]}>
                   <GetIcon
-                    iconName="locationPin"
-                    size={20}
-                    color={theme.primaryColor}
+                    iconName="greenCheck"
+                    size={16}
+                    color={property.readyToMove ? '#fff' : '#888'}
                   />
                 </View>
-                <View style={styles.overviewTextContainer}>
-                  <Text style={styles.overviewLabel}>ZIP Code</Text>
-                  <Text style={styles.overviewValue}>{property.zipCode}</Text>
-                </View>
+                <Text style={styles.featureText}>Ready to Move</Text>
               </View>
-            )}
 
-            {/* Seller Type - Adding this to overview grid */}
-            {property.sellerType && (
-              <View style={styles.overviewItem}>
-                <View style={styles.overviewIconWrapper}>
+              {/* Construction Done */}
+              <View style={styles.featureItem}>
+                <View
+                  style={[
+                    styles.featureIcon,
+                    property.constructionDone
+                      ? styles.featureActive
+                      : styles.featureInactive,
+                  ]}>
+                  <GetIcon
+                    iconName="greenCheck"
+                    size={16}
+                    color={property.constructionDone ? '#fff' : '#888'}
+                  />
+                </View>
+                <Text style={styles.featureText}>Construction Done</Text>
+              </View>
+
+              {/* Boundary Wall */}
+              <View style={styles.featureItem}>
+                <View
+                  style={[
+                    styles.featureIcon,
+                    property.boundaryWall
+                      ? styles.featureActive
+                      : styles.featureInactive,
+                  ]}>
+                  <GetIcon
+                    iconName="greenCheck"
+                    size={16}
+                    color={property.boundaryWall ? '#fff' : '#888'}
+                  />
+                </View>
+                <Text style={styles.featureText}>Boundary Wall</Text>
+              </View>
+
+              {/* Lifts */}
+              <View style={styles.featureItem}>
+                <View
+                  style={[
+                    styles.featureIcon,
+                    property.lifts
+                      ? styles.featureActive
+                      : styles.featureInactive,
+                  ]}>
+                  <GetIcon
+                    iconName="greenCheck"
+                    size={16}
+                    color={property.lifts ? '#fff' : '#888'}
+                  />
+                </View>
+                <Text style={styles.featureText}>Elevators</Text>
+              </View>
+
+              {/* Alarm System */}
+              <View style={styles.featureItem}>
+                <View
+                  style={[
+                    styles.featureIcon,
+                    property.alarmSystem
+                      ? styles.featureActive
+                      : styles.featureInactive,
+                  ]}>
+                  <GetIcon
+                    iconName="greenCheck"
+                    size={16}
+                    color={property.alarmSystem ? '#fff' : '#888'}
+                  />
+                </View>
+                <Text style={styles.featureText}>Alarm System</Text>
+              </View>
+
+              {/* Surveillance Cameras */}
+              <View style={styles.featureItem}>
+                <View
+                  style={[
+                    styles.featureIcon,
+                    property.surveillanceCameras
+                      ? styles.featureActive
+                      : styles.featureInactive,
+                  ]}>
+                  <GetIcon
+                    iconName="greenCheck"
+                    size={16}
+                    color={property.surveillanceCameras ? '#fff' : '#888'}
+                  />
+                </View>
+                <Text style={styles.featureText}>Security Cameras</Text>
+              </View>
+
+              {/* Gated Security */}
+              <View style={styles.featureItem}>
+                <View
+                  style={[
+                    styles.featureIcon,
+                    property.gatedSecurity
+                      ? styles.featureActive
+                      : styles.featureInactive,
+                  ]}>
+                  <GetIcon
+                    iconName="greenCheck"
+                    size={16}
+                    color={property.gatedSecurity ? '#fff' : '#888'}
+                  />
+                </View>
+                <Text style={styles.featureText}>Gated Security</Text>
+              </View>
+
+              {/* Pantry */}
+              <View style={styles.featureItem}>
+                <View
+                  style={[
+                    styles.featureIcon,
+                    property.pantry
+                      ? styles.featureActive
+                      : styles.featureInactive,
+                  ]}>
+                  <GetIcon
+                    iconName="greenCheck"
+                    size={16}
+                    color={property.pantry ? '#fff' : '#888'}
+                  />
+                </View>
+                <Text style={styles.featureText}>Pantry</Text>
+              </View>
+            </View>
+          </View>
+
+          {/* Property Specifications */}
+          <View style={styles.section}>
+            <Text style={styles.sectionTitle}>Specifications</Text>
+
+            <View style={styles.specsList}>
+              {/* Floor */}
+              {property.floor && (
+                <View style={styles.specItem}>
+                  <Text style={styles.specLabel}>Floor</Text>
+                  <Text style={styles.specValue}>{property.floor}</Text>
+                </View>
+              )}
+
+              {/* Parking */}
+              {property.parking && (
+                <View style={styles.specItem}>
+                  <Text style={styles.specLabel}>Parking</Text>
+                  <Text style={styles.specValue}>{property.parking}</Text>
+                </View>
+              )}
+
+              {/* Open Side */}
+              {property.openSide && (
+                <View style={styles.specItem}>
+                  <Text style={styles.specLabel}>Open Side</Text>
+                  <Text style={styles.specValue}>{property.openSide}</Text>
+                </View>
+              )}
+
+              {/* Property Age */}
+              {property.propertyAge && (
+                <View style={styles.specItem}>
+                  <Text style={styles.specLabel}>Property Age</Text>
+                  <Text style={styles.specValue}>{property.propertyAge}</Text>
+                </View>
+              )}
+
+              {/* Ceiling Height */}
+              {property.ceilingHeight && (
+                <View style={styles.specItem}>
+                  <Text style={styles.specLabel}>Ceiling Height</Text>
+                  <Text style={styles.specValue}>{property.ceilingHeight}</Text>
+                </View>
+              )}
+
+              {/* CreatedOn Date */}
+              {property.createdOn && (
+                <View style={styles.specItem}>
+                  <Text style={styles.specLabel}>Listed On</Text>
+                  <Text style={styles.specValue}>
+                    {new Date(property.createdOn).toLocaleDateString()}
+                  </Text>
+                </View>
+              )}
+            </View>
+          </View>
+
+          {/* Tags */}
+          {displayTags.length > 0 && (
+            <View style={styles.section}>
+              <Text style={styles.sectionTitle}>Tags</Text>
+              <View style={styles.tagsContainer}>
+                {displayTags.map((tag: string, index: number) => (
+                  <View key={index} style={styles.tag}>
+                    <Text style={styles.tagText}>{tag || ''}</Text>
+                  </View>
+                ))}
+              </View>
+            </View>
+          )}
+
+          {/* Contact Information */}
+          <View style={[styles.section, styles.sellerSection]}>
+            <Text style={styles.sectionTitle}>Contact Information</Text>
+
+            <View style={styles.sellerCard}>
+              <View style={styles.sellerDetails}>
+                <View style={styles.sellerIconContainer}>
                   <GetIcon
                     iconName="user"
-                    size={20}
+                    size={24}
                     color={theme.primaryColor}
                   />
                 </View>
-                <View style={styles.overviewTextContainer}>
-                  <Text style={styles.overviewLabel}>Seller Type</Text>
-                  <Text style={styles.overviewValue}>
-                    {property.sellerType}
+                <View style={styles.sellerInfo}>
+                  <Text style={styles.sellerName}>
+                    {property.sellerName || 'Seller'}
                   </Text>
-                </View>
-              </View>
-            )}
-
-            {/* BHK Type */}
-            {property.bhkType && (
-              <View style={styles.overviewItem}>
-                <View style={styles.overviewIconWrapper}>
-                  <GetIcon
-                    iconName="room"
-                    size={20}
-                    color={theme.primaryColor}
-                  />
-                </View>
-                <View style={styles.overviewTextContainer}>
-                  <Text style={styles.overviewLabel}>Configuration</Text>
-                  <Text style={styles.overviewValue}>{property.bhkType}</Text>
-                </View>
-              </View>
-            )}
-
-            {/* Area */}
-            {property.area && (
-              <View style={styles.overviewItem}>
-                <View style={styles.overviewIconWrapper}>
-                  <GetIcon
-                    iconName="length"
-                    size={20}
-                    color={theme.primaryColor}
-                  />
-                </View>
-                <View style={styles.overviewTextContainer}>
-                  <Text style={styles.overviewLabel}>Area</Text>
-                  <Text style={styles.overviewValue}>
-                    {property.area} {property.lmUnit || 'sq ft'}
+                  <Text style={styles.sellerType}>
+                    {property.sellerType || ''}
                   </Text>
+                  {property.sellerEmail && (
+                    <Text
+                      style={[styles.sellerEmail, {color: theme.primaryColor}]}>
+                      {property.sellerEmail}
+                    </Text>
+                  )}
                 </View>
               </View>
-            )}
-
-            {/* Furnishing */}
-            {property.furnishing && (
-              <View style={styles.overviewItem}>
-                <View style={styles.overviewIconWrapper}>
-                  <GetIcon
-                    iconName="doubleBed"
-                    size={20}
-                    color={theme.primaryColor}
-                  />
-                </View>
-                <View style={styles.overviewTextContainer}>
-                  <Text style={styles.overviewLabel}>Furnishing</Text>
-                  <Text style={styles.overviewValue}>
-                    {property.furnishing}
-                  </Text>
-                </View>
-              </View>
-            )}
-
-            {/* Facing */}
-            {property.facing && (
-              <View style={styles.overviewItem}>
-                <View style={styles.overviewIconWrapper}>
-                  <GetIcon
-                    iconName="compass"
-                    size={20}
-                    color={theme.primaryColor}
-                  />
-                </View>
-                <View style={styles.overviewTextContainer}>
-                  <Text style={styles.overviewLabel}>Facing</Text>
-                  <Text style={styles.overviewValue}>{property.facing}</Text>
-                </View>
-              </View>
-            )}
-          </View>
-        </View>
-
-        {/* Description */}
-        {(property.shortDescription || property.longDescription) && (
-          <View style={styles.section}>
-            <Text style={styles.sectionTitle}>Description</Text>
-
-            {property.shortDescription && (
-              <View style={styles.descriptionContainer}>
-                <Text style={styles.descriptionText}>
-                  {property.shortDescription.replace(/<[^>]*>/g, '')}
-                </Text>
-              </View>
-            )}
-
-            {property.longDescription && (
-              <View style={styles.descriptionContainer}>
-                <Text style={styles.descriptionText}>
-                  {property.longDescription.replace(/<[^>]*>/g, '')}
-                </Text>
-              </View>
-            )}
-          </View>
-        )}
-
-        {/* Interest Toggle Card - Add this section */}
-        <View style={styles.section}>
-          <View style={styles.featuredContainer}>
-            <View style={styles.featuredTextContainer}>
-              <Text style={styles.featuredTitle}>
-                {isFeatured ? 'Featured' : 'Not Featured'}
-              </Text>
-            </View>
-
-            <Switch
-              trackColor={{false: '#dddddd', true: theme.primaryColor + '80'}}
-              thumbColor={isFeatured ? theme.primaryColor : '#f4f3f4'}
-              ios_backgroundColor="#dddddd"
-              onValueChange={handleFeaturedToggle}
-              value={isFeatured}
-            />
-          </View>
-        </View>
-
-        {/* Additional Features */}
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Features</Text>
-
-          <View style={styles.featuresGrid}>
-            {/* Ready to Move */}
-            <View style={styles.featureItem}>
-              <View
-                style={[
-                  styles.featureIcon,
-                  property.readyToMove
-                    ? [
-                        styles.featureActive,
-                        {backgroundColor: theme.primaryColor},
-                      ]
-                    : styles.featureInactive,
-                ]}>
-                <GetIcon
-                  iconName="greenCheck"
-                  size={16}
-                  color={property.readyToMove ? '#fff' : '#888'}
-                />
-              </View>
-              <Text style={styles.featureText}>Ready to Move</Text>
-            </View>
-
-            {/* Construction Done */}
-            <View style={styles.featureItem}>
-              <View
-                style={[
-                  styles.featureIcon,
-                  property.constructionDone
-                    ? styles.featureActive
-                    : styles.featureInactive,
-                ]}>
-                <GetIcon
-                  iconName="greenCheck"
-                  size={16}
-                  color={property.constructionDone ? '#fff' : '#888'}
-                />
-              </View>
-              <Text style={styles.featureText}>Construction Done</Text>
-            </View>
-
-            {/* Boundary Wall */}
-            <View style={styles.featureItem}>
-              <View
-                style={[
-                  styles.featureIcon,
-                  property.boundaryWall
-                    ? styles.featureActive
-                    : styles.featureInactive,
-                ]}>
-                <GetIcon
-                  iconName="greenCheck"
-                  size={16}
-                  color={property.boundaryWall ? '#fff' : '#888'}
-                />
-              </View>
-              <Text style={styles.featureText}>Boundary Wall</Text>
-            </View>
-
-            {/* Lifts */}
-            <View style={styles.featureItem}>
-              <View
-                style={[
-                  styles.featureIcon,
-                  property.lifts
-                    ? styles.featureActive
-                    : styles.featureInactive,
-                ]}>
-                <GetIcon
-                  iconName="greenCheck"
-                  size={16}
-                  color={property.lifts ? '#fff' : '#888'}
-                />
-              </View>
-              <Text style={styles.featureText}>Elevators</Text>
-            </View>
-
-            {/* Alarm System */}
-            <View style={styles.featureItem}>
-              <View
-                style={[
-                  styles.featureIcon,
-                  property.alarmSystem
-                    ? styles.featureActive
-                    : styles.featureInactive,
-                ]}>
-                <GetIcon
-                  iconName="greenCheck"
-                  size={16}
-                  color={property.alarmSystem ? '#fff' : '#888'}
-                />
-              </View>
-              <Text style={styles.featureText}>Alarm System</Text>
-            </View>
-
-            {/* Surveillance Cameras */}
-            <View style={styles.featureItem}>
-              <View
-                style={[
-                  styles.featureIcon,
-                  property.surveillanceCameras
-                    ? styles.featureActive
-                    : styles.featureInactive,
-                ]}>
-                <GetIcon
-                  iconName="greenCheck"
-                  size={16}
-                  color={property.surveillanceCameras ? '#fff' : '#888'}
-                />
-              </View>
-              <Text style={styles.featureText}>Security Cameras</Text>
-            </View>
-
-            {/* Gated Security */}
-            <View style={styles.featureItem}>
-              <View
-                style={[
-                  styles.featureIcon,
-                  property.gatedSecurity
-                    ? styles.featureActive
-                    : styles.featureInactive,
-                ]}>
-                <GetIcon
-                  iconName="greenCheck"
-                  size={16}
-                  color={property.gatedSecurity ? '#fff' : '#888'}
-                />
-              </View>
-              <Text style={styles.featureText}>Gated Security</Text>
-            </View>
-
-            {/* Pantry */}
-            <View style={styles.featureItem}>
-              <View
-                style={[
-                  styles.featureIcon,
-                  property.pantry
-                    ? styles.featureActive
-                    : styles.featureInactive,
-                ]}>
-                <GetIcon
-                  iconName="greenCheck"
-                  size={16}
-                  color={property.pantry ? '#fff' : '#888'}
-                />
-              </View>
-              <Text style={styles.featureText}>Pantry</Text>
             </View>
           </View>
-        </View>
 
-        {/* Property Specifications */}
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Specifications</Text>
+          {/* Add at the bottom of your component return statement */}
+          <ConfirmationModal
+            visible={showDeleteModal}
+            title="Delete Property"
+            message="Are you sure you want to delete this property?"
+            onConfirm={handleDeleteProperty}
+            onCancel={() => setShowDeleteModal(false)}
+            isLoading={isDeleting}
+          />
+        </ScrollView>
+      )}
 
-          <View style={styles.specsList}>
-            {/* Floor */}
-            {property.floor && (
-              <View style={styles.specItem}>
-                <Text style={styles.specLabel}>Floor</Text>
-                <Text style={styles.specValue}>{property.floor}</Text>
-              </View>
-            )}
-
-            {/* Parking */}
-            {property.parking && (
-              <View style={styles.specItem}>
-                <Text style={styles.specLabel}>Parking</Text>
-                <Text style={styles.specValue}>{property.parking}</Text>
-              </View>
-            )}
-
-            {/* Open Side */}
-            {property.openSide && (
-              <View style={styles.specItem}>
-                <Text style={styles.specLabel}>Open Side</Text>
-                <Text style={styles.specValue}>{property.openSide}</Text>
-              </View>
-            )}
-
-            {/* Property Age */}
-            {property.propertyAge && (
-              <View style={styles.specItem}>
-                <Text style={styles.specLabel}>Property Age</Text>
-                <Text style={styles.specValue}>{property.propertyAge}</Text>
-              </View>
-            )}
-
-            {/* Ceiling Height */}
-            {property.ceilingHeight && (
-              <View style={styles.specItem}>
-                <Text style={styles.specLabel}>Ceiling Height</Text>
-                <Text style={styles.specValue}>{property.ceilingHeight}</Text>
-              </View>
-            )}
-
-            {/* CreatedOn Date */}
-            {property.createdOn && (
-              <View style={styles.specItem}>
-                <Text style={styles.specLabel}>Listed On</Text>
-                <Text style={styles.specValue}>
-                  {new Date(property.createdOn).toLocaleDateString()}
-                </Text>
-              </View>
-            )}
-          </View>
-        </View>
-
-        {/* Tags */}
-        {displayTags.length > 0 && (
-          <View style={styles.section}>
-            <Text style={styles.sectionTitle}>Tags</Text>
-            <View style={styles.tagsContainer}>
-              {displayTags.map((tag: string, index: number) => (
-                <View key={index} style={styles.tag}>
-                  <Text style={styles.tagText}>{tag || ''}</Text>
-                </View>
-              ))}
-            </View>
-          </View>
-        )}
-
-        {/* Contact Information */}
-        <View style={[styles.section, styles.sellerSection]}>
-          <Text style={styles.sectionTitle}>Contact Information</Text>
-
-          <View style={styles.sellerCard}>
-            <View style={styles.sellerDetails}>
-              <View style={styles.sellerIconContainer}>
-                <GetIcon iconName="user" size={24} color={theme.primaryColor} />
-              </View>
-              <View style={styles.sellerInfo}>
-                <Text style={styles.sellerName}>
-                  {property.sellerName || 'Seller'}
-                </Text>
-                <Text style={styles.sellerType}>
-                  {property.sellerType || ''}
-                </Text>
-                {property.sellerEmail && (
-                  <Text
-                    style={[styles.sellerEmail, {color: theme.primaryColor}]}>
-                    {property.sellerEmail}
-                  </Text>
-                )}
-              </View>
-            </View>
-          </View>
-        </View>
-
-        {/* Add at the bottom of your component return statement */}
-        <ConfirmationModal
-          visible={showDeleteModal}
-          title="Delete Property"
-          message="Are you sure you want to delete this property?"
-          onConfirm={handleDeleteProperty}
-          onCancel={() => setShowDeleteModal(false)}
-          isLoading={isDeleting}
-        />
-      </ScrollView>
       {/* Bottom Spacing */}
-      <View style={styles.bottomSpacing} />
+      {!loading && !error && property && <View style={styles.bottomSpacing} />}
     </View>
   );
 };
@@ -1302,6 +1309,19 @@ const styles = StyleSheet.create({
   playButtonContainer: {
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  contentLoadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#f8f8f8',
+  },
+  contentErrorContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 20,
+    backgroundColor: '#f8f8f8',
   },
 });
 

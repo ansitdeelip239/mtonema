@@ -77,6 +77,7 @@ class PartnerService {
     pageNumber: number,
     pageSize: number,
     searchKey?: string,
+    sortDirection: 'asc' | 'desc' = 'desc',
   ) {
     try {
       const params = new URLSearchParams({
@@ -84,6 +85,7 @@ class PartnerService {
         pageNumber: pageNumber.toString(),
         pageSize: pageSize.toString(),
         SearchKey: searchKey || '',
+        sortDirection,
       }).toString();
       const response = await api.get<ClientResponseModel>(
         `${url.getClientData}?${params}`,
