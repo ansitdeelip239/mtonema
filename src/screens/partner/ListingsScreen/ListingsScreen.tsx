@@ -262,11 +262,15 @@ const ListingScreen: React.FC<Props> = ({navigation}) => {
   return (
     <View style={styles.container}>
       <Header title="Property Listings" />
-      <SearchAndFilter
-        initialFilters={filters}
-        onSearch={handleSearch}
-        onFilter={handleFilter}
-      />
+
+      <View style={styles.searchContainer}>
+        <SearchAndFilter
+          initialFilters={filters}
+          onSearch={handleSearch}
+          onFilter={handleFilter}
+        />
+      </View>
+
       <FlatList
         data={properties}
         renderItem={renderItem}
@@ -308,6 +312,9 @@ const ListingScreen: React.FC<Props> = ({navigation}) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+  },
+  searchContainer: {
+    paddingTop: 10,
   },
   propertyCardContainer: {
     paddingHorizontal: 16,

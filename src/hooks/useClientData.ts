@@ -1,4 +1,4 @@
-import {useState, useCallback, useEffect} from 'react';
+import {useState, useCallback, useEffect, useRef} from 'react';
 import {Client, PagingModel} from '../types';
 import {useAuth} from './useAuth';
 import PartnerService from '../services/PartnerService';
@@ -20,14 +20,25 @@ export const useClientData = () => {
     previousPage: false,
   });
 
+  // Use ref to track sort direction changes without affecting dependencies
+  const sortDirectionRef = useRef(sortDirection);
+  // Track if sort was manually triggered
+  const manualSortRef = useRef(false);
+
   const {user} = useAuth();
   const {clientsUpdated} = usePartner();
+
+  // Update ref when sortDirection state changes
+  useEffect(() => {
+    sortDirectionRef.current = sortDirection;
+  }, [sortDirection]);
 
   const fetchClients = useCallback(
     async (page: number = 1, search?: string, sort?: 'asc' | 'desc') => {
       setError(null);
       try {
-        const currentSort = sort || sortDirection;
+        // Use the provided sort direction or the current ref value
+        const currentSort = sort || sortDirectionRef.current;
         const response = await PartnerService.getClientData(
           user?.email || '',
           page,
@@ -50,7 +61,7 @@ export const useClientData = () => {
         setError('Failed to fetch clients');
       }
     },
-    [user?.email, paging.pageSize, sortDirection],
+    [user?.email, paging.pageSize],
   );
 
   const handleSearch = useCallback(
@@ -61,10 +72,23 @@ export const useClientData = () => {
   );
 
   const handleSort = useCallback(async () => {
+    // Set flag to prevent duplicate fetches
+    manualSortRef.current = true;
+
     const newSortDirection = sortDirection === 'asc' ? 'desc' : 'asc';
     setSortDirection(newSortDirection);
-    setClients([]);
-    await fetchClients(1, undefined, newSortDirection);
+    setClients([]); // Clear clients for better UX
+    setIsLoading(true);
+
+    try {
+      await fetchClients(1, undefined, newSortDirection);
+    } finally {
+      setIsLoading(false);
+      // Reset flag after fetch completes
+      setTimeout(() => {
+        manualSortRef.current = false;
+      }, 100);
+    }
   }, [sortDirection, fetchClients]);
 
   const loadMoreClients = useCallback(async () => {
@@ -76,6 +100,11 @@ export const useClientData = () => {
   }, [fetchClients, paging.nextPage, paging.currentPage, isLoadingMore]);
 
   useEffect(() => {
+    // Skip if this is from a manual sort action
+    if (manualSortRef.current) {
+      return;
+    }
+
     setIsLoading(true);
     fetchClients().finally(() => setIsLoading(false));
   }, [user?.email, fetchClients, clientsUpdated]);

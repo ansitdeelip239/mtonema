@@ -19,7 +19,7 @@ import {useMaster} from '../../../context/MasterProvider';
 import AddGroupModal from './components/AddGroupModal';
 import Toast from 'react-native-toast-message';
 import {usePartner} from '../../../context/PartnerProvider';
-import {useTheme} from '../../../context/ThemeProvider'; // Added theme import
+import {useTheme} from '../../../context/ThemeProvider';
 
 // Updated EmptyList component to use theme
 const EmptyList = memo(
@@ -82,35 +82,94 @@ const GroupsScreen = () => {
   const [isSaving, setIsSaving] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const [selectedGroup, setSelectedGroup] = useState<Group2 | null>(null);
+
+  // New pagination states
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [isLoadingMore, setIsLoadingMore] = useState(false);
+  const [pageSize] = useState(20);
+
   const {user} = useAuth();
   const {masterData} = useMaster();
   const {reloadGroups} = usePartner();
 
   // Fetch groups
-  const fetchGroups = useCallback(async () => {
-    if (!user?.email) {
-      return;
-    }
-
-    setIsLoading(true);
-    try {
-      const response = await PartnerService.getGroupsByEmail(user.email);
-      if (response?.data) {
-        setGroups(response.data.groups || []);
+  const fetchGroups = useCallback(
+    async (page = 1, shouldAppend = false) => {
+      if (!user?.email) {
+        return;
       }
-    } catch (error) {
-      console.error('Error fetching groups:', error);
-    } finally {
-      setIsLoading(false);
-    }
-  }, [user?.email]);
+
+      try {
+        if (page === 1) {
+          setIsLoading(true);
+        } else {
+          setIsLoadingMore(true);
+        }
+
+        const response = await PartnerService.getGroupsByEmail(
+          user.email,
+          page,
+          pageSize,
+        );
+
+        if (response?.data) {
+          const newGroups = response.data.groups || [];
+          const paging = response.data.responsePagingModel;
+
+          // Update pagination state
+          setTotalPages(paging?.totalPage || 1);
+
+          // Update groups list
+          if (shouldAppend) {
+            setGroups(prevGroups => [...prevGroups, ...newGroups]);
+          } else {
+            setGroups(newGroups);
+          }
+        }
+      } catch (error) {
+        console.error('Error fetching groups:', error);
+        Toast.show({
+          type: 'error',
+          text1: 'Failed to load groups',
+          text2: 'Please try again later',
+        });
+      } finally {
+        setIsLoading(false);
+        setIsLoadingMore(false);
+      }
+    },
+    [user?.email, pageSize],
+  );
 
   // Handle pull-to-refresh
   const onRefresh = useCallback(async () => {
     setRefreshing(true);
-    await fetchGroups();
+    setCurrentPage(1);
+    await fetchGroups(1, false);
     setRefreshing(false);
   }, [fetchGroups]);
+
+  // Handle loading more when reaching the end of the list
+  const handleLoadMore = useCallback(() => {
+    if (!isLoading && !isLoadingMore && currentPage < totalPages) {
+      const nextPage = currentPage + 1;
+      setCurrentPage(nextPage);
+      fetchGroups(nextPage, true);
+    }
+  }, [currentPage, totalPages, fetchGroups, isLoading, isLoadingMore]);
+
+  // Footer component for the FlatList to show loading indicator
+  const renderFooter = useCallback(() => {
+    if (!isLoadingMore) return null;
+
+    return (
+      <View style={styles.footerLoader}>
+        <ActivityIndicator size="small" color={theme.primaryColor} />
+        <Text style={styles.loadingMoreText}>Loading more...</Text>
+      </View>
+    );
+  }, [isLoadingMore, theme.primaryColor]);
 
   // Handle group operations - now handles both add and edit
   const handleSaveGroup = useCallback(
@@ -141,7 +200,9 @@ const GroupsScreen = () => {
         }
 
         if (response.success) {
-          await fetchGroups(); // Refresh the list
+          // Reset to first page after adding/editing a group
+          setCurrentPage(1);
+          await fetchGroups(1, false);
           setModalVisible(false); // Close the modal after successful save
           setSelectedGroup(null);
           Toast.show({
@@ -177,7 +238,9 @@ const GroupsScreen = () => {
         const response = await PartnerService.deleteGroup(groupId);
 
         if (response.success) {
-          await fetchGroups();
+          // Reset to first page after deletion
+          setCurrentPage(1);
+          await fetchGroups(1, false);
           setModalVisible(false);
           setSelectedGroup(null);
           Toast.show({
@@ -254,7 +317,7 @@ const GroupsScreen = () => {
 
   // Initial fetch
   useEffect(() => {
-    fetchGroups();
+    fetchGroups(1, false);
   }, [fetchGroups]);
 
   // Keyextractor for FlatList
@@ -294,12 +357,15 @@ const GroupsScreen = () => {
             />
           }
           ListEmptyComponent={renderEmptyList}
+          ListFooterComponent={renderFooter}
           contentContainerStyle={styles.flatListContainer}
           showsVerticalScrollIndicator={false}
           removeClippedSubviews={true}
           initialNumToRender={10}
           maxToRenderPerBatch={10}
           windowSize={5}
+          onEndReached={handleLoadMore}
+          onEndReachedThreshold={0.3}
         />
       </View>
 
@@ -457,6 +523,18 @@ const styles = StyleSheet.create({
   buttonText: {
     fontWeight: 'bold',
     color: Colors.white,
+  },
+  // Add this new style for footer loader
+  footerLoader: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingVertical: 16,
+  },
+  loadingMoreText: {
+    marginLeft: 8,
+    fontSize: 14,
+    color: '#666',
   },
 });
 

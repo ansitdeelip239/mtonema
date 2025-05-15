@@ -946,6 +946,7 @@ const styles = StyleSheet.create({
   },
   scrollView: {
     flex: 1,
+    paddingTop: 10,
   },
   contentContainer: {
     paddingBottom: 100, // Update to 100 for tab bar

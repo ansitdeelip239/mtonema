@@ -19,7 +19,7 @@ import RenderItem from './components/RenderItem';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {AgentDataStackParamList} from '../../../navigator/components/AgentDataStack';
 import SearchAndFilter from './components/SearchAndFilter';
-import { useTheme } from '../../../context/ThemeProvider';
+import {useTheme} from '../../../context/ThemeProvider';
 
 // type Props = BottomTabScreenProps<PartnerBottomTabParamList, 'Property'>;
 type Props = NativeStackScreenProps<AgentDataStackParamList, 'AgentDataScreen'>;
@@ -183,12 +183,15 @@ const AgentDataScreen: React.FC<Props> = ({navigation}) => {
           <Text style={styles.buttonText}>Add</Text>
         </TouchableOpacity>
       </Header>
-      <SearchAndFilter
-        initialFilters={filters}
-        onSearch={handleSearch}
-        onFilter={handleFilter}
-        locations={locations}
-      />
+
+      <View style={styles.searchContainer}>
+        <SearchAndFilter
+          initialFilters={filters}
+          onSearch={handleSearch}
+          onFilter={handleFilter}
+          locations={locations}
+        />
+      </View>
 
       {isInitialLoading ? (
         <View style={styles.centerLoaderContainer}>
@@ -230,6 +233,9 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#f5f5f5',
+  },
+  searchContainer: {
+    paddingTop: 10,
   },
   listContainer: {
     padding: 16,

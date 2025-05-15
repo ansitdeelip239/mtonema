@@ -109,7 +109,7 @@ const styles = StyleSheet.create({
     // Update to match HeaderComponent
     borderBottomLeftRadius: 25, // Changed from 30 to match HeaderComponent
     borderBottomRightRadius: 25,
-    marginBottom: 10,
+    // marginBottom: 10,
   },
   headerContainer: {
     flexDirection: 'row',

@@ -213,10 +213,12 @@ class PartnerService {
     }
   }
 
-  static async getGroupsByEmail(email: string) {
+  static async getGroupsByEmail(email: string, pageNumber?: number, pageSize?: number) {
     try {
       const params = new URLSearchParams({
         email,
+        ...(pageNumber && { pageNumber: pageNumber.toString() }),
+        ...(pageSize && { pageSize: pageSize.toString() }),
       }).toString();
 
       const response = await api.get<Group2Response>(`${url.groups}?${params}`);
