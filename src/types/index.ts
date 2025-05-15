@@ -225,6 +225,7 @@ export interface Group2 {
 
 export interface Group2Response {
   groups: Group2[];
+  responsePagingModel: PagingModel;
 }
 
 export interface Client {

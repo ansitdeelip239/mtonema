@@ -210,7 +210,7 @@ const MediaAndSubmitStep: React.FC<MediaAndSubmitStepProps> = ({
         This step is optional. You can proceed without filling these details.
       </Text>
 
-      <Text style={styles.sectionTitle}>Property Images</Text>
+      <Text style={styles.sectionTitle}>Images</Text>
       <Text style={styles.sectionDescription}>
         Upload images of your property. Select one image as the default display
         image.
@@ -234,7 +234,6 @@ const MediaAndSubmitStep: React.FC<MediaAndSubmitStepProps> = ({
 
       {/* Video URL input */}
       <View style={styles.videoSection}>
-        <Text style={styles.fieldTitle}>Property Video</Text>
         <MaterialTextInput
           field="videoURL"
           formInput={formInput}
@@ -294,11 +293,6 @@ const styles = StyleSheet.create({
   },
   videoSection: {
     marginBottom: 20,
-  },
-  fieldTitle: {
-    fontSize: 16,
-    fontWeight: '500',
-    marginBottom: 8,
   },
   submitSection: {
     marginBottom: 20,

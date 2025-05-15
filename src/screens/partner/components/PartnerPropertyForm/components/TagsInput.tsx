@@ -55,7 +55,7 @@ const TagsInput: React.FC<TagsInputProps> = ({tags, onTagsChange}) => {
 
   return (
     <View style={styles.tagsSection}>
-      <Text style={styles.fieldTitle}>Property Tags</Text>
+      <Text style={styles.fieldTitle}>Tags</Text>
       <View style={styles.tagInputContainer}>
         <View style={styles.tagInputWrapper}>
           <TextInput

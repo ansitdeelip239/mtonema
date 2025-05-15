@@ -91,7 +91,7 @@ const GroupsScreen = () => {
 
   const {user} = useAuth();
   const {masterData} = useMaster();
-  const {reloadGroups} = usePartner();
+  const {reloadGroups, setClientsUpdated} = usePartner();
 
   // Fetch groups
   const fetchGroups = useCallback(
@@ -161,7 +161,9 @@ const GroupsScreen = () => {
 
   // Footer component for the FlatList to show loading indicator
   const renderFooter = useCallback(() => {
-    if (!isLoadingMore) return null;
+    if (!isLoadingMore) {
+      return null;
+    }
 
     return (
       <View style={styles.footerLoader}>
@@ -248,6 +250,7 @@ const GroupsScreen = () => {
             text1: 'Group deleted successfully',
           });
           reloadGroups();
+          setClientsUpdated(prev => !prev);
         } else {
           Toast.show({
             type: 'error',
@@ -265,7 +268,7 @@ const GroupsScreen = () => {
         setIsDeleting(false);
       }
     },
-    [fetchGroups, reloadGroups],
+    [fetchGroups, reloadGroups, setClientsUpdated],
   );
 
   // Handle group item press

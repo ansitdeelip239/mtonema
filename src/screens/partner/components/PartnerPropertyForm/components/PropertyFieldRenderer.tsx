@@ -212,7 +212,7 @@ const PropertyFieldRenderer: React.FC<PropertyFieldRendererProps> = ({
       return (
         <FilterOption
           key={field}
-          label="Property Unit"
+          label="Area Unit"
           options={masterData?.AreaUnit || []}
           selectedValue={formInput.lmUnit}
           onSelect={value => handleFieldSelect('lmUnit', value)}
@@ -311,9 +311,9 @@ const PropertyFieldRenderer: React.FC<PropertyFieldRendererProps> = ({
           field="longDescription"
           formInput={formInput}
           setFormInput={handleInputChange}
-          label="Property Description"
+          label="Long Description"
           mode="outlined"
-          placeholder="Enter detailed property description"
+          placeholder="Enter a detailed description"
           multiline
           numberOfLines={5}
         />
