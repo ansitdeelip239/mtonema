@@ -13,6 +13,12 @@ const getActivityIcon = (activityType: string) => {
   if (type.includes('whatsapp message')) {
     return 'whatsapp';
   }
+  if (type.includes('meeting')) {
+    return 'meeting';
+  }
+  if (type.includes('client created')) {
+    return 'userPlus';
+  }
   return 'notes';
 };
 
@@ -83,11 +89,28 @@ const ActivityTimeline: React.FC<ActivityTimelineProps> = ({
             {formatDate(activity.createdOn, 'PPp')}
           </Text>
         </View>
+
         {hasDescription && (
           <Text style={styles.activityDescription} numberOfLines={2}>
             {activity.description}
           </Text>
         )}
+
+        <View
+          style={[
+            styles.createdByContainer,
+            // eslint-disable-next-line react-native/no-inline-styles
+            {marginBottom: hasDescription ? 4 : 0},
+          ]}>
+          <View
+            style={[
+              styles.userIconContainer,
+              {backgroundColor: Colors.grey},
+            ]}>
+            <GetIcon iconName="user" size={12} color="white" />
+          </View>
+          <Text style={styles.createdByText}>by {activity.createdBy}</Text>
+        </View>
       </View>
     </TouchableOpacity>
   );
@@ -168,6 +191,24 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: '#666',
     fontStyle: 'italic',
+  },
+  createdByContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: 4,
+  },
+  userIconContainer: {
+    width: 20,
+    height: 20,
+    borderRadius: 10,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: 6,
+  },
+  createdByText: {
+    fontSize: 12,
+    color: '#666',
+    fontWeight: '500',
   },
 });
 

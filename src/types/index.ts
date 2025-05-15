@@ -196,6 +196,7 @@ export interface ClientActivityDataModel {
   assignedTo: MasterDataModel;
   description: string;
   createdOn: string;
+  createdBy: string;
   updatedOn: string;
 }
 
