@@ -49,6 +49,10 @@ const ActivityTimeline: React.FC<ActivityTimelineProps> = ({
   const activityColor = getActivityColor(activity.activityType.name);
   const hasDescription = activity.description && activity.description !== '-';
 
+  // Format date and time separately for different styling
+  const dateString = formatDate(activity.createdOn, 'MMM d');
+  const timeString = formatDate(activity.createdOn, 'h:mm a');
+
   return (
     <TouchableOpacity
       style={styles.touchableContainer}
@@ -74,39 +78,28 @@ const ActivityTimeline: React.FC<ActivityTimelineProps> = ({
         )}
       </View>
 
-      <View
-        style={[
-          styles.contentSection,
-          !hasDescription && styles.contentSectionCentered,
-        ]}>
-        <View style={styles.activityHeader}>
-          <Text
-            style={[styles.activityType, {color: activityColor}]}
-            numberOfLines={1}>
-            {activity.activityType.name}
-          </Text>
-          <Text style={styles.activityDate}>
-            {formatDate(activity.createdOn, 'PPp')}
-          </Text>
+      <View style={styles.contentSection}>
+        {/* Date and time with different styling */}
+        <View style={styles.dateTimeContainer}>
+          <Text style={styles.dateText}>{dateString}</Text>
+          <Text style={styles.timeText}> {timeString}</Text>
         </View>
 
+        {/* Activity Type */}
+        <Text style={styles.activityType} numberOfLines={1}>
+          {activity.activityType.name}
+        </Text>
+
+        {/* Description (if exists) */}
         {hasDescription && (
           <Text style={styles.activityDescription} numberOfLines={2}>
             {activity.description}
           </Text>
         )}
 
-        <View
-          style={[
-            styles.createdByContainer,
-            // eslint-disable-next-line react-native/no-inline-styles
-            {marginBottom: hasDescription ? 4 : 0},
-          ]}>
-          <View
-            style={[
-              styles.userIconContainer,
-              {backgroundColor: Colors.grey},
-            ]}>
+        {/* Created by */}
+        <View style={styles.createdByContainer}>
+          <View style={styles.userIconContainer}>
             <GetIcon iconName="user" size={12} color="white" />
           </View>
           <Text style={styles.createdByText}>by {activity.createdBy}</Text>
@@ -120,6 +113,7 @@ const styles = StyleSheet.create({
   touchableContainer: {
     flexDirection: 'row',
     paddingVertical: 8,
+    paddingTop: 0,
     backgroundColor: 'white',
   },
   timelineSection: {
@@ -172,20 +166,22 @@ const styles = StyleSheet.create({
     marginBottom: 4,
   },
   activityType: {
-    fontSize: 14,
-    fontWeight: '600',
-    flex: 1,
-    marginRight: 8,
+    fontSize: 13,
+    fontWeight: '700', // Bold
+    color: '#000', // Black
+    marginBottom: 4,
   },
   activityDate: {
-    fontSize: 12,
-    color: '#666',
+    fontSize: 14,
+    fontWeight: '600',
+    color: '#333',
+    marginBottom: 4,
   },
   activityDescription: {
-    fontSize: 14,
-    color: '#333',
-    // marginBottom: 4,
-    lineHeight: 20,
+    fontSize: 12,
+    color: '#777', // Slightly gray
+    lineHeight: 18,
+    marginBottom: 4,
   },
   assignedTo: {
     fontSize: 12,
@@ -195,7 +191,7 @@ const styles = StyleSheet.create({
   createdByContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginTop: 4,
+    marginTop: 2,
   },
   userIconContainer: {
     width: 20,
@@ -204,11 +200,27 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     marginRight: 6,
+    backgroundColor: '#999', // Gray color for icon
   },
   createdByText: {
     fontSize: 12,
-    color: '#666',
-    fontWeight: '500',
+    color: '#777', // Gray
+    fontWeight: '400',
+  },
+  dateTimeContainer: {
+    flexDirection: 'row',
+    alignItems: 'baseline',
+    marginBottom: 4,
+  },
+  dateText: {
+    fontSize: 14,
+    fontWeight: '700', // Bold date
+    color: '#333',
+  },
+  timeText: {
+    fontSize: 14,
+    fontWeight: '400', // Regular time
+    color: '#333',
   },
 });
 
