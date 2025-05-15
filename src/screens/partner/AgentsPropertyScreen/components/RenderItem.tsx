@@ -9,7 +9,7 @@ import Toast from 'react-native-toast-message';
 import ConfirmationModal from '../../../../components/ConfirmationModal';
 import {AgentDataStackParamList} from '../../../../navigator/components/AgentDataStack';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
-import { useTheme } from '../../../../context/ThemeProvider';
+import {useTheme} from '../../../../context/ThemeProvider';
 
 interface RenderItemProps {
   item: AgentData;
@@ -26,6 +26,7 @@ const RenderItem: React.FC<RenderItemProps> = ({
   navigation,
 }) => {
   const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false); // Add loading state
 
   const {theme} = useTheme();
 
@@ -41,6 +42,7 @@ const RenderItem: React.FC<RenderItemProps> = ({
   };
 
   const handleConfirmDelete = async () => {
+    setIsDeleting(true);
     try {
       const response = await PartnerService.deleteAgentProperty(item.id);
       if (response.success) {
@@ -59,6 +61,7 @@ const RenderItem: React.FC<RenderItemProps> = ({
         visibilityTime: 4000,
       });
     } finally {
+      setIsDeleting(false);
       setIsDeleteModalVisible(false);
     }
   };
@@ -68,8 +71,14 @@ const RenderItem: React.FC<RenderItemProps> = ({
       <Surface style={styles.card}>
         <View style={styles.header}>
           <View style={styles.titleContainer}>
-            <Text style={[styles.name, {color: theme.primaryColor}]}>{item.agentName || 'N/A'}</Text>
-            <View style={[styles.badge, {backgroundColor: theme.primaryColor + '15'}]}>
+            <Text style={[styles.name, {color: theme.primaryColor}]}>
+              {item.agentName || 'N/A'}
+            </Text>
+            <View
+              style={[
+                styles.badge,
+                {backgroundColor: theme.primaryColor + '15'},
+              ]}>
               <Text style={[styles.badgeText, {color: theme.primaryColor}]}>
                 {item.negotiable ? 'Negotiable' : 'Fixed Price'}
               </Text>
@@ -77,14 +86,18 @@ const RenderItem: React.FC<RenderItemProps> = ({
           </View>
           <View style={styles.actions}>
             <IconButton
-              icon={() => GetIcon({iconName: 'edit', color: theme.primaryColor})}
+              icon={() =>
+                GetIcon({iconName: 'edit', color: theme.primaryColor})
+              }
               size={20}
               onPress={() => onEdit()}
               iconColor={theme.primaryColor}
               style={styles.actionButton}
             />
             <IconButton
-              icon={() => GetIcon({iconName: 'delete', color: theme.primaryColor})}
+              icon={() =>
+                GetIcon({iconName: 'delete', color: theme.primaryColor})
+              }
               size={20}
               onPress={handleDeletePress}
               iconColor={theme.primaryColor}
@@ -104,30 +117,36 @@ const RenderItem: React.FC<RenderItemProps> = ({
             <Text style={styles.label}>Location:</Text>
             <Text style={styles.value}>{item.propertyLocation || 'N/A'}</Text>
           </View>
-
           <View style={styles.row}>
             <Text style={styles.label}>Demand Price:</Text>
-            <Text style={[styles.value, styles.priceText, {color: theme.primaryColor}]}>
+            <Text
+              style={[
+                styles.value,
+                styles.priceText,
+                {color: theme.primaryColor},
+              ]}>
               {formatCurrency(item.demandPrice) || 'N/A'}
             </Text>
           </View>
           <View style={styles.row}>
             <Text style={styles.label}>Security Deposit:</Text>
-            <Text style={[styles.value, styles.priceText, {color: theme.primaryColor}]}>
+            <Text
+              style={[
+                styles.value,
+                styles.priceText,
+                {color: theme.primaryColor},
+              ]}>
               {formatCurrency(item.securityDepositAmount) || 'N/A'}
             </Text>
           </View>
-
           <View style={styles.row}>
             <Text style={styles.label}>Contact No.:</Text>
             <Text style={styles.value}>{item.agentContactNo || 'N/A'}</Text>
           </View>
-
           <View style={styles.row}>
             <Text style={styles.label}>Property Type:</Text>
             <Text style={styles.value}>{item.propertyType || 'N/A'}</Text>
           </View>
-
           <View style={styles.row}>
             <Text style={styles.label}>Date Added:</Text>
             <Text style={styles.value}>
@@ -159,6 +178,7 @@ const RenderItem: React.FC<RenderItemProps> = ({
         message="This action cannot be undone. Are you sure you want to delete this property?"
         onConfirm={handleConfirmDelete}
         onCancel={() => setIsDeleteModalVisible(false)}
+        isLoading={isDeleting}
       />
     </>
   );
@@ -172,10 +192,7 @@ const styles = StyleSheet.create({
     marginVertical: 8,
     elevation: 4,
     shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
+    shadowOffset: {width: 0, height: 2},
     shadowOpacity: 0.15,
     shadowRadius: 6,
   },

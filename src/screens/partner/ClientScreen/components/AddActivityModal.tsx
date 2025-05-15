@@ -8,7 +8,7 @@ import {Button} from 'react-native-paper';
 import {ClientActivityDataModel} from '../../../../types';
 import GetIcon from '../../../../components/GetIcon';
 import ConfirmationModal from '../../../../components/ConfirmationModal';
-import { useTheme } from '../../../../context/ThemeProvider';
+import {useTheme} from '../../../../context/ThemeProvider';
 
 interface AddActivityModalProps {
   visible: boolean;
@@ -20,7 +20,7 @@ interface AddActivityModalProps {
   onDelete?: (activityId: number) => void;
   closeMenu?: () => void;
   isDeletingActivity?: boolean;
-  initialActivityType?: number | null; // Add this prop
+  initialActivityType?: number | null;
 }
 
 interface ActivityFormData {
@@ -38,7 +38,7 @@ const AddActivityModal: React.FC<AddActivityModalProps> = ({
   onDelete,
   closeMenu,
   isDeletingActivity = false,
-  initialActivityType = null, // Default to null
+  initialActivityType = null,
 }) => {
   const [formData, setFormData] = React.useState<ActivityFormData>({
     activityType: null,
@@ -60,7 +60,6 @@ const AddActivityModal: React.FC<AddActivityModalProps> = ({
         description: activityToEdit.description,
       });
     } else if (initialActivityType) {
-      // Use the initialActivityType if provided
       setFormData(prev => ({
         ...prev,
         activityType: initialActivityType,
@@ -114,6 +113,21 @@ const AddActivityModal: React.FC<AddActivityModalProps> = ({
     }
   };
 
+  // Filter ActivityType options where showInDropdown is true
+  const filteredActivityTypes =
+    masterData?.ActivityType?.filter(activityType => {
+      try {
+        const descriptionObj = JSON.parse(activityType.description);
+        return descriptionObj.showInDropdown === true;
+      } catch (error) {
+        console.error(
+          `Error parsing ActivityType description for ${activityType.masterDetailName}:`,
+          error,
+        );
+        return false;
+      }
+    }) || [];
+
   return (
     <>
       <Modal
@@ -138,7 +152,7 @@ const AddActivityModal: React.FC<AddActivityModalProps> = ({
 
             <FilterOption
               label="Select Activity Type"
-              options={masterData?.ActivityType || []}
+              options={filteredActivityTypes}
               selectedValue={
                 masterData?.ActivityType.find(
                   option => option.id === formData.activityType,
@@ -175,14 +189,20 @@ const AddActivityModal: React.FC<AddActivityModalProps> = ({
               <Button
                 mode="outlined"
                 style={[styles.modalButton, {borderColor: theme.primaryColor}]}
-                labelStyle={[styles.cancelButtonText, {color: theme.primaryColor}]}
+                labelStyle={[
+                  styles.cancelButtonText,
+                  {color: theme.primaryColor},
+                ]}
                 onPress={onClose}>
                 Cancel
               </Button>
 
               <Button
                 mode="contained"
-                style={[styles.modalButton, {backgroundColor: theme.primaryColor}]}
+                style={[
+                  styles.modalButton,
+                  {backgroundColor: theme.primaryColor},
+                ]}
                 labelStyle={styles.buttonText}
                 onPress={handleSubmit}
                 loading={isLoading}
@@ -222,8 +242,6 @@ const styles = StyleSheet.create({
   modalTitle: {
     fontSize: 24,
     fontWeight: 'bold',
-    // marginBottom: 20,
-    // textAlign: 'center',
     color: '#000',
   },
   input: {
