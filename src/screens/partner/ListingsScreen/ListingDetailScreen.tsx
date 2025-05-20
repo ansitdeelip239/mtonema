@@ -673,10 +673,7 @@ const ListingDetailScreen: React.FC<Props> = ({route, navigation}) => {
                   style={[
                     styles.featureIcon,
                     property.readyToMove
-                      ? [
-                          styles.featureActive,
-                          {backgroundColor: theme.primaryColor},
-                        ]
+                      ? [styles.featureActive, {backgroundColor: theme.primaryColor}]
                       : styles.featureInactive,
                   ]}>
                   <GetIcon
@@ -694,7 +691,7 @@ const ListingDetailScreen: React.FC<Props> = ({route, navigation}) => {
                   style={[
                     styles.featureIcon,
                     property.constructionDone
-                      ? styles.featureActive
+                      ? [styles.featureActive, {backgroundColor: theme.primaryColor}]
                       : styles.featureInactive,
                   ]}>
                   <GetIcon
@@ -712,7 +709,7 @@ const ListingDetailScreen: React.FC<Props> = ({route, navigation}) => {
                   style={[
                     styles.featureIcon,
                     property.boundaryWall
-                      ? styles.featureActive
+                      ? [styles.featureActive, {backgroundColor: theme.primaryColor}]
                       : styles.featureInactive,
                   ]}>
                   <GetIcon
@@ -730,7 +727,7 @@ const ListingDetailScreen: React.FC<Props> = ({route, navigation}) => {
                   style={[
                     styles.featureIcon,
                     property.lifts
-                      ? styles.featureActive
+                      ? [styles.featureActive, {backgroundColor: theme.primaryColor}]
                       : styles.featureInactive,
                   ]}>
                   <GetIcon
@@ -748,7 +745,7 @@ const ListingDetailScreen: React.FC<Props> = ({route, navigation}) => {
                   style={[
                     styles.featureIcon,
                     property.alarmSystem
-                      ? styles.featureActive
+                      ? [styles.featureActive, {backgroundColor: theme.primaryColor}]
                       : styles.featureInactive,
                   ]}>
                   <GetIcon
@@ -766,7 +763,7 @@ const ListingDetailScreen: React.FC<Props> = ({route, navigation}) => {
                   style={[
                     styles.featureIcon,
                     property.surveillanceCameras
-                      ? styles.featureActive
+                      ? [styles.featureActive, {backgroundColor: theme.primaryColor}]
                       : styles.featureInactive,
                   ]}>
                   <GetIcon
@@ -784,7 +781,7 @@ const ListingDetailScreen: React.FC<Props> = ({route, navigation}) => {
                   style={[
                     styles.featureIcon,
                     property.gatedSecurity
-                      ? styles.featureActive
+                      ? [styles.featureActive, {backgroundColor: theme.primaryColor}]
                       : styles.featureInactive,
                   ]}>
                   <GetIcon
@@ -802,7 +799,7 @@ const ListingDetailScreen: React.FC<Props> = ({route, navigation}) => {
                   style={[
                     styles.featureIcon,
                     property.pantry
-                      ? styles.featureActive
+                      ? [styles.featureActive, {backgroundColor: theme.primaryColor}]
                       : styles.featureInactive,
                   ]}>
                   <GetIcon
