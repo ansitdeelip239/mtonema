@@ -110,7 +110,10 @@ const EmailScreen: React.FC<Props> = ({navigation, route}) => {
         }
 
         if (response && !role.includes(response.data?.userType as string)) {
-          showError('Email not found');
+          setEmailError({
+            message: 'Email not found',
+            isClickable: false,
+          });
           return false;
         }
 
@@ -124,7 +127,7 @@ const EmailScreen: React.FC<Props> = ({navigation, route}) => {
         return false;
       }
     },
-    [role, showError],
+    [role],
   );
 
   // Add this after your keyboard hook usage

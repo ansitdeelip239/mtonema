@@ -9,6 +9,7 @@ import {
   Dimensions,
 } from 'react-native';
 import { Text, Portal} from 'react-native-paper';
+import Colors from '../constants/Colors';
 
 type DialogContextType = {
   showError: (message: string) => void;
@@ -150,7 +151,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   okButton: {
-    backgroundColor: '#cc0e74',
+    backgroundColor: Colors.MT_PRIMARY_1,
     paddingVertical: 10,
     paddingHorizontal: 30,
     borderRadius: 5,

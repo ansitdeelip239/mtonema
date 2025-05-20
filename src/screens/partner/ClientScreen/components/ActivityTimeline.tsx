@@ -102,7 +102,17 @@ const ActivityTimeline: React.FC<ActivityTimelineProps> = ({
           <View style={styles.userIconContainer}>
             <GetIcon iconName="user" size={12} color="white" />
           </View>
-          <Text style={styles.createdByText}>by {activity.createdBy}</Text>
+          <View style={styles.createdByTextContainer}>
+            <View style={styles.createdByNameRow}>
+              <Text style={styles.createdByLabel}>by </Text>
+              <Text style={styles.createdByName}>
+                {JSON.parse(activity.createdBy).Name}
+              </Text>
+            </View>
+            <Text style={styles.createdByEmail}>
+              ({JSON.parse(activity.createdBy).Email})
+            </Text>
+          </View>
         </View>
       </View>
     </TouchableOpacity>
@@ -202,10 +212,27 @@ const styles = StyleSheet.create({
     marginRight: 6,
     backgroundColor: '#999', // Gray color for icon
   },
-  createdByText: {
+  createdByTextContainer: {
+    flexDirection: 'column',
+  },
+  createdByNameRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  createdByLabel: {
     fontSize: 12,
-    color: '#777', // Gray
+    color: '#999',
     fontWeight: '400',
+  },
+  createdByName: {
+    fontSize: 12,
+    color: '#666',
+    fontWeight: '600',
+  },
+  createdByEmail: {
+    fontSize: 11,
+    color: '#888',
+    marginTop: 2,
   },
   dateTimeContainer: {
     flexDirection: 'row',

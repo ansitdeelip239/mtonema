@@ -28,7 +28,7 @@ export const MainScreen: React.FC<Props> = ({navigation}) => {
   const onPartnerLogin = () => {
     // Partners and admins go to location selection screen
     navigation.navigate('PartnerZoneScreen', {
-      role: [Roles.PARTNER, Roles.ADMIN],
+      role: [Roles.PARTNER],
     });
   };
 
