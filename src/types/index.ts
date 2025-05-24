@@ -7,6 +7,7 @@ export interface AuthContextType {
   login: (token: string) => void;
   logout: () => void;
   storeUser: (user: User) => void;
+  storePartnerZone: (partnerZone: MasterDetailModel) => void;
   storeToken: (token: string) => void;
   authToken: string | null;
   dataUpdated: boolean;

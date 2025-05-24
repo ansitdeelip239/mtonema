@@ -3,7 +3,7 @@ import AuthService from '../services/AuthService';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {jwtDecode} from 'jwt-decode';
 import AuthContext from './AuthContext';
-import {User} from '../types';
+import {MasterDetailModel, User} from '../types';
 import {useLogoStorage} from '../hooks/useLogoStorage';
 
 interface AuthProviderProps {
@@ -127,6 +127,14 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({children}) => {
     }
   }, []);
 
+  const storePartnerZone = useCallback(async (partnerZone: MasterDetailModel) => {
+    try {
+      await AsyncStorage.setItem('partnerZone', JSON.stringify(partnerZone));
+    } catch (error) {
+      console.error('Error storing token:', error);
+    }
+  }, []);
+
   const login = useCallback(
     async (token: string) => {
       try {
@@ -192,6 +200,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({children}) => {
     logout,
     storeUser,
     storeToken,
+    storePartnerZone,
     authToken,
     dataUpdated,
     setDataUpdated,

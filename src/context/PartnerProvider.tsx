@@ -2,6 +2,9 @@ import React, {useState, useEffect, useCallback, createContext} from 'react';
 import PartnerService from '../services/PartnerService';
 import {Group} from '../types';
 import {useAuth} from '../hooks/useAuth';
+import {MasterDetailModel} from '../types';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {useMaster} from './MasterProvider';
 
 interface PartnerProviderProps {
   children: React.ReactNode;
@@ -19,6 +22,8 @@ interface PartnerContextProps {
   setAgentPropertyUpdated: React.Dispatch<React.SetStateAction<boolean>>;
   partnerPropertyUpdated: boolean;
   setPartnerPropertyUpdated: React.Dispatch<React.SetStateAction<boolean>>;
+  cities: MasterDetailModel[];
+  fetchProjectLocations: () => Promise<void>;
 }
 
 const PartnerContext = createContext<PartnerContextProps | undefined>(
@@ -31,7 +36,9 @@ export const PartnerProvider: React.FC<PartnerProviderProps> = ({children}) => {
   const [clientsUpdated, setClientsUpdated] = useState(false);
   const [agentPropertyUpdated, setAgentPropertyUpdated] = useState(false);
   const [partnerPropertyUpdated, setPartnerPropertyUpdated] = useState(false);
+  const [cities, setCities] = useState<MasterDetailModel[]>([]);
   const {user} = useAuth();
+  const {fetchMasterDetailsByMasterNameAndXref} = useMaster();
 
   const fetchGroups = useCallback(async () => {
     try {
@@ -42,9 +49,47 @@ export const PartnerProvider: React.FC<PartnerProviderProps> = ({children}) => {
     }
   }, [user?.email]);
 
+  const fetchProjectLocations = useCallback(async () => {
+    try {
+      const partnerZoneData = await AsyncStorage.getItem('partnerZone');
+      if (partnerZoneData) {
+        const parsedData = JSON.parse(partnerZoneData);
+        const response = await fetchMasterDetailsByMasterNameAndXref(
+          'ProjectLocation',
+          parsedData.masterName,
+        );
+        console.log(
+          'Project locations response from PartnerProvider:',
+          response,
+          parsedData,
+        );
+
+        if (response.success) {
+          setCities(response.data);
+        } else {
+          console.error(
+            'Failed to fetch project locations in PartnerProvider:',
+            response.message,
+          );
+          setCities([]); // Set to empty array on failure
+        }
+      } else {
+        console.log('No partnerZone data found in AsyncStorage.');
+        setCities([]); // Set to empty array if no zone data
+      }
+    } catch (error) {
+      console.error(
+        'Error fetching project locations in PartnerProvider:',
+        error,
+      );
+      setCities([]); // Set to empty array on error
+    }
+  }, [fetchMasterDetailsByMasterNameAndXref]);
+
   useEffect(() => {
     fetchGroups();
-  }, [fetchGroups]);
+    fetchProjectLocations(); // Call on mount
+  }, [fetchGroups, fetchProjectLocations]);
 
   const reloadGroups = useCallback(() => {
     fetchGroups();
@@ -62,6 +107,8 @@ export const PartnerProvider: React.FC<PartnerProviderProps> = ({children}) => {
     setAgentPropertyUpdated,
     partnerPropertyUpdated,
     setPartnerPropertyUpdated,
+    cities,
+    fetchProjectLocations,
   };
 
   return (

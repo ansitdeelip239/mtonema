@@ -48,7 +48,7 @@ class PartnerService {
 
   static async addAgentProperty(body: AgentPropertyRequestModel) {
     try {
-      const response = await api.post<null>(`${url.agentProperties}`, body);
+      const response = await api.post<null>(`${url.addAgentProperties}`, body);
       return response;
     } catch (error) {
       console.error('Error in updateAgentProperty', error);
@@ -347,7 +347,7 @@ class PartnerService {
 
   static async postPartnerProperty(payload: PartnerPropertyApiSubmissionType) {
     try {
-      const response = await api.post<null>(`${url.partnerProperty}`, payload);
+      const response = await api.post<null>(`${url.addPartnerProperty}`, payload);
       return response;
     } catch (error) {
       console.error('Error in postPartnerProperty', error);

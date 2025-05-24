@@ -5,12 +5,14 @@ import partnerPropertyFormSchema, {
   PartnerPropertyFormType,
 } from '../../../../../schema/PartnerPropertyFormSchema';
 import {useMaster} from '../../../../../context/MasterProvider';
+import {usePartner} from '../../../../../context/PartnerProvider'; // Added
 import {MaterialTextInput} from '../../../../../components/MaterialTextInput';
 import FilterOption from '../../../../../components/FilterOption';
 import {formatCurrency} from '../../../../../utils/currency';
 import {z} from 'zod';
 import MasterService from '../../../../../services/MasterService';
 import {PlacePrediction} from '../../../../../types/googlePlaces';
+
 
 interface BasicDetailsStepProps {
   formInput: PartnerPropertyFormType;
@@ -33,6 +35,7 @@ const BasicDetailsStep: React.FC<BasicDetailsStepProps> = ({
   showBackButton = false,
 }) => {
   const {masterData} = useMaster();
+  const {cities} = usePartner();
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isFormValid, setIsFormValid] = useState(false);
   const [attemptedSubmit, setAttemptedSubmit] = useState(false);
@@ -315,7 +318,7 @@ const BasicDetailsStep: React.FC<BasicDetailsStepProps> = ({
 
       <FilterOption
         label="City*"
-        options={masterData?.ProjectLocation || []}
+        options={cities || []}
         selectedValue={formInput.city}
         onSelect={value => handleFieldSelect('city', value)}
         error={getErrorMessage('city')}

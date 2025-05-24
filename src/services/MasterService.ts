@@ -1,13 +1,21 @@
-import {SearchIntellisenseResponse} from '../types';
+import {MasterDetailModel, SearchIntellisenseResponse} from '../types';
 import {api} from '../utils/api';
 import url from '../constants/api';
 import {GooglePlacesResponse} from '../types/googlePlaces';
 
 class MasterService {
-  static async getMasterDetails(masterName: string) {
+  static async getMasterDetails(masterName: string, xref?: string) {
     try {
-      const response = await api.get<any>(
-        `${url.getMasterDetail}?masterName=${masterName}`,
+      const params = new URLSearchParams({
+        masterName,
+      });
+
+      if (xref) {
+        params.append('xref', xref);
+      }
+
+      const response = await api.get<MasterDetailModel[]>(
+        `${url.getMasterDetail}?${params.toString()}`,
       );
       return response;
     } catch (error) {

@@ -3,6 +3,7 @@ import MasterService from '../services/MasterService';
 import {MasterDetailModel} from '../types';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import _ from 'lodash';
+import {Response} from '../types';
 
 interface MasterProviderProps {
   children: React.ReactNode;
@@ -28,6 +29,10 @@ interface MasterData {
 interface MasterContextProps {
   masterData: MasterData | null;
   reloadMasterData: () => void;
+  fetchMasterDetailsByMasterNameAndXref: (
+    mastersName: string,
+    xref: string,
+  ) => Promise<Response<MasterDetailModel[]>>;
   isLoading: boolean;
   dataSource: 'cache' | 'api' | 'cache-updated' | null;
 }
@@ -236,9 +241,26 @@ export const MasterProvider: React.FC<MasterProviderProps> = ({children}) => {
     loadMasterData();
   }, [loadMasterData]);
 
+  const fetchMasterDetailsByMasterNameAndXref = async (
+    mastersName: string,
+    xref: string,
+  ) => {
+    try {
+      const response = await MasterService.getMasterDetails(mastersName, xref);
+      return response;
+    } catch (error) {
+      console.error(
+        `Error fetching master details for ${masterName} with xref ${xref}:`,
+        error,
+      );
+      throw error;
+    }
+  };
+
   const contextValue = {
     masterData,
     reloadMasterData,
+    fetchMasterDetailsByMasterNameAndXref,
     isLoading,
     dataSource,
   };

@@ -11,12 +11,13 @@ import MasterService from '../../services/MasterService';
 import {useTheme} from '../../context/ThemeProvider';
 import HeaderComponent from './components/HeaderComponent';
 import {getGradientColors} from '../../utils/colorUtils';
+import Roles from '../../constants/Roles';
 
 type Props = NativeStackScreenProps<AuthStackParamList, 'OtpScreen'>;
 
 const OtpScreen: React.FC<Props> = ({navigation, route}) => {
   const [isLoading, setIsLoading] = useState(false);
-  const {storeToken, login, storeUser} = useAuth();
+  const {storeToken, login, storeUser, storePartnerZone} = useAuth();
   const [OTP, setOtp] = useState('');
   const {email, logoUrl, location} = route.params;
   const {showError, hideDialog} = useDialog();
@@ -69,19 +70,26 @@ const OtpScreen: React.FC<Props> = ({navigation, route}) => {
           const userResponse = await AuthService.getUserByToken(response.data);
           await storeUser(userResponse.data);
 
-          const masterResponse = await MasterService.getMasterDetailsById(
-            userResponse.data.partnerLocation,
-          );
+          if (
+            userResponse.data.role === Roles.PARTNER ||
+            userResponse.data.role === Roles.TEAM
+          ) {
+            const masterResponse = await MasterService.getMasterDetailsById(
+              userResponse.data.partnerLocation,
+            );
 
-          if (masterResponse.success) {
-            const description = JSON.parse(masterResponse.data.description);
-            const theme = {
-              primaryColor: description.colorScheme.primaryColor,
-              secondaryColor: description.colorScheme.secondaryColor,
-              backgroundColor: description.colorScheme.backgroundColor,
-              textColor: description.colorScheme.textColor,
-            };
-            await updateTheme(theme);
+            await storePartnerZone(masterResponse.data);
+
+            if (masterResponse.success) {
+              const description = JSON.parse(masterResponse.data.description);
+              const theme = {
+                primaryColor: description.colorScheme.primaryColor,
+                secondaryColor: description.colorScheme.secondaryColor,
+                backgroundColor: description.colorScheme.backgroundColor,
+                textColor: description.colorScheme.textColor,
+              };
+              await updateTheme(theme);
+            }
           }
 
           // Store the logo URL if we have it from route params
@@ -131,6 +139,7 @@ const OtpScreen: React.FC<Props> = ({navigation, route}) => {
     storeLogoData,
     extractLogoFromPartnerLocation,
     updateTheme,
+    storePartnerZone,
   ]);
 
   return (

@@ -1,5 +1,5 @@
 import {createContext} from 'react';
-import {AuthContextType, User} from '../types';
+import {AuthContextType, MasterDetailModel, User} from '../types';
 
 const AuthContext = createContext<AuthContextType>({
   isAuthenticated: false,
@@ -8,6 +8,7 @@ const AuthContext = createContext<AuthContextType>({
   login: (_token: string) => {},
   logout: () => {},
   storeUser: (_user: User) => {},
+  storePartnerZone: (_partnerZone: MasterDetailModel) => {},
   storeToken: (_token: string) => {},
   authToken: null,
   dataUpdated: false,

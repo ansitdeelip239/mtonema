@@ -49,10 +49,11 @@ const url = {
 
   //Partner
   agentProperties: BASE_URL + '/partners/agent-properties',
+  addAgentProperties: BASE_URL + '/partners/add-agent-property-new',
   agentPropertiesNew: BASE_URL + '/partners/agent-properties-New',
   // updateAgentProperty: BASE_URL + '/partner/UpdateAgentProperty',
   getClientData: BASE_URL + '/partners/getclientdata',
-  getGroupsByPartnerId: BASE_URL + '/partners/groups',
+  getGroupsByPartnerId: BASE_URL + '/partners/groups-New',
   // addEditClientData: BASE_URL + '/partner/AddEditClientData',
   // getPartnerProperty: BASE_URL + '/partner-properties',
   deleteAgentProperty: BASE_URL + '/partners/agent-properties',
@@ -67,6 +68,7 @@ const url = {
   },
   partnerPropertyNew: BASE_URL + '/partners/partner-properties',
   partnerProperty: BASE_URL + '/partners/properties',
+  addPartnerProperty: BASE_URL + '/partners/add-partner-property-new',
   deletePartnerPropertyById: (propertyId: number) => {
     return BASE_URL + '/partner/properties/' + propertyId;
   },

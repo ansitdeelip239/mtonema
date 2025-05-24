@@ -112,7 +112,6 @@ export const ClientCard: React.FC<ClientCardProps> = ({
                   {parseCreatedBy(client.createdBy).Name}
                 </Text>
                 <Text style={styles.creatorEmail}>
-                  {' '}
                   ({parseCreatedBy(client.createdBy).Email})
                 </Text>
               </View>
@@ -243,8 +242,8 @@ const styles = StyleSheet.create({
   },
   creatorInfoContainer: {
     flex: 1,
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: 'column',
+    alignItems: 'flex-start',
   },
   creatorEmail: {
     fontSize: 12,
