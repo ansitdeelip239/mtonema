@@ -12,6 +12,7 @@ import {formatDate} from '../../../../utils/dateUtils';
 import GroupBadges from './GroupBadge';
 import {ClientStackParamList} from '../../../../navigator/components/ClientScreenStack';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
+import parseCreatedBy from '../../../../utils/createdByStringParser';
 
 interface ClientCardProps {
   client: Client;
@@ -100,6 +101,21 @@ export const ClientCard: React.FC<ClientCardProps> = ({
             <View style={styles.groupContainer}>
               <Text style={styles.label}>Groups:</Text>
               <GroupBadges groups={client.groups} />
+            </View>
+          )}
+
+          {client.createdBy && (
+            <View style={styles.row}>
+              <Text style={styles.label}>Created By:</Text>
+              <View style={styles.creatorInfoContainer}>
+                <Text style={styles.dateText}>
+                  {parseCreatedBy(client.createdBy).Name}
+                </Text>
+                <Text style={styles.creatorEmail}>
+                  {' '}
+                  ({parseCreatedBy(client.createdBy).Email})
+                </Text>
+              </View>
             </View>
           )}
 
@@ -224,5 +240,14 @@ const styles = StyleSheet.create({
   phoneIcon: {
     width: 20,
     height: 20,
+  },
+  creatorInfoContainer: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  creatorEmail: {
+    fontSize: 12,
+    color: '#888',
   },
 });

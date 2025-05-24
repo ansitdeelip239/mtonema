@@ -240,6 +240,7 @@ export interface Client {
   clientActivityDataModels: ClientActivityDataModel[];
   groups: {id: number; name: string; groupColor: string}[];
   createdOn: string;
+  createdBy: string;
   activity: string;
   status: number;
   followUp?: FollowUp;

@@ -38,7 +38,7 @@ class PartnerService {
         propertyType,
         bhkType,
       }).toString();
-      const response = await api.get<any>(`${url.agentProperties}?${params}`);
+      const response = await api.get<any>(`${url.agentPropertiesNew}?${params}`);
       return response.data;
     } catch (error) {
       console.error('Error in getMasterDetails', error);
@@ -88,7 +88,7 @@ class PartnerService {
         sortDirection,
       }).toString();
       const response = await api.get<ClientResponseModel>(
-        `${url.getClientData}?${params}`,
+        `${url.clients}?${params}`,
       );
       return response;
     } catch (error) {
@@ -114,7 +114,7 @@ class PartnerService {
 
   static async addClient(body: ClientForm) {
     try {
-      const response = await api.post<string | null>(`${url.clients}`, body);
+      const response = await api.post<string | null>(`${url.addClients}`, body);
       return response;
     } catch (error) {
       console.error('Error in addClient', error);
@@ -356,7 +356,7 @@ class PartnerService {
   }
 
   static async getPartnerPropertyByUserId(
-    userId: number,
+    email: string,
     pageNumber: number,
     pageSize: number,
     searchQuery?: string,
@@ -366,6 +366,7 @@ class PartnerService {
   ) {
     try {
       const params = new URLSearchParams({
+        email,
         pageNumber: pageNumber.toString(),
         pageSize: pageSize.toString(),
         ...(searchQuery && {searchQuery}),
@@ -375,7 +376,7 @@ class PartnerService {
       }).toString();
 
       const response = await api.get<PropertiesResponse>(
-        url.getPartnerProperty(userId) + `?${params}`,
+        url.partnerPropertyNew + `?${params}`,
       );
       return response;
     } catch (error) {

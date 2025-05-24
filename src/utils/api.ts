@@ -6,12 +6,12 @@ async function fetchAPI<T>(endpoint: string, options: RequestInit = {}) {
 
   let token: string | null = await AsyncStorage.getItem('token');
 
-  const defaultHeaders = {
+  const defaultHeaders: HeadersInit_ = {
     'Content-Type': 'application/json',
     ...(token && {Authorization: `Bearer ${token}`}),
   };
 
-  const config = {
+  const config: RequestInit = {
     ...options,
     headers: {
       ...defaultHeaders,
@@ -46,7 +46,7 @@ async function fetchAPI<T>(endpoint: string, options: RequestInit = {}) {
 }
 
 interface API {
-  get<T>(endpoint: string): Promise<Response<T>>;
+  get<T>(endpoint: string, headers?: HeadersInit_): Promise<Response<T>>;
   post<T>(endpoint: string, data: any): Promise<Response<T>>;
   put<T>(endpoint: string, data: any): Promise<Response<T>>;
   delete<T>(endpoint: string): Promise<Response<T>>;
@@ -54,7 +54,7 @@ interface API {
 }
 
 export const api: API = {
-  get: <T>(endpoint: string) => fetchAPI<T>(endpoint, {method: 'GET'}),
+  get: <T>(endpoint: string, headers?: HeadersInit_) => fetchAPI<T>(endpoint, {method: 'GET', headers}),
   post: <T>(endpoint: string, data: any) =>
     fetchAPI<T>(endpoint, {
       method: 'POST',

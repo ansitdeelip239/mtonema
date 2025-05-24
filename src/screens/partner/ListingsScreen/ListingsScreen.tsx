@@ -55,7 +55,7 @@ const ListingScreen: React.FC<Props> = ({navigation}) => {
 
   const fetchProperties = useCallback(
     async (page: number, shouldRefresh = false) => {
-      if (!user?.id) {
+      if (!user?.email) {
         return;
       }
       try {
@@ -66,7 +66,7 @@ const ListingScreen: React.FC<Props> = ({navigation}) => {
         }
 
         const response = await PartnerService.getPartnerPropertyByUserId(
-          user.id,
+          user.email,
           page,
           PAGE_SIZE,
           debouncedSearchQuery || undefined, // <-- use debounced value here
@@ -96,7 +96,7 @@ const ListingScreen: React.FC<Props> = ({navigation}) => {
         }
       }
     },
-    [user?.id, debouncedSearchQuery, filters], // <-- use debouncedSearchQuery here
+    [user?.email, debouncedSearchQuery, filters], // <-- use debouncedSearchQuery here
   );
 
   useEffect(() => {

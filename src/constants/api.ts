@@ -2,11 +2,11 @@
 // export let BASE_URL = 'https://devdncrbe.azurewebsites.net';
 // let BASE_URL = 'https://dncrpropertyapi.azurewebsites.net';
 // export let BASE_URL = 'https://freehostingweb.bsite.net';
-// export const BASE_URL =
-//   'https://dncrnewapi-bmbfb6f6awd8b0bd.westindia-01.azurewebsites.net';
-
 export const BASE_URL =
-  'https://mtestatesapi-f0bthnfwbtbxcecu.southindia-01.azurewebsites.net';
+  'https://dncrnewapi-bmbfb6f6awd8b0bd.westindia-01.azurewebsites.net';
+
+// export const BASE_URL =
+//   'https://mtestatesapi-f0bthnfwbtbxcecu.southindia-01.azurewebsites.net';
 
 const url = {
   //Authentication
@@ -49,6 +49,7 @@ const url = {
 
   //Partner
   agentProperties: BASE_URL + '/partners/agent-properties',
+  agentPropertiesNew: BASE_URL + '/partners/agent-properties-New',
   // updateAgentProperty: BASE_URL + '/partner/UpdateAgentProperty',
   getClientData: BASE_URL + '/partners/getclientdata',
   getGroupsByPartnerId: BASE_URL + '/partners/groups',
@@ -56,6 +57,7 @@ const url = {
   // getPartnerProperty: BASE_URL + '/partner-properties',
   deleteAgentProperty: BASE_URL + '/partners/agent-properties',
   clients: BASE_URL + '/partners/clients',
+  addClients: BASE_URL + '/partners/clients-New',
   addEditClientActivity: BASE_URL + '/partners/addeditclient-activity',
   deleteClientActivity: BASE_URL + '/partners/deleteclient-activity',
 
@@ -63,6 +65,7 @@ const url = {
   getPartnerProperty: (userId: number) => {
     return BASE_URL + '/users/' + userId + '/partner-properties';
   },
+  partnerPropertyNew: BASE_URL + '/partners/partner-properties',
   partnerProperty: BASE_URL + '/partners/properties',
   deletePartnerPropertyById: (propertyId: number) => {
     return BASE_URL + '/partner/properties/' + propertyId;

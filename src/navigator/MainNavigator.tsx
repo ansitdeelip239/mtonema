@@ -23,7 +23,7 @@ const MainNavigator = () => {
         <PropertyFormProvider>
           <SellerNavigator />
         </PropertyFormProvider>
-      ) : user?.role === Roles.PARTNER ? (
+      ) : user?.role === Roles.PARTNER || user?.role === Roles.TEAM ? (
         <PartnerProvider>
           <PartnerNavigator />
         </PartnerProvider>

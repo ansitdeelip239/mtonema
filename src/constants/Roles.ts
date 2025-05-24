@@ -3,6 +3,7 @@ export interface RoleTypes {
   PARTNER: 'Partner';
   BUYER: 'Buyer';
   SELLER: 'Seller';
+  TEAM: 'TeamMember';
 }
 
 const Roles: RoleTypes = {
@@ -10,6 +11,7 @@ const Roles: RoleTypes = {
   PARTNER: 'Partner',
   BUYER: 'Buyer',
   SELLER: 'Seller',
+  TEAM: 'TeamMember',
 } as const;
 
 export default Roles;
