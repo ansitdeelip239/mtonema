@@ -78,7 +78,8 @@ const url = {
 
   //Groups
   groups: BASE_URL + '/partners/groups',
-  addGroups: BASE_URL + '/partners/addedit-groups',
+  // addGroups: BASE_URL + '/partners/addedit-groups',
+  addGroups: BASE_URL + '/partners/addedit-groups-New',
 
   //Partner Feedback
   feedback: BASE_URL + '/testimonials/by-createdby',
