@@ -24,7 +24,7 @@ interface HeaderComponentProps {
 const HeaderComponent: React.FC<HeaderComponentProps> = ({
   title,
   onBackPress,
-  showBackButton = true,
+  showBackButton = false,
   rightComponent,
   gradientColors = [Colors.MT_PRIMARY_1, '#1e5799'],
   compact = false, // Default to false for backward compatibility

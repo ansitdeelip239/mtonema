@@ -13,7 +13,8 @@ import {useMaster} from '../../../../context/MasterProvider';
 import FilterOption from '../../../../components/FilterOption';
 import {FilterValues} from '../types';
 import {convertToMasterDetailModel} from '../../../../utils/formUtils';
-import { useTheme } from '../../../../context/ThemeProvider';
+import {useTheme} from '../../../../context/ThemeProvider';
+import {usePartner} from '../../../../context/PartnerProvider';
 
 const FilterModal = ({
   initialFilters,
@@ -26,6 +27,7 @@ const FilterModal = ({
 }) => {
   const [filters, setFilters] = useState<FilterValues>(initialFilters);
   const {masterData} = useMaster();
+  const {cities} = usePartner();
   const {theme} = useTheme();
 
   const fadeAnim = useRef(new Animated.Value(0)).current;
@@ -41,10 +43,10 @@ const FilterModal = ({
     [],
   );
 
-  const cityTypes = useMemo(
-    () => masterData?.ProjectLocation || [],
-    [masterData],
-  );
+  // const cityTypes = useMemo(
+  //   () => masterData?.ProjectLocation || [],
+  //   [masterData],
+  // );
 
   const haveFiltersChanged = useMemo(() => {
     return (
@@ -128,7 +130,10 @@ const FilterModal = ({
             <Text style={styles.modalTitle}>Filter Properties</Text>
             {hasActiveFilters && (
               <TouchableOpacity onPress={handleClearAllFilters}>
-                <Text style={[styles.clearAllText, {color: theme.primaryColor}]}>Clear All</Text>
+                <Text
+                  style={[styles.clearAllText, {color: theme.primaryColor}]}>
+                  Clear All
+                </Text>
               </TouchableOpacity>
             )}
           </View>
@@ -156,7 +161,7 @@ const FilterModal = ({
                 />
                 <FilterOption
                   label="City"
-                  options={cityTypes}
+                  options={cities}
                   selectedValue={filters.city}
                   onSelect={value => handleSelect('city', value)}
                 />

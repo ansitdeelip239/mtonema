@@ -2,11 +2,11 @@
 // export let BASE_URL = 'https://devdncrbe.azurewebsites.net';
 // let BASE_URL = 'https://dncrpropertyapi.azurewebsites.net';
 // export let BASE_URL = 'https://freehostingweb.bsite.net';
-export const BASE_URL =
-  'https://dncrnewapi-bmbfb6f6awd8b0bd.westindia-01.azurewebsites.net';
-
 // export const BASE_URL =
-//   'https://mtestatesapi-f0bthnfwbtbxcecu.southindia-01.azurewebsites.net';
+//   'https://dncrnewapi-bmbfb5f6awd8b0bd.westindia-01.azurewebsites.net';
+
+export const BASE_URL =
+  'https://mtestatesapi-f0bthnfwbtbxcecu.southindia-01.azurewebsites.net';
 
 const url = {
   //Authentication

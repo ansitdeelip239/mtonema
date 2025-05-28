@@ -2,55 +2,46 @@ import React from 'react';
 import {
   View,
   Text,
-  TouchableOpacity,
   StyleSheet,
+  TouchableOpacity,
   Image,
   Platform,
   ScrollView,
 } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {AuthStackParamList} from '../../navigator/AuthNavigator';
-import GetIcon from '../../components/GetIcon';
-import Roles from '../../constants/Roles';
-import Images from '../../constants/Images';
-import {BackgroundWrapper} from '../../components/BackgroundWrapper';
 import Colors from '../../constants/Colors';
+import Images from '../../constants/Images';
+import Roles from '../../constants/Roles';
+import storageKeys from '../../constants/storageKeys';
+import {BackgroundWrapper} from '../../components/BackgroundWrapper';
 import LinearGradient from 'react-native-linear-gradient';
-import {useMaster} from '../../context/MasterProvider';
-import {MasterDetailModel} from '../../types';
 import HeaderComponent from './components/HeaderComponent';
 
-type Props = NativeStackScreenProps<AuthStackParamList, 'MainScreen'>;
+type Props = NativeStackScreenProps<
+  AuthStackParamList,
+  'UserTypeSelectionScreen'
+>;
 
-export const MainScreen: React.FC<Props> = ({navigation}) => {
-  const {masterData} = useMaster();
+const UserTypeSelectionScreen: React.FC<Props> = ({navigation}) => {
+  const handleUserTypeSelection = async (isPartner: boolean) => {
+    try {
+      // Store user type in AsyncStorage
+      await AsyncStorage.setItem(
+        storageKeys.USER_TYPE_KEY,
+        isPartner ? Roles.PARTNER : 'User',
+      );
 
-  // const onPartnerLogin = () => {
-  //   // Partners and admins go to location selection screen
-  //   navigation.navigate('PartnerZoneScreen');
-  // };
-
-  const onBuyerSellerLogin = () => {
-    const individualLocation = masterData?.PartnerLocation?.find(
-      location => location.masterDetailName === 'Individual',
-    );
-
-    navigation.navigate('EmailScreen', {
-      role: [Roles.BUYER, Roles.SELLER],
-      location: individualLocation as MasterDetailModel,
-    });
-  };
-
-  const onBuyerSignup = () => {
-    navigation.navigate('SignUpScreen', {
-      role: Roles.BUYER,
-    });
-  };
-
-  const onSellerSignup = () => {
-    navigation.navigate('SignUpScreen', {
-      role: Roles.SELLER,
-    });
+      // Navigate based on selection
+      if (isPartner) {
+        navigation.replace('PartnerZoneScreen');
+      } else {
+        navigation.replace('MainScreen');
+      }
+    } catch (error) {
+      console.error('Error saving user type:', error);
+    }
   };
 
   return (
@@ -74,78 +65,37 @@ export const MainScreen: React.FC<Props> = ({navigation}) => {
           <View style={styles.cardContainer}>
             <View style={styles.card}>
               <View style={styles.welcomeSection}>
-                {/* Empty section, can be used later */}
+                <Text style={styles.welcomeText}>Welcome!</Text>
+                <Text style={styles.subtitleText}>
+                  Will you be using the app as a Partner?
+                </Text>
               </View>
 
               <View style={styles.section}>
-                <Text style={styles.sectionTitle}>
-                  Already have an account?
-                </Text>
                 <TouchableOpacity
                   style={styles.primaryButton}
-                  onPress={onBuyerSellerLogin}>
+                  onPress={() => handleUserTypeSelection(true)}
+                  activeOpacity={0.8}>
                   <LinearGradient
                     colors={[Colors.MT_PRIMARY_1, '#2c7fb8']}
                     style={styles.gradientButton}>
-                    <Text style={styles.buttonText}>Log In</Text>
+                    <Text style={styles.buttonText}>Yes, I'm a Partner</Text>
                   </LinearGradient>
                 </TouchableOpacity>
               </View>
 
               <View style={styles.section}>
-                <Text style={styles.sectionTitle}>
-                  New here? Create an account!
-                </Text>
-                <TouchableOpacity
-                  style={styles.primaryButton}
-                  onPress={onBuyerSignup}>
-                  <LinearGradient
-                    colors={[Colors.MT_PRIMARY_1, '#2c7fb8']}
-                    style={styles.gradientButton}>
-                    <Text style={styles.buttonText}>Sign Up as Buyer</Text>
-                    <GetIcon iconName="home" color="white" size="20" />
-                  </LinearGradient>
-                </TouchableOpacity>
-              </View>
-
-              <View style={styles.divider} />
-
-              <View style={styles.section}>
-                <Text style={styles.sectionTitle}>
-                  Want to list your property?
-                </Text>
                 <TouchableOpacity
                   style={styles.secondaryButton}
-                  onPress={onSellerSignup}>
+                  onPress={() => handleUserTypeSelection(false)}
+                  activeOpacity={0.8}>
                   <View style={styles.buttonContent}>
-                    <GetIcon
-                      iconName="property"
-                      color={Colors.MT_PRIMARY_1}
-                      size="20"
-                    />
                     <Text style={styles.secondaryButtonText}>
-                      Sign Up as Seller
+                      No, I'm a User
                     </Text>
                   </View>
                 </TouchableOpacity>
               </View>
-
-              {/* <View style={styles.section}>
-                <TouchableOpacity
-                  style={styles.partnerButton}
-                  onPress={onPartnerLogin}>
-                  <LinearGradient
-                    colors={['#3a7bd5', '#00d2ff']}
-                    start={{x: 0, y: 0}}
-                    end={{x: 1, y: 0}}
-                    style={styles.gradientPartnerButton}>
-                    <GetIcon iconName="partner3" color="white" size="24" />
-                    <Text style={styles.partnerButtonText}>
-                      Log In as Partner
-                    </Text>
-                  </LinearGradient>
-                </TouchableOpacity>
-              </View> */}
             </View>
           </View>
         </ScrollView>
@@ -154,7 +104,6 @@ export const MainScreen: React.FC<Props> = ({navigation}) => {
   );
 };
 
-// Update styles to remove header-specific styles
 const styles = StyleSheet.create({
   mainScreen: {
     flex: 1,
@@ -173,16 +122,14 @@ const styles = StyleSheet.create({
     width: '80%',
     height: 160,
   },
-  // New style for App & CRM text
   appCrmText: {
     fontSize: 20,
     fontWeight: '700',
     color: '#333',
     marginTop: 5,
-    marginBottom: 10,
+    marginBottom: 50,
     textAlign: 'center',
     letterSpacing: 1,
-    // Add subtle text shadow for emphasis
     ...Platform.select({
       ios: {
         textShadowColor: 'rgba(0, 0, 0, 0.2)',
@@ -197,8 +144,6 @@ const styles = StyleSheet.create({
       },
     }),
   },
-
-  // Card content styles
   cardContainer: {
     flex: 1,
     paddingHorizontal: 20,
@@ -222,26 +167,22 @@ const styles = StyleSheet.create({
   },
   welcomeSection: {
     alignItems: 'center',
-    marginBottom: 16,
+    marginBottom: 32,
   },
   welcomeText: {
     fontSize: 22,
     fontWeight: 'bold',
     textAlign: 'center',
+    color: '#333',
+    marginBottom: 8,
   },
   subtitleText: {
     fontSize: 16,
     color: '#666',
-    marginTop: 4,
+    textAlign: 'center',
   },
   section: {
     marginBottom: 16,
-  },
-  sectionTitle: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: '#333',
-    marginBottom: 8,
   },
   primaryButton: {
     borderRadius: 15,
@@ -269,11 +210,11 @@ const styles = StyleSheet.create({
     color: 'white',
     fontSize: 17,
     fontWeight: 'bold',
-    marginRight: 8,
   },
   secondaryButton: {
     backgroundColor: 'white',
     borderWidth: 2,
+    borderColor: Colors.MT_PRIMARY_1,
     borderRadius: 15,
     padding: 10,
     ...Platform.select({
@@ -296,40 +237,8 @@ const styles = StyleSheet.create({
   secondaryButtonText: {
     fontSize: 17,
     fontWeight: '600',
-    marginLeft: 10,
-  },
-  divider: {
-    height: 1,
-    backgroundColor: '#e0e0e0',
-    marginVertical: 16,
-    width: '100%',
-  },
-  partnerButton: {
-    borderRadius: 15,
-    overflow: 'hidden',
-    ...Platform.select({
-      ios: {
-        shadowColor: '#000',
-        shadowOffset: {width: 0, height: 4},
-        shadowOpacity: 0.15,
-        shadowRadius: 8,
-      },
-      android: {
-        elevation: 5,
-      },
-    }),
-  },
-  gradientPartnerButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingVertical: 12,
-    borderRadius: 15,
-  },
-  partnerButtonText: {
-    color: 'white',
-    fontSize: 17,
-    fontWeight: 'bold',
-    marginLeft: 12,
+    color: Colors.MT_PRIMARY_1,
   },
 });
+
+export default UserTypeSelectionScreen;

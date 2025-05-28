@@ -17,17 +17,17 @@ import Images from '../../constants/Images';
 import {MasterDetailModel} from '../../types';
 import HeaderComponent from './components/HeaderComponent';
 import LinearGradient from 'react-native-linear-gradient';
+import Roles from '../../constants/Roles';
 
 const {width} = Dimensions.get('window');
 type Props = NativeStackScreenProps<AuthStackParamList, 'PartnerZoneScreen'>;
 
-const PartnerZoneScreen: React.FC<Props> = ({navigation, route}) => {
+const PartnerZoneScreen: React.FC<Props> = ({navigation}) => {
   const {masterData} = useMaster();
-  const roles = route.params.role;
 
   const handleLocationPress = (locationName: MasterDetailModel) => {
     navigation.navigate('EmailScreen', {
-      role: roles,
+      role: [Roles.PARTNER, Roles.TEAM],
       location: locationName,
     });
   };
@@ -90,8 +90,8 @@ const PartnerZoneScreen: React.FC<Props> = ({navigation, route}) => {
     <View style={styles.container}>
       <HeaderComponent
         title="Partner Zone"
-        showBackButton={true}
-        onBackPress={() => navigation.goBack()}
+        // showBackButton={true}
+        // onBackPress={() => navigation.goBack()}
       />
 
       <View style={styles.headerContainer}>

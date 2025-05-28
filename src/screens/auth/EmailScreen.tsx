@@ -226,6 +226,7 @@ const EmailScreen: React.FC<Props> = ({navigation, route}) => {
             ? 'Partner Sign In'
             : 'Buyer/Seller Sign In'
         }
+        showBackButton={true}
         onBackPress={navigation.goBack}
         gradientColors={headerGradientColors}
       />
