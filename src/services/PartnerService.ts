@@ -15,8 +15,16 @@ import {
   FollowUpType,
   Group2Response,
   GroupResponse,
+  User,
 } from '../types';
 import {api} from '../utils/api';
+
+interface AssignClientResponse {
+  clientId: number;
+  removedAssignments: number[];
+  newAssignments: number[];
+  activityAdded: string;
+}
 
 class PartnerService {
   static async getAgentProperties(
@@ -38,7 +46,9 @@ class PartnerService {
         propertyType,
         bhkType,
       }).toString();
-      const response = await api.get<any>(`${url.agentPropertiesNew}?${params}`);
+      const response = await api.get<any>(
+        `${url.agentPropertiesNew}?${params}`,
+      );
       return response.data;
     } catch (error) {
       console.error('Error in getMasterDetails', error);
@@ -88,7 +98,7 @@ class PartnerService {
         sortDirection,
       }).toString();
       const response = await api.get<ClientResponseModel>(
-        `${url.clients}?${params}`,
+        `${url.getClients}?${params}`,
       );
       return response;
     } catch (error) {
@@ -213,12 +223,16 @@ class PartnerService {
     }
   }
 
-  static async getGroupsByEmail(email: string, pageNumber?: number, pageSize?: number) {
+  static async getGroupsByEmail(
+    email: string,
+    pageNumber?: number,
+    pageSize?: number,
+  ) {
     try {
       const params = new URLSearchParams({
         email,
-        ...(pageNumber && { pageNumber: pageNumber.toString() }),
-        ...(pageSize && { pageSize: pageSize.toString() }),
+        ...(pageNumber && {pageNumber: pageNumber.toString()}),
+        ...(pageSize && {pageSize: pageSize.toString()}),
       }).toString();
 
       const response = await api.get<Group2Response>(`${url.groups}?${params}`);
@@ -286,7 +300,12 @@ class PartnerService {
     }
   }
 
-  static async getFollowUpByUserId(userId: number, filter: string, pageNumber: number, pageSize: number) {
+  static async getFollowUpByUserId(
+    userId: number,
+    filter: string,
+    pageNumber: number,
+    pageSize: number,
+  ) {
     try {
       const params = new URLSearchParams({
         userId: userId.toString(),
@@ -347,7 +366,10 @@ class PartnerService {
 
   static async postPartnerProperty(payload: PartnerPropertyApiSubmissionType) {
     try {
-      const response = await api.post<null>(`${url.addPartnerProperty}`, payload);
+      const response = await api.post<null>(
+        `${url.addPartnerProperty}`,
+        payload,
+      );
       return response;
     } catch (error) {
       console.error('Error in postPartnerProperty', error);
@@ -456,6 +478,39 @@ class PartnerService {
       return response;
     } catch (error) {
       console.error('Error in getPartnerCustomerTestimonial', error);
+      throw error;
+    }
+  }
+
+  static async getAssignedUsers(clientId: number) {
+    try {
+      const response = await api.get<number[]>(url.getAssignedUsers(clientId));
+      return response;
+    } catch (error) {
+      console.error('Error in getAssignedUsers', error);
+      throw error;
+    }
+  }
+
+  static async getTeamMembers(email: string) {
+    try {
+      const params = new URLSearchParams({
+        email,
+      }).toString();
+      const response = await api.get<User[]>(url.teamMembers + `?${params}`);
+      return response;
+    } catch (error) {
+      console.error('Error in getTeamMembers', error);
+      throw error;
+    }
+  }
+
+  static async assignClient(payload: {clientId: number; userId: number[]}) {
+    try {
+      const response = await api.post<AssignClientResponse>(url.assignClient, payload);
+      return response;
+    } catch (error) {
+      console.error('Error in assignClient', error);
       throw error;
     }
   }

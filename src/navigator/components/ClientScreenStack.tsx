@@ -4,12 +4,14 @@ import ClientScreen from '../../screens/partner/ClientScreen/ClientScreen';
 import AddClientScreen from '../../screens/partner/ClientScreen/AddClientScreen';
 import ClientProfileScreen from '../../screens/partner/ClientScreen/ClientProfileScreen';
 import { Client } from '../../types';
+import ClientAssignmentScreen from '../../screens/partner/ClientScreen/ClientAssignmentScreen';
 
 // Define the param list type for this stack
 export type ClientStackParamList = {
   ClientScreen: undefined;
   AddClientScreen: {editMode: boolean; clientData?: Client};
   ClientProfileScreen: {clientId: number};
+  ClientAssignmentScreen: {clientId: number, assignedUsers: number[]};
 };
 
 const Stack = createNativeStackNavigator<ClientStackParamList>();
@@ -22,6 +24,7 @@ const ClientScreenStack = () => {
       <Stack.Screen name="ClientScreen" component={ClientScreen} />
       <Stack.Screen name="AddClientScreen" component={AddClientScreen} />
       <Stack.Screen name="ClientProfileScreen" component={ClientProfileScreen} />
+      <Stack.Screen name="ClientAssignmentScreen" component={ClientAssignmentScreen} />
     </Stack.Navigator>
   );
 };

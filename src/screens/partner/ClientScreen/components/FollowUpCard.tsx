@@ -1,15 +1,16 @@
 import React from 'react';
-import {View, Text, TouchableOpacity, StyleSheet} from 'react-native';
+import {View, Text, TouchableOpacity, StyleSheet, ActivityIndicator} from 'react-native';
 import GetIcon from '../../../../components/GetIcon';
 import {Client} from '../../../../types';
 import {formatFollowUpDate, formatTime} from '../../../../utils/dateUtils';
 
 interface FollowUpCardProps {
   client: Client;
+  isLoading?: boolean;
   onPress: () => void;
 }
 
-const FollowUpCard: React.FC<FollowUpCardProps> = ({client, onPress}) => {
+const FollowUpCard: React.FC<FollowUpCardProps> = ({client, isLoading = false, onPress}) => {
   // Helper function to convert UTC date to local time
   const getLocalDate = (dateString: string) => {
     if (!dateString) {
@@ -100,40 +101,54 @@ const FollowUpCard: React.FC<FollowUpCardProps> = ({client, onPress}) => {
         // Add yellow style if time remaining is less than 1 hour
         isLessThanOneHour && styles.lessThanOneHourFollowUpCard,
       ]}
-      onPress={onPress}>
+      onPress={onPress}
+      disabled={isLoading}>
       <View style={styles.followUpHeader}>
-        <Text style={[styles.sectionTitle, isOverdue && styles.overdueText]}>
-          {localFollowUpDate
-            ? isOverdue
-              ? 'Follow Up Overdue'
-              : isToday
-              ? 'Follow Up Today'
-              : `Follow Up in ${getDaysText()}`
-            : isSomedayFollowUp
-            ? 'Follow Up: Someday'
-            : 'No Follow Up Scheduled'}
-        </Text>
-        <View style={styles.scheduleButton}>
-          {hasFollowUp ? (
-            <GetIcon iconName="edit" size={20} color="#0066cc" />
-          ) : (
-            <GetIcon iconName="plus" size={20} color="#0066cc" />
-          )}
-        </View>
+        {isLoading ? (
+          <View style={styles.loadingContainer}>
+            <ActivityIndicator size="small" color="#666" />
+            <Text style={styles.loadingText}>Loading follow-up...</Text>
+          </View>
+        ) : (
+          <>
+            <Text style={[styles.sectionTitle, isOverdue && styles.overdueText]}>
+              {localFollowUpDate
+                ? isOverdue
+                  ? 'Follow Up Overdue'
+                  : isToday
+                  ? 'Follow Up Today'
+                  : `Follow Up in ${getDaysText()}`
+                : isSomedayFollowUp
+                ? 'Follow Up: Someday'
+                : 'No Follow Up Scheduled'}
+            </Text>
+            <View style={styles.scheduleButton}>
+              {hasFollowUp ? (
+                <GetIcon iconName="edit" size={20} color="#0066cc" />
+              ) : (
+                <GetIcon iconName="plus" size={20} color="#0066cc" />
+              )}
+            </View>
+          </>
+        )}
       </View>
-      {localFollowUpDate ? (
-        <View style={styles.followUpDateContainer}>
-          <Text style={[styles.infoValue, isOverdue && styles.overdueText]}>
-            {formatFollowUpDate(localFollowUpDate)}
-          </Text>
-          <Text style={[styles.followUpTime, isOverdue && styles.overdueText]}>
-            {formatTime(localFollowUpDate)}
-          </Text>
-        </View>
-      ) : isSomedayFollowUp ? (
-        <Text style={styles.infoValue}>To be scheduled later</Text>
-      ) : (
-        <Text style={styles.infoValue}>No date set</Text>
+      {!isLoading && (
+        <>
+          {localFollowUpDate ? (
+            <View style={styles.followUpDateContainer}>
+              <Text style={[styles.infoValue, isOverdue && styles.overdueText]}>
+                {formatFollowUpDate(localFollowUpDate)}
+              </Text>
+              <Text style={[styles.followUpTime, isOverdue && styles.overdueText]}>
+                {formatTime(localFollowUpDate)}
+              </Text>
+            </View>
+          ) : isSomedayFollowUp ? (
+            <Text style={styles.infoValue}>To be scheduled later</Text>
+          ) : (
+            <Text style={styles.infoValue}>No date set</Text>
+          )}
+        </>
       )}
     </TouchableOpacity>
   );
@@ -224,6 +239,16 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.15,
     shadowRadius: 4,
     elevation: 4,
+  },
+  loadingContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+    flex: 1,
+  },
+  loadingText: {
+    fontSize: 14,
+    color: '#666',
   },
 });
 

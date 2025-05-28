@@ -1,10 +1,11 @@
+import apiConfig from '../constants/config';
 import {Response} from '../types';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 async function fetchAPI<T>(endpoint: string, options: RequestInit = {}) {
   const url = `${endpoint}`;
 
-  let token: string | null = await AsyncStorage.getItem('token');
+  let token: string | null = await AsyncStorage.getItem('token') || apiConfig.hmacToken;
 
   const defaultHeaders: HeadersInit_ = {
     'Content-Type': 'application/json',

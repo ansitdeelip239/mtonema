@@ -1,12 +1,6 @@
-// let BASE_URL = 'https://dncrpropertyapi.azurewebsites.net'; //Dev Url
-// export let BASE_URL = 'https://devdncrbe.azurewebsites.net';
-// let BASE_URL = 'https://dncrpropertyapi.azurewebsites.net';
-// export let BASE_URL = 'https://freehostingweb.bsite.net';
-// export const BASE_URL =
-//   'https://dncrnewapi-bmbfb5f6awd8b0bd.westindia-01.azurewebsites.net';
+import config from './config';
 
-export const BASE_URL =
-  'https://mtestatesapi-f0bthnfwbtbxcecu.southindia-01.azurewebsites.net';
+export const BASE_URL = config.apiUrl;
 
 const url = {
   //Authentication
@@ -58,6 +52,7 @@ const url = {
   // getPartnerProperty: BASE_URL + '/partner-properties',
   deleteAgentProperty: BASE_URL + '/partners/agent-properties',
   clients: BASE_URL + '/partners/clients',
+  getClients: BASE_URL + '/partners/clients-New',
   addClients: BASE_URL + '/partners/clients-New',
   addEditClientActivity: BASE_URL + '/partners/addeditclient-activity',
   deleteClientActivity: BASE_URL + '/partners/deleteclient-activity',
@@ -72,6 +67,11 @@ const url = {
   deletePartnerPropertyById: (propertyId: number) => {
     return BASE_URL + '/partner/properties/' + propertyId;
   },
+  getAssignedUsers: (clientId: number) => {
+    return BASE_URL + '/clients/' + clientId + '/assigned-users';
+  },
+  teamMembers: BASE_URL + '/teammembers',
+  assignClient: BASE_URL + '/assign-client',
 
   //Partner Follow-ups
   followUps: BASE_URL + '/partners/follow-ups',

@@ -23,7 +23,6 @@ import {useDialog} from '../../../hooks/useDialog';
 import ConfirmationModal from '../../../components/ConfirmationModal';
 import ScheduleFollowUpModal from './components/ScheduleFollowUpModal';
 
-// Import our new components
 import ProfileHeader from './components/ProfileHeader';
 import ContactButtons from './components/ContactButtons';
 import FollowUpCard from './components/FollowUpCard';
@@ -31,8 +30,7 @@ import ContactInfoCard from './components/ContactInfoCard';
 import GroupsCard from './components/GroupsCard';
 import NotesCard from './components/NotesCard';
 import RecentActivitiesCard from './components/RecentActivitiesCard';
-
-// Add import for useMaster
+import AssignedUsersCard from './components/AssignedUsersCard';
 import {useMaster} from '../../../context/MasterProvider';
 
 type Props = NativeStackScreenProps<
@@ -44,6 +42,8 @@ const ClientProfileScreen: React.FC<Props> = ({route, navigation}) => {
   const [client, setClient] = useState<Client | null>(null);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
+  const [followUpLoading, setFollowUpLoading] = useState(false);
+  const [assignedUsersLoading, setAssignedUsersLoading] = useState(false);
   const [visible, setVisible] = useState(false);
   const [isActivityModalVisible, setIsActivityModalVisible] = useState(false);
   const [addingActivity, setAddingActivity] = useState(false);
@@ -54,10 +54,10 @@ const ClientProfileScreen: React.FC<Props> = ({route, navigation}) => {
   const [isDeletingActivity, setIsDeletingActivity] = useState(false);
   const [isFollowUpModalVisible, setIsFollowUpModalVisible] = useState(false);
   const [schedulingFollowUp, setSchedulingFollowUp] = useState(false);
-  // Add this to your existing state variables
   const [preSelectedActivityType, setPreSelectedActivityType] = useState<
     number | null
   >(null);
+  const [assignedUsers, setAssignedUsers] = useState<number[]>([]);
 
   const {clientsUpdated, setClientsUpdated} = usePartner();
   const {keyboardVisible} = useKeyboard();
@@ -66,8 +66,9 @@ const ClientProfileScreen: React.FC<Props> = ({route, navigation}) => {
   // Get activity type master data
   const {masterData} = useMaster();
 
-  const fetchClient = React.useCallback(async () => {
+  const fetchClient = useCallback(async () => {
     try {
+      setLoading(true);
       const response = await PartnerService.getClientById(
         route.params.clientId,
       );
@@ -84,6 +85,7 @@ const ClientProfileScreen: React.FC<Props> = ({route, navigation}) => {
     }
 
     try {
+      setFollowUpLoading(true);
       const response = await PartnerService.getFollowUpDate(
         route.params.clientId,
       );
@@ -99,17 +101,43 @@ const ClientProfileScreen: React.FC<Props> = ({route, navigation}) => {
       }
     } catch (error) {
       showError('Failed to fetch follow-up date');
+    } finally {
+      setFollowUpLoading(false);
     }
   }, [route.params.clientId, navigation, showError]);
+
+  const fetchAssignedUsers = useCallback(async () => {
+    try {
+      setAssignedUsersLoading(true);
+      const response = await PartnerService.getAssignedUsers(
+        route.params.clientId,
+      );
+      if (response.success) {
+        setAssignedUsers(response.data);
+      } else {
+        setAssignedUsers([]);
+      }
+    } catch (error) {
+      console.error('Error in fetchAssignedUsers', error);
+      showError('Failed to fetch assigned users');
+    } finally {
+      setAssignedUsersLoading(false);
+    }
+  }, [route.params.clientId, showError]);
 
   useEffect(() => {
     fetchClient();
   }, [fetchClient, clientsUpdated]);
 
+  useEffect(() => {
+    fetchAssignedUsers();
+  }, [fetchAssignedUsers, clientsUpdated]);
+
   const onRefresh = React.useCallback(() => {
     setRefreshing(true);
     fetchClient();
-  }, [fetchClient]);
+    fetchAssignedUsers();
+  }, [fetchClient, fetchAssignedUsers]);
 
   // Helper function to get activity type ID by name
   const getActivityTypeIdByName = useCallback(
@@ -529,7 +557,19 @@ const ClientProfileScreen: React.FC<Props> = ({route, navigation}) => {
               <View style={styles.infoSection}>
                 <FollowUpCard
                   client={client}
+                  isLoading={followUpLoading}
                   onPress={() => setIsFollowUpModalVisible(true)}
+                />
+
+                <AssignedUsersCard
+                  assignedUsersCount={assignedUsers.length}
+                  isLoading={assignedUsersLoading}
+                  onPress={() => {
+                    navigation.navigate('ClientAssignmentScreen', {
+                      clientId: client.id as number,
+                      assignedUsers: assignedUsers,
+                    });
+                  }}
                 />
 
                 <ContactInfoCard client={client} />
