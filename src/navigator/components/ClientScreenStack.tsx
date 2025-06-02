@@ -5,6 +5,7 @@ import AddClientScreen from '../../screens/partner/ClientScreen/AddClientScreen'
 import ClientProfileScreen from '../../screens/partner/ClientScreen/ClientProfileScreen';
 import { Client } from '../../types';
 import ClientAssignmentScreen from '../../screens/partner/ClientScreen/ClientAssignmentScreen';
+import MessageTemplateScreen from '../../screens/partner/ClientScreen/MessageTemplateScreen';
 
 // Define the param list type for this stack
 export type ClientStackParamList = {
@@ -12,6 +13,7 @@ export type ClientStackParamList = {
   AddClientScreen: {editMode: boolean; clientData?: Client};
   ClientProfileScreen: {clientId: number};
   ClientAssignmentScreen: {clientId: number, assignedUsers: number[]};
+  MessageTemplateScreen: {clientId: number, clientName: string, clientPhone: string, clientWhatsapp: string, clientEmail: string};
 };
 
 const Stack = createNativeStackNavigator<ClientStackParamList>();
@@ -25,6 +27,7 @@ const ClientScreenStack = () => {
       <Stack.Screen name="AddClientScreen" component={AddClientScreen} />
       <Stack.Screen name="ClientProfileScreen" component={ClientProfileScreen} />
       <Stack.Screen name="ClientAssignmentScreen" component={ClientAssignmentScreen} />
+      <Stack.Screen name="MessageTemplateScreen" component={MessageTemplateScreen} />
     </Stack.Navigator>
   );
 };

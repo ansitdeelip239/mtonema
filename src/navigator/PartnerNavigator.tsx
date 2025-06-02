@@ -8,7 +8,7 @@ import GroupsScreen from '../screens/partner/GroupsScreen/GroupsScreen';
 import GetIcon from '../components/GetIcon';
 import PartnerProfileScreen from '../screens/partner/ProfileScreen/ProfileScreen';
 import {useTheme} from '../context/ThemeProvider';
-import ContentScreen from '../screens/partner/ContentScreen/ContentScreen';
+import ContentTemplateScreenStack from './components/ContentTemplateStack';
 
 const Drawer = createDrawerNavigator<PartnerDrawerParamList>();
 
@@ -62,7 +62,7 @@ const PartnerNavigator = () => {
 
       <Drawer.Screen
         name="Content"
-        component={ContentScreen}
+        component={ContentTemplateScreenStack}
         options={{
           headerShown: false,
           // eslint-disable-next-line react/no-unstable-nested-components

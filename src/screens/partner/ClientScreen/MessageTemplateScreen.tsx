@@ -1,31 +1,29 @@
 import React, {useState, useEffect, useCallback} from 'react';
-import {View, StyleSheet, SafeAreaView} from 'react-native';
-import {AnimatedFAB} from 'react-native-paper';
+import {View, StyleSheet, SafeAreaView, Linking} from 'react-native';
+import {NativeStackScreenProps} from '@react-navigation/native-stack';
+import {ClientStackParamList} from '../../../navigator/components/ClientScreenStack';
 import Header from '../../../components/Header';
 import {PartnerDrawerParamList} from '../../../types/navigation';
 import {useAuth} from '../../../hooks/useAuth';
 import {ContentTemplate} from '../../../types';
 import PartnerService from '../../../services/PartnerService';
 import {useDialog} from '../../../hooks/useDialog';
-import {useTheme} from '../../../context/ThemeProvider';
-import ContentHeader from './components/ContentHeader';
-import ContentLoadingIndicator from './components/ContentLoadingIndicator';
-import ContentTemplatesList from './components/ContentTemplateList';
-import GetIcon from '../../../components/GetIcon';
-import {NativeStackScreenProps} from '@react-navigation/native-stack';
-import {ContentTemplateStackParamList} from '../../../navigator/components/ContentTemplateStack';
+import ContentTemplatesList from '../ContentScreen/components/ContentTemplateList';
+import ContentLoadingIndicator from '../ContentScreen/components/ContentLoadingIndicator';
+import ContentHeader from '../ContentScreen/components/ContentHeader';
 
 type Props = NativeStackScreenProps<
-  ContentTemplateStackParamList,
-  'ContentTemplateScreen'
+  ClientStackParamList,
+  'MessageTemplateScreen'
 >;
 
 const PAGE_SIZE = 20;
 
-const ContentScreen: React.FC<Props> = ({navigation}) => {
+const MessageTemplateScreen: React.FC<Props> = ({route, navigation}) => {
+  const {clientName, clientPhone, clientWhatsapp, clientEmail} =
+    route.params;
   const {user} = useAuth();
   const {showError} = useDialog();
-  const {theme} = useTheme();
 
   // State management
   const [contentTemplates, setContentTemplates] = useState<ContentTemplate[]>(
@@ -37,7 +35,6 @@ const ContentScreen: React.FC<Props> = ({navigation}) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [hasNextPage, setHasNextPage] = useState(true);
   const [totalCount, setTotalCount] = useState(0);
-  const [isExtended, setIsExtended] = useState(true);
 
   // Fetch content templates
   const fetchContentTemplates = useCallback(
@@ -107,39 +104,75 @@ const ContentScreen: React.FC<Props> = ({navigation}) => {
     }
   }, [loadingMore, hasNextPage, currentPage, fetchContentTemplates]);
 
-  // Handle scroll for FAB animation
-  const handleScroll = useCallback(
-    ({nativeEvent}: {nativeEvent: {contentOffset: {y: number}}}) => {
-      const currentScrollPosition =
-        Math.floor(nativeEvent?.contentOffset?.y) ?? 0;
-      setIsExtended(currentScrollPosition <= 0);
-    },
-    [],
-  );
+  // Handle template selection
+  const handleTemplatePress = useCallback(
+    (item: ContentTemplate) => {
+      console.log('Template selected:', item.name, item.content);
+      // Replace placeholders in template content
+      let processedContent = item.content;
+      if (clientName) {
+        processedContent = processedContent.replace(/{name}/g, clientName);
+      }
+      if (clientPhone) {
+        processedContent = processedContent.replace(
+          /{phoneNumber}/g,
+          clientPhone,
+        );
+      }
+      if (clientWhatsapp) {
+        processedContent = processedContent.replace(
+          /{whatsappNumber}/g,
+          clientWhatsapp,
+        );
+      }
+      if (clientEmail) {
+        processedContent = processedContent.replace(/{email}/g, clientEmail);
+      }
 
-  // Handle template actions
-  const handleTemplatePress = useCallback((item: ContentTemplate) => {
-    console.log('Template pressed:', item.name);
-  }, []);
+      // Create WhatsApp deep link with prefilled message
+      const whatsappUrl = `whatsapp://send?phone=${clientWhatsapp}&text=${encodeURIComponent(
+        processedContent,
+      )}`;
+      Linking.openURL(whatsappUrl).catch(() => {
+        // Fallback to web WhatsApp if app is not installed
+        const webWhatsappUrl = `https://wa.me/${clientWhatsapp}?text=${encodeURIComponent(
+          processedContent,
+        )}`;
+        Linking.openURL(webWhatsappUrl);
+      });
+      // TODO: Navigate to send message screen with selected template
+      // navigation.navigate('SendMessageScreen', {
+      //   templateId: item.id,
+      //   templateContent: item.content,
+      //   clientId,
+      //   clientName,
+      //   clientPhone,
+      //   clientWhatsapp,
+      //   clientEmail,
+      // });
+    },
+    [clientEmail, clientName, clientPhone, clientWhatsapp],
+  );
 
   const handleTemplateView = useCallback((item: ContentTemplate) => {
     console.log('View template:', item.name);
+    // TODO: Show template preview
   }, []);
 
   const handleTemplateEdit = useCallback((item: ContentTemplate) => {
     console.log('Edit template:', item.name);
+    // TODO: Navigate to edit template screen
   }, []);
-
-  // Handle FAB press
-  const handleAddContent = useCallback(() => {
-    navigation.navigate('AddContentTempleteScreen');
-  }, [navigation]);
 
   // Main loading state
   if (loading && contentTemplates.length === 0) {
     return (
       <SafeAreaView style={styles.container}>
-        <Header<PartnerDrawerParamList> title="Content Templates" />
+        <Header<PartnerDrawerParamList>
+          title="Select Message Template"
+          navigation={navigation}
+          backButton={true}
+        />
         <ContentLoadingIndicator type="initial" />
       </SafeAreaView>
     );
@@ -147,7 +180,11 @@ const ContentScreen: React.FC<Props> = ({navigation}) => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Header<PartnerDrawerParamList> title="Message Templates" />
+      <Header<PartnerDrawerParamList>
+        title="Select Message Template"
+        navigation={navigation}
+        backButton={true}
+      />
 
       <View style={styles.content}>
         <ContentHeader totalCount={totalCount} />
@@ -159,25 +196,9 @@ const ContentScreen: React.FC<Props> = ({navigation}) => {
           loadingMore={loadingMore}
           onRefresh={handleRefresh}
           onLoadMore={handleLoadMore}
-          onScroll={handleScroll}
           onTemplatePress={handleTemplatePress}
           onTemplateView={handleTemplateView}
           onTemplateEdit={handleTemplateEdit}
-        />
-
-        {/* Animated FAB */}
-        <AnimatedFAB
-          // eslint-disable-next-line react/no-unstable-nested-components
-          icon={() => <GetIcon iconName="plus" color="white" size={24} />}
-          label="Add Template"
-          color="white"
-          extended={isExtended}
-          onPress={handleAddContent}
-          visible={true}
-          animateFrom="right"
-          iconMode="static"
-          variant="primary"
-          style={[styles.fab, {backgroundColor: theme.primaryColor}]}
         />
       </View>
     </SafeAreaView>
@@ -192,11 +213,6 @@ const styles = StyleSheet.create({
   content: {
     flex: 1,
   },
-  fab: {
-    bottom: 16,
-    right: 16,
-    position: 'absolute',
-  },
 });
 
-export default ContentScreen;
+export default MessageTemplateScreen;

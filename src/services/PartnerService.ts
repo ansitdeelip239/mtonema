@@ -533,10 +533,31 @@ class PartnerService {
         ...(searchKey && {searchKey}),
       }).toString();
 
-      const response = await api.get<ContentTemplatesData>(`${url.contentTemplates}?${params}`);
+      const response = await api.get<ContentTemplatesData>(
+        `${url.contentTemplates}?${params}`,
+      );
       return response;
     } catch (error) {
       console.error('Error in getContentTemplates', error);
+      throw error;
+    }
+  }
+
+  static async createContentTemplate(
+    userId: number,
+    payload: {
+      name: string;
+      content: string;
+    },
+  ) {
+    try {
+      const response = await api.post<null>(
+        `${url.addContentTemplate(userId)}`,
+        payload,
+      );
+      return response;
+    } catch (error) {
+      console.error('Error in createContentTemplate', error);
       throw error;
     }
   }

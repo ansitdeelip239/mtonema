@@ -13,6 +13,7 @@ interface ContentTemplatesListProps {
   loadingMore: boolean;
   onRefresh: () => void;
   onLoadMore: () => void;
+  onScroll?: (event: any) => void; // Add onScroll prop
   onTemplatePress?: (item: ContentTemplate) => void;
   onTemplateView?: (item: ContentTemplate) => void;
   onTemplateEdit?: (item: ContentTemplate) => void;
@@ -25,6 +26,7 @@ const ContentTemplatesList: React.FC<ContentTemplatesListProps> = ({
   loadingMore,
   onRefresh,
   onLoadMore,
+  onScroll,
   onTemplatePress,
   onTemplateView,
   onTemplateEdit,
@@ -62,6 +64,8 @@ const ContentTemplatesList: React.FC<ContentTemplatesListProps> = ({
       }
       onEndReached={onLoadMore}
       onEndReachedThreshold={0.1}
+      onScroll={onScroll} // Add onScroll prop to FlatList
+      scrollEventThrottle={16} // Add throttling for smooth animation
       showsVerticalScrollIndicator={false}
       contentContainerStyle={[
         styles.listContainer,

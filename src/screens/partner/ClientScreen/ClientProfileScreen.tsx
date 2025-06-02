@@ -7,6 +7,8 @@ import {
   Linking,
   RefreshControl,
   ActivityIndicator,
+  TouchableOpacity,
+  Text,
 } from 'react-native';
 import {ClientStackParamList} from '../../../navigator/components/ClientScreenStack';
 import Header from '../../../components/Header';
@@ -592,6 +594,29 @@ const ClientProfileScreen: React.FC<Props> = ({route, navigation}) => {
         </ScrollView>
       )}
 
+      {/* Fixed Send Quick Response Button - Moved outside ScrollView */}
+      {client && (
+        <View style={styles.fixedButtonContainer}>
+          <TouchableOpacity
+            style={styles.sendResponseButton}
+            onPress={() => {
+              navigation.navigate('MessageTemplateScreen', {
+                clientId: client.id as number,
+                clientName: client.clientName,
+                clientPhone: client.mobileNumber,
+                clientWhatsapp: client.whatsappNumber,
+                clientEmail: client.emailId,
+              });
+            }}
+            activeOpacity={0.7}>
+            <GetIcon iconName="message" size={20} color="white" />
+            <Text style={styles.sendResponseButtonText}>
+              Send Quick Response
+            </Text>
+          </TouchableOpacity>
+        </View>
+      )}
+
       <AddActivityModal
         visible={isActivityModalVisible}
         onClose={() => {
@@ -657,7 +682,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   scrollViewContent: {
-    paddingBottom: 80,
+    paddingBottom: 140, // Keep padding to prevent content from being hidden behind button
   },
   infoSection: {
     padding: 16,
@@ -670,6 +695,36 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#f8f9fa',
+  },
+  sendResponseButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#0066cc',
+    borderRadius: 24,
+    paddingVertical: 12,
+    paddingHorizontal: 24,
+    elevation: 4,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    width: '100%',
+  },
+  sendResponseButtonText: {
+    color: 'white',
+    fontSize: 16,
+    marginLeft: 8,
+    fontWeight: '500',
+  },
+  fixedButtonContainer: {
+    position: 'absolute',
+    bottom: 110, // Positioned above bottom tabs
+    left: 16,
+    right: 16,
   },
 });
 

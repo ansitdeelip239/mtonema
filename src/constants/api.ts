@@ -76,6 +76,9 @@ const url = {
   addGroups: BASE_URL + '/partners/addedit-groups-New',
   feedback: BASE_URL + '/testimonials/by-createdby',
   contentTemplates: BASE_URL + '/partners/content-templates',
+  addContentTemplate: (userId: number) => {
+    return BASE_URL + '/partners/' + userId + '/templates';
+  },
 
   //Admin
   getAllProperties: BASE_URL + '/property/getAllProperty',
