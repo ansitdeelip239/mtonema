@@ -312,3 +312,21 @@ export interface CustomerTestimonial {
   updatedOn: string | null;
   recordStatus: string;
 }
+
+export interface ContentTemplate {
+  id: number;
+  userId: number;
+  userName: string;
+  name: string;
+  content: string;
+  createdBy: number;
+  creatorName: string;
+  createdOn: string;
+  recordStatus: string;
+}
+
+export interface ContentTemplatesData {
+  contentTemplates: ContentTemplate[];
+  totalCount: number;
+  responsePagingModel: PagingModel;
+}

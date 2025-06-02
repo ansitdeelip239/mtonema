@@ -8,6 +8,7 @@ import GroupsScreen from '../screens/partner/GroupsScreen/GroupsScreen';
 import GetIcon from '../components/GetIcon';
 import PartnerProfileScreen from '../screens/partner/ProfileScreen/ProfileScreen';
 import {useTheme} from '../context/ThemeProvider';
+import ContentScreen from '../screens/partner/ContentScreen/ContentScreen';
 
 const Drawer = createDrawerNavigator<PartnerDrawerParamList>();
 
@@ -55,6 +56,18 @@ const PartnerNavigator = () => {
           // eslint-disable-next-line react/no-unstable-nested-components
           drawerIcon: ({color}) => (
             <GetIcon iconName="group" color={color} size="25" />
+          ),
+        }}
+      />
+
+      <Drawer.Screen
+        name="Content"
+        component={ContentScreen}
+        options={{
+          headerShown: false,
+          // eslint-disable-next-line react/no-unstable-nested-components
+          drawerIcon: ({color}) => (
+            <GetIcon iconName="notes" color={color} size="25" />
           ),
         }}
       />

@@ -1,4 +1,4 @@
-import apiConfig from '../constants/config';
+import apiConfig from '../config';
 import {Response} from '../types';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 

@@ -1,4 +1,4 @@
-import config from './config';
+import config from '../config';
 
 export const BASE_URL = config.apiUrl;
 
@@ -56,8 +56,6 @@ const url = {
   addClients: BASE_URL + '/partners/clients-New',
   addEditClientActivity: BASE_URL + '/partners/addeditclient-activity',
   deleteClientActivity: BASE_URL + '/partners/deleteclient-activity',
-
-  //Partner Properties
   getPartnerProperty: (userId: number) => {
     return BASE_URL + '/users/' + userId + '/partner-properties';
   },
@@ -72,17 +70,12 @@ const url = {
   },
   teamMembers: BASE_URL + '/teammembers',
   assignClient: BASE_URL + '/assign-client',
-
-  //Partner Follow-ups
   followUps: BASE_URL + '/partners/follow-ups',
-
-  //Groups
   groups: BASE_URL + '/partners/groups',
   // addGroups: BASE_URL + '/partners/addedit-groups',
   addGroups: BASE_URL + '/partners/addedit-groups-New',
-
-  //Partner Feedback
   feedback: BASE_URL + '/testimonials/by-createdby',
+  contentTemplates: BASE_URL + '/partners/content-templates',
 
   //Admin
   getAllProperties: BASE_URL + '/property/getAllProperty',

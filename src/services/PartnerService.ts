@@ -9,6 +9,7 @@ import {
   Client,
   ClientForm,
   ClientResponseModel,
+  ContentTemplatesData,
   CustomerTestimonialResponse,
   FollowUp,
   FollowUpResponseModel,
@@ -507,10 +508,35 @@ class PartnerService {
 
   static async assignClient(payload: {clientId: number; userId: number[]}) {
     try {
-      const response = await api.post<AssignClientResponse>(url.assignClient, payload);
+      const response = await api.post<AssignClientResponse>(
+        url.assignClient,
+        payload,
+      );
       return response;
     } catch (error) {
       console.error('Error in assignClient', error);
+      throw error;
+    }
+  }
+
+  static async getContentTemplates(
+    userId: number,
+    pageNumber: number,
+    pageSize: number,
+    searchKey?: string,
+  ) {
+    try {
+      const params = new URLSearchParams({
+        userId: userId.toString(),
+        pageNumber: pageNumber.toString(),
+        pageSize: pageSize.toString(),
+        ...(searchKey && {searchKey}),
+      }).toString();
+
+      const response = await api.get<ContentTemplatesData>(`${url.contentTemplates}?${params}`);
+      return response;
+    } catch (error) {
+      console.error('Error in getContentTemplates', error);
       throw error;
     }
   }
