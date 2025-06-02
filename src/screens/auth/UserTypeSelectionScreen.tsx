@@ -91,7 +91,7 @@ const UserTypeSelectionScreen: React.FC<Props> = ({navigation}) => {
                   activeOpacity={0.8}>
                   <View style={styles.buttonContent}>
                     <Text style={styles.secondaryButtonText}>
-                      No, I'm a User
+                      No, I'm a Buyer/Seller
                     </Text>
                   </View>
                 </TouchableOpacity>
