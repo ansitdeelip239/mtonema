@@ -31,7 +31,6 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({children}) => {
 
   const logout = useCallback(async () => {
     try {
-      await AsyncStorage.removeItem('propertyFormData');
       await AuthService.removeUserData();
       await AsyncStorage.removeItem('tokenExpiry');
       await AsyncStorage.removeItem('token');
