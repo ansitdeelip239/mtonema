@@ -12,7 +12,6 @@ import {formatDate} from '../../../../utils/dateUtils';
 import GroupBadges from './GroupBadge';
 import {ClientStackParamList} from '../../../../navigator/components/ClientScreenStack';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
-import parseCreatedBy from '../../../../utils/createdByStringParser';
 
 interface ClientCardProps {
   client: Client;
@@ -108,38 +107,25 @@ export const ClientCard: React.FC<ClientCardProps> = ({
             <View style={styles.row}>
               <Text style={styles.label}>Created By:</Text>
               <View style={styles.creatorInfoContainer}>
-                <Text style={styles.dateText}>
-                  {parseCreatedBy(client.createdBy).Name}
-                </Text>
+                <Text style={styles.dateText}>{client.createdBy.name}</Text>
                 <Text style={styles.creatorEmail}>
-                  ({parseCreatedBy(client.createdBy).Email})
+                  ({client.createdBy.email})
                 </Text>
               </View>
             </View>
           )}
 
-          <View style={styles.activitySection}>
+          {client.lastActivityDate ? (
             <View style={styles.row}>
-              {client.clientActivityDataModels?.length > 0 ? (
-                <>
-                  <Text style={styles.label}>Last Activity:</Text>
-                  <Text style={styles.lastActivity}>
-                    {client.clientActivityDataModels.length > 0 &&
-                      formatDate(
-                        client.clientActivityDataModels.sort(
-                          (a, b) =>
-                            new Date(b.createdOn).getTime() -
-                            new Date(a.createdOn).getTime(),
-                        )[0].createdOn,
-                        'PPpp',
-                      )}
-                  </Text>
-                </>
-              ) : (
-                <Text style={styles.noActivity}>No activities yet</Text>
-              )}
+              <Text style={styles.label}>Last Activity:</Text>
+              <Text style={styles.lastActivity}>{formatDate(client.lastActivityDate, 'dd MMM yy, h:mm a')}</Text>
             </View>
-          </View>
+          ) : (
+            <View style={styles.row}>
+              <Text style={styles.label}>Last Activity:</Text>
+              <Text style={styles.noActivity}>No activity recorded</Text>
+            </View>
+          )}
         </View>
       </View>
     </TouchableOpacity>
@@ -218,14 +204,16 @@ const styles = StyleSheet.create({
     borderTopColor: '#f0f0f0',
   },
   lastActivity: {
-    fontSize: 13,
-    color: '#444',
+    fontSize: 14,
+    color: '#0066cc',
+    fontWeight: '600',
     flex: 1,
   },
   noActivity: {
-    fontSize: 13,
+    fontSize: 14,
     color: '#999',
     fontStyle: 'italic',
+    flex: 1,
   },
   iconContainer: {
     flexDirection: 'row',

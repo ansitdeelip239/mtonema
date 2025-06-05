@@ -74,12 +74,12 @@ const UserTypeSelectionScreen: React.FC<Props> = ({navigation}) => {
               <View style={styles.section}>
                 <TouchableOpacity
                   style={styles.primaryButton}
-                  onPress={() => handleUserTypeSelection(true)}
+                  onPress={() => handleUserTypeSelection(false)}
                   activeOpacity={0.8}>
                   <LinearGradient
                     colors={[Colors.MT_PRIMARY_1, '#2c7fb8']}
                     style={styles.gradientButton}>
-                    <Text style={styles.buttonText}>Yes, I'm a Partner</Text>
+                    <Text style={styles.buttonText}>No, I'm a Buyer/Seller</Text>
                   </LinearGradient>
                 </TouchableOpacity>
               </View>
@@ -87,11 +87,11 @@ const UserTypeSelectionScreen: React.FC<Props> = ({navigation}) => {
               <View style={styles.section}>
                 <TouchableOpacity
                   style={styles.secondaryButton}
-                  onPress={() => handleUserTypeSelection(false)}
+                  onPress={() => handleUserTypeSelection(true)}
                   activeOpacity={0.8}>
                   <View style={styles.buttonContent}>
                     <Text style={styles.secondaryButtonText}>
-                      No, I'm a Buyer/Seller
+                      Yes, I'm a Partner
                     </Text>
                   </View>
                 </TouchableOpacity>

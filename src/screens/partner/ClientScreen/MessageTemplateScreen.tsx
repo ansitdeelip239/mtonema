@@ -11,6 +11,7 @@ import {useDialog} from '../../../hooks/useDialog';
 import ContentTemplatesList from '../ContentScreen/components/ContentTemplateList';
 import ContentLoadingIndicator from '../ContentScreen/components/ContentLoadingIndicator';
 import ContentHeader from '../ContentScreen/components/ContentHeader';
+import { useFocusEffect } from '@react-navigation/native';
 
 type Props = NativeStackScreenProps<
   ClientStackParamList,
@@ -20,8 +21,7 @@ type Props = NativeStackScreenProps<
 const PAGE_SIZE = 20;
 
 const MessageTemplateScreen: React.FC<Props> = ({route, navigation}) => {
-  const {clientName, clientPhone, clientWhatsapp, clientEmail} =
-    route.params;
+  const {clientName, clientPhone, clientWhatsapp, clientEmail} = route.params;
   const {user} = useAuth();
   const {showError} = useDialog();
 
@@ -163,6 +163,27 @@ const MessageTemplateScreen: React.FC<Props> = ({route, navigation}) => {
     console.log('Edit template:', item.name);
     // TODO: Navigate to edit template screen
   }, []);
+
+  // Hide bottom tabs when this screen is focused
+  useFocusEffect(
+    useCallback(() => {
+      const parent = navigation.getParent();
+      if (parent) {
+        parent.setOptions({
+          tabBarStyle: {display: 'none'},
+        });
+      }
+
+      return () => {
+        const parentNavigator = navigation.getParent();
+        if (parentNavigator) {
+          parentNavigator.setOptions({
+            tabBarStyle: {display: 'flex'},
+          });
+        }
+      };
+    }, [navigation]),
+  );
 
   // Main loading state
   if (loading && contentTemplates.length === 0) {

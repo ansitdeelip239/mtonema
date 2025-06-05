@@ -12,7 +12,6 @@ import {PartnerDrawerParamList} from '../../../types/navigation';
 import Header from '../../../components/Header';
 import {useClientData} from '../../../hooks/useClientData';
 import {ClientCard} from './components/ClientCard';
-import Colors from '../../../constants/Colors';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {ClientStackParamList} from '../../../navigator/components/ClientScreenStack';
 import SearchHeader from '../../../components/SearchHeader';
@@ -26,6 +25,7 @@ import {usePartner} from '../../../context/PartnerProvider';
 import PartnerService from '../../../services/PartnerService';
 import {useAuth} from '../../../hooks/useAuth';
 import GetIcon from '../../../components/GetIcon';
+import FilterDrawer from './components/FilterDrawer';
 
 type Props = NativeStackScreenProps<ClientStackParamList, 'ClientScreen'>;
 
@@ -39,10 +39,12 @@ const ClientScreen: React.FC<Props> = ({navigation}) => {
     onRefresh,
     handleSearch,
     loadMoreClients,
-    handleSort,
+    handleFilterChange,
     sortDirection,
+    sortBy,
   } = useClientData();
   const [isSearching, setIsSearching] = useState(false);
+  const [isFilterDrawerVisible, setIsFilterDrawerVisible] = useState(false);
   const {theme} = useTheme();
   const {masterData} = useMaster();
   const {setClientsUpdated} = usePartner();
@@ -110,8 +112,6 @@ const ClientScreen: React.FC<Props> = ({navigation}) => {
     setAddingActivity(true);
 
     try {
-      // Here you would make the API call to add the activity
-      // Example:
       await PartnerService.addEditClientActivity(
         type,
         clientId,
@@ -119,7 +119,6 @@ const ClientScreen: React.FC<Props> = ({navigation}) => {
         user?.email as string,
       );
 
-      // Update UI
       setClientsUpdated(true);
       Toast.show({
         type: 'success',
@@ -127,7 +126,6 @@ const ClientScreen: React.FC<Props> = ({navigation}) => {
         text2: 'Activity added successfully',
       });
 
-      // Close modal and reset state
       setIsActivityModalVisible(false);
       setSelectedClient(null);
       setPreSelectedActivityType(null);
@@ -216,7 +214,7 @@ const ClientScreen: React.FC<Props> = ({navigation}) => {
       <Header<PartnerDrawerParamList>
         title="Clients"
         gradientColors={headerGradientColors}
-        compact={true}>
+        >
         <TouchableOpacity
           style={[styles.addButton, {backgroundColor: theme.secondaryColor}]}
           onPress={() => {
@@ -226,7 +224,7 @@ const ClientScreen: React.FC<Props> = ({navigation}) => {
         </TouchableOpacity>
       </Header>
 
-      {/* Search and sort row */}
+      {/* Search and filter row */}
       <View style={styles.searchSortContainer}>
         <View style={styles.searchContainer}>
           <SearchHeader
@@ -235,13 +233,9 @@ const ClientScreen: React.FC<Props> = ({navigation}) => {
           />
         </View>
         <TouchableOpacity
-          style={[styles.sortButton, {backgroundColor: theme.secondaryColor}]}
-          onPress={handleSort}>
-          {sortDirection === 'asc' ? (
-            <GetIcon iconName="descending" color="#fff" />
-          ) : (
-            <GetIcon iconName="ascending" color="#fff" />
-          )}
+          style={[styles.filterButton, {backgroundColor: theme.secondaryColor}]}
+          onPress={() => setIsFilterDrawerVisible(true)}>
+          <GetIcon iconName="filter" color="#fff" />
         </TouchableOpacity>
       </View>
 
@@ -263,6 +257,15 @@ const ClientScreen: React.FC<Props> = ({navigation}) => {
           initialActivityType={preSelectedActivityType}
         />
       )}
+
+      {/* Filter Drawer */}
+      <FilterDrawer
+        visible={isFilterDrawerVisible}
+        onClose={() => setIsFilterDrawerVisible(false)}
+        sortBy={sortBy}
+        sortDirection={sortDirection}
+        onFilterChange={handleFilterChange}
+      />
     </View>
   );
 };
@@ -311,22 +314,6 @@ const styles = StyleSheet.create({
     flex: 1,
     // marginRight: 12,
   },
-  searchInput: {
-    backgroundColor: 'white',
-    borderRadius: 50,
-    elevation: 5,
-    height: 50,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.15,
-    shadowRadius: 4,
-  },
-  searchInputText: {
-    color: Colors.placeholderColor,
-  },
   footerLoader: {
     flexDirection: 'row',
     justifyContent: 'center',
@@ -361,7 +348,7 @@ const styles = StyleSheet.create({
     paddingRight: 10,
     paddingTop: 10,
   },
-  sortButton: {
+  filterButton: {
     width: 46,
     height: 46,
     borderRadius: 23,

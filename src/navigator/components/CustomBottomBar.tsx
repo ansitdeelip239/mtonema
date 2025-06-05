@@ -31,7 +31,16 @@ export const CustomBottomBar = <T extends ParamListBase>({
   const {keyboardVisible} = useKeyboard();
   const {theme} = useTheme();
 
-  if (keyboardVisible) {
+  // Check if any screen has tabBarStyle display: 'none'
+  const isTabBarHidden = Object.values(descriptors).some(
+    descriptor =>
+      typeof descriptor.options.tabBarStyle === 'object' &&
+      descriptor.options.tabBarStyle !== null &&
+      'display' in descriptor.options.tabBarStyle &&
+      descriptor.options.tabBarStyle.display === 'none',
+  );
+
+  if (keyboardVisible || isTabBarHidden) {
     return null;
   }
 

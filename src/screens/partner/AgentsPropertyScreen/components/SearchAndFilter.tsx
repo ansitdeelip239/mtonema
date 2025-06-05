@@ -5,6 +5,7 @@ import {FilterValues} from '../../../../types';
 import Colors from '../../../../constants/Colors';
 import FilterModal from './FilterModal';
 import GetIcon from '../../../../components/GetIcon';
+import { useTheme } from '../../../../context/ThemeProvider';
 
 const SearchAndFilter = ({
   initialFilters,
@@ -19,6 +20,8 @@ const SearchAndFilter = ({
 }) => {
   const [searchText, setSearchText] = useState('');
   const [modalVisible, setModalVisible] = useState(false);
+
+  const {theme} = useTheme();
 
   return (
     <View style={styles.container}>
@@ -48,9 +51,9 @@ const SearchAndFilter = ({
         />
       </View>
       <TouchableOpacity
-        style={styles.filterButton}
+        style={[styles.filterButton, {backgroundColor: theme.secondaryColor}]}
         onPress={() => setModalVisible(!modalVisible)}>
-          <GetIcon iconName="filter" color={Colors.black} size="24" />
+          <GetIcon iconName="filter" color={Colors.white} size="20" />
       </TouchableOpacity>
       <Modal
         visible={modalVisible}
@@ -99,9 +102,8 @@ const styles = StyleSheet.create({
     color: Colors.placeholderColor,
   },
   filterButton: {
-    backgroundColor: 'white',
-    width: 50,
-    height: 50,
+    width: 46,
+    height: 46,
     borderRadius: 24,
     elevation: 5,
     justifyContent: 'center',

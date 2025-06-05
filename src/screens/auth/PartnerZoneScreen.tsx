@@ -23,7 +23,7 @@ const {width} = Dimensions.get('window');
 type Props = NativeStackScreenProps<AuthStackParamList, 'PartnerZoneScreen'>;
 
 const PartnerZoneScreen: React.FC<Props> = ({navigation}) => {
-  const {masterData} = useMaster();
+  const {masterData, isLoading} = useMaster();
 
   const handleLocationPress = (locationName: MasterDetailModel) => {
     navigation.navigate('EmailScreen', {
@@ -105,7 +105,7 @@ const PartnerZoneScreen: React.FC<Props> = ({navigation}) => {
         </Text>
       </View>
 
-      {!masterData || !masterData.PartnerLocation ? (
+      {isLoading || !masterData || !masterData.PartnerLocation ? (
         <View style={styles.loadingContainer}>
           <ActivityIndicator size="large" color={Colors.MT_PRIMARY_1} />
           <Text style={styles.loadingText}>Loading locations...</Text>

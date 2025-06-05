@@ -52,7 +52,7 @@ const url = {
   // getPartnerProperty: BASE_URL + '/partner-properties',
   deleteAgentProperty: BASE_URL + '/partners/agent-properties',
   clients: BASE_URL + '/partners/clients',
-  getClients: BASE_URL + '/partners/clients-New',
+  getClients: BASE_URL + '/partners/clients-data-new',
   addClients: BASE_URL + '/partners/clients-New',
   addEditClientActivity: BASE_URL + '/partners/addeditclient-activity',
   deleteClientActivity: BASE_URL + '/partners/deleteclient-activity',

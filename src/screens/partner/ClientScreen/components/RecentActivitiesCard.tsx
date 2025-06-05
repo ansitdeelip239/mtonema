@@ -6,7 +6,7 @@ import GetIcon from '../../../../components/GetIcon';
 import {useTheme} from '../../../../context/ThemeProvider';
 
 interface RecentActivitiesCardProps {
-  activities: ClientActivityDataModel[];
+  activities?: ClientActivityDataModel[];
   onAddActivity: () => void;
   onActivityPress: (activity: ClientActivityDataModel) => void;
 }

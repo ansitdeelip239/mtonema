@@ -11,6 +11,7 @@ export const useClientData = () => {
   const [error, setError] = useState<string | null>(null);
   const [refreshing, setRefreshing] = useState(false);
   const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('desc');
+  const [sortBy, setSortBy] = useState<'createdOn' | 'activity'>('createdOn');
   const [paging, setPaging] = useState<PagingModel>({
     currentPage: 1,
     pageSize: 20,
@@ -20,31 +21,44 @@ export const useClientData = () => {
     previousPage: false,
   });
 
-  // Use ref to track sort direction changes without affecting dependencies
+  // Use ref to track sort parameters changes without affecting dependencies
   const sortDirectionRef = useRef(sortDirection);
+  const sortByRef = useRef(sortBy);
   // Track if sort was manually triggered
   const manualSortRef = useRef(false);
 
   const {user} = useAuth();
   const {clientsUpdated} = usePartner();
 
-  // Update ref when sortDirection state changes
+  // Update refs when sort parameters change
   useEffect(() => {
     sortDirectionRef.current = sortDirection;
   }, [sortDirection]);
 
+  useEffect(() => {
+    sortByRef.current = sortBy;
+  }, [sortBy]);
+
   const fetchClients = useCallback(
-    async (page: number = 1, search?: string, sort?: 'asc' | 'desc') => {
+    async (
+      page: number = 1,
+      search?: string,
+      sort?: 'asc' | 'desc',
+      sortByParam?: 'createdOn' | 'activity',
+    ) => {
       setError(null);
       try {
-        // Use the provided sort direction or the current ref value
+        // Use the provided parameters or the current ref values
         const currentSort = sort || sortDirectionRef.current;
+        const currentSortBy = sortByParam || sortByRef.current;
+
         const response = await PartnerService.getClientData(
-          user?.email || '',
+          user?.id || 0,
           page,
           paging.pageSize,
           search,
           currentSort,
+          currentSortBy,
         );
 
         if (page === 1) {
@@ -61,7 +75,7 @@ export const useClientData = () => {
         setError('Failed to fetch clients');
       }
     },
-    [user?.email, paging.pageSize],
+    [user?.id, paging.pageSize],
   );
 
   const handleSearch = useCallback(
@@ -71,25 +85,28 @@ export const useClientData = () => {
     [fetchClients],
   );
 
-  const handleSort = useCallback(async () => {
-    // Set flag to prevent duplicate fetches
-    manualSortRef.current = true;
+  const handleFilterChange = useCallback(
+    async (newSortBy: 'createdOn' | 'activity', newSortDirection: 'asc' | 'desc') => {
+      // Set flag to prevent duplicate fetches
+      manualSortRef.current = true;
 
-    const newSortDirection = sortDirection === 'asc' ? 'desc' : 'asc';
-    setSortDirection(newSortDirection);
-    setClients([]); // Clear clients for better UX
-    setIsLoading(true);
+      setSortBy(newSortBy);
+      setSortDirection(newSortDirection);
+      setClients([]); // Clear clients for better UX
+      setIsLoading(true);
 
-    try {
-      await fetchClients(1, undefined, newSortDirection);
-    } finally {
-      setIsLoading(false);
-      // Reset flag after fetch completes
-      setTimeout(() => {
-        manualSortRef.current = false;
-      }, 100);
-    }
-  }, [sortDirection, fetchClients]);
+      try {
+        await fetchClients(1, undefined, newSortDirection, newSortBy);
+      } finally {
+        setIsLoading(false);
+        // Reset flag after fetch completes
+        setTimeout(() => {
+          manualSortRef.current = false;
+        }, 100);
+      }
+    },
+    [fetchClients],
+  );
 
   const loadMoreClients = useCallback(async () => {
     if (paging.nextPage && !isLoadingMore) {
@@ -122,10 +139,11 @@ export const useClientData = () => {
     error,
     refreshing,
     sortDirection,
+    sortBy,
     fetchClients,
     onRefresh,
     handleSearch,
-    handleSort,
+    handleFilterChange,
     loadMoreClients,
   };
 };

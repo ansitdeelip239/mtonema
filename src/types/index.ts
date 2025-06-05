@@ -238,11 +238,15 @@ export interface Client {
   whatsappNumber: string;
   emailId: string;
   notes: string;
-  clientActivityDataModels: ClientActivityDataModel[];
+  clientActivityDataModels?: ClientActivityDataModel[];
   groups: {id: number; name: string; groupColor: string}[];
   createdOn: string;
-  createdBy: string;
-  activity: string;
+  createdBy: {
+    id: number;
+    name: string;
+    email: string;
+  };
+  lastActivityDate: string;
   status: number;
   followUp?: FollowUp;
 }

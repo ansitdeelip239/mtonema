@@ -1,5 +1,6 @@
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import React, {useEffect, useState, useCallback} from 'react';
+import {useFocusEffect} from '@react-navigation/native';
 import {
   View,
   StyleSheet,
@@ -494,6 +495,27 @@ const ClientProfileScreen: React.FC<Props> = ({route, navigation}) => {
     }
   };
 
+  // Hide bottom tabs when this screen is focused
+  useFocusEffect(
+    useCallback(() => {
+      const parent = navigation.getParent();
+      if (parent) {
+        parent.setOptions({
+          tabBarStyle: {display: 'none'},
+        });
+      }
+
+      return () => {
+        const parentNavigator = navigation.getParent();
+        if (parentNavigator) {
+          parentNavigator.setOptions({
+            tabBarStyle: {display: 'flex'},
+          });
+        }
+      };
+    }, [navigation]),
+  );
+
   return (
     <View style={styles.container}>
       <Header
@@ -682,7 +704,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   scrollViewContent: {
-    paddingBottom: 140, // Keep padding to prevent content from being hidden behind button
+    paddingBottom: 50,
   },
   infoSection: {
     padding: 16,
@@ -722,7 +744,7 @@ const styles = StyleSheet.create({
   },
   fixedButtonContainer: {
     position: 'absolute',
-    bottom: 110, // Positioned above bottom tabs
+    bottom: 20, // Changed from 110 to 20 since tabs are hidden
     left: 16,
     right: 16,
   },

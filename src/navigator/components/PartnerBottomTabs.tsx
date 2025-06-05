@@ -55,7 +55,7 @@ const tabScreens: Array<TabScreen<PartnerBottomTabParamList>> = [
 const PartnerBottomTabs = () => {
   // Get theme from context
   const {theme} = useTheme();
-  
+
   return (
     <Tab.Navigator
       initialRouteName="FollowUp"
@@ -78,7 +78,10 @@ const PartnerBottomTabs = () => {
             tabBarLabel: label, // Use the custom label if provided
             // eslint-disable-next-line react/no-unstable-nested-components
             tabBarIcon: ({focused, color}) => (
-              <GetIcon iconName={icon} color={focused ? theme.primaryColor : color} />
+              <GetIcon
+                iconName={icon}
+                color={focused ? theme.primaryColor : color}
+              />
             ),
           }}
           listeners={listeners}

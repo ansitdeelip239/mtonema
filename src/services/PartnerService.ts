@@ -84,19 +84,21 @@ class PartnerService {
   }
 
   static async getClientData(
-    partnerId: string,
+    id: number,
     pageNumber: number,
     pageSize: number,
     searchKey?: string,
     sortDirection: 'asc' | 'desc' = 'desc',
+    sortBy: 'createdOn' | 'activity' = 'createdOn',
   ) {
     try {
       const params = new URLSearchParams({
-        partnerId,
+        userIds: id.toString(),
         pageNumber: pageNumber.toString(),
         pageSize: pageSize.toString(),
-        SearchKey: searchKey || '',
+        searchKey: searchKey || '',
         sortDirection,
+        sortBy,
       }).toString();
       const response = await api.get<ClientResponseModel>(
         `${url.getClients}?${params}`,
