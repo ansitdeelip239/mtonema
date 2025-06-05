@@ -9,7 +9,7 @@ import {
   Alert,
   ActivityIndicator,
 } from 'react-native';
-import React, {useState, useCallback} from 'react';
+import React, {useState, useCallback, useEffect} from 'react';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {ContentTemplateStackParamList} from '../../../navigator/components/ContentTemplateStack';
 import Header from '../../../components/Header';
@@ -17,23 +17,34 @@ import {PartnerDrawerParamList} from '../../../types/navigation';
 import {useTheme} from '../../../context/ThemeProvider';
 import {useAuth} from '../../../hooks/useAuth';
 import {useDialog} from '../../../hooks/useDialog';
-import GetIcon from '../../../components/GetIcon';
 import Toast from 'react-native-toast-message';
 import PartnerService from '../../../services/PartnerService';
+import {usePartner} from '../../../context/PartnerProvider';
 
 type Props = NativeStackScreenProps<
   ContentTemplateStackParamList,
   'AddContentTempleteScreen'
 >;
 
-const AddContentScreen: React.FC<Props> = ({navigation}) => {
+const AddContentScreen: React.FC<Props> = ({navigation, route}) => {
+  // Get params from route
+  const {editMode = false, templateData} = route.params || {};
+
   const {theme} = useTheme();
   const {user} = useAuth();
   const {showError} = useDialog();
+  const {setMessageTemplateUpdated} = usePartner();
 
   const [templateName, setTemplateName] = useState('');
   const [content, setContent] = useState('');
   const [saving, setSaving] = useState(false);
+
+  useEffect(() => {
+    if (editMode && templateData) {
+      setTemplateName(templateData.name);
+      setContent(templateData.content);
+    }
+  }, [editMode, templateData]);
 
   // Insert variable at cursor position
   const insertVariable = useCallback((variable: string) => {
@@ -59,35 +70,54 @@ const AddContentScreen: React.FC<Props> = ({navigation}) => {
     try {
       setSaving(true);
 
-      // TODO: Add the actual API call for creating content template
-      // const response = await PartnerService.createContentTemplate({
-      //   name: templateName.trim(),
-      //   content: content.trim(),
-      //   userId: user.id,
-      // });o
+      let response;
 
-      // Simulate API call for now
-
-      const response = await PartnerService.createContentTemplate(user.id, {
-        name: templateName.trim(),
-        content: content.trim(),
-      });
+      if (editMode && templateData) {
+        response = await PartnerService.updateContentTemplate(
+          user.id,
+          templateData.id,
+          {
+            name: templateName.trim(),
+            content: content.trim(),
+          },
+        );
+      } else {
+        response = await PartnerService.createContentTemplate(user.id, {
+          name: templateName.trim(),
+          content: content.trim(),
+        });
+      }
 
       if (response.success) {
         Toast.show({
           type: 'success',
-          text1: 'Template Created',
-          text2: 'Your message template has been saved successfully.',
+          text1: editMode ? 'Template Updated' : 'Template Created',
+          text2: editMode
+            ? 'Your message template has been updated successfully.'
+            : 'Your message template has been saved successfully.',
         });
+        setMessageTemplateUpdated(prev => !prev);
         navigation.goBack();
       }
     } catch (error) {
-      console.error('Error creating template:', error);
-      showError('Failed to create template');
+      console.error(
+        `Error ${editMode ? 'updating' : 'creating'} template:`,
+        error,
+      );
+      showError(`Failed to ${editMode ? 'update' : 'create'} template`);
     } finally {
       setSaving(false);
     }
-  }, [templateName, content, user?.id, showError, navigation]);
+  }, [
+    templateName,
+    content,
+    user?.id,
+    showError,
+    navigation,
+    editMode,
+    templateData,
+    setMessageTemplateUpdated,
+  ]);
 
   const handleCancel = useCallback(() => {
     if (templateName.trim() || content.trim()) {
@@ -112,15 +142,26 @@ const AddContentScreen: React.FC<Props> = ({navigation}) => {
   const variables = [
     {id: 'name', variable: '{name}', description: 'Client name'},
     {id: 'phone', variable: '{phone}', description: 'Phone number'},
+    {
+      id: 'whatsapp_number',
+      variable: '{whatsapp_number}',
+      description: 'Whatsapp number',
+    },
     {id: 'email', variable: '{email}', description: 'Email address'},
     {id: 'sender_name', variable: '{sender_name}', description: 'Your name'},
-    {id: 'company', variable: '{company}', description: 'Company name'},
+    {id: 'sender_email', variable: '{sender_email}', description: 'Your email'},
+    {
+      id: 'sender_address',
+      variable: '{sender_address}',
+      description: 'Your address',
+    },
+    {id: 'sender_phone', variable: '{sender_phone}', description: 'Your phone'},
   ];
 
   return (
     <SafeAreaView style={styles.container}>
       <Header<PartnerDrawerParamList>
-        title="Add Message Template"
+        title={editMode ? 'Edit Message Template' : 'Add Message Template'}
         backButton={true}
         onBackPress={handleCancel}
       />
@@ -222,12 +263,15 @@ const AddContentScreen: React.FC<Props> = ({navigation}) => {
           {saving ? (
             <>
               <ActivityIndicator size="small" color="white" />
-              <Text style={styles.saveButtonText}>Saving...</Text>
+              <Text style={styles.saveButtonText}>
+                {editMode ? 'Updating...' : 'Saving...'}
+              </Text>
             </>
           ) : (
             <>
-              <GetIcon iconName="checkmark" size={16} color="white" />
-              <Text style={styles.saveButtonText}>Save Template</Text>
+              <Text style={styles.saveButtonText}>
+                {editMode ? 'Update Template' : 'Save Template'}
+              </Text>
             </>
           )}
         </TouchableOpacity>

@@ -14,6 +14,7 @@ import ContentTemplatesList from './components/ContentTemplateList';
 import GetIcon from '../../../components/GetIcon';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {ContentTemplateStackParamList} from '../../../navigator/components/ContentTemplateStack';
+import { usePartner } from '../../../context/PartnerProvider';
 
 type Props = NativeStackScreenProps<
   ContentTemplateStackParamList,
@@ -26,6 +27,7 @@ const ContentScreen: React.FC<Props> = ({navigation}) => {
   const {user} = useAuth();
   const {showError} = useDialog();
   const {theme} = useTheme();
+  const {messageTemplateUpdated} = usePartner();
 
   // State management
   const [contentTemplates, setContentTemplates] = useState<ContentTemplate[]>(
@@ -90,7 +92,7 @@ const ContentScreen: React.FC<Props> = ({navigation}) => {
   // Initial load
   useEffect(() => {
     fetchContentTemplates(1);
-  }, [fetchContentTemplates]);
+  }, [fetchContentTemplates, messageTemplateUpdated]);
 
   // Handle refresh
   const handleRefresh = useCallback(() => {
@@ -127,12 +129,17 @@ const ContentScreen: React.FC<Props> = ({navigation}) => {
   }, []);
 
   const handleTemplateEdit = useCallback((item: ContentTemplate) => {
-    console.log('Edit template:', item.name);
-  }, []);
+    navigation.navigate('AddContentTempleteScreen', {
+      editMode: true,
+      templateData: item,
+    });
+  }, [navigation]);
 
   // Handle FAB press
   const handleAddContent = useCallback(() => {
-    navigation.navigate('AddContentTempleteScreen');
+    navigation.navigate('AddContentTempleteScreen', {
+      editMode: false,
+    });
   }, [navigation]);
 
   // Main loading state

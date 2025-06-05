@@ -79,6 +79,9 @@ const url = {
   addContentTemplate: (userId: number) => {
     return BASE_URL + '/partners/' + userId + '/templates';
   },
+  updateContentTemplate: (userId: number, templateId: number) => {
+    return BASE_URL + '/partners/' + userId + '/templates/' + templateId;
+  },
 
   //Admin
   getAllProperties: BASE_URL + '/property/getAllProperty',

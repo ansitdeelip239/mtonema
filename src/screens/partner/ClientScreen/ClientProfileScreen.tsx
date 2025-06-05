@@ -501,7 +501,7 @@ const ClientProfileScreen: React.FC<Props> = ({route, navigation}) => {
   useFocusEffect(
     useCallback(() => {
       hideBottomTabs();
-      
+
       return () => {
         showBottomTabs();
       };
@@ -614,7 +614,7 @@ const ClientProfileScreen: React.FC<Props> = ({route, navigation}) => {
           <TouchableOpacity
             style={styles.sendResponseButton}
             onPress={() => {
-              navigation.navigate('MessageTemplateScreen', {
+              navigation.navigate('ChooseMessageTypeScreen', {
                 clientId: client.id as number,
                 clientName: client.clientName,
                 clientPhone: client.mobileNumber,

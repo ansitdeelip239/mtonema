@@ -61,6 +61,7 @@ export type IconEnum =
   | 'ascending'
   | 'descending'
   | 'meeting'
+  | 'email'
   | 'userPlus';
 
 type IconProps = {
@@ -130,6 +131,7 @@ const GetIcon = ({iconName, color, size}: IconProps) => {
     ascending: require('../assets/Icon/ascending.png'),
     descending: require('../assets/Icon/descending.png'),
     meeting: require('../assets/Icon/meeting.png'),
+    email: require('../assets/Icon/mail.png'),
     userPlus: require('../assets/Icon/add-user.png'),
   };
 

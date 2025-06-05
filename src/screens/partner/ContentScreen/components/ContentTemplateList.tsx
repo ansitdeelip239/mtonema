@@ -28,14 +28,12 @@ const ContentTemplatesList: React.FC<ContentTemplatesListProps> = ({
   onLoadMore,
   onScroll,
   onTemplatePress,
-  onTemplateView,
   onTemplateEdit,
 }) => {
   const renderContentTemplate = ({item}: {item: ContentTemplate}) => (
     <ContentTemplateCard
       item={item}
       onPress={onTemplatePress}
-      onView={onTemplateView}
       onEdit={onTemplateEdit}
     />
   );

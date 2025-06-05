@@ -563,6 +563,26 @@ class PartnerService {
       throw error;
     }
   }
+
+  static async updateContentTemplate(
+    userId: number,
+    templateId: number,
+    payload: {
+      name: string;
+      content: string;
+    },
+  ) {
+    try {
+      const response = await api.put<null>(
+        `${url.updateContentTemplate(userId, templateId)}`,
+        payload,
+      );
+      return response;
+    } catch (error) {
+      console.error('Error in createContentTemplate', error);
+      throw error;
+    }
+  }
 }
 
 export default PartnerService;

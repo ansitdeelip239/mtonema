@@ -22,6 +22,8 @@ interface PartnerContextProps {
   setAgentPropertyUpdated: React.Dispatch<React.SetStateAction<boolean>>;
   partnerPropertyUpdated: boolean;
   setPartnerPropertyUpdated: React.Dispatch<React.SetStateAction<boolean>>;
+  messageTemplateUpdated: boolean;
+  setMessageTemplateUpdated: React.Dispatch<React.SetStateAction<boolean>>;
   cities: MasterDetailModel[];
   fetchProjectLocations: () => Promise<void>;
 }
@@ -32,13 +34,16 @@ const PartnerContext = createContext<PartnerContextProps | undefined>(
 
 export const PartnerProvider: React.FC<PartnerProviderProps> = ({children}) => {
   const [groups, setGroups] = useState<Group[]>([]);
+  const [cities, setCities] = useState<MasterDetailModel[]>([]);
+  const {user} = useAuth();
+  const {fetchMasterDetailsByMasterNameAndXref} = useMaster();
+
+
   const [dataUpdated, setDataUpdated] = useState(false);
   const [clientsUpdated, setClientsUpdated] = useState(false);
   const [agentPropertyUpdated, setAgentPropertyUpdated] = useState(false);
   const [partnerPropertyUpdated, setPartnerPropertyUpdated] = useState(false);
-  const [cities, setCities] = useState<MasterDetailModel[]>([]);
-  const {user} = useAuth();
-  const {fetchMasterDetailsByMasterNameAndXref} = useMaster();
+  const [messageTemplateUpdated, setMessageTemplateUpdated] = useState(false);
 
   const fetchGroups = useCallback(async () => {
     try {
@@ -107,6 +112,8 @@ export const PartnerProvider: React.FC<PartnerProviderProps> = ({children}) => {
     setAgentPropertyUpdated,
     partnerPropertyUpdated,
     setPartnerPropertyUpdated,
+    messageTemplateUpdated,
+    setMessageTemplateUpdated,
     cities,
     fetchProjectLocations,
   };

@@ -1,20 +1,17 @@
 import React from 'react';
 import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
 import GetIcon from '../../../../components/GetIcon';
-import Colors from '../../../../constants/Colors';
 import {ContentTemplate} from '../../../../types';
 
 interface ContentTemplateCardProps {
   item: ContentTemplate;
   onPress?: (item: ContentTemplate) => void;
-  onView?: (item: ContentTemplate) => void;
   onEdit?: (item: ContentTemplate) => void;
 }
 
 const ContentTemplateCard: React.FC<ContentTemplateCardProps> = ({
   item,
   onPress,
-  onView,
   onEdit,
 }) => {
   // Format date
@@ -44,16 +41,21 @@ const ContentTemplateCard: React.FC<ContentTemplateCardProps> = ({
           <Text style={styles.templateCreator}>by {item.creatorName}</Text>
         </View>
         <View style={styles.templateActions}>
-          <TouchableOpacity
+          {/* <TouchableOpacity
             style={styles.actionButton}
             onPress={() => onView?.(item)}>
             <GetIcon iconName="eye" size={20} color={Colors.MT_PRIMARY_1} />
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.actionButton}
-            onPress={() => onEdit?.(item)}>
-            <GetIcon iconName="edit" size={20} color="#666" />
-          </TouchableOpacity>
+          </TouchableOpacity> */}
+          {onEdit && (
+            <TouchableOpacity
+              style={styles.actionButton}
+              onPress={e => {
+                e.stopPropagation(); // Prevent card press
+                onEdit(item);
+              }}>
+              <GetIcon iconName="edit" size={20} color="#666" />
+            </TouchableOpacity>
+          )}
         </View>
       </View>
 
