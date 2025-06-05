@@ -11,7 +11,8 @@ import {useDialog} from '../../../hooks/useDialog';
 import ContentTemplatesList from '../ContentScreen/components/ContentTemplateList';
 import ContentLoadingIndicator from '../ContentScreen/components/ContentLoadingIndicator';
 import ContentHeader from '../ContentScreen/components/ContentHeader';
-import { useFocusEffect } from '@react-navigation/native';
+import {useFocusEffect} from '@react-navigation/native';
+import {useBottomTab} from '../../../context/BottomTabProvider';
 
 type Props = NativeStackScreenProps<
   ClientStackParamList,
@@ -24,6 +25,7 @@ const MessageTemplateScreen: React.FC<Props> = ({route, navigation}) => {
   const {clientName, clientPhone, clientWhatsapp, clientEmail} = route.params;
   const {user} = useAuth();
   const {showError} = useDialog();
+  const {hideBottomTabs, showBottomTabs} = useBottomTab();
 
   // State management
   const [contentTemplates, setContentTemplates] = useState<ContentTemplate[]>(
@@ -167,22 +169,12 @@ const MessageTemplateScreen: React.FC<Props> = ({route, navigation}) => {
   // Hide bottom tabs when this screen is focused
   useFocusEffect(
     useCallback(() => {
-      const parent = navigation.getParent();
-      if (parent) {
-        parent.setOptions({
-          tabBarStyle: {display: 'none'},
-        });
-      }
+      hideBottomTabs();
 
       return () => {
-        const parentNavigator = navigation.getParent();
-        if (parentNavigator) {
-          parentNavigator.setOptions({
-            tabBarStyle: {display: 'flex'},
-          });
-        }
+        showBottomTabs();
       };
-    }, [navigation]),
+    }, [hideBottomTabs, showBottomTabs]),
   );
 
   // Main loading state

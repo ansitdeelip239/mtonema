@@ -35,6 +35,7 @@ import NotesCard from './components/NotesCard';
 import RecentActivitiesCard from './components/RecentActivitiesCard';
 import AssignedUsersCard from './components/AssignedUsersCard';
 import {useMaster} from '../../../context/MasterProvider';
+import {useBottomTab} from '../../../context/BottomTabProvider';
 
 type Props = NativeStackScreenProps<
   ClientStackParamList,
@@ -68,6 +69,7 @@ const ClientProfileScreen: React.FC<Props> = ({route, navigation}) => {
   const {showError} = useDialog();
   // Get activity type master data
   const {masterData} = useMaster();
+  const {hideBottomTabs, showBottomTabs} = useBottomTab();
 
   const fetchClient = useCallback(async () => {
     try {
@@ -498,22 +500,12 @@ const ClientProfileScreen: React.FC<Props> = ({route, navigation}) => {
   // Hide bottom tabs when this screen is focused
   useFocusEffect(
     useCallback(() => {
-      const parent = navigation.getParent();
-      if (parent) {
-        parent.setOptions({
-          tabBarStyle: {display: 'none'},
-        });
-      }
-
+      hideBottomTabs();
+      
       return () => {
-        const parentNavigator = navigation.getParent();
-        if (parentNavigator) {
-          parentNavigator.setOptions({
-            tabBarStyle: {display: 'flex'},
-          });
-        }
+        showBottomTabs();
       };
-    }, [navigation]),
+    }, [hideBottomTabs, showBottomTabs]),
   );
 
   return (

@@ -51,9 +51,7 @@ const tabScreens: Array<TabScreen<PartnerBottomTabParamList>> = [
   },
 ] as const;
 
-// Changed from memo wrapper to function component to use hooks properly
 const PartnerBottomTabs = () => {
-  // Get theme from context
   const {theme} = useTheme();
 
   return (
@@ -75,7 +73,7 @@ const PartnerBottomTabs = () => {
           component={component}
           options={{
             tabBarShowLabel: true,
-            tabBarLabel: label, // Use the custom label if provided
+            tabBarLabel: label,
             // eslint-disable-next-line react/no-unstable-nested-components
             tabBarIcon: ({focused, color}) => (
               <GetIcon
@@ -91,5 +89,4 @@ const PartnerBottomTabs = () => {
   );
 };
 
-// Apply memo after the component definition
 export default memo(PartnerBottomTabs);

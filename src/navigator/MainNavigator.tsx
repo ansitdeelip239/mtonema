@@ -9,6 +9,7 @@ import {PartnerProvider} from '../context/PartnerProvider';
 import {PropertyFormProvider} from '../context/PropertyFormContext';
 import Roles from '../constants/Roles';
 import AdminNavigator from './AdminNavigator';
+import {BottomTabProvider} from '../context/BottomTabProvider';
 
 const MainNavigator = () => {
   const {user} = useAuth();
@@ -24,9 +25,11 @@ const MainNavigator = () => {
           <SellerNavigator />
         </PropertyFormProvider>
       ) : user?.role === Roles.PARTNER || user?.role === Roles.TEAM ? (
-        <PartnerProvider>
-          <PartnerNavigator />
-        </PartnerProvider>
+        <BottomTabProvider>
+          <PartnerProvider>
+            <PartnerNavigator />
+          </PartnerProvider>
+        </BottomTabProvider>
       ) : user?.role === Roles.ADMIN ? (
         <AdminNavigator />
       ) : null}

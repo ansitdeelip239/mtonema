@@ -5,12 +5,13 @@ import {CommonActions, ParamListBase} from '@react-navigation/native';
 import {useKeyboard} from '../../hooks/useKeyboard';
 import GetIcon, {IconEnum} from '../../components/GetIcon';
 import {useTheme} from '../../context/ThemeProvider';
+import {useBottomTab} from '../../context/BottomTabProvider';
 
 export type TabScreen<T extends ParamListBase> = {
   name: keyof T;
   component: React.ComponentType<any>;
   icon: IconEnum;
-  label?: string; // Add this optional label property
+  label?: string;
   listeners?: (props: {navigation: any}) => Partial<{
     tabPress: () => void;
   }>;
@@ -30,9 +31,9 @@ export const CustomBottomBar = <T extends ParamListBase>({
   const middleIndex = Math.floor(tabScreens.length / 2);
   const {keyboardVisible} = useKeyboard();
   const {theme} = useTheme();
+  const {isTabBarHidden} = useBottomTab();
 
-  // Check if any screen has tabBarStyle display: 'none'
-  const isTabBarHidden = Object.values(descriptors).some(
+  const shouldHideTabBar = isTabBarHidden || Object.values(descriptors).some(
     descriptor =>
       typeof descriptor.options.tabBarStyle === 'object' &&
       descriptor.options.tabBarStyle !== null &&
@@ -40,7 +41,7 @@ export const CustomBottomBar = <T extends ParamListBase>({
       descriptor.options.tabBarStyle.display === 'none',
   );
 
-  if (keyboardVisible || isTabBarHidden) {
+  if (keyboardVisible || shouldHideTabBar) {
     return null;
   }
 
