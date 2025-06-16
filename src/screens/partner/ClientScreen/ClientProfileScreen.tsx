@@ -608,18 +608,19 @@ const ClientProfileScreen: React.FC<Props> = ({route, navigation}) => {
         </ScrollView>
       )}
 
-      {/* Fixed Send Quick Response Button - Moved outside ScrollView */}
+      {/* Fixed Send Quick Response Button - Updated navigation */}
       {client && (
         <View style={styles.fixedButtonContainer}>
           <TouchableOpacity
             style={styles.sendResponseButton}
             onPress={() => {
-              navigation.navigate('ChooseMessageTypeScreen', {
+              navigation.navigate('MessageTemplateScreen', {
                 clientId: client.id as number,
                 clientName: client.clientName,
                 clientPhone: client.mobileNumber,
                 clientWhatsapp: client.whatsappNumber,
                 clientEmail: client.emailId,
+                messageType: 'whatsapp', // Default, but user will choose template first
               });
             }}
             activeOpacity={0.7}>

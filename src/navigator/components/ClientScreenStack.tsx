@@ -6,7 +6,7 @@ import ClientProfileScreen from '../../screens/partner/ClientScreen/ClientProfil
 import {Client} from '../../types';
 import ClientAssignmentScreen from '../../screens/partner/ClientScreen/ClientAssignmentScreen';
 import MessageTemplateScreen from '../../screens/partner/ClientScreen/MessageTemplateScreen';
-import ChooseMessageTypeScreen from '../../screens/partner/ClientScreen/ChooseMessageTypeScreen';
+import MessagePreviewScreen from '../../screens/partner/ClientScreen/MessagePreviewScreen';
 
 // Define the param list type for this stack
 export type ClientStackParamList = {
@@ -14,13 +14,6 @@ export type ClientStackParamList = {
   AddClientScreen: {editMode: boolean; clientData?: Client};
   ClientProfileScreen: {clientId: number};
   ClientAssignmentScreen: {clientId: number; assignedUsers: number[]};
-  ChooseMessageTypeScreen: {
-    clientId: number;
-    clientName: string;
-    clientPhone: string;
-    clientWhatsapp: string;
-    clientEmail: string;
-  };
   MessageTemplateScreen: {
     clientId: number;
     clientName: string;
@@ -28,6 +21,15 @@ export type ClientStackParamList = {
     clientWhatsapp: string;
     clientEmail: string;
     messageType: string;
+  };
+  MessagePreviewScreen: {
+    clientId: number;
+    clientName: string;
+    clientPhone: string;
+    clientWhatsapp: string;
+    clientEmail: string;
+    messageContent: string;
+    templateName: string;
   };
 };
 
@@ -45,8 +47,8 @@ const ClientScreenStack = () => {
         component={ClientProfileScreen}
       />
       <Stack.Screen
-        name="ChooseMessageTypeScreen"
-        component={ChooseMessageTypeScreen}
+        name="MessagePreviewScreen"
+        component={MessagePreviewScreen}
       />
       <Stack.Screen
         name="ClientAssignmentScreen"

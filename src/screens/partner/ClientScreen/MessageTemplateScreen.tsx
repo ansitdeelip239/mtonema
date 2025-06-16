@@ -1,5 +1,5 @@
 import React, {useState, useEffect, useCallback} from 'react';
-import {View, StyleSheet, SafeAreaView, Linking, Alert} from 'react-native';
+import {View, StyleSheet, SafeAreaView} from 'react-native';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {ClientStackParamList} from '../../../navigator/components/ClientScreenStack';
 import Header from '../../../components/Header';
@@ -24,11 +24,11 @@ const PAGE_SIZE = 20;
 
 const MessageTemplateScreen: React.FC<Props> = ({route, navigation}) => {
   const {
+    clientId,
     clientName,
     clientPhone,
     clientWhatsapp,
     clientEmail,
-    messageType = 'whatsapp',
   } = route.params;
   const {user} = useAuth();
   const {showError} = useDialog();
@@ -45,20 +45,6 @@ const MessageTemplateScreen: React.FC<Props> = ({route, navigation}) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [hasNextPage, setHasNextPage] = useState(true);
   const [totalCount, setTotalCount] = useState(0);
-
-  // Get header title based on message type
-  const getHeaderTitle = () => {
-    switch (messageType) {
-      case 'email':
-        return 'Select Email Template';
-      case 'whatsapp':
-        return 'Select WhatsApp Template';
-      case 'sms':
-        return 'Select SMS Template';
-      default:
-        return 'Select Message Template';
-    }
-  };
 
   // Process template content with placeholders
   const processTemplateContent = useCallback(
@@ -98,88 +84,6 @@ const MessageTemplateScreen: React.FC<Props> = ({route, navigation}) => {
       return processedContent;
     },
     [clientName, clientPhone, clientWhatsapp, clientEmail, user?.name, user?.email, user?.location, user?.phone],
-  );
-
-  // Handle WhatsApp deep linking
-  const handleWhatsAppLink = useCallback(
-    async (content: string) => {
-      if (!clientWhatsapp) {
-        Alert.alert('Error', 'WhatsApp number not available for this client.');
-        return;
-      }
-
-      try {
-        const whatsappUrl = `whatsapp://send?phone=${clientWhatsapp}&text=${encodeURIComponent(
-          content,
-        )}`;
-        const canOpen = await Linking.canOpenURL(whatsappUrl);
-
-        if (canOpen) {
-          await Linking.openURL(whatsappUrl);
-        } else {
-          // Fallback to web WhatsApp
-          const webWhatsappUrl = `https://wa.me/${clientWhatsapp}?text=${encodeURIComponent(
-            content,
-          )}`;
-          await Linking.openURL(webWhatsappUrl);
-        }
-      } catch (error) {
-        console.error('Error opening WhatsApp:', error);
-        Alert.alert(
-          'Error',
-          'Failed to open WhatsApp. Please make sure WhatsApp is installed.',
-        );
-      }
-    },
-    [clientWhatsapp],
-  );
-
-  // Handle Email deep linking
-  const handleEmailLink = useCallback(
-    async (content: string) => {
-      if (!clientEmail) {
-        Alert.alert('Error', 'Email address not available for this client.');
-        return;
-      }
-
-      try {
-        const subject = `Message from ${user?.name || 'Agent'}`;
-        const emailUrl = `mailto:${clientEmail}?subject=${encodeURIComponent(
-          subject,
-        )}&body=${encodeURIComponent(content)}`;
-
-        await Linking.openURL(emailUrl);
-      } catch (error) {
-        console.error('Error opening email:', error);
-        Alert.alert('Error', 'Failed to open email app.');
-      }
-    },
-    [clientEmail, user?.name],
-  );
-
-  // Handle SMS deep linking
-  const handleSMSLink = useCallback(
-    async (content: string) => {
-      if (!clientPhone) {
-        Alert.alert('Error', 'Phone number not available for this client.');
-        return;
-      }
-
-      try {
-        const smsUrl = `sms:${clientPhone}?body=${encodeURIComponent(content)}`;
-
-        // const canOpen = await Linking.canOpenURL(smsUrl);
-        // if (canOpen) {
-          await Linking.openURL(smsUrl);
-        // } else {
-        //   Alert.alert('Error', 'SMS not supported on this device.');
-        // }
-      } catch (error) {
-        console.error('Error opening SMS:', error);
-        Alert.alert('Error', 'Failed to open SMS app.');
-      }
-    },
-    [clientPhone],
   );
 
   // Fetch content templates
@@ -250,34 +154,32 @@ const MessageTemplateScreen: React.FC<Props> = ({route, navigation}) => {
     }
   }, [loadingMore, hasNextPage, currentPage, fetchContentTemplates]);
 
-  // Handle template selection with platform-specific deep linking
+  // Handle template selection - navigate to message preview
   const handleTemplatePress = useCallback(
-    async (item: ContentTemplate) => {
-      console.log('Template selected:', item.name, 'for', messageType);
+    (item: ContentTemplate) => {
+      console.log('Template selected:', item.name);
 
       const processedContent = processTemplateContent(item.content);
 
-      switch (messageType) {
-        case 'whatsapp':
-          await handleWhatsAppLink(processedContent);
-          break;
-        case 'email':
-          await handleEmailLink(processedContent);
-          break;
-        case 'sms':
-          await handleSMSLink(processedContent);
-          break;
-        default:
-          // Default to WhatsApp
-          await handleWhatsAppLink(processedContent);
-      }
+      // Navigate to message preview screen
+      navigation.navigate('MessagePreviewScreen', {
+        clientId,
+        clientName,
+        clientPhone,
+        clientWhatsapp,
+        clientEmail,
+        messageContent: processedContent,
+        templateName: item.name,
+      });
     },
     [
-      messageType,
       processTemplateContent,
-      handleWhatsAppLink,
-      handleEmailLink,
-      handleSMSLink,
+      navigation,
+      clientId,
+      clientName,
+      clientPhone,
+      clientWhatsapp,
+      clientEmail,
     ],
   );
 
@@ -297,7 +199,7 @@ const MessageTemplateScreen: React.FC<Props> = ({route, navigation}) => {
     return (
       <SafeAreaView style={styles.container}>
         <Header<PartnerDrawerParamList>
-          title={getHeaderTitle()}
+          title="Select Message Template"
           navigation={navigation}
           backButton={true}
         />
@@ -309,7 +211,7 @@ const MessageTemplateScreen: React.FC<Props> = ({route, navigation}) => {
   return (
     <SafeAreaView style={styles.container}>
       <Header<PartnerDrawerParamList>
-        title={getHeaderTitle()}
+        title="Select Message Template"
         navigation={navigation}
         backButton={true}
       />
