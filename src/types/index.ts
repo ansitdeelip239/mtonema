@@ -222,6 +222,13 @@ export interface Group2 {
     id: number;
     name: string;
   };
+  partnerId: number;
+  createdOn: string;
+  createdBy: {
+    id: number;
+    name: string;
+    email: string;
+  }
 }
 
 export interface Group2Response {

@@ -71,7 +71,7 @@ const url = {
   teamMembers: BASE_URL + '/teammembers',
   assignClient: BASE_URL + '/assign-client',
   followUps: BASE_URL + '/partners/follow-ups',
-  groups: BASE_URL + '/partners/groups',
+  groups: BASE_URL + '/partners/groups-New',
   // addGroups: BASE_URL + '/partners/addedit-groups',
   addGroups: BASE_URL + '/partners/addedit-groups-New',
   feedback: BASE_URL + '/testimonials/by-createdby',
