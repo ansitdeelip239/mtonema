@@ -56,7 +56,7 @@ export const MainScreen: React.FC<Props> = ({navigation}) => {
   return (
     <BackgroundWrapper>
       <View style={styles.mainScreen}>
-        <HeaderComponent title="MT Estates" showBackButton={false} />
+        <HeaderComponent title="MT One" showBackButton={false} />
 
         <ScrollView
           contentContainerStyle={styles.scrollContent}
@@ -68,7 +68,7 @@ export const MainScreen: React.FC<Props> = ({navigation}) => {
               resizeMode="contain"
             />
             {/* Added App & CRM text below logo */}
-            <Text style={styles.appCrmText}>App & CRM</Text>
+            {/* <Text style={styles.appCrmText}>App & CRM</Text> */}
           </View>
 
           <View style={styles.cardContainer}>
@@ -85,7 +85,7 @@ export const MainScreen: React.FC<Props> = ({navigation}) => {
                   style={styles.primaryButton}
                   onPress={onBuyerSellerLogin}>
                   <LinearGradient
-                    colors={[Colors.MT_PRIMARY_1, '#2c7fb8']}
+                    colors={[Colors.MT_PRIMARY_1, Colors.MT_PRIMARY_1]}
                     style={styles.gradientButton}>
                     <Text style={styles.buttonText}>Log In</Text>
                   </LinearGradient>
@@ -100,7 +100,7 @@ export const MainScreen: React.FC<Props> = ({navigation}) => {
                   style={styles.primaryButton}
                   onPress={onBuyerSignup}>
                   <LinearGradient
-                    colors={[Colors.MT_PRIMARY_1, '#2c7fb8']}
+                    colors={[Colors.MT_PRIMARY_1, Colors.MT_PRIMARY_1]}
                     style={styles.gradientButton}>
                     <Text style={styles.buttonText}>Sign Up as Buyer</Text>
                     <GetIcon iconName="home" color="white" size="20" />
@@ -163,6 +163,7 @@ const styles = StyleSheet.create({
   scrollContent: {
     flexGrow: 1,
     paddingTop: 10,
+    gap: 40, // Added 60 gap between children
   },
   logoContainer: {
     justifyContent: 'center',
@@ -274,6 +275,7 @@ const styles = StyleSheet.create({
   secondaryButton: {
     backgroundColor: 'white',
     borderWidth: 2,
+    borderColor: Colors.MT_PRIMARY_1,
     borderRadius: 15,
     padding: 10,
     ...Platform.select({
@@ -296,6 +298,7 @@ const styles = StyleSheet.create({
   secondaryButtonText: {
     fontSize: 17,
     fontWeight: '600',
+    color: Colors.MT_PRIMARY_1,
     marginLeft: 10,
   },
   divider: {

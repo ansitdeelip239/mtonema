@@ -47,7 +47,7 @@ const UserTypeSelectionScreen: React.FC<Props> = ({navigation}) => {
   return (
     <BackgroundWrapper>
       <View style={styles.mainScreen}>
-        <HeaderComponent title="MT Estates" showBackButton={false} />
+        <HeaderComponent title="MT One" showBackButton={false} />
 
         <ScrollView
           contentContainerStyle={styles.scrollContent}
@@ -59,7 +59,7 @@ const UserTypeSelectionScreen: React.FC<Props> = ({navigation}) => {
               resizeMode="contain"
             />
             {/* Added App & CRM text below logo */}
-            <Text style={styles.appCrmText}>App & CRM</Text>
+            {/* <Text style={styles.appCrmText}>App & CRM</Text> */}
           </View>
 
           <View style={styles.cardContainer}>
@@ -77,7 +77,7 @@ const UserTypeSelectionScreen: React.FC<Props> = ({navigation}) => {
                   onPress={() => handleUserTypeSelection(false)}
                   activeOpacity={0.8}>
                   <LinearGradient
-                    colors={[Colors.MT_PRIMARY_1, '#2c7fb8']}
+                    colors={[Colors.MT_PRIMARY_1, Colors.MT_PRIMARY_1]}
                     style={styles.gradientButton}>
                     <Text style={styles.buttonText}>No, I'm a Buyer/Seller</Text>
                   </LinearGradient>
@@ -112,6 +112,7 @@ const styles = StyleSheet.create({
   scrollContent: {
     flexGrow: 1,
     paddingTop: 10,
+    gap: 80, // Added 60 gap between children
   },
   logoContainer: {
     justifyContent: 'center',

@@ -346,7 +346,7 @@ const EmailScreen: React.FC<Props> = ({navigation, route}) => {
                                 0.2,
                               ),
                             ]
-                          : ['#a8c7f0', '#b8e0f7'] // Default light blue if no partner color
+                          : [lightenColor(Colors.MT_PRIMARY_1, 0.4), lightenColor(Colors.MT_PRIMARY_1, 0.4)] // Default light blue if no partner color
                         : partnerInfo.colorScheme?.primaryColor
                         ? [
                             partnerInfo.colorScheme.primaryColor,

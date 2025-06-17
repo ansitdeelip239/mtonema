@@ -26,7 +26,7 @@ const HeaderComponent: React.FC<HeaderComponentProps> = ({
   onBackPress,
   showBackButton = false,
   rightComponent,
-  gradientColors = [Colors.MT_PRIMARY_1, '#1e5799'],
+  gradientColors = [Colors.MT_PRIMARY_1, Colors.MT_PRIMARY_1],
   compact = false, // Default to false for backward compatibility
 }) => {
   // Get safe area insets

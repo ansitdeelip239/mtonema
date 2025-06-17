@@ -33,6 +33,7 @@ import GetIcon from '../../components/GetIcon';
 import {useMaster} from '../../context/MasterProvider';
 import {MasterDetailModel} from '../../types';
 import HeaderComponent from './components/HeaderComponent';
+import { lightenColor } from '../../utils/colorUtils';
 
 const {width} = Dimensions.get('window');
 type Props = NativeStackScreenProps<AuthStackParamList, 'SignUpScreen'>;
@@ -314,8 +315,8 @@ const SignUpScreen: React.FC<Props> = ({navigation, route}) => {
                     <LinearGradient
                       colors={
                         isLoading || loading
-                          ? ['#a8c7f0', '#b8e0f7'] // Light blue gradient for disabled state
-                          : ['#3a7bd5', '#00d2ff']
+                          ? [lightenColor(Colors.MT_PRIMARY_1, 0.4), lightenColor(Colors.MT_PRIMARY_1, 0.4)] // Light blue gradient for disabled state
+                          : [Colors.MT_PRIMARY_1, Colors.MT_PRIMARY_1]
                       }
                       start={{x: 0, y: 0}}
                       end={{x: 1, y: 0}}

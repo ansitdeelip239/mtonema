@@ -94,5 +94,5 @@ export const getGradientColors = (primaryColor?: string): string[] => {
   }
 
   // Default colors if no partner-specific colors are available
-  return [Colors.MT_PRIMARY_1, '#1e5799'];
+  return [Colors.MT_PRIMARY_1, Colors.MT_PRIMARY_1];
 };
