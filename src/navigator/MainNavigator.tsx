@@ -8,11 +8,23 @@ import PartnerNavigator from './PartnerNavigator';
 import {PartnerProvider} from '../context/PartnerProvider';
 import {PropertyFormProvider} from '../context/PropertyFormContext';
 import Roles from '../constants/Roles';
-import AdminNavigator from './AdminNavigator';
 import {BottomTabProvider} from '../context/BottomTabProvider';
 
 const MainNavigator = () => {
   const {user} = useAuth();
+
+  // Array of allowed admin emails
+  const allowedAdminEmails = [
+    'info@dncrproperty.com',
+    'shashi225@gmail.com',
+    'atique159@gmail.com',
+  ];
+
+  // Check if user has admin role and email is in the allowed list
+  const isAuthorizedAdmin =
+    user?.role === Roles.ADMIN &&
+    user?.email &&
+    allowedAdminEmails.includes(user.email);
 
   return (
     <>
@@ -24,15 +36,17 @@ const MainNavigator = () => {
         <PropertyFormProvider>
           <SellerNavigator />
         </PropertyFormProvider>
-      ) : user?.role === Roles.PARTNER || user?.role === Roles.TEAM ? (
+      ) : user?.role === Roles.PARTNER ||
+        user?.role === Roles.TEAM ||
+        isAuthorizedAdmin ? (
         <BottomTabProvider>
           <PartnerProvider>
             <PartnerNavigator />
           </PartnerProvider>
         </BottomTabProvider>
-      ) : user?.role === Roles.ADMIN ? (
-        <AdminNavigator />
-      ) : null}
+      ) : // ) : user?.role === Roles.ADMIN ? (
+      //   <AdminNavigator />
+      null}
     </>
   );
 };

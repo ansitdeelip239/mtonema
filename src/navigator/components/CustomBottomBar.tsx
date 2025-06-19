@@ -119,7 +119,7 @@ export const CustomBottomBar = <T extends ParamListBase>({
           }}>
           <GetIcon
             iconName={tabScreens[middleIndex].icon}
-            color={theme.textColor === '#000000' ? '#fff' : theme.textColor}
+            color={'#fff'}
           />
         </TouchableOpacity>
 

@@ -27,7 +27,7 @@ const PartnerZoneScreen: React.FC<Props> = ({navigation}) => {
 
   const handleLocationPress = (locationName: MasterDetailModel) => {
     navigation.navigate('EmailScreen', {
-      role: [Roles.PARTNER, Roles.TEAM],
+      role: [Roles.PARTNER, Roles.TEAM, Roles.ADMIN],
       location: locationName,
     });
   };
