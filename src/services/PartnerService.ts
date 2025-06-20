@@ -84,7 +84,7 @@ class PartnerService {
   }
 
   static async getClientData(
-    id: number,
+    ids: string,
     pageNumber: number,
     pageSize: number,
     searchKey?: string,
@@ -93,7 +93,7 @@ class PartnerService {
   ) {
     try {
       const params = new URLSearchParams({
-        userIds: id.toString(),
+        userIds: ids,
         pageNumber: pageNumber.toString(),
         pageSize: pageSize.toString(),
         searchKey: searchKey || '',
@@ -580,6 +580,16 @@ class PartnerService {
       return response;
     } catch (error) {
       console.error('Error in createContentTemplate', error);
+      throw error;
+    }
+  }
+
+  static async getAllPartners() {
+    try {
+      const response = await api.get<{users: User[]}>(url.users + '?role=partner');
+      return response;
+    } catch (error) {
+      console.error('Error in getAllPartners', error);
       throw error;
     }
   }

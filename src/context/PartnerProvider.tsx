@@ -26,6 +26,9 @@ interface PartnerContextProps {
   setMessageTemplateUpdated: React.Dispatch<React.SetStateAction<boolean>>;
   cities: MasterDetailModel[];
   fetchProjectLocations: () => Promise<void>;
+  selectedPartnerIds: number[];
+  setSelectedPartnerIds: React.Dispatch<React.SetStateAction<number[]>>;
+  clearSelectedPartners: () => void;
 }
 
 const PartnerContext = createContext<PartnerContextProps | undefined>(
@@ -35,6 +38,7 @@ const PartnerContext = createContext<PartnerContextProps | undefined>(
 export const PartnerProvider: React.FC<PartnerProviderProps> = ({children}) => {
   const [groups, setGroups] = useState<Group[]>([]);
   const [cities, setCities] = useState<MasterDetailModel[]>([]);
+  const [selectedPartnerIds, setSelectedPartnerIds] = useState<number[]>([]);
   const {user} = useAuth();
   const {fetchMasterDetailsByMasterNameAndXref} = useMaster();
 
@@ -91,6 +95,10 @@ export const PartnerProvider: React.FC<PartnerProviderProps> = ({children}) => {
     }
   }, [fetchMasterDetailsByMasterNameAndXref]);
 
+  const clearSelectedPartners = useCallback(() => {
+    setSelectedPartnerIds([]);
+  }, []);
+
   useEffect(() => {
     fetchGroups();
     fetchProjectLocations(); // Call on mount
@@ -116,6 +124,9 @@ export const PartnerProvider: React.FC<PartnerProviderProps> = ({children}) => {
     setMessageTemplateUpdated,
     cities,
     fetchProjectLocations,
+    selectedPartnerIds,
+    setSelectedPartnerIds,
+    clearSelectedPartners,
   };
 
   return (

@@ -27,6 +27,8 @@ interface HeaderProps {
   centerTitle?: boolean;
   gradientColors?: string[];
   compact?: boolean;
+  showFilterButton?: boolean;
+  onFilterPress?: () => void;
 }
 
 export default function Header<T extends ParamListBase>({
@@ -40,6 +42,8 @@ export default function Header<T extends ParamListBase>({
   centerTitle = false,
   gradientColors,
   compact = false,
+  showFilterButton = false,
+  onFilterPress,
 }: HeaderProps) {
   const {openDrawer} = useDrawer<T>();
   const {theme} = useTheme();
@@ -68,7 +72,6 @@ export default function Header<T extends ParamListBase>({
       <StatusBar backgroundColor={headerColors[0]} barStyle="light-content" />
       <LinearGradient
         colors={headerColors}
-        // Remove explicit start/end to match HeaderComponent's behavior
         style={[
           styles.headerGradient,
           {
@@ -84,7 +87,7 @@ export default function Header<T extends ParamListBase>({
               <GetIcon
                 iconName={backButton ? 'back' : 'hamburgerMenu'}
                 color="white"
-                size="20" // Changed from 24 to match HeaderComponent
+                size="20"
               />
             </TouchableOpacity>
           )}
@@ -97,7 +100,16 @@ export default function Header<T extends ParamListBase>({
             ]}>
             {title}
           </Text>
-          <View style={styles.child}>{children}</View>
+          <View style={styles.rightSection}>
+            {showFilterButton && (
+              <TouchableOpacity
+                onPress={onFilterPress}
+                style={styles.filterButton}>
+                <GetIcon iconName="filterFunnel" color="white" size="20" />
+              </TouchableOpacity>
+            )}
+            <View style={styles.child}>{children}</View>
+          </View>
         </View>
       </LinearGradient>
     </>
@@ -106,17 +118,15 @@ export default function Header<T extends ParamListBase>({
 
 const styles = StyleSheet.create({
   headerGradient: {
-    // Update to match HeaderComponent
-    borderBottomLeftRadius: 25, // Changed from 30 to match HeaderComponent
+    borderBottomLeftRadius: 25,
     borderBottomRightRadius: 25,
-    // marginBottom: 10,
   },
   headerContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between', // Added to match HeaderComponent
+    justifyContent: 'space-between',
     paddingHorizontal: 16,
-    height: 40, // Match HeaderComponent height
+    height: 40,
   },
   headerText: {
     fontWeight: 'bold',
@@ -128,12 +138,23 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   menuButton: {
-    width: 36, // Changed from 40 to match HeaderComponent
-    height: 36, // Changed from 40 to match HeaderComponent
+    width: 36,
+    height: 36,
     borderRadius: 18,
-    // backgroundColor: 'rgba(255,255,255,0.2)', // Added background like HeaderComponent
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  rightSection: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  filterButton: {
+    width: 36,
+    height: 36,
+    borderRadius: 18,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: 8,
   },
   child: {
     marginRight: 8,

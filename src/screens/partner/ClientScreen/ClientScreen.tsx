@@ -26,6 +26,9 @@ import PartnerService from '../../../services/PartnerService';
 import {useAuth} from '../../../hooks/useAuth';
 import GetIcon from '../../../components/GetIcon';
 import FilterDrawer from './components/FilterDrawer';
+import {useNavigation} from '@react-navigation/native';
+import {DrawerNavigationProp} from '@react-navigation/drawer';
+import Roles from '../../../constants/Roles';
 
 type Props = NativeStackScreenProps<ClientStackParamList, 'ClientScreen'>;
 
@@ -47,7 +50,7 @@ const ClientScreen: React.FC<Props> = ({navigation}) => {
   const [isFilterDrawerVisible, setIsFilterDrawerVisible] = useState(false);
   const {theme} = useTheme();
   const {masterData} = useMaster();
-  const {setClientsUpdated} = usePartner();
+  const {setClientsUpdated, selectedPartnerIds} = usePartner();
   const {user} = useAuth();
 
   // Activity modal states
@@ -140,6 +143,13 @@ const ClientScreen: React.FC<Props> = ({navigation}) => {
     }
   };
 
+  const drawerNavigation =
+    useNavigation<DrawerNavigationProp<PartnerDrawerParamList>>();
+
+  const handleFilterPress = () => {
+    drawerNavigation.navigate('FilterPartnerScreen');
+  };
+
   // Update renderFooter to use isLoadingMore instead of isLoading
   const renderFooter = () => {
     if (!isLoadingMore) {
@@ -155,11 +165,14 @@ const ClientScreen: React.FC<Props> = ({navigation}) => {
   };
 
   const renderContent = () => {
-    // Only show full-page loader on initial load or search, not during pagination
-    if ((isLoading && clients.length === 0) || isSearching) {
+    // Show full-page loader on initial load, search, or when no clients and loading
+    if (isLoading || isSearching) {
       return (
         <View style={styles.centerContainer}>
           <ActivityIndicator size="large" color={theme.primaryColor} />
+          <Text style={styles.loadingStateText}>
+            {isSearching ? 'Searching clients...' : 'Loading clients...'}
+          </Text>
         </View>
       );
     }
@@ -214,7 +227,8 @@ const ClientScreen: React.FC<Props> = ({navigation}) => {
       <Header<PartnerDrawerParamList>
         title="Clients"
         gradientColors={headerGradientColors}
-        >
+        showFilterButton={user?.role === Roles.ADMIN}
+        onFilterPress={handleFilterPress}>
         <TouchableOpacity
           style={[styles.addButton, {backgroundColor: theme.secondaryColor}]}
           onPress={() => {
@@ -223,6 +237,24 @@ const ClientScreen: React.FC<Props> = ({navigation}) => {
           <Text style={styles.buttonText}>Add Client</Text>
         </TouchableOpacity>
       </Header>
+
+      {/* Show selected partners info */}
+      {selectedPartnerIds.length > 0 && (
+        <View style={styles.filterIndicator}>
+          <GetIcon iconName="filter" size={16} color={theme.primaryColor} />
+          <Text style={[styles.filterText, {color: theme.primaryColor}]}>
+            Showing clients from {selectedPartnerIds.length} selected partner
+            {selectedPartnerIds.length > 1 ? 's' : ''}
+          </Text>
+          <TouchableOpacity
+            onPress={handleFilterPress}
+            style={styles.editFilterButton}>
+            <Text style={[styles.editFilterText, {color: theme.primaryColor}]}>
+              Edit
+            </Text>
+          </TouchableOpacity>
+        </View>
+      )}
 
       {/* Search and filter row */}
       <View style={styles.searchSortContainer}>
@@ -363,6 +395,38 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 0.15,
     shadowRadius: 4,
+  },
+  loadingStateText: {
+    marginTop: 12,
+    fontSize: 16,
+    color: '#666',
+    textAlign: 'center',
+  },
+  filterIndicator: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#f0f9ff',
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+    marginHorizontal: 16,
+    marginTop: 8,
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: '#e0f2fe',
+  },
+  filterText: {
+    flex: 1,
+    marginLeft: 8,
+    fontSize: 14,
+    fontWeight: '500',
+  },
+  editFilterButton: {
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+  },
+  editFilterText: {
+    fontSize: 14,
+    fontWeight: '600',
   },
 });
 

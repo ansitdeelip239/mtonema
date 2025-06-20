@@ -29,7 +29,7 @@ export interface User {
   updatedOn: string;
   updatedBy: string;
   recordStatus: number;
-  partnerLocation: number;
+  partnerLocation?: number;
 }
 
 export interface Response<T> {

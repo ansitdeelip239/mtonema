@@ -28,7 +28,7 @@ export const useClientData = () => {
   const manualSortRef = useRef(false);
 
   const {user} = useAuth();
-  const {clientsUpdated} = usePartner();
+  const {clientsUpdated, selectedPartnerIds} = usePartner();
 
   // Update refs when sort parameters change
   useEffect(() => {
@@ -52,8 +52,21 @@ export const useClientData = () => {
         const currentSort = sort || sortDirectionRef.current;
         const currentSortBy = sortByParam || sortByRef.current;
 
+        // Determine which user IDs to use:
+        // - If selectedPartnerIds is not empty, use those
+        // - Otherwise, use the logged-in user's ID
+        let userIdsToFetch: string;
+
+        if (selectedPartnerIds.length > 0) {
+          // Use selected partner IDs (comma-separated string)
+          userIdsToFetch = selectedPartnerIds.join(',');
+        } else {
+          // Use logged-in user's ID
+          userIdsToFetch = user?.id.toString() || '0';
+        }
+
         const response = await PartnerService.getClientData(
-          user?.id || 0,
+          userIdsToFetch,
           page,
           paging.pageSize,
           search,
@@ -75,7 +88,7 @@ export const useClientData = () => {
         setError('Failed to fetch clients');
       }
     },
-    [user?.id, paging.pageSize],
+    [user?.id, paging.pageSize, selectedPartnerIds],
   );
 
   const handleSearch = useCallback(
@@ -86,7 +99,10 @@ export const useClientData = () => {
   );
 
   const handleFilterChange = useCallback(
-    async (newSortBy: 'createdOn' | 'activity', newSortDirection: 'asc' | 'desc') => {
+    async (
+      newSortBy: 'createdOn' | 'activity',
+      newSortDirection: 'asc' | 'desc',
+    ) => {
       // Set flag to prevent duplicate fetches
       manualSortRef.current = true;
 
@@ -116,15 +132,19 @@ export const useClientData = () => {
     }
   }, [fetchClients, paging.nextPage, paging.currentPage, isLoadingMore]);
 
+  // Main effect to load clients when dependencies change
   useEffect(() => {
     // Skip if this is from a manual sort action
     if (manualSortRef.current) {
       return;
     }
 
+    // Clear existing clients when filter changes
+    setClients([]);
     setIsLoading(true);
+
     fetchClients().finally(() => setIsLoading(false));
-  }, [user?.email, fetchClients, clientsUpdated]);
+  }, [fetchClients, clientsUpdated, selectedPartnerIds]);
 
   const onRefresh = async () => {
     setRefreshing(true);

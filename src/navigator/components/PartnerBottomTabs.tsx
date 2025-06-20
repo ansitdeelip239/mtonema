@@ -9,6 +9,7 @@ import AgentDataScreenStack from './AgentDataStack';
 import ListingScreenStack from './PropertyListingScreenStack';
 import AddPartnerPropertyScreen from '../../screens/partner/AddPartnerPropertyScreen/AddPartnerPropertyScreen';
 import {useTheme} from '../../context/ThemeProvider';
+import { CommonActions } from '@react-navigation/native';
 
 const Tab = createBottomTabNavigator<PartnerBottomTabParamList>();
 
@@ -25,9 +26,21 @@ const tabScreens: Array<TabScreen<PartnerBottomTabParamList>> = [
     icon: 'client',
     listeners: ({navigation}) => ({
       tabPress: () => {
-        navigation.navigate('Clients', {
-          screen: 'ClientScreen',
-        });
+        // Reset the Clients stack to show only ClientScreen
+        navigation.dispatch(
+          CommonActions.reset({
+            index: 0,
+            routes: [
+              {
+                name: 'Clients',
+                state: {
+                  routes: [{name: 'ClientScreen'}],
+                  index: 0,
+                },
+              },
+            ],
+          }),
+        );
       },
     }),
   },

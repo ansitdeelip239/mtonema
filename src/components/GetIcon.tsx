@@ -62,6 +62,7 @@ export type IconEnum =
   | 'descending'
   | 'meeting'
   | 'email'
+  | 'filterFunnel'
   | 'userPlus';
 
 type IconProps = {
@@ -133,6 +134,7 @@ const GetIcon = ({iconName, color, size}: IconProps) => {
     meeting: require('../assets/Icon/meeting.png'),
     email: require('../assets/Icon/mail.png'),
     userPlus: require('../assets/Icon/add-user.png'),
+    filterFunnel: require('../assets/Icon/funnel.png'),
   };
 
   const imageStyle = [

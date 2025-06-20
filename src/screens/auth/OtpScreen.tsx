@@ -12,6 +12,7 @@ import {useTheme} from '../../context/ThemeProvider';
 import HeaderComponent from './components/HeaderComponent';
 import {getGradientColors} from '../../utils/colorUtils';
 import Roles from '../../constants/Roles';
+import Colors from '../../constants/Colors';
 
 type Props = NativeStackScreenProps<AuthStackParamList, 'OtpScreen'>;
 
@@ -70,7 +71,16 @@ const OtpScreen: React.FC<Props> = ({navigation, route}) => {
           const userResponse = await AuthService.getUserByToken(response.data);
           await storeUser(userResponse.data);
 
-          if (
+          // Check if user is ADMIN - if so, use default theme
+          if (userResponse.data.role === Roles.ADMIN) {
+            const defaultTheme = {
+              primaryColor: Colors.MT_PRIMARY_1,
+              secondaryColor: Colors.MT_PRIMARY_2,
+              backgroundColor: Colors.MT_SECONDARY_3,
+              textColor: Colors.MT_SECONDARY_1,
+            };
+            await updateTheme(defaultTheme);
+          } else if (
             userResponse.data.role === Roles.PARTNER ||
             userResponse.data.role === Roles.TEAM
           ) {
