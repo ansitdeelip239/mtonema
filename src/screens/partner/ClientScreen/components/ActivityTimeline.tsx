@@ -1,11 +1,11 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
-import GetIcon from '../../../../components/GetIcon';
+import GetIcon, {IconEnum} from '../../../../components/GetIcon';
 import {ClientActivityDataModel} from '../../../../types';
 import {formatDate} from '../../../../utils/dateUtils';
 import Colors from '../../../../constants/Colors';
 
-const getActivityIcon = (activityType: string) => {
+const getActivityIcon = (activityType: string): IconEnum => {
   const type = activityType.toLowerCase();
   if (type.includes('phone call')) {
     return 'phone';
@@ -18,6 +18,9 @@ const getActivityIcon = (activityType: string) => {
   }
   if (type.includes('client created')) {
     return 'userPlus';
+  }
+  if (type.includes('assigned')) {
+    return 'user';
   }
   return 'notes';
 };
@@ -38,6 +41,7 @@ interface ActivityTimelineProps {
   isFirst?: boolean;
   isLast?: boolean;
   onPress: (activity: ClientActivityDataModel) => void;
+  isClickable?: boolean;
 }
 
 const ActivityTimeline: React.FC<ActivityTimelineProps> = ({
@@ -45,7 +49,10 @@ const ActivityTimeline: React.FC<ActivityTimelineProps> = ({
   isFirst = false,
   isLast = false,
   onPress,
+  isClickable = true,
 }) => {
+  const [isDescriptionExpanded, setIsDescriptionExpanded] = useState(false);
+
   const activityColor = getActivityColor(activity.activityType.name);
   const hasDescription = activity.description && activity.description !== '-';
 
@@ -53,10 +60,25 @@ const ActivityTimeline: React.FC<ActivityTimelineProps> = ({
   const dateString = formatDate(activity.createdOn, 'MMM d');
   const timeString = formatDate(activity.createdOn, 'h:mm a');
 
+  const handlePress = () => {
+    if (isClickable) {
+      onPress(activity);
+    }
+  };
+
+  const toggleDescription = () => {
+    setIsDescriptionExpanded(!isDescriptionExpanded);
+  };
+
+  // Check if description needs truncation (rough estimation)
+  const needsTruncation = hasDescription && activity.description.length > 100;
+
   return (
     <TouchableOpacity
       style={styles.touchableContainer}
-      onPress={() => onPress(activity)}>
+      onPress={handlePress}
+      disabled={!isClickable}
+      activeOpacity={isClickable ? 0.7 : 1}>
       <View style={styles.timelineSection}>
         {/* Line coming from above (only if it's not the first item) */}
         {!isFirst && (
@@ -90,11 +112,32 @@ const ActivityTimeline: React.FC<ActivityTimelineProps> = ({
           {activity.activityType.name}
         </Text>
 
-        {/* Description (if exists) */}
+        {/* Description with fold/unfold functionality */}
         {hasDescription && (
-          <Text style={styles.activityDescription} numberOfLines={2}>
-            {activity.description}
-          </Text>
+          <View style={styles.descriptionContainer}>
+            <Text
+              style={styles.activityDescription}
+              numberOfLines={isDescriptionExpanded ? undefined : 2}>
+              {activity.description}
+            </Text>
+            {needsTruncation && (
+              <TouchableOpacity
+                style={styles.foldUnfoldButton}
+                onPress={toggleDescription}
+                hitSlop={{top: 10, bottom: 10, left: 10, right: 10}}>
+                <View
+                  style={[
+                    styles.chevronContainer,
+                    isDescriptionExpanded && styles.chevronRotated,
+                  ]}>
+                  <GetIcon iconName="chevronRight" size={12} color="#666" />
+                </View>
+                <Text style={styles.foldUnfoldText}>
+                  {isDescriptionExpanded ? 'Show less' : 'Show more'}
+                </Text>
+              </TouchableOpacity>
+            )}
+          </View>
         )}
 
         {/* Created by */}
@@ -164,39 +207,38 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingBottom: 8,
   },
-  // New style for centering content when there's no description
-  contentSectionCentered: {
-    justifyContent: 'center',
-    paddingBottom: 0,
-  },
-  activityHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: 4,
-  },
   activityType: {
     fontSize: 13,
     fontWeight: '700', // Bold
     color: '#000', // Black
     marginBottom: 4,
   },
-  activityDate: {
-    fontSize: 14,
-    fontWeight: '600',
-    color: '#333',
+  descriptionContainer: {
     marginBottom: 4,
   },
   activityDescription: {
     fontSize: 12,
     color: '#777', // Slightly gray
     lineHeight: 18,
-    marginBottom: 4,
   },
-  assignedTo: {
-    fontSize: 12,
+  foldUnfoldButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: 4,
+    alignSelf: 'flex-start',
+    paddingVertical: 2,
+  },
+  chevronContainer: {
+    transform: [{rotate: '90deg'}], // Point down when collapsed
+  },
+  chevronRotated: {
+    transform: [{rotate: '270deg'}], // Point up when expanded
+  },
+  foldUnfoldText: {
+    fontSize: 11,
     color: '#666',
-    fontStyle: 'italic',
+    marginLeft: 6,
+    fontWeight: '500',
   },
   createdByContainer: {
     flexDirection: 'row',

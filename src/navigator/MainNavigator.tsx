@@ -19,8 +19,8 @@ const MainNavigator = () => {
   const allowedAdminEmails = [
     'info@dncrproperty.com',
     'shashi225@gmail.com',
-    'atique159@gmail.com',
-    'ansitdeelip239@gmail.com',
+    // 'atique159@gmail.com',
+    // 'ansitdeelip239@gmail.com',
   ];
 
   // Check if user has admin role and email is in the allowed list

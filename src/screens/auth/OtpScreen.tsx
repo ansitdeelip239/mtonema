@@ -81,8 +81,9 @@ const OtpScreen: React.FC<Props> = ({navigation, route}) => {
             };
             await updateTheme(defaultTheme);
           } else if (
-            userResponse.data.role === Roles.PARTNER ||
-            userResponse.data.role === Roles.TEAM
+            (userResponse.data.role === Roles.PARTNER ||
+              userResponse.data.role === Roles.TEAM) &&
+            userResponse.data.partnerLocation
           ) {
             const masterResponse = await MasterService.getMasterDetailsById(
               userResponse.data.partnerLocation,

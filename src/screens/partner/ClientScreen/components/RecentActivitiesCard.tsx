@@ -4,6 +4,7 @@ import {ClientActivityDataModel} from '../../../../types';
 import ActivityTimeline from './ActivityTimeline';
 import GetIcon from '../../../../components/GetIcon';
 import {useTheme} from '../../../../context/ThemeProvider';
+import {useMaster} from '../../../../context/MasterProvider';
 
 interface RecentActivitiesCardProps {
   activities?: ClientActivityDataModel[];
@@ -17,6 +18,40 @@ const RecentActivitiesCard: React.FC<RecentActivitiesCardProps> = ({
   onActivityPress,
 }) => {
   const {theme} = useTheme();
+  const {masterData} = useMaster();
+
+  // Helper function to check if an activity is clickable based on showInDropdown
+  const isActivityClickable = (activity: ClientActivityDataModel): boolean => {
+    if (!masterData?.ActivityType) {
+      return false;
+    }
+
+    const activityType = masterData.ActivityType.find(
+      type => type.id === activity.activityType.id
+    );
+
+    if (!activityType) {
+      return false;
+    }
+
+    try {
+      const descriptionObj = JSON.parse(activityType.description);
+      return descriptionObj.showInDropdown === true;
+    } catch (error) {
+      console.error(
+        `Error parsing ActivityType description for ${activityType.masterDetailName}:`,
+        error,
+      );
+      return false;
+    }
+  };
+
+  // Handler that only processes clicks for clickable activities
+  const handleActivityPress = (activity: ClientActivityDataModel) => {
+    if (isActivityClickable(activity)) {
+      onActivityPress(activity);
+    }
+  };
 
   const renderActivities = () => {
     if (!activities || activities.length === 0) {
@@ -45,7 +80,8 @@ const RecentActivitiesCard: React.FC<RecentActivitiesCardProps> = ({
             activity={activity}
             isFirst={index === 0}
             isLast={index === sortedActivities.length - 1}
-            onPress={onActivityPress}
+            onPress={handleActivityPress}
+            isClickable={isActivityClickable(activity)}
           />
         ))}
       </View>
