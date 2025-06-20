@@ -7,6 +7,7 @@ import GetIcon from '../../../../components/GetIcon';
 import Colors from '../../../../constants/Colors';
 import {useTheme} from '../../../../context/ThemeProvider';
 import GroupBadges from '../../ClientScreen/components/GroupBadge';
+import { parseHtmlToText } from '../../../../utils/parseHtmlToText';
 
 interface FollowUpCardProps {
   item: FollowUpType;
@@ -47,6 +48,9 @@ const FollowUpCard: React.FC<FollowUpCardProps> = ({item, filterType}) => {
     ? getLocalDate(item.followUpDate)
     : null;
 
+  // Parse HTML notes to plain text
+  const parsedNotes = parseHtmlToText(item.client.notes || '');
+
   return (
     <Card style={styles.followUpCard}>
       <Card.Content>
@@ -81,7 +85,7 @@ const FollowUpCard: React.FC<FollowUpCardProps> = ({item, filterType}) => {
           )}
         </View>
 
-        <Text style={styles.notes}>{item.client.notes || 'No notes'}</Text>
+        <Text style={styles.notes}>{parsedNotes || 'No notes'}</Text>
       </Card.Content>
     </Card>
   );
@@ -145,7 +149,6 @@ const styles = StyleSheet.create({
     color: '#888',
     fontStyle: 'italic',
   },
-  // Removed groupTag and groupText styles as they're no longer needed
 });
 
 export default FollowUpCard;

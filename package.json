@@ -23,6 +23,7 @@
     "date-fns": "^4.1.0",
     "jwt-decode": "^4.0.0",
     "lodash": "^4.17.21",
+    "node-html-parser": "^7.0.1",
     "react": "^19.0.0",
     "react-native": "^0.79.2",
     "react-native-gesture-handler": "^2.25.0",

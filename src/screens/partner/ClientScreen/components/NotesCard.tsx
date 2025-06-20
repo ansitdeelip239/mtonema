@@ -1,5 +1,6 @@
 import React from 'react';
 import {View, Text, StyleSheet} from 'react-native';
+import { parseHtmlToText } from '../../../../utils/parseHtmlToText';
 
 interface NotesCardProps {
   notes?: string;
@@ -10,10 +11,12 @@ const NotesCard: React.FC<NotesCardProps> = ({notes}) => {
     return null;
   }
 
+  const parsedNotes = parseHtmlToText(notes);
+
   return (
     <View style={styles.infoCard}>
       <Text style={styles.sectionTitle}>Notes</Text>
-      <Text style={styles.notesText}>{notes}</Text>
+      <Text style={styles.notesText}>{parsedNotes}</Text>
     </View>
   );
 };
