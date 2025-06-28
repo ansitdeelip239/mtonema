@@ -303,11 +303,11 @@ const ClientProfileScreen: React.FC<Props> = ({route, navigation}) => {
           };
 
           if (isFollowUpToday()) {
-            // Reschedule follow-up for 3 days later
+            // Reschedule follow-up for 1 days later
             try {
-              // Create a new date 3 days in the future
+              // Create a new date 1 days in the future
               const newFollowUpDate = new Date();
-              newFollowUpDate.setDate(newFollowUpDate.getDate() + 3);
+              newFollowUpDate.setDate(newFollowUpDate.getDate() + 1);
 
               // Ensure the time is set to a reasonable hour (e.g., 10:00 AM)
               newFollowUpDate.setHours(10, 0, 0, 0);
@@ -345,7 +345,7 @@ const ClientProfileScreen: React.FC<Props> = ({route, navigation}) => {
                   type: 'success',
                   text1: 'Success',
                   text2:
-                    'Activity added and follow-up rescheduled for 3 days later',
+                    'Activity added and follow-up rescheduled for 1 days later',
                 });
               } else {
                 Toast.show({
