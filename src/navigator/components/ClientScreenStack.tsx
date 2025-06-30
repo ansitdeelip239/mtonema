@@ -13,7 +13,11 @@ export type ClientStackParamList = {
   ClientScreen: undefined;
   AddClientScreen: {editMode: boolean; clientData?: Client};
   ClientProfileScreen: {clientId: number};
-  ClientAssignmentScreen: {clientId: number; assignedUsers: number[]};
+  ClientAssignmentScreen: {clientId: number; assignedUsers: {
+    id: number;
+    name: string;
+    email: string;
+  }[]};
   MessageTemplateScreen: {
     clientId: number;
     clientName: string;

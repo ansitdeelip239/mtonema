@@ -487,7 +487,11 @@ class PartnerService {
 
   static async getAssignedUsers(clientId: number) {
     try {
-      const response = await api.get<number[]>(url.getAssignedUsers(clientId));
+      const response = await api.get<{
+        id: number;
+        name: string;
+        email: string;
+      }[]>(url.getAssignedUsers(clientId));
       return response;
     } catch (error) {
       console.error('Error in getAssignedUsers', error);

@@ -86,6 +86,29 @@ const FollowUpCard: React.FC<FollowUpCardProps> = ({item, filterType}) => {
         </View>
 
         <Text style={styles.notes}>{parsedNotes || 'No notes'}</Text>
+
+        {/* Horizontal Rule */}
+        <View style={styles.horizontalRule} />
+
+        {/* Assigned Users Section */}
+        <View style={styles.assignedUsersContainerWrapper}>
+          {item.assignedUsers && item.assignedUsers.length > 0 && (
+            <Text style={styles.assignedUsersLabel}>Assigned Users:</Text>
+          )}
+          <View style={styles.assignedUsersContainer}>
+            {item.assignedUsers && item.assignedUsers.length > 0 ? (
+              <View style={styles.assignedUsersList}>
+                {item.assignedUsers.map((user) => (
+                  <View key={user.id} style={styles.assignedUserBadge}>
+                    <Text style={styles.assignedUserName}>{user.name}</Text>
+                  </View>
+                ))}
+              </View>
+            ) : (
+              <Text style={styles.noAssignedUserText}>No assigned users</Text>
+            )}
+          </View>
+        </View>
       </Card.Content>
     </Card>
   );
@@ -140,6 +163,56 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: '#444',
     marginTop: 6,
+    marginBottom: 6,
+  },
+  horizontalRule: {
+    borderBottomColor: '#e0e0e0',
+    borderBottomWidth: 1,
+    marginVertical: 8,
+    marginHorizontal: -8,
+  },
+  assignedUsersContainerWrapper: {
+    marginTop: 2,
+    marginBottom: 4,
+  },
+  assignedUsersLabel: {
+    fontSize: 13,
+    color: '#555',
+    fontWeight: 'bold',
+    marginBottom: 2,
+    marginLeft: 2,
+  },
+  assignedUsersContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    flexWrap: 'wrap',
+    marginLeft: 2,
+  },
+  assignedUsersList: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    alignItems: 'center',
+  },
+  assignedUserBadge: {
+    backgroundColor: '#e6f2ff',
+    borderRadius: 12,
+    paddingHorizontal: 10,
+    paddingVertical: 4,
+    marginRight: 8,
+    marginBottom: 4,
+    borderWidth: 1,
+    borderColor: '#b3d4fc',
+  },
+  assignedUserName: {
+    fontSize: 13,
+    color: '#2563eb',
+    fontWeight: '500',
+  },
+  noAssignedUserText: {
+    fontSize: 12,
+    color: '#888',
+    fontStyle: 'italic',
+    marginLeft: 2,
   },
   groupsContainer: {
     marginVertical: 4,

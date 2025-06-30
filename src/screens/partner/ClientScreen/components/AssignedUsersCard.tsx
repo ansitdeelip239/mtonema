@@ -2,18 +2,24 @@ import React from 'react';
 import {View, Text, StyleSheet, TouchableOpacity, ActivityIndicator} from 'react-native';
 import GetIcon from '../../../../components/GetIcon';
 
+interface AssignedUser {
+  id: number;
+  name: string;
+  email: string;
+}
+
 interface AssignedUsersCardProps {
-  assignedUsersCount: number;
+  assignedUsers: AssignedUser[];
   isLoading?: boolean;
   onPress?: () => void;
 }
 
 const AssignedUsersCard: React.FC<AssignedUsersCardProps> = ({
-  assignedUsersCount,
+  assignedUsers = [],
   isLoading = false,
   onPress,
 }) => {
-  const isAssigned = assignedUsersCount > 0;
+  const isAssigned = assignedUsers.length > 0;
 
   return (
     <TouchableOpacity
@@ -42,19 +48,20 @@ const AssignedUsersCard: React.FC<AssignedUsersCardProps> = ({
                 {isAssigned ? 'Assigned To' : 'Unassigned'}
               </Text>
               {isAssigned && (
-                <Text style={styles.description}>
-                  {assignedUsersCount} user{assignedUsersCount > 1 ? 's' : ''}
-                </Text>
+                <View style={styles.badgesContainer}>
+                  {assignedUsers.map(user => (
+                    <View key={user.id} style={styles.userBadge}>
+                      <Text style={styles.userBadgeText}>{user.name}</Text>
+                    </View>
+                  ))}
+                </View>
+              )}
+              {!isAssigned && (
+                <Text style={styles.description}>No users assigned</Text>
               )}
             </>
           )}
         </View>
-
-        {!isLoading && isAssigned && (
-          <View style={styles.countBadge}>
-            <Text style={styles.countText}>{assignedUsersCount}</Text>
-          </View>
-        )}
 
         {!isLoading && onPress && (
           <View style={styles.arrowContainer}>
@@ -107,17 +114,25 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: '#666',
   },
-  countBadge: {
-    backgroundColor: '#0066cc',
+  badgesContainer: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    marginTop: 4,
+  },
+  userBadge: {
+    backgroundColor: '#e6f2ff',
     borderRadius: 12,
-    paddingHorizontal: 8,
+    paddingHorizontal: 10,
     paddingVertical: 4,
     marginRight: 8,
+    marginBottom: 4,
+    borderWidth: 1,
+    borderColor: '#b3d4fc',
   },
-  countText: {
-    color: 'white',
-    fontSize: 12,
-    fontWeight: '600',
+  userBadgeText: {
+    fontSize: 13,
+    color: '#2563eb',
+    fontWeight: '500',
   },
   arrowContainer: {
     padding: 4,

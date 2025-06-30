@@ -256,6 +256,11 @@ export interface Client {
   lastActivityDate: string;
   status: number;
   followUp?: FollowUp;
+  assignedTeamIds?: {
+    id: number;
+    name: string;
+    email: string;
+  }[];
 }
 
 export interface FollowUp {
@@ -280,6 +285,11 @@ export interface FollowUpType {
   createdBy: number;
   updatedBy: number;
   client: Client;
+  assignedUsers: {
+    id: number;
+    name: string;
+    email: string;
+  }[]
 }
 
 export interface ClientResponseModel {

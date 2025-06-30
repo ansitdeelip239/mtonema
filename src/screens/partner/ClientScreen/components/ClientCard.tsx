@@ -103,6 +103,20 @@ export const ClientCard: React.FC<ClientCardProps> = ({
             </View>
           )}
 
+          {/* Assigned Team Members */}
+          {client.assignedTeamIds && client.assignedTeamIds.length > 0 && (
+            <View style={styles.row}>
+              <Text style={styles.label}>Assigned To:</Text>
+              <View style={styles.assignedBadgesContainer}>
+                {client.assignedTeamIds.map(member => (
+                  <View key={member.id} style={styles.assignedBadge}>
+                    <Text style={styles.assignedBadgeText}>{member.name}</Text>
+                  </View>
+                ))}
+              </View>
+            </View>
+          )}
+
           {client.createdBy && (
             <View style={styles.row}>
               <Text style={styles.label}>Created By:</Text>
@@ -236,5 +250,27 @@ const styles = StyleSheet.create({
   creatorEmail: {
     fontSize: 12,
     color: '#888',
+  },
+  assignedBadgesContainer: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 1,
+    alignItems: 'center',
+    flex: 1,
+  },
+  assignedBadge: {
+    backgroundColor: '#e6f0fa',
+    borderRadius: 12,
+    paddingVertical: 4,
+    paddingHorizontal: 12,
+    marginRight: 8,
+    marginBottom: 4,
+    borderWidth: 1,
+    borderColor: '#b3d4fc',
+  },
+  assignedBadgeText: {
+    color: '#0066cc',
+    fontWeight: '600',
+    fontSize: 13,
   },
 });

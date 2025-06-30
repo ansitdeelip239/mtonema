@@ -54,7 +54,8 @@ const ClientAssignmentScreen: React.FC<Props> = ({navigation, route}) => {
         const usersWithSelection: UserWithSelection[] = response.data.map(
           teamUser => ({
             ...teamUser,
-            isSelected: assignedUsers.includes(teamUser.id),
+            // isSelected: assignedUsers.includes(teamUser.id),
+            isSelected: assignedUsers.map(assignedUser => assignedUser.id).includes(teamUser.id),
           }),
         );
         setUsers(usersWithSelection);

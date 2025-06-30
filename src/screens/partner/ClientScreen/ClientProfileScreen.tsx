@@ -61,7 +61,13 @@ const ClientProfileScreen: React.FC<Props> = ({route, navigation}) => {
   const [preSelectedActivityType, setPreSelectedActivityType] = useState<
     number | null
   >(null);
-  const [assignedUsers, setAssignedUsers] = useState<number[]>([]);
+  const [assignedUsers, setAssignedUsers] = useState<
+    {
+      id: number;
+      name: string;
+      email: string;
+    }[]
+  >([]);
 
   const {clientsUpdated, setClientsUpdated} = usePartner();
   const {keyboardVisible} = useKeyboard();
@@ -578,7 +584,7 @@ const ClientProfileScreen: React.FC<Props> = ({route, navigation}) => {
                 />
 
                 <AssignedUsersCard
-                  assignedUsersCount={assignedUsers.length}
+                  assignedUsers={assignedUsers}
                   isLoading={assignedUsersLoading}
                   onPress={() => {
                     navigation.navigate('ClientAssignmentScreen', {
