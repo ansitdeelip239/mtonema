@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import {useAuth} from '../hooks/useAuth';
-import {useLogoStorage} from '../hooks/useLogoStorage';
+// import {useLogoStorage} from '../hooks/useLogoStorage';
 import {
   DrawerContentScrollView,
   DrawerItemList,
@@ -29,7 +29,7 @@ const CustomDrawerContent = (props: any) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [loadingModalVisible, setLoadingModalVisible] = useState(false);
 
-  const {logoUrl} = useLogoStorage();
+  // const {logoUrl} = useLogoStorage();
 
   useEffect(() => {
     if (user?.name) {
@@ -62,11 +62,11 @@ const CustomDrawerContent = (props: any) => {
     <DrawerContentScrollView {...props} contentContainerStyle={styles.flexOne}>
       <TouchableOpacity onPress={navigateToProfile}>
         <View style={styles.profileContainer}>
-          {logoUrl ? (
+          {/* {logoUrl ? (
             <Image source={{uri: logoUrl}} style={styles.logo} />
-          ) : (
+          ) : ( */}
             <Image source={Images.MTESTATES_LOGO} style={styles.logo} />
-          )}
+          {/* )} */}
 
           <View style={styles.nameContainer}>
             <Text style={styles.name}>{userName}</Text>

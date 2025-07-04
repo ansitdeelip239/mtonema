@@ -40,7 +40,7 @@ const PartnerZoneScreen: React.FC<Props> = ({navigation}) => {
 
     try {
       const parsedDesc = JSON.parse(description);
-      return parsedDesc?.imageUrl || null;
+      return parsedDesc?.iconUrl || null;
     } catch (error) {
       console.error('Error parsing location description:', error);
       return null;
@@ -200,8 +200,8 @@ const styles = StyleSheet.create({
     height: 100,
   },
   partnerLogo: {
-    width: 100,
-    height: 100,
+    width: 80,
+    height: 80,
     resizeMode: 'contain',
     mixBlendMode: 'multiply',
   },

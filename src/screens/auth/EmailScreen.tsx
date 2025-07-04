@@ -76,9 +76,9 @@ const EmailScreen: React.FC<Props> = ({navigation, route}) => {
     return getGradientColors(partnerInfo.colorScheme?.primaryColor);
   }, [partnerInfo.colorScheme]);
 
-  const logoHeight = useRef(new Animated.Value(200)).current;
+  // Animation values for logo
+  const logoHeight = useRef(new Animated.Value(150)).current;
   const logoOpacity = useRef(new Animated.Value(1)).current;
-  const logoMarginTop = useRef(new Animated.Value(0)).current;
 
   const onSubmit = async (_data: EmailFormData) => {
     // This is just to maintain the form submission structure
@@ -130,18 +130,27 @@ const EmailScreen: React.FC<Props> = ({navigation, route}) => {
     [role],
   );
 
-  // Add this after your keyboard hook usage
+  // Animate logo on keyboard visibility change
   useEffect(() => {
     if (keyboardVisible) {
-      // Immediately hide the logo when keyboard appears (no animation)
-      logoHeight.setValue(0);
-      logoOpacity.setValue(0);
-      logoMarginTop.setValue(-30);
-    } else {
-      // Animate logo sliding down and fading in when keyboard hides
+      // Animate logo sliding up and fading out
       Animated.parallel([
         Animated.timing(logoHeight, {
-          toValue: 200,
+          toValue: 0,
+          duration: 300,
+          useNativeDriver: false,
+        }),
+        Animated.timing(logoOpacity, {
+          toValue: 0,
+          duration: 250,
+          useNativeDriver: false,
+        }),
+      ]).start();
+    } else {
+      // Animate logo sliding down and fading in
+      Animated.parallel([
+        Animated.timing(logoHeight, {
+          toValue: 150,
           duration: 300,
           useNativeDriver: false,
         }),
@@ -150,14 +159,9 @@ const EmailScreen: React.FC<Props> = ({navigation, route}) => {
           duration: 350,
           useNativeDriver: false,
         }),
-        Animated.timing(logoMarginTop, {
-          toValue: 0,
-          duration: 300,
-          useNativeDriver: false,
-        }),
       ]).start();
     }
-  }, [keyboardVisible, logoHeight, logoOpacity, logoMarginTop]);
+  }, [keyboardVisible, logoHeight, logoOpacity]);
 
   const handleOtpVerification = useCallback(
     async (skipEmailCheck = false) => {
@@ -242,23 +246,22 @@ const EmailScreen: React.FC<Props> = ({navigation, route}) => {
               {
                 opacity: logoOpacity,
                 height: logoHeight,
-                marginTop: logoMarginTop,
                 overflow: 'hidden' as const,
               },
             ]}>
-            {partnerInfo.imageUrl ? (
+            {/* {partnerInfo.imageUrl ? (
               <Image
                 source={{uri: partnerInfo.imageUrl}}
                 style={styles.logo}
                 resizeMode="contain"
               />
-            ) : (
+            ) : ( */}
               <Image
                 source={Images.MTESTATES_LOGO}
                 style={styles.logo}
                 resizeMode="contain"
               />
-            )}
+            {/* )} */}
           </Animated.View>
 
           <View style={styles.formCard}>
@@ -412,11 +415,11 @@ const styles = StyleSheet.create({
   },
   logoContainer: {
     alignItems: 'center',
-    marginBottom: 30,
+    marginBottom: 50,
   },
   logo: {
-    width: width * 0.8,
-    height: 200,
+    width: width * 0.7,
+    height: 150,
     mixBlendMode: 'multiply',
   },
   formCard: {
