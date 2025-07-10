@@ -1,31 +1,31 @@
-import {NativeStackScreenProps} from '@react-navigation/native-stack';
-import React, {useEffect, useState, useCallback} from 'react';
-import {useFocusEffect} from '@react-navigation/native';
+import React, {useState, useEffect, useCallback} from 'react';
 import {
   View,
+  Text,
   StyleSheet,
   ScrollView,
-  Linking,
   RefreshControl,
-  ActivityIndicator,
   TouchableOpacity,
-  Text,
+  ActivityIndicator,
+  Linking,
 } from 'react-native';
+import {NativeStackScreenProps} from '@react-navigation/native-stack';
+import {useFocusEffect} from '@react-navigation/native';
 import {ClientStackParamList} from '../../../navigator/components/ClientScreenStack';
 import Header from '../../../components/Header';
-import {Client, ClientActivityDataModel, FollowUp} from '../../../types';
 import PartnerService from '../../../services/PartnerService';
-import Toast from 'react-native-toast-message';
+import {Client, ClientActivityDataModel, FollowUp} from '../../../types';
+import {useAuth} from '../../../hooks/useAuth';
 import GetIcon from '../../../components/GetIcon';
+import {useDialog} from '../../../hooks/useDialog';
+import Toast from 'react-native-toast-message';
 import {usePartner} from '../../../context/PartnerProvider';
 import {Appbar, Menu} from 'react-native-paper';
 import AddActivityModal from './components/AddActivityModal';
 import {useKeyboard} from '../../../hooks/useKeyboard';
-import {useAuth} from '../../../hooks/useAuth';
-import {useDialog} from '../../../hooks/useDialog';
 import ConfirmationModal from '../../../components/ConfirmationModal';
 import ScheduleFollowUpModal from './components/ScheduleFollowUpModal';
-
+import DuplicateClientsModal from './components/DuplicateClientsModal';
 import ProfileHeader from './components/ProfileHeader';
 import ContactButtons from './components/ContactButtons';
 import FollowUpCard from './components/FollowUpCard';
@@ -68,6 +68,10 @@ const ClientProfileScreen: React.FC<Props> = ({route, navigation}) => {
       email: string;
     }[]
   >([]);
+  const [duplicateClients, setDuplicateClients] = useState<Partial<Client>[]>(
+    [],
+  );
+  const [isDuplicateModalVisible, setIsDuplicateModalVisible] = useState(false);
 
   const {clientsUpdated, setClientsUpdated} = usePartner();
   const {keyboardVisible} = useKeyboard();
@@ -77,6 +81,19 @@ const ClientProfileScreen: React.FC<Props> = ({route, navigation}) => {
   const {masterData} = useMaster();
   const {hideBottomTabs, showBottomTabs} = useBottomTab();
 
+  const fetchDuplicateClients = useCallback(async () => {
+    try {
+      const response = await PartnerService.getDuplicateClients(
+        route.params.clientId,
+      );
+      if (response.success) {
+        setDuplicateClients(response.data);
+      }
+    } catch (error) {
+      console.error('Error fetching duplicate clients:', error);
+    }
+  }, [route.params.clientId]);
+
   const fetchClient = useCallback(async () => {
     try {
       setLoading(true);
@@ -85,6 +102,7 @@ const ClientProfileScreen: React.FC<Props> = ({route, navigation}) => {
       );
       if (response.success) {
         setClient(response.data);
+        fetchDuplicateClients(); // Fetch duplicate clients after getting client data
       }
     } catch (error) {
       console.error('Error in fetchClient', error);
@@ -115,7 +133,7 @@ const ClientProfileScreen: React.FC<Props> = ({route, navigation}) => {
     } finally {
       setFollowUpLoading(false);
     }
-  }, [route.params.clientId, navigation, showError]);
+  }, [route.params.clientId, navigation, showError, fetchDuplicateClients]);
 
   const fetchAssignedUsers = useCallback(async () => {
     try {
@@ -572,6 +590,15 @@ const ClientProfileScreen: React.FC<Props> = ({route, navigation}) => {
           refreshControl={
             <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
           }>
+          {duplicateClients.length > 0 && (
+            <TouchableOpacity
+              style={styles.duplicateWarning}
+              onPress={() => setIsDuplicateModalVisible(true)}>
+              <Text style={styles.duplicateWarningText}>
+                Duplicate Client Found
+              </Text>
+            </TouchableOpacity>
+          )}
           {client && (
             <>
               <ProfileHeader client={client} />
@@ -676,6 +703,18 @@ const ClientProfileScreen: React.FC<Props> = ({route, navigation}) => {
         onConfirm={handleConfirmDelete}
         onCancel={() => setIsDeleteModalVisible(false)}
       />
+
+      <DuplicateClientsModal
+        visible={isDuplicateModalVisible}
+        onClose={() => setIsDuplicateModalVisible(false)}
+        duplicateClients={duplicateClients}
+        onClientPress={clientId => {
+          setIsDuplicateModalVisible(false);
+          navigation.push('ClientProfileScreen', {
+            clientId: clientId,
+          });
+        }}
+      />
     </View>
   );
 };
@@ -743,9 +782,31 @@ const styles = StyleSheet.create({
   },
   fixedButtonContainer: {
     position: 'absolute',
-    bottom: 20, // Changed from 110 to 20 since tabs are hidden
+    bottom: 20,
     left: 16,
     right: 16,
+  },
+  duplicateWarning: {
+    backgroundColor: '#ffebee',
+    padding: 12,
+    marginBottom: 16,
+    borderRadius: 8,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderWidth: 1,
+    borderColor: '#ffcdd2',
+  },
+  duplicateWarningText: {
+    color: '#c62828',
+    fontSize: 14,
+    fontWeight: '600',
+  },
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    justifyContent: 'center',
+    padding: 20,
   },
 });
 

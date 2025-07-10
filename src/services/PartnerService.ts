@@ -487,11 +487,13 @@ class PartnerService {
 
   static async getAssignedUsers(clientId: number) {
     try {
-      const response = await api.get<{
-        id: number;
-        name: string;
-        email: string;
-      }[]>(url.getAssignedUsers(clientId));
+      const response = await api.get<
+        {
+          id: number;
+          name: string;
+          email: string;
+        }[]
+      >(url.getAssignedUsers(clientId));
       return response;
     } catch (error) {
       console.error('Error in getAssignedUsers', error);
@@ -590,7 +592,19 @@ class PartnerService {
 
   static async getAllPartners() {
     try {
-      const response = await api.get<{users: User[]}>(url.users + '?role=partner');
+      const response = await api.get<{users: User[]}>(
+        url.users + '?role=partner',
+      );
+      return response;
+    } catch (error) {
+      console.error('Error in getAllPartners', error);
+      throw error;
+    }
+  }
+
+  static async getDuplicateClients(clientId: number) {
+    try {
+      const response = await api.get<Partial<Client>[]>(url.getDuplicateClients + `/${clientId}`);
       return response;
     } catch (error) {
       console.error('Error in getAllPartners', error);
