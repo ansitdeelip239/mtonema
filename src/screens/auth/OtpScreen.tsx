@@ -166,7 +166,6 @@ const OtpScreen: React.FC<Props> = ({navigation, route}) => {
         onChangeText={setOtp}
         onPress={handleSubmit}
         isLoading={isLoading}
-        logoUrl={logoUrl}
         themeColor={partnerInfo.colorScheme?.primaryColor}
       />
     </SafeAreaView>

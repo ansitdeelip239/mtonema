@@ -28,7 +28,6 @@ interface OtpModelProps {
   onChangeText: (text: string) => void;
   onPress: () => void;
   isLoading?: boolean;
-  logoUrl?: string;
   themeColor?: string;
 }
 
@@ -37,7 +36,6 @@ const OtpModel: React.FC<OtpModelProps> = ({
   onChangeText,
   onPress,
   isLoading = false,
-  logoUrl,
   themeColor,
 }) => {
   const otpInputRef = useRef(null);
@@ -111,19 +109,11 @@ const OtpModel: React.FC<OtpModelProps> = ({
                 } as any,
                 {overflow: 'hidden' as 'hidden'},
               ]}>
-              {logoUrl ? (
-                <Image
-                  source={{uri: logoUrl}}
-                  style={styles.logo}
-                  resizeMode="contain"
-                />
-              ) : (
-                <Image
-                  source={Images.MTESTATES_LOGO}
-                  style={styles.logo}
-                  resizeMode="contain"
-                />
-              )}
+              <Image
+                source={Images.MTESTATES_LOGO}
+                style={styles.logo}
+                resizeMode="contain"
+              />
             </Animated.View>
 
             <View style={styles.formCard}>
