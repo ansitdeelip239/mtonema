@@ -47,10 +47,9 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   badge: {
-    paddingHorizontal: 12,
-    paddingVertical: 6,
-    borderRadius: 3,
-    // Removed borderWidth as solid background with same color border isn't needed
+    paddingHorizontal: 8,
+    paddingVertical: 3,
+    borderRadius: 2,
   },
   badgeText: {
     fontSize: 12,

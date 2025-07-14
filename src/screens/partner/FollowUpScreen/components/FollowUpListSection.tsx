@@ -5,7 +5,6 @@ import {
   StyleSheet,
   FlatList,
   ActivityIndicator,
-  TouchableOpacity,
 } from 'react-native';
 import FollowUpCard from './FollowUpCard';
 import {FollowUpType} from '../../../../types';
@@ -40,13 +39,11 @@ const FollowUpListSection: React.FC<FollowUpListSectionProps> = ({
 }) => {
   const {theme} = useTheme();
   const renderFollowUpItem = ({item}: {item: FollowUpType}) => (
-    <TouchableOpacity onPress={() => onFollowUpPress?.(item.client.id)}>
-      {!filterType ? (
-        <FollowUpCard item={item} />
-      ) : (
-        <FollowUpCard item={item} filterType={filterType} />
-      )}
-    </TouchableOpacity>
+    <FollowUpCard
+      item={item}
+      filterType={filterType}
+      onPress={() => onFollowUpPress?.(item.client.id)}
+    />
   );
 
   const renderFooter = () => {

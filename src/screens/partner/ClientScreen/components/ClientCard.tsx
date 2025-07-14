@@ -6,17 +6,7 @@ import GroupBadges from './GroupBadge';
 import {ClientStackParamList} from '../../../../navigator/components/ClientScreenStack';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import GetIcon from '../../../../components/GetIcon';
-
-// Utility to generate a pastel color from a string
-const getPastelColor = (str: string) => {
-  let hash = 0;
-  for (let i = 0; i < str.length; i++) {
-    // eslint-disable-next-line no-bitwise
-    hash = str.charCodeAt(i) + ((hash << 5) - hash);
-  }
-  const hue = hash % 360;
-  return `hsl(${hue}, 70%, 85%)`;
-};
+import { getPastelColor } from '../../../../utils/getPastelColor';
 
 interface ClientCardProps {
   client: Client;
@@ -77,7 +67,6 @@ export const ClientCard: React.FC<ClientCardProps> = ({
                 {client.clientName.charAt(0).toUpperCase()}
               </Text>
             </View>
-
             <View style={styles.nameStatusContainer}>
               <Text style={styles.clientName}>{client.clientName}</Text>
               <View style={styles.statusRow}>
@@ -101,41 +90,26 @@ export const ClientCard: React.FC<ClientCardProps> = ({
                 </Text>
               </View>
             </View>
-          </View>
-
-          <View style={styles.actionIcons}>
-            {client.whatsappNumber && (
-              <TouchableOpacity
-                onPress={handleWhatsapp}
-                style={styles.iconButton}>
-                <GetIcon iconName="whatsapp" size={20} />
-              </TouchableOpacity>
-            )}
-            {client.mobileNumber && (
-              <TouchableOpacity onPress={handlePhone} style={styles.iconButton}>
-                <GetIcon iconName="phone" size={20} />
-              </TouchableOpacity>
-            )}
+            <View style={styles.actionIconsRow}>
+              {client.whatsappNumber && (
+                <TouchableOpacity
+                  onPress={handleWhatsapp}
+                  style={[styles.iconButton, styles.whatsappButton]}
+                >
+                  <GetIcon iconName="whatsapp" size={20} color="#fff" />
+                </TouchableOpacity>
+              )}
+              {client.mobileNumber && (
+                <TouchableOpacity onPress={handlePhone} style={[styles.iconButton, styles.phoneButton]}>
+                  <GetIcon iconName="phone" size={14} color="#fff" />
+                </TouchableOpacity>
+              )}
+            </View>
           </View>
         </View>
 
         <View style={styles.cardContent}>
-          {(client.mobileNumber || client.whatsappNumber || client.emailId) && (
-            <View style={styles.infoRow}>
-              {client.mobileNumber || client.whatsappNumber ? (
-                <Text style={styles.infoText}>
-                  {client.mobileNumber || client.whatsappNumber}
-                </Text>
-              ) : null}
-              {(client.mobileNumber || client.whatsappNumber) &&
-              client.emailId ? (
-                <Text style={styles.separator}>•</Text>
-              ) : null}
-              {client.emailId ? (
-                <Text style={styles.infoText}>{client.emailId}</Text>
-              ) : null}
-            </View>
-          )}
+          {/* Phone and email info hidden as requested */}
           {/* {client.lastActivityDate && (
             <View style={styles.lastActivityRow}>
               <Text style={styles.lastActivityText}>
@@ -239,15 +213,28 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: '#666',
   },
-  actionIcons: {
+  actionIconsRow: {
     flexDirection: 'row',
-    alignItems: 'center',
+    alignItems: 'flex-start',
+    marginLeft: 12,
+    marginTop: -18,
+    gap: 2,
   },
   iconButton: {
-    marginLeft: 12,
-    padding: 8,
-    borderRadius: 20,
-    backgroundColor: '#f8f9fa',
+    width: 36,
+    height: 36,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 18,
+    marginRight: 8,
+    elevation: 2,
+    padding: 0,
+  },
+  whatsappButton: {
+    backgroundColor: '#25D366',
+  },
+  phoneButton: {
+    backgroundColor: '#007AFF',
   },
   cardContent: {
     paddingHorizontal: 16,
