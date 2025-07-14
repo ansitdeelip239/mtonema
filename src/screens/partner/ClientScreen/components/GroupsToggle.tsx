@@ -1,4 +1,5 @@
 import React, {useState, useCallback, useMemo} from 'react';
+import {TextInput} from 'react-native';
 import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
 import {usePartner} from '../../../../context/PartnerProvider';
 import GetIcon from '../../../../components/GetIcon';
@@ -24,6 +25,7 @@ const GroupsToggleComponent: React.FC<GroupsToggleComponentProps> = ({
   const [showAllGroups, setShowAllGroups] = useState(false);
   const [showAddGroupModal, setShowAddGroupModal] = useState(false);
   const [isAddingGroup, setIsAddingGroup] = useState(false);
+  const [searchText, setSearchText] = useState('');
 
   // Function to handle group creation
   const handleAddGroup = useCallback(
@@ -97,8 +99,16 @@ const GroupsToggleComponent: React.FC<GroupsToggleComponentProps> = ({
       groups?.filter(group => selectedGroups.includes(group.id)) || [];
 
     // Then, get unselected groups
-    const unselected =
+    let unselected =
       groups?.filter(group => !selectedGroups.includes(group.id)) || [];
+
+    // Filter by search text
+    if (searchText.trim()) {
+      const lowerSearch = searchText.trim().toLowerCase();
+      unselected = unselected.filter(group =>
+        group.groupName.toLowerCase().includes(lowerSearch)
+      );
+    }
 
     // Determine which unselected groups to show
     const toShow = showAllGroups
@@ -117,7 +127,7 @@ const GroupsToggleComponent: React.FC<GroupsToggleComponentProps> = ({
       unselectedGroups: unselected,
       unselectedToShow: toShow,
     };
-  }, [groups, selectedGroups, showAllGroups]);
+  }, [groups, selectedGroups, showAllGroups, searchText]);
 
   // Destructure directly from groupsData to avoid redeclaration issues
   const {visibleGroups, hasMoreGroups, unselectedGroups, unselectedToShow} =
@@ -147,6 +157,15 @@ const GroupsToggleComponent: React.FC<GroupsToggleComponentProps> = ({
           <Text style={styles.addGroupButtonText}>Add Group</Text>
         </TouchableOpacity>
       </View>
+
+      {/* Search bar for groups */}
+      <TextInput
+        style={styles.searchBar}
+        placeholder="Search groups..."
+        value={searchText}
+        onChangeText={setSearchText}
+        placeholderTextColor="#888"
+      />
 
       {/* Group buttons container */}
       <View style={styles.groupButtonsContainer}>
@@ -266,8 +285,19 @@ const GroupsToggleComponent: React.FC<GroupsToggleComponentProps> = ({
   );
 };
 
-// Styles remain unchanged
 const styles = StyleSheet.create({
+  searchBar: {
+    width: '100%',
+    borderWidth: 1,
+    borderColor: '#ddd',
+    borderRadius: 12,
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+    fontSize: 15,
+    marginBottom: 12,
+    backgroundColor: '#fafbfc',
+    color: '#222',
+  },
   groupsContainer: {
     marginBottom: 16,
   },

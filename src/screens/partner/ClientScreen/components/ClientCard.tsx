@@ -1,17 +1,22 @@
 import React from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  Image,
-  Linking,
-  TouchableOpacity,
-} from 'react-native';
+import {View, Text, StyleSheet, Linking, TouchableOpacity} from 'react-native';
 import {Client} from '../../../../types';
 import {formatDate} from '../../../../utils/dateUtils';
 import GroupBadges from './GroupBadge';
 import {ClientStackParamList} from '../../../../navigator/components/ClientScreenStack';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
+import GetIcon from '../../../../components/GetIcon';
+
+// Utility to generate a pastel color from a string
+const getPastelColor = (str: string) => {
+  let hash = 0;
+  for (let i = 0; i < str.length; i++) {
+    // eslint-disable-next-line no-bitwise
+    hash = str.charCodeAt(i) + ((hash << 5) - hash);
+  }
+  const hue = hash % 360;
+  return `hsl(${hue}, 70%, 85%)`;
+};
 
 interface ClientCardProps {
   client: Client;
@@ -62,52 +67,88 @@ export const ClientCard: React.FC<ClientCardProps> = ({
     <TouchableOpacity onPress={handleCardPress} activeOpacity={0.7}>
       <View style={styles.clientCard}>
         <View style={styles.cardHeader}>
-          <View style={styles.dateContainer}>
-            <View style={styles.dateBlock}>
-              <Text style={styles.dateLabel}>Date Added</Text>
-              <Text style={styles.dateText}>
-                {client.createdOn && formatDate(client.createdOn, 'dd MMM yy')}
+          <View style={styles.avatarContainer}>
+            <View
+              style={[
+                styles.avatar,
+                {backgroundColor: getPastelColor(client.clientName)},
+              ]}>
+              <Text style={styles.avatarText}>
+                {client.clientName.charAt(0).toUpperCase()}
               </Text>
             </View>
-            <View style={styles.iconContainer}>
-              {client.mobileNumber && (
-                <TouchableOpacity onPress={handlePhone}>
-                  <Image
-                    source={require('../../../../assets/Icon/phone.png')}
-                    style={styles.phoneIcon}
-                  />
-                </TouchableOpacity>
-              )}
-              {client.whatsappNumber && (
-                <TouchableOpacity onPress={handleWhatsapp}>
-                  <Image
-                    source={require('../../../../assets/Icon/whatsapp.png')}
-                    style={styles.whatsappIcon}
-                  />
-                </TouchableOpacity>
-              )}
+
+            <View style={styles.nameStatusContainer}>
+              <Text style={styles.clientName}>{client.clientName}</Text>
+              <View style={styles.statusRow}>
+                {(() => {
+                  const now = new Date();
+                  const createdDate = new Date(client.createdOn);
+                  const oneDayAgo = new Date(
+                    now.getTime() - 24 * 60 * 60 * 1000,
+                  );
+                  const isNewClient = createdDate > oneDayAgo;
+                  return isNewClient ? (
+                    <View style={[styles.statusBadge, styles.newStatus]}>
+                      <Text style={styles.statusText}>New</Text>
+                    </View>
+                  ) : null;
+                })()}
+                <Text style={styles.timeText}>
+                  {client.lastActivityDate
+                    ? formatDate(client.lastActivityDate, 'h:mm a')
+                    : formatDate(client.createdOn, 'h:mm a')}
+                </Text>
+              </View>
             </View>
+          </View>
+
+          <View style={styles.actionIcons}>
+            {client.whatsappNumber && (
+              <TouchableOpacity
+                onPress={handleWhatsapp}
+                style={styles.iconButton}>
+                <GetIcon iconName="whatsapp" size={20} />
+              </TouchableOpacity>
+            )}
+            {client.mobileNumber && (
+              <TouchableOpacity onPress={handlePhone} style={styles.iconButton}>
+                <GetIcon iconName="phone" size={20} />
+              </TouchableOpacity>
+            )}
           </View>
         </View>
 
         <View style={styles.cardContent}>
-          <View style={styles.row}>
-            <Text style={styles.label}>Client Name:</Text>
-            <Text style={styles.clientName}>{client.clientName}</Text>
-          </View>
-
-          {client.groups.length > 0 && (
-            <View style={styles.groupContainer}>
-              <Text style={styles.label}>Groups:</Text>
-              <GroupBadges groups={client.groups} />
+          {(client.mobileNumber || client.whatsappNumber || client.emailId) && (
+            <View style={styles.infoRow}>
+              {client.mobileNumber || client.whatsappNumber ? (
+                <Text style={styles.infoText}>
+                  {client.mobileNumber || client.whatsappNumber}
+                </Text>
+              ) : null}
+              {(client.mobileNumber || client.whatsappNumber) &&
+              client.emailId ? (
+                <Text style={styles.separator}>•</Text>
+              ) : null}
+              {client.emailId ? (
+                <Text style={styles.infoText}>{client.emailId}</Text>
+              ) : null}
             </View>
           )}
+          {/* {client.lastActivityDate && (
+            <View style={styles.lastActivityRow}>
+              <Text style={styles.lastActivityText}>
+                Last Activity: {formatDate(client.lastActivityDate, 'MMM d, yyyy h:mm a')}
+              </Text>
+            </View>
+          )} */}
 
-          {/* Assigned Team Members */}
+          {/* Assigned Team Members - Compact version */}
           {client.assignedTeamIds && client.assignedTeamIds.length > 0 && (
-            <View style={styles.row}>
-              <Text style={styles.label}>Assigned To:</Text>
-              <View style={styles.assignedBadgesContainer}>
+            <View style={styles.assignedContainer}>
+              <Text style={styles.assignedLabel}>Assigned:</Text>
+              <View style={styles.assignedBadgesWrapper}>
                 {client.assignedTeamIds.map(member => (
                   <View key={member.id} style={styles.assignedBadge}>
                     <Text style={styles.assignedBadgeText}>{member.name}</Text>
@@ -117,27 +158,10 @@ export const ClientCard: React.FC<ClientCardProps> = ({
             </View>
           )}
 
-          {client.createdBy && (
-            <View style={styles.row}>
-              <Text style={styles.label}>Created By:</Text>
-              <View style={styles.creatorInfoContainer}>
-                <Text style={styles.dateText}>{client.createdBy.name}</Text>
-                <Text style={styles.creatorEmail}>
-                  ({client.createdBy.email})
-                </Text>
-              </View>
-            </View>
-          )}
-
-          {client.lastActivityDate ? (
-            <View style={styles.row}>
-              <Text style={styles.label}>Last Activity:</Text>
-              <Text style={styles.lastActivity}>{formatDate(client.lastActivityDate, 'dd MMM yy, h:mm a')}</Text>
-            </View>
-          ) : (
-            <View style={styles.row}>
-              <Text style={styles.label}>Last Activity:</Text>
-              <Text style={styles.noActivity}>No activity recorded</Text>
+          {/* Groups - Compact version */}
+          {client.groups.length > 0 && (
+            <View style={styles.groupsCompact}>
+              <GroupBadges groups={client.groups} />
             </View>
           )}
         </View>
@@ -149,128 +173,145 @@ export const ClientCard: React.FC<ClientCardProps> = ({
 const styles = StyleSheet.create({
   clientCard: {
     backgroundColor: 'white',
-    marginBottom: 16,
-    elevation: 5,
-    borderRadius: 16,
+    marginBottom: 12,
+    borderRadius: 12,
     shadowColor: '#000',
     shadowOffset: {width: 0, height: 2},
-    shadowOpacity: 0.15,
-    shadowRadius: 6,
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
     borderWidth: 1,
     borderColor: 'rgba(0, 0, 0, 0.05)',
   },
   cardHeader: {
-    padding: 16,
-    borderBottomWidth: 1,
-    borderBottomColor: '#f0f0f0',
-    backgroundColor: 'rgba(0, 102, 204, 0.03)',
-    borderTopLeftRadius: 16,
-    borderTopRightRadius: 16,
-  },
-  dateContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-  },
-  dateBlock: {
-    alignItems: 'center',
-  },
-  dateLabel: {
-    fontSize: 12,
-    color: '#666',
-    marginBottom: 4,
-  },
-  dateText: {
-    fontSize: 14,
-    color: '#0066cc',
-    fontWeight: '600',
-  },
-  cardContent: {
     padding: 16,
+    paddingBottom: 12,
   },
-  row: {
+  avatarContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 16,
-    flexWrap: 'wrap',
+    flex: 1,
   },
-  groupContainer: {
-    flexDirection: 'row',
-    marginBottom: 16,
-    flexWrap: 'wrap',
+  avatar: {
+    width: 48,
+    height: 48,
+    borderRadius: 24,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: 12,
   },
-  label: {
-    fontSize: 14,
-    color: '#555',
-    fontWeight: '600',
-    marginRight: 8,
+  avatarText: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: '#333',
+  },
+  nameStatusContainer: {
+    flex: 1,
   },
   clientName: {
     fontSize: 16,
-    fontWeight: '700',
-    color: '#333',
-    flex: 1,
-  },
-  activitySection: {
-    marginTop: 8,
-    paddingTop: 16,
-    borderTopWidth: 1,
-    borderTopColor: '#f0f0f0',
-  },
-  lastActivity: {
-    fontSize: 14,
-    color: '#0066cc',
     fontWeight: '600',
-    flex: 1,
+    color: '#333',
+    marginBottom: 4,
   },
-  noActivity: {
-    fontSize: 14,
-    color: '#999',
-    fontStyle: 'italic',
-    flex: 1,
-  },
-  iconContainer: {
+  statusRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 20,
   },
-  whatsappIcon: {
-    width: 30,
-    height: 30,
+  statusBadge: {
+    paddingHorizontal: 8,
+    paddingVertical: 2,
+    borderRadius: 4,
+    marginRight: 8,
   },
-  phoneIcon: {
-    width: 20,
-    height: 20,
+  newStatus: {
+    backgroundColor: '#e8f5e8',
   },
-  creatorInfoContainer: {
-    flex: 1,
-    flexDirection: 'column',
-    alignItems: 'flex-start',
+  statusText: {
+    fontSize: 11,
+    fontWeight: '500',
+    color: '#333',
   },
-  creatorEmail: {
+  timeText: {
     fontSize: 12,
-    color: '#888',
+    color: '#666',
   },
-  assignedBadgesContainer: {
+  actionIcons: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  iconButton: {
+    marginLeft: 12,
+    padding: 8,
+    borderRadius: 20,
+    backgroundColor: '#f8f9fa',
+  },
+  cardContent: {
+    paddingHorizontal: 16,
+    paddingBottom: 16,
+  },
+  infoRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 8,
+  },
+  infoText: {
+    fontSize: 13,
+    color: '#666',
+  },
+  separator: {
+    fontSize: 13,
+    color: '#ccc',
+    marginHorizontal: 8,
+  },
+  assignedContainer: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    marginBottom: 8,
+  },
+  assignedLabel: {
+    fontSize: 12,
+    color: '#666',
+    marginRight: 6,
+    fontWeight: '500',
+    marginTop: 2,
+  },
+  assignedBadgesWrapper: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    gap: 1,
-    alignItems: 'center',
     flex: 1,
+    gap: 4,
   },
   assignedBadge: {
     backgroundColor: '#e6f0fa',
-    borderRadius: 12,
-    paddingVertical: 4,
-    paddingHorizontal: 12,
-    marginRight: 8,
-    marginBottom: 4,
+    borderRadius: 8,
+    paddingVertical: 2,
+    paddingHorizontal: 6,
     borderWidth: 1,
     borderColor: '#b3d4fc',
   },
   assignedBadgeText: {
     color: '#0066cc',
-    fontWeight: '600',
-    fontSize: 13,
+    fontWeight: '500',
+    fontSize: 11,
+  },
+  assignedText: {
+    fontSize: 12,
+    color: '#0066cc',
+    fontWeight: '500',
+    flex: 1,
+  },
+  groupsCompact: {
+    marginTop: 4,
+  },
+  lastActivityRow: {
+    marginBottom: 8,
+  },
+  lastActivityText: {
+    fontSize: 12,
+    color: '#888',
   },
 });
