@@ -5,7 +5,7 @@ import {formatFollowUpDate, formatTime} from '../../../../utils/dateUtils';
 import GetIcon from '../../../../components/GetIcon';
 import {useTheme} from '../../../../context/ThemeProvider';
 import GroupBadges from '../../ClientScreen/components/GroupBadge';
-import {parseHtmlToText} from '../../../../utils/parseHtmlToText';
+// import {parseHtmlToText} from '../../../../utils/parseHtmlToText';
 import { getPastelColor } from '../../../../utils/getPastelColor';
 
 interface FollowUpCardProps {
@@ -54,7 +54,7 @@ const FollowUpCard: React.FC<FollowUpCardProps> = ({
     : null;
 
   // Parse HTML notes to plain text
-  const parsedNotes = parseHtmlToText(item.client.notes || '');
+  // const parsedNotes = parseHtmlToText(item.client.notes || '');
 
   const handleCardPress = () => {
     if (onPress) {
@@ -119,7 +119,7 @@ const FollowUpCard: React.FC<FollowUpCardProps> = ({
           )}
 
           {/* Notes */}
-          {parsedNotes && <Text style={styles.notes}>{parsedNotes}</Text>}
+          {/* {parsedNotes && <Text style={styles.notes}>{parsedNotes}</Text>} */}
 
           {/* Assigned Users */}
           {item.assignedUsers && item.assignedUsers.length > 0 && (
@@ -221,6 +221,7 @@ const styles = StyleSheet.create({
   cardContent: {
     paddingHorizontal: 16,
     paddingBottom: 16,
+    gap: 6,
   },
   groupsContainer: {
     marginVertical: 4,
