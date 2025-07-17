@@ -1,14 +1,14 @@
 import {PartnerPropertyFormType} from '../schema/PartnerPropertyFormSchema';
 
 export const initialFormState: PartnerPropertyFormType = {
-  propertyType: null,
-  city: null,
-  propertyFor: null,
-  sellerType: null,
-  location: null,
+  propertyType: '',
+  city: '',
+  propertyFor: '',
+  sellerType: '',
+  location: '',
   zipCode: null,
-  propertyName: null,
-  price: null,
+  propertyName: '',
+  price: 0,
   imageURL: null,
   alarmSystem: null,
   videoURL: 'https://youtu.be/YZWhTCO-0-g',

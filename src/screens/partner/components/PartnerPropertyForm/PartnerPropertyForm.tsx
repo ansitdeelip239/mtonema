@@ -13,6 +13,7 @@ import {usePartner} from '../../../../context/PartnerProvider';
 import useForm from '../../../../hooks/useForm';
 import {initialFormState} from '../../../../utils/partner-property-form-initial-state';
 import PartnerService from '../../../../services/PartnerService';
+import MasterService from '../../../../services/MasterService';
 import Toast from 'react-native-toast-message';
 import Header from '../../../../components/Header';
 import {PartnerDrawerParamList} from '../../../../types/navigation';
@@ -115,6 +116,35 @@ const PartnerPropertyForm: React.FC<PartnerPropertyFormProps> = ({
       }
     },
   });
+
+  // Fetch and set videoURL from master details if available
+  useEffect(() => {
+    async function fetchVideoUrl() {
+      if (user?.partnerLocation) {
+        try {
+            const response = await MasterService.getMasterDetailsById(user.partnerLocation);
+
+            if (response?.data?.description) {
+            try {
+              const descriptionData = JSON.parse(response.data.description);
+              if (descriptionData?.tourVideo) {
+              setFormInput({
+                ...formInput,
+                videoURL: descriptionData.tourVideo,
+              });
+              }
+            } catch (e) {
+              console.error('Error parsing master description:', e);
+            }
+            }
+        } catch (err) {
+          // Optionally handle error
+        }
+      }
+    }
+    fetchVideoUrl();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user?.partnerLocation]);
 
   // Use form validation hook
   const {validateStep} = useFormValidation(formInput);
