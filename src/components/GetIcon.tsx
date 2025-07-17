@@ -63,6 +63,9 @@ export type IconEnum =
   | 'meeting'
   | 'email'
   | 'filterFunnel'
+  | 'morning'
+  | 'afternoon'
+  | 'evening'
   | 'userPlus';
 
 type IconProps = {
@@ -134,6 +137,9 @@ const GetIcon = ({iconName, color, size}: IconProps) => {
     meeting: require('../assets/Icon/meeting.png'),
     email: require('../assets/Icon/mail.png'),
     userPlus: require('../assets/Icon/add-user.png'),
+    morning: require('../assets/Icon/morning.png'),
+    afternoon: require('../assets/Icon/afternoon.png'),
+    evening: require('../assets/Icon/evening.png'),
     filterFunnel: require('../assets/Icon/funnel.png'),
   };
 

@@ -35,7 +35,7 @@ const EditProfileComponent = () => {
     phone: false,
   });
   const [profileUpdated, setProfileUpdated] = useState(false);
-  const {user, setUser} = useAuth();
+  const {user, storeUser} = useAuth();
   const {keyboardVisible} = useKeyboard();
   const scrollViewRef = useRef<ScrollView>(null);
   // const {logoUrl} = useLogoStorage();
@@ -57,6 +57,7 @@ const EditProfileComponent = () => {
             email: formData.email,
             location: formData.location,
             phone: formData.phone,
+            recordStatus: user?.recordStatus,
           };
 
           const response = await CommonService.updateProfile(requestBody);
@@ -66,7 +67,7 @@ const EditProfileComponent = () => {
             // setUser(response.data);
             setProfileUpdated(prev => !prev);
             if (user) {
-              setUser({
+              storeUser({
                 ...user,
                 name: requestBody.name,
                 email: requestBody.email,
@@ -287,10 +288,13 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   profileImage: {
-    width: 200,
-    height: 200,
-    mixBlendMode: 'multiply',
-    // borderRadius: 50,
+    // width: 160,
+    maxWidth: 300,
+    // height: 160,
+    maxHeight: 160,
+    alignSelf: 'center',
+    borderRadius: 0,
+    resizeMode: 'cover',
   },
   bottomPadding: {
     height: 150,

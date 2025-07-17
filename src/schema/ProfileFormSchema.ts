@@ -9,6 +9,7 @@ export const profileFormSchema = z.object({
 
 export const profileApiSchema = profileFormSchema.extend({
   id: z.number(),
+  recordStatus: z.enum(['Active', 'Inactive']).optional(),
 });
 
 export type ProfileFormData = z.infer<typeof profileFormSchema>;

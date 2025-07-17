@@ -152,9 +152,9 @@ const ActivityTimeline: React.FC<ActivityTimelineProps> = ({
                 {JSON.parse(activity.createdBy).Name}
               </Text>
             </View>
-            <Text style={styles.createdByEmail}>
+            {/* <Text style={styles.createdByEmail}>
               ({JSON.parse(activity.createdBy).Email})
-            </Text>
+            </Text> */}
           </View>
         </View>
       </View>

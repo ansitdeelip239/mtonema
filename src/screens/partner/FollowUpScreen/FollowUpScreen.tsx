@@ -10,6 +10,7 @@ import {
   NativeSyntheticEvent,
 } from 'react-native';
 import Colors from '../../../constants/Colors';
+import {useAuth} from '../../../hooks/useAuth';
 import GetIcon from '../../../components/GetIcon';
 import Header from '../../../components/Header';
 import {PartnerDrawerParamList} from '../../../types/navigation';
@@ -21,10 +22,14 @@ import {usePartner} from '../../../context/PartnerProvider';
 import {navigate} from '../../../navigator/NavigationRef';
 import {Badge} from 'react-native-paper';
 import {useTheme} from '../../../context/ThemeProvider';
+import {getGreeting} from '../../../utils/dateUtils';
 
 type Props = NativeStackScreenProps<FollowUpStackParamList, 'FollowUpScreen'>;
 
 const FollowUpScreen: React.FC<Props> = ({navigation}) => {
+  const {user} = useAuth();
+  const {theme} = useTheme();
+
   const {
     followUps: todayFollowUps,
     isLoading: isTodayLoading,
@@ -38,37 +43,24 @@ const FollowUpScreen: React.FC<Props> = ({navigation}) => {
     followUps: overdueFollowUps,
     fetchFollowUps: fetchOverdueFollowUps,
     pagination: overduePagination,
-    // loadMoreFollowUps: loadMoreOverdueFollowUps,
-    // isLoadingMore: isLoadingMoreOverdue,
-    // hasMoreData: hasMoreOverdueData,
   } = useFollowUps('overdue', 1);
 
   const {
     followUps: upcomingFollowUps,
     fetchFollowUps: fetchUpcomingFollowUps,
     pagination: upcomingPagination,
-    // loadMoreFollowUps: loadMoreUpcomingFollowUps,
-    // isLoadingMore: isLoadingMoreUpcoming,
-    // hasMoreData: hasMoreUpcomingData,
   } = useFollowUps('upcoming', 1);
 
   const {
     followUps: somedayFollowUps,
     fetchFollowUps: fetchSomedayFollowUps,
     pagination: somedayPagination,
-    // loadMoreFollowUps: loadMoreSomedayFollowUps,
-    // isLoadingMore: isLoadingMoreSomeday,
-    // hasMoreData: hasMoreSomedayData,
   } = useFollowUps('someday', 1);
 
   const [isRefreshing, setIsRefreshing] = useState(false);
   const {clientsUpdated} = usePartner();
-  const {theme} = useTheme();
-
-  // Track scroll position to determine which list to load more from
   const [activeSection, setActiveSection] = useState<string | null>(null);
 
-  // Helper function to determine if a date is today
   const isToday = useCallback((dateString: string | null): boolean => {
     if (!dateString) {
       return false;
@@ -82,7 +74,6 @@ const FollowUpScreen: React.FC<Props> = ({navigation}) => {
     );
   }, []);
 
-  // Filter follow-ups for today
   const getTodayFollowUps = useCallback(() => {
     if (!todayFollowUps) {
       return [];
@@ -90,7 +81,6 @@ const FollowUpScreen: React.FC<Props> = ({navigation}) => {
     return todayFollowUps.filter(followUp => isToday(followUp.followUpDate));
   }, [todayFollowUps, isToday]);
 
-  // Update useEffect to fetch all follow-ups
   useEffect(() => {
     fetchTodayFollowUps();
     fetchOverdueFollowUps();
@@ -142,30 +132,69 @@ const FollowUpScreen: React.FC<Props> = ({navigation}) => {
     });
   };
 
-  // Handle scroll events to detect when user reaches end of list
   const handleScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
     const {layoutMeasurement, contentOffset, contentSize} = event.nativeEvent;
-    const paddingToBottom = 20; // How far from the bottom to trigger loading more
+    const paddingToBottom = 20;
     const isCloseToBottom =
       layoutMeasurement.height + contentOffset.y >=
       contentSize.height - paddingToBottom;
 
-    if (isCloseToBottom) {
-      // Load more data based on which section is visible
-      if (activeSection === 'today' && hasMoreTodayData) {
-        loadMoreTodayFollowUps();
-      }
+    if (isCloseToBottom && activeSection === 'today' && hasMoreTodayData) {
+      loadMoreTodayFollowUps();
     }
   };
 
-  // Function to set active section when a section becomes visible
   const setCurrentSection = (section: string) => {
     setActiveSection(section);
   };
 
   return (
-    <View style={styles.container}>
+    <>
       <Header<PartnerDrawerParamList> title="Follow-Ups" />
+      {/* Styled Salutation */}
+      <View style={styles.salutationContainer}>
+        <View
+          style={[
+            styles.salutationInner,
+            {backgroundColor: theme.backgroundColor},
+          ]}>
+          <GetIcon
+            iconName={(() => {
+              const hour = new Date().getHours();
+              if (hour >= 5 && hour < 12) {
+                return 'morning';
+              }
+              if (hour >= 12 && hour < 17) {
+                return 'afternoon';
+              }
+              return 'evening';
+            })()}
+            size={32}
+          />
+          <View style={styles.salutationTextWrapper}>
+            <Text style={[styles.salutationHi, {color: theme.textColor}]}>
+              Hi
+              {user?.name
+                ? (() => {
+                    const parts = user.name.split(' ');
+                    if (parts.length > 1 && parts[0].endsWith('.')) {
+                      return `, ${parts[1]}`;
+                    }
+                    return `, ${parts[0]}`;
+                  })()
+                : ''}
+              !
+            </Text>
+            <Text
+              style={[
+                styles.salutationGreeting,
+                {color: theme.secondaryColor},
+              ]}>
+              {getGreeting()}
+            </Text>
+          </View>
+        </View>
+      </View>
 
       <ScrollView
         style={styles.content}
@@ -178,8 +207,7 @@ const FollowUpScreen: React.FC<Props> = ({navigation}) => {
           />
         }
         onScroll={handleScroll}
-        scrollEventThrottle={400} // Control how often scroll events fire
-      >
+        scrollEventThrottle={400}>
         {/* Navigation Buttons */}
         <View style={styles.navButtonsContainer}>
           <TouchableOpacity
@@ -192,11 +220,7 @@ const FollowUpScreen: React.FC<Props> = ({navigation}) => {
                   styles.overdueIconContainer,
                   {backgroundColor: Colors.red},
                 ]}>
-                <GetIcon
-                  iconName="calendarOverdue"
-                  size={24}
-                  // color={Colors.MT_SECONDARY_3}
-                />
+                <GetIcon iconName="calendarOverdue" size={24} />
               </View>
               <View style={styles.navButtonTextContainer}>
                 <View style={styles.titleContainer}>
@@ -228,11 +252,7 @@ const FollowUpScreen: React.FC<Props> = ({navigation}) => {
                   styles.navButtonIconContainer,
                   {backgroundColor: theme.primaryColor},
                 ]}>
-                <GetIcon
-                  iconName="calendarUpcoming"
-                  size={24}
-                  // color={Colors.MT_SECONDARY_3}
-                />
+                <GetIcon iconName="calendarUpcoming" size={24} />
               </View>
               <View style={styles.navButtonTextContainer}>
                 <View style={styles.titleContainer}>
@@ -273,11 +293,7 @@ const FollowUpScreen: React.FC<Props> = ({navigation}) => {
                   styles.navButtonIconContainer,
                   {backgroundColor: theme.secondaryColor},
                 ]}>
-                <GetIcon
-                  iconName="calendarSomeday"
-                  size={24}
-                  // color={Colors.MT_SECONDARY_3}
-                />
+                <GetIcon iconName="calendarSomeday" size={24} />
               </View>
               <View style={styles.navButtonTextContainer}>
                 <View style={styles.titleContainer}>
@@ -326,11 +342,8 @@ const FollowUpScreen: React.FC<Props> = ({navigation}) => {
             isLoadingMore={isLoadingMoreToday}
           />
         </View>
-
-        {/* Increase bottom padding to prevent content from being hidden under bottom navigation */}
-        <View style={styles.bottomPadding} />
       </ScrollView>
-    </View>
+    </>
   );
 };
 
@@ -339,16 +352,41 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#f8f9fa',
   },
-  sectionContainer: {
+  salutationContainer: {
+    paddingHorizontal: 16,
+    marginVertical: 12,
+  },
+  salutationInner: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    borderRadius: 16,
+    padding: 8,
+    paddingHorizontal: 12,
+    shadowColor: '#000',
+    shadowOffset: {width: 0, height: 3},
+    shadowOpacity: 0.15,
+    shadowRadius: 8,
+    elevation: 5,
+    gap: 12,
+  },
+  salutationTextWrapper: {
     flex: 1,
+  },
+  salutationHi: {
+    fontSize: 24,
+    fontWeight: '700',
+    marginBottom: 4,
+  },
+  salutationGreeting: {
+    fontSize: 16,
+    fontWeight: '400',
   },
   content: {
     flex: 1,
-    padding: 16,
-    paddingTop: 8,
   },
   navButtonsContainer: {
     marginBottom: 24,
+    paddingHorizontal: 16,
   },
   navButton: {
     backgroundColor: Colors.MT_SECONDARY_3,
@@ -392,8 +430,9 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: Colors.MT_SECONDARY_2,
   },
-  bottomPadding: {
-    height: 100,
+  sectionContainer: {
+    flex: 1,
+    paddingHorizontal: 16,
   },
   titleContainer: {
     flexDirection: 'row',

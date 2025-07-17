@@ -11,20 +11,20 @@ import {ThemeProvider} from './src/context/ThemeProvider';
 
 const App = () => {
   return (
-    <PaperProvider>
-      <ThemeProvider>
-        <DialogProvider>
-          <MasterProvider>
-            <AuthProvider>
-              <SafeAreaProvider>
+    <SafeAreaProvider>
+      <PaperProvider>
+        <ThemeProvider>
+          <DialogProvider>
+            <MasterProvider>
+              <AuthProvider>
                 <RootNavigator />
                 <Toast />
-              </SafeAreaProvider>
-            </AuthProvider>
-          </MasterProvider>
-        </DialogProvider>
-      </ThemeProvider>
-    </PaperProvider>
+              </AuthProvider>
+            </MasterProvider>
+          </DialogProvider>
+        </ThemeProvider>
+      </PaperProvider>
+    </SafeAreaProvider>
   );
 };
 

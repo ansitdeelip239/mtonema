@@ -8,25 +8,24 @@ import {
 import {
   ActivityIndicator,
   Image,
-  Linking,
   Modal,
   StyleSheet,
   Text,
   TouchableOpacity,
   View,
 } from 'react-native';
-import Strings from '../constants/Strings';
 import Colors from '../constants/Colors';
 import GetIcon from './GetIcon';
 import Images from '../constants/Images';
-import { useTheme } from '../context/ThemeProvider';
+import {useTheme} from '../context/ThemeProvider';
 
 const CustomDrawerContent = (props: any) => {
   const {user, logout} = useAuth();
   const {theme} = useTheme();
   const [userName, setUserName] = useState(user?.name || '');
   const [isLoggingOut, setIsLoggingOut] = useState(false);
-  const [modalVisible, setModalVisible] = useState(false);
+  const [modalVisible, setModalVisible] = useState(false); // Under development modal
+  const [logoutModalVisible, setLogoutModalVisible] = useState(false); // Logout confirmation modal
   const [loadingModalVisible, setLoadingModalVisible] = useState(false);
 
   // const {logoUrl} = useLogoStorage();
@@ -37,15 +36,14 @@ const CustomDrawerContent = (props: any) => {
     }
   }, [user?.name]);
 
-
   const handleCustomButtonPress = () => {
     props.navigation.closeDrawer();
-    setModalVisible(true);
+    setLogoutModalVisible(true);
   };
 
   const confirmLogout = async () => {
     setIsLoggingOut(true);
-    setModalVisible(false);
+    setLogoutModalVisible(false);
     setLoadingModalVisible(true);
     await logout();
     setIsLoggingOut(false);
@@ -65,7 +63,7 @@ const CustomDrawerContent = (props: any) => {
           {/* {logoUrl ? (
             <Image source={{uri: logoUrl}} style={styles.logo} />
           ) : ( */}
-            <Image source={Images.MTESTATES_LOGO} style={styles.logo} />
+          <Image source={Images.MTESTATES_LOGO} style={styles.logo} />
           {/* )} */}
 
           <View style={styles.nameContainer}>
@@ -86,22 +84,41 @@ const CustomDrawerContent = (props: any) => {
       <View style={styles.customItemsContainer}>
         <TouchableOpacity
           style={styles.customDrawerItem}
-          onPress={() => Linking.openURL(Strings.About_Us_Url)}>
+          onPress={() => setModalVisible(true)}>
           <View style={styles.iconContainer}>
             <GetIcon iconName="about" color="#444" size="25" />
           </View>
-          <Text style={styles.itemText}>About</Text>
+          <Text style={styles.itemText}>Help Center</Text>
         </TouchableOpacity>
 
         <TouchableOpacity
           style={styles.customDrawerItem}
-          onPress={() => Linking.openURL(Strings.FAQ_Url)}>
+          onPress={() => setModalVisible(true)}>
           <View style={styles.iconContainer}>
             <GetIcon iconName="faq" color="#444" size="25" />
           </View>
-          <Text style={styles.itemText}>FAQ</Text>
+          <Text style={styles.itemText}>Chat With Us</Text>
         </TouchableOpacity>
       </View>
+      {/* Under Development Modal */}
+      <Modal
+        animationType="fade"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => setModalVisible(false)}>
+        <View style={styles.modalContainer}>
+          <View style={styles.modalContent}>
+            <Text style={styles.modalText}>
+              This feature is under development.
+            </Text>
+            <TouchableOpacity
+              style={[styles.modalSingleButton, {backgroundColor: theme.primaryColor}]}
+              onPress={() => setModalVisible(false)}>
+              <Text style={styles.textWhite}>OK</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
 
       {/* Custom Button */}
       <View style={styles.flexGrow} />
@@ -121,8 +138,8 @@ const CustomDrawerContent = (props: any) => {
       <Modal
         animationType="fade"
         transparent={true}
-        visible={modalVisible}
-        onRequestClose={() => setModalVisible(false)}>
+        visible={logoutModalVisible}
+        onRequestClose={() => setLogoutModalVisible(false)}>
         <View style={styles.modalContainer}>
           <View style={styles.modalContent}>
             <Text style={styles.modalText}>
@@ -131,11 +148,14 @@ const CustomDrawerContent = (props: any) => {
             <View style={styles.modalButtons}>
               <TouchableOpacity
                 style={styles.whiteButton}
-                onPress={() => setModalVisible(false)}>
+                onPress={() => setLogoutModalVisible(false)}>
                 <Text style={styles.textBlack}>Cancel</Text>
               </TouchableOpacity>
               <TouchableOpacity
-                style={[styles.redButton, {backgroundColor: theme.primaryColor}]}
+                style={[
+                  styles.redButton,
+                  {backgroundColor: theme.primaryColor},
+                ]}
                 onPress={confirmLogout}
                 disabled={isLoggingOut}>
                 <Text style={styles.textWhite}>Log out</Text>
@@ -288,6 +308,15 @@ const styles = StyleSheet.create({
     margin: 5,
     borderRadius: 5,
     alignItems: 'center',
+  },
+  modalSingleButton: {
+    minWidth: 100,
+    paddingVertical: 10,
+    paddingHorizontal: 24,
+    marginTop: 10,
+    borderRadius: 5,
+    alignItems: 'center',
+    alignSelf: 'center',
   },
   whiteButton: {
     flex: 1,

@@ -11,6 +11,7 @@ import {PropertyFormProvider} from '../context/PropertyFormContext';
 import Roles from '../constants/Roles';
 import {BottomTabProvider} from '../context/BottomTabProvider';
 import GetIcon from '../components/GetIcon';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 const MainNavigator = () => {
   const {user, logout} = useAuth();
@@ -36,21 +37,17 @@ const MainNavigator = () => {
     !allowedAdminEmails.includes(user.email);
 
   const handleLogout = () => {
-    Alert.alert(
-      'Logout',
-      'Are you sure you want to logout?',
-      [
-        {
-          text: 'Cancel',
-          style: 'cancel',
-        },
-        {
-          text: 'Logout',
-          onPress: logout,
-          style: 'destructive',
-        },
-      ]
-    );
+    Alert.alert('Logout', 'Are you sure you want to logout?', [
+      {
+        text: 'Cancel',
+        style: 'cancel',
+      },
+      {
+        text: 'Logout',
+        onPress: logout,
+        style: 'destructive',
+      },
+    ]);
   };
 
   // Handle unauthorized admin access
@@ -61,7 +58,8 @@ const MainNavigator = () => {
           <GetIcon iconName="help" size={64} color="#ff6b6b" />
           <Text style={styles.unauthorizedTitle}>Access Denied</Text>
           <Text style={styles.unauthorizedMessage}>
-            Your admin account ({user.email}) is not authorized to access this application.
+            Your admin account ({user.email}) is not authorized to access this
+            application.
           </Text>
           <Text style={styles.contactMessage}>
             Please contact the system administrator for access permissions.
@@ -90,11 +88,13 @@ const MainNavigator = () => {
       ) : user?.role === Roles.PARTNER ||
         user?.role === Roles.TEAM ||
         isAuthorizedAdmin ? (
-        <BottomTabProvider>
-          <PartnerProvider>
-            <PartnerNavigator />
-          </PartnerProvider>
-        </BottomTabProvider>
+        <SafeAreaView style={styles.safeArea} edges={['bottom']}>
+          <BottomTabProvider>
+            <PartnerProvider>
+              <PartnerNavigator />
+            </PartnerProvider>
+          </BottomTabProvider>
+        </SafeAreaView>
       ) : (
         // Fallback for any unhandled user roles
         <View style={styles.container}>
@@ -121,6 +121,9 @@ const MainNavigator = () => {
 };
 
 const styles = StyleSheet.create({
+  safeArea: {
+    flex: 1,
+  },
   container: {
     flex: 1,
     backgroundColor: '#f8f9fa',
