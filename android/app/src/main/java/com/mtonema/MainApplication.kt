@@ -1,4 +1,4 @@
-package com.mtestatesma
+package com.mtonema
 
 import android.app.Application
 import com.facebook.react.PackageList

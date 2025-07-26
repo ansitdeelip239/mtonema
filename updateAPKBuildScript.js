@@ -3,8 +3,10 @@ const { Buffer } = require('buffer');
 
 // updateAPKBuildScript.js
 
+// const API_URL =
+//   'https://mtestatesapi-f0bthnfwbtbxcecu.southindia-01.azurewebsites.net/appsettings';
 const API_URL =
-  'https://mtestatesapi-f0bthnfwbtbxcecu.southindia-01.azurewebsites.net/appsettings';
+  'https://api.mtone.in/appsettings';
 const AUTH_TOKEN =
   'e74e1523bfaf582757ca621fd6166361a1df604b3c6369383f313fba83baceac';
 
