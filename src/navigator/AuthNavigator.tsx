@@ -7,6 +7,7 @@ import PostProperty from '../screens/seller/PostPropertyScreen';
 import OtpScreen from '../screens/auth/OtpScreen';
 import PartnerZoneScreen from '../screens/auth/PartnerZoneScreen';
 import {MasterDetailModel} from '../types';
+import PartnerLoginScreen from '../screens/auth/PartnerLoginScreen';
 // import UserTypeSelectionScreen from '../screens/auth/UserTypeSelectionScreen';
 // import AsyncStorage from '@react-native-async-storage/async-storage';
 // import storageKeys from '../constants/storageKeys';
@@ -16,7 +17,8 @@ import {MasterDetailModel} from '../types';
 // import OtpModel from '../components/OtpModel';
 
 export type AuthStackParamList = {
-  EmailScreen: {role: string[]; location: MasterDetailModel};
+  EmailScreen: {role: string[]; location: MasterDetailModel | null};
+  PartnerLoginScreen: undefined;
   PartnerZoneScreen: undefined;
   SignUpScreen: {role: string};
   MainScreen: undefined;
@@ -79,12 +81,13 @@ export default function AuthNavigator() {
         headerShown: false,
       }}
       // initialRouteName={initialRoute as keyof AuthStackParamList}>
-      initialRouteName="PartnerZoneScreen">
+      initialRouteName="PartnerLoginScreen">
       {/* <Stack.Screen
         name="UserTypeSelectionScreen"
         component={UserTypeSelectionScreen}
       /> */}
       <Stack.Screen name="MainScreen" component={MainScreen} />
+      <Stack.Screen name="PartnerLoginScreen" component={PartnerLoginScreen} />
       <Stack.Screen name="PartnerZoneScreen" component={PartnerZoneScreen} />
       <Stack.Screen name="EmailScreen" component={EmailScreen} />
       <Stack.Screen name="SignUpScreen" component={SignUpScreen} />

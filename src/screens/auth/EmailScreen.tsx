@@ -30,7 +30,6 @@ import config from '../../config';
 import {
   darkenColor,
   lightenColor,
-  getGradientColors,
 } from '../../utils/colorUtils';
 
 const {width} = Dimensions.get('window');
@@ -72,9 +71,12 @@ const EmailScreen: React.FC<Props> = ({navigation, route}) => {
     }
   }, [location]);
 
-  // Derive header colors from partner info or use defaults
+  // Derive header colors from partner info or use MT_PRIMARY/SECONDARY as fallback
   const headerGradientColors = useMemo(() => {
-    return getGradientColors(partnerInfo.colorScheme?.primaryColor);
+    if (partnerInfo.colorScheme?.primaryColor && partnerInfo.colorScheme?.secondaryColor) {
+      return [partnerInfo.colorScheme.primaryColor, partnerInfo.colorScheme.secondaryColor];
+    }
+    return [Colors.MT_PRIMARY_1, Colors.MT_SECONDARY_1];
   }, [partnerInfo.colorScheme]);
 
   // Animation values for logo
@@ -168,7 +170,7 @@ const EmailScreen: React.FC<Props> = ({navigation, route}) => {
     navigation.navigate('OtpScreen', {
       email: formInput.email,
       logoUrl: partnerInfo.imageUrl,
-      location: location,
+      ...(location ? { location } : {}),
     });
   }, [formInput.email, location, navigation, partnerInfo.imageUrl]);
 
@@ -196,13 +198,15 @@ const EmailScreen: React.FC<Props> = ({navigation, route}) => {
         const response = await AuthService.otpVerification(
           formInput.email,
           undefined,
-          JSON.parse(location.description).domain,
+          location && location.description
+            ? JSON.parse(location.description).domain
+            : undefined,
         );
         if (response.success) {
           navigation.navigate('OtpScreen', {
             email: formInput.email,
             logoUrl: partnerInfo.imageUrl,
-            location: location,
+            location: location ?? undefined,
           });
           if (!skipEmailCheck) {
             setNavigateToPostProperty(false);
@@ -436,7 +440,7 @@ const styles = StyleSheet.create({
   },
   logoContainer: {
     alignItems: 'center',
-    marginBottom: 50,
+    marginBottom: 70,
   },
   logo: {
     width: width * 0.7,
