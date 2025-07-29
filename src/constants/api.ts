@@ -70,6 +70,7 @@ const url = {
     return BASE_URL + '/clients/' + clientId + '/assigned-users';
   },
   teamMembers: BASE_URL + '/teammembers',
+  getAllTeamMembers: BASE_URL + '/partners/team-members',
   assignClient: BASE_URL + '/assign-client',
   followUps: BASE_URL + '/partners/follow-ups',
   groups: BASE_URL + '/partners/groups-New',

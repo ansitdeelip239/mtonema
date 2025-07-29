@@ -227,7 +227,7 @@ const ClientScreen: React.FC<Props> = ({navigation}) => {
       <Header<PartnerDrawerParamList>
         title="Clients"
         gradientColors={headerGradientColors}
-        showFilterButton={user?.role === Roles.ADMIN}
+        showFilterButton={user?.role === Roles.ADMIN || user?.role === Roles.PARTNER}
         onFilterPress={handleFilterPress}>
         <TouchableOpacity
           style={[styles.addButton, {backgroundColor: theme.secondaryColor}]}
@@ -242,10 +242,11 @@ const ClientScreen: React.FC<Props> = ({navigation}) => {
       {selectedPartnerIds.length > 0 && (
         <View style={styles.filterIndicator}>
           <GetIcon iconName="filter" size={16} color={theme.primaryColor} />
-          <Text style={[styles.filterText, {color: theme.primaryColor}]}>
-            Showing clients from {selectedPartnerIds.length} selected partner
+            <Text style={[styles.filterText, {color: theme.primaryColor}]}>
+            Showing clients from {selectedPartnerIds.length} selected{' '}
+            {user?.role === Roles.ADMIN ? 'partner' : 'team member'}
             {selectedPartnerIds.length > 1 ? 's' : ''}
-          </Text>
+            </Text>
           <TouchableOpacity
             onPress={handleFilterPress}
             style={styles.editFilterButton}>

@@ -40,9 +40,9 @@ const FilterPartnerScreen = () => {
     setSelectedPartners(selectedPartnerIds);
   }, [selectedPartnerIds]);
 
-  // Admin access guard
+  // Admin or Partner access guard
   useEffect(() => {
-    if (!user || user.role !== Roles.ADMIN) {
+    if (!user || (user.role !== Roles.ADMIN && user.role !== Roles.PARTNER)) {
       Alert.alert(
         'Access Denied',
         'You do not have permission to access this page.',
@@ -59,20 +59,40 @@ const FilterPartnerScreen = () => {
   // Fetch partners from API
   useEffect(() => {
     const fetchPartners = async () => {
-      if (!user || user.role !== Roles.ADMIN) {
+      if (!user || (user.role !== Roles.ADMIN && user.role !== Roles.PARTNER)) {
         return;
       }
 
       try {
         setIsLoading(true);
-        const response = await PartnerService.getAllPartners();
-        console.log('API Response:', response);
+        let response;
 
-        if (response.success && response.data && response.data.users) {
-          setPartners(response.data.users);
-        } else {
-          Alert.alert('Error', 'Failed to fetch partners');
+        if (user.role === Roles.ADMIN) {
+          response = await PartnerService.getAllPartners();
+          if (response.success && response.data && response.data.users) {
+            setPartners(response.data.users);
+          } else {
+            Alert.alert('Error', 'Failed to fetch partners');
+          }
+        } else if (user.role === Roles.PARTNER) {
+          response = await PartnerService.getAllTeamMembers(
+            user.id.toString(),
+            1,
+            100,
+          );
+          if (response.success && response.data && response.data.teamMembers) {
+            setPartners(
+              response.data.teamMembers.map((tm: any) => ({
+                ...tm,
+                id: tm.teamMemberId,
+              })),
+            );
+          } else {
+            Alert.alert('Error', 'Failed to fetch partners');
+          }
         }
+
+        console.log('API Response:', response);
       } catch (error) {
         console.error('Error fetching partners:', error);
         Alert.alert('Error', 'Failed to fetch partners. Please try again.');
@@ -89,8 +109,8 @@ const FilterPartnerScreen = () => {
     return getGradientColors(theme.primaryColor);
   }, [theme.primaryColor]);
 
-  // Early return if user is not admin
-  if (!user || user.role !== Roles.ADMIN) {
+  // Early return if user is not admin or partner
+  if (!user || (user.role !== Roles.ADMIN && user.role !== Roles.PARTNER)) {
     return (
       <View style={styles.container}>
         <Header<PartnerDrawerParamList>
@@ -236,7 +256,9 @@ const FilterPartnerScreen = () => {
       return (
         <View style={styles.centerContainer}>
           <ActivityIndicator size="large" color={theme.primaryColor} />
-          <Text style={styles.loadingText}>Loading partners...</Text>
+            <Text style={styles.loadingText}>
+            {user?.role === Roles.ADMIN ? 'Loading partners...' : 'Loading team members...'}
+            </Text>
         </View>
       );
     }
@@ -245,7 +267,8 @@ const FilterPartnerScreen = () => {
       <>
         <View style={styles.selectionHeader}>
           <Text style={styles.selectionText}>
-            {selectedPartners.length} of {partners.length} partners selected
+            {selectedPartners.length} of {partners.length}{' '}
+            {user.role === Roles.ADMIN ? 'partners' : 'team members'} selected
           </Text>
           <TouchableOpacity
             onPress={handleSelectAll}
@@ -297,10 +320,14 @@ const FilterPartnerScreen = () => {
   return (
     <View style={styles.container}>
       <Header<PartnerDrawerParamList>
-        title="Filter Partners"
-        gradientColors={headerGradientColors}
-        backButton={true}
-        onBackPress={handleBack}
+      title={
+        user.role === Roles.ADMIN
+        ? 'Filter Partners'
+        : 'Filter Team Members'
+      }
+      gradientColors={headerGradientColors}
+      backButton={true}
+      onBackPress={handleBack}
       />
       {renderContent()}
     </View>

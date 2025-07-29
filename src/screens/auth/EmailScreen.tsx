@@ -26,6 +26,7 @@ import {useKeyboard} from '../../hooks/useKeyboard';
 import Roles from '../../constants/Roles';
 import Images from '../../constants/Images';
 import HeaderComponent from './components/HeaderComponent';
+import config from '../../config';
 import {
   darkenColor,
   lightenColor,
@@ -163,6 +164,14 @@ const EmailScreen: React.FC<Props> = ({navigation, route}) => {
     }
   }, [keyboardVisible, logoHeight, logoOpacity]);
 
+  const handleOtpVerification2 = useCallback(async () => {
+    navigation.navigate('OtpScreen', {
+      email: formInput.email,
+      logoUrl: partnerInfo.imageUrl,
+      location: location,
+    });
+  }, [formInput.email, location, navigation, partnerInfo.imageUrl]);
+
   const handleOtpVerification = useCallback(
     async (skipEmailCheck = false) => {
       const validationResult = emailSchema.safeParse(formInput);
@@ -184,7 +193,11 @@ const EmailScreen: React.FC<Props> = ({navigation, route}) => {
           }
         }
 
-        const response = await AuthService.otpVerification(formInput.email, undefined, JSON.parse(location.description).domain);
+        const response = await AuthService.otpVerification(
+          formInput.email,
+          undefined,
+          JSON.parse(location.description).domain,
+        );
         if (response.success) {
           navigation.navigate('OtpScreen', {
             email: formInput.email,
@@ -214,12 +227,17 @@ const EmailScreen: React.FC<Props> = ({navigation, route}) => {
     ],
   );
 
+  // Choose which handler to use based on environment
+  const handleContinue = useCallback(() => {
+    if (config.environment === 'development') {
+      handleOtpVerification2();
+    } else {
+      handleOtpVerification();
+    }
+  }, [handleOtpVerification, handleOtpVerification2]);
+
   const handleVerifyNow = useCallback(() => {
     handleOtpVerification(true);
-  }, [handleOtpVerification]);
-
-  const handleContinue = useCallback(() => {
-    handleOtpVerification();
   }, [handleOtpVerification]);
 
   return (
@@ -256,11 +274,11 @@ const EmailScreen: React.FC<Props> = ({navigation, route}) => {
                 resizeMode="contain"
               />
             ) : ( */}
-              <Image
-                source={Images.MTESTATES_LOGO}
-                style={styles.logo}
-                resizeMode="contain"
-              />
+            <Image
+              source={Images.MTESTATES_LOGO}
+              style={styles.logo}
+              resizeMode="contain"
+            />
             {/* )} */}
           </Animated.View>
 
@@ -349,7 +367,10 @@ const EmailScreen: React.FC<Props> = ({navigation, route}) => {
                                 0.2,
                               ),
                             ]
-                          : [lightenColor(Colors.MT_PRIMARY_1, 0.4), lightenColor(Colors.MT_PRIMARY_1, 0.4)] // Default light blue if no partner color
+                          : [
+                              lightenColor(Colors.MT_PRIMARY_1, 0.4),
+                              lightenColor(Colors.MT_PRIMARY_1, 0.4),
+                            ] // Default light blue if no partner color
                         : partnerInfo.colorScheme?.primaryColor
                         ? [
                             partnerInfo.colorScheme.primaryColor,

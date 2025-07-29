@@ -602,9 +602,45 @@ class PartnerService {
     }
   }
 
+  static async getAllTeamMembers(
+    partnerIds: string,
+    pageNumber: number,
+    pageSize: number,
+  ) {
+    try {
+      const params = new URLSearchParams({
+        partnerIds,
+        pageNumber: pageNumber.toString(),
+        pageSize: pageSize.toString(),
+      });
+
+      const response = await api.get<{
+        teamMembers: {
+          partnerId: number;
+          teamMemberId: number;
+          name: string;
+          email: string;
+          phone: string;
+          role: string;
+          location: string;
+          createdOn: string;
+          createdBy: string;
+          recordStatus: string;
+          isActive: boolean;
+        }[];
+      }>(url.getAllTeamMembers + `?${params.toString()}`);
+      return response;
+    } catch (error) {
+      console.error('Error in getAllTeamMembers', error);
+      throw error;
+    }
+  }
+
   static async getDuplicateClients(clientId: number) {
     try {
-      const response = await api.get<Partial<Client>[]>(url.getDuplicateClients + `/${clientId}`);
+      const response = await api.get<Partial<Client>[]>(
+        url.getDuplicateClients + `/${clientId}`,
+      );
       return response;
     } catch (error) {
       console.error('Error in getAllPartners', error);
