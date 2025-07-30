@@ -26,6 +26,7 @@ import {useDialog} from '../../../hooks/useDialog';
 import GroupsToggleComponent from './components/GroupsToggle';
 import {useTheme} from '../../../context/ThemeProvider';
 import {addCountryCode} from '../../../utils/phoneUtils';
+import { stripHtmlTags } from '../../../utils/formUtils';
 
 type Props = NativeStackScreenProps<ClientStackParamList, 'AddClientScreen'>;
 
@@ -49,7 +50,7 @@ const AddClientScreen: React.FC<Props> = ({navigation, route}) => {
         mobileNumber: clientData.mobileNumber || '',
         whatsappNumber: clientData.whatsappNumber || '',
         emailId: clientData.emailId || '',
-        notes: clientData.notes || '',
+        notes: stripHtmlTags(clientData.notes || ''), // Clean notes here
         groups: clientData.groups?.map(group => group.id) || [],
         partnerId: user?.email ?? '',
       };

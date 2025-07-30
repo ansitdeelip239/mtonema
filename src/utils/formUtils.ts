@@ -6,6 +6,7 @@ export const convertToMasterDetailModel = (
   return options.map((option, index) => ({
     id: index + 1,
     masterDetailName: option,
+    description: '', // Provide a default or meaningful description here
   }));
 };
 
@@ -17,7 +18,7 @@ export const getYoutubeVideoId = (url: string): string | null => {
 
   // Regular expressions for different YouTube URL formats
   const regexPatterns = [
-    /(?:youtube\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|\S*?[?&]v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})/,
+    /(?:youtube\.com\/(?:[^/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|\S*?[?&]v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})/,
     /^([a-zA-Z0-9_-]{11})$/, // For cases when video ID is directly provided
   ];
 
@@ -40,4 +41,12 @@ export const getYouTubeThumbnailUrl = (videoUrl: string): string => {
   }
   // Return a placeholder if we can't extract the ID
   return 'https://via.placeholder.com/480x360.png?text=Video+Preview+Not+Available';
+};
+
+export const stripHtmlTags = (htmlString: string): string => {
+  if (!htmlString) {
+    return '';
+  }
+  // A quick way to remove HTML tags
+  return htmlString.replace(/<\/?[^>]+(>|$)/g, '');
 };

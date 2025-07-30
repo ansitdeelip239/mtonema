@@ -16,7 +16,7 @@ const NotesCard: React.FC<NotesCardProps> = ({notes}) => {
   return (
     <View style={styles.infoCard}>
       <Text style={styles.sectionTitle}>Notes</Text>
-      <Text style={styles.notesText}>{parsedNotes}</Text>
+      <Text style={styles.notesText} selectable>{parsedNotes}</Text>
     </View>
   );
 };
