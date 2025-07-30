@@ -22,9 +22,9 @@ const ContactInfoCard: React.FC<ContactInfoCardProps> = ({ client }) => {
       <Text style={styles.sectionTitle}>Contact Information</Text>
       {contactFields.map(field => (
         <View key={field.label} style={styles.infoRow}>
-          <Text style={styles.infoLabel}>{field.label}</Text>
+          <Text style={styles.infoLabel} selectable>{field.label}</Text>
           <Text style={styles.colon}>:</Text>
-          <Text style={styles.infoValue}>{field.value}</Text>
+          <Text style={styles.infoValue} selectable>{field.value}</Text>
         </View>
       ))}
     </View>

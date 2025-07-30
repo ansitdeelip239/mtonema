@@ -10,11 +10,11 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = ({client}) => {
   return (
     <View style={styles.profileHeader}>
       <View style={styles.avatarContainer}>
-        <Text style={styles.avatarText}>
+        <Text style={styles.avatarText} selectable>
           {client.clientName.charAt(0).toUpperCase()}
         </Text>
       </View>
-      <Text style={styles.clientName}>{client.clientName}</Text>
+      <Text style={styles.clientName} selectable>{client.clientName}</Text>
       {client.displayName && (
         <Text style={styles.displayName}>{client.displayName}</Text>
       )}
