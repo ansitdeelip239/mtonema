@@ -6,7 +6,8 @@ import GroupBadges from './GroupBadge';
 import {ClientStackParamList} from '../../../../navigator/components/ClientScreenStack';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import GetIcon from '../../../../components/GetIcon';
-import { getPastelColor } from '../../../../utils/getPastelColor';
+import {getPastelColor} from '../../../../utils/getPastelColor';
+import {formatWhatsappNumber} from '../../../../utils/phoneUtils';
 
 interface ClientCardProps {
   client: Client;
@@ -28,12 +29,8 @@ export const ClientCard: React.FC<ClientCardProps> = ({
   onContactPress,
 }) => {
   const handleWhatsapp = () => {
-    // Open WhatsApp
-    Linking.openURL(
-      `https://api.whatsapp.com/send?phone=${client.whatsappNumber}`,
-    );
-
-    // Trigger activity recording if handler is provided
+    const number = formatWhatsappNumber(client.whatsappNumber);
+    Linking.openURL(`https://api.whatsapp.com/send?phone=${number}`);
     if (onContactPress) {
       onContactPress('whatsapp', client);
     }
@@ -94,13 +91,14 @@ export const ClientCard: React.FC<ClientCardProps> = ({
               {client.whatsappNumber && (
                 <TouchableOpacity
                   onPress={handleWhatsapp}
-                  style={[styles.iconButton, styles.whatsappButton]}
-                >
+                  style={[styles.iconButton, styles.whatsappButton]}>
                   <GetIcon iconName="whatsapp" size={20} color="#fff" />
                 </TouchableOpacity>
               )}
               {client.mobileNumber && (
-                <TouchableOpacity onPress={handlePhone} style={[styles.iconButton, styles.phoneButton]}>
+                <TouchableOpacity
+                  onPress={handlePhone}
+                  style={[styles.iconButton, styles.phoneButton]}>
                   <GetIcon iconName="phone" size={14} color="#fff" />
                 </TouchableOpacity>
               )}

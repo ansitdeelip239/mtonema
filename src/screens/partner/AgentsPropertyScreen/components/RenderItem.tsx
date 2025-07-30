@@ -26,7 +26,7 @@ const RenderItem: React.FC<RenderItemProps> = ({
   navigation,
 }) => {
   const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false);
-  const [isDeleting, setIsDeleting] = useState(false); // Add loading state
+  const [isDeleting, setIsDeleting] = useState(false);
 
   const {theme} = useTheme();
 
@@ -110,15 +110,18 @@ const RenderItem: React.FC<RenderItemProps> = ({
 
         <View style={styles.contentSection}>
           <View style={styles.row}>
-            <Text style={styles.label}>BHK Type:</Text>
+            <Text style={styles.label}>BHK Type</Text>
+            <Text style={styles.colon}>:</Text>
             <Text style={styles.value}>{item.bhkType || 'Not Specified'}</Text>
           </View>
           <View style={styles.row}>
-            <Text style={styles.label}>Location:</Text>
+            <Text style={styles.label}>Location</Text>
+            <Text style={styles.colon}>:</Text>
             <Text style={styles.value}>{item.propertyLocation || 'N/A'}</Text>
           </View>
           <View style={styles.row}>
-            <Text style={styles.label}>Demand Price:</Text>
+            <Text style={styles.label}>Demand Price</Text>
+            <Text style={styles.colon}>:</Text>
             <Text
               style={[
                 styles.value,
@@ -129,7 +132,8 @@ const RenderItem: React.FC<RenderItemProps> = ({
             </Text>
           </View>
           <View style={styles.row}>
-            <Text style={styles.label}>Security Deposit:</Text>
+            <Text style={styles.label}>Security Deposit</Text>
+            <Text style={styles.colon}>:</Text>
             <Text
               style={[
                 styles.value,
@@ -140,15 +144,18 @@ const RenderItem: React.FC<RenderItemProps> = ({
             </Text>
           </View>
           <View style={styles.row}>
-            <Text style={styles.label}>Contact No.:</Text>
+            <Text style={styles.label}>Contact No.</Text>
+            <Text style={styles.colon}>:</Text>
             <Text style={styles.value}>{item.agentContactNo || 'N/A'}</Text>
           </View>
           <View style={styles.row}>
-            <Text style={styles.label}>Property Type:</Text>
+            <Text style={styles.label}>Property Type</Text>
+            <Text style={styles.colon}>:</Text>
             <Text style={styles.value}>{item.propertyType || 'N/A'}</Text>
           </View>
           <View style={styles.row}>
-            <Text style={styles.label}>Date Added:</Text>
+            <Text style={styles.label}>Date Added</Text>
+            <Text style={styles.colon}>:</Text>
             <Text style={styles.value}>
               {item.createdOn
                 ? new Date(item.createdOn).toLocaleDateString('en-GB', {
@@ -242,9 +249,18 @@ const styles = StyleSheet.create({
   },
   label: {
     fontWeight: '600',
-    width: 140,
+    minWidth: 120,
     color: '#666',
     fontSize: 14,
+    textAlign: 'left',
+    paddingRight: 2,
+  },
+  colon: {
+    width: 12,
+    textAlign: 'center',
+    color: '#666',
+    fontSize: 14,
+    fontWeight: '600',
   },
   value: {
     flex: 1,

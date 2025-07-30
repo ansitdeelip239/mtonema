@@ -299,6 +299,8 @@ const FollowUpScreen: React.FC<Props> = ({navigation}) => {
             isLoadingMore={isLoadingMoreToday}
           />
         </View>
+        {/* Add gap at the bottom to avoid content being hidden by bottom tab */}
+        <View style={styles.bottomGap} />
       </ScrollView>
     </>
   );
@@ -390,6 +392,9 @@ const styles = StyleSheet.create({
     marginLeft: 8,
     color: Colors.MT_SECONDARY_2,
     fontSize: 14,
+  },
+  bottomGap: {
+    height: 80,
   },
 });
 

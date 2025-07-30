@@ -14,6 +14,7 @@ import Colors from '../../constants/Colors';
 import {getGradientColors} from '../../utils/colorUtils';
 import HeaderComponent from './components/HeaderComponent';
 import Images from '../../constants/Images';
+import Roles from '../../constants/Roles';
 
 type Props = NativeStackScreenProps<AuthStackParamList, 'PartnerLoginScreen'>;
 
@@ -23,7 +24,7 @@ const PartnerLoginScreen: React.FC<Props> = ({navigation}) => {
 
   const handleLogin = () => {
     navigation.navigate('EmailScreen', {
-      role: ['Partner'],
+      role: [Roles.PARTNER, Roles.ADMIN, Roles.TEAM],
       location: partnerLocation,
     });
   };

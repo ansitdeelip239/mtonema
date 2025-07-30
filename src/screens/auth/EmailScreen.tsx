@@ -27,10 +27,7 @@ import Roles from '../../constants/Roles';
 import Images from '../../constants/Images';
 import HeaderComponent from './components/HeaderComponent';
 import config from '../../config';
-import {
-  darkenColor,
-  lightenColor,
-} from '../../utils/colorUtils';
+import {darkenColor, lightenColor} from '../../utils/colorUtils';
 
 const {width} = Dimensions.get('window');
 type Props = NativeStackScreenProps<AuthStackParamList, 'EmailScreen'>;
@@ -73,8 +70,14 @@ const EmailScreen: React.FC<Props> = ({navigation, route}) => {
 
   // Derive header colors from partner info or use MT_PRIMARY/SECONDARY as fallback
   const headerGradientColors = useMemo(() => {
-    if (partnerInfo.colorScheme?.primaryColor && partnerInfo.colorScheme?.secondaryColor) {
-      return [partnerInfo.colorScheme.primaryColor, partnerInfo.colorScheme.secondaryColor];
+    if (
+      partnerInfo.colorScheme?.primaryColor &&
+      partnerInfo.colorScheme?.secondaryColor
+    ) {
+      return [
+        partnerInfo.colorScheme.primaryColor,
+        partnerInfo.colorScheme.secondaryColor,
+      ];
     }
     return [Colors.MT_PRIMARY_1, Colors.MT_SECONDARY_1];
   }, [partnerInfo.colorScheme]);
@@ -170,7 +173,7 @@ const EmailScreen: React.FC<Props> = ({navigation, route}) => {
     navigation.navigate('OtpScreen', {
       email: formInput.email,
       logoUrl: partnerInfo.imageUrl,
-      ...(location ? { location } : {}),
+      ...(location ? {location} : {}),
     });
   }, [formInput.email, location, navigation, partnerInfo.imageUrl]);
 

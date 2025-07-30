@@ -1,16 +1,16 @@
 import React from 'react';
-import {View, Text, StyleSheet} from 'react-native';
-import {Client} from '../../../../types';
+import { View, Text, StyleSheet } from 'react-native';
+import { Client } from '../../../../types';
 
 interface ContactInfoCardProps {
   client: Client;
 }
 
-const ContactInfoCard: React.FC<ContactInfoCardProps> = ({client}) => {
+const ContactInfoCard: React.FC<ContactInfoCardProps> = ({ client }) => {
   const contactFields = [
-    {label: 'Mobile', value: client.mobileNumber},
-    {label: 'WhatsApp', value: client.whatsappNumber},
-    {label: 'Email', value: client.emailId},
+    { label: 'Mobile', value: client.mobileNumber },
+    { label: 'WhatsApp', value: client.whatsappNumber },
+    { label: 'Email', value: client.emailId },
   ].filter(field => field.value);
 
   if (contactFields.length === 0) {
@@ -22,7 +22,8 @@ const ContactInfoCard: React.FC<ContactInfoCardProps> = ({client}) => {
       <Text style={styles.sectionTitle}>Contact Information</Text>
       {contactFields.map(field => (
         <View key={field.label} style={styles.infoRow}>
-          <Text style={styles.infoLabel}>{field.label}:</Text>
+          <Text style={styles.infoLabel}>{field.label}</Text>
+          <Text style={styles.colon}>:</Text>
           <Text style={styles.infoValue}>{field.value}</Text>
         </View>
       ))}
@@ -37,7 +38,7 @@ const styles = StyleSheet.create({
     padding: 16,
     marginBottom: 16,
     shadowColor: '#000',
-    shadowOffset: {width: 0, height: 2},
+    shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 4,
     elevation: 3,
@@ -51,17 +52,28 @@ const styles = StyleSheet.create({
   infoRow: {
     flexDirection: 'row',
     marginBottom: 8,
+    alignItems: 'center',
   },
   infoLabel: {
-    width: 80,
+    minWidth: 80, // Align labels but allow left alignment
     fontSize: 14,
     color: '#666',
     fontWeight: '500',
+    textAlign: 'left',
+    paddingRight: 4,
+  },
+  colon: {
+    width: 10,
+    fontSize: 14,
+    color: '#666',
+    fontWeight: '500',
+    textAlign: 'center',
   },
   infoValue: {
     flex: 1,
     fontSize: 14,
     color: '#1a1a1a',
+    paddingLeft: 4,
   },
 });
 

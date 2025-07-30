@@ -29,13 +29,14 @@ import DuplicateClientsModal from './components/DuplicateClientsModal';
 import ProfileHeader from './components/ProfileHeader';
 import ContactButtons from './components/ContactButtons';
 import FollowUpCard from './components/FollowUpCard';
-import ContactInfoCard from './components/ContactInfoCard';
 import GroupsCard from './components/GroupsCard';
 import NotesCard from './components/NotesCard';
 import RecentActivitiesCard from './components/RecentActivitiesCard';
 import AssignedUsersCard from './components/AssignedUsersCard';
 import {useMaster} from '../../../context/MasterProvider';
 import {useBottomTab} from '../../../context/BottomTabProvider';
+import { formatWhatsappNumber } from '../../../utils/phoneUtils';
+import ContactInfoCard from './components/ContactInfoCard';
 
 type Props = NativeStackScreenProps<
   ClientStackParamList,
@@ -201,11 +202,11 @@ const ClientProfileScreen: React.FC<Props> = ({route, navigation}) => {
         case 'phone':
           Linking.openURL(`tel:${client.mobileNumber}`);
           break;
-        case 'whatsapp':
-          Linking.openURL(
-            `https://api.whatsapp.com/send?phone=${client.whatsappNumber}`,
-          );
+        case 'whatsapp': {
+          const number = formatWhatsappNumber(client.whatsappNumber);
+          Linking.openURL(`https://api.whatsapp.com/send?phone=${number}`);
           break;
+        }
         case 'email':
           Linking.openURL(`mailto:${client.emailId}`);
           break;
@@ -225,7 +226,7 @@ const ClientProfileScreen: React.FC<Props> = ({route, navigation}) => {
             setPreSelectedActivityType(activityTypeId);
             setIsActivityModalVisible(true);
           }
-        }, 1000); // 3 seconds delay
+        }, 1000); // 1 second delay
       }
     },
     [client, getActivityTypeIdByName],

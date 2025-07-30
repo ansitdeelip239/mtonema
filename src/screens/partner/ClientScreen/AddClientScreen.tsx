@@ -24,7 +24,8 @@ import {z} from 'zod';
 import clientFormSchema from '../../../schema/ClientFormSchema';
 import {useDialog} from '../../../hooks/useDialog';
 import GroupsToggleComponent from './components/GroupsToggle';
-import { useTheme } from '../../../context/ThemeProvider';
+import {useTheme} from '../../../context/ThemeProvider';
+import {addCountryCode} from '../../../utils/phoneUtils';
 
 type Props = NativeStackScreenProps<ClientStackParamList, 'AddClientScreen'>;
 
@@ -101,13 +102,15 @@ const AddClientScreen: React.FC<Props> = ({navigation, route}) => {
           ...formData,
           clientName: formInput.clientName?.trim(),
           displayName: formData.displayName?.trim() || undefined,
-          mobileNumber: formData.mobileNumber?.trim() || undefined,
-          whatsappNumber: formData.whatsappNumber?.trim() || undefined,
+          mobileNumber: addCountryCode(formData.mobileNumber) || undefined,
+          whatsappNumber: addCountryCode(formData.whatsappNumber) || undefined,
           emailId: formData.emailId?.trim() || undefined,
           notes: formData.notes?.trim() || undefined,
           groups: Array.from(new Set(formData.groups || [])),
           partnerId: formData.partnerId,
         };
+
+        console.log('Cleaned form data:', cleanedData);
 
         if (editMode && clientData) {
           cleanedData.id = clientData.id;
