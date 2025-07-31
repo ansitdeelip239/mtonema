@@ -17,7 +17,9 @@ const Drawer = createDrawerNavigator<PartnerDrawerParamList>();
 const PartnerNavigator = () => {
   // Get theme from context
   const {theme} = useTheme();
-
+  
+  const isIOS = Platform.OS === 'ios';
+  
   // Update drawer styles to use theme
   const drawerStyles = {
     drawerType: 'front' as const,
@@ -34,22 +36,22 @@ const PartnerNavigator = () => {
       drawerContent={props => <CustomDrawerContent {...props} />}
       screenOptions={{
         ...drawerStyles,
-        drawerLabelStyle: {textAlign: 'center', width: '70%'},
-        swipeEnabled: Platform.OS === 'ios' ? false : true,
+        swipeEnabled: !isIOS,
       }}
       initialRouteName="Home">
       <Drawer.Screen
         name="Home"
         component={PartnerBottomTabs}
         options={{
-          headerShown: Platform.OS === 'ios' ? true : false,
+          headerShown: isIOS,
+          headerTitle: isIOS ? '' : 'Home', // Hide title text on iOS
+          headerTitleStyle: isIOS ? {opacity: 0} : undefined, // Extra fallback
           // eslint-disable-next-line react/no-unstable-nested-components
           drawerIcon: ({color}) => (
             <GetIcon iconName="home" color={color} size="25" />
           ),
         }}
       />
-
       <Drawer.Screen
         name="Groups"
         component={GroupsScreen}
@@ -61,7 +63,6 @@ const PartnerNavigator = () => {
           ),
         }}
       />
-
       <Drawer.Screen
         name="Content"
         component={ContentTemplateScreenStack}
@@ -73,7 +74,6 @@ const PartnerNavigator = () => {
           ),
         }}
       />
-
       <Drawer.Screen
         name="Profile Screen"
         component={PartnerProfileScreen}
@@ -82,7 +82,6 @@ const PartnerNavigator = () => {
           drawerItemStyle: {display: 'none'},
         }}
       />
-
       {/* Hidden Filter Screen */}
       <Drawer.Screen
         name="FilterPartnerScreen"

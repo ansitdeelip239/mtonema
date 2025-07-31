@@ -153,43 +153,73 @@ const OtpModel: React.FC<OtpModelProps> = ({
               </View>
 
               <TouchableOpacity
-                style={styles.primaryButton}
+                style={[
+                  styles.primaryButton,
+                  Platform.OS === 'ios' ? styles.iosButton : null,
+                  {
+                    backgroundColor:
+                      Platform.OS === 'ios' && (value.length !== 6 || isLoading)
+                        ? '#d3d3d3'
+                        : Platform.OS === 'ios' && themeColor
+                        ? themeColor
+                        : Platform.OS === 'ios'
+                        ? Colors.MT_PRIMARY_1
+                        : undefined,
+                  },
+                ]}
                 onPress={handleSubmit}
                 disabled={value.length !== 6 || isLoading}>
-                <LinearGradient
-                  colors={
-                    value.length !== 6 || isLoading
-                      ? themeColor
-                        ? [
-                            lightenColor(themeColor, 0.4),
-                            lightenColor(themeColor, 0.2),
-                          ]
-                        : ['#a8c7f0', '#b8e0f7'] // Default light blue gradient for disabled state
-                      : themeColor
-                      ? [themeColor, darkenColor(themeColor, 0.2)]
-                      : ['#3a7bd5', '#00d2ff']
-                  }
-                  start={{x: 0, y: 0}}
-                  end={{x: 1, y: 0}}
-                  style={styles.buttonGradient}>
+                {Platform.OS === 'android' ? (
+                  <LinearGradient
+                    colors={
+                      value.length !== 6 || isLoading
+                        ? themeColor
+                          ? [
+                              lightenColor(themeColor, 0.4),
+                              lightenColor(themeColor, 0.2),
+                            ]
+                          : ['#a8c7f0', '#b8e0f7']
+                        : themeColor
+                        ? [themeColor, darkenColor(themeColor, 0.2)]
+                        : ['#3a7bd5', '#00d2ff']
+                    }
+                    start={{x: 0, y: 0}}
+                    end={{x: 1, y: 0}}
+                    style={styles.buttonGradient}>
+                    <View style={styles.buttonContentWrapper}>
+                      <Text
+                        style={[
+                          styles.buttonText,
+                          (value.length !== 6 || isLoading) &&
+                            styles.disabledButtonText,
+                        ]}>
+                        {isLoading ? 'Verifying...' : 'Verify OTP'}
+                      </Text>
+                      {!isLoading && value.length === 6 && (
+                        <GetIcon
+                          iconName="chevronRight"
+                          color="white"
+                          size="20"
+                        />
+                      )}
+                    </View>
+                  </LinearGradient>
+                ) : (
                   <View style={styles.buttonContentWrapper}>
                     <Text
                       style={[
                         styles.buttonText,
                         (value.length !== 6 || isLoading) &&
                           styles.disabledButtonText,
+                        Platform.OS === 'ios' && {
+                          color:
+                            value.length !== 6 || isLoading ? '#666' : 'white',
+                        },
                       ]}>
-                      {isLoading ? 'Verifying...' : 'Verify OTP'}
+                      {isLoading ? 'Verifying...' : 'Verify'}
                     </Text>
-                    {!isLoading && value.length === 6 && (
-                      <GetIcon
-                        iconName="chevronRight"
-                        color="white"
-                        size="20"
-                      />
-                    )}
                   </View>
-                </LinearGradient>
+                )}
               </TouchableOpacity>
 
               <View style={styles.resendContainer}>
@@ -304,6 +334,15 @@ const styles = StyleSheet.create({
         elevation: 5,
       },
     }),
+  },
+  iosButton: {
+    backgroundColor: Colors.MT_PRIMARY_1,
+    borderRadius: 12,
+    paddingVertical: 15,
+    shadowColor: '#000',
+    shadowOffset: {width: 0, height: 2},
+    shadowOpacity: 0.15,
+    shadowRadius: 4,
   },
   buttonGradient: {
     borderRadius: 15,

@@ -1,13 +1,14 @@
 // import React, {useState} from 'react';
-import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import EmailScreen from '../screens/auth/EmailScreen';
 import SignUpScreen from '../screens/auth/SignUpScreen2';
-import {MainScreen} from '../screens/auth/MainScreen';
+import { MainScreen } from '../screens/auth/MainScreen';
 import PostProperty from '../screens/seller/PostPropertyScreen';
 import OtpScreen from '../screens/auth/OtpScreen';
 import PartnerZoneScreen from '../screens/auth/PartnerZoneScreen';
-import {MasterDetailModel} from '../types';
+import { MasterDetailModel } from '../types';
 import PartnerLoginScreen from '../screens/auth/PartnerLoginScreen';
+import { Platform } from 'react-native';
 // import UserTypeSelectionScreen from '../screens/auth/UserTypeSelectionScreen';
 // import AsyncStorage from '@react-native-async-storage/async-storage';
 // import storageKeys from '../constants/storageKeys';
@@ -17,13 +18,13 @@ import PartnerLoginScreen from '../screens/auth/PartnerLoginScreen';
 // import OtpModel from '../components/OtpModel';
 
 export type AuthStackParamList = {
-  EmailScreen: {role: string[]; location: MasterDetailModel | null};
+  EmailScreen: { role: string[]; location: MasterDetailModel | null };
   PartnerLoginScreen: undefined;
   PartnerZoneScreen: undefined;
-  SignUpScreen: {role: string};
+  SignUpScreen: { role: string };
   MainScreen: undefined;
   // ChangePasswordScreen: undefined;
-  PasswordScreen: {email: string};
+  PasswordScreen: { email: string };
   OtpScreen: {
     email: string;
     isForgetPassword?: boolean;
@@ -31,7 +32,7 @@ export type AuthStackParamList = {
     location?: MasterDetailModel;
   };
   PostProperty: undefined;
-  OtpModel: {email: string};
+  OtpModel: { email: string };
   UserTypeSelectionScreen: undefined;
   // ForgetPassword: undefined;
 };
@@ -75,24 +76,72 @@ export default function AuthNavigator() {
   //     </View>
   //   );
   // }
+  const isIOS = Platform.OS === 'ios';
+
   return (
     <Stack.Navigator
       screenOptions={{
-        headerShown: false,
+        headerShown: isIOS,
+        headerTitleStyle: { color: 'black' },
       }}
-      // initialRouteName={initialRoute as keyof AuthStackParamList}>
-      initialRouteName="PartnerLoginScreen">
+      initialRouteName="PartnerLoginScreen"
+    >
       {/* <Stack.Screen
-        name="UserTypeSelectionScreen"
-        component={UserTypeSelectionScreen}
+      name="UserTypeSelectionScreen"
+      component={UserTypeSelectionScreen}
+      options={{
+        title: isIOS ? 'User Type Selection' : '',
+      }}
       /> */}
-      <Stack.Screen name="MainScreen" component={MainScreen} />
-      <Stack.Screen name="PartnerLoginScreen" component={PartnerLoginScreen} />
-      <Stack.Screen name="PartnerZoneScreen" component={PartnerZoneScreen} />
-      <Stack.Screen name="EmailScreen" component={EmailScreen} />
-      <Stack.Screen name="SignUpScreen" component={SignUpScreen} />
-      <Stack.Screen name="OtpScreen" component={OtpScreen} />
-      <Stack.Screen name="PostProperty" component={PostProperty} />
+      <Stack.Screen
+        name="MainScreen"
+        component={MainScreen}
+        options={{
+          title: isIOS ? 'Main' : '',
+        }}
+      />
+      <Stack.Screen
+        name="PartnerLoginScreen"
+        component={PartnerLoginScreen}
+        options={{
+          title: isIOS ? 'Partner Login' : '',
+        }}
+      />
+      <Stack.Screen
+        name="PartnerZoneScreen"
+        component={PartnerZoneScreen}
+        options={{
+          title: isIOS ? 'Partner Zone' : '',
+        }}
+      />
+      <Stack.Screen
+        name="EmailScreen"
+        component={EmailScreen}
+        options={{
+          title: isIOS ? 'Email' : '',
+        }}
+      />
+      <Stack.Screen
+        name="SignUpScreen"
+        component={SignUpScreen}
+        options={{
+          title: isIOS ? 'Sign Up' : '',
+        }}
+      />
+      <Stack.Screen
+        name="OtpScreen"
+        component={OtpScreen}
+        options={{
+          title: isIOS ? 'OTP' : '',
+        }}
+      />
+      <Stack.Screen
+        name="PostProperty"
+        component={PostProperty}
+        options={{
+          title: isIOS ? 'Post Property' : '',
+        }}
+      />
     </Stack.Navigator>
   );
 }

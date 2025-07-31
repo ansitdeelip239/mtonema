@@ -1,28 +1,28 @@
-import React, {useState, useCallback, useEffect, useMemo} from 'react';
-import {StyleSheet, SafeAreaView} from 'react-native';
-import {NativeStackScreenProps} from '@react-navigation/native-stack';
-import {AuthStackParamList} from '../../navigator/AuthNavigator';
+import React, { useState, useCallback, useEffect, useMemo } from 'react';
+import { StyleSheet, SafeAreaView, Platform } from 'react-native';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { AuthStackParamList } from '../../navigator/AuthNavigator';
 import AuthService from '../../services/AuthService';
-import {useAuth} from '../../hooks/useAuth';
+import { useAuth } from '../../hooks/useAuth';
 import OtpModel from '../../components/OtpModel';
-import {useDialog} from '../../hooks/useDialog';
-import {useLogoStorage} from '../../hooks/useLogoStorage';
+import { useDialog } from '../../hooks/useDialog';
+import { useLogoStorage } from '../../hooks/useLogoStorage';
 import MasterService from '../../services/MasterService';
-import {useTheme} from '../../context/ThemeProvider';
+import { useTheme } from '../../context/ThemeProvider';
 import HeaderComponent from './components/HeaderComponent';
-import {getGradientColors} from '../../utils/colorUtils';
+import { getGradientColors } from '../../utils/colorUtils';
 import Roles from '../../constants/Roles';
 import Colors from '../../constants/Colors';
 
 type Props = NativeStackScreenProps<AuthStackParamList, 'OtpScreen'>;
 
-const OtpScreen: React.FC<Props> = ({navigation, route}) => {
+const OtpScreen: React.FC<Props> = ({ navigation, route }) => {
   const [isLoading, setIsLoading] = useState(false);
-  const {storeToken, login, storeUser, storePartnerZone} = useAuth();
+  const { storeToken, login, storeUser, storePartnerZone } = useAuth();
   const [OTP, setOtp] = useState('');
-  const {email, logoUrl, location} = route.params;
-  const {showError, hideDialog} = useDialog();
-  const {updateTheme} = useTheme();
+  const { email, logoUrl, location } = route.params;
+  const { showError, hideDialog } = useDialog();
+  const { updateTheme } = useTheme();
 
   // Partner info state
   const [partnerInfo, setPartnerInfo] = useState<{
@@ -53,7 +53,7 @@ const OtpScreen: React.FC<Props> = ({navigation, route}) => {
   }, [partnerInfo.colorScheme]);
 
   // Use the enhanced hook
-  const {storeLogoData, extractLogoFromPartnerLocation} = useLogoStorage();
+  const { storeLogoData, extractLogoFromPartnerLocation } = useLogoStorage();
 
   const handleSubmit = useCallback(async () => {
     if (OTP.length !== 6) {
@@ -155,11 +155,15 @@ const OtpScreen: React.FC<Props> = ({navigation, route}) => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <HeaderComponent
-        title="Verify OTP"
-        onBackPress={navigation.goBack}
-        gradientColors={headerGradientColors}
-      />
+      {
+        Platform.OS === 'android' && (
+          <HeaderComponent
+            title="Verify OTP"
+            onBackPress={navigation.goBack}
+            gradientColors={headerGradientColors}
+          />
+        )
+      }
 
       <OtpModel
         value={OTP}
