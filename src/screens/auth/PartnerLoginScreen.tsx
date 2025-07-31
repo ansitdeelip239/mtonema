@@ -16,6 +16,7 @@ import { getGradientColors } from '../../utils/colorUtils';
 import HeaderComponent from './components/HeaderComponent';
 import Images from '../../constants/Images';
 import Roles from '../../constants/Roles';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 type Props = NativeStackScreenProps<AuthStackParamList, 'PartnerLoginScreen'>;
 

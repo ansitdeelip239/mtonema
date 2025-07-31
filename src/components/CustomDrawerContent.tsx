@@ -1,5 +1,5 @@
-import React, {useState, useEffect} from 'react';
-import {useAuth} from '../hooks/useAuth';
+import React, { useState, useEffect } from 'react';
+import { useAuth } from '../hooks/useAuth';
 // import {useLogoStorage} from '../hooks/useLogoStorage';
 import {
   DrawerContentScrollView,
@@ -17,11 +17,12 @@ import {
 import Colors from '../constants/Colors';
 import GetIcon from './GetIcon';
 import Images from '../constants/Images';
-import {useTheme} from '../context/ThemeProvider';
+import { useTheme } from '../context/ThemeProvider';
+import { navigationRef } from '../navigator/NavigationRef';
 
 const CustomDrawerContent = (props: any) => {
-  const {user, logout} = useAuth();
-  const {theme} = useTheme();
+  const { user, logout } = useAuth();
+  const { theme } = useTheme();
   const [userName, setUserName] = useState(user?.name || '');
   const [isLoggingOut, setIsLoggingOut] = useState(false);
   const [modalVisible, setModalVisible] = useState(false); // Under development modal
@@ -46,6 +47,10 @@ const CustomDrawerContent = (props: any) => {
     setLogoutModalVisible(false);
     setLoadingModalVisible(true);
     await logout();
+    navigationRef.current?.resetRoot({
+      index: 0,
+      routes: [{ name: 'Auth' }],
+    })
     setIsLoggingOut(false);
     setLoadingModalVisible(false);
     console.log('Logged Out Successfully');
@@ -112,7 +117,7 @@ const CustomDrawerContent = (props: any) => {
               This feature is under development.
             </Text>
             <TouchableOpacity
-              style={[styles.modalSingleButton, {backgroundColor: theme.primaryColor}]}
+              style={[styles.modalSingleButton, { backgroundColor: theme.primaryColor }]}
               onPress={() => setModalVisible(false)}>
               <Text style={styles.textWhite}>OK</Text>
             </TouchableOpacity>
@@ -125,7 +130,7 @@ const CustomDrawerContent = (props: any) => {
       <View style={styles.p15}>
         <TouchableOpacity
           onPress={handleCustomButtonPress}
-          style={[styles.logout, {backgroundColor: theme.primaryColor}]}
+          style={[styles.logout, { backgroundColor: theme.primaryColor }]}
           disabled={isLoggingOut}>
           <View style={styles.drawerItem}>
             <GetIcon iconName="logout" color={Colors.white} size="25" />
@@ -154,7 +159,7 @@ const CustomDrawerContent = (props: any) => {
               <TouchableOpacity
                 style={[
                   styles.redButton,
-                  {backgroundColor: theme.primaryColor},
+                  { backgroundColor: theme.primaryColor },
                 ]}
                 onPress={confirmLogout}
                 disabled={isLoggingOut}>

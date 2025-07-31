@@ -104,7 +104,7 @@ export default function AuthNavigator() {
         name="PartnerLoginScreen"
         component={PartnerLoginScreen}
         options={{
-          title: isIOS ? 'Partner Login' : '',
+          title: isIOS ? 'Login' : '',
         }}
       />
       <Stack.Screen
