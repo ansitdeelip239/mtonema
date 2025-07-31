@@ -10,6 +10,7 @@ import ListingScreenStack from './PropertyListingScreenStack';
 import AddPartnerPropertyScreen from '../../screens/partner/AddPartnerPropertyScreen/AddPartnerPropertyScreen';
 import {useTheme} from '../../context/ThemeProvider';
 import { CommonActions } from '@react-navigation/native';
+import AddPropertyStack from './AddPropertyStack';
 
 const Tab = createBottomTabNavigator<PartnerBottomTabParamList>();
 
@@ -46,7 +47,7 @@ const tabScreens: Array<TabScreen<PartnerBottomTabParamList>> = [
   },
   {
     name: 'AddProperty',
-    component: AddPartnerPropertyScreen,
+    component: AddPropertyStack,
     icon: 'listproperty',
     label: 'Add',
   },

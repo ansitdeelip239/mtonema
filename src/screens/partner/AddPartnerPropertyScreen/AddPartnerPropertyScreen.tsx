@@ -1,9 +1,9 @@
 import React from 'react';
-import {BottomTabScreenProps} from '@react-navigation/bottom-tabs';
-import {PartnerBottomTabParamList} from '../../../types/navigation';
 import PartnerPropertyForm from '../components/PartnerPropertyForm/PartnerPropertyForm';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { AddPropertyStackParamList } from '../../../navigator/components/AddPropertyStack';
 
-type Props = BottomTabScreenProps<PartnerBottomTabParamList, 'AddProperty'>;
+type Props = NativeStackScreenProps<AddPropertyStackParamList, 'AddPartnerProperty'>;
 
 const AddPartnerPropertyScreen: React.FC<Props> = ({navigation}) => {
   return (

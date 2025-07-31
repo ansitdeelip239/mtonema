@@ -1,5 +1,5 @@
 import React from 'react';
-import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {Platform, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {BottomTabBarProps} from '@react-navigation/bottom-tabs';
 import {CommonActions, ParamListBase} from '@react-navigation/native';
 import {useKeyboard} from '../../hooks/useKeyboard';
@@ -193,7 +193,7 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     paddingHorizontal: 16,
-    paddingBottom: 16,
+    paddingBottom: Platform.OS === 'ios' ? 4 : 16,
     backgroundColor: 'transparent',
   },
   bottomBar: {
@@ -220,7 +220,7 @@ const styles = StyleSheet.create({
     flexShrink: 1,
   },
   activeTabLabel: {
-    fontWeight: 'bold',
+    fontWeight: Platform.OS === 'android' ? 'bold' : '400',
   },
   tabSection: {
     flex: 1,

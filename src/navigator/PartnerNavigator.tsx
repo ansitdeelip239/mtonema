@@ -43,7 +43,7 @@ const PartnerNavigator = () => {
         name="Home"
         component={PartnerBottomTabs}
         options={{
-          headerShown: isIOS,
+          headerShown: false,
           // headerTitle: isIOS ? '' : 'Home', // Hide title text on iOS
           // headerTitleStyle: isIOS ? {opacity: 0} : undefined, // Extra fallback
           // eslint-disable-next-line react/no-unstable-nested-components
