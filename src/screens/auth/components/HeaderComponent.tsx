@@ -1,4 +1,4 @@
-import React, {ReactNode} from 'react';
+import React, { ReactNode } from 'react';
 import {
   View,
   Text,
@@ -10,7 +10,7 @@ import {
 import LinearGradient from 'react-native-linear-gradient';
 import Colors from '../../../constants/Colors';
 import GetIcon from '../../../components/GetIcon';
-import {useSafeAreaInsets} from 'react-native-safe-area-context';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 interface HeaderComponentProps {
   title: string;
@@ -18,7 +18,7 @@ interface HeaderComponentProps {
   showBackButton?: boolean;
   rightComponent?: ReactNode;
   gradientColors?: string[];
-  compact?: boolean; // New prop to allow for a more compact header
+  compact?: boolean;
 }
 
 const HeaderComponent: React.FC<HeaderComponentProps> = ({
@@ -27,42 +27,60 @@ const HeaderComponent: React.FC<HeaderComponentProps> = ({
   showBackButton = false,
   rightComponent,
   gradientColors = [Colors.MT_PRIMARY_1, Colors.MT_PRIMARY_1],
-  compact = false, // Default to false for backward compatibility
+  compact = false,
 }) => {
-  // Get safe area insets
   const insets = useSafeAreaInsets();
+  const isIOS = Platform.OS === 'ios';
 
-  // Reduced top padding for all screens
-  const topPadding =
-    insets.top > 0 ? insets.top : Platform.OS === 'ios' ? 20 : 8;
+  const topPadding = isIOS
+    ? insets.top + 10 // Increased padding for iOS to account for status bar and notch
+    : insets.top > 0 ? insets.top : 10;
 
-  // Smaller bottom padding
-  const bottomPadding = compact ? 8 : 10;
+  const bottomPadding = isIOS
+    ? compact ? 12 : 16 // Slightly adjusted for iOS compact mode
+    : compact ? 8 : 12;
 
   return (
     <>
-      <StatusBar backgroundColor={gradientColors[0]} barStyle="light-content" />
+      <StatusBar
+        backgroundColor={gradientColors[0]}
+        barStyle="light-content"
+      />
       <LinearGradient
         colors={gradientColors}
         style={[
-          styles.headerGradient,
+          isIOS ? styles.headerGradientIOS : styles.headerGradient,
           {
             paddingTop: topPadding,
             paddingBottom: bottomPadding,
           },
-        ]}>
-        <View style={styles.headerContent}>
+        ]}
+      >
+        <View style={isIOS ? styles.headerContentIOS : styles.headerContent}>
           {showBackButton ? (
-            <TouchableOpacity style={styles.backButton} onPress={onBackPress}>
-              <GetIcon iconName="back" color="white" size="20" />
+            <TouchableOpacity
+              style={isIOS ? styles.backButtonIOS : styles.backButton}
+              onPress={onBackPress}
+              accessibilityLabel="Go back"
+              accessibilityRole="button"
+            >
+              <GetIcon iconName="back" color="white" size={20} />
             </TouchableOpacity>
           ) : (
-            <View style={styles.spacer} />
+            <View style={isIOS ? styles.spacerIOS : styles.spacer} />
           )}
 
-          <Text style={styles.headerText}>{title}</Text>
+          <Text
+            style={isIOS ? styles.headerTextIOS : styles.headerText}
+            numberOfLines={1}
+            ellipsizeMode="tail"
+          >
+            {title}
+          </Text>
 
-          {rightComponent || <View style={styles.spacer} />}
+          {rightComponent || (
+            <View style={isIOS ? styles.spacerIOS : styles.spacer} />
+          )}
         </View>
       </LinearGradient>
     </>
@@ -71,33 +89,67 @@ const HeaderComponent: React.FC<HeaderComponentProps> = ({
 
 const styles = StyleSheet.create({
   headerGradient: {
-    // paddingTop handled dynamically
-    // paddingBottom handled dynamically
-    borderBottomLeftRadius: 25, // Slightly smaller radius
+    borderBottomLeftRadius: 25,
     borderBottomRightRadius: 25,
   },
   headerContent: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    paddingHorizontal: 16, // Reduced from 20
-    height: 40, // Reduced from 45
+    paddingHorizontal: 16,
+    height: 44,
   },
   headerText: {
-    fontSize: 18, // Reduced from 20
+    fontSize: 18,
     fontWeight: 'bold',
     color: 'white',
+    flex: 1,
+    textAlign: 'center',
   },
   backButton: {
-    width: 36, // Reduced from 40
-    height: 36, // Reduced from 40
+    width: 36,
+    height: 36,
     borderRadius: 18,
     backgroundColor: 'rgba(255,255,255,0.2)',
     justifyContent: 'center',
     alignItems: 'center',
   },
   spacer: {
-    width: 36, // Match the button width
+    width: 36,
+  },
+  headerGradientIOS: {
+    borderBottomLeftRadius: 32,
+    borderBottomRightRadius: 32,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 3 },
+    shadowOpacity: 0.15,
+    shadowRadius: 6,
+  },
+  headerContentIOS: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: 20,
+    height: 44,
+  },
+  headerTextIOS: {
+    fontSize: 19,
+    fontWeight: '600',
+    color: 'white',
+    letterSpacing: -0.2,
+    flex: 1,
+    textAlign: 'center',
+  },
+  backButtonIOS: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: 'rgba(255,255,255,0.15)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  spacerIOS: {
+    width: 40,
   },
 });
 

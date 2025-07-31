@@ -7,21 +7,22 @@ import {
   SafeAreaView,
   NativeScrollEvent,
   NativeSyntheticEvent,
+  Platform,
 } from 'react-native';
-import {NativeStackScreenProps} from '@react-navigation/native-stack';
-import {FollowUpStackParamList} from '../../../navigator/components/FollowUpScreenStack';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { FollowUpStackParamList } from '../../../navigator/components/FollowUpScreenStack';
 import Header from '../../../components/Header';
-import {useFollowUps} from '../../../hooks/useFollowUps';
+import { useFollowUps } from '../../../hooks/useFollowUps';
 import FollowUpListSection from './components/FollowUpListSection';
-import {navigate} from '../../../navigator/NavigationRef';
-import {useTheme} from '../../../context/ThemeProvider';
+import { navigate } from '../../../navigator/NavigationRef';
+import { useTheme } from '../../../context/ThemeProvider';
 
 type Props = NativeStackScreenProps<
   FollowUpStackParamList,
   'SomedayFollowUpScreen'
 >;
 
-const SomedayFollowUpScreen: React.FC<Props> = ({navigation}) => {
+const SomedayFollowUpScreen: React.FC<Props> = ({ navigation }) => {
   // Use normal page size for proper pagination
   const {
     followUps,
@@ -34,7 +35,7 @@ const SomedayFollowUpScreen: React.FC<Props> = ({navigation}) => {
     fetchFollowUps, // <-- Add this
   } = useFollowUps('someday'); // Default page size (10)
 
-  const {theme} = useTheme();
+  const { theme } = useTheme();
 
   // Add useEffect to fetch data when component mounts
   useEffect(() => {
@@ -44,13 +45,13 @@ const SomedayFollowUpScreen: React.FC<Props> = ({navigation}) => {
   const handleFollowUpPress = (clientId: number) => {
     navigate('Clients', {
       screen: 'ClientProfileScreen',
-      params: {clientId},
+      params: { clientId },
     });
   };
 
   // Handle scroll to implement infinite scrolling
   const handleScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
-    const {layoutMeasurement, contentOffset, contentSize} = event.nativeEvent;
+    const { layoutMeasurement, contentOffset, contentSize } = event.nativeEvent;
     const paddingToBottom = 20; // How far from the bottom to trigger loading more
     const isCloseToBottom =
       layoutMeasurement.height + contentOffset.y >=
@@ -63,11 +64,15 @@ const SomedayFollowUpScreen: React.FC<Props> = ({navigation}) => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Header
-        title="Someday Follow-ups"
-        backButton={true}
-        navigation={navigation}
-      />
+      {
+        Platform.OS === 'android' && (
+          <Header
+            title="Someday Follow-ups"
+            backButton={true}
+            navigation={navigation}
+          />
+        )
+      }
 
       <ScrollView
         style={styles.content}

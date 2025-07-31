@@ -29,6 +29,8 @@ const PartnerLoginScreen: React.FC<Props> = ({navigation}) => {
     });
   };
 
+  const isIOS = Platform.OS === 'ios';
+
   return (
     <View style={styles.container}>
       <HeaderComponent
@@ -61,15 +63,17 @@ const PartnerLoginScreen: React.FC<Props> = ({navigation}) => {
         {/* Login Button Section */}
         <View style={styles.buttonSection}>
           <TouchableOpacity
-            style={styles.loginButton}
+            style={isIOS ? styles.loginButtonIOS : styles.loginButton}
             onPress={handleLogin}
             activeOpacity={0.8}>
             <LinearGradient
               colors={[Colors.MT_PRIMARY_1, Colors.MT_SECONDARY_1]}
               start={{x: 0, y: 0}}
               end={{x: 1, y: 1}}
-              style={styles.buttonGradient}>
-              <Text style={styles.buttonText}>Continue to Login</Text>
+              style={isIOS ? styles.buttonGradientIOS : styles.buttonGradient}>
+              <Text style={isIOS ? styles.buttonTextIOS : styles.buttonText}>
+                Continue to Login
+              </Text>
             </LinearGradient>
           </TouchableOpacity>
 
@@ -155,21 +159,13 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     paddingBottom: 40,
   },
+  
+  // Android/Default button styles
   loginButton: {
     borderRadius: 16,
     overflow: 'hidden',
     marginBottom: 32,
-    ...Platform.select({
-      ios: {
-        shadowColor: Colors.MT_PRIMARY_1,
-        shadowOffset: {width: 0, height: 6},
-        shadowOpacity: 0.25,
-        shadowRadius: 12,
-      },
-      android: {
-        elevation: 8,
-      },
-    }),
+    elevation: 8,
   },
   buttonGradient: {
     borderRadius: 16,
@@ -185,6 +181,43 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     letterSpacing: 0.5,
   },
+
+  // iOS-specific button styles
+  loginButtonIOS: {
+    borderRadius: 14, // Slightly smaller radius for iOS
+    overflow: 'visible', // Changed from 'hidden' to allow shadow visibility
+    marginBottom: 32,
+    shadowColor: '#000000', // Changed to black for better visibility
+    shadowOffset: {
+      width: 0,
+      height: 6, // Increased shadow offset
+    },
+    shadowOpacity: 0.4, // Increased opacity
+    shadowRadius: 10, // Increased radius for more prominent shadow
+    // Add a more visible border
+    borderWidth: 1,
+    borderColor: 'rgba(255,255,255,0.2)',
+    // Add background color to ensure button is visible
+    backgroundColor: 'transparent',
+  },
+  buttonGradientIOS: {
+    borderRadius: 13, // Slightly smaller to account for border
+    paddingVertical: 20, // Slightly more padding for iOS
+    paddingHorizontal: 36,
+    alignItems: 'center',
+    justifyContent: 'center',
+    minHeight: 56, // Ensure minimum touch target size for iOS
+    // Ensure gradient is visible
+    overflow: 'hidden',
+  },
+  buttonTextIOS: {
+    color: Colors.MT_SECONDARY_3,
+    fontSize: 17, // iOS standard button text size
+    fontWeight: '600',
+    textAlign: 'center',
+    letterSpacing: -0.2, // Tighter letter spacing for iOS
+  },
+
   infoContainer: {
     flexDirection: 'row',
     alignItems: 'center',

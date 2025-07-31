@@ -1,4 +1,4 @@
-import React, {useEffect, useCallback, useState} from 'react';
+import React, { useEffect, useCallback, useState } from 'react';
 import {
   View,
   Text,
@@ -8,25 +8,26 @@ import {
   RefreshControl,
   NativeScrollEvent,
   NativeSyntheticEvent,
+  Platform,
 } from 'react-native';
 import Colors from '../../../constants/Colors';
 import GetIcon from '../../../components/GetIcon';
 import Header from '../../../components/Header';
-import {PartnerDrawerParamList} from '../../../types/navigation';
-import {NativeStackScreenProps} from '@react-navigation/native-stack';
-import {FollowUpStackParamList} from '../../../navigator/components/FollowUpScreenStack';
-import {useFollowUps} from '../../../hooks/useFollowUps';
+import { PartnerDrawerParamList } from '../../../types/navigation';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { FollowUpStackParamList } from '../../../navigator/components/FollowUpScreenStack';
+import { useFollowUps } from '../../../hooks/useFollowUps';
 import FollowUpListSection from './components/FollowUpListSection';
-import {usePartner} from '../../../context/PartnerProvider';
-import {navigate} from '../../../navigator/NavigationRef';
-import {Badge} from 'react-native-paper';
-import {useTheme} from '../../../context/ThemeProvider';
+import { usePartner } from '../../../context/PartnerProvider';
+import { navigate } from '../../../navigator/NavigationRef';
+import { Badge } from 'react-native-paper';
+import { useTheme } from '../../../context/ThemeProvider';
 import SalutationGreeting from './components/Salutation';
 
 type Props = NativeStackScreenProps<FollowUpStackParamList, 'FollowUpScreen'>;
 
-const FollowUpScreen: React.FC<Props> = ({navigation}) => {
-  const {theme} = useTheme();
+const FollowUpScreen: React.FC<Props> = ({ navigation }) => {
+  const { theme } = useTheme();
 
   const {
     followUps: todayFollowUps,
@@ -56,7 +57,7 @@ const FollowUpScreen: React.FC<Props> = ({navigation}) => {
   } = useFollowUps('someday', 1);
 
   const [isRefreshing, setIsRefreshing] = useState(false);
-  const {clientsUpdated} = usePartner();
+  const { clientsUpdated } = usePartner();
   const [activeSection, setActiveSection] = useState<string | null>(null);
 
   const isToday = useCallback((dateString: string | null): boolean => {
@@ -126,12 +127,12 @@ const FollowUpScreen: React.FC<Props> = ({navigation}) => {
   const handleFollowUpPress = (clientId: number) => {
     navigate('Clients', {
       screen: 'ClientProfileScreen',
-      params: {clientId},
+      params: { clientId },
     });
   };
 
   const handleScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
-    const {layoutMeasurement, contentOffset, contentSize} = event.nativeEvent;
+    const { layoutMeasurement, contentOffset, contentSize } = event.nativeEvent;
     const paddingToBottom = 20;
     const isCloseToBottom =
       layoutMeasurement.height + contentOffset.y >=
@@ -148,7 +149,11 @@ const FollowUpScreen: React.FC<Props> = ({navigation}) => {
 
   return (
     <>
-      <Header<PartnerDrawerParamList> title="Follow-Ups" />
+      {
+        Platform.OS === 'android' && (
+          <Header<PartnerDrawerParamList> title="Follow-Ups" />
+        )
+      }
 
       <ScrollView
         style={styles.content}
@@ -175,7 +180,7 @@ const FollowUpScreen: React.FC<Props> = ({navigation}) => {
                 style={[
                   styles.navButtonIconContainer,
                   styles.overdueIconContainer,
-                  {backgroundColor: Colors.red},
+                  { backgroundColor: Colors.red },
                 ]}>
                 <GetIcon iconName="calendarOverdue" size={24} />
               </View>
@@ -207,7 +212,7 @@ const FollowUpScreen: React.FC<Props> = ({navigation}) => {
               <View
                 style={[
                   styles.navButtonIconContainer,
-                  {backgroundColor: theme.primaryColor},
+                  { backgroundColor: theme.primaryColor },
                 ]}>
                 <GetIcon iconName="calendarUpcoming" size={24} />
               </View>
@@ -241,14 +246,14 @@ const FollowUpScreen: React.FC<Props> = ({navigation}) => {
             style={[
               styles.navButton,
               styles.somedayButton,
-              {borderLeftColor: theme.secondaryColor},
+              { borderLeftColor: theme.secondaryColor },
             ]}
             onPress={() => navigateToScreen('someday')}>
             <View style={styles.navButtonContent}>
               <View
                 style={[
                   styles.navButtonIconContainer,
-                  {backgroundColor: theme.secondaryColor},
+                  { backgroundColor: theme.secondaryColor },
                 ]}>
                 <GetIcon iconName="calendarSomeday" size={24} />
               </View>
@@ -259,7 +264,7 @@ const FollowUpScreen: React.FC<Props> = ({navigation}) => {
                     <Badge
                       style={[
                         styles.somedayBadge,
-                        {backgroundColor: theme.secondaryColor},
+                        { backgroundColor: theme.secondaryColor },
                       ]}
                       size={22}>
                       {somedayPagination?.totalCount}
@@ -324,7 +329,7 @@ const styles = StyleSheet.create({
     marginBottom: 12,
     elevation: 2,
     shadowColor: '#000',
-    shadowOffset: {width: 0, height: 1},
+    shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.22,
     shadowRadius: 2.22,
   },

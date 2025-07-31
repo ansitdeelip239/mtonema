@@ -10,6 +10,7 @@ import PartnerProfileScreen from '../screens/partner/ProfileScreen/ProfileScreen
 import {useTheme} from '../context/ThemeProvider';
 import ContentTemplateScreenStack from './components/ContentTemplateStack';
 import FilterPartnerScreen from '../screens/partner/FilterPartnerScreen/FilterPartnerScreen';
+import { Platform } from 'react-native';
 
 const Drawer = createDrawerNavigator<PartnerDrawerParamList>();
 
@@ -34,13 +35,14 @@ const PartnerNavigator = () => {
       screenOptions={{
         ...drawerStyles,
         drawerLabelStyle: {textAlign: 'center', width: '70%'},
+        swipeEnabled: Platform.OS === 'ios',
       }}
       initialRouteName="Home">
       <Drawer.Screen
         name="Home"
         component={PartnerBottomTabs}
         options={{
-          headerShown: false,
+          headerShown: Platform.OS === 'ios' ? true : false,
           // eslint-disable-next-line react/no-unstable-nested-components
           drawerIcon: ({color}) => (
             <GetIcon iconName="home" color={color} size="25" />
