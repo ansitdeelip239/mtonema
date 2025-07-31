@@ -37,15 +37,7 @@ const FollowUpScreenStack = () => {
         headerTitleAlign: 'center',
         headerBackVisible: true,
         headerBackTitle: 'Back',
-        headerLeft: () => (
-          <TouchableOpacity
-            onPress={() => drawerNavigation.toggleDrawer()}
-            style={{ marginLeft: 16, padding: 4 }}
-            hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
-          >
-            <GetIcon iconName="hamburgerMenu" color="#fff" size={18} />
-          </TouchableOpacity>
-        ),
+        // NO headerLeft here — we will add it per-screen
       }}
       initialRouteName="FollowUpScreen"
     >
@@ -54,26 +46,38 @@ const FollowUpScreenStack = () => {
         component={FollowUpScreen}
         options={{
           title: 'Follow Up',
-          headerBackVisible: false, // Hide back on initial screen
+          headerBackVisible: false, // Hide back button on initial screen
+
+          // Show drawer icon only on the root screen
+          headerLeft: () => (
+            <TouchableOpacity
+              onPress={() => drawerNavigation.toggleDrawer()}
+              style={{ marginLeft: 16, padding: 4 }}
+              hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+            >
+              <GetIcon iconName="hamburgerMenu" color="#fff" size={18} />
+            </TouchableOpacity>
+          ),
         }}
       />
       <Stack.Screen
         name="OverdueFollowUpScreen"
         component={OverdueFollowUpScreen}
-        options={{ title: 'Overdue Follow Up' }}
+        options={{ title: 'Overdue Follow Up' /* no headerLeft here */ }}
       />
       <Stack.Screen
         name="UpcomingFollowUpScreen"
         component={UpcomingFollowUpScreen}
-        options={{ title: 'Upcoming Follow Up' }}
+        options={{ title: 'Upcoming Follow Up' /* no headerLeft here */ }}
       />
       <Stack.Screen
         name="SomedayFollowUpScreen"
         component={SomedayFollowUpScreen}
-        options={{ title: 'Someday Follow Up' }}
+        options={{ title: 'Someday Follow Up' /* no headerLeft here */ }}
       />
     </Stack.Navigator>
   );
 };
 
 export default FollowUpScreenStack;
+

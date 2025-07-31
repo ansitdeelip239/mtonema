@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useLayoutEffect } from 'react';
 import {
   View,
   Text,
@@ -163,6 +163,36 @@ const ClientProfileScreen: React.FC<Props> = ({ route, navigation }) => {
   useEffect(() => {
     fetchAssignedUsers();
   }, [fetchAssignedUsers, clientsUpdated]);
+
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      headerRight: () => (
+        <View style={{ flexDirection: 'row', marginRight: 10 }}>
+          <TouchableOpacity
+            onPress={() => {
+              navigation.navigate('AddClientScreen', {
+                editMode: true,
+                clientData: client ?? undefined,
+              });
+            }}
+            style={{ marginHorizontal: 10 }}
+          >
+            <GetIcon iconName="edit" color="#fff" size={18} />
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            onPress={() => {
+              setIsDeleteModalVisible(true);
+            }}
+            style={{ marginHorizontal: 10 }}
+          >
+            <GetIcon iconName="delete" color="#fff" size={18} />
+          </TouchableOpacity>
+        </View>
+      ),
+    });
+  }, [navigation, client]);
+
 
   const onRefresh = React.useCallback(() => {
     setRefreshing(true);

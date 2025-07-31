@@ -35,23 +35,23 @@ const AgentDataScreenStack = () => {
         headerTitleAlign: 'center',
         headerBackVisible: true,
         headerBackTitle: 'Back',
-        headerLeft: () => (
-          <TouchableOpacity
-            onPress={() => drawerNavigation.toggleDrawer()}
-            style={{ marginLeft: 16, padding: 4 }}
-            hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
-          >
-            <GetIcon iconName="hamburgerMenu" color="#fff" size={18} />
-          </TouchableOpacity>
-        ),
       }}
     >
       <Stack.Screen
         name="AgentDataScreen"
         component={AgentDataScreen}
-        options={({navigation}) => ({
+        options={({ navigation }) => ({
           headerBackVisible: false, // hide back button on the root screen
           title: 'Agent Data',
+          headerLeft: () => (
+            <TouchableOpacity
+              onPress={() => drawerNavigation.toggleDrawer()}
+              style={{ marginLeft: 16, padding: 4 }}
+              hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+            >
+              <GetIcon iconName="hamburgerMenu" color="#fff" size={18} />
+            </TouchableOpacity>
+          ),
           headerRight: () => (
             <>
               <TouchableOpacity

@@ -36,15 +36,6 @@ const ListingScreenStack = () => {
         headerTitleAlign: 'center',
         headerBackVisible: true,
         headerBackTitle: 'Back',
-        headerLeft: () => (
-          <TouchableOpacity
-            onPress={() => drawerNavigation.toggleDrawer()}
-            style={{ marginLeft: 16, padding: 4 }}
-            hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
-          >
-            <GetIcon iconName="hamburgerMenu" color="#fff" size={18} />
-          </TouchableOpacity>
-        ),
       }}
       initialRouteName="ListingsScreen"
     >
@@ -54,6 +45,15 @@ const ListingScreenStack = () => {
         options={{
           headerBackVisible: false, // hide back button on initial screen
           title: 'Listings', // Optional: set a friendly title
+          headerLeft: () => (
+            <TouchableOpacity
+              onPress={() => drawerNavigation.toggleDrawer()}
+              style={{ marginLeft: 16, padding: 4 }}
+              hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+            >
+              <GetIcon iconName="hamburgerMenu" color="#fff" size={18} />
+            </TouchableOpacity>
+          ),
         }}
       />
       <Stack.Screen
