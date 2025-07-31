@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useCallback, useMemo, useRef} from 'react';
+import React, { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import {
   View,
   StyleSheet,
@@ -7,24 +7,25 @@ import {
   Text,
   TouchableOpacity,
   ActivityIndicator,
+  Platform,
 } from 'react-native';
 import PartnerService from '../../../services/PartnerService';
-import {useAuth} from '../../../hooks/useAuth';
-import {AgentData, FilterValues, PagingModel} from '../../../types';
+import { useAuth } from '../../../hooks/useAuth';
+import { AgentData, FilterValues, PagingModel } from '../../../types';
 import renderFooter from './components/RenderFooter';
 import Header from '../../../components/Header';
-import {PartnerDrawerParamList} from '../../../types/navigation';
-import {usePartner} from '../../../context/PartnerProvider';
+import { PartnerDrawerParamList } from '../../../types/navigation';
+import { usePartner } from '../../../context/PartnerProvider';
 import RenderItem from './components/RenderItem';
-import {NativeStackScreenProps} from '@react-navigation/native-stack';
-import {AgentDataStackParamList} from '../../../navigator/components/AgentDataStack';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { AgentDataStackParamList } from '../../../navigator/components/AgentDataStack';
 import SearchAndFilter from './components/SearchAndFilter';
-import {useTheme} from '../../../context/ThemeProvider';
+import { useTheme } from '../../../context/ThemeProvider';
 
 // type Props = BottomTabScreenProps<PartnerBottomTabParamList, 'Property'>;
 type Props = NativeStackScreenProps<AgentDataStackParamList, 'AgentDataScreen'>;
 
-const AgentDataScreen: React.FC<Props> = ({navigation}) => {
+const AgentDataScreen: React.FC<Props> = ({ navigation }) => {
   const [agentData, setAgentData] = useState<AgentData[]>([]);
   const [locations, setLocations] = useState<string[]>([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -39,9 +40,9 @@ const AgentDataScreen: React.FC<Props> = ({navigation}) => {
     propertyType: null,
     bhkType: null,
   });
-  const {user} = useAuth();
-  const {agentPropertyUpdated, setAgentPropertyUpdated} = usePartner();
-  const {theme} = useTheme();
+  const { user } = useAuth();
+  const { agentPropertyUpdated, setAgentPropertyUpdated } = usePartner();
+  const { theme } = useTheme();
   const PAGE_SIZE = 10;
 
   const isInitialRender = useRef(true);
@@ -106,8 +107,8 @@ const AgentDataScreen: React.FC<Props> = ({navigation}) => {
 
         const hasMore = Boolean(
           pagingInfo?.currentPage &&
-            pagingInfo?.totalPage &&
-            pagingInfo.currentPage < pagingInfo.totalPage,
+          pagingInfo?.totalPage &&
+          pagingInfo.currentPage < pagingInfo.totalPage,
         );
         setHasMoreData(hasMore);
         setCurrentPage(pagingInfo?.currentPage ?? 1);
@@ -171,18 +172,22 @@ const AgentDataScreen: React.FC<Props> = ({navigation}) => {
 
   return (
     <View style={styles.container}>
-      <Header<PartnerDrawerParamList> title="Agent's Property">
-        <TouchableOpacity
-          style={[styles.addButton, {backgroundColor: theme.secondaryColor}]}
-          onPress={() => {
-            navigation.navigate('AddAgentDataScreen', {
-              editMode: false,
-              propertyData: {} as AgentData,
-            });
-          }}>
-          <Text style={styles.buttonText}>Add</Text>
-        </TouchableOpacity>
-      </Header>
+      {
+        Platform.OS === 'android' && (
+          <Header<PartnerDrawerParamList> title="Agent's Property">
+            <TouchableOpacity
+              style={[styles.addButton, { backgroundColor: theme.secondaryColor }]}
+              onPress={() => {
+                navigation.navigate('AddAgentDataScreen', {
+                  editMode: false,
+                  propertyData: {} as AgentData,
+                });
+              }}>
+              <Text style={styles.buttonText}>Add</Text>
+            </TouchableOpacity>
+          </Header>
+        )
+      }
 
       <View style={styles.searchContainer}>
         <SearchAndFilter
@@ -200,7 +205,7 @@ const AgentDataScreen: React.FC<Props> = ({navigation}) => {
       ) : (
         <FlatList
           data={agentData}
-          renderItem={({item}) => (
+          renderItem={({ item }) => (
             <RenderItem
               item={item}
               onDataUpdate={() => setAgentPropertyUpdated(prev => !prev)}
@@ -220,7 +225,7 @@ const AgentDataScreen: React.FC<Props> = ({navigation}) => {
           onEndReached={handleLoadMore}
           onEndReachedThreshold={0.5}
           ListFooterComponent={
-            isPaginationLoading ? renderFooter({isLoading: true}) : null
+            isPaginationLoading ? renderFooter({ isLoading: true }) : null
           }
           ListEmptyComponent={renderEmptyComponent}
         />

@@ -1,5 +1,5 @@
-import {NativeStackScreenProps} from '@react-navigation/native-stack';
-import React, {useEffect, useState, useMemo} from 'react';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import React, { useEffect, useState, useMemo } from 'react';
 import {
   Text,
   View,
@@ -13,20 +13,20 @@ import {
   useWindowDimensions,
   Switch,
 } from 'react-native';
-import {ListingScreenStackParamList} from '../../../navigator/components/PropertyListingScreenStack';
-import {Property} from './types';
+import { ListingScreenStackParamList } from '../../../navigator/components/PropertyListingScreenStack';
+import { Property } from './types';
 import PartnerService from '../../../services/PartnerService';
 import Colors from '../../../constants/Colors';
 import GetIcon from '../../../components/GetIcon';
-import {formatCurrency} from '../../../utils/currency';
+import { formatCurrency } from '../../../utils/currency';
 import Header from '../../../components/Header';
 import YoutubeVideoPlayer from '../../../components/YoutubeVideoPlayer';
 import Toast from 'react-native-toast-message';
-import {usePartner} from '../../../context/PartnerProvider';
-import {Appbar, Menu} from 'react-native-paper';
+import { usePartner } from '../../../context/PartnerProvider';
+import { Appbar, Menu } from 'react-native-paper';
 import ConfirmationModal from '../../../components/ConfirmationModal';
-import {getYouTubeThumbnailUrl} from '../../../utils/formUtils';
-import {useTheme} from '../../../context/ThemeProvider';
+import { getYouTubeThumbnailUrl } from '../../../utils/formUtils';
+import { useTheme } from '../../../context/ThemeProvider';
 
 type Props = NativeStackScreenProps<
   ListingScreenStackParamList,
@@ -36,9 +36,9 @@ type Props = NativeStackScreenProps<
 // Default placeholder image
 const placeholderImage = require('../../../assets/Images/dncr_black_logo.png');
 
-const ListingDetailScreen: React.FC<Props> = ({route, navigation}) => {
+const ListingDetailScreen: React.FC<Props> = ({ route, navigation }) => {
   // ...existing state variables and handlers...
-  const {propertyId} = route.params;
+  const { propertyId } = route.params;
 
   const [property, setProperty] = useState<Property>();
   const [loading, setLoading] = useState<boolean>(true);
@@ -52,15 +52,14 @@ const ListingDetailScreen: React.FC<Props> = ({route, navigation}) => {
     [key: number]: boolean;
   }>({});
 
-  const {width} = useWindowDimensions();
-  const {setPartnerPropertyUpdated} = usePartner();
-  const {theme} = useTheme();
+  const { width } = useWindowDimensions();
+  const { setPartnerPropertyUpdated } = usePartner();
+  const { theme } = useTheme();
 
   const handleFeaturedToggle = async (newValue: boolean) => {
     setIsFeatured(newValue);
     console.log(
-      `Interest toggled: ${
-        newValue ? 'Interested' : 'Not interested'
+      `Interest toggled: ${newValue ? 'Interested' : 'Not interested'
       } in property ${propertyId}`,
     );
 
@@ -73,15 +72,14 @@ const ListingDetailScreen: React.FC<Props> = ({route, navigation}) => {
       if (response.success) {
         Toast.show({
           type: 'success',
-          text1: `Property ${
-            newValue ? 'marked as' : 'unmarked from'
-          } featured`,
+          text1: `Property ${newValue ? 'marked as' : 'unmarked from'
+            } featured`,
           position: 'top',
           visibilityTime: 2000,
         });
 
         if (property) {
-          setProperty({...property, featured: newValue});
+          setProperty({ ...property, featured: newValue });
         }
 
         setPartnerPropertyUpdated(prev => !prev);
@@ -213,7 +211,7 @@ const ListingDetailScreen: React.FC<Props> = ({route, navigation}) => {
   const handleImageScroll = (event: any) => {
     const slideIndex = Math.ceil(
       event.nativeEvent.contentOffset.x /
-        event.nativeEvent.layoutMeasurement.width,
+      event.nativeEvent.layoutMeasurement.width,
     );
 
     if (slideIndex !== currentImageIndex) {
@@ -265,46 +263,50 @@ const ListingDetailScreen: React.FC<Props> = ({route, navigation}) => {
 
   return (
     <View style={styles.container}>
-      <Header
-        title={property?.propertyName || 'Property Details'}
-        backButton={true}
-        onBackPress={() => navigation.goBack()}>
-        {!loading && property && (
-          <Menu
-            visible={menuVisible}
-            onDismiss={closeMenu}
-            anchor={
-              <Appbar.Action
-                // eslint-disable-next-line react/no-unstable-nested-components
-                icon={() => <GetIcon iconName="threeDots" color="white" />}
-                onPress={openMenu}
-                style={styles.threeDotsIcon}
-              />
-            }
-            contentStyle={styles.menuContent}>
-            <Menu.Item
-              onPress={() => {
-                closeMenu();
-                handleEditProperty();
-              }}
-              title="Edit"
-              titleStyle={styles.menuItemTitle}
-              // eslint-disable-next-line react/no-unstable-nested-components
-              leadingIcon={() => <GetIcon iconName="edit" />}
-            />
-            <Menu.Item
-              onPress={() => {
-                closeMenu();
-                setShowDeleteModal(true);
-              }}
-              title="Delete"
-              titleStyle={styles.menuItemTitle}
-              // eslint-disable-next-line react/no-unstable-nested-components
-              leadingIcon={() => <GetIcon iconName="delete" />}
-            />
-          </Menu>
-        )}
-      </Header>
+      {
+        Platform.OS === 'android' && (
+          <Header
+            title={property?.propertyName || 'Property Details'}
+            backButton={true}
+            onBackPress={() => navigation.goBack()}>
+            {!loading && property && (
+              <Menu
+                visible={menuVisible}
+                onDismiss={closeMenu}
+                anchor={
+                  <Appbar.Action
+                    // eslint-disable-next-line react/no-unstable-nested-components
+                    icon={() => <GetIcon iconName="threeDots" color="white" />}
+                    onPress={openMenu}
+                    style={styles.threeDotsIcon}
+                  />
+                }
+                contentStyle={styles.menuContent}>
+                <Menu.Item
+                  onPress={() => {
+                    closeMenu();
+                    handleEditProperty();
+                  }}
+                  title="Edit"
+                  titleStyle={styles.menuItemTitle}
+                  // eslint-disable-next-line react/no-unstable-nested-components
+                  leadingIcon={() => <GetIcon iconName="edit" />}
+                />
+                <Menu.Item
+                  onPress={() => {
+                    closeMenu();
+                    setShowDeleteModal(true);
+                  }}
+                  title="Delete"
+                  titleStyle={styles.menuItemTitle}
+                  // eslint-disable-next-line react/no-unstable-nested-components
+                  leadingIcon={() => <GetIcon iconName="delete" />}
+                />
+              </Menu>
+            )}
+          </Header>
+        )
+      }
 
       {/* Content area - conditionally render based on state */}
       {loading ? (
@@ -316,7 +318,7 @@ const ListingDetailScreen: React.FC<Props> = ({route, navigation}) => {
         <View style={styles.contentErrorContainer}>
           <Text style={styles.errorText}>{error || 'Property not found'}</Text>
           <TouchableOpacity
-            style={[styles.retryButton, {backgroundColor: theme.primaryColor}]}
+            style={[styles.retryButton, { backgroundColor: theme.primaryColor }]}
             onPress={() => navigation.goBack()}>
             <Text style={styles.buttonText}>Go Back</Text>
           </TouchableOpacity>
@@ -333,12 +335,12 @@ const ListingDetailScreen: React.FC<Props> = ({route, navigation}) => {
                 <FlatList
                   data={displayImages}
                   keyExtractor={(item, index) => `image-${index}`}
-                  renderItem={({item, index}) => (
-                    <View style={[styles.imageSlide, {width}]}>
+                  renderItem={({ item, index }) => (
+                    <View style={[styles.imageSlide, { width }]}>
                       {item.isVideo ? (
                         // Only render the YouTube player if this is the current slide AND it's active
                         currentImageIndex === index &&
-                        activeVideoSlides[index] ? (
+                          activeVideoSlides[index] ? (
                           <YoutubeVideoPlayer
                             key={`video-${index}-${Math.random()}`} // Force remount with random key
                             videoId={item.videoUrl}
@@ -382,7 +384,7 @@ const ListingDetailScreen: React.FC<Props> = ({route, navigation}) => {
                         )
                       ) : (
                         <Image
-                          source={{uri: item.imageUrl}}
+                          source={{ uri: item.imageUrl }}
                           style={styles.propertyImage}
                           resizeMode="cover"
                         />
@@ -410,7 +412,7 @@ const ListingDetailScreen: React.FC<Props> = ({route, navigation}) => {
                         style={[
                           styles.paginationDot,
                           currentImageIndex === index &&
-                            styles.paginationDotActive,
+                          styles.paginationDotActive,
                         ]}
                       />
                     ))}
@@ -437,7 +439,7 @@ const ListingDetailScreen: React.FC<Props> = ({route, navigation}) => {
 
               {property.featured && (
                 <View
-                  style={[styles.badge, {backgroundColor: theme.primaryColor}]}>
+                  style={[styles.badge, { backgroundColor: theme.primaryColor }]}>
                   <Text style={styles.badgeText}>Featured</Text>
                 </View>
               )}
@@ -450,7 +452,7 @@ const ListingDetailScreen: React.FC<Props> = ({route, navigation}) => {
               {property.propertyName || 'Unnamed Property'}
             </Text>
 
-            <Text style={[styles.propertyPrice, {color: theme.primaryColor}]}>
+            <Text style={[styles.propertyPrice, { color: theme.primaryColor }]}>
               {property.price
                 ? formatCurrency(property.price)
                 : 'Price on request'}
@@ -653,7 +655,7 @@ const ListingDetailScreen: React.FC<Props> = ({route, navigation}) => {
               </View>
 
               <Switch
-                trackColor={{false: '#dddddd', true: theme.primaryColor + '80'}}
+                trackColor={{ false: '#dddddd', true: theme.primaryColor + '80' }}
                 thumbColor={isFeatured ? theme.primaryColor : '#f4f3f4'}
                 ios_backgroundColor="#dddddd"
                 onValueChange={handleFeaturedToggle}
@@ -673,7 +675,7 @@ const ListingDetailScreen: React.FC<Props> = ({route, navigation}) => {
                   style={[
                     styles.featureIcon,
                     property.readyToMove
-                      ? [styles.featureActive, {backgroundColor: theme.primaryColor}]
+                      ? [styles.featureActive, { backgroundColor: theme.primaryColor }]
                       : styles.featureInactive,
                   ]}>
                   <GetIcon
@@ -691,7 +693,7 @@ const ListingDetailScreen: React.FC<Props> = ({route, navigation}) => {
                   style={[
                     styles.featureIcon,
                     property.constructionDone
-                      ? [styles.featureActive, {backgroundColor: theme.primaryColor}]
+                      ? [styles.featureActive, { backgroundColor: theme.primaryColor }]
                       : styles.featureInactive,
                   ]}>
                   <GetIcon
@@ -709,7 +711,7 @@ const ListingDetailScreen: React.FC<Props> = ({route, navigation}) => {
                   style={[
                     styles.featureIcon,
                     property.boundaryWall
-                      ? [styles.featureActive, {backgroundColor: theme.primaryColor}]
+                      ? [styles.featureActive, { backgroundColor: theme.primaryColor }]
                       : styles.featureInactive,
                   ]}>
                   <GetIcon
@@ -727,7 +729,7 @@ const ListingDetailScreen: React.FC<Props> = ({route, navigation}) => {
                   style={[
                     styles.featureIcon,
                     property.lifts
-                      ? [styles.featureActive, {backgroundColor: theme.primaryColor}]
+                      ? [styles.featureActive, { backgroundColor: theme.primaryColor }]
                       : styles.featureInactive,
                   ]}>
                   <GetIcon
@@ -745,7 +747,7 @@ const ListingDetailScreen: React.FC<Props> = ({route, navigation}) => {
                   style={[
                     styles.featureIcon,
                     property.alarmSystem
-                      ? [styles.featureActive, {backgroundColor: theme.primaryColor}]
+                      ? [styles.featureActive, { backgroundColor: theme.primaryColor }]
                       : styles.featureInactive,
                   ]}>
                   <GetIcon
@@ -763,7 +765,7 @@ const ListingDetailScreen: React.FC<Props> = ({route, navigation}) => {
                   style={[
                     styles.featureIcon,
                     property.surveillanceCameras
-                      ? [styles.featureActive, {backgroundColor: theme.primaryColor}]
+                      ? [styles.featureActive, { backgroundColor: theme.primaryColor }]
                       : styles.featureInactive,
                   ]}>
                   <GetIcon
@@ -781,7 +783,7 @@ const ListingDetailScreen: React.FC<Props> = ({route, navigation}) => {
                   style={[
                     styles.featureIcon,
                     property.gatedSecurity
-                      ? [styles.featureActive, {backgroundColor: theme.primaryColor}]
+                      ? [styles.featureActive, { backgroundColor: theme.primaryColor }]
                       : styles.featureInactive,
                   ]}>
                   <GetIcon
@@ -799,7 +801,7 @@ const ListingDetailScreen: React.FC<Props> = ({route, navigation}) => {
                   style={[
                     styles.featureIcon,
                     property.pantry
-                      ? [styles.featureActive, {backgroundColor: theme.primaryColor}]
+                      ? [styles.featureActive, { backgroundColor: theme.primaryColor }]
                       : styles.featureInactive,
                   ]}>
                   <GetIcon
@@ -906,7 +908,7 @@ const ListingDetailScreen: React.FC<Props> = ({route, navigation}) => {
                   </Text>
                   {property.sellerEmail && (
                     <Text
-                      style={[styles.sellerEmail, {color: theme.primaryColor}]}>
+                      style={[styles.sellerEmail, { color: theme.primaryColor }]}>
                       {property.sellerEmail}
                     </Text>
                   )}
@@ -1038,7 +1040,7 @@ const styles = StyleSheet.create({
     ...Platform.select({
       ios: {
         shadowColor: '#000',
-        shadowOffset: {width: 0, height: 2},
+        shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.1,
         shadowRadius: 4,
       },

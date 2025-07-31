@@ -1,4 +1,4 @@
-import React, {useState, useMemo} from 'react';
+import React, { useState, useMemo } from 'react';
 import {
   ActivityIndicator,
   StyleSheet,
@@ -7,32 +7,33 @@ import {
   FlatList,
   RefreshControl,
   TouchableOpacity,
+  Platform,
 } from 'react-native';
-import {PartnerDrawerParamList} from '../../../types/navigation';
+import { PartnerDrawerParamList } from '../../../types/navigation';
 import Header from '../../../components/Header';
-import {useClientData} from '../../../hooks/useClientData';
-import {ClientCard} from './components/ClientCard';
-import {NativeStackScreenProps} from '@react-navigation/native-stack';
-import {ClientStackParamList} from '../../../navigator/components/ClientScreenStack';
+import { useClientData } from '../../../hooks/useClientData';
+import { ClientCard } from './components/ClientCard';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { ClientStackParamList } from '../../../navigator/components/ClientScreenStack';
 import SearchHeader from '../../../components/SearchHeader';
-import {useTheme} from '../../../context/ThemeProvider';
-import {getGradientColors} from '../../../utils/colorUtils';
-import {Client} from '../../../types';
-import {useMaster} from '../../../context/MasterProvider';
+import { useTheme } from '../../../context/ThemeProvider';
+import { getGradientColors } from '../../../utils/colorUtils';
+import { Client } from '../../../types';
+import { useMaster } from '../../../context/MasterProvider';
 import AddActivityModal from './components/AddActivityModal';
 import Toast from 'react-native-toast-message';
-import {usePartner} from '../../../context/PartnerProvider';
+import { usePartner } from '../../../context/PartnerProvider';
 import PartnerService from '../../../services/PartnerService';
-import {useAuth} from '../../../hooks/useAuth';
+import { useAuth } from '../../../hooks/useAuth';
 import GetIcon from '../../../components/GetIcon';
 import FilterDrawer from './components/FilterDrawer';
-import {useNavigation} from '@react-navigation/native';
-import {DrawerNavigationProp} from '@react-navigation/drawer';
+import { useNavigation } from '@react-navigation/native';
+import { DrawerNavigationProp } from '@react-navigation/drawer';
 import Roles from '../../../constants/Roles';
 
 type Props = NativeStackScreenProps<ClientStackParamList, 'ClientScreen'>;
 
-const ClientScreen: React.FC<Props> = ({navigation}) => {
+const ClientScreen: React.FC<Props> = ({ navigation }) => {
   const {
     clients,
     isLoading,
@@ -48,10 +49,10 @@ const ClientScreen: React.FC<Props> = ({navigation}) => {
   } = useClientData();
   const [isSearching, setIsSearching] = useState(false);
   const [isFilterDrawerVisible, setIsFilterDrawerVisible] = useState(false);
-  const {theme} = useTheme();
-  const {masterData} = useMaster();
-  const {setClientsUpdated, selectedPartnerIds} = usePartner();
-  const {user} = useAuth();
+  const { theme } = useTheme();
+  const { masterData } = useMaster();
+  const { setClientsUpdated, selectedPartnerIds } = usePartner();
+  const { user } = useAuth();
 
   // Activity modal states
   const [isActivityModalVisible, setIsActivityModalVisible] = useState(false);
@@ -188,7 +189,7 @@ const ClientScreen: React.FC<Props> = ({navigation}) => {
     return (
       <FlatList
         data={clients}
-        renderItem={({item}) => (
+        renderItem={({ item }) => (
           <ClientCard
             client={item}
             navigation={navigation}
@@ -224,33 +225,37 @@ const ClientScreen: React.FC<Props> = ({navigation}) => {
 
   return (
     <View style={styles.container}>
-      <Header<PartnerDrawerParamList>
-        title="Clients"
-        gradientColors={headerGradientColors}
-        showFilterButton={user?.role === Roles.ADMIN || user?.role === Roles.PARTNER}
-        onFilterPress={handleFilterPress}>
-        <TouchableOpacity
-          style={[styles.addButton, {backgroundColor: theme.secondaryColor}]}
-          onPress={() => {
-            navigation.navigate('AddClientScreen', {editMode: false});
-          }}>
-          <Text style={styles.buttonText}>Add Client</Text>
-        </TouchableOpacity>
-      </Header>
+      {
+        Platform.OS === 'android' && (
+          <Header<PartnerDrawerParamList>
+            title="Clients"
+            gradientColors={headerGradientColors}
+            showFilterButton={user?.role === Roles.ADMIN || user?.role === Roles.PARTNER}
+            onFilterPress={handleFilterPress}>
+            <TouchableOpacity
+              style={[styles.addButton, { backgroundColor: theme.secondaryColor }]}
+              onPress={() => {
+                navigation.navigate('AddClientScreen', { editMode: false });
+              }}>
+              <Text style={styles.buttonText}>Add Client</Text>
+            </TouchableOpacity>
+          </Header>
+        )
+      }
 
       {/* Show selected partners info */}
       {selectedPartnerIds.length > 0 && (
         <View style={styles.filterIndicator}>
           <GetIcon iconName="filter" size={16} color={theme.primaryColor} />
-            <Text style={[styles.filterText, {color: theme.primaryColor}]}>
+          <Text style={[styles.filterText, { color: theme.primaryColor }]}>
             Showing clients from {selectedPartnerIds.length} selected{' '}
             {user?.role === Roles.ADMIN ? 'partner' : 'team member'}
             {selectedPartnerIds.length > 1 ? 's' : ''}
-            </Text>
+          </Text>
           <TouchableOpacity
             onPress={handleFilterPress}
             style={styles.editFilterButton}>
-            <Text style={[styles.editFilterText, {color: theme.primaryColor}]}>
+            <Text style={[styles.editFilterText, { color: theme.primaryColor }]}>
               Edit
             </Text>
           </TouchableOpacity>
@@ -266,7 +271,7 @@ const ClientScreen: React.FC<Props> = ({navigation}) => {
           />
         </View>
         <TouchableOpacity
-          style={[styles.filterButton, {backgroundColor: theme.secondaryColor}]}
+          style={[styles.filterButton, { backgroundColor: theme.secondaryColor }]}
           onPress={() => setIsFilterDrawerVisible(true)}>
           <GetIcon iconName="filter" color="#fff" />
         </TouchableOpacity>

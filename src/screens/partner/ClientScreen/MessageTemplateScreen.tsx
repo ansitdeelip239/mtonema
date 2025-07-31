@@ -1,18 +1,18 @@
-import React, {useState, useEffect, useCallback} from 'react';
-import {View, StyleSheet, SafeAreaView} from 'react-native';
-import {NativeStackScreenProps} from '@react-navigation/native-stack';
-import {ClientStackParamList} from '../../../navigator/components/ClientScreenStack';
+import React, { useState, useEffect, useCallback } from 'react';
+import { View, StyleSheet, SafeAreaView, Platform } from 'react-native';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { ClientStackParamList } from '../../../navigator/components/ClientScreenStack';
 import Header from '../../../components/Header';
-import {PartnerDrawerParamList} from '../../../types/navigation';
-import {useAuth} from '../../../hooks/useAuth';
-import {ContentTemplate} from '../../../types';
+import { PartnerDrawerParamList } from '../../../types/navigation';
+import { useAuth } from '../../../hooks/useAuth';
+import { ContentTemplate } from '../../../types';
 import PartnerService from '../../../services/PartnerService';
-import {useDialog} from '../../../hooks/useDialog';
+import { useDialog } from '../../../hooks/useDialog';
 import ContentTemplatesList from '../ContentScreen/components/ContentTemplateList';
 import ContentLoadingIndicator from '../ContentScreen/components/ContentLoadingIndicator';
 import ContentHeader from '../ContentScreen/components/ContentHeader';
-import {useFocusEffect} from '@react-navigation/native';
-import {useBottomTab} from '../../../context/BottomTabProvider';
+import { useFocusEffect } from '@react-navigation/native';
+import { useBottomTab } from '../../../context/BottomTabProvider';
 import { usePartner } from '../../../context/PartnerProvider';
 
 type Props = NativeStackScreenProps<
@@ -22,7 +22,7 @@ type Props = NativeStackScreenProps<
 
 const PAGE_SIZE = 20;
 
-const MessageTemplateScreen: React.FC<Props> = ({route, navigation}) => {
+const MessageTemplateScreen: React.FC<Props> = ({ route, navigation }) => {
   const {
     clientId,
     clientName,
@@ -30,10 +30,10 @@ const MessageTemplateScreen: React.FC<Props> = ({route, navigation}) => {
     clientWhatsapp,
     clientEmail,
   } = route.params;
-  const {user} = useAuth();
-  const {showError} = useDialog();
-  const {messageTemplateUpdated} = usePartner();
-  const {hideBottomTabs, showBottomTabs} = useBottomTab();
+  const { user } = useAuth();
+  const { showError } = useDialog();
+  const { messageTemplateUpdated } = usePartner();
+  const { hideBottomTabs, showBottomTabs } = useBottomTab();
 
   // State management
   const [contentTemplates, setContentTemplates] = useState<ContentTemplate[]>(
@@ -107,7 +107,7 @@ const MessageTemplateScreen: React.FC<Props> = ({route, navigation}) => {
         );
 
         if (response.success) {
-          const {contentTemplates: newTemplates, responsePagingModel} =
+          const { contentTemplates: newTemplates, responsePagingModel } =
             response.data;
 
           if (pageNumber === 1) {
@@ -198,11 +198,15 @@ const MessageTemplateScreen: React.FC<Props> = ({route, navigation}) => {
   if (loading && contentTemplates.length === 0) {
     return (
       <SafeAreaView style={styles.container}>
-        <Header<PartnerDrawerParamList>
-          title="Select Message Template"
-          navigation={navigation}
-          backButton={true}
-        />
+        {
+          Platform.OS === 'android' && (
+            <Header<PartnerDrawerParamList>
+              title="Select Message Template"
+              navigation={navigation}
+              backButton={true}
+            />
+          )
+        }
         <ContentLoadingIndicator type="initial" />
       </SafeAreaView>
     );
@@ -210,11 +214,15 @@ const MessageTemplateScreen: React.FC<Props> = ({route, navigation}) => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Header<PartnerDrawerParamList>
-        title="Select Message Template"
-        navigation={navigation}
-        backButton={true}
-      />
+      {
+        Platform.OS === 'android' && (
+          <Header<PartnerDrawerParamList>
+            title="Select Message Template"
+            navigation={navigation}
+            backButton={true}
+          />
+        )
+      }
 
       <View style={styles.content}>
         <ContentHeader totalCount={totalCount} />

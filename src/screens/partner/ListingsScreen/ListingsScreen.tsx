@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useState, useRef} from 'react';
+import React, { useCallback, useEffect, useState, useRef } from 'react';
 import {
   View,
   FlatList,
@@ -7,18 +7,19 @@ import {
   Text,
   StyleSheet,
   ToastAndroid,
+  Platform,
 } from 'react-native';
 import PartnerService from '../../../services/PartnerService';
-import {useAuth} from '../../../hooks/useAuth';
-import {Property} from './types';
+import { useAuth } from '../../../hooks/useAuth';
+import { Property } from './types';
 import PropertyCard from './components/PropertyCard';
 import SearchAndFilter from './components/SearchAndFilter';
-import {NativeStackScreenProps} from '@react-navigation/native-stack';
-import {ListingScreenStackParamList} from '../../../navigator/components/PropertyListingScreenStack';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { ListingScreenStackParamList } from '../../../navigator/components/PropertyListingScreenStack';
 import Header from '../../../components/Header';
-import {usePartner} from '../../../context/PartnerProvider';
+import { usePartner } from '../../../context/PartnerProvider';
 import Swipeable from 'react-native-gesture-handler/Swipeable';
-import {TouchableOpacity} from 'react-native';
+import { TouchableOpacity } from 'react-native';
 import ConfirmationModal from '../../../components/ConfirmationModal';
 
 const PAGE_SIZE = 10;
@@ -28,7 +29,7 @@ type Props = NativeStackScreenProps<
   'ListingsScreen'
 >;
 
-const ListingScreen: React.FC<Props> = ({navigation}) => {
+const ListingScreen: React.FC<Props> = ({ navigation }) => {
   const [properties, setProperties] = useState<Property[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isRefreshing, setIsRefreshing] = useState(false);
@@ -40,7 +41,7 @@ const ListingScreen: React.FC<Props> = ({navigation}) => {
   const [isDeleting, setIsDeleting] = useState(false);
   const [debouncedSearchQuery, setDebouncedSearchQuery] = useState('');
 
-  const {partnerPropertyUpdated} = usePartner();
+  const { partnerPropertyUpdated } = usePartner();
 
   const [searchQuery, setSearchQuery] = useState('');
   const [filters, setFilters] = useState({
@@ -49,7 +50,7 @@ const ListingScreen: React.FC<Props> = ({navigation}) => {
     city: null as string | null,
   });
 
-  const {user} = useAuth();
+  const { user } = useAuth();
 
   const swipeableRefs = useRef<Map<number, Swipeable>>(new Map());
 
@@ -214,7 +215,7 @@ const ListingScreen: React.FC<Props> = ({navigation}) => {
   );
 
   // Update renderItem to use Swipeable with both left and right actions
-  const renderItem = ({item}: {item: Property}) => (
+  const renderItem = ({ item }: { item: Property }) => (
     <Swipeable
       ref={(ref: Swipeable) => {
         if (ref) {
@@ -261,7 +262,11 @@ const ListingScreen: React.FC<Props> = ({navigation}) => {
 
   return (
     <View style={styles.container}>
-      <Header title="Property Listings" />
+      {
+        Platform.OS === 'android' && (
+          <Header title="Property Listings" />
+        )
+      }
 
       <View style={styles.searchContainer}>
         <SearchAndFilter

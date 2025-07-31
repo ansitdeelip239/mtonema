@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, { useEffect } from 'react';
 import {
   View,
   StyleSheet,
@@ -7,32 +7,32 @@ import {
   Platform,
   Dimensions,
 } from 'react-native';
-import {PartnerPropertyApiSubmissionType} from '../../../../schema/PartnerPropertyFormSchema';
-import {useAuth} from '../../../../hooks/useAuth';
-import {usePartner} from '../../../../context/PartnerProvider';
+import { PartnerPropertyApiSubmissionType } from '../../../../schema/PartnerPropertyFormSchema';
+import { useAuth } from '../../../../hooks/useAuth';
+import { usePartner } from '../../../../context/PartnerProvider';
 import useForm from '../../../../hooks/useForm';
-import {initialFormState} from '../../../../utils/partner-property-form-initial-state';
+import { initialFormState } from '../../../../utils/partner-property-form-initial-state';
 import PartnerService from '../../../../services/PartnerService';
 import MasterService from '../../../../services/MasterService';
 import Toast from 'react-native-toast-message';
 import Header from '../../../../components/Header';
-import {PartnerDrawerParamList} from '../../../../types/navigation';
+import { PartnerDrawerParamList } from '../../../../types/navigation';
 import FormStepper from './components/FormStepper';
-import {useTheme} from '../../../../context/ThemeProvider';
+import { useTheme } from '../../../../context/ThemeProvider';
 
 // Import modular components
 import FormStepContainer from './components/FormStepContainer';
 import ClearFormButton from './components/ClearFormButton';
-import {useFormNavigation} from './hooks/useFormNavigation';
-import {useFormValidation} from './hooks/useFormValidation';
+import { useFormNavigation } from './hooks/useFormNavigation';
+import { useFormValidation } from './hooks/useFormValidation';
 
 // Import step components
 import BasicDetailsStep from './steps/BasicDetailsStep';
 import PropertyDetailsStep from './steps/PropertyDetailsStep';
 import MediaAndSubmitStep from './steps/MediaAndSubmitStep';
-import {usePropertyDataMapping} from './hooks/usePropertyDataMapping';
+import { usePropertyDataMapping } from './hooks/usePropertyDataMapping';
 
-const {width} = Dimensions.get('window');
+const { width } = Dimensions.get('window');
 const steps = ['Basic Info', 'Property Details', 'Media & Submit'];
 
 type PartnerPropertyFormProps = {
@@ -50,9 +50,9 @@ const PartnerPropertyForm: React.FC<PartnerPropertyFormProps> = ({
   submitButtonText,
   navigation,
 }) => {
-  const {user} = useAuth();
-  const {setPartnerPropertyUpdated} = usePartner();
-  const {theme} = useTheme();
+  const { user } = useAuth();
+  const { setPartnerPropertyUpdated } = usePartner();
+  const { theme } = useTheme();
 
   // Use the property data mapping hook
   const propertyDataMapping = usePropertyDataMapping(propertyData);
@@ -101,7 +101,7 @@ const PartnerPropertyForm: React.FC<PartnerPropertyFormProps> = ({
 
           navigation.reset({
             index: 0,
-            routes: [{name: 'Property', params: {screen: 'ListingsScreen'}}],
+            routes: [{ name: 'Property', params: { screen: 'ListingsScreen' } }],
           });
         }
       } catch (error) {
@@ -122,32 +122,32 @@ const PartnerPropertyForm: React.FC<PartnerPropertyFormProps> = ({
     async function fetchVideoUrl() {
       if (user?.partnerLocation) {
         try {
-            const response = await MasterService.getMasterDetailsById(user.partnerLocation);
+          const response = await MasterService.getMasterDetailsById(user.partnerLocation);
 
-            if (response?.data?.description) {
+          if (response?.data?.description) {
             try {
               const descriptionData = JSON.parse(response.data.description);
               if (descriptionData?.tourVideo) {
-              setFormInput({
-                ...formInput,
-                videoURL: descriptionData.tourVideo,
-              });
+                setFormInput({
+                  ...formInput,
+                  videoURL: descriptionData.tourVideo,
+                });
               }
             } catch (e) {
               console.error('Error parsing master description:', e);
             }
-            }
+          }
         } catch (err) {
           // Optionally handle error
         }
       }
     }
     fetchVideoUrl();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user?.partnerLocation]);
 
   // Use form validation hook
-  const {validateStep} = useFormValidation(formInput);
+  const { validateStep } = useFormValidation(formInput);
 
   // Use form navigation hook
   const {
@@ -207,20 +207,24 @@ const PartnerPropertyForm: React.FC<PartnerPropertyFormProps> = ({
 
   return (
     <View style={styles.container}>
-      <Header<PartnerDrawerParamList>
-        title={headerTitle}
-        backButton={editMode}
-        onBackPress={() => {
-          navigation.reset({
-            index: 0,
-            routes: [{name: 'Property', params: {screen: 'ListingsScreen'}}],
-          });
-        }}>
-        <ClearFormButton
-          onPress={completeReset}
-          backgroundColor={theme.secondaryColor}
-        />
-      </Header>
+      {
+        Platform.OS === 'android' && (
+          <Header<PartnerDrawerParamList>
+            title={headerTitle}
+            backButton={editMode}
+            onBackPress={() => {
+              navigation.reset({
+                index: 0,
+                routes: [{ name: 'Property', params: { screen: 'ListingsScreen' } }],
+              });
+            }}>
+            <ClearFormButton
+              onPress={completeReset}
+              backgroundColor={theme.secondaryColor}
+            />
+          </Header>
+        )
+      }
 
       <View style={styles.stepperContainer}>
         <FormStepper
@@ -238,7 +242,7 @@ const PartnerPropertyForm: React.FC<PartnerPropertyFormProps> = ({
         <Animated.View
           style={[
             styles.slidingContainer,
-            {transform: [{translateX: slideAnimation}]},
+            { transform: [{ translateX: slideAnimation }] },
           ]}>
           <FormStepContainer
             scrollViewRef={el => {
@@ -298,7 +302,7 @@ const styles = StyleSheet.create({
     ...Platform.select({
       ios: {
         shadowColor: '#000',
-        shadowOffset: {width: 0, height: 2},
+        shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.1,
         shadowRadius: 2,
       },

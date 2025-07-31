@@ -1,4 +1,4 @@
-import React, {useCallback, useState} from 'react';
+import React, { useCallback, useState } from 'react';
 import {
   View,
   StyleSheet,
@@ -8,18 +8,19 @@ import {
   ScrollView,
   Linking,
   Alert,
+  Platform,
 } from 'react-native';
-import {NativeStackScreenProps} from '@react-navigation/native-stack';
-import {ClientStackParamList} from '../../../navigator/components/ClientScreenStack';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { ClientStackParamList } from '../../../navigator/components/ClientScreenStack';
 import Header from '../../../components/Header';
-import {PartnerDrawerParamList} from '../../../types/navigation';
-import {useFocusEffect} from '@react-navigation/native';
-import {useBottomTab} from '../../../context/BottomTabProvider';
-import GetIcon, {IconEnum} from '../../../components/GetIcon';
-import {Menu} from 'react-native-paper';
+import { PartnerDrawerParamList } from '../../../types/navigation';
+import { useFocusEffect } from '@react-navigation/native';
+import { useBottomTab } from '../../../context/BottomTabProvider';
+import GetIcon, { IconEnum } from '../../../components/GetIcon';
+import { Menu } from 'react-native-paper';
 import PartnerService from '../../../services/PartnerService';
-import {useAuth} from '../../../hooks/useAuth';
-import {usePartner} from '../../../context/PartnerProvider';
+import { useAuth } from '../../../hooks/useAuth';
+import { usePartner } from '../../../context/PartnerProvider';
 
 type Props = NativeStackScreenProps<
   ClientStackParamList,
@@ -37,7 +38,7 @@ interface MessageOption {
   unavailableReason?: string;
 }
 
-const MessagePreviewScreen: React.FC<Props> = ({route, navigation}) => {
+const MessagePreviewScreen: React.FC<Props> = ({ route, navigation }) => {
   const {
     clientName,
     clientPhone,
@@ -48,11 +49,11 @@ const MessagePreviewScreen: React.FC<Props> = ({route, navigation}) => {
     clientId,
   } = route.params;
 
-  const {hideBottomTabs, showBottomTabs} = useBottomTab();
+  const { hideBottomTabs, showBottomTabs } = useBottomTab();
   const [menuVisible, setMenuVisible] = useState(false);
 
-  const {user} = useAuth();
-  const {setClientsUpdated} = usePartner();
+  const { user } = useAuth();
+  const { setClientsUpdated } = usePartner();
 
   // Hide bottom tabs when this screen is focused
   useFocusEffect(
@@ -201,11 +202,15 @@ const MessagePreviewScreen: React.FC<Props> = ({route, navigation}) => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Header<PartnerDrawerParamList>
-        title="Message Preview"
-        navigation={navigation}
-        backButton={true}
-      />
+      {
+        Platform.OS === 'android' && (
+          <Header<PartnerDrawerParamList>
+            title="Message Preview"
+            navigation={navigation}
+            backButton={true}
+          />
+        )
+      }
 
       <ScrollView
         style={styles.content}
@@ -245,7 +250,7 @@ const MessagePreviewScreen: React.FC<Props> = ({route, navigation}) => {
           <TouchableOpacity
             style={[
               styles.defaultSendButton,
-              {backgroundColor: defaultWhatsAppOption.color},
+              { backgroundColor: defaultWhatsAppOption.color },
             ]}
             onPress={() => handleSendMessage('whatsapp')}
             activeOpacity={0.8}>

@@ -1,4 +1,4 @@
-import React, {useRef, useMemo, useCallback, useState, useEffect} from 'react';
+import React, { useRef, useMemo, useCallback, useState, useEffect } from 'react';
 import {
   View,
   StyleSheet,
@@ -9,29 +9,29 @@ import {
   Keyboard,
   Text,
 } from 'react-native';
-import {Button, Switch} from 'react-native-paper';
-import {MaterialTextInput} from '../../../components/MaterialTextInput';
-import {useMaster} from '../../../context/MasterProvider';
+import { Button, Switch } from 'react-native-paper';
+import { MaterialTextInput } from '../../../components/MaterialTextInput';
+import { useMaster } from '../../../context/MasterProvider';
 import FilterOption from '../../../components/FilterOption';
-import {formatCurrency} from '../../../utils/currency';
+import { formatCurrency } from '../../../utils/currency';
 import PartnerService from '../../../services/PartnerService';
 import useForm from '../../../hooks/useForm';
 import Header from '../../../components/Header';
-import {PartnerDrawerParamList} from '../../../types/navigation';
+import { PartnerDrawerParamList } from '../../../types/navigation';
 import agentPropertyFormSchema, {
   AgentPropertyFormType,
   apiSubmissionSchema,
 } from '../../../schema/AgentPropertyFormSchema';
-import {z} from 'zod';
-import {usePartner} from '../../../context/PartnerProvider';
+import { z } from 'zod';
+import { usePartner } from '../../../context/PartnerProvider';
 import Toast from 'react-native-toast-message';
-import {SearchInput} from './components/SearchInput';
-import {useKeyboard} from '../../../hooks/useKeyboard';
-import {useDialog} from '../../../hooks/useDialog';
-import {useAuth} from '../../../hooks/useAuth';
-import {NativeStackScreenProps} from '@react-navigation/native-stack';
-import {AgentDataStackParamList} from '../../../navigator/components/AgentDataStack';
-import {useTheme} from '../../../context/ThemeProvider';
+import { SearchInput } from './components/SearchInput';
+import { useKeyboard } from '../../../hooks/useKeyboard';
+import { useDialog } from '../../../hooks/useDialog';
+import { useAuth } from '../../../hooks/useAuth';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { AgentDataStackParamList } from '../../../navigator/components/AgentDataStack';
+import { useTheme } from '../../../context/ThemeProvider';
 
 // type Props = BottomTabScreenProps<PartnerBottomTabParamList, 'AddProperty'>;
 type Props = NativeStackScreenProps<
@@ -39,19 +39,19 @@ type Props = NativeStackScreenProps<
   'AddAgentDataScreen'
 >;
 
-const AddAgentPropertyScreen: React.FC<Props> = ({navigation, route}) => {
+const AddAgentPropertyScreen: React.FC<Props> = ({ navigation, route }) => {
   const [errors, setErrors] = useState<
     Partial<Record<keyof AgentPropertyFormType, string>>
   >({});
 
   const scrollViewRef = useRef<ScrollView>(null);
   // const {user} = useAuth();
-  const {masterData} = useMaster();
-  const {setAgentPropertyUpdated} = usePartner();
-  const {keyboardVisible} = useKeyboard();
-  const {showError} = useDialog();
-  const {user} = useAuth();
-  const {theme} = useTheme();
+  const { masterData } = useMaster();
+  const { setAgentPropertyUpdated } = usePartner();
+  const { keyboardVisible } = useKeyboard();
+  const { showError } = useDialog();
+  const { user } = useAuth();
+  const { theme } = useTheme();
 
   const editMode = route.params?.editMode;
   const propertyData = route.params?.propertyData;
@@ -91,13 +91,13 @@ const AddAgentPropertyScreen: React.FC<Props> = ({navigation, route}) => {
         const fieldSchema = agentPropertyFormSchema.pick({
           [field]: true,
         } as Record<typeof field, true>);
-        fieldSchema.parse({[field]: value});
-        setErrors(prev => ({...prev, [field]: undefined}));
+        fieldSchema.parse({ [field]: value });
+        setErrors(prev => ({ ...prev, [field]: undefined }));
         return true;
       } catch (error) {
         if (error instanceof z.ZodError) {
           const fieldError = error.errors[0]?.message || 'Invalid input';
-          setErrors(prev => ({...prev, [field]: fieldError}));
+          setErrors(prev => ({ ...prev, [field]: fieldError }));
         }
         return false;
       }
@@ -133,9 +133,9 @@ const AddAgentPropertyScreen: React.FC<Props> = ({navigation, route}) => {
             : undefined,
           securityDepositAmount: validatedApiData.securityDepositAmount
             ? parseInt(
-                validatedApiData.securityDepositAmount.toString().trim(),
-                10,
-              )
+              validatedApiData.securityDepositAmount.toString().trim(),
+              10,
+            )
             : undefined,
           negotiable: validatedApiData.negotiable,
           propertyNotes: validatedApiData.propertyNotes?.trim() || undefined,
@@ -144,9 +144,9 @@ const AddAgentPropertyScreen: React.FC<Props> = ({navigation, route}) => {
         const response = !editMode
           ? await PartnerService.addAgentProperty(request)
           : await PartnerService.updateAgentProperty(
-              request,
-              propertyData?.id as number,
-            );
+            request,
+            propertyData?.id as number,
+          );
         if (response.success) {
           resetForm();
           setErrors({});
@@ -206,7 +206,7 @@ const AddAgentPropertyScreen: React.FC<Props> = ({navigation, route}) => {
 
   const scrollToEnd = useCallback((delay = 100) => {
     setTimeout(() => {
-      scrollViewRef.current?.scrollToEnd({animated: true});
+      scrollViewRef.current?.scrollToEnd({ animated: true });
     }, delay);
   }, []);
 
@@ -359,11 +359,15 @@ const AddAgentPropertyScreen: React.FC<Props> = ({navigation, route}) => {
 
   return (
     <>
-      <Header<PartnerDrawerParamList>
-        title={editMode ? "Edit Agent's Property" : "Add Agent's Property"}
-        backButton={true}
-        onBackPress={() => navigation.navigate('AgentDataScreen')}
-      />
+      {
+        Platform.OS === 'android' && (
+          <Header<PartnerDrawerParamList>
+            title={editMode ? "Edit Agent's Property" : "Add Agent's Property"}
+            backButton={true}
+            onBackPress={() => navigation.navigate('AgentDataScreen')}
+          />
+        )
+      }
       <KeyboardAvoidingView
         style={styles.container}
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
@@ -373,7 +377,7 @@ const AddAgentPropertyScreen: React.FC<Props> = ({navigation, route}) => {
             ref={scrollViewRef}
             contentContainerStyle={[
               styles.scrollContainer,
-              {paddingBottom: keyboardVisible ? 60 : 120} as const,
+              { paddingBottom: keyboardVisible ? 60 : 120 } as const,
             ]}
             keyboardShouldPersistTaps="handled"
             showsVerticalScrollIndicator={false}

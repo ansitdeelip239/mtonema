@@ -1,4 +1,4 @@
-import React, {useRef, useMemo, useCallback, useState, useEffect} from 'react';
+import React, { useRef, useMemo, useCallback, useState, useEffect } from 'react';
 import {
   View,
   StyleSheet,
@@ -8,34 +8,34 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
 } from 'react-native';
-import {Button} from 'react-native-paper';
-import {ClientForm} from '../../../types';
-import {MaterialTextInput} from '../../../components/MaterialTextInput';
-import {NativeStackScreenProps} from '@react-navigation/native-stack';
-import {ClientStackParamList} from '../../../navigator/components/ClientScreenStack';
+import { Button } from 'react-native-paper';
+import { ClientForm } from '../../../types';
+import { MaterialTextInput } from '../../../components/MaterialTextInput';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { ClientStackParamList } from '../../../navigator/components/ClientScreenStack';
 import Header from '../../../components/Header';
-import {PartnerDrawerParamList} from '../../../types/navigation';
+import { PartnerDrawerParamList } from '../../../types/navigation';
 import useForm from '../../../hooks/useForm';
 import PartnerService from '../../../services/PartnerService';
-import {usePartner} from '../../../context/PartnerProvider';
+import { usePartner } from '../../../context/PartnerProvider';
 import Toast from 'react-native-toast-message';
-import {useAuth} from '../../../hooks/useAuth';
-import {z} from 'zod';
+import { useAuth } from '../../../hooks/useAuth';
+import { z } from 'zod';
 import clientFormSchema from '../../../schema/ClientFormSchema';
-import {useDialog} from '../../../hooks/useDialog';
+import { useDialog } from '../../../hooks/useDialog';
 import GroupsToggleComponent from './components/GroupsToggle';
-import {useTheme} from '../../../context/ThemeProvider';
-import {addCountryCode} from '../../../utils/phoneUtils';
+import { useTheme } from '../../../context/ThemeProvider';
+import { addCountryCode } from '../../../utils/phoneUtils';
 import { stripHtmlTags } from '../../../utils/formUtils';
 
 type Props = NativeStackScreenProps<ClientStackParamList, 'AddClientScreen'>;
 
-const AddClientScreen: React.FC<Props> = ({navigation, route}) => {
+const AddClientScreen: React.FC<Props> = ({ navigation, route }) => {
   const scrollViewRef = useRef<ScrollView>(null);
-  const {setClientsUpdated} = usePartner();
-  const {user} = useAuth();
-  const {theme} = useTheme();
-  const {showError} = useDialog();
+  const { setClientsUpdated } = usePartner();
+  const { user } = useAuth();
+  const { theme } = useTheme();
+  const { showError } = useDialog();
 
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
 
@@ -70,14 +70,14 @@ const AddClientScreen: React.FC<Props> = ({navigation, route}) => {
 
   const validateField = useCallback((field: keyof ClientForm, value: any) => {
     if (field !== 'clientName' && (!value || value === '')) {
-      setFieldErrors(prev => ({...prev, [field]: ''}));
+      setFieldErrors(prev => ({ ...prev, [field]: '' }));
       return;
     }
 
     try {
       const schema = clientFormSchema.shape[field];
       schema.parse(value);
-      setFieldErrors(prev => ({...prev, [field]: ''}));
+      setFieldErrors(prev => ({ ...prev, [field]: '' }));
     } catch (err) {
       if (err instanceof z.ZodError) {
         setFieldErrors(prev => ({
@@ -179,7 +179,7 @@ const AddClientScreen: React.FC<Props> = ({navigation, route}) => {
       if (field === 'clientName' || (value && value !== '')) {
         validateField(field, value);
       } else {
-        setFieldErrors(prev => ({...prev, [field]: ''}));
+        setFieldErrors(prev => ({ ...prev, [field]: '' }));
       }
     },
     [handleInputChange, validateField],
@@ -191,7 +191,7 @@ const AddClientScreen: React.FC<Props> = ({navigation, route}) => {
 
     setTimeout(() => {
       if (scrollViewRef.current) {
-        scrollViewRef.current.scrollToEnd({animated: true});
+        scrollViewRef.current.scrollToEnd({ animated: true });
       }
     }, safeDelay);
   };
@@ -205,11 +205,15 @@ const AddClientScreen: React.FC<Props> = ({navigation, route}) => {
 
   return (
     <>
-      <Header<PartnerDrawerParamList>
-        title={editMode ? 'Edit Client' : 'Add Client'}
-        backButton={true}
-        navigation={navigation}
-      />
+      {
+        Platform.OS === 'android' && (
+          <Header<PartnerDrawerParamList>
+            title={editMode ? 'Edit Client' : 'Add Client'}
+            backButton={true}
+            navigation={navigation}
+          />
+        )
+      }
       <KeyboardAvoidingView
         style={styles.container}
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}

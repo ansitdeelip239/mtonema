@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useCallback} from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import {
   View,
   Text,
@@ -6,19 +6,20 @@ import {
   FlatList,
   TouchableOpacity,
   ActivityIndicator,
+  Platform,
 } from 'react-native';
-import {NativeStackScreenProps} from '@react-navigation/native-stack';
-import {ClientStackParamList} from '../../../navigator/components/ClientScreenStack';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { ClientStackParamList } from '../../../navigator/components/ClientScreenStack';
 import Header from '../../../components/Header';
 import PartnerService from '../../../services/PartnerService';
-import {User} from '../../../types';
-import {useAuth} from '../../../hooks/useAuth';
+import { User } from '../../../types';
+import { useAuth } from '../../../hooks/useAuth';
 import GetIcon from '../../../components/GetIcon';
 import Colors from '../../../constants/Colors';
-import {useDialog} from '../../../hooks/useDialog';
+import { useDialog } from '../../../hooks/useDialog';
 import Toast from 'react-native-toast-message';
-import {usePartner} from '../../../context/PartnerProvider';
-import {useTheme} from '../../../context/ThemeProvider';
+import { usePartner } from '../../../context/PartnerProvider';
+import { useTheme } from '../../../context/ThemeProvider';
 
 type Props = NativeStackScreenProps<
   ClientStackParamList,
@@ -29,16 +30,16 @@ interface UserWithSelection extends User {
   isSelected: boolean;
 }
 
-const ClientAssignmentScreen: React.FC<Props> = ({navigation, route}) => {
-  const {clientId, assignedUsers} = route.params;
+const ClientAssignmentScreen: React.FC<Props> = ({ navigation, route }) => {
+  const { clientId, assignedUsers } = route.params;
   const [users, setUsers] = useState<UserWithSelection[]>([]);
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
 
-  const {user} = useAuth();
-  const {showError} = useDialog();
-  const {setClientsUpdated} = usePartner();
-  const {theme} = useTheme();
+  const { user } = useAuth();
+  const { showError } = useDialog();
+  const { setClientsUpdated } = usePartner();
+  const { theme } = useTheme();
 
   const fetchTeamMembers = useCallback(async () => {
     if (!user?.email) {
@@ -77,7 +78,7 @@ const ClientAssignmentScreen: React.FC<Props> = ({navigation, route}) => {
   const toggleUserSelection = (userId: number) => {
     setUsers(prevUsers =>
       prevUsers.map(_user =>
-        _user.id === userId ? {..._user, isSelected: !_user.isSelected} : _user,
+        _user.id === userId ? { ..._user, isSelected: !_user.isSelected } : _user,
       ),
     );
   };
@@ -119,7 +120,7 @@ const ClientAssignmentScreen: React.FC<Props> = ({navigation, route}) => {
     return users.filter(_user => _user.isSelected).length;
   };
 
-  const renderUserItem = ({item}: {item: UserWithSelection}) => (
+  const renderUserItem = ({ item }: { item: UserWithSelection }) => (
     <TouchableOpacity
       style={styles.userItem}
       onPress={() => toggleUserSelection(item.id)}
@@ -163,11 +164,15 @@ const ClientAssignmentScreen: React.FC<Props> = ({navigation, route}) => {
   if (loading) {
     return (
       <View style={styles.container}>
-        <Header
-          title="Client Assignment"
-          backButton={true}
-          onBackPress={() => navigation.goBack()}
-        />
+        {
+          Platform.OS === 'android' && (
+            <Header
+              title="Client Assignment"
+              backButton={true}
+              onBackPress={() => navigation.goBack()}
+            />
+          )
+        }
         <View style={styles.loadingContainer}>
           <ActivityIndicator size="large" color={theme.primaryColor} />
           <Text style={styles.loadingText}>Loading team members...</Text>
@@ -178,11 +183,15 @@ const ClientAssignmentScreen: React.FC<Props> = ({navigation, route}) => {
 
   return (
     <View style={styles.container}>
-      <Header
-        title="Client Assignment"
-        backButton={true}
-        onBackPress={() => navigation.goBack()}
-      />
+      {
+        Platform.OS === 'android' && (
+          <Header
+            title="Client Assignment"
+            backButton={true}
+            onBackPress={() => navigation.goBack()}
+          />
+        )
+      }
 
       <View style={styles.content}>
         <View style={styles.headerSection}>
@@ -191,7 +200,7 @@ const ClientAssignmentScreen: React.FC<Props> = ({navigation, route}) => {
             Select team members to assign to this client
           </Text>
           {getSelectedCount() > 0 && (
-            <Text style={[styles.selectedCount, {color: theme.primaryColor}]}>
+            <Text style={[styles.selectedCount, { color: theme.primaryColor }]}>
               {getSelectedCount()} user{getSelectedCount() > 1 ? 's' : ''}{' '}
               selected
             </Text>
@@ -211,7 +220,7 @@ const ClientAssignmentScreen: React.FC<Props> = ({navigation, route}) => {
           <TouchableOpacity
             style={[
               styles.submitButton,
-              {backgroundColor: theme.primaryColor},
+              { backgroundColor: theme.primaryColor },
               submitting && styles.submitButtonDisabled,
             ]}
             onPress={handleSubmit}

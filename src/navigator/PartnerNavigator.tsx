@@ -35,7 +35,7 @@ const PartnerNavigator = () => {
       screenOptions={{
         ...drawerStyles,
         drawerLabelStyle: {textAlign: 'center', width: '70%'},
-        swipeEnabled: Platform.OS === 'ios',
+        swipeEnabled: Platform.OS === 'ios' ? false : true,
       }}
       initialRouteName="Home">
       <Drawer.Screen

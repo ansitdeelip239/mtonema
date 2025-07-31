@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useCallback} from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import {
   View,
   Text,
@@ -8,21 +8,22 @@ import {
   TouchableOpacity,
   ActivityIndicator,
   Linking,
+  Platform,
 } from 'react-native';
-import {NativeStackScreenProps} from '@react-navigation/native-stack';
-import {useFocusEffect} from '@react-navigation/native';
-import {ClientStackParamList} from '../../../navigator/components/ClientScreenStack';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { useFocusEffect } from '@react-navigation/native';
+import { ClientStackParamList } from '../../../navigator/components/ClientScreenStack';
 import Header from '../../../components/Header';
 import PartnerService from '../../../services/PartnerService';
-import {Client, ClientActivityDataModel, FollowUp} from '../../../types';
-import {useAuth} from '../../../hooks/useAuth';
+import { Client, ClientActivityDataModel, FollowUp } from '../../../types';
+import { useAuth } from '../../../hooks/useAuth';
 import GetIcon from '../../../components/GetIcon';
-import {useDialog} from '../../../hooks/useDialog';
+import { useDialog } from '../../../hooks/useDialog';
 import Toast from 'react-native-toast-message';
-import {usePartner} from '../../../context/PartnerProvider';
-import {Appbar, Menu} from 'react-native-paper';
+import { usePartner } from '../../../context/PartnerProvider';
+import { Appbar, Menu } from 'react-native-paper';
 import AddActivityModal from './components/AddActivityModal';
-import {useKeyboard} from '../../../hooks/useKeyboard';
+import { useKeyboard } from '../../../hooks/useKeyboard';
 import ConfirmationModal from '../../../components/ConfirmationModal';
 import ScheduleFollowUpModal from './components/ScheduleFollowUpModal';
 import DuplicateClientsModal from './components/DuplicateClientsModal';
@@ -33,8 +34,8 @@ import GroupsCard from './components/GroupsCard';
 import NotesCard from './components/NotesCard';
 import RecentActivitiesCard from './components/RecentActivitiesCard';
 import AssignedUsersCard from './components/AssignedUsersCard';
-import {useMaster} from '../../../context/MasterProvider';
-import {useBottomTab} from '../../../context/BottomTabProvider';
+import { useMaster } from '../../../context/MasterProvider';
+import { useBottomTab } from '../../../context/BottomTabProvider';
 import { formatWhatsappNumber } from '../../../utils/phoneUtils';
 import ContactInfoCard from './components/ContactInfoCard';
 
@@ -43,7 +44,7 @@ type Props = NativeStackScreenProps<
   'ClientProfileScreen'
 >;
 
-const ClientProfileScreen: React.FC<Props> = ({route, navigation}) => {
+const ClientProfileScreen: React.FC<Props> = ({ route, navigation }) => {
   const [client, setClient] = useState<Client | null>(null);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
@@ -74,13 +75,13 @@ const ClientProfileScreen: React.FC<Props> = ({route, navigation}) => {
   );
   const [isDuplicateModalVisible, setIsDuplicateModalVisible] = useState(false);
 
-  const {clientsUpdated, setClientsUpdated} = usePartner();
-  const {keyboardVisible} = useKeyboard();
-  const {user} = useAuth();
-  const {showError} = useDialog();
+  const { clientsUpdated, setClientsUpdated } = usePartner();
+  const { keyboardVisible } = useKeyboard();
+  const { user } = useAuth();
+  const { showError } = useDialog();
   // Get activity type master data
-  const {masterData} = useMaster();
-  const {hideBottomTabs, showBottomTabs} = useBottomTab();
+  const { masterData } = useMaster();
+  const { hideBottomTabs, showBottomTabs } = useBottomTab();
 
   const fetchDuplicateClients = useCallback(async () => {
     try {
@@ -123,9 +124,9 @@ const ClientProfileScreen: React.FC<Props> = ({route, navigation}) => {
         setClient(prevClient =>
           prevClient
             ? {
-                ...prevClient,
-                followUp: response.data.followUp as FollowUp,
-              }
+              ...prevClient,
+              followUp: response.data.followUp as FollowUp,
+            }
             : null,
         );
       }
@@ -535,49 +536,53 @@ const ClientProfileScreen: React.FC<Props> = ({route, navigation}) => {
 
   return (
     <View style={styles.container}>
-      <Header
-        title="Client Profile"
-        navigation={navigation}
-        backButton={true}
-        onBackPress={() => {
-          navigation.navigate('ClientScreen');
-        }}>
-        <Menu
-          visible={visible}
-          onDismiss={closeMenu}
-          anchor={
-            <Appbar.Action
-              // eslint-disable-next-line react/no-unstable-nested-components
-              icon={() => <GetIcon iconName="threeDots" color="white" />}
-              onPress={openMenu}
-              style={styles.threeDotsIcon}
-            />
-          }
-          contentStyle={styles.menuContent}>
-          <Menu.Item
-            onPress={() => {
-              closeMenu();
-              if (client) {
-                navigation.navigate('AddClientScreen', {
-                  editMode: true,
-                  clientData: client,
-                });
+      {
+        Platform.OS === 'android' && (
+          <Header
+            title="Client Profile"
+            navigation={navigation}
+            backButton={true}
+            onBackPress={() => {
+              navigation.navigate('ClientScreen');
+            }}>
+            <Menu
+              visible={visible}
+              onDismiss={closeMenu}
+              anchor={
+                <Appbar.Action
+                  // eslint-disable-next-line react/no-unstable-nested-components
+                  icon={() => <GetIcon iconName="threeDots" color="white" />}
+                  onPress={openMenu}
+                  style={styles.threeDotsIcon}
+                />
               }
-            }}
-            title="Edit"
-            titleStyle={styles.menuItemTitle}
-            // eslint-disable-next-line react/no-unstable-nested-components
-            leadingIcon={() => <GetIcon iconName="edit" />}
-          />
-          <Menu.Item
-            onPress={handleDelete}
-            title="Delete"
-            titleStyle={styles.menuItemTitle}
-            // eslint-disable-next-line react/no-unstable-nested-components
-            leadingIcon={() => <GetIcon iconName="delete" />}
-          />
-        </Menu>
-      </Header>
+              contentStyle={styles.menuContent}>
+              <Menu.Item
+                onPress={() => {
+                  closeMenu();
+                  if (client) {
+                    navigation.navigate('AddClientScreen', {
+                      editMode: true,
+                      clientData: client,
+                    });
+                  }
+                }}
+                title="Edit"
+                titleStyle={styles.menuItemTitle}
+                // eslint-disable-next-line react/no-unstable-nested-components
+                leadingIcon={() => <GetIcon iconName="edit" />}
+              />
+              <Menu.Item
+                onPress={handleDelete}
+                title="Delete"
+                titleStyle={styles.menuItemTitle}
+                // eslint-disable-next-line react/no-unstable-nested-components
+                leadingIcon={() => <GetIcon iconName="delete" />}
+              />
+            </Menu>
+          </Header>
+        )
+      }
 
       {loading ? (
         // Only replace the content area with the loading indicator
