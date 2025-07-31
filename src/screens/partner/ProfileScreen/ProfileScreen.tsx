@@ -1,13 +1,17 @@
 import React from 'react';
-import {View, StyleSheet} from 'react-native';
+import { View, StyleSheet, Platform } from 'react-native';
 import Header from '../../../components/Header';
-import {PartnerDrawerParamList} from '../../../types/navigation';
+import { PartnerDrawerParamList } from '../../../types/navigation';
 import EditProfileComponent from '../../../components/EditProfileComponent';
 
 export default function PartnerProfileScreen() {
   return (
     <View style={styles.container}>
-      <Header<PartnerDrawerParamList> title="Profile" />
+      {
+        Platform.OS === 'android' && (
+          <Header<PartnerDrawerParamList> title="Profile" />
+        )
+      }
       {/* <ProfileScreen /> */}
       <EditProfileComponent />
     </View>

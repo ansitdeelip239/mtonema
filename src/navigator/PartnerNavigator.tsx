@@ -69,7 +69,7 @@ const PartnerNavigator = () => {
         name="Content"
         component={ContentTemplateScreenStack}
         options={{
-          headerShown: isIOS,
+          headerShown: false,
           // eslint-disable-next-line react/no-unstable-nested-components
           drawerIcon: ({color}) => (
             <GetIcon iconName="notes" color={color} size="25" />
@@ -80,7 +80,7 @@ const PartnerNavigator = () => {
         name="Profile Screen"
         component={PartnerProfileScreen}
         options={{
-          headerShown: false,
+          headerShown: isIOS,
           drawerItemStyle: {display: 'none'},
         }}
       />
