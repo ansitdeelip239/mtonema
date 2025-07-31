@@ -8,32 +8,33 @@ import {
   ScrollView,
   Alert,
   ActivityIndicator,
+  Platform,
 } from 'react-native';
-import React, {useState, useCallback, useEffect} from 'react';
-import {NativeStackScreenProps} from '@react-navigation/native-stack';
-import {ContentTemplateStackParamList} from '../../../navigator/components/ContentTemplateStack';
+import React, { useState, useCallback, useEffect } from 'react';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { ContentTemplateStackParamList } from '../../../navigator/components/ContentTemplateStack';
 import Header from '../../../components/Header';
-import {PartnerDrawerParamList} from '../../../types/navigation';
-import {useTheme} from '../../../context/ThemeProvider';
-import {useAuth} from '../../../hooks/useAuth';
-import {useDialog} from '../../../hooks/useDialog';
+import { PartnerDrawerParamList } from '../../../types/navigation';
+import { useTheme } from '../../../context/ThemeProvider';
+import { useAuth } from '../../../hooks/useAuth';
+import { useDialog } from '../../../hooks/useDialog';
 import Toast from 'react-native-toast-message';
 import PartnerService from '../../../services/PartnerService';
-import {usePartner} from '../../../context/PartnerProvider';
+import { usePartner } from '../../../context/PartnerProvider';
 
 type Props = NativeStackScreenProps<
   ContentTemplateStackParamList,
   'AddContentTempleteScreen'
 >;
 
-const AddContentScreen: React.FC<Props> = ({navigation, route}) => {
+const AddContentScreen: React.FC<Props> = ({ navigation, route }) => {
   // Get params from route
-  const {editMode = false, templateData} = route.params || {};
+  const { editMode = false, templateData } = route.params || {};
 
-  const {theme} = useTheme();
-  const {user} = useAuth();
-  const {showError} = useDialog();
-  const {setMessageTemplateUpdated} = usePartner();
+  const { theme } = useTheme();
+  const { user } = useAuth();
+  const { showError } = useDialog();
+  const { setMessageTemplateUpdated } = usePartner();
 
   const [templateName, setTemplateName] = useState('');
   const [content, setContent] = useState('');
@@ -125,7 +126,7 @@ const AddContentScreen: React.FC<Props> = ({navigation, route}) => {
         'Discard Changes',
         'Are you sure you want to discard your changes?',
         [
-          {text: 'Continue Editing', style: 'cancel'},
+          { text: 'Continue Editing', style: 'cancel' },
           {
             text: 'Discard',
             style: 'destructive',
@@ -140,31 +141,35 @@ const AddContentScreen: React.FC<Props> = ({navigation, route}) => {
 
   // Available variables
   const variables = [
-    {id: 'name', variable: '{name}', description: 'Client name'},
-    {id: 'phone', variable: '{phone}', description: 'Phone number'},
+    { id: 'name', variable: '{name}', description: 'Client name' },
+    { id: 'phone', variable: '{phone}', description: 'Phone number' },
     {
       id: 'whatsapp_number',
       variable: '{whatsapp_number}',
       description: 'Whatsapp number',
     },
-    {id: 'email', variable: '{email}', description: 'Email address'},
-    {id: 'sender_name', variable: '{sender_name}', description: 'Your name'},
-    {id: 'sender_email', variable: '{sender_email}', description: 'Your email'},
+    { id: 'email', variable: '{email}', description: 'Email address' },
+    { id: 'sender_name', variable: '{sender_name}', description: 'Your name' },
+    { id: 'sender_email', variable: '{sender_email}', description: 'Your email' },
     {
       id: 'sender_address',
       variable: '{sender_address}',
       description: 'Your address',
     },
-    {id: 'sender_phone', variable: '{sender_phone}', description: 'Your phone'},
+    { id: 'sender_phone', variable: '{sender_phone}', description: 'Your phone' },
   ];
 
   return (
     <SafeAreaView style={styles.container}>
-      <Header<PartnerDrawerParamList>
-        title={editMode ? 'Edit Message Template' : 'Add Message Template'}
-        backButton={true}
-        onBackPress={handleCancel}
-      />
+      {
+        Platform.OS === 'android' && (
+          <Header<PartnerDrawerParamList>
+            title={editMode ? 'Edit Template' : 'New Template'}
+            backButton={true}
+            onBackPress={handleCancel}
+          />
+        )
+      }
 
       <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
         {/* Template Name Input */}
@@ -255,7 +260,7 @@ const AddContentScreen: React.FC<Props> = ({navigation, route}) => {
         <TouchableOpacity
           style={[
             styles.saveButton,
-            {backgroundColor: theme.primaryColor},
+            { backgroundColor: theme.primaryColor },
             saving && styles.savingButton,
           ]}
           onPress={handleSave}

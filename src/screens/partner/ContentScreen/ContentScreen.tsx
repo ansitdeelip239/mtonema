@@ -1,19 +1,19 @@
-import React, {useState, useEffect, useCallback} from 'react';
-import {View, StyleSheet, SafeAreaView} from 'react-native';
-import {AnimatedFAB} from 'react-native-paper';
+import React, { useState, useEffect, useCallback } from 'react';
+import { View, StyleSheet, SafeAreaView, Platform } from 'react-native';
+import { AnimatedFAB } from 'react-native-paper';
 import Header from '../../../components/Header';
-import {PartnerDrawerParamList} from '../../../types/navigation';
-import {useAuth} from '../../../hooks/useAuth';
-import {ContentTemplate} from '../../../types';
+import { PartnerDrawerParamList } from '../../../types/navigation';
+import { useAuth } from '../../../hooks/useAuth';
+import { ContentTemplate } from '../../../types';
 import PartnerService from '../../../services/PartnerService';
-import {useDialog} from '../../../hooks/useDialog';
-import {useTheme} from '../../../context/ThemeProvider';
+import { useDialog } from '../../../hooks/useDialog';
+import { useTheme } from '../../../context/ThemeProvider';
 import ContentHeader from './components/ContentHeader';
 import ContentLoadingIndicator from './components/ContentLoadingIndicator';
 import ContentTemplatesList from './components/ContentTemplateList';
 import GetIcon from '../../../components/GetIcon';
-import {NativeStackScreenProps} from '@react-navigation/native-stack';
-import {ContentTemplateStackParamList} from '../../../navigator/components/ContentTemplateStack';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { ContentTemplateStackParamList } from '../../../navigator/components/ContentTemplateStack';
 import { usePartner } from '../../../context/PartnerProvider';
 
 type Props = NativeStackScreenProps<
@@ -23,11 +23,11 @@ type Props = NativeStackScreenProps<
 
 const PAGE_SIZE = 20;
 
-const ContentScreen: React.FC<Props> = ({navigation}) => {
-  const {user} = useAuth();
-  const {showError} = useDialog();
-  const {theme} = useTheme();
-  const {messageTemplateUpdated} = usePartner();
+const ContentScreen: React.FC<Props> = ({ navigation }) => {
+  const { user } = useAuth();
+  const { showError } = useDialog();
+  const { theme } = useTheme();
+  const { messageTemplateUpdated } = usePartner();
 
   // State management
   const [contentTemplates, setContentTemplates] = useState<ContentTemplate[]>(
@@ -62,7 +62,7 @@ const ContentScreen: React.FC<Props> = ({navigation}) => {
         );
 
         if (response.success) {
-          const {contentTemplates: newTemplates, responsePagingModel} =
+          const { contentTemplates: newTemplates, responsePagingModel } =
             response.data;
 
           if (pageNumber === 1) {
@@ -111,7 +111,7 @@ const ContentScreen: React.FC<Props> = ({navigation}) => {
 
   // Handle scroll for FAB animation
   const handleScroll = useCallback(
-    ({nativeEvent}: {nativeEvent: {contentOffset: {y: number}}}) => {
+    ({ nativeEvent }: { nativeEvent: { contentOffset: { y: number } } }) => {
       const currentScrollPosition =
         Math.floor(nativeEvent?.contentOffset?.y) ?? 0;
       setIsExtended(currentScrollPosition <= 0);
@@ -154,7 +154,11 @@ const ContentScreen: React.FC<Props> = ({navigation}) => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Header<PartnerDrawerParamList> title="Message Templates" />
+      {
+        Platform.OS === 'android' && (
+          <Header<PartnerDrawerParamList> title="Message Templates" />
+        )
+      }
 
       <View style={styles.content}>
         <ContentHeader totalCount={totalCount} />
@@ -184,7 +188,7 @@ const ContentScreen: React.FC<Props> = ({navigation}) => {
           animateFrom="right"
           iconMode="static"
           variant="primary"
-          style={[styles.fab, {backgroundColor: theme.primaryColor}]}
+          style={[styles.fab, { backgroundColor: theme.primaryColor }]}
         />
       </View>
     </SafeAreaView>

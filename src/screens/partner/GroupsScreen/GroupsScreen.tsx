@@ -1,4 +1,4 @@
-import React, {useEffect, useState, useCallback, memo} from 'react';
+import React, { useEffect, useState, useCallback, memo } from 'react';
 import {
   View,
   Text,
@@ -8,22 +8,23 @@ import {
   ActivityIndicator,
   RefreshControl,
   TouchableOpacity,
+  Platform,
 } from 'react-native';
 import Header from '../../../components/Header';
-import {PartnerDrawerParamList} from '../../../types/navigation';
+import { PartnerDrawerParamList } from '../../../types/navigation';
 import Colors from '../../../constants/Colors';
-import {Group2} from '../../../types';
+import { Group2 } from '../../../types';
 import PartnerService from '../../../services/PartnerService';
-import {useAuth} from '../../../hooks/useAuth';
-import {useMaster} from '../../../context/MasterProvider';
+import { useAuth } from '../../../hooks/useAuth';
+import { useMaster } from '../../../context/MasterProvider';
 import AddGroupModal from './components/AddGroupModal';
 import Toast from 'react-native-toast-message';
-import {usePartner} from '../../../context/PartnerProvider';
-import {useTheme} from '../../../context/ThemeProvider';
+import { usePartner } from '../../../context/PartnerProvider';
+import { useTheme } from '../../../context/ThemeProvider';
 
 // Updated EmptyList component to use theme
 const EmptyList = memo(
-  ({isLoading, themeColor}: {isLoading: boolean; themeColor: string}) => {
+  ({ isLoading, themeColor }: { isLoading: boolean; themeColor: string }) => {
     if (isLoading) {
       return (
         <View style={styles.loaderContainer}>
@@ -73,7 +74,7 @@ const GroupItem = memo(
 
 const GroupsScreen = () => {
   // Get theme from context
-  const {theme} = useTheme();
+  const { theme } = useTheme();
 
   const [groups, setGroups] = useState<Group2[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -89,9 +90,9 @@ const GroupsScreen = () => {
   const [isLoadingMore, setIsLoadingMore] = useState(false);
   const [pageSize] = useState(20);
 
-  const {user} = useAuth();
-  const {masterData} = useMaster();
-  const {reloadGroups, setClientsUpdated} = usePartner();
+  const { user } = useAuth();
+  const { masterData } = useMaster();
+  const { reloadGroups, setClientsUpdated } = usePartner();
 
   // Fetch groups
   const fetchGroups = useCallback(
@@ -308,7 +309,7 @@ const GroupsScreen = () => {
 
   // Render a group item
   const renderGroupItem = useCallback(
-    ({item}: {item: Group2}) => (
+    ({ item }: { item: Group2 }) => (
       <GroupItem
         item={item}
         getColorByMasterId={getColorByMasterId}
@@ -334,17 +335,22 @@ const GroupsScreen = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Header<PartnerDrawerParamList>
-        title="Groups"
-        children={
-          <TouchableOpacity
-            onPress={toggleModal}
-            style={[styles.addButton, {backgroundColor: theme.secondaryColor}]} // Updated with theme
-            disabled={isSaving || isDeleting}>
-            <Text style={styles.addButtonText}>+ Add Group</Text>
-          </TouchableOpacity>
-        }
-      />
+      {
+        Platform.OS === 'android' && (
+          <Header<PartnerDrawerParamList>
+            title="Groups"
+            children={
+              <TouchableOpacity
+                onPress={toggleModal}
+                style={[styles.addButton, { backgroundColor: theme.secondaryColor }]} // Updated with theme
+                disabled={isSaving || isDeleting}>
+                <Text style={styles.addButtonText}>+ Add Group</Text>
+              </TouchableOpacity>
+            }
+          />
+
+        )
+      }
 
       <View style={styles.content}>
         <FlatList
@@ -424,7 +430,7 @@ const styles = StyleSheet.create({
     marginBottom: 16,
     elevation: 2,
     shadowColor: '#000',
-    shadowOffset: {width: 0, height: 1},
+    shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.22,
     shadowRadius: 2.22,
   },
@@ -443,7 +449,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     elevation: 2,
     shadowColor: '#000',
-    shadowOffset: {width: 0, height: 1},
+    shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.22,
     shadowRadius: 2.22,
   },

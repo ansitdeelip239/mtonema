@@ -44,8 +44,8 @@ const PartnerNavigator = () => {
         component={PartnerBottomTabs}
         options={{
           headerShown: isIOS,
-          headerTitle: isIOS ? '' : 'Home', // Hide title text on iOS
-          headerTitleStyle: isIOS ? {opacity: 0} : undefined, // Extra fallback
+          // headerTitle: isIOS ? '' : 'Home', // Hide title text on iOS
+          // headerTitleStyle: isIOS ? {opacity: 0} : undefined, // Extra fallback
           // eslint-disable-next-line react/no-unstable-nested-components
           drawerIcon: ({color}) => (
             <GetIcon iconName="home" color={color} size="25" />
@@ -56,7 +56,9 @@ const PartnerNavigator = () => {
         name="Groups"
         component={GroupsScreen}
         options={{
-          headerShown: false,
+          headerShown: isIOS,
+          // headerTitle: isIOS ? '' : 'Groups', // Hide title text on iOS
+          // headerTitleStyle: isIOS ? {opacity: 0} : undefined, // Extra fallback
           // eslint-disable-next-line react/no-unstable-nested-components
           drawerIcon: ({color}) => (
             <GetIcon iconName="group" color={color} size="25" />
@@ -67,7 +69,7 @@ const PartnerNavigator = () => {
         name="Content"
         component={ContentTemplateScreenStack}
         options={{
-          headerShown: false,
+          headerShown: isIOS,
           // eslint-disable-next-line react/no-unstable-nested-components
           drawerIcon: ({color}) => (
             <GetIcon iconName="notes" color={color} size="25" />
