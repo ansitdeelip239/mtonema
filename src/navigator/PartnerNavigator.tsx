@@ -9,8 +9,8 @@ import GetIcon from '../components/GetIcon';
 import PartnerProfileScreen from '../screens/partner/ProfileScreen/ProfileScreen';
 import {useTheme} from '../context/ThemeProvider';
 import ContentTemplateScreenStack from './components/ContentTemplateStack';
-import FilterPartnerScreen from '../screens/partner/FilterPartnerScreen/FilterPartnerScreen';
 import { Platform } from 'react-native';
+import FilterPartnerStack from './components/FilterPartnerStack';
 
 const Drawer = createDrawerNavigator<PartnerDrawerParamList>();
 
@@ -86,8 +86,8 @@ const PartnerNavigator = () => {
       />
       {/* Hidden Filter Screen */}
       <Drawer.Screen
-        name="FilterPartnerScreen"
-        component={FilterPartnerScreen}
+        name="Filter Partners"
+        component={FilterPartnerStack}
         options={{
           headerShown: false,
           drawerItemStyle: {display: 'none'},

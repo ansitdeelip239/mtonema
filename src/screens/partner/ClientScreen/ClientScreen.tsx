@@ -148,7 +148,7 @@ const ClientScreen: React.FC<Props> = ({ navigation }) => {
     useNavigation<DrawerNavigationProp<PartnerDrawerParamList>>();
 
   const handleFilterPress = () => {
-    drawerNavigation.navigate('FilterPartnerScreen');
+    drawerNavigation.navigate('Filter Partners');
   };
 
   // Update renderFooter to use isLoadingMore instead of isLoading

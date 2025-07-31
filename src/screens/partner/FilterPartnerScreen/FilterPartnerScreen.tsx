@@ -1,4 +1,4 @@
-import React, {useState, useMemo, useEffect} from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import {
   View,
   Text,
@@ -7,27 +7,28 @@ import {
   TouchableOpacity,
   ActivityIndicator,
   Alert,
+  Platform,
 } from 'react-native';
 import Header from '../../../components/Header';
-import {useTheme} from '../../../context/ThemeProvider';
-import {getGradientColors} from '../../../utils/colorUtils';
-import {useNavigation} from '@react-navigation/native';
-import {DrawerNavigationProp} from '@react-navigation/drawer';
-import {PartnerDrawerParamList} from '../../../types/navigation';
+import { useTheme } from '../../../context/ThemeProvider';
+import { getGradientColors } from '../../../utils/colorUtils';
+import { useNavigation } from '@react-navigation/native';
+import { DrawerNavigationProp } from '@react-navigation/drawer';
+import { PartnerDrawerParamList } from '../../../types/navigation';
 import GetIcon from '../../../components/GetIcon';
-import {useAuth} from '../../../hooks/useAuth';
+import { useAuth } from '../../../hooks/useAuth';
 import Roles from '../../../constants/Roles';
 import PartnerService from '../../../services/PartnerService';
-import {User} from '../../../types';
-import {usePartner} from '../../../context/PartnerProvider';
+import { User } from '../../../types';
+import { usePartner } from '../../../context/PartnerProvider';
 import Toast from 'react-native-toast-message';
 
 const FilterPartnerScreen = () => {
-  const {theme} = useTheme();
+  const { theme } = useTheme();
   const navigation =
     useNavigation<DrawerNavigationProp<PartnerDrawerParamList>>();
-  const {user} = useAuth();
-  const {selectedPartnerIds, setSelectedPartnerIds, setClientsUpdated} =
+  const { user } = useAuth();
+  const { selectedPartnerIds, setSelectedPartnerIds, setClientsUpdated } =
     usePartner();
 
   const [partners, setPartners] = useState<User[]>([]);
@@ -126,7 +127,7 @@ const FilterPartnerScreen = () => {
             You do not have permission to access this page.
           </Text>
           <TouchableOpacity
-            style={[styles.backButton, {backgroundColor: theme.primaryColor}]}
+            style={[styles.backButton, { backgroundColor: theme.primaryColor }]}
             onPress={() => navigation.goBack()}>
             <Text style={styles.backButtonText}>Go Back</Text>
           </TouchableOpacity>
@@ -176,9 +177,8 @@ const FilterPartnerScreen = () => {
         Toast.show({
           type: 'success',
           text1: 'Filter Applied',
-          text2: `Showing clients for ${
-            selectedPartners.length
-          } selected partner${selectedPartners.length > 1 ? 's' : ''}.`,
+          text2: `Showing clients for ${selectedPartners.length
+            } selected partner${selectedPartners.length > 1 ? 's' : ''}.`,
           position: 'top',
           visibilityTime: 2000,
         });
@@ -197,7 +197,7 @@ const FilterPartnerScreen = () => {
     navigation.goBack();
   };
 
-  const renderPartnerCard = ({item}: {item: User}) => {
+  const renderPartnerCard = ({ item }: { item: User }) => {
     const isSelected = selectedPartners.includes(item.id);
 
     return (
@@ -209,7 +209,7 @@ const FilterPartnerScreen = () => {
           <Text
             style={[
               styles.partnerName,
-              isSelected && {color: theme.primaryColor},
+              isSelected && { color: theme.primaryColor },
             ]}>
             {item.name}
           </Text>
@@ -240,7 +240,7 @@ const FilterPartnerScreen = () => {
             styles.checkmarkContainer,
             isSelected && [
               styles.selectedCheckmark,
-              {backgroundColor: theme.primaryColor},
+              { backgroundColor: theme.primaryColor },
             ],
           ]}>
           {isSelected && (
@@ -256,9 +256,9 @@ const FilterPartnerScreen = () => {
       return (
         <View style={styles.centerContainer}>
           <ActivityIndicator size="large" color={theme.primaryColor} />
-            <Text style={styles.loadingText}>
+          <Text style={styles.loadingText}>
             {user?.role === Roles.ADMIN ? 'Loading partners...' : 'Loading team members...'}
-            </Text>
+          </Text>
         </View>
       );
     }
@@ -272,8 +272,8 @@ const FilterPartnerScreen = () => {
           </Text>
           <TouchableOpacity
             onPress={handleSelectAll}
-            style={[styles.selectAllButton, {borderColor: theme.primaryColor}]}>
-            <Text style={[styles.selectAllText, {color: theme.primaryColor}]}>
+            style={[styles.selectAllButton, { borderColor: theme.primaryColor }]}>
+            <Text style={[styles.selectAllText, { color: theme.primaryColor }]}>
               {selectedPartners.length === partners.length
                 ? 'Deselect All'
                 : 'Select All'}
@@ -298,7 +298,7 @@ const FilterPartnerScreen = () => {
           <TouchableOpacity
             style={[
               styles.applyButton,
-              {backgroundColor: theme.primaryColor},
+              { backgroundColor: theme.primaryColor },
               isApplying && styles.disabledButton,
             ]}
             onPress={handleApply}
@@ -319,16 +319,20 @@ const FilterPartnerScreen = () => {
 
   return (
     <View style={styles.container}>
-      <Header<PartnerDrawerParamList>
-      title={
-        user.role === Roles.ADMIN
-        ? 'Filter Partners'
-        : 'Filter Team Members'
+      {
+        Platform.OS === 'android' && (
+          <Header<PartnerDrawerParamList>
+            title={
+              user.role === Roles.ADMIN
+                ? 'Filter Partners'
+                : 'Filter Team Members'
+            }
+            gradientColors={headerGradientColors}
+            backButton={true}
+            onBackPress={handleBack}
+          />
+        )
       }
-      gradientColors={headerGradientColors}
-      backButton={true}
-      onBackPress={handleBack}
-      />
       {renderContent()}
     </View>
   );
@@ -418,7 +422,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#e8e8e8',
     shadowColor: '#000',
-    shadowOffset: {width: 0, height: 2},
+    shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.08,
     shadowRadius: 4,
     elevation: 2,
@@ -428,7 +432,7 @@ const styles = StyleSheet.create({
     borderColor: '#4CAF50',
     backgroundColor: '#f8fff8',
     shadowColor: '#4CAF50',
-    shadowOffset: {width: 0, height: 4},
+    shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.15,
     shadowRadius: 8,
     elevation: 4,
@@ -473,7 +477,7 @@ const styles = StyleSheet.create({
   selectedCheckmark: {
     borderColor: '#4CAF50',
     shadowColor: '#4CAF50',
-    shadowOffset: {width: 0, height: 2},
+    shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.3,
     shadowRadius: 4,
     elevation: 3,
