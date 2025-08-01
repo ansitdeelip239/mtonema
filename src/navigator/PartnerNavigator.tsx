@@ -9,7 +9,7 @@ import GetIcon from '../components/GetIcon';
 import PartnerProfileScreen from '../screens/partner/ProfileScreen/ProfileScreen';
 import {useTheme} from '../context/ThemeProvider';
 import ContentTemplateScreenStack from './components/ContentTemplateStack';
-import { Platform } from 'react-native';
+import {Platform} from 'react-native';
 import FilterPartnerStack from './components/FilterPartnerStack';
 
 const Drawer = createDrawerNavigator<PartnerDrawerParamList>();
@@ -17,9 +17,9 @@ const Drawer = createDrawerNavigator<PartnerDrawerParamList>();
 const PartnerNavigator = () => {
   // Get theme from context
   const {theme} = useTheme();
-  
+
   const isIOS = Platform.OS === 'ios';
-  
+
   // Update drawer styles to use theme
   const drawerStyles = {
     drawerType: 'front' as const,

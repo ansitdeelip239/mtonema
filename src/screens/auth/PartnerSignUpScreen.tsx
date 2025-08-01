@@ -34,7 +34,6 @@ import PartnerSignUpFormSchema, {
   PartnerSignupFormType,
   partnerSignupSubmissionSchema,
 } from '../../schema/PartnerSignUpFormSchema';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const {width} = Dimensions.get('window');
 type Props = NativeStackScreenProps<AuthStackParamList, 'SignUpScreen'>;
@@ -157,8 +156,6 @@ const PartnerSignUpScreen: React.FC<Props> = ({navigation}) => {
         if (response.success) {
           // Store email for later use
           setUserEmail(formData.email);
-
-          await AsyncStorage.setItem('hasSignedUp', 'true');
 
           try {
             const masterDescription = masterData?.PartnerLocation?.find(
