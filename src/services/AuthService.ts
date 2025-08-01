@@ -4,6 +4,24 @@ import url from '../constants/api';
 import {SignupBody, SignupFormType} from '../schema/SignUpFormSchema';
 import {api} from '../utils/api';
 import {RoleTypes} from '../constants/Roles';
+import {
+  PartnerSignupBody,
+  PartnerSignupFormType,
+} from '../schema/PartnerSignUpFormSchema';
+
+interface GetInTouchResponse {
+  id: number;
+  enquiryType: string;
+  name: string;
+  email: string;
+  phone: string;
+  message: string;
+  createdBy: string;
+  createdOn: string;
+  updatedBy: string;
+  updatedOn: string;
+  recordStatus: number;
+}
 
 interface ValidateEmailResponse {
   id: number;
@@ -37,6 +55,36 @@ class AuthService {
         url.userSignup,
         body,
       );
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  static async partnerSignUp(
+    body: PartnerSignupBody,
+  ): Promise<Response<PartnerSignupFormType | null>> {
+    try {
+      const response = await api.post<PartnerSignupFormType | null>(
+        url.partnerSignup,
+        body,
+      );
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  static async getInTouch(body: {
+    subject: string;
+    message: string;
+    email: string;
+    name: string;
+    phone: string;
+    domain: string;
+  }): Promise<Response<GetInTouchResponse>> {
+    try {
+      const response = await api.post<GetInTouchResponse>(url.getInTouch, body);
       return response;
     } catch (error) {
       throw error;

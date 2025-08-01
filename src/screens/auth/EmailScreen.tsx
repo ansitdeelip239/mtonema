@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState, useMemo } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import {
   View,
   Text,
@@ -68,20 +68,6 @@ const EmailScreen: React.FC<Props> = ({ navigation, route }) => {
       console.error('Failed to parse location description:', error);
     }
   }, [location]);
-
-  // Derive header colors from partner info or use MT_PRIMARY/SECONDARY as fallback
-  const headerGradientColors = useMemo(() => {
-    if (
-      partnerInfo.colorScheme?.primaryColor &&
-      partnerInfo.colorScheme?.secondaryColor
-    ) {
-      return [
-        partnerInfo.colorScheme.primaryColor,
-        partnerInfo.colorScheme.secondaryColor,
-      ];
-    }
-    return [Colors.MT_PRIMARY_1, Colors.MT_SECONDARY_1];
-  }, [partnerInfo.colorScheme]);
 
   // Animation values for logo
   const logoHeight = useRef(new Animated.Value(150)).current;
@@ -324,7 +310,6 @@ const EmailScreen: React.FC<Props> = ({ navigation, route }) => {
           }
           showBackButton={true}
           onBackPress={navigation.goBack}
-          gradientColors={headerGradientColors}
         />
       )}
 

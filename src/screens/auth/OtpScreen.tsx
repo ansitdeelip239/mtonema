@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect, useMemo } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { StyleSheet, SafeAreaView, Platform } from 'react-native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { AuthStackParamList } from '../../navigator/AuthNavigator';
@@ -10,7 +10,6 @@ import { useLogoStorage } from '../../hooks/useLogoStorage';
 import MasterService from '../../services/MasterService';
 import { useTheme } from '../../context/ThemeProvider';
 import HeaderComponent from './components/HeaderComponent';
-import { getGradientColors } from '../../utils/colorUtils';
 import Roles from '../../constants/Roles';
 import Colors from '../../constants/Colors';
 
@@ -46,11 +45,6 @@ const OtpScreen: React.FC<Props> = ({ navigation, route }) => {
       console.error('Failed to parse location description:', error);
     }
   }, [location]);
-
-  // Derive header colors from partner info or use defaults
-  const headerGradientColors = useMemo(() => {
-    return getGradientColors(partnerInfo.colorScheme?.primaryColor);
-  }, [partnerInfo.colorScheme]);
 
   // Use the enhanced hook
   const { storeLogoData, extractLogoFromPartnerLocation } = useLogoStorage();
@@ -160,7 +154,6 @@ const OtpScreen: React.FC<Props> = ({ navigation, route }) => {
           <HeaderComponent
             title="Verify OTP"
             onBackPress={navigation.goBack}
-            gradientColors={headerGradientColors}
           />
         )
       }

@@ -1,7 +1,6 @@
 // import React, {useState} from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import EmailScreen from '../screens/auth/EmailScreen';
-import SignUpScreen from '../screens/auth/SignUpScreen2';
 import { MainScreen } from '../screens/auth/MainScreen';
 import PostProperty from '../screens/seller/PostPropertyScreen';
 import OtpScreen from '../screens/auth/OtpScreen';
@@ -9,6 +8,7 @@ import PartnerZoneScreen from '../screens/auth/PartnerZoneScreen';
 import { MasterDetailModel } from '../types';
 import PartnerLoginScreen from '../screens/auth/PartnerLoginScreen';
 import { Platform } from 'react-native';
+import PartnerSignUpScreen from '../screens/auth/PartnerSignUpScreen';
 // import UserTypeSelectionScreen from '../screens/auth/UserTypeSelectionScreen';
 // import AsyncStorage from '@react-native-async-storage/async-storage';
 // import storageKeys from '../constants/storageKeys';
@@ -123,7 +123,7 @@ export default function AuthNavigator() {
       />
       <Stack.Screen
         name="SignUpScreen"
-        component={SignUpScreen}
+        component={PartnerSignUpScreen}
         options={{
           title: isIOS ? 'Sign Up' : '',
         }}

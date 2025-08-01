@@ -5,6 +5,7 @@ export const BASE_URL = config.apiUrl;
 const url = {
   //Authentication
   userSignup: BASE_URL + '/account/user-signup',
+  partnerSignup: BASE_URL + '/account/partner-signup',
   otpVerification: BASE_URL + '/account/otp-verification',
 
   ValidateEmail: BASE_URL + '/account/check-email', //Need to update
@@ -90,6 +91,8 @@ const url = {
   getAllUsers: BASE_URL + '/User/GetAllUser',
   getVisitor: BASE_URL + '/User/GetVisitor',
   getAllContact: BASE_URL + '/contactProperty/getAllContact',
+
+  getInTouch: BASE_URL + '/properties/GetInTouch',
 };
 
 export default url;

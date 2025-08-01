@@ -10,7 +10,6 @@ import {
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {AuthStackParamList} from '../../navigator/AuthNavigator';
 import Colors from '../../constants/Colors';
-import {getGradientColors} from '../../utils/colorUtils';
 import HeaderComponent from './components/HeaderComponent';
 import Images from '../../constants/Images';
 import Roles from '../../constants/Roles';
@@ -35,7 +34,6 @@ const PartnerLoginScreen: React.FC<Props> = ({navigation}) => {
       {!isIOS && (
         <HeaderComponent
           title="MT One: App & CRM"
-          gradientColors={getGradientColors(Colors.MT_PRIMARY_1)}
         />
       )}
 
@@ -73,6 +71,16 @@ const PartnerLoginScreen: React.FC<Props> = ({navigation}) => {
               </View>
             </TouchableOpacity>
 
+            {/* Get started for FREE link/button */}
+            <TouchableOpacity
+              style={styles.freeLink}
+              onPress={() => navigation.navigate('SignUpScreen', { role: Roles.PARTNER })}
+              activeOpacity={0.6}
+              testID="free-signup-button"
+            >
+              <Text style={styles.freeLinkText}>Get started for FREE</Text>
+            </TouchableOpacity>
+
             {/* Secondary Info */}
             <View style={styles.infoContainer}>
               <View style={styles.divider} />
@@ -92,6 +100,16 @@ const PartnerLoginScreen: React.FC<Props> = ({navigation}) => {
               hitSlop={{top: 10, bottom: 10, left: 10, right: 10}}
               testID="ios-login-button">
               <Text style={styles.simpleIOSButtonText}>Continue to Login</Text>
+            </TouchableOpacity>
+
+            {/* Get started for FREE link/button */}
+            <TouchableOpacity
+              style={styles.freeLink}
+              onPress={() => navigation.navigate('SignUpScreen', { role: Roles.PARTNER })}
+              activeOpacity={0.6}
+              testID="free-signup-button"
+            >
+              <Text style={styles.freeLinkText}>Get started for FREE</Text>
             </TouchableOpacity>
 
             {/* Secondary Info */}
@@ -239,6 +257,23 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
 
+  freeLink: {
+    alignItems: 'center',
+    marginBottom: 16,
+    paddingVertical: 8,
+    paddingHorizontal: 16,
+  },
+  freeLinkText: {
+    color: Colors.MT_PRIMARY_1,
+    fontSize: 16,
+    fontWeight: '700',
+    textAlign: 'center',
+    letterSpacing: 0.5,
+    // textTransform: 'uppercase',
+    textShadowColor: 'rgba(0, 0, 0, 0.1)',
+    textShadowOffset: { width: 0, height: 1 },
+    textShadowRadius: 2,
+  },
   infoContainer: {
     flexDirection: 'row',
     alignItems: 'center',
