@@ -16,7 +16,6 @@ import Images from '../../constants/Images';
 import Roles from '../../constants/Roles';
 import storageKeys from '../../constants/storageKeys';
 import {BackgroundWrapper} from '../../components/BackgroundWrapper';
-import LinearGradient from 'react-native-linear-gradient';
 import HeaderComponent from './components/HeaderComponent';
 
 type Props = NativeStackScreenProps<
@@ -76,11 +75,9 @@ const UserTypeSelectionScreen: React.FC<Props> = ({navigation}) => {
                   style={styles.primaryButton}
                   onPress={() => handleUserTypeSelection(false)}
                   activeOpacity={0.8}>
-                  <LinearGradient
-                    colors={[Colors.MT_PRIMARY_1, Colors.MT_PRIMARY_1]}
-                    style={styles.gradientButton}>
+                  <View style={styles.primaryButtonContent}>
                     <Text style={styles.buttonText}>No, I'm a Buyer/Seller</Text>
-                  </LinearGradient>
+                  </View>
                 </TouchableOpacity>
               </View>
 
@@ -186,6 +183,7 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
   primaryButton: {
+    backgroundColor: Colors.MT_PRIMARY_1,
     borderRadius: 15,
     overflow: 'hidden',
     ...Platform.select({
@@ -200,7 +198,7 @@ const styles = StyleSheet.create({
       },
     }),
   },
-  gradientButton: {
+  primaryButtonContent: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',

@@ -20,14 +20,13 @@ import { useDialog } from '../../hooks/useDialog';
 import { MaterialTextInput } from '../../components/MaterialTextInput';
 import useForm from '../../hooks/useForm';
 import { EmailFormData, emailSchema } from '../../schema/LoginSchema';
-import LinearGradient from 'react-native-linear-gradient';
 import GetIcon from '../../components/GetIcon';
 import { useKeyboard } from '../../hooks/useKeyboard';
 import Roles from '../../constants/Roles';
 import Images from '../../constants/Images';
 import HeaderComponent from './components/HeaderComponent';
 import config from '../../config';
-import { darkenColor, lightenColor } from '../../utils/colorUtils';
+import { lightenColor } from '../../utils/colorUtils';
 
 const { width } = Dimensions.get('window');
 type Props = NativeStackScreenProps<AuthStackParamList, 'EmailScreen'>;
@@ -249,10 +248,12 @@ const EmailScreen: React.FC<Props> = ({ navigation, route }) => {
     handleOtpVerification(true);
   }, [handleOtpVerification]);
 
-  // Get button background color
-  const getButtonBackgroundColor = () => {
-    if (!formInput.email || isLoading || formLoading) {
-      return '#CCCCCC'; // Disabled gray
+  // Get button background color based on state and theme
+  const getButtonBackgroundColor = (isDisabled: boolean) => {
+    if (isDisabled) {
+      return partnerInfo.colorScheme?.primaryColor
+        ? lightenColor(partnerInfo.colorScheme.primaryColor, 0.3)
+        : '#CCCCCC';
     }
     return partnerInfo.colorScheme?.primaryColor || Colors.MT_PRIMARY_1;
   };
@@ -260,130 +261,55 @@ const EmailScreen: React.FC<Props> = ({ navigation, route }) => {
   const renderButton = () => {
     if (emailError.isClickable) {
       // Verify Now Button
-      if (isIOS) {
-        return (
-          <TouchableOpacity
-            style={[styles.simpleIOSButton, { backgroundColor: getButtonBackgroundColor() }]}
-            onPress={handleVerifyNow}
-            disabled={isLoading || formLoading}
-            activeOpacity={0.8}>
-            <Text style={styles.simpleIOSButtonText}>
-              {isLoading ? 'Verifying...' : 'Verify Now'}
-            </Text>
-          </TouchableOpacity>
-        );
-      } else {
-        // Android fancy button
-        return (
-          <TouchableOpacity
-            style={styles.primaryButton}
-            onPress={handleVerifyNow}
-            disabled={isLoading || formLoading}>
-            <LinearGradient
-              colors={
-                isLoading || formLoading
-                  ? partnerInfo.colorScheme?.primaryColor
-                    ? [
-                        lightenColor(partnerInfo.colorScheme.primaryColor, 0.4),
-                        lightenColor(partnerInfo.colorScheme.primaryColor, 0.2),
-                      ]
-                    : ['#a8c7f0', '#b8e0f7']
-                  : partnerInfo.colorScheme?.primaryColor
-                    ? [
-                        partnerInfo.colorScheme.primaryColor,
-                        darkenColor(partnerInfo.colorScheme.primaryColor, 0.2),
-                      ]
-                    : headerGradientColors
-              }
-              start={{ x: 0, y: 0 }}
-              end={{ x: 1, y: 0 }}
-              style={styles.buttonGradient}>
-              <Text
-                style={[
-                  styles.buttonText,
-                  (isLoading || formLoading) && styles.disabledButtonText,
-                ]}>
-                {isLoading ? 'Verifying...' : 'Verify Now'}
-              </Text>
-            </LinearGradient>
-          </TouchableOpacity>
-        );
-      }
+      const isDisabled = isLoading || formLoading;
+      return (
+        <TouchableOpacity
+          style={[
+            styles.primaryButton,
+            { backgroundColor: getButtonBackgroundColor(isDisabled) },
+          ]}
+          onPress={handleVerifyNow}
+          disabled={isDisabled}
+          activeOpacity={0.8}>
+          <Text
+            style={[
+              styles.buttonText,
+              isDisabled && styles.disabledButtonText,
+            ]}>
+            {isLoading ? 'Verifying...' : 'Verify Now'}
+          </Text>
+        </TouchableOpacity>
+      );
     } else {
       // Continue Button
-      if (isIOS) {
-        return (
-          <TouchableOpacity
-            style={[styles.simpleIOSButton, { backgroundColor: getButtonBackgroundColor() }]}
-            onPress={handleContinue}
-            disabled={!formInput.email || isLoading || formLoading}
-            activeOpacity={0.8}>
-            <View style={styles.simpleIOSButtonContent}>
-              <Text style={styles.simpleIOSButtonText}>
-                {isLoading ? 'Sending OTP...' : 'Continue'}
-              </Text>
-              {!isLoading && (
-                <GetIcon
-                  iconName="chevronRight"
-                  color={!formInput.email || formLoading ? '#ffffff80' : 'white'}
-                  size="20"
-                />
-              )}
-            </View>
-          </TouchableOpacity>
-        );
-      } else {
-        // Android fancy button
-        return (
-          <TouchableOpacity
-            style={styles.primaryButton}
-            onPress={handleContinue}
-            disabled={!formInput.email || isLoading || formLoading}>
-            <LinearGradient
-              colors={
-                !formInput.email || isLoading || formLoading
-                  ? partnerInfo.colorScheme?.primaryColor
-                    ? [
-                        lightenColor(partnerInfo.colorScheme.primaryColor, 0.4),
-                        lightenColor(partnerInfo.colorScheme.primaryColor, 0.2),
-                      ]
-                    : [
-                        lightenColor(Colors.MT_PRIMARY_1, 0.4),
-                        lightenColor(Colors.MT_PRIMARY_1, 0.4),
-                      ]
-                  : partnerInfo.colorScheme?.primaryColor
-                    ? [
-                        partnerInfo.colorScheme.primaryColor,
-                        darkenColor(partnerInfo.colorScheme.primaryColor, 0.2),
-                      ]
-                    : headerGradientColors
-              }
-              start={{ x: 0, y: 0 }}
-              end={{ x: 1, y: 0 }}
-              style={styles.buttonGradient}>
-              <View style={styles.buttonContentWrapper}>
-                <Text
-                  style={[
-                    styles.buttonText,
-                    (!formInput.email || isLoading || formLoading) &&
-                    styles.disabledButtonText,
-                  ]}>
-                  {isLoading ? 'Sending OTP...' : 'Continue'}
-                </Text>
-                {!isLoading && (
-                  <GetIcon
-                    iconName="chevronRight"
-                    color={
-                      !formInput.email || formLoading ? '#ffffff80' : 'white'
-                    }
-                    size="20"
-                  />
-                )}
-              </View>
-            </LinearGradient>
-          </TouchableOpacity>
-        );
-      }
+      const isDisabled = !formInput.email || isLoading || formLoading;
+      return (
+        <TouchableOpacity
+          style={[
+            styles.primaryButton,
+            { backgroundColor: getButtonBackgroundColor(isDisabled) },
+          ]}
+          onPress={handleContinue}
+          disabled={isDisabled}
+          activeOpacity={0.8}>
+          <View style={styles.buttonContentWrapper}>
+            <Text
+              style={[
+                styles.buttonText,
+                isDisabled && styles.disabledButtonText,
+              ]}>
+              {isLoading ? 'Sending OTP...' : 'Continue'}
+            </Text>
+            {!isLoading && (
+              <GetIcon
+                iconName="chevronRight"
+                color={isDisabled ? '#ffffff80' : 'white'}
+                size="20"
+              />
+            )}
+          </View>
+        </TouchableOpacity>
+      );
     }
   };
 
@@ -446,9 +372,7 @@ const EmailScreen: React.FC<Props> = ({ navigation, route }) => {
               />
             </View>
 
-            <View style={styles.actionsSection}>
-              {renderButton()}
-            </View>
+            <View style={styles.actionsSection}>{renderButton()}</View>
           </View>
         </View>
       </KeyboardAvoidingView>
@@ -517,21 +441,25 @@ const styles = StyleSheet.create({
   actionsSection: {
     alignItems: 'center',
   },
-
-  // Android fancy button styles
   primaryButton: {
     width: '100%',
     borderRadius: 15,
-    overflow: 'hidden',
+    paddingVertical: 15,
+    paddingHorizontal: 24,
+    alignItems: 'center',
+    justifyContent: 'center',
+    minHeight: 50,
     ...Platform.select({
+      ios: {
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 4 },
+        shadowOpacity: 0.15,
+        shadowRadius: 8,
+      },
       android: {
         elevation: 5,
       },
     }),
-  },
-  buttonGradient: {
-    borderRadius: 15,
-    paddingVertical: 15,
   },
   buttonContentWrapper: {
     flexDirection: 'row',
@@ -546,30 +474,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   disabledButtonText: {
-    color: Colors.MT_SECONDARY_3,
-  },
-
-  // Simple iOS button styles
-  simpleIOSButton: {
-    width: '100%',
-    borderRadius: 12,
-    paddingVertical: 16,
-    paddingHorizontal: 24,
-    alignItems: 'center',
-    justifyContent: 'center',
-    minHeight: 50,
-  },
-  simpleIOSButtonContent: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  simpleIOSButtonText: {
-    color: 'white',
-    fontSize: 17,
-    fontWeight: '600',
-    textAlign: 'center',
-    marginRight: 8,
+    color: Colors.MT_SECONDARY_3 || 'rgba(255,255,255,0.7)',
   },
 });
 

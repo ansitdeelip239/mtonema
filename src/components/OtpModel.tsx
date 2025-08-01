@@ -1,5 +1,5 @@
 /* eslint-disable react-native/no-inline-styles */
-import React, {useRef, useEffect} from 'react';
+import React, { useRef, useEffect } from 'react';
 import {
   View,
   Text,
@@ -12,16 +12,15 @@ import {
   ScrollView,
   Dimensions,
 } from 'react-native';
-import {OtpInput} from 'react-native-otp-entry';
-import {useDialog} from '../hooks/useDialog';
-import LinearGradient from 'react-native-linear-gradient';
+import { OtpInput } from 'react-native-otp-entry';
+import { useDialog } from '../hooks/useDialog';
 import Colors from '../constants/Colors';
 import Images from '../constants/Images';
+import { useKeyboard } from '../hooks/useKeyboard';
+import { lightenColor } from '../utils/colorUtils';
 import GetIcon from './GetIcon';
-import {useKeyboard} from '../hooks/useKeyboard';
-import {darkenColor, lightenColor} from '../utils/colorUtils';
 
-const {width} = Dimensions.get('window');
+const { width } = Dimensions.get('window');
 
 interface OtpModelProps {
   value: string;
@@ -39,8 +38,8 @@ const OtpModel: React.FC<OtpModelProps> = ({
   themeColor,
 }) => {
   const otpInputRef = useRef(null);
-  const {showError} = useDialog();
-  const {keyboardVisible} = useKeyboard();
+  const { showError } = useDialog();
+  const { keyboardVisible } = useKeyboard();
 
   // Simplified animation values - matching SignUpScreen2
   const logoHeight = useRef(new Animated.Value(150)).current;
@@ -87,6 +86,17 @@ const OtpModel: React.FC<OtpModelProps> = ({
     }
   }, [keyboardVisible, logoHeight, logoOpacity]);
 
+  // Get button background color based on state and platform
+  const getButtonBackgroundColor = () => {
+    const isDisabled = value.length !== 6 || isLoading;
+
+    if (isDisabled) {
+      return themeColor ? lightenColor(themeColor, 0.3) : '#d3d3d3';
+    }
+
+    return themeColor || Colors.MT_PRIMARY_1;
+  };
+
   return (
     <View style={styles.container}>
       <KeyboardAvoidingView
@@ -107,7 +117,7 @@ const OtpModel: React.FC<OtpModelProps> = ({
                   opacity: logoOpacity,
                   height: logoHeight,
                 } as any,
-                {overflow: 'hidden' as 'hidden'},
+                { overflow: 'hidden' as 'hidden' },
               ]}>
               <Image
                 source={Images.MTESTATES_LOGO}
@@ -121,7 +131,7 @@ const OtpModel: React.FC<OtpModelProps> = ({
                 <Text
                   style={[
                     styles.welcomeTitle,
-                    themeColor ? {color: themeColor} : null,
+                    themeColor ? { color: themeColor } : null,
                   ]}>
                   Enter OTP
                 </Text>
@@ -142,9 +152,9 @@ const OtpModel: React.FC<OtpModelProps> = ({
                       styles.activeOtpBox,
                       themeColor
                         ? {
-                            borderColor: themeColor,
-                            backgroundColor: lightenColor(themeColor, 0.9),
-                          }
+                          borderColor: themeColor,
+                          backgroundColor: lightenColor(themeColor, 0.9),
+                        }
                         : null,
                     ]),
                   }}
@@ -155,71 +165,28 @@ const OtpModel: React.FC<OtpModelProps> = ({
               <TouchableOpacity
                 style={[
                   styles.primaryButton,
-                  Platform.OS === 'ios' ? styles.iosButton : null,
                   {
-                    backgroundColor:
-                      Platform.OS === 'ios' && (value.length !== 6 || isLoading)
-                        ? '#d3d3d3'
-                        : Platform.OS === 'ios' && themeColor
-                        ? themeColor
-                        : Platform.OS === 'ios'
-                        ? Colors.MT_PRIMARY_1
-                        : undefined,
+                    backgroundColor: getButtonBackgroundColor(),
                   },
                 ]}
                 onPress={handleSubmit}
                 disabled={value.length !== 6 || isLoading}>
-                {Platform.OS === 'android' ? (
-                  <LinearGradient
-                    colors={
-                      value.length !== 6 || isLoading
-                        ? themeColor
-                          ? [
-                              lightenColor(themeColor, 0.4),
-                              lightenColor(themeColor, 0.2),
-                            ]
-                          : ['#a8c7f0', '#b8e0f7']
-                        : themeColor
-                        ? [themeColor, darkenColor(themeColor, 0.2)]
-                        : ['#3a7bd5', '#00d2ff']
-                    }
-                    start={{x: 0, y: 0}}
-                    end={{x: 1, y: 0}}
-                    style={styles.buttonGradient}>
-                    <View style={styles.buttonContentWrapper}>
-                      <Text
-                        style={[
-                          styles.buttonText,
-                          (value.length !== 6 || isLoading) &&
-                            styles.disabledButtonText,
-                        ]}>
-                        {isLoading ? 'Verifying...' : 'Verify OTP'}
-                      </Text>
-                      {!isLoading && value.length === 6 && (
-                        <GetIcon
-                          iconName="chevronRight"
-                          color="white"
-                          size="20"
-                        />
-                      )}
-                    </View>
-                  </LinearGradient>
-                ) : (
-                  <View style={styles.buttonContentWrapper}>
-                    <Text
-                      style={[
-                        styles.buttonText,
-                        (value.length !== 6 || isLoading) &&
-                          styles.disabledButtonText,
-                        Platform.OS === 'ios' && {
-                          color:
-                            value.length !== 6 || isLoading ? '#666' : 'white',
-                        },
-                      ]}>
-                      {isLoading ? 'Verifying...' : 'Verify'}
-                    </Text>
-                  </View>
-                )}
+                <View style={styles.buttonContentWrapper}>
+                  <Text
+                    style={[
+                      styles.buttonText,
+                      (value.length !== 6 || isLoading) && styles.disabledButtonText,
+                    ]}>
+                    {isLoading ? 'Verifying...' : 'Verify OTP'}
+                  </Text>
+                  {!isLoading && value.length === 6 && (
+                    <GetIcon
+                      iconName="chevronRight"
+                      color="white"
+                      size="20"
+                    />
+                  )}
+                </View>
               </TouchableOpacity>
 
               <View style={styles.resendContainer}>
@@ -228,9 +195,9 @@ const OtpModel: React.FC<OtpModelProps> = ({
                   <Text
                     style={[
                       styles.resendLink,
-                      themeColor ? {color: themeColor} : null,
+                      themeColor ? { color: themeColor } : null,
                     ]}
-                    onPress={() => {}}>
+                    onPress={() => { }}>
                     Resend OTP
                   </Text>
                 </Text>
@@ -238,7 +205,7 @@ const OtpModel: React.FC<OtpModelProps> = ({
             </View>
 
             {/* Add padding at the bottom to ensure the card doesn't get hidden by keyboard */}
-            <View style={{height: keyboardVisible ? 120 : 40}} />
+            <View style={{ height: keyboardVisible ? 120 : 40 }} />
           </View>
         </ScrollView>
       </KeyboardAvoidingView>
@@ -280,7 +247,7 @@ const styles = StyleSheet.create({
     ...Platform.select({
       ios: {
         shadowColor: '#000',
-        shadowOffset: {width: 0, height: 5},
+        shadowOffset: { width: 0, height: 5 },
         shadowOpacity: 0.1,
         shadowRadius: 15,
       },
@@ -322,11 +289,12 @@ const styles = StyleSheet.create({
   primaryButton: {
     width: '100%',
     borderRadius: 15,
+    paddingVertical: 15,
     overflow: 'hidden',
     ...Platform.select({
       ios: {
         shadowColor: '#000',
-        shadowOffset: {width: 0, height: 4},
+        shadowOffset: { width: 0, height: 4 },
         shadowOpacity: 0.15,
         shadowRadius: 8,
       },
@@ -334,19 +302,6 @@ const styles = StyleSheet.create({
         elevation: 5,
       },
     }),
-  },
-  iosButton: {
-    backgroundColor: Colors.MT_PRIMARY_1,
-    borderRadius: 12,
-    paddingVertical: 15,
-    shadowColor: '#000',
-    shadowOffset: {width: 0, height: 2},
-    shadowOpacity: 0.15,
-    shadowRadius: 4,
-  },
-  buttonGradient: {
-    borderRadius: 15,
-    paddingVertical: 15,
   },
   buttonContentWrapper: {
     flexDirection: 'row',

@@ -11,10 +11,11 @@ import GetIcon from './GetIcon';
 import {useDrawer} from '../hooks/useDrawer';
 import {ParamListBase} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
-import LinearGradient from 'react-native-linear-gradient';
+// Removed import: LinearGradient
 import {useTheme} from '../context/ThemeProvider';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
-import {getGradientColors} from '../utils/colorUtils';
+// Removed getGradientColors import as it’s not needed now
+// import {getGradientColors} from '../utils/colorUtils';
 
 interface HeaderProps {
   title: string;
@@ -25,7 +26,8 @@ interface HeaderProps {
   titleSize?: number;
   hideDrawerButton?: boolean;
   centerTitle?: boolean;
-  gradientColors?: string[];
+  // Remove gradientColors prop since gradient is removed
+  // gradientColors?: string[];
   compact?: boolean;
   showFilterButton?: boolean;
   onFilterPress?: () => void;
@@ -40,7 +42,7 @@ export default function Header<T extends ParamListBase>({
   titleSize = 18,
   hideDrawerButton = false,
   centerTitle = false,
-  gradientColors,
+  // gradientColors, // Removed
   compact = false,
   showFilterButton = false,
   onFilterPress,
@@ -49,15 +51,13 @@ export default function Header<T extends ParamListBase>({
   const {theme} = useTheme();
   const insets = useSafeAreaInsets();
 
-  // Get safe area insets
   const topPadding =
     insets.top > 0 ? insets.top : Platform.OS === 'ios' ? 20 : 8;
 
-  // Smaller bottom padding like HeaderComponent
   const bottomPadding = compact ? 8 : 10;
 
-  // Use provided gradientColors or fallback to calculated ones
-  const headerColors = gradientColors || getGradientColors(theme.primaryColor);
+  // Use a single background color instead of gradient
+  const backgroundColor = theme.primaryColor;
 
   const handleBackPress = () => {
     if (onBackPress) {
@@ -69,14 +69,14 @@ export default function Header<T extends ParamListBase>({
 
   return (
     <>
-      <StatusBar backgroundColor={headerColors[0]} barStyle="light-content" />
-      <LinearGradient
-        colors={headerColors}
+      <StatusBar backgroundColor={backgroundColor} barStyle="light-content" />
+      <View
         style={[
-          styles.headerGradient,
+          styles.headerContainerWrapper,
           {
             paddingTop: topPadding,
             paddingBottom: bottomPadding,
+            backgroundColor: backgroundColor,
           },
         ]}>
         <View style={styles.headerContainer}>
@@ -111,13 +111,15 @@ export default function Header<T extends ParamListBase>({
             <View style={styles.child}>{children}</View>
           </View>
         </View>
-      </LinearGradient>
+      </View>
     </>
   );
 }
 
 const styles = StyleSheet.create({
-  headerGradient: {
+  // Changed from headerGradient to headerContainerWrapper
+  // to apply rounded corners on the outer container view
+  headerContainerWrapper: {
     borderBottomLeftRadius: 25,
     borderBottomRightRadius: 25,
   },
@@ -163,3 +165,4 @@ const styles = StyleSheet.create({
     paddingLeft: 0,
   },
 });
+

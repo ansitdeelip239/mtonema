@@ -28,12 +28,11 @@ import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import Roles, {RoleTypes} from '../../constants/Roles';
 import {AuthStackParamList} from '../../navigator/AuthNavigator';
 import Images from '../../constants/Images';
-import LinearGradient from 'react-native-linear-gradient';
 import GetIcon from '../../components/GetIcon';
 import {useMaster} from '../../context/MasterProvider';
 import {MasterDetailModel} from '../../types';
 import HeaderComponent from './components/HeaderComponent';
-import { lightenColor } from '../../utils/colorUtils';
+import {lightenColor} from '../../utils/colorUtils';
 
 const {width} = Dimensions.get('window');
 type Props = NativeStackScreenProps<AuthStackParamList, 'SignUpScreen'>;
@@ -210,6 +209,14 @@ const SignUpScreen: React.FC<Props> = ({navigation, route}) => {
     }
   };
 
+  // Get button background color based on state
+  const getButtonBackgroundColor = () => {
+    const isDisabled = isLoading || loading;
+    return isDisabled
+      ? lightenColor(Colors.MT_PRIMARY_1, 0.4)
+      : Colors.MT_PRIMARY_1;
+  };
+
   return (
     <View style={styles.container}>
       {/* Replace header with HeaderComponent */}
@@ -309,37 +316,30 @@ const SignUpScreen: React.FC<Props> = ({navigation, route}) => {
 
                 <View style={styles.actionsSection}>
                   <TouchableOpacity
-                    style={styles.primaryButton}
+                    style={[
+                      styles.primaryButton,
+                      {backgroundColor: getButtonBackgroundColor()},
+                    ]}
                     onPress={handleSubmit}
                     disabled={isLoading || loading}>
-                    <LinearGradient
-                      colors={
-                        isLoading || loading
-                          ? [lightenColor(Colors.MT_PRIMARY_1, 0.4), lightenColor(Colors.MT_PRIMARY_1, 0.4)] // Light blue gradient for disabled state
-                          : [Colors.MT_PRIMARY_1, Colors.MT_PRIMARY_1]
-                      }
-                      start={{x: 0, y: 0}}
-                      end={{x: 1, y: 0}}
-                      style={styles.buttonGradient}>
-                      <View style={styles.buttonContentWrapper}>
-                        <Text
-                          style={[
-                            styles.buttonText,
-                            (isLoading || loading) && styles.disabledButtonText,
-                          ]}>
-                          {isLoading || loading
-                            ? 'Creating Account...'
-                            : 'Sign Up'}
-                        </Text>
-                        {!isLoading && !loading && (
-                          <GetIcon
-                            iconName="chevronRight"
-                            color="white"
-                            size="20"
-                          />
-                        )}
-                      </View>
-                    </LinearGradient>
+                    <View style={styles.buttonContentWrapper}>
+                      <Text
+                        style={[
+                          styles.buttonText,
+                          (isLoading || loading) && styles.disabledButtonText,
+                        ]}>
+                        {isLoading || loading
+                          ? 'Creating Account...'
+                          : 'Sign Up'}
+                      </Text>
+                      {!isLoading && !loading && (
+                        <GetIcon
+                          iconName="chevronRight"
+                          color="white"
+                          size="20"
+                        />
+                      )}
+                    </View>
                   </TouchableOpacity>
                 </View>
               </View>
@@ -430,6 +430,7 @@ const styles = StyleSheet.create({
   primaryButton: {
     width: '100%',
     borderRadius: 15,
+    paddingVertical: 15,
     overflow: 'hidden',
     ...Platform.select({
       ios: {
@@ -442,10 +443,6 @@ const styles = StyleSheet.create({
         elevation: 5,
       },
     }),
-  },
-  buttonGradient: {
-    borderRadius: 15,
-    paddingVertical: 15,
   },
   buttonContentWrapper: {
     flexDirection: 'row',
@@ -460,7 +457,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   disabledButtonText: {
-    color: Colors.MT_SECONDARY_3,
+    color: Colors.MT_SECONDARY_3 || 'rgba(255,255,255,0.7)',
   },
   footer: {
     padding: 20,

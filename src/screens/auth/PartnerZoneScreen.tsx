@@ -16,7 +16,6 @@ import Colors from '../../constants/Colors';
 import Images from '../../constants/Images';
 import {MasterDetailModel} from '../../types';
 import HeaderComponent from './components/HeaderComponent';
-import LinearGradient from 'react-native-linear-gradient';
 import Roles from '../../constants/Roles';
 
 const {width} = Dimensions.get('window');
@@ -56,9 +55,7 @@ const PartnerZoneScreen: React.FC<Props> = ({navigation}) => {
         style={styles.locationButton}
         onPress={() => handleLocationPress(item)}
         activeOpacity={0.7}>
-        <LinearGradient
-          colors={['#ffffff', '#f8f9fa']}
-          style={styles.gradientContainer}>
+        <View style={styles.solidContainer}>
           <View style={styles.locationContent}>
             {logoUrl ? (
               <Image
@@ -81,7 +78,7 @@ const PartnerZoneScreen: React.FC<Props> = ({navigation}) => {
             ellipsizeMode="tail">
             {item.masterDetailName}
           </Text>
-        </LinearGradient>
+        </View>
       </TouchableOpacity>
     );
   };
@@ -186,9 +183,10 @@ const styles = StyleSheet.create({
     shadowRadius: 6,
     elevation: 4,
   },
-  gradientContainer: {
+  solidContainer: {
     width: '100%',
     padding: 12,
+    backgroundColor: '#ffffff', // Using the lighter color from the original gradient
     borderWidth: 1,
     borderColor: 'rgba(0, 0, 0, 0.05)',
     borderRadius: 16,

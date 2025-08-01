@@ -15,7 +15,6 @@ import Roles from '../../constants/Roles';
 import Images from '../../constants/Images';
 import {BackgroundWrapper} from '../../components/BackgroundWrapper';
 import Colors from '../../constants/Colors';
-import LinearGradient from 'react-native-linear-gradient';
 import {useMaster} from '../../context/MasterProvider';
 import {MasterDetailModel} from '../../types';
 import HeaderComponent from './components/HeaderComponent';
@@ -82,13 +81,9 @@ export const MainScreen: React.FC<Props> = ({navigation}) => {
                   Already have an account?
                 </Text>
                 <TouchableOpacity
-                  style={styles.primaryButton}
+                  style={[styles.primaryButton, styles.solidButton]}
                   onPress={onBuyerSellerLogin}>
-                  <LinearGradient
-                    colors={[Colors.MT_PRIMARY_1, Colors.MT_PRIMARY_1]}
-                    style={styles.gradientButton}>
-                    <Text style={styles.buttonText}>Log In</Text>
-                  </LinearGradient>
+                  <Text style={styles.buttonText}>Log In</Text>
                 </TouchableOpacity>
               </View>
 
@@ -97,14 +92,12 @@ export const MainScreen: React.FC<Props> = ({navigation}) => {
                   New here? Create an account!
                 </Text>
                 <TouchableOpacity
-                  style={styles.primaryButton}
+                  style={[styles.primaryButton, styles.solidButton]}
                   onPress={onBuyerSignup}>
-                  <LinearGradient
-                    colors={[Colors.MT_PRIMARY_1, Colors.MT_PRIMARY_1]}
-                    style={styles.gradientButton}>
+                  <View style={styles.buttonContentRow}>
                     <Text style={styles.buttonText}>Sign Up as Buyer</Text>
                     <GetIcon iconName="home" color="white" size="20" />
-                  </LinearGradient>
+                  </View>
                 </TouchableOpacity>
               </View>
 
@@ -132,18 +125,14 @@ export const MainScreen: React.FC<Props> = ({navigation}) => {
 
               {/* <View style={styles.section}>
                 <TouchableOpacity
-                  style={styles.partnerButton}
+                  style={[styles.primaryButton, styles.partnerButtonSolid]}
                   onPress={onPartnerLogin}>
-                  <LinearGradient
-                    colors={['#3a7bd5', '#00d2ff']}
-                    start={{x: 0, y: 0}}
-                    end={{x: 1, y: 0}}
-                    style={styles.gradientPartnerButton}>
+                  <View style={styles.buttonContentRow}>
                     <GetIcon iconName="partner3" color="white" size="24" />
-                    <Text style={styles.partnerButtonText}>
+                    <Text style={styles.buttonText}>
                       Log In as Partner
                     </Text>
-                  </LinearGradient>
+                  </View>
                 </TouchableOpacity>
               </View> */}
             </View>
@@ -259,12 +248,22 @@ const styles = StyleSheet.create({
       },
     }),
   },
-  gradientButton: {
+  solidButton: {
+    backgroundColor: Colors.MT_PRIMARY_1,
+    paddingVertical: 12,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  partnerButtonSolid: {
+    backgroundColor: '#3a7bd5', // Using the primary color from the original gradient
+    paddingVertical: 12,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  buttonContentRow: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    paddingVertical: 12,
-    borderRadius: 15,
   },
   buttonText: {
     color: 'white',
@@ -306,33 +305,5 @@ const styles = StyleSheet.create({
     backgroundColor: '#e0e0e0',
     marginVertical: 16,
     width: '100%',
-  },
-  partnerButton: {
-    borderRadius: 15,
-    overflow: 'hidden',
-    ...Platform.select({
-      ios: {
-        shadowColor: '#000',
-        shadowOffset: {width: 0, height: 4},
-        shadowOpacity: 0.15,
-        shadowRadius: 8,
-      },
-      android: {
-        elevation: 5,
-      },
-    }),
-  },
-  gradientPartnerButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingVertical: 12,
-    borderRadius: 15,
-  },
-  partnerButtonText: {
-    color: 'white',
-    fontSize: 17,
-    fontWeight: 'bold',
-    marginLeft: 12,
   },
 });

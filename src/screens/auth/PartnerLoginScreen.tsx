@@ -6,21 +6,18 @@ import {
   TouchableOpacity,
   Platform,
   Image,
-  Alert,
 } from 'react-native';
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import LinearGradient from 'react-native-linear-gradient';
-import { AuthStackParamList } from '../../navigator/AuthNavigator';
+import {NativeStackScreenProps} from '@react-navigation/native-stack';
+import {AuthStackParamList} from '../../navigator/AuthNavigator';
 import Colors from '../../constants/Colors';
-import { getGradientColors } from '../../utils/colorUtils';
+import {getGradientColors} from '../../utils/colorUtils';
 import HeaderComponent from './components/HeaderComponent';
 import Images from '../../constants/Images';
 import Roles from '../../constants/Roles';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 
 type Props = NativeStackScreenProps<AuthStackParamList, 'PartnerLoginScreen'>;
 
-const PartnerLoginScreen: React.FC<Props> = ({ navigation }) => {
+const PartnerLoginScreen: React.FC<Props> = ({navigation}) => {
   // For demo, partnerLocation can be null or a dummy object if needed
   const partnerLocation = null;
 
@@ -35,14 +32,12 @@ const PartnerLoginScreen: React.FC<Props> = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      {
-        !isIOS && (
-          <HeaderComponent
-            title="MT One: App & CRM"
-            gradientColors={getGradientColors(Colors.MT_PRIMARY_1)}
-          />
-        )
-      }
+      {!isIOS && (
+        <HeaderComponent
+          title="MT One: App & CRM"
+          gradientColors={getGradientColors(Colors.MT_PRIMARY_1)}
+        />
+      )}
 
       {/* Main Content Container */}
       <View style={styles.mainContent}>
@@ -66,22 +61,16 @@ const PartnerLoginScreen: React.FC<Props> = ({ navigation }) => {
           <Text style={styles.subtitle}>Sign in to access your dashboard</Text>
         </View>
 
-        {/* Login Button Section (Android only) */}
+        {/* Login Button Section (Android) */}
         {!isIOS && (
           <View style={styles.buttonSection}>
             <TouchableOpacity
               style={styles.loginButton}
               onPress={handleLogin}
               activeOpacity={0.8}>
-              <LinearGradient
-                colors={[Colors.MT_PRIMARY_1, Colors.MT_SECONDARY_1]}
-                start={{ x: 0, y: 0 }}
-                end={{ x: 1, y: 1 }}
-                style={styles.buttonGradient}>
-                <Text style={styles.buttonText}>
-                  Continue to Login
-                </Text>
-              </LinearGradient>
+              <View style={styles.solidButton}>
+                <Text style={styles.buttonText}>Continue to Login</Text>
+              </View>
             </TouchableOpacity>
 
             {/* Secondary Info */}
@@ -92,21 +81,17 @@ const PartnerLoginScreen: React.FC<Props> = ({ navigation }) => {
             </View>
           </View>
         )}
-        
-        {/* Login Button Section (iOS only, multiple approaches) */}
+
+        {/* Login Button Section (iOS) */}
         {isIOS && (
           <View style={styles.buttonSection}>
-            {/* Approach 1: Simple TouchableOpacity */}
             <TouchableOpacity
               style={styles.simpleIOSButton}
               onPress={handleLogin}
               activeOpacity={0.7}
-              hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }} // Increase touch area
-              testID="ios-login-button" // For debugging
-            >
-              <Text style={styles.simpleIOSButtonText}>
-                Continue to Login
-              </Text>
+              hitSlop={{top: 10, bottom: 10, left: 10, right: 10}}
+              testID="ios-login-button">
+              <Text style={styles.simpleIOSButtonText}>Continue to Login</Text>
             </TouchableOpacity>
 
             {/* Secondary Info */}
@@ -121,12 +106,7 @@ const PartnerLoginScreen: React.FC<Props> = ({ navigation }) => {
 
       {/* Bottom Accent */}
       <View style={styles.bottomAccent}>
-        <LinearGradient
-          colors={[Colors.MT_PRIMARY_2, Colors.MT_SECONDARY_3]}
-          start={{ x: 0, y: 0 }}
-          end={{ x: 1, y: 0 }}
-          style={styles.accentGradient}
-        />
+        <View style={styles.solidAccent} />
       </View>
     </View>
   );
@@ -200,7 +180,8 @@ const styles = StyleSheet.create({
     marginBottom: 32,
     elevation: 8,
   },
-  buttonGradient: {
+  solidButton: {
+    backgroundColor: Colors.MT_PRIMARY_1,
     borderRadius: 16,
     paddingVertical: 18,
     paddingHorizontal: 32,
@@ -215,7 +196,7 @@ const styles = StyleSheet.create({
     letterSpacing: 0.5,
   },
 
-  // iOS button styles - improved
+  // iOS button styles
   simpleIOSButton: {
     borderRadius: 12,
     backgroundColor: Colors.MT_PRIMARY_1,
@@ -224,11 +205,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     marginBottom: 16,
-    minHeight: 50, // Ensure minimum touch target
-    // Remove any potential interference
+    minHeight: 50,
     zIndex: 1,
     elevation: 0,
-    // Add border for visibility
     borderWidth: 2,
     borderColor: Colors.MT_PRIMARY_2,
   },
@@ -282,8 +261,9 @@ const styles = StyleSheet.create({
   bottomAccent: {
     height: 8,
   },
-  accentGradient: {
+  solidAccent: {
     flex: 1,
+    backgroundColor: Colors.MT_PRIMARY_2, // Using the primary color from the original gradient
   },
 });
 

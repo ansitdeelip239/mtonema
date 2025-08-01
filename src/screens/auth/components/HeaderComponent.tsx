@@ -1,4 +1,4 @@
-import React, { ReactNode } from 'react';
+import React, {ReactNode} from 'react';
 import {
   View,
   Text,
@@ -7,17 +7,16 @@ import {
   Platform,
   StatusBar,
 } from 'react-native';
-import LinearGradient from 'react-native-linear-gradient';
 import Colors from '../../../constants/Colors';
 import GetIcon from '../../../components/GetIcon';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 interface HeaderComponentProps {
   title: string;
   onBackPress?: () => void;
   showBackButton?: boolean;
   rightComponent?: ReactNode;
-  gradientColors?: string[];
+  backgroundColor?: string;
   compact?: boolean;
 }
 
@@ -26,7 +25,7 @@ const HeaderComponent: React.FC<HeaderComponentProps> = ({
   onBackPress,
   showBackButton = false,
   rightComponent,
-  gradientColors = [Colors.MT_PRIMARY_1, Colors.MT_PRIMARY_1],
+  backgroundColor = Colors.MT_PRIMARY_1,
   compact = false,
 }) => {
   const insets = useSafeAreaInsets();
@@ -34,61 +33,59 @@ const HeaderComponent: React.FC<HeaderComponentProps> = ({
 
   const topPadding = isIOS
     ? insets.top + 10 // Increased padding for iOS to account for status bar and notch
-    : insets.top > 0 ? insets.top : 10;
+    : insets.top > 0
+    ? insets.top
+    : 10;
 
   const bottomPadding = isIOS
-    ? compact ? 12 : 16 // Slightly adjusted for iOS compact mode
-    : compact ? 8 : 12;
+    ? compact
+      ? 12
+      : 16 // Slightly adjusted for iOS compact mode
+    : compact
+    ? 8
+    : 12;
 
   return (
     <>
-      <StatusBar
-        backgroundColor={gradientColors[0]}
-        barStyle="light-content"
-      />
-      <LinearGradient
-        colors={gradientColors}
+      <StatusBar backgroundColor={backgroundColor} barStyle="light-content" />
+      <View
         style={[
-          isIOS ? styles.headerGradientIOS : styles.headerGradient,
+          isIOS ? styles.headerIOS : styles.header,
           {
+            backgroundColor: backgroundColor,
             paddingTop: topPadding,
             paddingBottom: bottomPadding,
           },
-        ]}
-      >
+        ]}>
         <View style={isIOS ? styles.headerContentIOS : styles.headerContent}>
           {showBackButton ? (
             <TouchableOpacity
               style={isIOS ? styles.backButtonIOS : styles.backButton}
               onPress={onBackPress}
               accessibilityLabel="Go back"
-              accessibilityRole="button"
-            >
+              accessibilityRole="button">
               <GetIcon iconName="back" color="white" size={20} />
             </TouchableOpacity>
           ) : (
             <View style={isIOS ? styles.spacerIOS : styles.spacer} />
           )}
-
           <Text
             style={isIOS ? styles.headerTextIOS : styles.headerText}
             numberOfLines={1}
-            ellipsizeMode="tail"
-          >
+            ellipsizeMode="tail">
             {title}
           </Text>
-
           {rightComponent || (
             <View style={isIOS ? styles.spacerIOS : styles.spacer} />
           )}
         </View>
-      </LinearGradient>
+      </View>
     </>
   );
 };
 
 const styles = StyleSheet.create({
-  headerGradient: {
+  header: {
     borderBottomLeftRadius: 25,
     borderBottomRightRadius: 25,
   },
@@ -117,11 +114,11 @@ const styles = StyleSheet.create({
   spacer: {
     width: 36,
   },
-  headerGradientIOS: {
+  headerIOS: {
     borderBottomLeftRadius: 32,
     borderBottomRightRadius: 32,
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 3 },
+    shadowOffset: {width: 0, height: 3},
     shadowOpacity: 0.15,
     shadowRadius: 6,
   },
