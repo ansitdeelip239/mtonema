@@ -647,6 +647,92 @@ class PartnerService {
       throw error;
     }
   }
+
+  static async createPaymentOrder(payload: {
+    userId: number;
+    planId: number;
+    customerId: string;
+  }) {
+    try {
+      const response = await api.post<{
+        orderId: number;
+        razorpayOrderId: string;
+        customerId: string;
+        keyId: string;
+        remainingTrialDays: number;
+        amount: number;
+        planId: number;
+        planName: string;
+        billingCycle: string;
+        durationDays: number;
+      }>(url.createPaymentOrder, payload);
+      return response;
+    } catch (error) {
+      console.error('Error in createPaymentOrder', error);
+      throw error;
+    }
+  }
+
+  static async getPaymentPlans() {
+    try {
+      const response = await api.get<{
+        id: number;
+        planName: string;
+        description: string;
+        price: number;
+        billingCycle: string;
+        durationDays: number;
+        maxUsers: number;
+        isTrial: boolean;
+        razorpayItemId: string;
+      }[]>(url.Plans);
+      return response;
+    } catch (error) {
+      console.error('Error in getPaymentPlans', error);
+      throw error;
+    }
+  }
+
+  static async getSubscriptionStatus(userId: number) {
+    try {
+      const response = await api.get<{
+        trialStatus: {
+          trialStatus: string;
+          trialStartDate: string;
+          trialEndDate: string;
+          remainingDays: number;
+          convertedToPaid: boolean;
+        };
+        orderStatus: {
+          orderId: number;
+          status: string;
+          paymentStatus: string;
+          startDate: string;
+          endDate: string;
+          remainingDays: number;
+          planId: number;
+          planName: string;
+          razorpayOrderId: string;
+          amount: number;
+          billingCycle: string;
+          needsRenewal: boolean;
+        };
+        hasActiveAccess: boolean;
+        trialDaysLeft: number;
+        orderDaysLeft: number;
+        chosenPlan: {
+          planId: number;
+          planName: string;
+          billingCycle: string;
+          amount: number;
+        };
+      }>(`${url.paymentOrderStatus}/${userId}`);
+      return response;
+    } catch (error) {
+      console.error('Error in getSubscriptionStatus', error);
+      throw error;
+    }
+  }
 }
 
 export default PartnerService;

@@ -1,4 +1,5 @@
 import {format, parseISO} from 'date-fns';
+import {IconEnum} from '../components/GetIcon';
 
 export const formatDate = (
   date: string | Date,
@@ -43,14 +44,56 @@ export const formatTime = (date: Date): string => {
   });
 };
 
-// Get time of day greeting
-export const getGreeting = () => {
+// Time-based configurations
+const timeConfig: {
+  nightOwl: {greeting: string; icon: IconEnum};
+  morning: {greeting: string; icon: IconEnum};
+  afternoon: {greeting: string; icon: IconEnum};
+  evening: {greeting: string; icon: IconEnum};
+} = {
+  nightOwl: {greeting: 'Hey Night Owl', icon: 'night'},
+  morning: {greeting: 'Good Morning', icon: 'morning'},
+  afternoon: {greeting: 'Good Afternoon', icon: 'afternoon'},
+  evening: {greeting: 'Good Evening', icon: 'evening'},
+};
+
+const getTimeOfDay = () => {
   const hour = new Date().getHours();
+
+  if (hour < 5) {
+    return timeConfig.nightOwl;
+  }
   if (hour < 12) {
-    return 'Good Morning';
+    return timeConfig.morning;
   }
   if (hour < 17) {
-    return 'Good Afternoon';
+    return timeConfig.afternoon;
   }
-  return 'Good Evening';
+  if (hour < 21) {
+    return timeConfig.evening;
+  }
+  return timeConfig.nightOwl;
+};
+
+// Get time of day greeting
+export const getGreeting = () => {
+  return getTimeOfDay().greeting;
+};
+
+// Get time-based icon name
+export const getTimeIcon = (): IconEnum => {
+  return getTimeOfDay().icon;
+};
+
+// Extract user's first name from full name
+export const getFirstName = (fullName: string): string => {
+  if (!fullName) {
+    return '';
+  }
+
+  const parts = fullName.split(' ');
+  if (parts.length > 1 && parts[0].endsWith('.')) {
+    return parts[1];
+  }
+  return parts[0];
 };

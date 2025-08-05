@@ -93,6 +93,12 @@ const url = {
   getAllContact: BASE_URL + '/contactProperty/getAllContact',
 
   getInTouch: BASE_URL + '/properties/GetInTouch',
+
+
+  //Payment
+  createPaymentOrder: BASE_URL + '/payment/orders/create',
+  paymentOrderStatus: BASE_URL + '/payment/orders/status',
+  Plans: BASE_URL + '/payment/plans',
 };
 
 export default url;
