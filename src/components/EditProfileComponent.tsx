@@ -9,8 +9,9 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
   Dimensions,
+  Text,
 } from 'react-native';
-import React, {useEffect, useState, useRef} from 'react';
+import React, {useEffect, useState, useRef, useCallback} from 'react';
 import useForm from '../hooks/useForm';
 import {MaterialTextInput} from './MaterialTextInput';
 import {Button} from 'react-native-paper';
@@ -19,11 +20,13 @@ import GetIcon from './GetIcon';
 import Images from '../constants/Images';
 import AuthService from '../services/AuthService';
 import CommonService from '../services/CommonService';
+import PartnerService from '../services/PartnerService';
 import {useAuth} from '../hooks/useAuth';
 import Colors from '../constants/Colors';
 import {useKeyboard} from '../hooks/useKeyboard';
 // import {useLogoStorage} from '../hooks/useLogoStorage';
-import { useTheme } from '../context/ThemeProvider';
+import {useTheme} from '../context/ThemeProvider';
+import Roles from '../constants/Roles';
 
 const EditProfileComponent = () => {
   const [editingFields, setEditingFields] = useState<
@@ -35,6 +38,8 @@ const EditProfileComponent = () => {
     phone: false,
   });
   const [profileUpdated, setProfileUpdated] = useState(false);
+  const [subscriptionStatus, setSubscriptionStatus] = useState<any>(null);
+  const [loadingSubscription, setLoadingSubscription] = useState(false);
   const {user, storeUser} = useAuth();
   const {keyboardVisible} = useKeyboard();
   const scrollViewRef = useRef<ScrollView>(null);
@@ -107,6 +112,68 @@ const EditProfileComponent = () => {
 
   const isAnyFieldEditing = Object.values(editingFields).some(value => value);
 
+  const fetchSubscriptionStatus = useCallback(async () => {
+    if (!user?.id || (user.role !== Roles.PARTNER && user.role !== Roles.TEAM)) {
+      return;
+    }
+
+    try {
+      setLoadingSubscription(true);
+      const response = await PartnerService.getSubscriptionStatus(user.id);
+
+      if (response.success) {
+        setSubscriptionStatus(response.data);
+      }
+    } catch (error) {
+      console.error('Error fetching subscription status:', error);
+    } finally {
+      setLoadingSubscription(false);
+    }
+  }, [user?.id, user?.role]);
+
+  const formatDate = (dateString: string) => {
+    if (!dateString) {
+      return 'N/A';
+    }
+    return new Date(dateString).toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric',
+    });
+  };
+
+  const getSubscriptionStatusText = () => {
+    if (!subscriptionStatus) {
+      return 'Loading...';
+    }
+
+    if (subscriptionStatus.hasActiveAccess) {
+      // Check for active trial first
+      if (
+        subscriptionStatus.trialStatus?.trialStatus?.toLowerCase() === 'active'
+      ) {
+        return 'Active Trial';
+      }
+      // Then check for active paid subscription
+      else if (
+        subscriptionStatus.orderStatus?.status?.toLowerCase() === 'active'
+      ) {
+        return `Active (${subscriptionStatus.orderStatus.planName})`;
+      }
+      // If hasActiveAccess is true but neither trial nor order is active, show general active
+      return 'Active';
+    }
+
+    return 'Inactive';
+  };
+
+  const getSubscriptionColor = () => {
+    if (!subscriptionStatus) {
+      return '#666';
+    }
+    return subscriptionStatus.hasActiveAccess ? '#53a20e' : '#ff6b6b';
+  };
+
   // Effect to scroll to the end when keyboard appears
   useEffect(() => {
     if (keyboardVisible && isAnyFieldEditing) {
@@ -129,7 +196,8 @@ const EditProfileComponent = () => {
     }
 
     fetchProfileData();
-  }, [setFormInput, profileUpdated]);
+    fetchSubscriptionStatus();
+  }, [setFormInput, profileUpdated, fetchSubscriptionStatus]);
 
   // Get screen dimensions to calculate appropriate padding
   const screenHeight = Dimensions.get('window').height;
@@ -168,12 +236,177 @@ const EditProfileComponent = () => {
               {/* {logoUrl ? (
                 <Image source={{uri: logoUrl}} style={styles.profileImage} />
               ) : ( */}
-                <Image
-                  source={Images.MTESTATES_LOGO}
-                  style={styles.profileImage}
-                />
+              <Image
+                source={Images.MTESTATES_LOGO}
+                style={styles.profileImage}
+              />
               {/* )} */}
             </View>
+
+            {/* Subscription Status Section - Only for Partners and Team Members */}
+            {(user?.role === Roles.PARTNER || user?.role === Roles.TEAM) && (
+              <View style={styles.subscriptionContainer}>
+                <Text style={styles.subscriptionTitle}>
+                  Subscription Status
+                </Text>
+
+                {loadingSubscription ? (
+                  <Text style={styles.subscriptionLoading}>Loading...</Text>
+                ) : subscriptionStatus ? (
+                  <View style={styles.subscriptionDetails}>
+                    <View style={styles.statusRow}>
+                      <Text style={styles.statusLabel}>Status:</Text>
+                      <Text
+                        style={[
+                          styles.statusValue,
+                          {color: getSubscriptionColor()},
+                        ]}>
+                        {getSubscriptionStatusText()}
+                      </Text>
+                    </View>
+
+                    {subscriptionStatus.hasActiveAccess && (
+                      <>
+                        {/* Trial Information */}
+                        {subscriptionStatus.trialStatus?.trialStatus?.toLowerCase() ===
+                          'active' && (
+                          <>
+                            <View style={styles.statusRow}>
+                              <Text style={styles.statusLabel}>
+                                Trial Start:
+                              </Text>
+                              <Text style={styles.statusValue}>
+                                {formatDate(
+                                  subscriptionStatus.trialStatus.trialStartDate,
+                                )}
+                              </Text>
+                            </View>
+                            <View style={styles.statusRow}>
+                              <Text style={styles.statusLabel}>Trial End:</Text>
+                              <Text style={styles.statusValue}>
+                                {formatDate(
+                                  subscriptionStatus.trialStatus.trialEndDate,
+                                )}
+                              </Text>
+                            </View>
+                            <View style={styles.statusRow}>
+                              <Text style={styles.statusLabel}>
+                                Trial Days Left:
+                              </Text>
+                              <Text style={styles.statusValue}>
+                                {subscriptionStatus.trialDaysLeft} days
+                              </Text>
+                            </View>
+                            {!subscriptionStatus.trialStatus
+                              .convertedToPaid && (
+                              <View style={styles.statusRow}>
+                                <Text style={styles.statusLabel}>
+                                  Converted to Paid:
+                                </Text>
+                                <Text style={styles.statusValue}>
+                                  {subscriptionStatus.trialStatus
+                                    .convertedToPaid
+                                    ? 'Yes'
+                                    : 'No'}
+                                </Text>
+                              </View>
+                            )}
+                          </>
+                        )}
+
+                        {/* Paid Subscription Information */}
+                        {subscriptionStatus.orderStatus?.status?.toLowerCase() ===
+                          'active' && (
+                          <>
+                            <View style={styles.statusRow}>
+                              <Text style={styles.statusLabel}>Plan:</Text>
+                              <Text style={styles.statusValue}>
+                                {subscriptionStatus.orderStatus.planName}
+                              </Text>
+                            </View>
+                            <View style={styles.statusRow}>
+                              <Text style={styles.statusLabel}>Billing:</Text>
+                              <Text style={styles.statusValue}>
+                                {subscriptionStatus.orderStatus.billingCycle}
+                              </Text>
+                            </View>
+                            <View style={styles.statusRow}>
+                              <Text style={styles.statusLabel}>
+                                Start Date:
+                              </Text>
+                              <Text style={styles.statusValue}>
+                                {formatDate(
+                                  subscriptionStatus.orderStatus.startDate,
+                                )}
+                              </Text>
+                            </View>
+                            <View style={styles.statusRow}>
+                              <Text style={styles.statusLabel}>End Date:</Text>
+                              <Text style={styles.statusValue}>
+                                {formatDate(
+                                  subscriptionStatus.orderStatus.endDate,
+                                )}
+                              </Text>
+                            </View>
+                            <View style={styles.statusRow}>
+                              <Text style={styles.statusLabel}>
+                                Days Remaining:
+                              </Text>
+                              <Text style={styles.statusValue}>
+                                {subscriptionStatus.orderStatus.remainingDays}{' '}
+                                days
+                              </Text>
+                            </View>
+                          </>
+                        )}
+
+                        {/* Pending Order Information (when user is in trial but has pending payment) */}
+                        {subscriptionStatus.orderStatus?.status?.toLowerCase() ===
+                          'pending' &&
+                          subscriptionStatus.trialStatus?.trialStatus?.toLowerCase() ===
+                            'active' && (
+                            <>
+                              <View style={styles.statusRow}>
+                                <Text style={styles.statusLabel}>
+                                  Pending Plan:
+                                </Text>
+                                <Text style={styles.statusValue}>
+                                  {subscriptionStatus.orderStatus.planName}
+                                </Text>
+                              </View>
+                              <View style={styles.statusRow}>
+                                <Text style={styles.statusLabel}>
+                                  Payment Status:
+                                </Text>
+                                <Text
+                                  style={[
+                                    styles.statusValue,
+                                    styles.pendingStatus,
+                                  ]}>
+                                  {subscriptionStatus.orderStatus.paymentStatus}
+                                </Text>
+                              </View>
+                              <View style={styles.statusRow}>
+                                <Text style={styles.statusLabel}>Amount:</Text>
+                                <Text style={styles.statusValue}>
+                                  ₹
+                                  {(
+                                    subscriptionStatus.orderStatus.amount / 100
+                                  ).toFixed(2)}
+                                </Text>
+                              </View>
+                            </>
+                          )}
+                      </>
+                    )}
+                  </View>
+                ) : (
+                  <Text style={styles.subscriptionError}>
+                    Failed to load subscription status
+                  </Text>
+                )}
+              </View>
+            )}
             <MaterialTextInput
               field="name"
               formInput={formInput}
@@ -255,7 +488,10 @@ const EditProfileComponent = () => {
                 onPress={onSubmit}
                 loading={loading}
                 textColor={Colors.white}
-                style={[styles.submitButton, {backgroundColor: theme.primaryColor}]}>
+                style={[
+                  styles.submitButton,
+                  {backgroundColor: theme.primaryColor},
+                ]}>
                 Save Changes
               </Button>
             )}
@@ -298,6 +534,63 @@ const styles = StyleSheet.create({
   },
   bottomPadding: {
     height: 150,
+  },
+  subscriptionContainer: {
+    backgroundColor: 'white',
+    borderRadius: 12,
+    padding: 16,
+    marginBottom: 20,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
+  },
+  subscriptionTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: '#333',
+    marginBottom: 12,
+  },
+  subscriptionLoading: {
+    fontSize: 14,
+    color: '#666',
+    textAlign: 'center',
+    paddingVertical: 10,
+  },
+  subscriptionError: {
+    fontSize: 14,
+    color: '#ff6b6b',
+    textAlign: 'center',
+    paddingVertical: 10,
+  },
+  subscriptionDetails: {
+    gap: 8,
+  },
+  statusRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingVertical: 4,
+  },
+  statusLabel: {
+    fontSize: 14,
+    color: '#666',
+    fontWeight: '500',
+    flex: 1,
+  },
+  statusValue: {
+    fontSize: 14,
+    color: '#333',
+    fontWeight: '600',
+    flex: 1,
+    textAlign: 'right',
+  },
+  pendingStatus: {
+    color: '#ff9500',
   },
 });
 
