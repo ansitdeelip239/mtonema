@@ -1,65 +1,71 @@
-import React, {useState, useEffect, useCallback} from 'react';
-import {View, ActivityIndicator, StyleSheet} from 'react-native';
-import PartnerService from '../services/PartnerService';
-import {useAuth} from '../hooks/useAuth';
+import React, {useEffect, useState} from 'react';
+import {View, StyleSheet, Image, Animated} from 'react-native';
+import {useSubscription} from '../context/SubscriptionProvider';
 import PaymentScreen from '../screens/partner/PaymentScreen/PaymentScreen';
-import Roles from '../constants/Roles';
+import Images from '../constants/Images';
 
 interface SubscriptionGuardProps {
   children: React.ReactNode;
 }
 
 const SubscriptionGuard: React.FC<SubscriptionGuardProps> = ({children}) => {
-  const [isLoading, setIsLoading] = useState(true);
-  const [hasActiveSubscription, setHasActiveSubscription] = useState(false);
-  const {user} = useAuth();
+  const {
+    hasActiveSubscription,
+    isLoadingSubscription,
+    isPartnerOrTeam,
+    refreshSubscription,
+  } = useSubscription();
 
-  const isPartnerOrTeam =
-    user?.role === Roles.PARTNER || user?.role === Roles.TEAM;
-
-  const checkSubscriptionStatus = useCallback(async () => {
-    if (!user?.id) {
-      setIsLoading(false);
-      return;
-    }
-
-    try {
-      setIsLoading(true);
-      const response = await PartnerService.getSubscriptionStatus(user.id);
-
-      if (response.success) {
-        const data = response.data;
-        setHasActiveSubscription(data.hasActiveAccess);
-      } else {
-        setHasActiveSubscription(false);
-      }
-    } catch (error) {
-      setHasActiveSubscription(false);
-    } finally {
-      setIsLoading(false);
-    }
-  }, [user?.id]);
-
-  useEffect(() => {
-    if (isPartnerOrTeam) {
-      checkSubscriptionStatus();
-    } else {
-      setIsLoading(false);
-    }
-  }, [checkSubscriptionStatus, isPartnerOrTeam]);
+  const [progressAnim] = useState(new Animated.Value(0));
 
   const handlePaymentSuccess = () => {
-    checkSubscriptionStatus();
+    refreshSubscription();
   };
+
+  useEffect(() => {
+    if (isLoadingSubscription) {
+      // Reset progress and start single-run animation
+      progressAnim.setValue(0);
+
+      // Animate to 90% over 3 seconds, then pause
+      Animated.timing(progressAnim, {
+        toValue: 0.9,
+        duration: 3000,
+        useNativeDriver: false,
+      }).start();
+    } else if (!isLoadingSubscription) {
+      // Complete the progress bar when loading finishes
+      Animated.timing(progressAnim, {
+        toValue: 1,
+        duration: 300,
+        useNativeDriver: false,
+      }).start();
+    }
+  }, [isLoadingSubscription, progressAnim]);
 
   if (!isPartnerOrTeam) {
     return <>{children}</>;
   }
 
-  if (isLoading) {
+  if (isLoadingSubscription) {
+    const progressWidth = progressAnim.interpolate({
+      inputRange: [0, 1],
+      outputRange: ['0%', '100%'],
+    });
+
     return (
       <View style={styles.loadingContainer}>
-        <ActivityIndicator size="large" color="#53a20e" />
+        <View style={styles.logoContainer}>
+          <Image source={Images.MTESTATES_LOGO} style={styles.logo} />
+        </View>
+        <View style={styles.progressContainer}>
+          {/* Progress Bar */}
+          <View style={styles.progressBarContainer}>
+            <Animated.View
+              style={[styles.progressBar, {width: progressWidth}]}
+            />
+          </View>
+        </View>
       </View>
     );
   }
@@ -77,6 +83,37 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#f5f5f5',
+  },
+  logoContainer: {
+    alignItems: 'center',
+    marginBottom: 40,
+  },
+  logo: {
+    maxWidth: 200,
+    maxHeight: 120,
+    resizeMode: 'contain',
+  },
+  progressContainer: {
+    alignItems: 'center',
+    gap: 16,
+  },
+  loadingText: {
+    fontSize: 16,
+    color: '#666',
+    fontWeight: '500',
+  },
+  progressBarContainer: {
+    width: 200,
+    height: 4,
+    backgroundColor: '#e0e0e0',
+    borderRadius: 2,
+    overflow: 'hidden',
+    marginTop: 8,
+  },
+  progressBar: {
+    height: '100%',
+    backgroundColor: '#53a20e',
+    borderRadius: 2,
   },
 });
 

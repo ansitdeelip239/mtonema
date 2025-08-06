@@ -11,7 +11,7 @@ import {
   Dimensions,
   Text,
 } from 'react-native';
-import React, {useEffect, useState, useRef, useCallback} from 'react';
+import React, {useEffect, useState, useRef} from 'react';
 import useForm from '../hooks/useForm';
 import {MaterialTextInput} from './MaterialTextInput';
 import {Button} from 'react-native-paper';
@@ -20,13 +20,12 @@ import GetIcon from './GetIcon';
 import Images from '../constants/Images';
 import AuthService from '../services/AuthService';
 import CommonService from '../services/CommonService';
-import PartnerService from '../services/PartnerService';
 import {useAuth} from '../hooks/useAuth';
 import Colors from '../constants/Colors';
 import {useKeyboard} from '../hooks/useKeyboard';
 // import {useLogoStorage} from '../hooks/useLogoStorage';
 import {useTheme} from '../context/ThemeProvider';
-import Roles from '../constants/Roles';
+import {useSubscription} from '../context/SubscriptionProvider';
 
 const EditProfileComponent = () => {
   const [editingFields, setEditingFields] = useState<
@@ -38,10 +37,16 @@ const EditProfileComponent = () => {
     phone: false,
   });
   const [profileUpdated, setProfileUpdated] = useState(false);
-  const [subscriptionStatus, setSubscriptionStatus] = useState<any>(null);
-  const [loadingSubscription, setLoadingSubscription] = useState(false);
   const {user, storeUser} = useAuth();
   const {keyboardVisible} = useKeyboard();
+  const {
+    subscriptionStatus,
+    isLoadingSubscription,
+    hasActiveSubscription,
+    isInTrial,
+    isActivePaidSubscription,
+    isPartnerOrTeam,
+  } = useSubscription();
   const scrollViewRef = useRef<ScrollView>(null);
   // const {logoUrl} = useLogoStorage();
   const {theme} = useTheme();
@@ -112,25 +117,6 @@ const EditProfileComponent = () => {
 
   const isAnyFieldEditing = Object.values(editingFields).some(value => value);
 
-  const fetchSubscriptionStatus = useCallback(async () => {
-    if (!user?.id || (user.role !== Roles.PARTNER && user.role !== Roles.TEAM)) {
-      return;
-    }
-
-    try {
-      setLoadingSubscription(true);
-      const response = await PartnerService.getSubscriptionStatus(user.id);
-
-      if (response.success) {
-        setSubscriptionStatus(response.data);
-      }
-    } catch (error) {
-      console.error('Error fetching subscription status:', error);
-    } finally {
-      setLoadingSubscription(false);
-    }
-  }, [user?.id, user?.role]);
-
   const formatDate = (dateString: string) => {
     if (!dateString) {
       return 'N/A';
@@ -147,20 +133,16 @@ const EditProfileComponent = () => {
       return 'Loading...';
     }
 
-    if (subscriptionStatus.hasActiveAccess) {
+    if (hasActiveSubscription) {
       // Check for active trial first
-      if (
-        subscriptionStatus.trialStatus?.trialStatus?.toLowerCase() === 'active'
-      ) {
+      if (isInTrial) {
         return 'Active Trial';
       }
       // Then check for active paid subscription
-      else if (
-        subscriptionStatus.orderStatus?.status?.toLowerCase() === 'active'
-      ) {
-        return `Active (${subscriptionStatus.orderStatus.planName})`;
+      else if (isActivePaidSubscription) {
+        return `Active (${subscriptionStatus?.orderStatus?.planName})`;
       }
-      // If hasActiveAccess is true but neither trial nor order is active, show general active
+      // If hasActiveSubscription is true but neither trial nor order is active, show general active
       return 'Active';
     }
 
@@ -171,7 +153,7 @@ const EditProfileComponent = () => {
     if (!subscriptionStatus) {
       return '#666';
     }
-    return subscriptionStatus.hasActiveAccess ? '#53a20e' : '#ff6b6b';
+    return hasActiveSubscription ? '#53a20e' : '#ff6b6b';
   };
 
   // Effect to scroll to the end when keyboard appears
@@ -196,8 +178,7 @@ const EditProfileComponent = () => {
     }
 
     fetchProfileData();
-    fetchSubscriptionStatus();
-  }, [setFormInput, profileUpdated, fetchSubscriptionStatus]);
+  }, [setFormInput, profileUpdated]);
 
   // Get screen dimensions to calculate appropriate padding
   const screenHeight = Dimensions.get('window').height;
@@ -244,13 +225,13 @@ const EditProfileComponent = () => {
             </View>
 
             {/* Subscription Status Section - Only for Partners and Team Members */}
-            {(user?.role === Roles.PARTNER || user?.role === Roles.TEAM) && (
+            {isPartnerOrTeam && (
               <View style={styles.subscriptionContainer}>
                 <Text style={styles.subscriptionTitle}>
                   Subscription Status
                 </Text>
 
-                {loadingSubscription ? (
+                {isLoadingSubscription ? (
                   <Text style={styles.subscriptionLoading}>Loading...</Text>
                 ) : subscriptionStatus ? (
                   <View style={styles.subscriptionDetails}>
@@ -265,11 +246,10 @@ const EditProfileComponent = () => {
                       </Text>
                     </View>
 
-                    {subscriptionStatus.hasActiveAccess && (
+                    {hasActiveSubscription && (
                       <>
                         {/* Trial Information */}
-                        {subscriptionStatus.trialStatus?.trialStatus?.toLowerCase() ===
-                          'active' && (
+                        {isInTrial && (
                           <>
                             <View style={styles.statusRow}>
                               <Text style={styles.statusLabel}>
@@ -315,8 +295,7 @@ const EditProfileComponent = () => {
                         )}
 
                         {/* Paid Subscription Information */}
-                        {subscriptionStatus.orderStatus?.status?.toLowerCase() ===
-                          'active' && (
+                        {isActivePaidSubscription && (
                           <>
                             <View style={styles.statusRow}>
                               <Text style={styles.statusLabel}>Plan:</Text>

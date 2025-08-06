@@ -10,8 +10,8 @@ import {
   ScrollView,
   Modal,
 } from 'react-native';
-import PartnerService from '../../../services/PartnerService';
 import {useAuth} from '../../../hooks/useAuth';
+import {useSubscription} from '../../../context/SubscriptionProvider';
 import GetIcon from '../../../components/GetIcon';
 import Toast from 'react-native-toast-message';
 import Images from '../../../constants/Images';
@@ -30,42 +30,95 @@ interface Plan {
 
 interface PaymentScreenProps {
   onPaymentSuccess?: () => void;
+  isUpgrade?: boolean; // New prop to indicate if this is an upgrade from trial
+  onClose?: () => void; // For when used in modal
 }
 
-const PaymentScreen: React.FC<PaymentScreenProps> = ({onPaymentSuccess}) => {
+const PaymentScreen: React.FC<PaymentScreenProps> = ({
+  onPaymentSuccess,
+  isUpgrade = false,
+  onClose,
+}) => {
   const [isLoading, setIsLoading] = useState(false);
-  const [isLoadingPlans, setIsLoadingPlans] = useState(true);
-  const [plans, setPlans] = useState<Plan[]>([]);
   const [selectedPlan, setSelectedPlan] = useState<Plan | null>(null);
   const [isLoggingOut, setIsLoggingOut] = useState(false);
   const [isVerifyingPayment, setIsVerifyingPayment] = useState(false);
-  const [verificationAttempts, setVerificationAttempts] = useState(0);
   const {user, logout} = useAuth();
+  const {
+    plans,
+    isLoadingPlans,
+    fetchPlans,
+    createPaymentOrder,
+    checkSubscriptionStatus,
+    subscriptionStatus,
+    isInTrial,
+  } = useSubscription();
 
   useEffect(() => {
     fetchPlans();
-  }, []);
-
-  const fetchPlans = async () => {
-    try {
-      setIsLoadingPlans(true);
-      const response = await PartnerService.getPaymentPlans();
-      if (response.success) {
-        setPlans(response.data);
-        // Don't auto-select any plan, let user choose
-      } else {
-        Alert.alert('Error', 'Failed to load plans. Please try again.');
-      }
-    } catch (error) {
-      console.error('Error fetching plans:', error);
-      Alert.alert('Error', 'Failed to load plans. Please try again.');
-    } finally {
-      setIsLoadingPlans(false);
-    }
-  };
+  }, [fetchPlans]);
 
   const formatPrice = (price: number) => {
     return `₹${(price / 100).toFixed(2)}`;
+  };
+
+  const getSubscriptionMessage = () => {
+    // If this is an upgrade from trial, show a different message
+    if (isUpgrade || isInTrial) {
+      return {
+        show: true,
+        title: 'Upgrade to Premium',
+        message:
+          'Choose a plan to unlock all features and continue your journey with us.',
+      };
+    }
+
+    if (subscriptionStatus) {
+      const {trialStatus, orderStatus} = subscriptionStatus;
+
+      // If they had a trial and it expired
+      if (
+        trialStatus.trialStatus === 'expired' &&
+        !trialStatus.convertedToPaid
+      ) {
+        return {
+          show: true,
+          title: 'Trial Period Expired',
+          message:
+            'Your trial period has ended. Please choose a plan to continue using the app.',
+        };
+      }
+
+      // If they had a paid subscription that expired
+      if (
+        orderStatus.status === 'expired' ||
+        orderStatus.paymentStatus === 'failed'
+      ) {
+        return {
+          show: true,
+          title: 'Subscription Expired',
+          message:
+            'Your subscription has expired. Please renew your plan to continue using the app.',
+        };
+      }
+
+      // If subscription needs renewal
+      if (orderStatus.needsRenewal) {
+        return {
+          show: true,
+          title: 'Subscription Renewal Required',
+          message:
+            'Your subscription is about to expire. Please renew your plan to continue uninterrupted access.',
+        };
+      }
+    }
+
+    // Default message for users without any subscription
+    return {
+      show: true,
+      title: 'Subscription Required',
+      message: 'Please choose a plan to start using the app.',
+    };
   };
 
   const handleLogout = () => {
@@ -99,25 +152,18 @@ const PaymentScreen: React.FC<PaymentScreenProps> = ({onPaymentSuccess}) => {
     }
 
     setIsVerifyingPayment(true);
-    setVerificationAttempts(0);
 
     for (let attempt = 1; attempt <= maxAttempts; attempt++) {
       try {
-        setVerificationAttempts(attempt);
-
         // Call the subscription status API to check if payment is processed
-        const statusResponse = await PartnerService.getSubscriptionStatus(
-          user.id,
-        );
+        // Skip loading to prevent SubscriptionGuard from showing loading screen
+        const hasActiveAccess = await checkSubscriptionStatus(true);
 
-        if (statusResponse.success) {
-          const subscriptionData = statusResponse.data;
-
-          // Check if user now has active access after payment
-          if (subscriptionData.hasActiveAccess) {
-            setIsVerifyingPayment(false);
-            return true;
-          }
+        console.log(hasActiveAccess, 'hasActiveAccess from verification');
+        // Check if user now has active access after payment using the returned value
+        if (hasActiveAccess) {
+          setIsVerifyingPayment(false);
+          return true;
         }
 
         // If not the last attempt, wait before trying again
@@ -152,22 +198,20 @@ const PaymentScreen: React.FC<PaymentScreenProps> = ({onPaymentSuccess}) => {
     setIsLoading(true);
 
     try {
-      // Create order first
-      const orderResponse = await PartnerService.createPaymentOrder({
+      // Create order first using context method
+      const orderData = await createPaymentOrder({
         userId: user.id,
         planId: selectedPlan.id,
         customerId: '', // Empty for new customers
       });
 
-      if (!orderResponse.success) {
+      if (!orderData) {
         Alert.alert(
           'Error',
           'Failed to create payment order. Please try again.',
         );
         return;
       }
-
-      const orderData = orderResponse.data;
 
       // Prepare Razorpay options with dynamic data
       const options = {
@@ -253,41 +297,54 @@ const PaymentScreen: React.FC<PaymentScreenProps> = ({onPaymentSuccess}) => {
     );
   }
 
+  const subscriptionMessage = getSubscriptionMessage();
+
   return (
     <ScrollView
       style={styles.container}
       contentContainerStyle={styles.contentContainer}>
-      {/* Header with user details and logout */}
+      {/* Header with user details and logout/close */}
       <View style={styles.header}>
         <View style={styles.userInfo}>
           <Text style={styles.accountLabel}>Payment for:</Text>
           <Text style={styles.userName}>{user?.name || 'User'}</Text>
           <Text style={styles.userEmail}>{user?.email || 'No email'}</Text>
         </View>
-        <TouchableOpacity
-          style={styles.logoutButton}
-          onPress={handleLogout}
-          disabled={isLoggingOut}
-          activeOpacity={0.7}>
-          {isLoggingOut ? (
-            <ActivityIndicator size="small" color="#ff6b6b" />
-          ) : (
-            <>
-              <GetIcon iconName="logout" size={18} color="#ff6b6b" />
-              <Text style={styles.logoutText}>Switch Account</Text>
-            </>
-          )}
-        </TouchableOpacity>
+        {isUpgrade && onClose ? (
+          <TouchableOpacity
+            style={styles.closeButton}
+            onPress={onClose}
+            activeOpacity={0.7}>
+            <GetIcon iconName="back" size={18} color="#666" />
+            <Text style={styles.closeText}>Close</Text>
+          </TouchableOpacity>
+        ) : (
+          <TouchableOpacity
+            style={styles.logoutButton}
+            onPress={handleLogout}
+            disabled={isLoggingOut}
+            activeOpacity={0.7}>
+            {isLoggingOut ? (
+              <ActivityIndicator size="small" color="#ff6b6b" />
+            ) : (
+              <>
+                <GetIcon iconName="logout" size={18} color="#ff6b6b" />
+                <Text style={styles.logoutText}>Switch Account</Text>
+              </>
+            )}
+          </TouchableOpacity>
+        )}
       </View>
 
-      <Text style={styles.title}>Subscription Required</Text>
+      <Text style={styles.title}>
+        {subscriptionMessage.title || 'Choose Your Plan'}
+      </Text>
 
-      <View style={styles.subscriptionMessage}>
-        <Text style={styles.messageText}>
-          Your subscription has expired. Please choose a plan to continue using
-          the app.
-        </Text>
-      </View>
+      {subscriptionMessage.show && (
+        <View style={styles.subscriptionMessage}>
+          <Text style={styles.messageText}>{subscriptionMessage.message}</Text>
+        </View>
+      )}
 
       {plans.length === 0 ? (
         <View style={styles.noPlansContainer}>
@@ -379,9 +436,6 @@ const PaymentScreen: React.FC<PaymentScreenProps> = ({onPaymentSuccess}) => {
             <Text style={styles.verificationTitle}>Verifying Payment</Text>
             <Text style={styles.verificationText}>
               Please wait while we confirm your payment...
-            </Text>
-            <Text style={styles.attemptText}>
-              Attempt {verificationAttempts} of 5
             </Text>
           </View>
         </View>
@@ -670,10 +724,23 @@ const styles = StyleSheet.create({
     marginBottom: 15,
     lineHeight: 22,
   },
-  attemptText: {
-    fontSize: 14,
-    color: '#53a20e',
+  closeButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingVertical: 8,
+    paddingHorizontal: 12,
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: '#ddd',
+    backgroundColor: '#f9f9f9',
+    minWidth: 80,
+    justifyContent: 'center',
+  },
+  closeText: {
+    fontSize: 12,
+    color: '#666',
     fontWeight: '600',
+    marginLeft: 6,
   },
 });
 

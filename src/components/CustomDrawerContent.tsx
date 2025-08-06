@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../hooks/useAuth';
+import { useSubscription } from '../context/SubscriptionProvider';
 // import {useLogoStorage} from '../hooks/useLogoStorage';
 import {
   DrawerContentScrollView,
@@ -19,15 +20,18 @@ import GetIcon from './GetIcon';
 import Images from '../constants/Images';
 import { useTheme } from '../context/ThemeProvider';
 import { navigationRef } from '../navigator/NavigationRef';
+import PaymentScreen from '../screens/partner/PaymentScreen/PaymentScreen';
 
 const CustomDrawerContent = (props: any) => {
   const { user, logout } = useAuth();
   const { theme } = useTheme();
+  const { isInTrial, isPartnerOrTeam } = useSubscription();
   const [userName, setUserName] = useState(user?.name || '');
   const [isLoggingOut, setIsLoggingOut] = useState(false);
   const [modalVisible, setModalVisible] = useState(false); // Under development modal
   const [logoutModalVisible, setLogoutModalVisible] = useState(false); // Logout confirmation modal
   const [loadingModalVisible, setLoadingModalVisible] = useState(false);
+  const [premiumModalVisible, setPremiumModalVisible] = useState(false); // Premium upgrade modal
 
   // const {logoUrl} = useLogoStorage();
 
@@ -50,7 +54,7 @@ const CustomDrawerContent = (props: any) => {
     navigationRef.current?.resetRoot({
       index: 0,
       routes: [{ name: 'Auth' }],
-    })
+    });
     setIsLoggingOut(false);
     setLoadingModalVisible(false);
     console.log('Logged Out Successfully');
@@ -59,6 +63,15 @@ const CustomDrawerContent = (props: any) => {
   const navigateToProfile = () => {
     props.navigation.navigate('Profile Screen');
     props.navigation.closeDrawer();
+  };
+
+  const handlePremiumUpgrade = () => {
+    props.navigation.closeDrawer();
+    setPremiumModalVisible(true);
+  };
+
+  const handlePremiumSuccess = () => {
+    setPremiumModalVisible(false);
   };
 
   return (
@@ -87,6 +100,18 @@ const CustomDrawerContent = (props: any) => {
 
       {/* Custom About and FAQ Items */}
       <View style={styles.customItemsContainer}>
+        {/* Buy Premium Button - Only show for trial users */}
+        {isPartnerOrTeam && isInTrial && (
+          <TouchableOpacity
+            style={styles.premiumDrawerItem}
+            onPress={handlePremiumUpgrade}>
+            <View style={styles.iconContainer}>
+              <GetIcon iconName="premium" color="white" size="25" />
+            </View>
+            <Text style={styles.premiumItemText}>Buy Premium</Text>
+          </TouchableOpacity>
+        )}
+
         <TouchableOpacity
           style={styles.customDrawerItem}
           onPress={() => setModalVisible(true)}>
@@ -181,6 +206,19 @@ const CustomDrawerContent = (props: any) => {
           <Text style={styles.loadingText}>Logging out...</Text>
         </View>
       </Modal>
+
+      {/* Premium Upgrade Modal */}
+      <Modal
+        animationType="slide"
+        transparent={false}
+        visible={premiumModalVisible}
+        onRequestClose={() => setPremiumModalVisible(false)}>
+        <PaymentScreen
+          onPaymentSuccess={handlePremiumSuccess}
+          isUpgrade={true}
+          onClose={() => setPremiumModalVisible(false)}
+        />
+      </Modal>
     </DrawerContentScrollView>
   );
 };
@@ -205,6 +243,24 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     marginVertical: 2,
   },
+  premiumDrawerItem: {
+    backgroundColor: '#53a20e',
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingVertical: 12,
+    paddingHorizontal: 16,
+    marginVertical: 2,
+    borderRadius: 32,
+    marginHorizontal: 8,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
+  },
   iconContainer: {
     width: 24,
     height: 24,
@@ -217,6 +273,11 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: '500',
     color: 'black',
+  },
+  premiumItemText: {
+    fontSize: 14,
+    fontWeight: 'bold',
+    color: 'white',
   },
   profileContainer: {
     alignItems: 'center',
