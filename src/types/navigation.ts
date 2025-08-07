@@ -45,6 +45,7 @@ export type PartnerDrawerParamList = {
   'Content': undefined;
   'Profile Screen': undefined;
   'Filter Partners': undefined;
+  'Plans': undefined;
 };
 
 export type AdminDrawerParamList = {

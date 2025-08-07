@@ -229,7 +229,6 @@ const ClientScreen: React.FC<Props> = ({ navigation }) => {
         Platform.OS === 'android' && (
           <Header<PartnerDrawerParamList>
             title="Clients"
-            gradientColors={headerGradientColors}
             showFilterButton={user?.role === Roles.ADMIN || user?.role === Roles.PARTNER}
             onFilterPress={handleFilterPress}>
             <TouchableOpacity

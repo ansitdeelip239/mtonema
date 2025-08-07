@@ -21,6 +21,7 @@ import Images from '../constants/Images';
 import { useTheme } from '../context/ThemeProvider';
 import { navigationRef } from '../navigator/NavigationRef';
 import PaymentScreen from '../screens/partner/PaymentScreen/PaymentScreen';
+import Roles from '../constants/Roles';
 
 const CustomDrawerContent = (props: any) => {
   const { user, logout } = useAuth();
@@ -74,6 +75,11 @@ const CustomDrawerContent = (props: any) => {
     setPremiumModalVisible(false);
   };
 
+  const navigateToPlans = () => {
+    props.navigation.navigate('Plans');
+    props.navigation.closeDrawer();
+  }
+
   return (
     <DrawerContentScrollView {...props} contentContainerStyle={styles.flexOne}>
       <TouchableOpacity onPress={navigateToProfile}>
@@ -109,6 +115,17 @@ const CustomDrawerContent = (props: any) => {
               <GetIcon iconName="premium" color="white" size="25" />
             </View>
             <Text style={styles.premiumItemText}>Buy Premium</Text>
+          </TouchableOpacity>
+        )}
+
+        {user?.role === Roles.ADMIN && (
+          <TouchableOpacity
+            style={styles.customDrawerItem}
+            onPress={navigateToPlans}>
+            <View style={styles.iconContainer}>
+              <GetIcon iconName="calendar" color="#444" size="25" />
+            </View>
+            <Text style={styles.itemText}>Plans</Text>
           </TouchableOpacity>
         )}
 
@@ -240,7 +257,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     paddingVertical: 12,
-    paddingHorizontal: 16,
+    paddingHorizontal: 10,
     marginVertical: 2,
   },
   premiumDrawerItem: {
@@ -266,7 +283,7 @@ const styles = StyleSheet.create({
     height: 24,
     justifyContent: 'center',
     alignItems: 'center',
-    marginRight: 32,
+    marginRight: 16,
     marginLeft: 4,
   },
   itemText: {

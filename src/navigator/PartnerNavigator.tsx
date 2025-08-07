@@ -11,6 +11,8 @@ import {useTheme} from '../context/ThemeProvider';
 import ContentTemplateScreenStack from './components/ContentTemplateStack';
 import {Platform} from 'react-native';
 import FilterPartnerStack from './components/FilterPartnerStack';
+import PlansScreen from '../screens/partner/Plans/PlansScreen';
+import PlansStack from './components/PlansStack';
 
 const Drawer = createDrawerNavigator<PartnerDrawerParamList>();
 
@@ -88,6 +90,16 @@ const PartnerNavigator = () => {
         <Drawer.Screen
           name="Filter Partners"
           component={FilterPartnerStack}
+          options={{
+            headerShown: false,
+            drawerItemStyle: {display: 'none'},
+          }}
+        />
+
+        {/* Plans Screen */}
+        <Drawer.Screen
+          name="Plans"
+          component={PlansStack}
           options={{
             headerShown: false,
             drawerItemStyle: {display: 'none'},

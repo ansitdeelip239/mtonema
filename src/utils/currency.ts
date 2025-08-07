@@ -35,4 +35,9 @@ const formatCurrency = (value: string | number | null | undefined) => {
   }
 };
 
-export {formatCurrency};
+
+const convertPaiseToRupees = (price: number) => {
+  return `₹${(price / 100).toFixed(2)}`;
+};
+
+export {formatCurrency, convertPaiseToRupees};

@@ -1,0 +1,72 @@
+
+import React from 'react';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { Platform, TouchableOpacity } from 'react-native';
+import { useTheme } from '../../context/ThemeProvider';
+import AddPartnerPropertyScreen from '../../screens/partner/AddPartnerPropertyScreen/AddPartnerPropertyScreen';
+import { useNavigation } from '@react-navigation/native';
+import { DrawerNavigationProp } from '@react-navigation/drawer';
+import { PartnerDrawerParamList } from '../../types/navigation';
+import GetIcon from '../../components/GetIcon';
+import PlansScreen from '../../screens/partner/Plans/PlansScreen';
+import AddPlanScreen from '../../screens/partner/Plans/AddPlanScreen';
+import { Plan } from '../../types/payment';
+
+export type PlansStackParamList = {
+  'Plans Screen': undefined;
+  'Add Plan Screen': {editMode?: boolean; planData?: Plan};
+};
+
+const Stack = createNativeStackNavigator<PlansStackParamList>();
+
+const PlansStack = () => {
+  const { theme } = useTheme();
+  const isIOS = Platform.OS === 'ios';
+
+  const drawerNavigation =
+    useNavigation<DrawerNavigationProp<PartnerDrawerParamList>>();
+
+  return (
+    <Stack.Navigator
+      screenOptions={{
+        headerShown: isIOS,
+        headerStyle: { backgroundColor: theme.primaryColor },
+        headerTintColor: '#fff',
+        headerTitleAlign: 'center',
+        headerBackVisible: true,
+        headerBackTitle: 'Back',
+        headerLeft: () => (
+          <TouchableOpacity
+            onPress={() => drawerNavigation.toggleDrawer()}
+            style={{ marginLeft: 16, padding: 4 }}
+            hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+          >
+            <GetIcon iconName="hamburgerMenu" color="#fff" size={18} />
+          </TouchableOpacity>
+        ),
+      }}
+      initialRouteName="Plans Screen"
+    >
+      <Stack.Screen
+        name="Plans Screen"
+        component={PlansScreen}
+        options={{
+          title: 'Plans',
+          headerBackVisible: false, // hide back button on root screen
+        }}
+      />
+
+      <Stack.Screen
+        name="Add Plan Screen"
+        component={AddPlanScreen}
+        options={{
+          title: 'Plans',
+          headerBackVisible: false, // hide back button on root screen
+        }}
+      />
+    </Stack.Navigator>
+  );
+};
+
+export default PlansStack;
+

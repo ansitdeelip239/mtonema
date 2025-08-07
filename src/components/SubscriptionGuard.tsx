@@ -17,13 +17,27 @@ const SubscriptionGuard: React.FC<SubscriptionGuardProps> = ({children}) => {
   } = useSubscription();
 
   const [progressAnim] = useState(new Animated.Value(0));
+  const [isInitialLoad, setIsInitialLoad] = useState(true);
 
   const handlePaymentSuccess = () => {
     refreshSubscription();
   };
 
+  // Handle initial load state to prevent flash
   useEffect(() => {
-    if (isLoadingSubscription) {
+    if (isPartnerOrTeam) {
+      // For partner/team users, wait for the first subscription check to complete
+      if (!isLoadingSubscription && isInitialLoad) {
+        setIsInitialLoad(false);
+      }
+    } else {
+      // For non-partner users, immediately set initial load to false
+      setIsInitialLoad(false);
+    }
+  }, [isLoadingSubscription, isPartnerOrTeam, isInitialLoad]);
+
+  useEffect(() => {
+    if (isInitialLoad || isLoadingSubscription) {
       // Reset progress and start single-run animation
       progressAnim.setValue(0);
 
@@ -33,7 +47,7 @@ const SubscriptionGuard: React.FC<SubscriptionGuardProps> = ({children}) => {
         duration: 3000,
         useNativeDriver: false,
       }).start();
-    } else if (!isLoadingSubscription) {
+    } else if (!isInitialLoad && !isLoadingSubscription) {
       // Complete the progress bar when loading finishes
       Animated.timing(progressAnim, {
         toValue: 1,
@@ -41,13 +55,14 @@ const SubscriptionGuard: React.FC<SubscriptionGuardProps> = ({children}) => {
         useNativeDriver: false,
       }).start();
     }
-  }, [isLoadingSubscription, progressAnim]);
+  }, [isInitialLoad, isLoadingSubscription, progressAnim]);
 
   if (!isPartnerOrTeam) {
     return <>{children}</>;
   }
 
-  if (isLoadingSubscription) {
+  // Show loading screen during initial load or when actively loading subscription
+  if (isInitialLoad || isLoadingSubscription) {
     const progressWidth = progressAnim.interpolate({
       inputRange: [0, 1],
       outputRange: ['0%', '100%'],

@@ -675,20 +675,68 @@ class PartnerService {
 
   static async getPaymentPlans() {
     try {
-      const response = await api.get<{
-        id: number;
-        planName: string;
-        description: string;
-        price: number;
-        billingCycle: string;
-        durationDays: number;
-        maxUsers: number;
-        isTrial: boolean;
-        razorpayItemId: string;
-      }[]>(url.Plans);
+      const response = await api.get<
+        {
+          id: number;
+          planName: string;
+          description: string;
+          price: number;
+          billingCycle: string;
+          durationDays: number;
+          maxUsers: number;
+          isTrial: boolean;
+          razorpayItemId: string;
+        }[]
+      >(url.Plans);
       return response;
     } catch (error) {
       console.error('Error in getPaymentPlans', error);
+      throw error;
+    }
+  }
+
+  static async addPaymentPlan(payload: {
+    planName: string;
+    description: string;
+    price: number;
+    billingCycle: string;
+    durationDays: number;
+    maxUsers: number;
+    isTrial: boolean;
+  }) {
+    try {
+      const response = await api.post<null>(url.Plans, payload);
+      return response;
+    } catch (error) {
+      console.error('Error in addPaymentPlan', error);
+      throw error;
+    }
+  }
+
+  static async updatePaymentPlan(payload: {
+    planName: string;
+    description: string;
+    price: number;
+    billingCycle: string;
+    durationDays: number;
+    maxUsers: number;
+    isTrial: boolean;
+  }, planId: number) {
+    try {
+      const response = await api.put<null>(url.Plans + `/${planId}`, payload);
+      return response;
+    } catch (error) {
+      console.error('Error in updatePaymentPlan', error);
+      throw error;
+    }
+  }
+
+  static async deletePaymentPlan(planId: number) {
+    try {
+      const response = await api.delete<null>(url.Plans + `/${planId}`);
+      return response;
+    } catch (error) {
+      console.error('Error in deletePaymentPlan', error);
       throw error;
     }
   }
