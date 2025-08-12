@@ -68,6 +68,8 @@ export type IconEnum =
   | 'evening'
   | 'night'
   | 'premium'
+  | 'rupee'
+  | 'transaction'
   | 'userPlus';
 
 type IconProps = {
@@ -145,6 +147,8 @@ const GetIcon = ({iconName, color, size}: IconProps) => {
     night: require('../assets/Icon/night.png'),
     filterFunnel: require('../assets/Icon/funnel.png'),
     premium: require('../assets/Icon/premium.png'),
+    rupee: require('../assets/Icon/rupee.png'),
+    transaction: require('../assets/Icon/transaction.png'),
   };
 
   const imageStyle = [

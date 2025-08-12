@@ -11,8 +11,7 @@ import {useTheme} from '../context/ThemeProvider';
 import ContentTemplateScreenStack from './components/ContentTemplateStack';
 import {Platform} from 'react-native';
 import FilterPartnerStack from './components/FilterPartnerStack';
-import PlansScreen from '../screens/partner/Plans/PlansScreen';
-import PlansStack from './components/PlansStack';
+import PaymentBottomTabs from './components/PaymentBottomTabs';
 
 const Drawer = createDrawerNavigator<PartnerDrawerParamList>();
 
@@ -33,79 +32,79 @@ const PartnerNavigator = () => {
   };
 
   return (
-      <Drawer.Navigator
-        // eslint-disable-next-line react/no-unstable-nested-components
-        drawerContent={props => <CustomDrawerContent {...props} />}
-        screenOptions={{
-          ...drawerStyles,
-          swipeEnabled: !isIOS,
+    <Drawer.Navigator
+      // eslint-disable-next-line react/no-unstable-nested-components
+      drawerContent={props => <CustomDrawerContent {...props} />}
+      screenOptions={{
+        ...drawerStyles,
+        swipeEnabled: !isIOS,
+      }}
+      initialRouteName="Home">
+      <Drawer.Screen
+        name="Home"
+        component={PartnerBottomTabs}
+        options={{
+          headerShown: false,
+          // headerTitle: isIOS ? '' : 'Home', // Hide title text on iOS
+          // headerTitleStyle: isIOS ? {opacity: 0} : undefined, // Extra fallback
+          // eslint-disable-next-line react/no-unstable-nested-components
+          drawerIcon: ({color}) => (
+            <GetIcon iconName="home" color={color} size="25" />
+          ),
         }}
-        initialRouteName="Home">
-        <Drawer.Screen
-          name="Home"
-          component={PartnerBottomTabs}
-          options={{
-            headerShown: false,
-            // headerTitle: isIOS ? '' : 'Home', // Hide title text on iOS
-            // headerTitleStyle: isIOS ? {opacity: 0} : undefined, // Extra fallback
-            // eslint-disable-next-line react/no-unstable-nested-components
-            drawerIcon: ({color}) => (
-              <GetIcon iconName="home" color={color} size="25" />
-            ),
-          }}
-        />
-        <Drawer.Screen
-          name="Groups"
-          component={GroupsScreen}
-          options={{
-            headerShown: isIOS,
-            // headerTitle: isIOS ? '' : 'Groups', // Hide title text on iOS
-            // headerTitleStyle: isIOS ? {opacity: 0} : undefined, // Extra fallback
-            // eslint-disable-next-line react/no-unstable-nested-components
-            drawerIcon: ({color}) => (
-              <GetIcon iconName="group" color={color} size="25" />
-            ),
-          }}
-        />
-        <Drawer.Screen
-          name="Content"
-          component={ContentTemplateScreenStack}
-          options={{
-            headerShown: false,
-            // eslint-disable-next-line react/no-unstable-nested-components
-            drawerIcon: ({color}) => (
-              <GetIcon iconName="notes" color={color} size="25" />
-            ),
-          }}
-        />
-        <Drawer.Screen
-          name="Profile Screen"
-          component={PartnerProfileScreen}
-          options={{
-            headerShown: isIOS,
-            drawerItemStyle: {display: 'none'},
-          }}
-        />
-        {/* Hidden Filter Screen */}
-        <Drawer.Screen
-          name="Filter Partners"
-          component={FilterPartnerStack}
-          options={{
-            headerShown: false,
-            drawerItemStyle: {display: 'none'},
-          }}
-        />
+      />
+      <Drawer.Screen
+        name="Groups"
+        component={GroupsScreen}
+        options={{
+          headerShown: isIOS,
+          // headerTitle: isIOS ? '' : 'Groups', // Hide title text on iOS
+          // headerTitleStyle: isIOS ? {opacity: 0} : undefined, // Extra fallback
+          // eslint-disable-next-line react/no-unstable-nested-components
+          drawerIcon: ({color}) => (
+            <GetIcon iconName="group" color={color} size="25" />
+          ),
+        }}
+      />
+      <Drawer.Screen
+        name="Content"
+        component={ContentTemplateScreenStack}
+        options={{
+          headerShown: false,
+          // eslint-disable-next-line react/no-unstable-nested-components
+          drawerIcon: ({color}) => (
+            <GetIcon iconName="notes" color={color} size="25" />
+          ),
+        }}
+      />
+      <Drawer.Screen
+        name="Profile Screen"
+        component={PartnerProfileScreen}
+        options={{
+          headerShown: isIOS,
+          drawerItemStyle: {display: 'none'},
+        }}
+      />
+      {/* Hidden Filter Screen */}
+      <Drawer.Screen
+        name="Filter Partners"
+        component={FilterPartnerStack}
+        options={{
+          headerShown: false,
+          drawerItemStyle: {display: 'none'},
+        }}
+      />
 
-        {/* Plans Screen */}
-        <Drawer.Screen
-          name="Plans"
-          component={PlansStack}
-          options={{
-            headerShown: false,
-            drawerItemStyle: {display: 'none'},
-          }}
-        />
-      </Drawer.Navigator>
+      {/* Payments Screen */}
+      <Drawer.Screen
+        name="Payments"
+        component={PaymentBottomTabs}
+        options={{
+          headerShown: false,
+          drawerItemStyle: {display: 'none'},
+        }}
+      />
+    </Drawer.Navigator>
   );
 };
 

@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
-import { useAuth } from '../hooks/useAuth';
-import { useSubscription } from '../context/SubscriptionProvider';
+import React, {useState, useEffect} from 'react';
+import {useAuth} from '../hooks/useAuth';
+import {useSubscription} from '../context/SubscriptionProvider';
 // import {useLogoStorage} from '../hooks/useLogoStorage';
 import {
   DrawerContentScrollView,
@@ -18,15 +18,15 @@ import {
 import Colors from '../constants/Colors';
 import GetIcon from './GetIcon';
 import Images from '../constants/Images';
-import { useTheme } from '../context/ThemeProvider';
-import { navigationRef } from '../navigator/NavigationRef';
+import {useTheme} from '../context/ThemeProvider';
+import {navigationRef} from '../navigator/NavigationRef';
 import PaymentScreen from '../screens/partner/PaymentScreen/PaymentScreen';
 import Roles from '../constants/Roles';
 
 const CustomDrawerContent = (props: any) => {
-  const { user, logout } = useAuth();
-  const { theme } = useTheme();
-  const { isInTrial, isPartnerOrTeam } = useSubscription();
+  const {user, logout} = useAuth();
+  const {theme} = useTheme();
+  const {isInTrial, isPartnerOrTeam} = useSubscription();
   const [userName, setUserName] = useState(user?.name || '');
   const [isLoggingOut, setIsLoggingOut] = useState(false);
   const [modalVisible, setModalVisible] = useState(false); // Under development modal
@@ -54,7 +54,7 @@ const CustomDrawerContent = (props: any) => {
     await logout();
     navigationRef.current?.resetRoot({
       index: 0,
-      routes: [{ name: 'Auth' }],
+      routes: [{name: 'Auth'}],
     });
     setIsLoggingOut(false);
     setLoadingModalVisible(false);
@@ -75,10 +75,10 @@ const CustomDrawerContent = (props: any) => {
     setPremiumModalVisible(false);
   };
 
-  const navigateToPlans = () => {
-    props.navigation.navigate('Plans');
+  const navigateToPayments = () => {
+    props.navigation.navigate('Payments');
     props.navigation.closeDrawer();
-  }
+  };
 
   return (
     <DrawerContentScrollView {...props} contentContainerStyle={styles.flexOne}>
@@ -121,11 +121,11 @@ const CustomDrawerContent = (props: any) => {
         {user?.role === Roles.ADMIN && (
           <TouchableOpacity
             style={styles.customDrawerItem}
-            onPress={navigateToPlans}>
+            onPress={navigateToPayments}>
             <View style={styles.iconContainer}>
-              <GetIcon iconName="calendar" color="#444" size="25" />
+              <GetIcon iconName="rupee" color="#444" size="25" />
             </View>
-            <Text style={styles.itemText}>Plans</Text>
+            <Text style={styles.itemText}>Payments</Text>
           </TouchableOpacity>
         )}
 
@@ -159,7 +159,10 @@ const CustomDrawerContent = (props: any) => {
               This feature is under development.
             </Text>
             <TouchableOpacity
-              style={[styles.modalSingleButton, { backgroundColor: theme.primaryColor }]}
+              style={[
+                styles.modalSingleButton,
+                {backgroundColor: theme.primaryColor},
+              ]}
               onPress={() => setModalVisible(false)}>
               <Text style={styles.textWhite}>OK</Text>
             </TouchableOpacity>
@@ -172,7 +175,7 @@ const CustomDrawerContent = (props: any) => {
       <View style={styles.p15}>
         <TouchableOpacity
           onPress={handleCustomButtonPress}
-          style={[styles.logout, { backgroundColor: theme.primaryColor }]}
+          style={[styles.logout, {backgroundColor: theme.primaryColor}]}
           disabled={isLoggingOut}>
           <View style={styles.drawerItem}>
             <GetIcon iconName="logout" color={Colors.white} size="25" />
@@ -201,7 +204,7 @@ const CustomDrawerContent = (props: any) => {
               <TouchableOpacity
                 style={[
                   styles.redButton,
-                  { backgroundColor: theme.primaryColor },
+                  {backgroundColor: theme.primaryColor},
                 ]}
                 onPress={confirmLogout}
                 disabled={isLoggingOut}>

@@ -7,18 +7,15 @@ import { useNavigation } from '@react-navigation/native';
 import { DrawerNavigationProp } from '@react-navigation/drawer';
 import { PartnerDrawerParamList } from '../../types/navigation';
 import GetIcon from '../../components/GetIcon';
-import PlansScreen from '../../screens/partner/Plans/PlansScreen';
-import AddPlanScreen from '../../screens/partner/Plans/AddPlanScreen';
-import { Plan } from '../../types/payment';
+import TransactionsScreen from '../../screens/partner/TransactionsScreen/TransactionsScreen';
 
-export type PlansStackParamList = {
-  'Plans Screen': undefined;
-  'Add Plan Screen': {editMode?: boolean; planData?: Plan};
+export type TransactionsStackParamList = {
+  'Transactions Screen': undefined;
 };
 
-const Stack = createNativeStackNavigator<PlansStackParamList>();
+const Stack = createNativeStackNavigator<TransactionsStackParamList>();
 
-const PlansStack = () => {
+const TransactionsStack = () => {
   const { theme } = useTheme();
   const isIOS = Platform.OS === 'ios';
 
@@ -48,20 +45,11 @@ const PlansStack = () => {
           );
         },
       }}
-      initialRouteName="Plans Screen"
+      initialRouteName="Transactions Screen"
     >
       <Stack.Screen
-        name="Plans Screen"
-        component={PlansScreen}
-        options={{
-          title: 'Plans',
-          headerBackVisible: false, // hide back button on root screen
-        }}
-      />
-
-      <Stack.Screen
-        name="Add Plan Screen"
-        component={AddPlanScreen}
+        name="Transactions Screen"
+        component={TransactionsScreen}
         options={{
           title: 'Plans',
           headerBackVisible: false, // hide back button on root screen
@@ -71,5 +59,5 @@ const PlansStack = () => {
   );
 };
 
-export default PlansStack;
+export default TransactionsStack;
 

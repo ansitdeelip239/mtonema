@@ -16,6 +16,8 @@ import {
   FollowUpType,
   Group2Response,
   GroupResponse,
+  TransactionFilters,
+  TransactionResponse,
   User,
 } from '../types';
 import {api} from '../utils/api';
@@ -713,15 +715,18 @@ class PartnerService {
     }
   }
 
-  static async updatePaymentPlan(payload: {
-    planName: string;
-    description: string;
-    price: number;
-    billingCycle: string;
-    durationDays: number;
-    maxUsers: number;
-    isTrial: boolean;
-  }, planId: number) {
+  static async updatePaymentPlan(
+    payload: {
+      planName: string;
+      description: string;
+      price: number;
+      billingCycle: string;
+      durationDays: number;
+      maxUsers: number;
+      isTrial: boolean;
+    },
+    planId: number,
+  ) {
     try {
       const response = await api.put<null>(url.Plans + `/${planId}`, payload);
       return response;
@@ -778,6 +783,44 @@ class PartnerService {
       return response;
     } catch (error) {
       console.error('Error in getSubscriptionStatus', error);
+      throw error;
+    }
+  }
+
+  static async getPaymentTransactions(filters: TransactionFilters = {}) {
+    try {
+      const params = new URLSearchParams();
+
+      // Set default values
+      params.append('pageNumber', (filters.pageNumber || 1).toString());
+      params.append('pageSize', (filters.pageSize || 10).toString());
+      params.append('sortBy', filters.sortBy || 'transactionDate');
+      params.append('sortOrder', filters.sortOrder || 'desc');
+
+      // Add optional filters
+      if (filters.status && filters.status !== 'all') {
+        params.append('status', filters.status);
+      }
+      if (filters.method && filters.method !== 'all') {
+        params.append('method', filters.method);
+      }
+      if (filters.searchQuery) {
+        params.append('searchQuery', filters.searchQuery);
+      }
+      if (filters.dateFrom) {
+        params.append('dateFrom', filters.dateFrom);
+      }
+      if (filters.dateTo) {
+        params.append('dateTo', filters.dateTo);
+      }
+
+      const response = await api.get<TransactionResponse>(
+        `${url.transactions}?${params.toString()}`,
+      );
+
+      return response;
+    } catch (error) {
+      console.error('Error fetching transactions:', error);
       throw error;
     }
   }

@@ -228,7 +228,7 @@ export interface Group2 {
     id: number;
     name: string;
     email: string;
-  }
+  };
 }
 
 export interface Group2Response {
@@ -289,7 +289,7 @@ export interface FollowUpType {
     id: number;
     name: string;
     email: string;
-  }[]
+  }[];
 }
 
 export interface ClientResponseModel {
@@ -350,4 +350,69 @@ export interface ContentTemplatesData {
   contentTemplates: ContentTemplate[];
   totalCount: number;
   responsePagingModel: PagingModel;
+}
+
+export interface TransactionFilters {
+  pageNumber?: number;
+  pageSize?: number;
+  status?: string;
+  method?: string;
+  searchQuery?: string;
+  dateFrom?: string;
+  dateTo?: string;
+  sortBy?: string;
+  sortOrder?: 'asc' | 'desc';
+}
+
+export interface Transaction {
+  id: number;
+  userId: number;
+  userName: string;
+  userEmail: string;
+  paidAccountId: number;
+  razorpayOrderId: string;
+  razorpayPaymentId?: string;
+  planId: number;
+  planName: string;
+  status: string;
+  amount: number;
+  method: string;
+  transactionType: string;
+  transactionDate: string;
+  paymentDate?: string;
+  eventType: string;
+  errorCode?: string;
+  errorDescription?: string;
+  reason?: string;
+  razorpayInvoiceId: string;
+  createdOn: string;
+}
+
+export interface TransactionResponse {
+  transactions: Transaction[];
+  pagination: {
+    totalItems: number;
+    itemsPerPage: number;
+    currentPage: number;
+    totalPages: number;
+    hasNextPage: boolean;
+    hasPrevPage: boolean;
+  };
+  summary: {
+    totalTransactions: number;
+    successfulTransactions: number;
+    failedTransactions: number;
+    pendingTransactions: number;
+    totalAmount: number;
+    successfulAmount: number;
+    dateRange: {
+      fromDate: string;
+      toDate: string;
+    };
+  };
+  filters: {
+    availableStatuses: string[];
+    availableMethods: string[];
+    availablePlans: Array<{id: number; name: string}>;
+  };
 }

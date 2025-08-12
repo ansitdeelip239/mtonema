@@ -98,6 +98,7 @@ const url = {
   //Payment
   createPaymentOrder: BASE_URL + '/payment/orders/create',
   paymentOrderStatus: BASE_URL + '/payment/orders/status',
+  transactions: BASE_URL + '/payment/admin/transactions',
   Plans: BASE_URL + '/payment/plans',
 };
 

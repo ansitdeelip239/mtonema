@@ -31,6 +31,11 @@ export type PartnerBottomTabParamList = {
   AgentData: undefined;
 };
 
+export type PaymentBottomTabParamList = {
+  Plans: undefined;
+  Transactions: undefined;
+};
+
 export type SellerBottomTabParamList = {
   Home: undefined;
   Property: undefined;
@@ -45,7 +50,7 @@ export type PartnerDrawerParamList = {
   'Content': undefined;
   'Profile Screen': undefined;
   'Filter Partners': undefined;
-  'Plans': undefined;
+  'Payments': undefined;
 };
 
 export type AdminDrawerParamList = {

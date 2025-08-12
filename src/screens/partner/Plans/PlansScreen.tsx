@@ -1,39 +1,47 @@
-import React, { useEffect, useState } from 'react';
-import { useFocusEffect } from '@react-navigation/native';
-import { View, Text, StyleSheet, Alert, FlatList, ActivityIndicator, TouchableOpacity, Animated } from 'react-native';
+import React, {useCallback, useRef, useState, useMemo} from 'react';
+import {useFocusEffect} from '@react-navigation/native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  Alert,
+  FlatList,
+  ActivityIndicator,
+  TouchableOpacity,
+  Animated,
+} from 'react-native';
 import ConfirmationModal from '../../../components/ConfirmationModal';
 import PartnerService from '../../../services/PartnerService';
-import { Plan } from '../../../types/payment';
-import { convertPaiseToRupees } from '../../../utils/currency';
+import {Plan} from '../../../types/payment';
 import Header from '../../../components/Header';
 import Colors from '../../../constants/Colors';
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { PlansStackParamList } from '../../../navigator/components/PlansStack';
+import {NativeStackScreenProps} from '@react-navigation/native-stack';
+import {PlansStackParamList} from '../../../navigator/components/PlansStack';
 import GetIcon from '../../../components/GetIcon';
+import PlanItem from './components/PlanItem';
 
 type Props = NativeStackScreenProps<PlansStackParamList, 'Plans Screen'>;
 
 const PlansScreen: React.FC<Props> = ({navigation}) => {
   const [plans, setPlans] = useState<Plan[]>([]);
   const [isLoadingPlans, setIsLoadingPlans] = useState(true);
-  const [deleteModalVisible, setDeleteModalVisible] = useState(false);
-  const [selectedPlan, setSelectedPlan] = useState<Plan | null>(null);
-  const [deleteLoading, setDeleteLoading] = useState(false);
-  const fadeAnim = React.useRef(new Animated.Value(0)).current;
+  const [deleteModal, setDeleteModal] = useState<{
+    visible: boolean;
+    plan: Plan | null;
+    loading: boolean;
+  }>({
+    visible: false,
+    plan: null,
+    loading: false,
+  });
 
-  useEffect(() => {
-    fetchPlans();
-  }, []);
+  const fadeAnim = useRef(new Animated.Value(0)).current;
 
-  useFocusEffect(
-    React.useCallback(() => {
-      fetchPlans();
-    }, [])
-  );
-
-  const fetchPlans = async () => {
+  const fetchPlans = useCallback(async () => {
     try {
       setIsLoadingPlans(true);
+      fadeAnim.setValue(0); // Reset animation
+
       const response = await PartnerService.getPaymentPlans();
 
       if (response.success) {
@@ -41,7 +49,7 @@ const PlansScreen: React.FC<Props> = ({navigation}) => {
         // Animate in the list
         Animated.timing(fadeAnim, {
           toValue: 1,
-          duration: 600,
+          duration: 400, // Reduced duration
           useNativeDriver: true,
         }).start();
       } else {
@@ -53,155 +61,161 @@ const PlansScreen: React.FC<Props> = ({navigation}) => {
     } finally {
       setIsLoadingPlans(false);
     }
-  };
+  }, [fadeAnim]);
 
-  // Delete plan handler
-  const handleDeletePlan = async () => {
-    if (!selectedPlan) return;
-    setDeleteLoading(true);
+  // Only use useFocusEffect to avoid duplicate calls
+  useFocusEffect(
+    useCallback(() => {
+      fetchPlans();
+    }, [fetchPlans]),
+  );
+
+  const handleEditPlan = useCallback(
+    (plan: Plan) => {
+      navigation.navigate('Add Plan Screen', {
+        editMode: true,
+        planData: plan,
+      });
+    },
+    [navigation],
+  );
+
+  const handleDeletePlan = useCallback((plan: Plan) => {
+    setDeleteModal({visible: true, plan, loading: false});
+  }, []);
+
+  const confirmDeletePlan = useCallback(async () => {
+    if (!deleteModal.plan) {
+      return;
+    }
+
+    setDeleteModal(prev => ({...prev, loading: true}));
+
     try {
-      const response = await PartnerService.deletePaymentPlan(selectedPlan.id);
-      if (response && response.success) {
-        setDeleteModalVisible(false);
-        setSelectedPlan(null);
-        fetchPlans();
+      const response = await PartnerService.deletePaymentPlan(
+        deleteModal.plan.id,
+      );
+      if (response?.success) {
+        setDeleteModal({visible: false, plan: null, loading: false});
+        fetchPlans(); // Refresh the list
       } else {
         Alert.alert('Error', 'Failed to delete plan.');
       }
     } catch (err) {
       Alert.alert('Error', 'Failed to delete plan.');
     } finally {
-      setDeleteLoading(false);
+      setDeleteModal(prev => ({...prev, loading: false}));
     }
-  };
+  }, [deleteModal.plan, fetchPlans]);
 
-  return (
-    <View style={styles.container}>
-      <Header title="Payment Plans" children={
-        <TouchableOpacity 
-          style={styles.addButton}
-          onPress={() => {
-            navigation.navigate('Add Plan Screen', { editMode: false });
-          }}
-          activeOpacity={0.8}
-        >
-          <Text style={styles.addButtonText}>+</Text>
+  const cancelDelete = useCallback(() => {
+    setDeleteModal({visible: false, plan: null, loading: false});
+  }, []);
+
+  const navigateToAddPlan = useCallback(() => {
+    navigation.navigate('Add Plan Screen', {editMode: false});
+  }, [navigation]);
+
+  // Memoized header component
+  const headerComponent = useMemo(
+    () => (
+      <Header
+        title="Payment Plans"
+        children={
+          <TouchableOpacity
+            style={styles.addButton}
+            onPress={navigateToAddPlan}
+            activeOpacity={0.8}>
+            <Text style={styles.addButtonText}>+</Text>
+          </TouchableOpacity>
+        }
+      />
+    ),
+    [navigateToAddPlan],
+  );
+
+  // Memoized empty component
+  const emptyComponent = useMemo(
+    () => (
+      <View style={styles.emptyContainer}>
+        <GetIcon iconName="plus" size={64} color="#E0E0E0" />
+        <Text style={styles.emptyTitle}>No Plans Yet</Text>
+        <Text style={styles.emptyMessage}>
+          Create your first payment plan to get started
+        </Text>
+        <TouchableOpacity
+          style={styles.emptyButton}
+          onPress={navigateToAddPlan}
+          activeOpacity={0.8}>
+          <Text style={styles.emptyButtonText}>Create Plan</Text>
         </TouchableOpacity>
-      } />
-      {isLoadingPlans ? (
+      </View>
+    ),
+    [navigateToAddPlan],
+  );
+
+  const renderItem = useCallback(
+    ({item, index}: {item: Plan; index: number}) => (
+      <PlanItem
+        item={item}
+        index={index}
+        onEdit={handleEditPlan}
+        onDelete={handleDeletePlan}
+        fadeAnim={fadeAnim}
+      />
+    ),
+    [handleEditPlan, handleDeletePlan, fadeAnim],
+  );
+
+  const keyExtractor = useCallback((item: Plan) => item.id.toString(), []);
+
+  if (isLoadingPlans) {
+    return (
+      <View style={styles.container}>
+        {headerComponent}
         <View style={styles.loadingContainer}>
           <ActivityIndicator size="large" color="#4CAF50" />
           <Text style={styles.loadingText}>Loading plans...</Text>
         </View>
-      ) : (
-        <Animated.View style={[styles.listWrapper, { opacity: fadeAnim }]}>
-          <FlatList
-            data={plans}
-            keyExtractor={(item) => item.id.toString()}
-            renderItem={({ item, index }) => (
-              <Animated.View 
-                style={[
-                  styles.planItem,
-                  {
-                    transform: [{
-                      translateY: fadeAnim.interpolate({
-                        inputRange: [0, 1],
-                        outputRange: [50 * (index + 1), 0]
-                      })
-                    }]
-                  }
-                ]}
-              >
-                <View style={styles.planGradient}>
-                  <View style={styles.cardHeader}>
-                    <View style={styles.planBadge}>
-                      <Text style={styles.planBadgeText}>
-                        {item.isTrial ? 'TRIAL' : 'PREMIUM'}
-                      </Text>
-                    </View>
-                    <View style={styles.actionButtons}>
-                      <TouchableOpacity
-                        style={[styles.iconBtn, styles.editBtn]}
-                        onPress={() => {
-                          navigation.navigate('Add Plan Screen', { editMode: true, planData: item });
-                        }}
-                        activeOpacity={0.7}
-                      >
-                        <GetIcon iconName='edit' size={18} color="#fff" />
-                      </TouchableOpacity>
-                      <TouchableOpacity
-                        style={[styles.iconBtn, styles.deleteBtn]}
-                        onPress={() => {
-                          setSelectedPlan(item);
-                          setDeleteModalVisible(true);
-                        }}
-                        activeOpacity={0.7}
-                      >
-                        <GetIcon iconName='delete' size={18} color="#fff" />
-                      </TouchableOpacity>
-                    </View>
-                  </View>
-                  
-                  <View style={styles.planContent}>
-                    <Text style={styles.planName}>{item.planName}</Text>
-                    {item.description && (
-                      <Text style={styles.planDescription}>{item.description}</Text>
-                    )}
-                    
-                    <View style={styles.planDetails}>
-                      <View style={styles.priceContainer}>
-                        {/* <Text style={styles.currencySymbol}>₹</Text> */}
-                        <Text style={styles.planPrice}>{convertPaiseToRupees(item.price)}</Text>
-                        <Text style={styles.billingCycle}>/{item.billingCycle.toLowerCase()}</Text>
-                      </View>
-                      
-                      <View style={styles.planFeatures}>
-                        <View style={styles.featureItem}>
-                          <GetIcon iconName='user' size={16} color="#666" />
-                          <Text style={styles.featureText}>{item.maxUsers} users</Text>
-                        </View>
-                        <View style={styles.featureItem}>
-                          <GetIcon iconName='time' size={16} color="#666" />
-                          <Text style={styles.featureText}>{item.durationDays} days</Text>
-                        </View>
-                      </View>
-                    </View>
-                  </View>
-                </View>
-              </Animated.View>
-            )}
-            ListEmptyComponent={
-              <View style={styles.emptyContainer}>
-                <GetIcon iconName='plus' size={64} color="#E0E0E0" />
-                <Text style={styles.emptyTitle}>No Plans Yet</Text>
-                <Text style={styles.emptyMessage}>Create your first payment plan to get started</Text>
-                <TouchableOpacity 
-                  style={styles.emptyButton}
-                  onPress={() => navigation.navigate('Add Plan Screen', { editMode: false })}
-                  activeOpacity={0.8}
-                >
-                  <Text style={styles.emptyButtonText}>Create Plan</Text>
-                </TouchableOpacity>
-              </View>
-            }
-            contentContainerStyle={plans.length === 0 ? styles.emptyList : styles.listContainer}
-            refreshing={isLoadingPlans}
-            onRefresh={fetchPlans}
-            showsVerticalScrollIndicator={false}
-          />
-        </Animated.View>
-      )}
+      </View>
+    );
+  }
+
+  return (
+    <View style={styles.container}>
+      {headerComponent}
+
+      <FlatList
+        data={plans}
+        keyExtractor={keyExtractor}
+        renderItem={renderItem}
+        ListEmptyComponent={emptyComponent}
+        contentContainerStyle={
+          plans.length === 0 ? styles.emptyList : styles.listContainer
+        }
+        refreshing={isLoadingPlans}
+        onRefresh={fetchPlans}
+        showsVerticalScrollIndicator={false}
+        removeClippedSubviews={true} // Performance optimization
+        maxToRenderPerBatch={10} // Limit initial render batch
+        windowSize={10} // Optimize memory usage
+        initialNumToRender={5} // Reduce initial render count
+        getItemLayout={(data, index) => ({
+          length: 200, // Approximate item height
+          offset: 200 * index,
+          index,
+        })}
+      />
+
+      <View style={styles.bottomBarContainer} />
 
       <ConfirmationModal
-        visible={deleteModalVisible}
+        visible={deleteModal.visible}
         title="Delete Plan"
-        message={`Are you sure you want to delete the plan "${selectedPlan?.planName}"?`}
-        onConfirm={handleDeletePlan}
-        onCancel={() => {
-          setDeleteModalVisible(false);
-          setSelectedPlan(null);
-        }}
-        isLoading={deleteLoading}
+        message={`Are you sure you want to delete the plan "${deleteModal.plan?.planName}"?`}
+        onConfirm={confirmDeletePlan}
+        onCancel={cancelDelete}
+        isLoading={deleteModal.loading}
       />
     </View>
   );
@@ -263,7 +277,7 @@ const styles = StyleSheet.create({
     borderRadius: 25,
     elevation: 3,
     shadowColor: Colors.MT_PRIMARY_2,
-    shadowOffset: { width: 0, height: 4 },
+    shadowOffset: {width: 0, height: 4},
     shadowOpacity: 0.3,
     shadowRadius: 8,
   },
@@ -271,112 +285,6 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 16,
     fontWeight: '600',
-  },
-  planItem: {
-    marginBottom: 20,
-    borderRadius: 16,
-    overflow: 'hidden',
-    elevation: 8,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 6 },
-    shadowOpacity: 0.15,
-    shadowRadius: 12,
-  },
-  planGradient: {
-    backgroundColor: '#fff',
-    padding: 20,
-  },
-  cardHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'flex-start',
-    marginBottom: 16,
-  },
-  planBadge: {
-    backgroundColor: '#4CAF50',
-    paddingHorizontal: 12,
-    paddingVertical: 6,
-    borderRadius: 12,
-  },
-  planBadgeText: {
-    color: '#fff',
-    fontSize: 12,
-    fontWeight: '700',
-    letterSpacing: 0.5,
-  },
-  actionButtons: {
-    flexDirection: 'row',
-    gap: 8,
-  },
-  iconBtn: {
-    width: 36,
-    height: 36,
-    borderRadius: 18,
-    justifyContent: 'center',
-    alignItems: 'center',
-    elevation: 2,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 3,
-  },
-  editBtn: {
-    backgroundColor: '#2196F3',
-  },
-  deleteBtn: {
-    backgroundColor: '#F44336',
-  },
-  planContent: {
-    gap: 16,
-  },
-  planName: {
-    fontSize: 24,
-    fontWeight: '800',
-    color: '#1a1a1a',
-    letterSpacing: -0.5,
-  },
-  planDescription: {
-    fontSize: 16,
-    color: '#666',
-    lineHeight: 22,
-  },
-  planDetails: {
-    gap: 16,
-  },
-  priceContainer: {
-    flexDirection: 'row',
-    alignItems: 'baseline',
-    gap: 4,
-  },
-  currencySymbol: {
-    fontSize: 20,
-    fontWeight: '600',
-    color: '#4CAF50',
-  },
-  planPrice: {
-    fontSize: 32,
-    fontWeight: '900',
-    color: '#4CAF50',
-    letterSpacing: -1,
-  },
-  billingCycle: {
-    fontSize: 16,
-    color: '#666',
-    fontWeight: '500',
-  },
-  planFeatures: {
-    flexDirection: 'row',
-    gap: 24,
-  },
-  featureItem: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
-  },
-  featureText: {
-    fontSize: 14,
-    color: '#666',
-    fontWeight: '500',
   },
   addButton: {
     width: 44,
@@ -387,7 +295,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     elevation: 6,
     shadowColor: Colors.MT_PRIMARY_2,
-    shadowOffset: { width: 0, height: 4 },
+    shadowOffset: {width: 0, height: 4},
     shadowOpacity: 0.4,
     shadowRadius: 8,
   },
@@ -396,6 +304,9 @@ const styles = StyleSheet.create({
     fontSize: 28,
     fontWeight: '300',
     lineHeight: 28,
+  },
+  bottomBarContainer: {
+    paddingVertical: 32,
   },
 });
 
