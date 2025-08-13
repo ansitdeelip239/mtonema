@@ -110,9 +110,21 @@ const TeamsScreen: React.FC<Props> = ({navigation}) => {
     fetchTeamMembers(INITIAL_PAGE);
   };
 
+  const handleEditMember = useCallback(
+    (member: TeamMember) => {
+      navigation.navigate('Add Teams Screen', {
+        editMode: true,
+        teamData: member,
+      });
+    },
+    [navigation],
+  );
+
   const renderItem = useCallback(
-    ({item}: {item: TeamMember}) => <TeamMemberCard item={item} />,
-    [],
+    ({item}: {item: TeamMember}) => (
+      <TeamMemberCard item={item} onEdit={handleEditMember} />
+    ),
+    [handleEditMember],
   );
 
   const keyExtractor = useCallback(

@@ -532,6 +532,33 @@ class PartnerService {
     }
   }
 
+  static async updateTeamMember({
+    teamId,
+    name,
+    email,
+    phone,
+    location,
+    isActive = true,
+  }: {
+    teamId: number;
+    name: string;
+    email: string;
+    phone: string;
+    location: string;
+    isActive: boolean;
+  }) {
+    try {
+      const response = await api.put<null>(
+        `${url.getAllTeamMembers}/${teamId}`,
+        {name, email, phone, location, isActive},
+      );
+      return response;
+    } catch (error) {
+      console.error('Error in updateTeamMember', error);
+      throw error;
+    }
+  }
+
   static async assignClient(payload: {clientId: number; userId: number[]}) {
     try {
       const response = await api.post<AssignClientResponse>(

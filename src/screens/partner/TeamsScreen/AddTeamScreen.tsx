@@ -6,8 +6,9 @@ import {
   ScrollView,
   KeyboardAvoidingView,
   Platform,
+  TouchableOpacity,
+  ActivityIndicator,
 } from 'react-native';
-import { Button } from 'react-native-paper';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {Text, Card} from 'react-native-paper';
@@ -24,22 +25,32 @@ import {
 } from '../../../schema/TeamMemberSchema';
 import Toast from 'react-native-toast-message';
 import {useTheme} from '../../../context/ThemeProvider';
-import { usePartner } from '../../../context/PartnerProvider';
+import {usePartner} from '../../../context/PartnerProvider';
 
 type Props = NativeStackScreenProps<TeamStackParamList, 'Add Teams Screen'>;
 
-const AddTeamScreen: React.FC<Props> = ({navigation}) => {
+const AddTeamScreen: React.FC<Props> = ({navigation, route}) => {
   const {user} = useAuth();
   const {theme} = useTheme();
   const {setTeamUpdated} = usePartner();
   const [errors, setErrors] = useState<Record<string, string>>({});
 
-  const initialFormState: TeamMemberFormData = {
-    name: '',
-    email: '',
-    phone: '',
-    location: '',
-  };
+  // If editMode, prefill with teamData
+  const editMode = route?.params?.editMode === true;
+  const initialFormState: TeamMemberFormData =
+    editMode && route?.params?.teamData
+      ? {
+          name: route.params.teamData.name || '',
+          email: route.params.teamData.email || '',
+          phone: route.params.teamData.phone || '',
+          location: route.params.teamData.location || '',
+        }
+      : {
+          name: '',
+          email: '',
+          phone: '',
+          location: '',
+        };
 
   const handleSubmit = useCallback(
     async (formData: TeamMemberFormData) => {
@@ -71,21 +82,36 @@ const AddTeamScreen: React.FC<Props> = ({navigation}) => {
           location: formData.location.trim(),
         };
 
-        await PartnerService.addTeamMember(payload);
+        if (editMode) {
+          // Update team member logic (replace with your update API call)
+          await PartnerService.updateTeamMember({
+            ...payload,
+            teamId: parseInt(route.params.teamData?.teamMemberId as string, 10),
+            isActive: true,
+          });
 
-        Toast.show({
-          type: 'success',
-          text1: 'Success',
-          text2: 'Team member added successfully!',
-        });
+          Toast.show({
+            type: 'success',
+            text1: 'Success',
+            text2: 'Team member updated successfully!',
+          });
+        } else {
+          const response = await PartnerService.addTeamMember(payload);
+
+          if (response.success) {
+            Toast.show({
+              type: 'success',
+              text1: 'Success',
+              text2: 'Team member added successfully!',
+            });
+          }
+        }
 
         setTeamUpdated(true);
-
         resetForm();
         navigation.goBack();
       } catch (error: any) {
-        console.error('Error creating team member:', error);
-
+        console.error('Error creating/updating team member:', error);
         if (error.response?.data?.message) {
           Toast.show({
             type: 'error',
@@ -102,12 +128,14 @@ const AddTeamScreen: React.FC<Props> = ({navigation}) => {
           Toast.show({
             type: 'error',
             text1: 'Error',
-            text2: 'Failed to add team member. Please try again.',
+            text2: editMode
+              ? 'Failed to update team member. Please try again.'
+              : 'Failed to add team member. Please try again.',
           });
         }
       }
     },
-    [user?.id, navigation],
+    [user?.id, navigation, editMode, route?.params?.teamData],
   );
 
   const {formInput, handleInputChange, loading, onSubmit, resetForm} = useForm({
@@ -150,14 +178,12 @@ const AddTeamScreen: React.FC<Props> = ({navigation}) => {
   const handleInputChangeWithValidation = useCallback(
     (field: keyof TeamMemberFormData, value: string | boolean) => {
       const stringValue = typeof value === 'boolean' ? value.toString() : value;
-
       // Update form input
       handleInputChange(field, stringValue);
 
       // Perform live validation only if field has content or user has previously interacted
       if (stringValue.trim() || errors[field]) {
         const fieldError = validateField(field, stringValue);
-
         setErrors(prev => ({
           ...prev,
           [field]: fieldError || '',
@@ -181,9 +207,12 @@ const AddTeamScreen: React.FC<Props> = ({navigation}) => {
   return (
     <SafeAreaView style={styles.container}>
       {Platform.OS === 'android' && (
-        <Header title="Add Team Member" backButton onBackPress={() => navigation.goBack()} />
+        <Header
+          title={editMode ? 'Edit Team Member' : 'Add Team Member'}
+          backButton
+          onBackPress={() => navigation.goBack()}
+        />
       )}
-
       <KeyboardAvoidingView
         style={styles.keyboardAvoidingView}
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
@@ -194,9 +223,13 @@ const AddTeamScreen: React.FC<Props> = ({navigation}) => {
           showsVerticalScrollIndicator={false}>
           <Card style={styles.formCard}>
             <Card.Content style={styles.cardContent}>
-              <Text style={styles.title}>Add New Team Member</Text>
+              <Text style={styles.title}>
+                {editMode ? 'Edit Team Member' : 'Add New Team Member'}
+              </Text>
               <Text style={styles.subtitle}>
-                Fill in the details to add a new member to your team
+                {editMode
+                  ? 'Update the details of your team member'
+                  : 'Fill in the details to add a new member to your team'}
               </Text>
 
               <View style={styles.formContainer}>
@@ -204,8 +237,12 @@ const AddTeamScreen: React.FC<Props> = ({navigation}) => {
                   field="name"
                   formInput={formInput}
                   setFormInput={handleInputChangeWithValidation}
-                  label="Full Name *"
-                  placeholder="Enter team member's full name"
+                  label={editMode ? 'Full Name * (Edit)' : 'Full Name *'}
+                  placeholder={
+                    editMode
+                      ? "Edit team member's full name"
+                      : "Enter team member's full name"
+                  }
                   mode="outlined"
                   errorMessage={fieldErrors.name}
                   autoCapitalize="words"
@@ -216,8 +253,12 @@ const AddTeamScreen: React.FC<Props> = ({navigation}) => {
                   field="email"
                   formInput={formInput}
                   setFormInput={handleInputChangeWithValidation}
-                  label="Email Address *"
-                  placeholder="Enter email address"
+                  label={
+                    editMode ? 'Email Address * (Edit)' : 'Email Address *'
+                  }
+                  placeholder={
+                    editMode ? 'Edit email address' : 'Enter email address'
+                  }
                   mode="outlined"
                   errorMessage={fieldErrors.email}
                   keyboardType="email-address"
@@ -230,8 +271,12 @@ const AddTeamScreen: React.FC<Props> = ({navigation}) => {
                   field="phone"
                   formInput={formInput}
                   setFormInput={handleInputChangeWithValidation}
-                  label="Phone Number *"
-                  placeholder="Enter 10-digit phone number"
+                  label={editMode ? 'Phone Number * (Edit)' : 'Phone Number *'}
+                  placeholder={
+                    editMode
+                      ? 'Edit 10-digit phone number'
+                      : 'Enter 10-digit phone number'
+                  }
                   mode="outlined"
                   errorMessage={fieldErrors.phone}
                   keyboardType="phone-pad"
@@ -242,8 +287,12 @@ const AddTeamScreen: React.FC<Props> = ({navigation}) => {
                   field="location"
                   formInput={formInput}
                   setFormInput={handleInputChangeWithValidation}
-                  label="Location *"
-                  placeholder="Enter location (City, State, Country)"
+                  label={editMode ? 'Location * (Edit)' : 'Location *'}
+                  placeholder={
+                    editMode
+                      ? 'Edit location (City, State, Country)'
+                      : 'Enter location (City, State, Country)'
+                  }
                   mode="outlined"
                   errorMessage={fieldErrors.location}
                   autoCapitalize="words"
@@ -254,25 +303,53 @@ const AddTeamScreen: React.FC<Props> = ({navigation}) => {
           </Card>
 
           <View style={styles.buttonContainer}>
-            <Button
-              mode="outlined"
+            <TouchableOpacity
+              style={[styles.cancelButton, loading && styles.disabledButton]}
               onPress={() => navigation.goBack()}
-              style={styles.cancelButton}
-              disabled={loading}>
-              Cancel
-            </Button>
+              disabled={loading}
+              activeOpacity={0.7}>
+              <Text
+                style={[
+                  styles.cancelButtonText,
+                  loading && styles.disabledButtonText,
+                ]}>
+                Cancel
+              </Text>
+            </TouchableOpacity>
 
-            <Button
-              mode="contained"
-              onPress={onSubmit}
+            <TouchableOpacity
               style={[
                 styles.submitButton,
                 {backgroundColor: theme.primaryColor},
+                (!isFormValid() || loading) && styles.disabledSubmitButton,
               ]}
+              onPress={onSubmit}
               disabled={!isFormValid() || loading}
-              loading={loading}>
-              {loading ? 'Adding...' : 'Add Member'}
-            </Button>
+              activeOpacity={0.7}>
+              <View style={styles.submitButtonContent}>
+                {loading && (
+                  <ActivityIndicator
+                    size="small"
+                    color="#fff"
+                    style={styles.loadingIndicator}
+                  />
+                )}
+                <Text
+                  style={[
+                    styles.submitButtonText,
+                    (!isFormValid() || loading) &&
+                      styles.disabledSubmitButtonText,
+                  ]}>
+                  {loading
+                    ? editMode
+                      ? 'Updating...'
+                      : 'Adding...'
+                    : editMode
+                    ? 'Update Member'
+                    : 'Add Member'}
+                </Text>
+              </View>
+            </TouchableOpacity>
           </View>
         </ScrollView>
       </KeyboardAvoidingView>
@@ -330,10 +407,59 @@ const styles = StyleSheet.create({
   },
   cancelButton: {
     flex: 1,
+    paddingVertical: 12,
+    paddingHorizontal: 16,
+    borderRadius: 8,
+    borderWidth: 1.5,
     borderColor: '#64748b',
+    backgroundColor: 'transparent',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  cancelButtonText: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: '#64748b',
   },
   submitButton: {
     flex: 1,
+    paddingVertical: 12,
+    paddingHorizontal: 16,
+    borderRadius: 8,
+    alignItems: 'center',
+    justifyContent: 'center',
+    elevation: 2,
+    shadowColor: '#000',
+    shadowOffset: {width: 0, height: 2},
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+  },
+  submitButtonContent: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  submitButtonText: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: '#fff',
+  },
+  loadingIndicator: {
+    marginRight: 8,
+  },
+  disabledButton: {
+    opacity: 0.6,
+    borderColor: '#cbd5e1',
+  },
+  disabledButtonText: {
+    color: '#cbd5e1',
+  },
+  disabledSubmitButton: {
+    opacity: 0.6,
+    backgroundColor: '#cbd5e1',
+  },
+  disabledSubmitButtonText: {
+    color: '#94a3b8',
   },
 });
 
