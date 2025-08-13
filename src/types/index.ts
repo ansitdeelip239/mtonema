@@ -416,3 +416,13 @@ export interface TransactionResponse {
     availablePlans: Array<{id: number; name: string}>;
   };
 }
+
+export interface TeamMember {
+  teamMemberId: string;
+  name: string;
+  email: string;
+  phone: string;
+  role: string;
+  location: string;
+  isActive: boolean;
+}

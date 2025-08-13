@@ -516,6 +516,22 @@ class PartnerService {
     }
   }
 
+  static async addTeamMember(data: {
+    partnerId: number;
+    name: string;
+    email: string;
+    phone: string;
+    location: string;
+  }) {
+    try {
+      const response = await api.post<null>(url.getAllTeamMembers, data);
+      return response;
+    } catch (error) {
+      console.error('Error in addTeamMember', error);
+      throw error;
+    }
+  }
+
   static async assignClient(payload: {clientId: number; userId: number[]}) {
     try {
       const response = await api.post<AssignClientResponse>(
@@ -630,6 +646,15 @@ class PartnerService {
           recordStatus: string;
           isActive: boolean;
         }[];
+        pagination: {
+          totalCount: number;
+          activeCount: number;
+          pageSize: number;
+          currentPage: number;
+          totalPages: number;
+          hasNext: boolean;
+          hasPrevious: boolean;
+        };
       }>(url.getAllTeamMembers + `?${params.toString()}`);
       return response;
     } catch (error) {

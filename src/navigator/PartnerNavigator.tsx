@@ -12,6 +12,7 @@ import ContentTemplateScreenStack from './components/ContentTemplateStack';
 import {Platform} from 'react-native';
 import FilterPartnerStack from './components/FilterPartnerStack';
 import PaymentBottomTabs from './components/PaymentBottomTabs';
+import TeamStack from './components/TeamStack';
 
 const Drawer = createDrawerNavigator<PartnerDrawerParamList>();
 
@@ -66,6 +67,21 @@ const PartnerNavigator = () => {
           ),
         }}
       />
+
+      <Drawer.Screen
+        name="Teams"
+        component={TeamStack}
+        options={{
+          headerShown: isIOS,
+          // headerTitle: isIOS ? '' : 'Groups', // Hide title text on iOS
+          // headerTitleStyle: isIOS ? {opacity: 0} : undefined, // Extra fallback
+          // eslint-disable-next-line react/no-unstable-nested-components
+          drawerIcon: ({color}) => (
+            <GetIcon iconName="partner" color={color} size="25" />
+          ),
+        }}
+      />
+
       <Drawer.Screen
         name="Content"
         component={ContentTemplateScreenStack}

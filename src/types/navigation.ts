@@ -47,6 +47,7 @@ export type SellerBottomTabParamList = {
 export type PartnerDrawerParamList = {
   'Home': NavigatorScreenParams<PartnerBottomTabParamList>;
   'Groups': undefined;
+  'Teams': undefined;
   'Content': undefined;
   'Profile Screen': undefined;
   'Filter Partners': undefined;
