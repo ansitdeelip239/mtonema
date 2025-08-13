@@ -181,7 +181,7 @@ const AddTeamScreen: React.FC<Props> = ({navigation}) => {
   return (
     <SafeAreaView style={styles.container}>
       {Platform.OS === 'android' && (
-        <Header title="Add Team Member" backButton />
+        <Header title="Add Team Member" backButton onBackPress={() => navigation.goBack()} />
       )}
 
       <KeyboardAvoidingView
