@@ -16,6 +16,8 @@ import {
   FollowUpType,
   Group2Response,
   GroupResponse,
+  TransactionFilters,
+  TransactionResponse,
   User,
 } from '../types';
 import {api} from '../utils/api';
@@ -514,6 +516,49 @@ class PartnerService {
     }
   }
 
+  static async addTeamMember(data: {
+    partnerId: number;
+    name: string;
+    email: string;
+    phone: string;
+    location: string;
+  }) {
+    try {
+      const response = await api.post<null>(url.getAllTeamMembers, data);
+      return response;
+    } catch (error) {
+      console.error('Error in addTeamMember', error);
+      throw error;
+    }
+  }
+
+  static async updateTeamMember({
+    teamId,
+    name,
+    email,
+    phone,
+    location,
+    isActive = true,
+  }: {
+    teamId: number;
+    name: string;
+    email: string;
+    phone: string;
+    location: string;
+    isActive: boolean;
+  }) {
+    try {
+      const response = await api.put<null>(
+        `${url.getAllTeamMembers}/${teamId}`,
+        {name, email, phone, location, isActive},
+      );
+      return response;
+    } catch (error) {
+      console.error('Error in updateTeamMember', error);
+      throw error;
+    }
+  }
+
   static async assignClient(payload: {clientId: number; userId: number[]}) {
     try {
       const response = await api.post<AssignClientResponse>(
@@ -628,6 +673,15 @@ class PartnerService {
           recordStatus: string;
           isActive: boolean;
         }[];
+        pagination: {
+          totalCount: number;
+          activeCount: number;
+          pageSize: number;
+          currentPage: number;
+          totalPages: number;
+          hasNext: boolean;
+          hasPrevious: boolean;
+        };
       }>(url.getAllTeamMembers + `?${params.toString()}`);
       return response;
     } catch (error) {
@@ -644,6 +698,181 @@ class PartnerService {
       return response;
     } catch (error) {
       console.error('Error in getAllPartners', error);
+      throw error;
+    }
+  }
+
+  static async createPaymentOrder(payload: {
+    userId: number;
+    planId: number;
+    customerId: string;
+  }) {
+    try {
+      const response = await api.post<{
+        orderId: number;
+        razorpayOrderId: string;
+        customerId: string;
+        keyId: string;
+        remainingTrialDays: number;
+        amount: number;
+        planId: number;
+        planName: string;
+        billingCycle: string;
+        durationDays: number;
+      }>(url.createPaymentOrder, payload);
+      return response;
+    } catch (error) {
+      console.error('Error in createPaymentOrder', error);
+      throw error;
+    }
+  }
+
+  static async getPaymentPlans() {
+    try {
+      const response = await api.get<
+        {
+          id: number;
+          planName: string;
+          description: string;
+          price: number;
+          billingCycle: string;
+          durationDays: number;
+          maxUsers: number;
+          isTrial: boolean;
+          razorpayItemId: string;
+        }[]
+      >(url.Plans);
+      return response;
+    } catch (error) {
+      console.error('Error in getPaymentPlans', error);
+      throw error;
+    }
+  }
+
+  static async addPaymentPlan(payload: {
+    planName: string;
+    description: string;
+    price: number;
+    billingCycle: string;
+    durationDays: number;
+    maxUsers: number;
+    isTrial: boolean;
+  }) {
+    try {
+      const response = await api.post<null>(url.Plans, payload);
+      return response;
+    } catch (error) {
+      console.error('Error in addPaymentPlan', error);
+      throw error;
+    }
+  }
+
+  static async updatePaymentPlan(
+    payload: {
+      planName: string;
+      description: string;
+      price: number;
+      billingCycle: string;
+      durationDays: number;
+      maxUsers: number;
+      isTrial: boolean;
+    },
+    planId: number,
+  ) {
+    try {
+      const response = await api.put<null>(url.Plans + `/${planId}`, payload);
+      return response;
+    } catch (error) {
+      console.error('Error in updatePaymentPlan', error);
+      throw error;
+    }
+  }
+
+  static async deletePaymentPlan(planId: number) {
+    try {
+      const response = await api.delete<null>(url.Plans + `/${planId}`);
+      return response;
+    } catch (error) {
+      console.error('Error in deletePaymentPlan', error);
+      throw error;
+    }
+  }
+
+  static async getSubscriptionStatus(userId: number) {
+    try {
+      const response = await api.get<{
+        trialStatus: {
+          trialStatus: string;
+          trialStartDate: string;
+          trialEndDate: string;
+          remainingDays: number;
+          convertedToPaid: boolean;
+        };
+        orderStatus: {
+          orderId: number;
+          status: string;
+          paymentStatus: string;
+          startDate: string;
+          endDate: string;
+          remainingDays: number;
+          planId: number;
+          planName: string;
+          razorpayOrderId: string;
+          amount: number;
+          billingCycle: string;
+          needsRenewal: boolean;
+        };
+        hasActiveAccess: boolean;
+        trialDaysLeft: number;
+        orderDaysLeft: number;
+        chosenPlan: {
+          planId: number;
+          planName: string;
+          billingCycle: string;
+          amount: number;
+        };
+      }>(`${url.paymentOrderStatus}/${userId}`);
+      return response;
+    } catch (error) {
+      console.error('Error in getSubscriptionStatus', error);
+      throw error;
+    }
+  }
+
+  static async getPaymentTransactions(filters: TransactionFilters = {}) {
+    try {
+      const params = new URLSearchParams();
+
+      // Set default values
+      params.append('pageNumber', (filters.pageNumber || 1).toString());
+      params.append('pageSize', (filters.pageSize || 10).toString());
+      params.append('sortBy', filters.sortBy || 'transactionDate');
+      params.append('sortOrder', filters.sortOrder || 'desc');
+
+      // Add optional filters
+      if (filters.status && filters.status !== 'all') {
+        params.append('status', filters.status);
+      }
+      if (filters.method && filters.method !== 'all') {
+        params.append('method', filters.method);
+      }
+      if (filters.searchQuery) {
+        params.append('searchQuery', filters.searchQuery);
+      }
+      if (filters.dateFrom) {
+        params.append('dateFrom', filters.dateFrom);
+      }
+      if (filters.dateTo) {
+        params.append('dateTo', filters.dateTo);
+      }
+
+      const response = await api.get<TransactionResponse>(
+        `${url.transactions}?${params.toString()}`,
+      );
+
+      return response;
+    } catch (error) {
+      console.error('Error fetching transactions:', error);
       throw error;
     }
   }

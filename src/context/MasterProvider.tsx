@@ -24,6 +24,7 @@ interface MasterData {
   ActivityType: MasterDetailModel[];
   GroupColor: MasterDetailModel[];
   PartnerLocation: MasterDetailModel[];
+  BillingCycle: MasterDetailModel[];
 }
 
 interface MasterContextProps {
@@ -52,6 +53,7 @@ const defaultMasterData: MasterData = {
   ActivityType: [],
   GroupColor: [],
   PartnerLocation: [],
+  BillingCycle: [],
 };
 
 const MasterContext = createContext<MasterContextProps | undefined>(undefined);
@@ -75,6 +77,7 @@ const masterName = [
   'GroupColor',
   'ImageType',
   'PartnerLocation',
+  'BillingCycle',
 ];
 
 export const MasterProvider: React.FC<MasterProviderProps> = ({children}) => {

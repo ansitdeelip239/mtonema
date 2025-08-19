@@ -116,7 +116,6 @@ const FilterPartnerScreen = () => {
       <View style={styles.container}>
         <Header<PartnerDrawerParamList>
           title="Filter Partners"
-          gradientColors={headerGradientColors}
           backButton={true}
           onBackPress={() => navigation.goBack()}
         />
@@ -327,7 +326,6 @@ const FilterPartnerScreen = () => {
                 ? 'Filter Partners'
                 : 'Filter Team Members'
             }
-            gradientColors={headerGradientColors}
             backButton={true}
             onBackPress={handleBack}
           />

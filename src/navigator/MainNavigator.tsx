@@ -1,4 +1,3 @@
-// import { View, Text } from 'react-native'
 import React from 'react';
 import {View, Text, StyleSheet, TouchableOpacity, Alert} from 'react-native';
 import SellerNavigator from './SellerNavigator';
@@ -11,7 +10,9 @@ import {PropertyFormProvider} from '../context/PropertyFormContext';
 import Roles from '../constants/Roles';
 import {BottomTabProvider} from '../context/BottomTabProvider';
 import GetIcon from '../components/GetIcon';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import {SafeAreaView} from 'react-native-safe-area-context';
+import SubscriptionGuard from '../components/SubscriptionGuard';
+import SubscriptionProvider from '../context/SubscriptionProvider';
 
 const MainNavigator = () => {
   const {user, logout} = useAuth();
@@ -89,11 +90,15 @@ const MainNavigator = () => {
         user?.role === Roles.TEAM ||
         isAuthorizedAdmin ? (
         <SafeAreaView style={styles.safeArea} edges={['bottom']}>
-          <BottomTabProvider>
-            <PartnerProvider>
-              <PartnerNavigator />
-            </PartnerProvider>
-          </BottomTabProvider>
+          <SubscriptionProvider>
+            <SubscriptionGuard>
+              <BottomTabProvider>
+                <PartnerProvider>
+                  <PartnerNavigator />
+                </PartnerProvider>
+              </BottomTabProvider>
+            </SubscriptionGuard>
+          </SubscriptionProvider>
         </SafeAreaView>
       ) : (
         // Fallback for any unhandled user roles

@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from 'react';
-import { useAuth } from '../hooks/useAuth';
+import React, {useState, useEffect} from 'react';
+import {useAuth} from '../hooks/useAuth';
+import {useSubscription} from '../context/SubscriptionProvider';
 // import {useLogoStorage} from '../hooks/useLogoStorage';
 import {
   DrawerContentScrollView,
@@ -17,17 +18,21 @@ import {
 import Colors from '../constants/Colors';
 import GetIcon from './GetIcon';
 import Images from '../constants/Images';
-import { useTheme } from '../context/ThemeProvider';
-import { navigationRef } from '../navigator/NavigationRef';
+import {useTheme} from '../context/ThemeProvider';
+import {navigationRef} from '../navigator/NavigationRef';
+import PaymentScreen from '../screens/partner/PaymentScreen/PaymentScreen';
+import Roles from '../constants/Roles';
 
 const CustomDrawerContent = (props: any) => {
-  const { user, logout } = useAuth();
-  const { theme } = useTheme();
+  const {user, logout} = useAuth();
+  const {theme} = useTheme();
+  const {isInTrial, isPartnerOrTeam} = useSubscription();
   const [userName, setUserName] = useState(user?.name || '');
   const [isLoggingOut, setIsLoggingOut] = useState(false);
   const [modalVisible, setModalVisible] = useState(false); // Under development modal
   const [logoutModalVisible, setLogoutModalVisible] = useState(false); // Logout confirmation modal
   const [loadingModalVisible, setLoadingModalVisible] = useState(false);
+  const [premiumModalVisible, setPremiumModalVisible] = useState(false); // Premium upgrade modal
 
   // const {logoUrl} = useLogoStorage();
 
@@ -49,8 +54,8 @@ const CustomDrawerContent = (props: any) => {
     await logout();
     navigationRef.current?.resetRoot({
       index: 0,
-      routes: [{ name: 'Auth' }],
-    })
+      routes: [{name: 'Auth'}],
+    });
     setIsLoggingOut(false);
     setLoadingModalVisible(false);
     console.log('Logged Out Successfully');
@@ -58,6 +63,20 @@ const CustomDrawerContent = (props: any) => {
 
   const navigateToProfile = () => {
     props.navigation.navigate('Profile Screen');
+    props.navigation.closeDrawer();
+  };
+
+  const handlePremiumUpgrade = () => {
+    props.navigation.closeDrawer();
+    setPremiumModalVisible(true);
+  };
+
+  const handlePremiumSuccess = () => {
+    setPremiumModalVisible(false);
+  };
+
+  const navigateToPayments = () => {
+    props.navigation.navigate('Payments');
     props.navigation.closeDrawer();
   };
 
@@ -87,6 +106,29 @@ const CustomDrawerContent = (props: any) => {
 
       {/* Custom About and FAQ Items */}
       <View style={styles.customItemsContainer}>
+        {/* Buy Premium Button - Only show for trial users */}
+        {isPartnerOrTeam && isInTrial && (
+          <TouchableOpacity
+            style={styles.premiumDrawerItem}
+            onPress={handlePremiumUpgrade}>
+            <View style={styles.iconContainer}>
+              <GetIcon iconName="premium" color="white" size="25" />
+            </View>
+            <Text style={styles.premiumItemText}>Buy Premium</Text>
+          </TouchableOpacity>
+        )}
+
+        {user?.role === Roles.ADMIN && (
+          <TouchableOpacity
+            style={styles.customDrawerItem}
+            onPress={navigateToPayments}>
+            <View style={styles.iconContainer}>
+              <GetIcon iconName="rupee" color="#444" size="25" />
+            </View>
+            <Text style={styles.itemText}>Payments</Text>
+          </TouchableOpacity>
+        )}
+
         <TouchableOpacity
           style={styles.customDrawerItem}
           onPress={() => setModalVisible(true)}>
@@ -117,7 +159,10 @@ const CustomDrawerContent = (props: any) => {
               This feature is under development.
             </Text>
             <TouchableOpacity
-              style={[styles.modalSingleButton, { backgroundColor: theme.primaryColor }]}
+              style={[
+                styles.modalSingleButton,
+                {backgroundColor: theme.primaryColor},
+              ]}
               onPress={() => setModalVisible(false)}>
               <Text style={styles.textWhite}>OK</Text>
             </TouchableOpacity>
@@ -130,7 +175,7 @@ const CustomDrawerContent = (props: any) => {
       <View style={styles.p15}>
         <TouchableOpacity
           onPress={handleCustomButtonPress}
-          style={[styles.logout, { backgroundColor: theme.primaryColor }]}
+          style={[styles.logout, {backgroundColor: theme.primaryColor}]}
           disabled={isLoggingOut}>
           <View style={styles.drawerItem}>
             <GetIcon iconName="logout" color={Colors.white} size="25" />
@@ -159,7 +204,7 @@ const CustomDrawerContent = (props: any) => {
               <TouchableOpacity
                 style={[
                   styles.redButton,
-                  { backgroundColor: theme.primaryColor },
+                  {backgroundColor: theme.primaryColor},
                 ]}
                 onPress={confirmLogout}
                 disabled={isLoggingOut}>
@@ -180,6 +225,19 @@ const CustomDrawerContent = (props: any) => {
           <ActivityIndicator size="large" color="#ffffff" />
           <Text style={styles.loadingText}>Logging out...</Text>
         </View>
+      </Modal>
+
+      {/* Premium Upgrade Modal */}
+      <Modal
+        animationType="slide"
+        transparent={false}
+        visible={premiumModalVisible}
+        onRequestClose={() => setPremiumModalVisible(false)}>
+        <PaymentScreen
+          onPaymentSuccess={handlePremiumSuccess}
+          isUpgrade={true}
+          onClose={() => setPremiumModalVisible(false)}
+        />
       </Modal>
     </DrawerContentScrollView>
   );
@@ -202,21 +260,44 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     paddingVertical: 12,
+    paddingHorizontal: 10,
+    marginVertical: 2,
+  },
+  premiumDrawerItem: {
+    backgroundColor: '#53a20e',
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingVertical: 12,
     paddingHorizontal: 16,
     marginVertical: 2,
+    borderRadius: 32,
+    marginHorizontal: 8,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
   },
   iconContainer: {
     width: 24,
     height: 24,
     justifyContent: 'center',
     alignItems: 'center',
-    marginRight: 32,
+    marginRight: 16,
     marginLeft: 4,
   },
   itemText: {
     fontSize: 14,
     fontWeight: '500',
     color: 'black',
+  },
+  premiumItemText: {
+    fontSize: 14,
+    fontWeight: 'bold',
+    color: 'white',
   },
   profileContainer: {
     alignItems: 'center',

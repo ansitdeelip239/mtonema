@@ -1,30 +1,27 @@
-/* eslint-disable react-native/no-inline-styles */
-/* eslint-disable react/no-unstable-nested-components */
+
 import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { Platform, TouchableOpacity } from 'react-native';
-import ContentScreen from '../../screens/partner/ContentScreen/ContentScreen';
-import AddContentScreen from '../../screens/partner/ContentScreen/AddContentScreen';
-import { ContentTemplate } from '../../types';
 import { useTheme } from '../../context/ThemeProvider';
 import { useNavigation } from '@react-navigation/native';
 import { DrawerNavigationProp } from '@react-navigation/drawer';
 import { PartnerDrawerParamList } from '../../types/navigation';
 import GetIcon from '../../components/GetIcon';
+import PlansScreen from '../../screens/partner/Plans/PlansScreen';
+import AddPlanScreen from '../../screens/partner/Plans/AddPlanScreen';
+import { Plan } from '../../types/payment';
 
-export type ContentTemplateStackParamList = {
-  ContentTemplateScreen: undefined;
-  AddContentTempleteScreen: {
-    editMode?: boolean;
-    templateData?: ContentTemplate;
-  };
+export type PlansStackParamList = {
+  'Plans Screen': undefined;
+  'Add Plan Screen': {editMode?: boolean; planData?: Plan};
 };
 
-const Stack = createNativeStackNavigator<ContentTemplateStackParamList>();
+const Stack = createNativeStackNavigator<PlansStackParamList>();
 
-const ContentTemplateScreenStack = () => {
+const PlansStack = () => {
   const { theme } = useTheme();
   const isIOS = Platform.OS === 'ios';
+
   const drawerNavigation =
     useNavigation<DrawerNavigationProp<PartnerDrawerParamList>>();
 
@@ -37,37 +34,42 @@ const ContentTemplateScreenStack = () => {
         headerTitleAlign: 'center',
         headerBackVisible: true,
         headerBackTitle: 'Back',
-      }}
-      initialRouteName="ContentTemplateScreen"
-    >
-      <Stack.Screen
-        name="ContentTemplateScreen"
-        component={ContentScreen}
-        options={{
-          title: 'Content',
-          headerBackVisible: false,
-          headerLeft: () => (
+        // eslint-disable-next-line react/no-unstable-nested-components
+        headerLeft: () => {
+          const hamburgerButtonStyle = { marginLeft: 16, padding: 4 };
+          return (
             <TouchableOpacity
               onPress={() => drawerNavigation.toggleDrawer()}
-              style={{ marginLeft: 16, padding: 4 }}
+              style={hamburgerButtonStyle}
               hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
             >
               <GetIcon iconName="hamburgerMenu" color="#fff" size={18} />
             </TouchableOpacity>
-          ),
+          );
+        },
+      }}
+      initialRouteName="Plans Screen"
+    >
+      <Stack.Screen
+        name="Plans Screen"
+        component={PlansScreen}
+        options={{
+          title: 'Plans',
+          headerBackVisible: false, // hide back button on root screen
         }}
       />
+
       <Stack.Screen
-        name="AddContentTempleteScreen"
-        component={AddContentScreen}
+        name="Add Plan Screen"
+        component={AddPlanScreen}
         options={{
-          title: 'Add Content',
-          headerLeft: undefined, // only back button is shown, no drawer icon
+          title: 'Plans',
+          headerBackVisible: false, // hide back button on root screen
         }}
       />
     </Stack.Navigator>
   );
 };
 
-export default ContentTemplateScreenStack;
+export default PlansStack;
 

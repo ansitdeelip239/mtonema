@@ -3,7 +3,7 @@ import {View, Text, StyleSheet} from 'react-native';
 import { useAuth } from '../../../../hooks/useAuth';
 import { useTheme } from '../../../../context/ThemeProvider';
 import GetIcon from '../../../../components/GetIcon';
-import { getGreeting } from '../../../../utils/dateUtils';
+import { getGreeting, getTimeIcon, getFirstName } from '../../../../utils/dateUtils';
 
 const SalutationGreeting: React.FC = () => {
   const {user} = useAuth();
@@ -17,31 +17,12 @@ const SalutationGreeting: React.FC = () => {
           {backgroundColor: theme.backgroundColor},
         ]}>
         <GetIcon
-          iconName={(() => {
-            const hour = new Date().getHours();
-            if (hour >= 5 && hour < 12) {
-              return 'morning';
-            }
-            if (hour >= 12 && hour < 17) {
-              return 'afternoon';
-            }
-            return 'evening';
-          })()}
+          iconName={getTimeIcon()}
           size={32}
         />
         <View style={styles.salutationTextWrapper}>
           <Text style={[styles.salutationHi, {color: theme.textColor}]}>
-            Hi
-            {user?.name
-              ? (() => {
-                  const parts = user.name.split(' ');
-                  if (parts.length > 1 && parts[0].endsWith('.')) {
-                    return `, ${parts[1]}`;
-                  }
-                  return `, ${parts[0]}`;
-                })()
-              : ''}
-            !
+            Hi{user?.name ? `, ${getFirstName(user.name)}` : ''}!
           </Text>
           <Text
             style={[styles.salutationGreeting, {color: theme.secondaryColor}]}>

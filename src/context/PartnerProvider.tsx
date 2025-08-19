@@ -16,6 +16,8 @@ interface PartnerContextProps {
   setGroups: React.Dispatch<React.SetStateAction<Group[]>>;
   dataUpdated: boolean;
   setDataUpdated: React.Dispatch<React.SetStateAction<boolean>>;
+  teamUpdated: boolean;
+  setTeamUpdated: React.Dispatch<React.SetStateAction<boolean>>;
   clientsUpdated: boolean;
   setClientsUpdated: React.Dispatch<React.SetStateAction<boolean>>;
   agentPropertyUpdated: boolean;
@@ -45,6 +47,7 @@ export const PartnerProvider: React.FC<PartnerProviderProps> = ({children}) => {
 
   const [dataUpdated, setDataUpdated] = useState(false);
   const [clientsUpdated, setClientsUpdated] = useState(false);
+  const [teamUpdated, setTeamUpdated] = useState(false);
   const [agentPropertyUpdated, setAgentPropertyUpdated] = useState(false);
   const [partnerPropertyUpdated, setPartnerPropertyUpdated] = useState(false);
   const [messageTemplateUpdated, setMessageTemplateUpdated] = useState(false);
@@ -114,6 +117,8 @@ export const PartnerProvider: React.FC<PartnerProviderProps> = ({children}) => {
     setGroups,
     dataUpdated,
     setDataUpdated,
+    teamUpdated,
+    setTeamUpdated,
     clientsUpdated,
     setClientsUpdated,
     agentPropertyUpdated,

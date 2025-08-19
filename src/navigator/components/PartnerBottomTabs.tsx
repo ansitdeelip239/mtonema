@@ -7,7 +7,6 @@ import {CustomBottomBar, TabScreen} from './CustomBottomBar';
 import FollowUpScreenStack from './FollowUpScreenStack';
 import AgentDataScreenStack from './AgentDataStack';
 import ListingScreenStack from './PropertyListingScreenStack';
-import AddPartnerPropertyScreen from '../../screens/partner/AddPartnerPropertyScreen/AddPartnerPropertyScreen';
 import {useTheme} from '../../context/ThemeProvider';
 import { CommonActions } from '@react-navigation/native';
 import AddPropertyStack from './AddPropertyStack';
