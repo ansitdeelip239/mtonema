@@ -95,7 +95,7 @@ const TeamSubscriptionScreen: React.FC<TeamSubscriptionScreenProps> = ({
           <GetIcon iconName="ascending" size={18} color="white" />
           <Text style={styles.checkButtonText}>Check Status Again</Text>
         </TouchableOpacity>
-        <View style={{marginTop: 16}}>
+        <View style={styles.switchAccountContainer}>
           <SwitchAccountButton />
         </View>
       </View>
@@ -221,6 +221,9 @@ const styles = StyleSheet.create({
   },
   actions: {
     gap: 12,
+  },
+  switchAccountContainer: {
+    marginTop: 16,
   },
   checkButton: {
     backgroundColor: '#6366f1',
