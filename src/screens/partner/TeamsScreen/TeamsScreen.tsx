@@ -1,6 +1,5 @@
 import React, {useCallback, useEffect, useMemo, useState} from 'react';
-import {Platform, StyleSheet, FlatList, TouchableOpacity} from 'react-native';
-import {SafeAreaView} from 'react-native-safe-area-context';
+import {Platform, StyleSheet, FlatList, TouchableOpacity, SafeAreaView} from 'react-native';
 import Header from '../../../components/Header';
 import {PartnerDrawerParamList} from '../../../types/navigation';
 import PartnerService from '../../../services/PartnerService';
