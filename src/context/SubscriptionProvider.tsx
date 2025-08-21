@@ -171,6 +171,9 @@ export const SubscriptionProvider: React.FC<SubscriptionProviderProps> = ({
 
       const response = await PartnerService.getSubscriptionStatus(user.id);
 
+      console.log('Subscription status response:', response);
+      
+
       if (response.success) {
         const data = response.data;
         setSubscriptionStatus(data);

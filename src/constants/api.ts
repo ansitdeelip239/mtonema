@@ -94,11 +94,12 @@ const url = {
 
   getInTouch: BASE_URL + '/properties/GetInTouch',
 
-
   //Payment
   createPaymentOrder: BASE_URL + '/payment/orders/create',
   paymentOrderStatus: BASE_URL + '/payment/orders/status',
   transactions: BASE_URL + '/payment/admin/transactions',
+  nextBill: BASE_URL + '/payment/next-bill',
+  payNextBill: BASE_URL + '/payment/pay-next-bill',
   Plans: BASE_URL + '/payment/plans',
 };
 

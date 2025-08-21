@@ -1,5 +1,6 @@
 import React, {useState, useEffect} from 'react';
-import RazorpayCheckout from 'react-native-razorpay';
+import {openRazorpayModal} from '../../../utils/razorpay';
+import {verifyPaymentStatus} from '../../../utils/payment';
 import {
   View,
   Text,
@@ -8,13 +9,13 @@ import {
   Alert,
   ActivityIndicator,
   ScrollView,
-  Modal,
 } from 'react-native';
+import PaymentVerificationModal from '../../../components/PaymentVerificationModal';
 import {useAuth} from '../../../hooks/useAuth';
 import {useSubscription} from '../../../context/SubscriptionProvider';
 import GetIcon from '../../../components/GetIcon';
+import SwitchAccountButton from '../../../components/SwitchAccountButton';
 import Toast from 'react-native-toast-message';
-import Images from '../../../constants/Images';
 
 interface Plan {
   id: number;
@@ -41,9 +42,8 @@ const PaymentScreen: React.FC<PaymentScreenProps> = ({
 }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [selectedPlan, setSelectedPlan] = useState<Plan | null>(null);
-  const [isLoggingOut, setIsLoggingOut] = useState(false);
   const [isVerifyingPayment, setIsVerifyingPayment] = useState(false);
-  const {user, logout} = useAuth();
+  const {user} = useAuth();
   const {
     plans,
     isLoadingPlans,
@@ -74,41 +74,52 @@ const PaymentScreen: React.FC<PaymentScreenProps> = ({
     }
 
     if (subscriptionStatus) {
-      const {trialStatus, orderStatus} = subscriptionStatus;
+      const {trialStatus, hasActiveAccess, trialDaysLeft, orderDaysLeft} =
+        subscriptionStatus;
 
-      // If they had a trial and it expired
-      if (
-        trialStatus.trialStatus === 'expired' &&
-        !trialStatus.convertedToPaid
-      ) {
-        return {
-          show: true,
-          title: 'Trial Period Expired',
-          message:
-            'Your trial period has ended. Please choose a plan to continue using the app.',
-        };
+      // If user doesn't have active access and trial has expired
+      if (!hasActiveAccess) {
+        // If they had a trial and it expired
+        if (
+          trialStatus?.trialStatus === 'Expired' ||
+          trialStatus?.trialStatus === 'expired'
+        ) {
+          return {
+            show: true,
+            title: 'Trial Period Expired',
+            message:
+              'Your trial period has ended. Please choose a plan to continue using the app.',
+          };
+        }
+
+        // If they have no trial days left or order days left
+        if (trialDaysLeft === 0 && orderDaysLeft === 0) {
+          return {
+            show: true,
+            title: 'Subscription Required',
+            message:
+              'Your subscription has expired. Please choose a plan to continue using the app.',
+          };
+        }
+
+        // If subscription needs renewal (has some days left but less than a threshold)
+        if (orderDaysLeft > 0 && orderDaysLeft <= 7) {
+          return {
+            show: true,
+            title: 'Subscription Renewal Required',
+            message:
+              'Your subscription is about to expire. Please renew your plan to continue uninterrupted access.',
+          };
+        }
       }
 
-      // If they had a paid subscription that expired
-      if (
-        orderStatus.status === 'expired' ||
-        orderStatus.paymentStatus === 'failed'
-      ) {
+      // If user has active access, they might not need to see this screen
+      if (hasActiveAccess) {
         return {
           show: true,
-          title: 'Subscription Expired',
+          title: 'Manage Subscription',
           message:
-            'Your subscription has expired. Please renew your plan to continue using the app.',
-        };
-      }
-
-      // If subscription needs renewal
-      if (orderStatus.needsRenewal) {
-        return {
-          show: true,
-          title: 'Subscription Renewal Required',
-          message:
-            'Your subscription is about to expire. Please renew your plan to continue uninterrupted access.',
+            'You have an active subscription. Choose a plan to upgrade or extend.',
         };
       }
     }
@@ -119,69 +130,6 @@ const PaymentScreen: React.FC<PaymentScreenProps> = ({
       title: 'Subscription Required',
       message: 'Please choose a plan to start using the app.',
     };
-  };
-
-  const handleLogout = () => {
-    Alert.alert(
-      'Switch Account',
-      'Are you sure you want to logout and use a different account?',
-      [
-        {
-          text: 'Cancel',
-          style: 'cancel',
-        },
-        {
-          text: 'Logout',
-          style: 'destructive',
-          onPress: async () => {
-            setIsLoggingOut(true);
-            await logout();
-            setIsLoggingOut(false);
-          },
-        },
-      ],
-    );
-  };
-
-  const verifyPaymentStatus = async (
-    maxAttempts: number = 5,
-  ): Promise<boolean> => {
-    if (!user?.id) {
-      setIsVerifyingPayment(false);
-      return false;
-    }
-
-    setIsVerifyingPayment(true);
-
-    for (let attempt = 1; attempt <= maxAttempts; attempt++) {
-      try {
-        // Call the subscription status API to check if payment is processed
-        // Skip loading to prevent SubscriptionGuard from showing loading screen
-        const hasActiveAccess = await checkSubscriptionStatus(true);
-
-        console.log(hasActiveAccess, 'hasActiveAccess from verification');
-        // Check if user now has active access after payment using the returned value
-        if (hasActiveAccess) {
-          setIsVerifyingPayment(false);
-          return true;
-        }
-
-        // If not the last attempt, wait before trying again
-        if (attempt < maxAttempts) {
-          await new Promise(resolve => setTimeout(resolve, 2000)); // Wait 2 seconds
-        }
-      } catch (error) {
-        console.error(`Payment verification attempt ${attempt} failed:`, error);
-
-        // If not the last attempt, wait before trying again
-        if (attempt < maxAttempts) {
-          await new Promise(resolve => setTimeout(resolve, 2000)); // Wait 2 seconds
-        }
-      }
-    }
-
-    setIsVerifyingPayment(false);
-    return false; // Failed after all attempts
   };
 
   const handlePayment = async () => {
@@ -216,11 +164,9 @@ const PaymentScreen: React.FC<PaymentScreenProps> = ({
       // Prepare Razorpay options with dynamic data
       const options = {
         description: `${orderData.planName} - ${orderData.billingCycle}`,
-        image: Images.MT_ONE_LOGO, // Replace with your logo URL
         currency: 'INR',
         key: orderData.keyId,
         amount: orderData.amount,
-        name: 'MT One',
         order_id: orderData.razorpayOrderId,
         prefill: {
           email: user.email || 'ansitdeelip239@gmail.com',
@@ -230,56 +176,50 @@ const PaymentScreen: React.FC<PaymentScreenProps> = ({
         theme: {color: '#53a20e'},
       };
 
-      // Open Razorpay checkout
-      RazorpayCheckout.open(options)
-        .then(async data => {
+      // Open Razorpay checkout using util
+      openRazorpayModal(
+        options,
+        async _success => {
           // Handle success
-          console.log('Payment Success:', data);
+          console.log('Payment Success:', _success);
           console.log('Order Data:', orderData);
 
           // Start payment verification
-          const isVerified = await verifyPaymentStatus();
+          setIsVerifyingPayment(true);
+          const isVerified = await verifyPaymentStatus(
+            checkSubscriptionStatus,
+            user.id,
+          );
+          setIsVerifyingPayment(false);
 
-          if (isVerified) {
-            // Alert.alert(
-            //   'Payment Success',
-            //   'Your subscription has been activated successfully!',
-            // );
+            if (isVerified) {
             Toast.show({
               type: 'success',
               text1: 'Payment Success',
-              text2: 'Your subscription has been activated successfully!',
+              text2: 'Your subscription has been activated!',
             });
-            // Call the success callback if provided
-            if (onPaymentSuccess) {
-              onPaymentSuccess();
-            }
-          } else {
-            Alert.alert(
-              'Payment Verification Failed',
-              'Payment was processed but verification failed. Please contact support if your subscription is not activated.',
-            );
+            onPaymentSuccess?.();
+            } else {
+            const errorMsg =
+              'Payment was processed but verification failed. Please contact support if your subscription is not activated.';
+            Alert.alert('Payment Verification Failed', errorMsg);
             Toast.show({
               type: 'error',
               text1: 'Payment Verification Failed',
-              text2:
-                'Payment was processed but verification failed. Please contact support if your subscription is not activated.',
+              text2: errorMsg,
             });
-          }
-        })
-        .catch(error => {
+            }
+        },
+        error => {
           // Handle error or failure
-          // Alert.alert(
-          //   'Payment Failed',
-          //   error.description || 'Something went wrong',
-          // );
           Toast.show({
             type: 'error',
             text1: 'Payment Failed',
             text2: error.description || 'Something went wrong',
           });
           console.log('Payment Error:', error);
-        });
+        },
+      );
     } catch (error) {
       console.error('Error creating order:', error);
       Alert.alert('Error', 'Failed to initiate payment. Please try again.');
@@ -319,20 +259,7 @@ const PaymentScreen: React.FC<PaymentScreenProps> = ({
             <Text style={styles.closeText}>Close</Text>
           </TouchableOpacity>
         ) : (
-          <TouchableOpacity
-            style={styles.logoutButton}
-            onPress={handleLogout}
-            disabled={isLoggingOut}
-            activeOpacity={0.7}>
-            {isLoggingOut ? (
-              <ActivityIndicator size="small" color="#ff6b6b" />
-            ) : (
-              <>
-                <GetIcon iconName="logout" size={18} color="#ff6b6b" />
-                <Text style={styles.logoutText}>Switch Account</Text>
-              </>
-            )}
-          </TouchableOpacity>
+          <SwitchAccountButton />
         )}
       </View>
 
@@ -426,20 +353,7 @@ const PaymentScreen: React.FC<PaymentScreenProps> = ({
       )}
 
       {/* Payment Verification Modal */}
-      <Modal
-        visible={isVerifyingPayment}
-        transparent={true}
-        animationType="fade">
-        <View style={styles.modalOverlay}>
-          <View style={styles.verificationModal}>
-            <ActivityIndicator size="large" color="#53a20e" />
-            <Text style={styles.verificationTitle}>Verifying Payment</Text>
-            <Text style={styles.verificationText}>
-              Please wait while we confirm your payment...
-            </Text>
-          </View>
-        </View>
-      </Modal>
+      <PaymentVerificationModal visible={isVerifyingPayment} />
     </ScrollView>
   );
 };

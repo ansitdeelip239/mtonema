@@ -20,6 +20,7 @@ import {
   TransactionResponse,
   User,
 } from '../types';
+import {NextBillResponse, PayNextBillData} from '../types/payment';
 import {api} from '../utils/api';
 
 interface AssignClientResponse {
@@ -873,6 +874,26 @@ class PartnerService {
       return response;
     } catch (error) {
       console.error('Error fetching transactions:', error);
+      throw error;
+    }
+  }
+
+  static async getNextBill() {
+    try {
+      const response = await api.get<NextBillResponse>(url.nextBill);
+      return response;
+    } catch (error) {
+      console.error('Error in getNextBill', error);
+      throw error;
+    }
+  }
+
+  static async payNextBill() {
+    try {
+      const response = await api.post<PayNextBillData>(url.payNextBill, {});
+      return response;
+    } catch (error) {
+      console.error('Error in payNextBill', error);
       throw error;
     }
   }

@@ -2,6 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {View, StyleSheet, Image, Animated} from 'react-native';
 import {useSubscription} from '../context/SubscriptionProvider';
 import PaymentScreen from '../screens/partner/PaymentScreen/PaymentScreen';
+import BillingScreen from '../screens/partner/BillingScreen/BillingScreen';
 import Images from '../constants/Images';
 
 interface SubscriptionGuardProps {
@@ -14,8 +15,8 @@ const SubscriptionGuard: React.FC<SubscriptionGuardProps> = ({children}) => {
     isLoadingSubscription,
     isPartnerOrTeam,
     refreshSubscription,
+    subscriptionStatus, // Make sure this is available from your context
   } = useSubscription();
-
   const [progressAnim] = useState(new Animated.Value(0));
   const [isInitialLoad, setIsInitialLoad] = useState(true);
 
@@ -40,7 +41,6 @@ const SubscriptionGuard: React.FC<SubscriptionGuardProps> = ({children}) => {
     if (isInitialLoad || isLoadingSubscription) {
       // Reset progress and start single-run animation
       progressAnim.setValue(0);
-
       // Animate to 90% over 3 seconds, then pause
       Animated.timing(progressAnim, {
         toValue: 0.9,
@@ -85,10 +85,26 @@ const SubscriptionGuard: React.FC<SubscriptionGuardProps> = ({children}) => {
     );
   }
 
+  // If user doesn't have active subscription
   if (!hasActiveSubscription) {
-    return <PaymentScreen onPaymentSuccess={handlePaymentSuccess} />;
+    // Check if user has a chosen plan
+    const hasChosenPlan = subscriptionStatus?.chosenPlan?.planId;
+
+    if (hasChosenPlan) {
+      // User has chosen a plan but payment might be pending or failed
+      // Route to BillingScreen
+      return (
+        <BillingScreen
+          onPaymentSuccess={handlePaymentSuccess}
+        />
+      );
+    } else {
+      // User hasn't chosen a plan yet, show PaymentScreen for plan selection
+      return <PaymentScreen onPaymentSuccess={handlePaymentSuccess} />;
+    }
   }
 
+  // User has active subscription, show the main app
   return <>{children}</>;
 };
 
