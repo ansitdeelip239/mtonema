@@ -6,6 +6,8 @@ import BillingScreen from '../screens/partner/BillingScreen/BillingScreen';
 import Images from '../constants/Images';
 import config from '../config';
 import { useAuth } from '../hooks/useAuth';
+import Roles from '../constants/Roles';
+import TeamSubscriptionScreen from '../screens/partner/TeamSubscriptionScreen/TeamSubscriptionScreen';
 
 interface SubscriptionGuardProps {
   children: React.ReactNode;
@@ -105,8 +107,15 @@ const SubscriptionGuard: React.FC<SubscriptionGuardProps> = ({children}) => {
 
   // Handle subscription logic
   if (!hasActiveSubscription) {
+    // If user is a team member, show team member subscription screen
+    if (user?.role === Roles.TEAM) {
+      return (
+        <TeamSubscriptionScreen
+          onCheckStatus={refreshSubscription}
+        />
+      );
+    }
     const hasChosenPlan = subscriptionStatus?.chosenPlan?.planId;
-
     return hasChosenPlan ? (
       <BillingScreen onPaymentSuccess={handlePaymentSuccess} />
     ) : (
