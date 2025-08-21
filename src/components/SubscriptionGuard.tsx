@@ -4,6 +4,8 @@ import {useSubscription} from '../context/SubscriptionProvider';
 import PaymentScreen from '../screens/partner/PaymentScreen/PaymentScreen';
 import BillingScreen from '../screens/partner/BillingScreen/BillingScreen';
 import Images from '../constants/Images';
+import config from '../config';
+import { useAuth } from '../hooks/useAuth';
 
 interface SubscriptionGuardProps {
   children: React.ReactNode;
@@ -46,6 +48,8 @@ const SubscriptionGuard: React.FC<SubscriptionGuardProps> = ({children}) => {
     refreshSubscription,
     subscriptionStatus,
   } = useSubscription();
+
+  const {user} = useAuth();
 
   // Initialize Animated.Value only once
   const [progressAnim] = useState(() => new Animated.Value(0));
@@ -92,6 +96,11 @@ const SubscriptionGuard: React.FC<SubscriptionGuardProps> = ({children}) => {
   // Show loading screen
   if (isInitialLoad || isLoadingSubscription) {
     return <LoadingScreen progressAnim={progressAnim} />;
+  }
+
+  // Bypass subscription logic for specific emails from config
+  if (user?.email && config.bypass_emails.includes(user.email)) {
+    return <>{children}</>;
   }
 
   // Handle subscription logic
