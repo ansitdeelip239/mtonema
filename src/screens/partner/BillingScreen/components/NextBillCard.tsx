@@ -16,7 +16,7 @@ export const NextBillCard = React.memo(
     <View style={styles.billCard}>
       <View style={styles.cardHeader}>
         <View style={styles.cardHeaderLeft}>
-          <GetIcon iconName="phone" size={24} color="#6366f1" />
+          <GetIcon iconName="bill" size={24} color="#6366f1" />
           <Text style={styles.cardTitle}>Next Bill</Text>
         </View>
         <View style={styles.amountBadge}>
@@ -48,7 +48,7 @@ export const NextBillCard = React.memo(
       </View>
 
       <TouchableOpacity style={styles.payButton} onPress={onPayNow}>
-        <GetIcon iconName="phone" size={20} color="white" />
+        <GetIcon iconName="rupee" size={20} color="white" />
         <Text style={styles.payButtonText}>Pay Now</Text>
       </TouchableOpacity>
     </View>

@@ -94,7 +94,7 @@ const PaymentModal: React.FC<PaymentModalProps> = ({
           </TouchableOpacity>
 
           <TouchableOpacity style={styles.confirmButton} onPress={onConfirm}>
-            <GetIcon iconName="transaction" size={16} color="white" />
+            <GetIcon iconName="rupee" size={16} color="white" />
             <Text style={styles.confirmButtonText}>Confirm & Pay</Text>
           </TouchableOpacity>
         </View>

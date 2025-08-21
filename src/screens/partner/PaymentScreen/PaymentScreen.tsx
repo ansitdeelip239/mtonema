@@ -31,6 +31,9 @@ const PaymentScreen: React.FC<PaymentScreenProps> = ({
   onClose,
 }) => {
   const [selectedPlan, setSelectedPlan] = useState<Plan | null>(null);
+  // Add state for createPaymentOrder API loading
+  const [isCreatingOrder, setIsCreatingOrder] = useState(false);
+
   const {user} = useAuth();
   const {
     plans,
@@ -42,13 +45,16 @@ const PaymentScreen: React.FC<PaymentScreenProps> = ({
   } = useSubscription();
 
   // Use the custom payment hook
-  const {isPaying, processPayment, isProcessing} = useRazorpayPayment({
+  const {isPaying, isVerifying, processPayment} = useRazorpayPayment({
     onPaymentSuccess,
     successMessage: {
       title: 'Payment Success',
       subtitle: 'Your subscription has been activated!',
     },
   });
+
+  // Calculate total processing state
+  const isProcessing = isCreatingOrder || isPaying || isVerifying;
 
   // Memoize expensive functions
   const formatPrice = useCallback((price: number) => {
@@ -129,7 +135,10 @@ const PaymentScreen: React.FC<PaymentScreenProps> = ({
       return;
     }
 
+    setIsCreatingOrder(true);
+
     try {
+      // Step 1: Create payment order (show loading in button)
       const orderData = await createPaymentOrder({
         userId: user.id,
         planId: selectedPlan.id,
@@ -144,6 +153,7 @@ const PaymentScreen: React.FC<PaymentScreenProps> = ({
         return;
       }
 
+      // Step 2: Process Razorpay payment (hook will handle its own loading states)
       await processPayment({
         description: `${orderData.planName} - ${orderData.billingCycle}`,
         currency: 'INR',
@@ -160,6 +170,8 @@ const PaymentScreen: React.FC<PaymentScreenProps> = ({
     } catch (error) {
       console.error('Error creating order:', error);
       Alert.alert('Error', 'Failed to initiate payment. Please try again.');
+    } finally {
+      setIsCreatingOrder(false);
     }
   }, [user, selectedPlan, createPaymentOrder, processPayment]);
 
@@ -222,7 +234,9 @@ const PaymentScreen: React.FC<PaymentScreenProps> = ({
           selectedPlan={selectedPlan}
           userName={user?.name || 'User'}
           isProcessing={isProcessing}
+          isCreatingOrder={isCreatingOrder}
           isPaying={isPaying}
+          isVerifying={isVerifying}
           onPayment={handlePayment}
           formatPrice={formatPrice}
         />
