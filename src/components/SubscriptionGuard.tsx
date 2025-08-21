@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState, useCallback, useMemo} from 'react';
 import {View, StyleSheet, Image, Animated} from 'react-native';
 import {useSubscription} from '../context/SubscriptionProvider';
 import PaymentScreen from '../screens/partner/PaymentScreen/PaymentScreen';
@@ -9,64 +9,17 @@ interface SubscriptionGuardProps {
   children: React.ReactNode;
 }
 
-const SubscriptionGuard: React.FC<SubscriptionGuardProps> = ({children}) => {
-  const {
-    hasActiveSubscription,
-    isLoadingSubscription,
-    isPartnerOrTeam,
-    refreshSubscription,
-    subscriptionStatus, // Make sure this is available from your context
-  } = useSubscription();
-  const [progressAnim] = useState(new Animated.Value(0));
-  const [isInitialLoad, setIsInitialLoad] = useState(true);
-
-  const handlePaymentSuccess = () => {
-    refreshSubscription();
-  };
-
-  // Handle initial load state to prevent flash
-  useEffect(() => {
-    if (isPartnerOrTeam) {
-      // For partner/team users, wait for the first subscription check to complete
-      if (!isLoadingSubscription && isInitialLoad) {
-        setIsInitialLoad(false);
-      }
-    } else {
-      // For non-partner users, immediately set initial load to false
-      setIsInitialLoad(false);
-    }
-  }, [isLoadingSubscription, isPartnerOrTeam, isInitialLoad]);
-
-  useEffect(() => {
-    if (isInitialLoad || isLoadingSubscription) {
-      // Reset progress and start single-run animation
-      progressAnim.setValue(0);
-      // Animate to 90% over 3 seconds, then pause
-      Animated.timing(progressAnim, {
-        toValue: 0.9,
-        duration: 3000,
-        useNativeDriver: false,
-      }).start();
-    } else if (!isInitialLoad && !isLoadingSubscription) {
-      // Complete the progress bar when loading finishes
-      Animated.timing(progressAnim, {
-        toValue: 1,
-        duration: 300,
-        useNativeDriver: false,
-      }).start();
-    }
-  }, [isInitialLoad, isLoadingSubscription, progressAnim]);
-
-  if (!isPartnerOrTeam) {
-    return <>{children}</>;
-  }
-
-  // Show loading screen during initial load or when actively loading subscription
-  if (isInitialLoad || isLoadingSubscription) {
-    const progressWidth = progressAnim.interpolate({
-      inputRange: [0, 1],
-      outputRange: ['0%', '100%'],
-    });
+// Extract LoadingScreen component
+const LoadingScreen = React.memo(
+  ({progressAnim}: {progressAnim: Animated.Value}) => {
+    const progressWidth = useMemo(
+      () =>
+        progressAnim.interpolate({
+          inputRange: [0, 1],
+          outputRange: ['0%', '100%'],
+        }),
+      [progressAnim],
+    );
 
     return (
       <View style={styles.loadingContainer}>
@@ -74,7 +27,6 @@ const SubscriptionGuard: React.FC<SubscriptionGuardProps> = ({children}) => {
           <Image source={Images.MTESTATES_LOGO} style={styles.logo} />
         </View>
         <View style={styles.progressContainer}>
-          {/* Progress Bar */}
           <View style={styles.progressBarContainer}>
             <Animated.View
               style={[styles.progressBar, {width: progressWidth}]}
@@ -83,28 +35,76 @@ const SubscriptionGuard: React.FC<SubscriptionGuardProps> = ({children}) => {
         </View>
       </View>
     );
+  },
+);
+
+const SubscriptionGuard: React.FC<SubscriptionGuardProps> = ({children}) => {
+  const {
+    hasActiveSubscription,
+    isLoadingSubscription,
+    isPartnerOrTeam,
+    refreshSubscription,
+    subscriptionStatus,
+  } = useSubscription();
+
+  // Initialize Animated.Value only once
+  const [progressAnim] = useState(() => new Animated.Value(0));
+  const [isInitialLoad, setIsInitialLoad] = useState(true);
+
+  // Memoize callback to prevent recreation
+  const handlePaymentSuccess = useCallback(() => {
+    refreshSubscription();
+  }, [refreshSubscription]);
+
+  // Combine and optimize useEffect hooks
+  useEffect(() => {
+    // Handle initial load state
+    if (isPartnerOrTeam) {
+      if (!isLoadingSubscription && isInitialLoad) {
+        setIsInitialLoad(false);
+      }
+    } else {
+      setIsInitialLoad(false);
+    }
+
+    // Handle animation
+    if (isInitialLoad || isLoadingSubscription) {
+      progressAnim.setValue(0);
+      Animated.timing(progressAnim, {
+        toValue: 0.9,
+        duration: 3000,
+        useNativeDriver: false,
+      }).start();
+    } else if (!isInitialLoad && !isLoadingSubscription) {
+      Animated.timing(progressAnim, {
+        toValue: 1,
+        duration: 300,
+        useNativeDriver: false,
+      }).start();
+    }
+  }, [isLoadingSubscription, isPartnerOrTeam, isInitialLoad, progressAnim]);
+
+  // Early return for non-partner users
+  if (!isPartnerOrTeam) {
+    return <>{children}</>;
   }
 
-  // If user doesn't have active subscription
+  // Show loading screen
+  if (isInitialLoad || isLoadingSubscription) {
+    return <LoadingScreen progressAnim={progressAnim} />;
+  }
+
+  // Handle subscription logic
   if (!hasActiveSubscription) {
-    // Check if user has a chosen plan
     const hasChosenPlan = subscriptionStatus?.chosenPlan?.planId;
 
-    if (hasChosenPlan) {
-      // User has chosen a plan but payment might be pending or failed
-      // Route to BillingScreen
-      return (
-        <BillingScreen
-          onPaymentSuccess={handlePaymentSuccess}
-        />
-      );
-    } else {
-      // User hasn't chosen a plan yet, show PaymentScreen for plan selection
-      return <PaymentScreen onPaymentSuccess={handlePaymentSuccess} />;
-    }
+    return hasChosenPlan ? (
+      <BillingScreen onPaymentSuccess={handlePaymentSuccess} />
+    ) : (
+      <PaymentScreen onPaymentSuccess={handlePaymentSuccess} />
+    );
   }
 
-  // User has active subscription, show the main app
   return <>{children}</>;
 };
 
@@ -148,4 +148,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default SubscriptionGuard;
+export default React.memo(SubscriptionGuard);
