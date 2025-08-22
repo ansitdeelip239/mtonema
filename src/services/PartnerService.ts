@@ -5,6 +5,7 @@ import {
   Property,
 } from '../screens/partner/ListingsScreen/types';
 import {
+  AddTeamMemberResponse,
   AgentPropertyRequestModel,
   Client,
   ClientForm,
@@ -525,7 +526,7 @@ class PartnerService {
     location: string;
   }) {
     try {
-      const response = await api.post<null>(url.getAllTeamMembers, data);
+      const response = await api.post<AddTeamMemberResponse>(url.getAllTeamMembers, data);
       return response;
     } catch (error) {
       console.error('Error in addTeamMember', error);

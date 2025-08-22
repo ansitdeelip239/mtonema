@@ -26,6 +26,9 @@ import {
 import Toast from 'react-native-toast-message';
 import {useTheme} from '../../../context/ThemeProvider';
 import {usePartner} from '../../../context/PartnerProvider';
+import {useRazorpayPayment} from '../../../hooks/useRazorpayPayment';
+import { PaymentLoadingOverlay } from '../../../components/PaymentLoading';
+import Roles from '../../../constants/Roles';
 
 type Props = NativeStackScreenProps<TeamStackParamList, 'Add Teams Screen'>;
 
@@ -51,6 +54,26 @@ const AddTeamScreen: React.FC<Props> = ({navigation, route}) => {
           phone: '',
           location: '',
         };
+
+  const onPaymentSuccess = useCallback(() => {
+    Toast.show({
+      type: 'success',
+      text1: 'Success',
+      text2: 'Team member added successfully!',
+    });
+
+    setTeamUpdated(true);
+    resetForm();
+    navigation.goBack();
+  }, []);
+
+  const {isPaying, isVerifying, processPayment} = useRazorpayPayment({
+    onPaymentSuccess,
+    successMessage: {
+      title: 'Payment Success',
+      subtitle: 'Your subscription has been activated successfully!',
+    },
+  });
 
   const handleSubmit = useCallback(
     async (formData: TeamMemberFormData) => {
@@ -96,20 +119,36 @@ const AddTeamScreen: React.FC<Props> = ({navigation, route}) => {
             text2: 'Team member updated successfully!',
           });
         } else {
-          const response = await PartnerService.addTeamMember(payload);
-
-          if (response.success) {
+          // If user is ADMIN, skip payment gateway
+          if (user?.role === Roles.ADMIN) {
+            await PartnerService.addTeamMember(payload);
             Toast.show({
               type: 'success',
               text1: 'Success',
               text2: 'Team member added successfully!',
             });
+            setTeamUpdated(true);
+            resetForm();
+            navigation.goBack();
+            return;
           }
+          // Otherwise, show payment gateway
+          const response = await PartnerService.addTeamMember(payload);
+          const {amount, orderId, keyId} = response.data.paymentDetails;
+          await processPayment({
+            key: keyId,
+            amount,
+            currency: 'INR',
+            description: 'Team Member Subscription',
+            order_id: orderId,
+            prefill: {
+              email: payload.email,
+              contact: payload.phone,
+              name: payload.name,
+            },
+            theme: {color: theme.primaryColor},
+          });
         }
-
-        setTeamUpdated(true);
-        resetForm();
-        navigation.goBack();
       } catch (error: any) {
         console.error('Error creating/updating team member:', error);
         if (error.response?.data?.message) {
@@ -203,6 +242,8 @@ const AddTeamScreen: React.FC<Props> = ({navigation, route}) => {
     }),
     [errors],
   );
+
+  const isProcessing = loading || isPaying || isVerifying;
 
   return (
     <SafeAreaView style={styles.container}>
@@ -353,6 +394,14 @@ const AddTeamScreen: React.FC<Props> = ({navigation, route}) => {
           </View>
         </ScrollView>
       </KeyboardAvoidingView>
+      {/* Unified payment loading overlay */}
+      {isProcessing && (
+        <PaymentLoadingOverlay
+          isCreatingOrder={loading}
+          isPaying={isPaying}
+          isVerifying={isVerifying}
+        />
+      )}
     </SafeAreaView>
   );
 };

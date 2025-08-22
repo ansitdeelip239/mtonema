@@ -426,3 +426,38 @@ export interface TeamMember {
   location: string;
   isActive: boolean;
 }
+
+export interface AddTeamMemberResponse {
+  teamMember: {
+    id: number;
+    name: string;
+    email: string;
+    phone: string;
+    createdOn: string;
+  };
+  partnerDetails: {
+    id: number;
+    location: {
+      id: number;
+      locationName: string;
+      address: string;
+      isNewLocation: boolean;
+    };
+    partnerZone: {
+      id: number;
+      name: string;
+    };
+    website: string;
+    teamId: number;
+  };
+  paymentDetails: {
+    orderId: string;
+    amount: number;
+    keyId: string;
+    proratedDetails: {
+      amount: number;
+      daysRemaining: number;
+      totalDays: number;
+    };
+  };
+}

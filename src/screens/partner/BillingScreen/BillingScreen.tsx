@@ -10,7 +10,7 @@ import Toast from 'react-native-toast-message';
 import {useRazorpayPayment} from '../../../hooks/useRazorpayPayment';
 import {LoadingComponent} from './components/LoadingComponent';
 import {ErrorComponent} from './components/ErrorComponent';
-import {PaymentLoadingOverlay} from './components/PaymentLoading';
+import {PaymentLoadingOverlay} from '../../../components/PaymentLoading';
 import {NextBillCard} from './components/NextBillCard';
 
 type Props = {
