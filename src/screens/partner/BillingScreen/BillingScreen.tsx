@@ -1,5 +1,5 @@
 import React, {useCallback, useEffect, useState} from 'react';
-import {View, Text, StyleSheet, ScrollView} from 'react-native';
+import {View, Text, StyleSheet, ScrollView, TouchableOpacity} from 'react-native';
 import PartnerService from '../../../services/PartnerService';
 import {NextBillResponse} from '../../../types/payment';
 import PaymentModal from './components/PaymentModal';
@@ -12,13 +12,13 @@ import {LoadingComponent} from './components/LoadingComponent';
 import {ErrorComponent} from './components/ErrorComponent';
 import {PaymentLoadingOverlay} from '../../../components/PaymentLoading';
 import {NextBillCard} from './components/NextBillCard';
+import BillingPlanSwitcherModal from './components/BillingPlanSwitcherModal';
 
 type Props = {
   onPaymentSuccess?: () => void;
 };
 
 const BillingScreen: React.FC<Props> = ({onPaymentSuccess}) => {
-  // Keep all states - they serve different purposes
   const [state, setState] = useState({
     loading: true,
     error: null as string | null,
@@ -29,6 +29,7 @@ const BillingScreen: React.FC<Props> = ({onPaymentSuccess}) => {
   const [nextBill, setNextBill] = useState<NextBillResponse['nextBill'] | null>(
     null,
   );
+  const [showPlanModal, setShowPlanModal] = useState(false);
   const [paymentHistory, setPaymentHistory] = useState<
     NextBillResponse['transactionHistory']
   >([]);
@@ -150,6 +151,15 @@ const BillingScreen: React.FC<Props> = ({onPaymentSuccess}) => {
           </View>
         </View>
 
+        {/* Switch Billing Plan Button */}
+        <TouchableOpacity
+          style={styles.switchPlanButton}
+          onPress={() => setShowPlanModal(true)}
+          accessibilityLabel="Switch Billing Plan"
+        >
+          <Text style={styles.switchPlanButtonText}>Switch Billing Plan</Text>
+        </TouchableOpacity>
+
         {nextBill && (
           <NextBillCard nextBill={nextBill} onPayNow={handlePayNow} />
         )}
@@ -163,6 +173,14 @@ const BillingScreen: React.FC<Props> = ({onPaymentSuccess}) => {
           nextBill={nextBill}
         />
       </ScrollView>
+
+      {/* Billing Plan Switcher Modal */}
+      <BillingPlanSwitcherModal
+        visible={showPlanModal}
+        onClose={() => setShowPlanModal(false)}
+        currentPlanId={nextBill ? nextBill.partner.plan.id : 0}
+        onPlanSwitched={fetchNextBill}
+      />
 
       {/* Single overlay that handles all three states */}
       {isProcessing && (
@@ -203,6 +221,24 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: '#6b7280',
     lineHeight: 24,
+  },
+  switchPlanButton: {
+    marginBottom: 16,
+    backgroundColor: '#6366f1',
+    borderRadius: 8,
+    paddingVertical: 12,
+    alignItems: 'center',
+    justifyContent: 'center',
+    elevation: 2,
+    shadowColor: '#000',
+    shadowOffset: {width: 0, height: 2},
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+  },
+  switchPlanButtonText: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: '600',
   },
   historySection: {
     backgroundColor: 'white',

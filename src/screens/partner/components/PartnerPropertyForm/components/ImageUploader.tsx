@@ -10,6 +10,7 @@ import Toast from 'react-native-toast-message';
 import {ImageData} from '../../../../../types/image';
 import GetIcon from '../../../../../components/GetIcon';
 import { useTheme } from '../../../../../context/ThemeProvider';
+import url from '../../../../../constants/api';
 
 interface ImageUploaderProps {
   onImagesSelected: (images: ImageData[]) => void;
@@ -107,7 +108,7 @@ const ImageUploader: React.FC<ImageUploaderProps> = ({
 
     try {
       const response = await fetch(
-        'https://api.cloudinary.com/v1_1/dncrproperty-com/image/upload',
+        url.upload.image,
         {
           method: 'POST',
           body: data,

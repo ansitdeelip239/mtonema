@@ -1,106 +1,113 @@
-import config from '../config';
-
-export const BASE_URL = config.apiUrl;
-
 const url = {
-  //Authentication
-  userSignup: BASE_URL + '/account/user-signup',
-  partnerSignup: BASE_URL + '/account/partner-signup',
-  otpVerification: BASE_URL + '/account/otp-verification',
-
-  ValidateEmail: BASE_URL + '/account/check-email', //Need to update
-
-  //Users
-  users: BASE_URL + '/users',
-
-  //Property
-  FilterSearch: BASE_URL + '/property/filterProperty',
-  RecommendedProperty: BASE_URL + '/property/getAllProperty',
-  ContactProperty: BASE_URL + '/contactProperty/Contact',
-  getListOfContactedProperty:
-    BASE_URL + '/contactProperty/getAllContactByuserID',
-
-  //Seller
-  RegisterSeller: BASE_URL + '/Account/registerseller',
-  AddProperty: BASE_URL + '/property/addProperty',
-  GetProperty: BASE_URL + '/property/getPropertyByUserid',
-  UpdateProperty: BASE_URL + '/property/updateProperty',
-  deleteProperty: BASE_URL + '/property/removeProperty',
-  GetInTouch: BASE_URL + '/contactProperty/GetinTouch',
-
-  //updateprofile
-  UpdateProfile: BASE_URL + '/User/UpdateUser',
-
-  //cloudinary
-  imageUpload: 'https://api.cloudinary.com/v1_1/dncrproperty-com/image/upload',
-  videoUpload: 'https://api.cloudinary.com/v1_1/proplisting/video/upload',
-
-  //Master Detail
-  // getMasterDetail: BASE_URL + '/MasterDetail/getMasterDetailsByMasterName?MasterDetailName=',
-  getMasterDetail: BASE_URL + '/master-details',
-  getPlaces: BASE_URL + '/master-details/getgoogleplaces',
-  deleteUser: BASE_URL + '/User/DeleteUserByUserId',
-  searchIntellisense: BASE_URL + '/master-details/search-intellisense',
-
-  //Partner
-  agentProperties: BASE_URL + '/partners/agent-properties',
-  addAgentProperties: BASE_URL + '/partners/add-agent-property-new',
-  agentPropertiesNew: BASE_URL + '/partners/agent-properties-New',
-  // updateAgentProperty: BASE_URL + '/partner/UpdateAgentProperty',
-  getClientData: BASE_URL + '/partners/getclientdata',
-  getDuplicateClients: BASE_URL + '/partners/clients/check-duplicates',
-  getGroupsByPartnerId: BASE_URL + '/partners/groups-New',
-  // addEditClientData: BASE_URL + '/partner/AddEditClientData',
-  // getPartnerProperty: BASE_URL + '/partner-properties',
-  deleteAgentProperty: BASE_URL + '/partners/agent-properties',
-  clients: BASE_URL + '/partners/clients',
-  getClients: BASE_URL + '/partners/clients-data-new',
-  addClients: BASE_URL + '/partners/clients-New',
-  addEditClientActivity: BASE_URL + '/partners/addeditclient-activity',
-  deleteClientActivity: BASE_URL + '/partners/deleteclient-activity',
-  getPartnerProperty: (userId: number) => {
-    return BASE_URL + '/users/' + userId + '/partner-properties';
+  auth: {
+    userSignup: '/account/user-signup',
+    partnerSignup: '/account/partner-signup',
+    otpVerification: '/account/otp-verification',
+    validateEmail: '/account/check-email',
   },
-  partnerPropertyNew: BASE_URL + '/partners/partner-properties',
-  partnerProperty: BASE_URL + '/partners/properties',
-  addPartnerProperty: BASE_URL + '/partners/add-partner-property-new',
-  deletePartnerPropertyById: (propertyId: number) => {
-    return BASE_URL + '/partner/properties/' + propertyId;
+  users: {
+    list: '/users',
+    updateProfile: '/User/UpdateUser',
+    delete: '/User/DeleteUserByUserId',
   },
-  getAssignedUsers: (clientId: number) => {
-    return BASE_URL + '/clients/' + clientId + '/assigned-users';
+  property: {
+    filterSearch: '/property/filterProperty',
+    recommended: '/property/getAllProperty',
+    contact: '/contactProperty/Contact',
+    getContactedList: '/contactProperty/getAllContactByuserID',
+    getInTouch: '/properties/GetInTouch',
   },
-  teamMembers: BASE_URL + '/teammembers',
-  getAllTeamMembers: BASE_URL + '/partners/team-members',
-  assignClient: BASE_URL + '/assign-client',
-  followUps: BASE_URL + '/partners/follow-ups',
-  groups: BASE_URL + '/partners/groups-New',
-  // addGroups: BASE_URL + '/partners/addedit-groups',
-  addGroups: BASE_URL + '/partners/addedit-groups-New',
-  feedback: BASE_URL + '/testimonials/by-createdby',
-  contentTemplates: BASE_URL + '/partners/content-templates',
-  addContentTemplate: (userId: number) => {
-    return BASE_URL + '/partners/' + userId + '/templates';
+  seller: {
+    register: '/Account/registerseller',
+    property: {
+      add: '/property/addProperty',
+      get: '/property/getPropertyByUserid',
+      update: '/property/updateProperty',
+      delete: '/property/removeProperty',
+    },
+    getInTouch: '/contactProperty/GetinTouch',
   },
-  updateContentTemplate: (userId: number, templateId: number) => {
-    return BASE_URL + '/partners/' + userId + '/templates/' + templateId;
+  upload: {
+    image: 'https://api.cloudinary.com/v1_1/dncrproperty-com/image/upload',
+    video: 'https://api.cloudinary.com/v1_1/proplisting/video/upload',
   },
+  masterDetails: {
+    get: '/master-details',
+    getPlaces: '/master-details/getgoogleplaces',
+    searchIntellisense: '/master-details/search-intellisense',
+  },
+  partners: {
+    agentProperties: {
+      base: '/partners/agent-properties',
+      add: '/partners/add-agent-property-new',
+      new: '/partners/agent-properties-New',
+      delete: '/partners/agent-properties',
+    },
+    partnerProperties: {
+      base: '/partners/properties',
+      new: '/partners/partner-properties',
+      add: '/partners/add-partner-property-new',
+      getByUserId: (userId: number) => `/users/${userId}/partner-properties`,
+      deleteById: (propertyId: number) => `/partner/properties/${propertyId}`,
+    },
 
-  //Admin
-  getAllProperties: BASE_URL + '/property/getAllProperty',
-  getAllUsers: BASE_URL + '/User/GetAllUser',
-  getVisitor: BASE_URL + '/User/GetVisitor',
-  getAllContact: BASE_URL + '/contactProperty/getAllContact',
+    clients: {
+      list: '/partners/clients',
+      getData: '/partners/getclientdata',
+      getDataNew: '/partners/clients-data-new',
+      add: '/partners/clients-New',
+      checkDuplicates: '/partners/clients/check-duplicates',
+      getAssignedUsers: (clientId: number) =>
+        `/clients/${clientId}/assigned-users`,
+      assign: '/assign-client',
+      activities: {
+        addEdit: '/partners/addeditclient-activity',
+        delete: '/partners/deleteclient-activity',
+      },
+    },
 
-  getInTouch: BASE_URL + '/properties/GetInTouch',
+    team: {
+      members: '/teammembers',
+      getAllMembers: '/partners/team-members',
+    },
 
-  //Payment
-  createPaymentOrder: BASE_URL + '/payment/orders/create',
-  paymentOrderStatus: BASE_URL + '/payment/orders/status',
-  transactions: BASE_URL + '/payment/admin/transactions',
-  nextBill: BASE_URL + '/payment/next-bill',
-  payNextBill: BASE_URL + '/payment/pay-next-bill',
-  Plans: BASE_URL + '/payment/plans',
+    groups: {
+      list: '/partners/groups-New',
+      getByPartnerId: '/partners/groups-New',
+      addEdit: '/partners/addedit-groups-New',
+    },
+
+    followUps: '/partners/follow-ups',
+    feedback: '/testimonials/by-createdby',
+
+    templates: {
+      list: '/partners/content-templates',
+      add: (userId: number) => `/partners/${userId}/templates`,
+      update: (userId: number, templateId: number) =>
+        `/partners/${userId}/templates/${templateId}`,
+    },
+  },
+  admin: {
+    properties: '/property/getAllProperty',
+    users: '/User/GetAllUser',
+    visitors: '/User/GetVisitor',
+    contacts: '/contactProperty/getAllContact',
+  },
+  payment: {
+    orders: {
+      create: '/payment/orders/create',
+      status: '/payment/orders/status',
+    },
+    transactions: '/payment/admin/transactions',
+    billing: {
+      nextBill: '/payment/next-bill',
+      payNextBill: '/payment/pay-next-bill',
+    },
+    plans: {
+      list: '/payment/plans',
+      switch: '/payment/switch-plan',
+    },
+  },
 };
 
 export default url;

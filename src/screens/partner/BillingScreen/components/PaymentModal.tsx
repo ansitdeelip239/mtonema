@@ -1,5 +1,14 @@
-import React from 'react';
-import {Modal, View, TouchableOpacity, Text, StyleSheet} from 'react-native';
+import React, {useRef, useEffect} from 'react';
+import {
+  Modal,
+  View,
+  TouchableOpacity,
+  Text,
+  StyleSheet,
+  Animated,
+  Pressable,
+  ScrollView,
+} from 'react-native';
 import {NextBillResponse} from '../../../../types/payment';
 import GetIcon from '../../../../components/GetIcon';
 import {formatDate as formatDateUtil} from '../../../../utils/dateUtils';
@@ -12,118 +21,203 @@ interface PaymentModalProps {
   nextBill: NextBillResponse['nextBill'] | null;
 }
 
-// Removed local formatPrice and formatDate
-
 const PaymentModal: React.FC<PaymentModalProps> = ({
   visible,
   onClose,
   onConfirm,
   nextBill,
-}) => (
-  <Modal
-    visible={visible}
-    transparent={true}
-    animationType="slide"
-    onRequestClose={onClose}>
-    <View style={styles.modalOverlay}>
-      <View style={styles.paymentModal}>
-        {/* Handle Bar */}
-        <View style={styles.handleBar} />
+}) => {
+  // Animation values
+  const backdropOpacity = useRef(new Animated.Value(0)).current;
+  const slideAnim = useRef(new Animated.Value(300)).current; // Start 300px below
 
-        {/* Close Button */}
-        <TouchableOpacity style={styles.closeButton} onPress={onClose}>
-          <GetIcon iconName="clear" size={20} color="#64748b" />
-        </TouchableOpacity>
+  // Handle modal show/hide animations
+  useEffect(() => {
+    if (visible) {
+      // Show animations
+      Animated.parallel([
+        Animated.timing(backdropOpacity, {
+          toValue: 1,
+          duration: 250,
+          useNativeDriver: true,
+        }),
+        Animated.timing(slideAnim, {
+          toValue: 0,
+          duration: 300,
+          useNativeDriver: true,
+        }),
+      ]).start();
+    } else {
+      // Hide animations
+      Animated.parallel([
+        Animated.timing(backdropOpacity, {
+          toValue: 0,
+          duration: 200,
+          useNativeDriver: true,
+        }),
+        Animated.timing(slideAnim, {
+          toValue: 300,
+          duration: 250,
+          useNativeDriver: true,
+        }),
+      ]).start();
+    }
+  }, [visible, backdropOpacity, slideAnim]);
 
-        {/* Modal Header */}
-        <View style={styles.modalHeader}>
-          <View style={styles.modalIconWrapper}>
-            <GetIcon iconName="transaction" size={32} color="#6366f1" />
-          </View>
-          <Text style={styles.modalTitle}>Payment Confirmation</Text>
-          <Text style={styles.modalSubtitle}>
-            Review and confirm your payment details
-          </Text>
-        </View>
+  const handleBackdropPress = () => {
+    onClose();
+  };
 
-        {/* Payment Summary */}
-        <View style={styles.paymentSummary}>
-          <Text style={styles.summaryTitle}>Payment Summary</Text>
+  return (
+    <Modal
+      visible={visible}
+      transparent={true}
+      animationType="none" // Remove default animation
+      onRequestClose={onClose}>
+      <View style={styles.container}>
+        {/* Animated Backdrop */}
+        <Animated.View
+          style={[
+            styles.modalOverlay,
+            {
+              opacity: backdropOpacity,
+            },
+          ]}>
+          <Pressable
+            style={StyleSheet.absoluteFillObject}
+            onPress={handleBackdropPress}
+            accessibilityLabel="Close modal"
+          />
+        </Animated.View>
 
-          <View style={styles.summaryCard}>
-            <View style={styles.amountSection}>
-              <Text style={styles.totalLabel}>Total Amount</Text>
-              <Text style={styles.totalAmount}>
-                {nextBill && formatCurrency(nextBill.amount)}
-              </Text>
-            </View>
+        {/* Animated Modal Content */}
+        <Animated.View
+          style={[
+            styles.paymentModal,
+            {
+              transform: [{translateY: slideAnim}],
+            },
+          ]}>
+          {/* Handle Bar */}
+          <View style={styles.handleBar} />
 
-            <View style={styles.divider} />
-
-            <View style={styles.detailsSection}>
-              <View style={styles.summaryRow}>
-                <Text style={styles.summaryLabel}>Billing Cycle</Text>
-                <Text style={styles.summaryValue}>
-                  {nextBill?.billingCycle}
-                </Text>
-              </View>
-              <View style={styles.summaryRow}>
-                <Text style={styles.summaryLabel}>Duration</Text>
-                <Text style={styles.summaryValue}>
-                  {nextBill?.durationDays} days
-                </Text>
-              </View>
-              <View style={styles.summaryRow}>
-                <Text style={styles.summaryLabel}>Service Period</Text>
-                <Text style={styles.summaryValue}>
-                  {nextBill &&
-                    `${formatDateUtil(
-                      nextBill.startDate,
-                      'dd MMM yyyy',
-                    )} - ${formatDateUtil(nextBill.endDate, 'dd MMM yyyy')}`}
-                </Text>
-              </View>
-            </View>
-          </View>
-        </View>
-
-        {/* Action Buttons */}
-        <View style={styles.actionButtons}>
-          <TouchableOpacity style={styles.cancelButton} onPress={onClose}>
-            <Text style={styles.cancelButtonText}>Cancel</Text>
+          {/* Close Button */}
+          <TouchableOpacity style={styles.closeButton} onPress={onClose}>
+            <GetIcon iconName="clear" size={20} color="#64748b" />
           </TouchableOpacity>
 
-          <TouchableOpacity style={styles.confirmButton} onPress={onConfirm}>
-            <GetIcon iconName="rupee" size={16} color="white" />
-            <Text style={styles.confirmButtonText}>Confirm & Pay</Text>
-          </TouchableOpacity>
-        </View>
+          {/* Modal Header */}
+          <View style={styles.modalHeader}>
+            <View style={styles.modalIconWrapper}>
+              <GetIcon iconName="transaction" size={32} color="#6366f1" />
+            </View>
+            <Text style={styles.modalTitle}>Payment Confirmation</Text>
+            <Text style={styles.modalSubtitle}>
+              Review and confirm your payment details
+            </Text>
+          </View>
 
-        {/* Security Badge */}
-        <View style={styles.securityBadge}>
-          <GetIcon iconName="rupee" size={14} color="#059669" />
-          <Text style={styles.securityText}>
-            Secured with bank-level encryption
-          </Text>
-        </View>
+          {/* Scrollable Content */}
+          <ScrollView
+            style={styles.scrollContent}
+            showsVerticalScrollIndicator={false}
+            bounces={false}>
+            {/* Payment Summary */}
+            <View style={styles.paymentSummary}>
+              <Text style={styles.summaryTitle}>Payment Summary</Text>
+
+              <View style={styles.summaryCard}>
+                <View style={styles.amountSection}>
+                  <Text style={styles.totalLabel}>Total Amount</Text>
+                  <Text style={styles.totalAmount}>
+                    {nextBill && formatCurrency(nextBill.amount)}
+                  </Text>
+                </View>
+
+                <View style={styles.divider} />
+
+                <View style={styles.detailsSection}>
+                  <View style={styles.summaryRow}>
+                    <Text style={styles.summaryLabel}>Billing Cycle</Text>
+                    <Text style={styles.summaryValue}>
+                      {nextBill?.billingCycle}
+                    </Text>
+                  </View>
+                  <View style={styles.summaryRow}>
+                    <Text style={styles.summaryLabel}>Duration</Text>
+                    <Text style={styles.summaryValue}>
+                      {nextBill?.durationDays} days
+                    </Text>
+                  </View>
+                  <View style={styles.summaryRow}>
+                    <Text style={styles.summaryLabel}>Service Period</Text>
+                    <Text style={styles.summaryValue}>
+                      {nextBill &&
+                        `${formatDateUtil(
+                          nextBill.startDate,
+                          'dd MMM yyyy',
+                        )} - ${formatDateUtil(
+                          nextBill.endDate,
+                          'dd MMM yyyy',
+                        )}`}
+                    </Text>
+                  </View>
+                </View>
+              </View>
+            </View>
+          </ScrollView>
+
+          {/* Action Buttons */}
+          <View style={styles.actionButtons}>
+            <TouchableOpacity style={styles.cancelButton} onPress={onClose}>
+              <Text style={styles.cancelButtonText}>Cancel</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity style={styles.confirmButton} onPress={onConfirm}>
+              <GetIcon iconName="rupee" size={16} color="white" />
+              <Text style={styles.confirmButtonText}>Confirm & Pay</Text>
+            </TouchableOpacity>
+          </View>
+
+          {/* Security Badge */}
+          <View style={styles.securityBadge}>
+            <GetIcon iconName="rupee" size={14} color="#059669" />
+            <Text style={styles.securityText}>
+              Secured with bank-level encryption
+            </Text>
+          </View>
+        </Animated.View>
       </View>
-    </View>
-  </Modal>
-);
+    </Modal>
+  );
+};
 
 const styles = StyleSheet.create({
-  modalOverlay: {
+  container: {
     flex: 1,
+  },
+  modalOverlay: {
+    ...StyleSheet.absoluteFillObject,
     backgroundColor: 'rgba(0, 0, 0, 0.6)',
-    justifyContent: 'flex-end',
+    zIndex: 1,
   },
   paymentModal: {
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    bottom: 0,
     backgroundColor: 'white',
     borderTopLeftRadius: 24,
     borderTopRightRadius: 24,
     paddingHorizontal: 24,
     paddingBottom: 34,
-    maxHeight: '85%',
+    maxHeight: '90%',
+    zIndex: 2,
+    elevation: 8,
+    shadowColor: '#000',
+    shadowOffset: {width: 0, height: -2},
+    shadowOpacity: 0.15,
+    shadowRadius: 12,
   },
   handleBar: {
     width: 40,
@@ -149,7 +243,7 @@ const styles = StyleSheet.create({
   modalHeader: {
     alignItems: 'center',
     paddingTop: 24,
-    paddingBottom: 32,
+    paddingBottom: 24,
   },
   modalIconWrapper: {
     width: 72,
@@ -174,8 +268,11 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     lineHeight: 22,
   },
+  scrollContent: {
+    flex: 1,
+  },
   paymentSummary: {
-    marginBottom: 32,
+    marginBottom: 24,
   },
   summaryTitle: {
     fontSize: 18,
@@ -234,7 +331,7 @@ const styles = StyleSheet.create({
   actionButtons: {
     flexDirection: 'row',
     gap: 12,
-    marginBottom: 20,
+    marginVertical: 20,
   },
   cancelButton: {
     flex: 1,

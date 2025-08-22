@@ -5,7 +5,7 @@ import {api} from '../utils/api';
 class SellerService {
   static async addProperty(body: PropertyFormData) {
     try {
-      const response = await api.post<null>(`${url.AddProperty}`, body);
+      const response = await api.post<null>(`${url.seller.property.add}`, body);
       return response;
     } catch (error) {
       console.error('Error in addProperty', error);
@@ -15,7 +15,7 @@ class SellerService {
 
   static async updateProperty(body: PropertyFormData) {
     try {
-      const response = await api.post<null>(`${url.UpdateProperty}`, body);
+      const response = await api.post<null>(`${url.seller.property.update}`, body);
       return response;
     } catch (error) {
       console.error('Error in updateProperty', error);

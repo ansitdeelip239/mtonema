@@ -86,7 +86,7 @@ const [loading, setLoading] = useState(false);
     }
     setLoading(prev=>!prev);
     try {
-      const response = await api.post<any>(`${url.GetInTouch}`, formData);
+      const response = await api.post<any>(`${url.seller.getInTouch}`, formData);
       console.log(response.data);
       Alert.alert('Form Submitted',`Thank you, ${formData.name}!`);
       setFormData({name: '', email: '', mobile: '', message: ''});

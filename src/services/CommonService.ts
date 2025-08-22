@@ -6,7 +6,7 @@ import {api} from '../utils/api';
 class CommonService {
   public static async updateProfile(requestBody: ProfileFormData) {
     try {
-      const response = api.put<User>(`${url.users}`, requestBody);
+      const response = api.put<User>(`${url.users.list}`, requestBody);
       return response;
     } catch (error) {
       throw error;

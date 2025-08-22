@@ -52,7 +52,7 @@ class PartnerService {
         bhkType,
       }).toString();
       const response = await api.get<any>(
-        `${url.agentPropertiesNew}?${params}`,
+        `${url.partners.agentProperties.new}?${params}`,
       );
       return response.data;
     } catch (error) {
@@ -63,7 +63,7 @@ class PartnerService {
 
   static async addAgentProperty(body: AgentPropertyRequestModel) {
     try {
-      const response = await api.post<null>(`${url.addAgentProperties}`, body);
+      const response = await api.post<null>(`${url.partners.agentProperties.add}`, body);
       return response;
     } catch (error) {
       console.error('Error in updateAgentProperty', error);
@@ -77,7 +77,7 @@ class PartnerService {
   ) {
     try {
       const response = await api.put<null>(
-        `${url.agentProperties}/${id}`,
+        `${url.partners.agentProperties.base}/${id}`,
         body,
       );
       return response;
@@ -105,7 +105,7 @@ class PartnerService {
         sortBy,
       }).toString();
       const response = await api.get<ClientResponseModel>(
-        `${url.getClients}?${params}`,
+        `${url.partners.clients.getDataNew}?${params}`,
       );
       return response;
     } catch (error) {
@@ -120,7 +120,7 @@ class PartnerService {
         email,
       }).toString();
       const response = await api.get<GroupResponse>(
-        `${url.getGroupsByPartnerId}?${params}`,
+        `${url.partners.groups.list}?${params}`,
       );
       return response;
     } catch (error) {
@@ -131,7 +131,7 @@ class PartnerService {
 
   static async addClient(body: ClientForm) {
     try {
-      const response = await api.post<string | null>(`${url.addClients}`, body);
+      const response = await api.post<string | null>(`${url.partners.clients.add}`, body);
       return response;
     } catch (error) {
       console.error('Error in addClient', error);
@@ -150,7 +150,7 @@ class PartnerService {
         pageSize: pageSize.toString(),
       });
       const response = await api.get<any>(
-        `${url.users}/${partnerId}/partner-properties?${params}`,
+        `${url.users.list}/${partnerId}/partner-properties?${params}`,
       );
       return response;
     } catch (error) {
@@ -162,7 +162,7 @@ class PartnerService {
   static async deleteAgentProperty(agentPropertyId: number) {
     try {
       const response = await api.delete<null>(
-        `${url.deleteAgentProperty}?agentPropertyId=${agentPropertyId}`,
+        `${url.partners.agentProperties.delete}?agentPropertyId=${agentPropertyId}`,
       );
       return response;
     } catch (error) {
@@ -173,7 +173,7 @@ class PartnerService {
 
   static async getClientById(clientId: number) {
     try {
-      const response = await api.get<Client>(`${url.clients}/${clientId}`);
+      const response = await api.get<Client>(`${url.partners.clients.list}/${clientId}`);
 
       return response;
     } catch (error) {
@@ -184,7 +184,7 @@ class PartnerService {
 
   static async deleteClientById(clientId: number) {
     try {
-      const response = await api.delete<null>(`${url.clients}/${clientId}`);
+      const response = await api.delete<null>(`${url.partners.clients.list}/${clientId}`);
       return response;
     } catch (error) {
       console.error('Error in deleteClientById', error);
@@ -208,7 +208,7 @@ class PartnerService {
         ...(id && {id: id}),
       };
       const response = await api.post<null>(
-        `${url.addEditClientActivity}`,
+        `${url.partners.clients.activities.addEdit}`,
         body,
       );
       return response;
@@ -221,7 +221,7 @@ class PartnerService {
   static async deleteClientActivity(activityId: number) {
     try {
       const response = await api.delete<null>(
-        `${url.deleteClientActivity}?Id=${activityId}`,
+        `${url.partners.clients.activities.delete}?Id=${activityId}`,
       );
       return response;
     } catch (error) {
@@ -242,7 +242,7 @@ class PartnerService {
         ...(pageSize && {pageSize: pageSize.toString()}),
       }).toString();
 
-      const response = await api.get<Group2Response>(`${url.groups}?${params}`);
+      const response = await api.get<Group2Response>(`${url.partners.groups.list}?${params}`);
       return response;
     } catch (error) {
       console.error('Error in getGroupsByEmail', error);
@@ -264,7 +264,7 @@ class PartnerService {
         ...(groupId && {id: groupId}),
       };
 
-      const response = await api.post<null>(`${url.addGroups}`, payload);
+      const response = await api.post<null>(`${url.partners.groups.addEdit}`, payload);
       return response;
     } catch (error) {
       console.error('Error in createGroup', error);
@@ -274,7 +274,7 @@ class PartnerService {
 
   static async deleteGroup(groupId: number) {
     try {
-      const response = await api.delete<null>(`${url.groups}/${groupId}`);
+      const response = await api.delete<null>(`${url.partners.groups.list}/${groupId}`);
       return response;
     } catch (error) {
       console.error('Error in deleteGroup', error);
@@ -299,7 +299,7 @@ class PartnerService {
             clientId: number;
             followUp: null;
           }
-      >(`${url.followUps}/client?${params}`);
+      >(`${url.partners.followUps}/client?${params}`);
       return response;
     } catch (error) {
       console.error('Error in getFollowUpDate', error);
@@ -322,7 +322,7 @@ class PartnerService {
       }).toString();
 
       const response = await api.get<FollowUpResponseModel>(
-        `${url.followUps}?${params}`,
+        `${url.partners.followUps}?${params}`,
       );
       return response;
     } catch (error) {
@@ -339,7 +339,7 @@ class PartnerService {
   }) {
     try {
       const response = await api.post<FollowUpType>(
-        `${url.followUps}`,
+        `${url.partners.followUps}`,
         payload,
       );
       return response;
@@ -351,7 +351,7 @@ class PartnerService {
 
   static async deleteFollowUp(followUpId: number) {
     try {
-      const response = await api.delete<null>(`${url.followUps}/${followUpId}`);
+      const response = await api.delete<null>(`${url.partners.followUps}/${followUpId}`);
       return response;
     } catch (error) {
       console.error('Error in deleteFollowUp', error);
@@ -361,7 +361,7 @@ class PartnerService {
 
   static async completeFollowUp(followUpId: number, status: string) {
     try {
-      const response = await api.put<null>(`${url.followUps}/${followUpId}`, {
+      const response = await api.put<null>(`${url.partners.followUps}/${followUpId}`, {
         status: status,
       });
       return response;
@@ -374,7 +374,7 @@ class PartnerService {
   static async postPartnerProperty(payload: PartnerPropertyApiSubmissionType) {
     try {
       const response = await api.post<null>(
-        `${url.addPartnerProperty}`,
+        `${url.partners.partnerProperties.add}`,
         payload,
       );
       return response;
@@ -405,7 +405,7 @@ class PartnerService {
       }).toString();
 
       const response = await api.get<PropertiesResponse>(
-        url.partnerPropertyNew + `?${params}`,
+        url.partners.partnerProperties.new + `?${params}`,
       );
       return response;
     } catch (error) {
@@ -416,7 +416,7 @@ class PartnerService {
 
   static async getPartnerPropertyById(id: number) {
     try {
-      const response = await api.get<Property>(url.partnerProperty + `/${id}`);
+      const response = await api.get<Property>(url.partners.partnerProperties.base + `/${id}`);
       return response;
     } catch (error) {
       console.error('Error in getPartnerPropertyById', error);
@@ -427,7 +427,7 @@ class PartnerService {
   static async featuredProperty(propertyId: number, isFeatured: boolean) {
     try {
       const response = await api.patch<null>(
-        `${url.partnerProperty}/${propertyId}`,
+        `${url.partners.partnerProperties.base}/${propertyId}`,
         {
           isFeatured: isFeatured,
         },
@@ -442,7 +442,7 @@ class PartnerService {
   static async deletePartnerProperty(propertyId: number) {
     try {
       const response = await api.delete<null>(
-        url.deletePartnerPropertyById(propertyId),
+        url.partners.partnerProperties.deleteById(propertyId),
       );
       return response;
     } catch (error) {
@@ -457,7 +457,7 @@ class PartnerService {
   ) {
     try {
       const response = await api.put(
-        `${url.partnerProperty}/${propertyId}`,
+        `${url.partners.partnerProperties.base}/${propertyId}`,
         data,
       );
       return response;
@@ -480,7 +480,7 @@ class PartnerService {
       }).toString();
 
       const response = await api.get<CustomerTestimonialResponse>(
-        `${url.feedback}?${params}`,
+        `${url.partners.feedback}?${params}`,
       );
       return response;
     } catch (error) {
@@ -497,7 +497,7 @@ class PartnerService {
           name: string;
           email: string;
         }[]
-      >(url.getAssignedUsers(clientId));
+      >(url.partners.clients.getAssignedUsers(clientId));
       return response;
     } catch (error) {
       console.error('Error in getAssignedUsers', error);
@@ -510,7 +510,7 @@ class PartnerService {
       const params = new URLSearchParams({
         email,
       }).toString();
-      const response = await api.get<User[]>(url.teamMembers + `?${params}`);
+      const response = await api.get<User[]>(url.partners.team.members + `?${params}`);
       return response;
     } catch (error) {
       console.error('Error in getTeamMembers', error);
@@ -526,7 +526,10 @@ class PartnerService {
     location: string;
   }) {
     try {
-      const response = await api.post<AddTeamMemberResponse>(url.getAllTeamMembers, data);
+      const response = await api.post<AddTeamMemberResponse>(
+        url.partners.team.getAllMembers,
+        data,
+      );
       return response;
     } catch (error) {
       console.error('Error in addTeamMember', error);
@@ -551,7 +554,7 @@ class PartnerService {
   }) {
     try {
       const response = await api.put<null>(
-        `${url.getAllTeamMembers}/${teamId}`,
+        `${url.partners.team.getAllMembers}/${teamId}`,
         {name, email, phone, location, isActive},
       );
       return response;
@@ -564,7 +567,7 @@ class PartnerService {
   static async assignClient(payload: {clientId: number; userId: number[]}) {
     try {
       const response = await api.post<AssignClientResponse>(
-        url.assignClient,
+        url.partners.clients.assign,
         payload,
       );
       return response;
@@ -589,7 +592,7 @@ class PartnerService {
       }).toString();
 
       const response = await api.get<ContentTemplatesData>(
-        `${url.contentTemplates}?${params}`,
+        `${url.partners.templates.list}?${params}`,
       );
       return response;
     } catch (error) {
@@ -607,7 +610,7 @@ class PartnerService {
   ) {
     try {
       const response = await api.post<null>(
-        `${url.addContentTemplate(userId)}`,
+        `${url.partners.templates.add(userId)}`,
         payload,
       );
       return response;
@@ -627,7 +630,7 @@ class PartnerService {
   ) {
     try {
       const response = await api.put<null>(
-        `${url.updateContentTemplate(userId, templateId)}`,
+        `${url.partners.templates.update(userId, templateId)}`,
         payload,
       );
       return response;
@@ -640,7 +643,7 @@ class PartnerService {
   static async getAllPartners() {
     try {
       const response = await api.get<{users: User[]}>(
-        url.users + '?role=partner',
+        url.users.list + '?role=partner',
       );
       return response;
     } catch (error) {
@@ -684,7 +687,7 @@ class PartnerService {
           hasNext: boolean;
           hasPrevious: boolean;
         };
-      }>(url.getAllTeamMembers + `?${params.toString()}`);
+      }>(url.partners.team.getAllMembers + `?${params.toString()}`);
       return response;
     } catch (error) {
       console.error('Error in getAllTeamMembers', error);
@@ -695,7 +698,7 @@ class PartnerService {
   static async getDuplicateClients(clientId: number) {
     try {
       const response = await api.get<Partial<Client>[]>(
-        url.getDuplicateClients + `/${clientId}`,
+        url.partners.clients.checkDuplicates + `/${clientId}`,
       );
       return response;
     } catch (error) {
@@ -721,7 +724,7 @@ class PartnerService {
         planName: string;
         billingCycle: string;
         durationDays: number;
-      }>(url.createPaymentOrder, payload);
+      }>(url.payment.orders.create, payload);
       return response;
     } catch (error) {
       console.error('Error in createPaymentOrder', error);
@@ -743,7 +746,7 @@ class PartnerService {
           isTrial: boolean;
           razorpayItemId: string;
         }[]
-      >(url.Plans);
+      >(url.payment.plans.list);
       return response;
     } catch (error) {
       console.error('Error in getPaymentPlans', error);
@@ -761,7 +764,7 @@ class PartnerService {
     isTrial: boolean;
   }) {
     try {
-      const response = await api.post<null>(url.Plans, payload);
+      const response = await api.post<null>(url.payment.plans.list, payload);
       return response;
     } catch (error) {
       console.error('Error in addPaymentPlan', error);
@@ -782,7 +785,7 @@ class PartnerService {
     planId: number,
   ) {
     try {
-      const response = await api.put<null>(url.Plans + `/${planId}`, payload);
+      const response = await api.put<null>(url.payment.plans.list + `/${planId}`, payload);
       return response;
     } catch (error) {
       console.error('Error in updatePaymentPlan', error);
@@ -792,7 +795,7 @@ class PartnerService {
 
   static async deletePaymentPlan(planId: number) {
     try {
-      const response = await api.delete<null>(url.Plans + `/${planId}`);
+      const response = await api.delete<null>(url.payment.plans.list + `/${planId}`);
       return response;
     } catch (error) {
       console.error('Error in deletePaymentPlan', error);
@@ -833,7 +836,7 @@ class PartnerService {
           billingCycle: string;
           amount: number;
         };
-      }>(`${url.paymentOrderStatus}/${userId}`);
+      }>(`${url.payment.orders.status}/${userId}`);
       return response;
     } catch (error) {
       console.error('Error in getSubscriptionStatus', error);
@@ -869,7 +872,7 @@ class PartnerService {
       }
 
       const response = await api.get<TransactionResponse>(
-        `${url.transactions}?${params.toString()}`,
+        `${url.payment.transactions}?${params.toString()}`,
       );
 
       return response;
@@ -881,7 +884,7 @@ class PartnerService {
 
   static async getNextBill() {
     try {
-      const response = await api.get<NextBillResponse>(url.nextBill);
+      const response = await api.get<NextBillResponse>(url.payment.billing.nextBill);
       return response;
     } catch (error) {
       console.error('Error in getNextBill', error);
@@ -891,10 +894,20 @@ class PartnerService {
 
   static async payNextBill() {
     try {
-      const response = await api.post<PayNextBillData>(url.payNextBill, {});
+      const response = await api.post<PayNextBillData>(url.payment.billing.payNextBill, {});
       return response;
     } catch (error) {
       console.error('Error in payNextBill', error);
+      throw error;
+    }
+  }
+
+  static async switchBillingPlan(planId: number) {
+    try {
+      const response = await api.put<null>(url.payment.plans.switch, {planId});
+      return response;
+    } catch (error) {
+      console.error('Error in switchBillingPlan', error);
       throw error;
     }
   }

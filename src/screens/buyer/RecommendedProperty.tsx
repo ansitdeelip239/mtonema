@@ -44,7 +44,7 @@ const RecommendedProperty = ({navigation}: HomeProps) => {
         isLoadingRef.current = true;
         setIsFetchingMore(true); // Set fetching more to true
         const response = await api.get<any>(
-          `${url.RecommendedProperty}?pageNumber=${page}&pageSize=${pageSize}`,
+          `${url.property.recommended}?pageNumber=${page}&pageSize=${pageSize}`,
         );
 
         const newProperties = response.data?.propertyModels || [];

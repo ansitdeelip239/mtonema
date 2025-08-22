@@ -5,7 +5,7 @@ class BuyerService {
   static async RecommendedProperty(pageNumber: number, pageSize: number) {
     try {
       const response = await api.get<any>(
-        `${url.RecommendedProperty}?pageNumber=${pageNumber}&pageSize=${pageSize}`,
+        `${url.property.recommended}?pageNumber=${pageNumber}&pageSize=${pageSize}`,
       );
       return response;
     } catch (error) {
@@ -16,7 +16,7 @@ class BuyerService {
   static async getPlaces(text: string, city: string) {
     try {
       const response = await api.get<any>(
-        `${url.getPlaces}?text=${text}&city=${city}`,
+        `${url.masterDetails.getPlaces}?text=${text}&city=${city}`,
       );
       return response;
     } catch (error) {
@@ -27,7 +27,7 @@ class BuyerService {
   {
     try {
       const response = await api.get<any>(
-        `${url.deleteProperty}?id=${id}`,
+        `${url.seller.property.delete}?id=${id}`,
       );
       return response;
     } catch (error) {
@@ -52,7 +52,7 @@ class BuyerService {
     Relevance?: string;
   }) {
     try {
-      const response = await api.post<any>(url.FilterSearch, filterCriteria);
+      const response = await api.post<any>(url.property.filterSearch, filterCriteria);
       return response;
     } catch (error) {
       console.error('Error in filterProperties', error);

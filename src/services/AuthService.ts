@@ -39,7 +39,7 @@ class AuthService {
       }
 
       const response = await api.get<ValidateEmailResponse | null>(
-        `${url.ValidateEmail}?email=${email}`,
+        `${url.auth.validateEmail}?email=${email}`,
       );
       return response;
     } catch (error) {
@@ -52,7 +52,7 @@ class AuthService {
   ): Promise<Response<SignupFormType | null>> {
     try {
       const response = await api.post<SignupFormType | null>(
-        url.userSignup,
+        url.auth.userSignup,
         body,
       );
       return response;
@@ -66,7 +66,7 @@ class AuthService {
   ): Promise<Response<PartnerSignupFormType | null>> {
     try {
       const response = await api.post<PartnerSignupFormType | null>(
-        url.partnerSignup,
+        url.auth.partnerSignup,
         body,
       );
       return response;
@@ -84,7 +84,7 @@ class AuthService {
     domain: string;
   }): Promise<Response<GetInTouchResponse>> {
     try {
-      const response = await api.post<GetInTouchResponse>(url.getInTouch, body);
+      const response = await api.post<GetInTouchResponse>(url.property.getInTouch, body);
       return response;
     } catch (error) {
       throw error;
@@ -104,7 +104,7 @@ class AuthService {
       }
 
       const response = await api.post<string | null>(
-        url.otpVerification,
+        url.auth.otpVerification,
         requestBody,
       );
       return response;
@@ -115,7 +115,7 @@ class AuthService {
 
   static async getUserByToken(token: string) {
     try {
-      const response = await api.get<User>(`${url.users}?token=${token}`, {
+      const response = await api.get<User>(`${url.users.list}?token=${token}`, {
         Authorization: `Bearer ${token}`,
       });
       return response;
@@ -127,7 +127,7 @@ class AuthService {
   static async getPlaces(text: string, city: string) {
     try {
       const response = await api.get<PlacesResponse>(
-        `${url.getPlaces}?text=${text}&city=${city}`,
+        `${url.masterDetails.getPlaces}?text=${text}&city=${city}`,
       );
       return response;
     } catch (error) {

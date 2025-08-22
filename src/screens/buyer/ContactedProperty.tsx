@@ -90,7 +90,7 @@ const ContactedProperty = ({navigation}: HomeProps) => {
 
         // Make the API call
         const response = await api.post<any>(
-          `${url.getListOfContactedProperty}?pageNumber=${pageNumber}&pageSize=${pageSize}&id=${user.id}`,
+          `${url.property.getContactedList}?pageNumber=${pageNumber}&pageSize=${pageSize}&id=${user.id}`,
           requestBody,
         );
 

@@ -6,7 +6,7 @@ class AdminService {
   static async getAllUser(pageNumber: number, pageSize: number) {
     try {
       const response = await api.get<UserData>(
-        `${url.getAllUsers}?pageNumber=${pageNumber}&pageSize=${pageSize}`,
+        `${url.admin.users}?pageNumber=${pageNumber}&pageSize=${pageSize}`,
       );
       return response;
     } catch (error) {
@@ -18,7 +18,7 @@ class AdminService {
   static async getVisitors(body: VisitorRequest) {
     try {
       const response = await api.post<VisitorResponse>(
-        `${url.getVisitor}`,
+        `${url.admin.visitors}`,
         body,
       );
       return response;
@@ -31,7 +31,7 @@ class AdminService {
   static async getAllContactedProperty(pageNumber: number, pageSize: number) {
     try {
       const response = await api.get<ContactedPropertyResponse>(
-        `${url.getAllContact}?pageNumber=${pageNumber}&pageSize=${pageSize}`,
+        `${url.admin.contacts}?pageNumber=${pageNumber}&pageSize=${pageSize}`,
       );
       return response;
     } catch (error) {

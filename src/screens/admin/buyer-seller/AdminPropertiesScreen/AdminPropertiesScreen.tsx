@@ -17,7 +17,7 @@ const AdminPropertiesScreen = () => {
 
   const fetchAdminProperties = async (page: number) => {
     const response = await api.get<any>(
-      `${url.getAllProperties}?pageNumber=${page}&pageSize=10`,
+      `${url.admin.properties}?pageNumber=${page}&pageSize=10`,
     );
     return response;
   };

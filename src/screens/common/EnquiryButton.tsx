@@ -33,7 +33,7 @@ const EnquiryButton = ({
         UserID: user?.id,
         PropertyID: property.ID,
       };
-      const response = await api.post(`${url.ContactProperty}`, request);
+      const response = await api.post(`${url.property.contact}`, request);
       if (response.success) {
         Alert.alert('Success', 'Our Team will contact you soon');
         setDataUpdated(!dataUpdated);

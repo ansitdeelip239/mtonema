@@ -15,7 +15,7 @@ class MasterService {
       }
 
       const response = await api.get<MasterDetailModel[]>(
-        `${url.getMasterDetail}?${params.toString()}`,
+        `${url.masterDetails.get}?${params.toString()}`,
       );
       return response;
     } catch (error) {
@@ -26,7 +26,7 @@ class MasterService {
 
   static async getMasterDetailsById(id: number) {
     try {
-      const response = await api.get<any>(`${url.getMasterDetail}/${id}`);
+      const response = await api.get<any>(`${url.masterDetails.get}/${id}`);
       return response;
     } catch (error) {
       console.error('Error in getMasterDetails', error);
@@ -50,7 +50,7 @@ class MasterService {
       }
 
       const response = await api.get<SearchIntellisenseResponse[]>(
-        `${url.searchIntellisense}?${params.toString()}`,
+        `${url.masterDetails.searchIntellisense}?${params.toString()}`,
       );
       return response;
     } catch (error) {
@@ -63,12 +63,12 @@ class MasterService {
     try {
       if (city) {
         const response = await api.get<GooglePlacesResponse>(
-          `${url.getPlaces}?text=${text}&city=${city}`,
+          `${url.masterDetails.getPlaces}?text=${text}&city=${city}`,
         );
         return response;
       }
       const response = await api.get<GooglePlacesResponse>(
-        `${url.getPlaces}?text=${text}`,
+        `${url.masterDetails.getPlaces}?text=${text}`,
       );
       return response;
     } catch (error) {
