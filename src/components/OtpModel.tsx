@@ -1,5 +1,5 @@
 /* eslint-disable react-native/no-inline-styles */
-import React, { useRef, useEffect } from 'react';
+import React, {useRef, useEffect} from 'react';
 import {
   View,
   Text,
@@ -12,15 +12,16 @@ import {
   ScrollView,
   Dimensions,
 } from 'react-native';
-import { OtpInput } from 'react-native-otp-entry';
-import { useDialog } from '../hooks/useDialog';
+import {OtpInput} from 'react-native-otp-entry';
+import {useDialog} from '../hooks/useDialog';
 import Colors from '../constants/Colors';
 import Images from '../constants/Images';
-import { useKeyboard } from '../hooks/useKeyboard';
-import { lightenColor } from '../utils/colorUtils';
+import {useKeyboard} from '../hooks/useKeyboard';
+import {lightenColor} from '../utils/colorUtils';
 import GetIcon from './GetIcon';
+import {useTranslation} from 'react-i18next';
 
-const { width } = Dimensions.get('window');
+const {width} = Dimensions.get('window');
 
 interface OtpModelProps {
   value: string;
@@ -38,25 +39,34 @@ const OtpModel: React.FC<OtpModelProps> = ({
   themeColor,
 }) => {
   const otpInputRef = useRef(null);
-  const { showError } = useDialog();
-  const { keyboardVisible } = useKeyboard();
+  const {showError} = useDialog();
+  const {keyboardVisible} = useKeyboard();
+  const {t} = useTranslation();
 
-  // Simplified animation values - matching SignUpScreen2
+  // ✅ Define all translations at the top
+  const translations = {
+    enterOtp: t('screens.otpScreen.enterOtp'),
+    otpSentMessage: t('screens.otpScreen.otpSentMessage'),
+    enterValidOtp: t('screens.otpScreen.enterValidOtp'),
+    verifying: t('screens.otpScreen.verifying'),
+    verifyOtp: t('screens.otpScreen.verifyOtp'),
+    didntReceiveCode: t('screens.otpScreen.didntReceiveCode'),
+    resendOtp: t('screens.otpScreen.resendOtp'),
+  };
+
   const logoHeight = useRef(new Animated.Value(150)).current;
   const logoOpacity = useRef(new Animated.Value(1)).current;
 
   const handleSubmit = () => {
     if (value.length !== 6) {
-      showError('Please enter a valid 6-digit OTP.');
+      showError(translations.enterValidOtp); // ✅ Use translation
       return;
     }
     onPress();
   };
 
-  // Handle logo animation when keyboard shows/hides
   useEffect(() => {
     if (keyboardVisible) {
-      // Animate logo sliding up and fading out
       Animated.parallel([
         Animated.timing(logoHeight, {
           toValue: 0,
@@ -70,7 +80,6 @@ const OtpModel: React.FC<OtpModelProps> = ({
         }),
       ]).start();
     } else {
-      // Animate logo sliding down and fading in
       Animated.parallel([
         Animated.timing(logoHeight, {
           toValue: 150,
@@ -86,7 +95,6 @@ const OtpModel: React.FC<OtpModelProps> = ({
     }
   }, [keyboardVisible, logoHeight, logoOpacity]);
 
-  // Get button background color based on state and platform
   const getButtonBackgroundColor = () => {
     const isDisabled = value.length !== 6 || isLoading;
 
@@ -108,7 +116,6 @@ const OtpModel: React.FC<OtpModelProps> = ({
           bounces={false}
           showsVerticalScrollIndicator={false}
           keyboardShouldPersistTaps="handled">
-          {/* Logo with animation */}
           <View style={styles.contentContainer}>
             <Animated.View
               style={[
@@ -117,7 +124,7 @@ const OtpModel: React.FC<OtpModelProps> = ({
                   opacity: logoOpacity,
                   height: logoHeight,
                 } as any,
-                { overflow: 'hidden' as 'hidden' },
+                {overflow: 'hidden' as 'hidden'},
               ]}>
               <Image
                 source={Images.MTESTATES_LOGO}
@@ -131,12 +138,12 @@ const OtpModel: React.FC<OtpModelProps> = ({
                 <Text
                   style={[
                     styles.welcomeTitle,
-                    themeColor ? { color: themeColor } : null,
+                    themeColor ? {color: themeColor} : null,
                   ]}>
-                  Enter OTP
+                  {translations.enterOtp}
                 </Text>
                 <Text style={styles.welcomeSubtitle}>
-                  We've sent a 6-digit code to your registered E-mail address
+                  {translations.otpSentMessage}
                 </Text>
               </View>
 
@@ -152,9 +159,9 @@ const OtpModel: React.FC<OtpModelProps> = ({
                       styles.activeOtpBox,
                       themeColor
                         ? {
-                          borderColor: themeColor,
-                          backgroundColor: lightenColor(themeColor, 0.9),
-                        }
+                            borderColor: themeColor,
+                            backgroundColor: lightenColor(themeColor, 0.9),
+                          }
                         : null,
                     ]),
                   }}
@@ -175,37 +182,35 @@ const OtpModel: React.FC<OtpModelProps> = ({
                   <Text
                     style={[
                       styles.buttonText,
-                      (value.length !== 6 || isLoading) && styles.disabledButtonText,
+                      (value.length !== 6 || isLoading) &&
+                        styles.disabledButtonText,
                     ]}>
-                    {isLoading ? 'Verifying...' : 'Verify OTP'}
+                    {isLoading
+                      ? translations.verifying
+                      : translations.verifyOtp}
                   </Text>
                   {!isLoading && value.length === 6 && (
-                    <GetIcon
-                      iconName="chevronRight"
-                      color="white"
-                      size="20"
-                    />
+                    <GetIcon iconName="chevronRight" color="white" size="20" />
                   )}
                 </View>
               </TouchableOpacity>
 
               <View style={styles.resendContainer}>
                 <Text style={styles.resendText}>
-                  Didn't receive the code?{' '}
+                  {translations.didntReceiveCode}{' '}
                   <Text
                     style={[
                       styles.resendLink,
-                      themeColor ? { color: themeColor } : null,
+                      themeColor ? {color: themeColor} : null,
                     ]}
-                    onPress={() => { }}>
-                    Resend OTP
+                    onPress={() => {}}>
+                    {translations.resendOtp}
                   </Text>
                 </Text>
               </View>
             </View>
 
-            {/* Add padding at the bottom to ensure the card doesn't get hidden by keyboard */}
-            <View style={{ height: keyboardVisible ? 120 : 40 }} />
+            <View style={{height: keyboardVisible ? 120 : 40}} />
           </View>
         </ScrollView>
       </KeyboardAvoidingView>
@@ -247,7 +252,7 @@ const styles = StyleSheet.create({
     ...Platform.select({
       ios: {
         shadowColor: '#000',
-        shadowOffset: { width: 0, height: 5 },
+        shadowOffset: {width: 0, height: 5},
         shadowOpacity: 0.1,
         shadowRadius: 15,
       },
@@ -294,7 +299,7 @@ const styles = StyleSheet.create({
     ...Platform.select({
       ios: {
         shadowColor: '#000',
-        shadowOffset: { width: 0, height: 4 },
+        shadowOffset: {width: 0, height: 4},
         shadowOpacity: 0.15,
         shadowRadius: 8,
       },

@@ -12,6 +12,7 @@ import { useTheme } from '../../context/ThemeProvider';
 import HeaderComponent from './components/HeaderComponent';
 import Roles from '../../constants/Roles';
 import Colors from '../../constants/Colors';
+import { useTranslation } from 'react-i18next';
 
 type Props = NativeStackScreenProps<AuthStackParamList, 'OtpScreen'>;
 
@@ -22,6 +23,7 @@ const OtpScreen: React.FC<Props> = ({ navigation, route }) => {
   const { email, logoUrl, location } = route.params;
   const { showError, hideDialog } = useDialog();
   const { updateTheme } = useTheme();
+  const {t} = useTranslation();
 
   // Partner info state
   const [partnerInfo, setPartnerInfo] = useState<{
@@ -152,7 +154,7 @@ const OtpScreen: React.FC<Props> = ({ navigation, route }) => {
       {
         Platform.OS === 'android' && (
           <HeaderComponent
-            title="Verify OTP"
+            title={t('screens.otpScreen.verifyOTP')}
             onBackPress={navigation.goBack}
           />
         )

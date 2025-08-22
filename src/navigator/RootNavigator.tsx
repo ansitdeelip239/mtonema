@@ -5,14 +5,20 @@ import MainNavigator from './MainNavigator';
 import {navigationRef} from './NavigationRef';
 import AuthNavigator from './AuthNavigator';
 import {useAuth} from '../hooks/useAuth';
+import {useLanguage} from '../context/LanguageProvider';
 import {View, ActivityIndicator, StyleSheet, Image} from 'react-native';
 import Colors from '../constants/Colors';
 import Images from '../constants/Images';
+import LanguageSelectionScreen from '../screens/language/LanguageSelectionScreen';
+import LanguageDebugger from '../components/LanguageDebugger';
 
 const RootStack = createNativeStackNavigator();
 
 export default function RootNavigator() {
-  const {isAuthenticated, isLoading} = useAuth();
+  const {isAuthenticated, isLoading: isAuthLoading} = useAuth();
+  const {isLanguageSet, isLoading: isLanguageLoading} = useLanguage();
+
+  const isLoading = isAuthLoading || isLanguageLoading;
 
   if (isLoading) {
     return (
@@ -27,8 +33,14 @@ export default function RootNavigator() {
     );
   }
 
+  // Show language selection if language is not set
+  if (!isLanguageSet) {
+    return <LanguageSelectionScreen />;
+  }
+
   return (
     <NavigationContainer ref={navigationRef}>
+      <LanguageDebugger />
       <RootStack.Navigator screenOptions={{headerShown: false}}>
         {isAuthenticated ? (
           <RootStack.Screen name="Main" component={MainNavigator} />
@@ -39,6 +51,7 @@ export default function RootNavigator() {
     </NavigationContainer>
   );
 }
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,

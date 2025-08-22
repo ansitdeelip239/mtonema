@@ -1,0 +1,66 @@
+{
+  "common": {
+    "welcome": "Welcome",
+    "loading": "Loading...",
+    "submit": "Submit",
+    "cancel": "Cancel",
+    "save": "Save",
+    "delete": "Delete",
+    "edit": "Edit",
+    "back": "Back",
+    "next": "Continue",
+    "restartApp": "Restart App",
+    "email": "Email"
+  },
+  "screens": {
+    "partnerLoginScreen": {
+      "welcomePartner": "Welcome Partner",
+      "signInToDashboard": "Sign in to access your dashboard",
+      "continueToLogin": "Continue to Login",
+      "getStartedFree": "Get started for FREE",
+      "securePartnerAccess": "Secure Partner Access",
+      "appTitle": "MT One: App & CRM"
+    },
+    "languageSelectionScreen": {
+      "selectLanguage": "Select Language",
+      "choosePreferredLanguage": "Choose your preferred language for the app",
+      "currentLanguage": "Current Language"
+    },
+    "emailScreen": {
+      "partnerSignIn": "Partner Sign In",
+      "buyerSellerSignIn": "Buyer/Seller Sign In",
+      "welcomeBack": "Welcome Back",
+      "enterEmailMessage": "Please enter your email address to continue",
+      "emailLabel": "Email",
+      "emailPlaceholder": "Enter your email address",
+      "continue": "Continue",
+      "verifyNow": "Verify Now",
+      "sendingOtp": "Sending OTP...",
+      "verifying": "Verifying...",
+      "emailVerificationFailed": "Email verification failed",
+      "emailNotFound": "Email not found",
+      "unexpectedError": "An unexpected error occurred",
+      "failedToSendOtp": "Failed to send OTP. Please try again",
+      "errorSendingOtp": "An error occurred while sending OTP.",
+      "enterEmailToContinue": "Please enter your email address to continue"
+    },
+    "otpScreen": {
+      "verifyOTP": "Verify OTP",
+      "enterOtp": "Enter OTP",
+      "otpSentMessage": "We've sent a 6-digit code to your registered E-mail address",
+      "enterValidOtp": "Please enter a valid 6-digit OTP.",
+      "verifying": "Verifying...",
+      "verifyOtp": "Verify OTP",
+      "didntReceiveCode": "Didn't receive the code?",
+      "resendOtp": "Resend OTP"
+    }
+  },
+  "components": {
+    "languageSwitcher": {
+      "changeLanguage": "Change Language",
+      "switchToLanguage": "Switch to {{languageName}}?",
+      "rtlChangeWarning": "This will change the app layout direction and the app will restart.",
+      "languageChangeTitle": "Change Language"
+    }
+  }
+}

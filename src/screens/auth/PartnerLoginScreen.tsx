@@ -8,16 +8,28 @@ import {
   Image,
 } from 'react-native';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
+import {useTranslation} from 'react-i18next';
 import {AuthStackParamList} from '../../navigator/AuthNavigator';
 import Colors from '../../constants/Colors';
 import HeaderComponent from './components/HeaderComponent';
 import Images from '../../constants/Images';
 import Roles from '../../constants/Roles';
+import LanguageSwitcherButton from './LanguageSwitcherButton';
 
 type Props = NativeStackScreenProps<AuthStackParamList, 'PartnerLoginScreen'>;
 
 const PartnerLoginScreen: React.FC<Props> = ({navigation}) => {
-  // For demo, partnerLocation can be null or a dummy object if needed
+  const {t} = useTranslation();
+
+  const translations = {
+    appTitle: t('screens.partnerLoginScreen.appTitle'),
+    welcomePartner: t('screens.partnerLoginScreen.welcomePartner'),
+    signInToDashboard: t('screens.partnerLoginScreen.signInToDashboard'),
+    continueToLogin: t('screens.partnerLoginScreen.continueToLogin'),
+    getStartedFree: t('screens.partnerLoginScreen.getStartedFree'),
+    securePartnerAccess: t('screens.partnerLoginScreen.securePartnerAccess'),
+  };
+
   const partnerLocation = null;
 
   const handleLogin = () => {
@@ -31,14 +43,14 @@ const PartnerLoginScreen: React.FC<Props> = ({navigation}) => {
 
   return (
     <View style={styles.container}>
-      {!isIOS && (
-        <HeaderComponent
-          title="MT One: App & CRM"
-        />
-      )}
+      {/* Language Switcher */}
 
-      {/* Main Content Container */}
+      {!isIOS && <HeaderComponent title={translations.appTitle} />}
+
       <View style={styles.mainContent}>
+        <View style={styles.languageSwitcherContainer}>
+          <LanguageSwitcherButton textColor={Colors.MT_PRIMARY_1} />
+        </View>
         {/* Logo Section */}
         <View style={styles.logoSection}>
           <View style={styles.logoContainer}>
@@ -53,76 +65,49 @@ const PartnerLoginScreen: React.FC<Props> = ({navigation}) => {
         {/* Welcome Section */}
         <View style={styles.welcomeSection}>
           <View style={styles.titleContainer}>
-            <Text style={styles.welcomeTitle}>Welcome Partner</Text>
+            <Text style={styles.welcomeTitle}>
+              {translations.welcomePartner}
+            </Text>
             <View style={styles.titleUnderline} />
           </View>
-          <Text style={styles.subtitle}>Sign in to access your dashboard</Text>
+          <Text style={styles.subtitle}>{translations.signInToDashboard}</Text>
         </View>
 
-        {/* Login Button Section (Android) */}
-        {!isIOS && (
-          <View style={styles.buttonSection}>
-            <TouchableOpacity
-              style={styles.loginButton}
-              onPress={handleLogin}
-              activeOpacity={0.8}>
-              <View style={styles.solidButton}>
-                <Text style={styles.buttonText}>Continue to Login</Text>
-              </View>
-            </TouchableOpacity>
-
-            {/* Get started for FREE link/button */}
-            <TouchableOpacity
-              style={styles.freeLink}
-              onPress={() => navigation.navigate('SignUpScreen', { role: Roles.PARTNER })}
-              activeOpacity={0.6}
-              testID="free-signup-button"
-            >
-              <Text style={styles.freeLinkText}>Get started for FREE</Text>
-            </TouchableOpacity>
-
-            {/* Secondary Info */}
-            <View style={styles.infoContainer}>
-              <View style={styles.divider} />
-              <Text style={styles.infoText}>Secure Partner Access</Text>
-              <View style={styles.divider} />
+        {/* Login Button Section */}
+        <View style={styles.buttonSection}>
+          <TouchableOpacity
+            style={isIOS ? styles.simpleIOSButton : styles.loginButton}
+            onPress={handleLogin}
+            activeOpacity={0.8}>
+            <View style={isIOS ? null : styles.solidButton}>
+              <Text
+                style={isIOS ? styles.simpleIOSButtonText : styles.buttonText}>
+                {translations.continueToLogin}
+              </Text>
             </View>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={styles.freeLink}
+            onPress={() =>
+              navigation.navigate('SignUpScreen', {role: Roles.PARTNER})
+            }
+            activeOpacity={0.6}>
+            <Text style={styles.freeLinkText}>
+              {translations.getStartedFree}
+            </Text>
+          </TouchableOpacity>
+
+          <View style={styles.infoContainer}>
+            <View style={styles.divider} />
+            <Text style={styles.infoText}>
+              {translations.securePartnerAccess}
+            </Text>
+            <View style={styles.divider} />
           </View>
-        )}
-
-        {/* Login Button Section (iOS) */}
-        {isIOS && (
-          <View style={styles.buttonSection}>
-            <TouchableOpacity
-              style={styles.simpleIOSButton}
-              onPress={handleLogin}
-              activeOpacity={0.7}
-              hitSlop={{top: 10, bottom: 10, left: 10, right: 10}}
-              testID="ios-login-button">
-              <Text style={styles.simpleIOSButtonText}>Continue to Login</Text>
-            </TouchableOpacity>
-
-            {/* Get started for FREE link/button */}
-            <TouchableOpacity
-              style={styles.freeLink}
-              onPress={() => navigation.navigate('SignUpScreen', { role: Roles.PARTNER })}
-              activeOpacity={0.6}
-              testID="free-signup-button"
-            >
-              <Text style={styles.freeLinkText}>Get started for FREE</Text>
-            </TouchableOpacity>
-
-            {/* Secondary Info */}
-            <View style={styles.infoContainer}>
-              <View style={styles.divider} />
-              <Text style={styles.infoText}>Secure Partner Access</Text>
-              <View style={styles.divider} />
-            </View>
-          </View>
-        )}
+        </View>
       </View>
 
-      {/* Bottom Accent */}
       <View style={styles.bottomAccent}>
         <View style={styles.solidAccent} />
       </View>
@@ -135,15 +120,22 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: Colors.MT_SECONDARY_3,
   },
+  languageSwitcherContainer: {
+    // position: 'absolute',
+    // top: Platform.OS === 'ios' ? 60 : 20,
+    // right: 20,
+    // zIndex: 1000,
+  },
   mainContent: {
     flex: 1,
     paddingHorizontal: 24,
+    paddingTop: Platform.OS === 'ios' ? 40 : 20, // Add space for language switcher
   },
   logoSection: {
     flex: 0.4,
     justifyContent: 'center',
     alignItems: 'center',
-    paddingTop: 20,
+    // paddingTop: 20,
   },
   logoContainer: {
     backgroundColor: Colors.MT_SECONDARY_3,
@@ -190,7 +182,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     paddingBottom: 40,
   },
-
   // Android/Default button styles
   loginButton: {
     borderRadius: 16,
@@ -213,7 +204,6 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     letterSpacing: 0.5,
   },
-
   // iOS button styles
   simpleIOSButton: {
     borderRadius: 12,
@@ -236,27 +226,6 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     letterSpacing: 0.2,
   },
-
-  // Alternative iOS button for testing
-  alternativeIOSButton: {
-    borderRadius: 8,
-    backgroundColor: '#007AFF', // iOS blue
-    paddingVertical: 16,
-    paddingHorizontal: 24,
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginBottom: 32,
-    minHeight: 44, // iOS minimum touch target
-    borderWidth: 1,
-    borderColor: '#0056CC',
-  },
-  alternativeIOSButtonText: {
-    color: 'white',
-    fontSize: 16,
-    fontWeight: '600',
-    textAlign: 'center',
-  },
-
   freeLink: {
     alignItems: 'center',
     marginBottom: 16,
@@ -269,9 +238,8 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     textAlign: 'center',
     letterSpacing: 0.5,
-    // textTransform: 'uppercase',
     textShadowColor: 'rgba(0, 0, 0, 0.1)',
-    textShadowOffset: { width: 0, height: 1 },
+    textShadowOffset: {width: 0, height: 1},
     textShadowRadius: 2,
   },
   infoContainer: {
@@ -298,7 +266,7 @@ const styles = StyleSheet.create({
   },
   solidAccent: {
     flex: 1,
-    backgroundColor: Colors.MT_PRIMARY_2, // Using the primary color from the original gradient
+    backgroundColor: Colors.MT_PRIMARY_2,
   },
 });
 

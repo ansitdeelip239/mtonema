@@ -1,0 +1,66 @@
+{
+  "common": {
+    "welcome": "Bienvenido",
+    "loading": "Cargando...",
+    "submit": "Enviar",
+    "cancel": "Cancelar",
+    "save": "Guardar",
+    "delete": "Eliminar",
+    "edit": "Editar",
+    "back": "Atrás",
+    "next": "Continuar",
+    "restartApp": "Reiniciar App",
+    "email": "Correo Electrónico"
+  },
+  "screens": {
+    "partnerLoginScreen": {
+      "welcomePartner": "Bienvenido Socio",
+      "signInToDashboard": "Inicia sesión para acceder a tu panel",
+      "continueToLogin": "Continuar al Login",
+      "getStartedFree": "Comienza GRATIS",
+      "securePartnerAccess": "Acceso Seguro de Socios",
+      "appTitle": "MT One: App y CRM"
+    },
+    "languageSelectionScreen": {
+      "selectLanguage": "Seleccionar Idioma",
+      "choosePreferredLanguage": "Elige tu idioma preferido para la aplicación",
+      "currentLanguage": "Idioma Actual"
+    },
+    "emailScreen": {
+      "partnerSignIn": "Iniciar Sesión del Socio",
+      "buyerSellerSignIn": "Iniciar Sesión Comprador/Vendedor",
+      "welcomeBack": "Bienvenido de Nuevo",
+      "enterEmailMessage": "Por favor ingresa tu dirección de correo electrónico para continuar",
+      "emailLabel": "Correo Electrónico",
+      "emailPlaceholder": "Ingresa tu dirección de correo electrónico",
+      "continue": "Continuar",
+      "verifyNow": "Verificar Ahora",
+      "sendingOtp": "Enviando OTP...",
+      "verifying": "Verificando...",
+      "emailVerificationFailed": "La verificación de correo falló",
+      "emailNotFound": "Correo no encontrado",
+      "unexpectedError": "Ocurrió un error inesperado",
+      "failedToSendOtp": "Error al enviar OTP. Por favor intenta de nuevo",
+      "errorSendingOtp": "Ocurrió un error al enviar OTP.",
+      "enterEmailToContinue": "Por favor ingresa tu dirección de correo electrónico para continuar"
+    },
+    "otpScreen": {
+      "verifyOTP": "Verificar OTP",
+      "enterOtp": "Ingresar OTP",
+      "otpSentMessage": "Hemos enviado un código de 6 dígitos a tu dirección de correo registrada",
+      "enterValidOtp": "Por favor ingresa un OTP válido de 6 dígitos.",
+      "verifying": "Verificando...",
+      "verifyOtp": "Verificar OTP",
+      "didntReceiveCode": "¿No recibiste el código?",
+      "resendOtp": "Reenviar OTP"
+    }
+  },
+  "components": {
+    "languageSwitcher": {
+      "changeLanguage": "Cambiar Idioma",
+      "switchToLanguage": "¿Cambiar a {{languageName}}?",
+      "rtlChangeWarning": "Esto cambiará la dirección del diseño de la aplicación y la aplicación se reiniciará.",
+      "languageChangeTitle": "Cambiar Idioma"
+    }
+  }
+}

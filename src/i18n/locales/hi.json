@@ -1,0 +1,66 @@
+{
+  "common": {
+    "welcome": "स्वागत",
+    "loading": "लोड हो रहा है...",
+    "submit": "जमा करें",
+    "cancel": "रद्द करें",
+    "save": "सेव करें",
+    "delete": "मिटाएं",
+    "edit": "संपादित करें",
+    "back": "वापस",
+    "next": "जारी रखें",
+    "restartApp": "ऐप रीस्टार्ट करें",
+    "email": "ईमेल"
+  },
+  "screens": {
+    "partnerLoginScreen": {
+      "welcomePartner": "आपका स्वागत है, पार्टनर",
+      "signInToDashboard": "अपने डैशबोर्ड तक पहुंचने के लिए साइन इन करें",
+      "continueToLogin": "लॉगिन जारी रखें",
+      "getStartedFree": "मुफ्त में शुरुआत करें",
+      "securePartnerAccess": "सुरक्षित पार्टनर पहुंच",
+      "appTitle": "MT One: ऐप और CRM"
+    },
+    "languageSelectionScreen": {
+      "selectLanguage": "भाषा चुनें",
+      "choosePreferredLanguage": "ऐप के लिए अपनी पसंदीदा भाषा चुनें",
+      "currentLanguage": "वर्तमान भाषा"
+    },
+    "emailScreen": {
+      "partnerSignIn": "पार्टनर साइन इन",
+      "buyerSellerSignIn": "खरीदार/विक्रेता साइन इन",
+      "welcomeBack": "वापसी पर स्वागत",
+      "enterEmailMessage": "कृपया जारी रखने के लिए अपना ईमेल पता दर्ज करें",
+      "emailLabel": "ईमेल",
+      "emailPlaceholder": "अपना ईमेल पता दर्ज करें",
+      "continue": "जारी रखें",
+      "verifyNow": "अभी सत्यापित करें",
+      "sendingOtp": "OTP भेजा जा रहा है...",
+      "verifying": "सत्यापन हो रहा है...",
+      "emailVerificationFailed": "ईमेल सत्यापन विफल",
+      "emailNotFound": "ईमेल नहीं मिला",
+      "unexpectedError": "एक अनपेक्षित त्रुटि हुई",
+      "failedToSendOtp": "OTP भेजने में विफल। कृपया पुनः प्रयास करें",
+      "errorSendingOtp": "OTP भेजने में त्रुटि हुई।",
+      "enterEmailToContinue": "कृपया जारी रखने के लिए अपना ईमेल पता दर्ज करें"
+    },
+    "otpScreen": {
+      "verifyOTP": "OTP सत्यापित करें",
+      "enterOtp": "OTP दर्ज करें",
+      "otpSentMessage": "हमने आपके पंजीकृत ई-मेल पते पर 6 अंकों का कोड भेजा है",
+      "enterValidOtp": "कृपया 6 अंकों का वैध OTP दर्ज करें।",
+      "verifying": "सत्यापित हो रहा है...",
+      "verifyOtp": "OTP सत्यापित करें",
+      "didntReceiveCode": "कोड नहीं मिला?",
+      "resendOtp": "OTP पुनः भेजें"
+    }
+  },
+  "components": {
+    "languageSwitcher": {
+      "changeLanguage": "भाषा बदलें",
+      "switchToLanguage": "{{languageName}} में स्विच करें?",
+      "rtlChangeWarning": "यह ऐप लेआउट की दिशा बदल देगा और ऐप रीस्टार्ट हो जाएगा।",
+      "languageChangeTitle": "भाषा बदलें"
+    }
+  }
+}

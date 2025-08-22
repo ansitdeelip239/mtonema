@@ -1,0 +1,66 @@
+{
+  "common": {
+    "welcome": "أهلاً وسهلاً",
+    "loading": "جاري التحميل...",
+    "submit": "إرسال",
+    "cancel": "إلغاء",
+    "save": "حفظ",
+    "delete": "حذف",
+    "edit": "تعديل",
+    "back": "رجوع",
+    "next": "متابعة",
+    "restartApp": "إعادة تشغيل التطبيق",
+    "email": "البريد الإلكتروني"
+  },
+  "screens": {
+    "partnerLoginScreen": {
+      "welcomePartner": "أهلاً بالشريك",
+      "signInToDashboard": "سجل دخولك للوصول إلى لوحة التحكم",
+      "continueToLogin": "متابعة إلى تسجيل الدخول",
+      "getStartedFree": "ابدأ مجاناً",
+      "securePartnerAccess": "وصول آمن للشركاء",
+      "appTitle": "MT One: التطبيق ونظام إدارة العملاء"
+    },
+    "languageSelectionScreen": {
+      "selectLanguage": "اختر اللغة",
+      "choosePreferredLanguage": "اختر لغتك المفضلة للتطبيق",
+      "currentLanguage": "اللغة الحالية"
+    },
+    "emailScreen": {
+      "partnerSignIn": "تسجيل دخول الشريك",
+      "buyerSellerSignIn": "تسجيل دخول المشتري/البائع",
+      "welcomeBack": "مرحباً بعودتك",
+      "enterEmailMessage": "الرجاء إدخال عنوان بريدك الإلكتروني للمتابعة",
+      "emailLabel": "البريد الإلكتروني",
+      "emailPlaceholder": "أدخل عنوان بريدك الإلكتروني",
+      "continue": "متابعة",
+      "verifyNow": "تحقق الآن",
+      "sendingOtp": "إرسال رمز التحقق...",
+      "verifying": "جاري التحقق...",
+      "emailVerificationFailed": "فشل في التحقق من البريد الإلكتروني",
+      "emailNotFound": "البريد الإلكتروني غير موجود",
+      "unexpectedError": "حدث خطأ غير متوقع",
+      "failedToSendOtp": "فشل في إرسال رمز التحقق. الرجاء المحاولة مرة أخرى",
+      "errorSendingOtp": "حدث خطأ أثناء إرسال رمز التحقق.",
+      "enterEmailToContinue": "الرجاء إدخال عنوان بريدك الإلكتروني للمتابعة"
+    },
+    "otpScreen": {
+      "verifyOTP": "تحقق من رمز التحقق",
+      "enterOtp": "إدخال رمز التحقق",
+      "otpSentMessage": "لقد أرسلنا رمز مكون من 6 أرقام إلى عنوان بريدك الإلكتروني المسجل",
+      "enterValidOtp": "الرجاء إدخال رمز تحقق صحيح مكون من 6 أرقام.",
+      "verifying": "جاري التحقق...",
+      "verifyOtp": "تحقق من الرمز",
+      "didntReceiveCode": "لم تتلق الرمز؟",
+      "resendOtp": "إعادة إرسال الرمز"
+    }
+  },
+  "components": {
+    "languageSwitcher": {
+      "changeLanguage": "تغيير اللغة",
+      "switchToLanguage": "التبديل إلى {{languageName}}؟",
+      "rtlChangeWarning": "سيؤدي هذا إلى تغيير اتجاه تخطيط التطبيق وسيتم إعادة تشغيل التطبيق.",
+      "languageChangeTitle": "تغيير اللغة"
+    }
+  }
+}

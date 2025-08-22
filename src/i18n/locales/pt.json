@@ -1,0 +1,66 @@
+{
+  "common": {
+    "welcome": "Bem-vindo",
+    "loading": "Carregando...",
+    "submit": "Enviar",
+    "cancel": "Cancelar",
+    "save": "Salvar",
+    "delete": "Excluir",
+    "edit": "Editar",
+    "back": "Voltar",
+    "next": "Continuar",
+    "restartApp": "Reiniciar App",
+    "email": "Email"
+  },
+  "screens": {
+    "partnerLoginScreen": {
+      "welcomePartner": "Bem-vindo Parceiro",
+      "signInToDashboard": "Entre para acessar seu painel",
+      "continueToLogin": "Continuar para Login",
+      "getStartedFree": "Comece GRÁTIS",
+      "securePartnerAccess": "Acesso Seguro de Parceiros",
+      "appTitle": "MT One: App e CRM"
+    },
+    "languageSelectionScreen": {
+      "selectLanguage": "Selecionar Idioma",
+      "choosePreferredLanguage": "Escolha seu idioma preferido para o aplicativo",
+      "currentLanguage": "Idioma Atual"
+    },
+    "emailScreen": {
+      "partnerSignIn": "Login do Parceiro",
+      "buyerSellerSignIn": "Login Comprador/Vendedor",
+      "welcomeBack": "Bem-vindo de Volta",
+      "enterEmailMessage": "Por favor, insira seu endereço de email para continuar",
+      "emailLabel": "Email",
+      "emailPlaceholder": "Digite seu endereço de email",
+      "continue": "Continuar",
+      "verifyNow": "Verificar Agora",
+      "sendingOtp": "Enviando OTP...",
+      "verifying": "Verificando...",
+      "emailVerificationFailed": "Falha na verificação do email",
+      "emailNotFound": "Email não encontrado",
+      "unexpectedError": "Ocorreu um erro inesperado",
+      "failedToSendOtp": "Falha ao enviar OTP. Tente novamente",
+      "errorSendingOtp": "Ocorreu um erro ao enviar OTP.",
+      "enterEmailToContinue": "Por favor, insira seu endereço de email para continuar"
+    },
+    "otpScreen": {
+      "verifyOTP": "Verificar OTP",
+      "enterOtp": "Inserir OTP",
+      "otpSentMessage": "Enviamos um código de 6 dígitos para seu endereço de email registrado",
+      "enterValidOtp": "Por favor, insira um OTP válido de 6 dígitos.",
+      "verifying": "Verificando...",
+      "verifyOtp": "Verificar OTP",
+      "didntReceiveCode": "Não recebeu o código?",
+      "resendOtp": "Reenviar OTP"
+    }
+  },
+  "components": {
+    "languageSwitcher": {
+      "changeLanguage": "Alterar Idioma",
+      "switchToLanguage": "Mudar para {{languageName}}?",
+      "rtlChangeWarning": "Isso mudará a direção do layout do aplicativo e o aplicativo será reiniciado.",
+      "languageChangeTitle": "Alterar Idioma"
+    }
+  }
+}

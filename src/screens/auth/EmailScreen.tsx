@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, {useCallback, useEffect, useRef, useState} from 'react';
 import {
   View,
   Text,
@@ -10,40 +10,63 @@ import {
   Dimensions,
   Animated,
 } from 'react-native';
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import Toast from 'react-native-toast-message';
-import { AuthStackParamList } from '../../navigator/AuthNavigator';
+import {AuthStackParamList} from '../../navigator/AuthNavigator';
 import AuthService from '../../services/AuthService';
-import { useAuth } from '../../hooks/useAuth';
+import {useAuth} from '../../hooks/useAuth';
 import Colors from '../../constants/Colors';
-import { useDialog } from '../../hooks/useDialog';
-import { MaterialTextInput } from '../../components/MaterialTextInput';
+import {useDialog} from '../../hooks/useDialog';
+import {MaterialTextInput} from '../../components/MaterialTextInput';
 import useForm from '../../hooks/useForm';
-import { EmailFormData, emailSchema } from '../../schema/LoginSchema';
+import {EmailFormData, emailSchema} from '../../schema/LoginSchema';
 import GetIcon from '../../components/GetIcon';
-import { useKeyboard } from '../../hooks/useKeyboard';
+import {useKeyboard} from '../../hooks/useKeyboard';
 import Roles from '../../constants/Roles';
 import Images from '../../constants/Images';
 import HeaderComponent from './components/HeaderComponent';
 import config from '../../config';
-import { lightenColor } from '../../utils/colorUtils';
+import {lightenColor} from '../../utils/colorUtils';
+import { useTranslation } from 'react-i18next';
 
-const { width } = Dimensions.get('window');
+const {width} = Dimensions.get('window');
 type Props = NativeStackScreenProps<AuthStackParamList, 'EmailScreen'>;
 
-const EmailScreen: React.FC<Props> = ({ navigation, route }) => {
+const EmailScreen: React.FC<Props> = ({navigation, route}) => {
+  const {t} = useTranslation();
+
+  // ✅ Define all translations at the top using useMemo
+  const translations = React.useMemo(
+    () => ({
+      partnerSignIn: t('screens.emailScreen.partnerSignIn'),
+      buyerSellerSignIn: t('screens.emailScreen.buyerSellerSignIn'),
+      welcomeBack: t('screens.emailScreen.welcomeBack'),
+      enterEmailToContinue: t('screens.emailScreen.enterEmailToContinue'),
+      email: t('common.email'),
+      emailPlaceholder: t('screens.emailScreen.emailPlaceholder'),
+      continue: t('screens.emailScreen.continue'),
+      sendingOtp: t('screens.emailScreen.sendingOtp'),
+      verifyNow: t('screens.emailScreen.verifyNow'),
+      verifying: t('screens.emailScreen.verifying'),
+      emailNotFound: t('screens.emailScreen.emailNotFound'),
+      emailVerificationFailed: t('screens.emailScreen.emailVerificationFailed'),
+      failedToSendOtp: t('screens.emailScreen.failedToSendOtp'),
+      errorSendingOtp: t('screens.emailScreen.errorSendingOtp'),
+      unexpectedError: t('screens.emailScreen.unexpectedError'),
+    }),
+    [t]
+  );
+
   const [isLoading, setIsLoading] = useState(false);
   const [emailError, setEmailError] = useState<{
     message: string;
     isClickable?: boolean;
-  }>({ message: '', isClickable: false });
+  }>({message: '', isClickable: false});
 
-  // Use the keyboard hook to track keyboard status
-  const { keyboardVisible } = useKeyboard();
-
-  const { setNavigateToPostProperty } = useAuth();
-  const { showError } = useDialog();
-  const { role, location } = route.params;
+  const {keyboardVisible} = useKeyboard();
+  const {setNavigateToPostProperty} = useAuth();
+  const {showError} = useDialog();
+  const {role, location} = route.params;
   const [partnerInfo, setPartnerInfo] = useState<{
     imageUrl?: string;
     name?: string;
@@ -56,7 +79,6 @@ const EmailScreen: React.FC<Props> = ({ navigation, route }) => {
 
   const isIOS = Platform.OS === 'ios';
 
-  // Parse the location description JSON on component mount
   useEffect(() => {
     try {
       if (location && location.description) {
@@ -69,7 +91,6 @@ const EmailScreen: React.FC<Props> = ({ navigation, route }) => {
     }
   }, [location]);
 
-  // Animation values for logo
   const logoHeight = useRef(new Animated.Value(150)).current;
   const logoOpacity = useRef(new Animated.Value(1)).current;
 
@@ -91,12 +112,12 @@ const EmailScreen: React.FC<Props> = ({ navigation, route }) => {
   const checkEmail = useCallback(
     async (emailToCheck: string) => {
       try {
-        setEmailError({ message: '', isClickable: false });
+        setEmailError({message: '', isClickable: false});
         const response = await AuthService.verifyLoginInput(emailToCheck);
 
         if (!response.success) {
           setEmailError({
-            message: response.message || 'Email verification failed',
+            message: response.message || translations.emailVerificationFailed,
             isClickable: false,
           });
           return false;
@@ -104,7 +125,7 @@ const EmailScreen: React.FC<Props> = ({ navigation, route }) => {
 
         if (response && !role.includes(response.data?.userType as string)) {
           setEmailError({
-            message: 'Email not found',
+            message: translations.emailNotFound,
             isClickable: false,
           });
           return false;
@@ -113,20 +134,16 @@ const EmailScreen: React.FC<Props> = ({ navigation, route }) => {
         return true;
       } catch (error) {
         const errorMessage =
-          error instanceof Error
-            ? error.message
-            : 'An unexpected error occurred';
-        setEmailError({ message: errorMessage, isClickable: false });
+          error instanceof Error ? error.message : translations.unexpectedError;
+        setEmailError({message: errorMessage, isClickable: false});
         return false;
       }
     },
-    [role],
+    [role, translations],
   );
 
-  // Animate logo on keyboard visibility change
   useEffect(() => {
     if (keyboardVisible) {
-      // Animate logo sliding up and fading out
       Animated.parallel([
         Animated.timing(logoHeight, {
           toValue: 0,
@@ -140,7 +157,6 @@ const EmailScreen: React.FC<Props> = ({ navigation, route }) => {
         }),
       ]).start();
     } else {
-      // Animate logo sliding down and fading in
       Animated.parallel([
         Animated.timing(logoHeight, {
           toValue: 150,
@@ -160,7 +176,7 @@ const EmailScreen: React.FC<Props> = ({ navigation, route }) => {
     navigation.navigate('OtpScreen', {
       email: formInput.email,
       logoUrl: partnerInfo.imageUrl,
-      ...(location ? { location } : {}),
+      ...(location ? {location} : {}),
     });
   }, [formInput.email, location, navigation, partnerInfo.imageUrl]);
 
@@ -202,10 +218,10 @@ const EmailScreen: React.FC<Props> = ({ navigation, route }) => {
             setNavigateToPostProperty(false);
           }
         } else {
-          showError(response.message || 'Failed to send OTP. Please try again');
+          showError(response.message || translations.failedToSendOtp);
         }
       } catch (error) {
-        showError('An error occurred while sending OTP.');
+        showError(translations.errorSendingOtp);
       } finally {
         setIsLoading(false);
       }
@@ -218,10 +234,10 @@ const EmailScreen: React.FC<Props> = ({ navigation, route }) => {
       showError,
       partnerInfo.imageUrl,
       location,
+      translations,
     ],
   );
 
-  // Choose which handler to use based on environment
   const handleContinue = useCallback(() => {
     if (config.environment === 'development') {
       handleOtpVerification2();
@@ -234,7 +250,6 @@ const EmailScreen: React.FC<Props> = ({ navigation, route }) => {
     handleOtpVerification(true);
   }, [handleOtpVerification]);
 
-  // Get button background color based on state and theme
   const getButtonBackgroundColor = (isDisabled: boolean) => {
     if (isDisabled) {
       return partnerInfo.colorScheme?.primaryColor
@@ -246,13 +261,12 @@ const EmailScreen: React.FC<Props> = ({ navigation, route }) => {
 
   const renderButton = () => {
     if (emailError.isClickable) {
-      // Verify Now Button
       const isDisabled = isLoading || formLoading;
       return (
         <TouchableOpacity
           style={[
             styles.primaryButton,
-            { backgroundColor: getButtonBackgroundColor(isDisabled) },
+            {backgroundColor: getButtonBackgroundColor(isDisabled)},
           ]}
           onPress={handleVerifyNow}
           disabled={isDisabled}
@@ -262,18 +276,17 @@ const EmailScreen: React.FC<Props> = ({ navigation, route }) => {
               styles.buttonText,
               isDisabled && styles.disabledButtonText,
             ]}>
-            {isLoading ? 'Verifying...' : 'Verify Now'}
+            {isLoading ? translations.verifying : translations.verifyNow}
           </Text>
         </TouchableOpacity>
       );
     } else {
-      // Continue Button
       const isDisabled = !formInput.email || isLoading || formLoading;
       return (
         <TouchableOpacity
           style={[
             styles.primaryButton,
-            { backgroundColor: getButtonBackgroundColor(isDisabled) },
+            {backgroundColor: getButtonBackgroundColor(isDisabled)},
           ]}
           onPress={handleContinue}
           disabled={isDisabled}
@@ -284,7 +297,7 @@ const EmailScreen: React.FC<Props> = ({ navigation, route }) => {
                 styles.buttonText,
                 isDisabled && styles.disabledButtonText,
               ]}>
-              {isLoading ? 'Sending OTP...' : 'Continue'}
+              {isLoading ? translations.sendingOtp : translations.continue}
             </Text>
             {!isLoading && (
               <GetIcon
@@ -305,8 +318,8 @@ const EmailScreen: React.FC<Props> = ({ navigation, route }) => {
         <HeaderComponent
           title={
             route.params.role.includes(Roles.PARTNER)
-              ? 'Partner Sign In'
-              : 'Buyer/Seller Sign In'
+              ? translations.partnerSignIn
+              : translations.buyerSellerSignIn
           }
           showBackButton={true}
           onBackPress={navigation.goBack}
@@ -317,7 +330,6 @@ const EmailScreen: React.FC<Props> = ({ navigation, route }) => {
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         style={styles.keyboardAvoid}>
         <View style={styles.mainContent}>
-          {/* Only show logo when keyboard is not visible */}
           <Animated.View
             style={[
               styles.logoContainer,
@@ -336,16 +348,18 @@ const EmailScreen: React.FC<Props> = ({ navigation, route }) => {
 
           <View style={styles.formCard}>
             <View style={styles.welcomeSection}>
-              <Text style={styles.welcomeTitle}>Welcome Back</Text>
+              <Text style={styles.welcomeTitle}>
+                {translations.welcomeBack}
+              </Text>
               <Text style={styles.welcomeSubtitle}>
-                Please enter your email address to continue
+                {translations.enterEmailToContinue}
               </Text>
             </View>
 
             <View style={styles.inputSection}>
               <MaterialTextInput
-                label="Email"
-                placeholder="Enter your email address"
+                label={translations.email}
+                placeholder={translations.emailPlaceholder}
                 field="email"
                 formInput={formInput}
                 setFormInput={handleInputChange}
@@ -396,7 +410,7 @@ const styles = StyleSheet.create({
     ...Platform.select({
       ios: {
         shadowColor: '#000',
-        shadowOffset: { width: 0, height: 5 },
+        shadowOffset: {width: 0, height: 5},
         shadowOpacity: 0.1,
         shadowRadius: 15,
       },
@@ -437,7 +451,7 @@ const styles = StyleSheet.create({
     ...Platform.select({
       ios: {
         shadowColor: '#000',
-        shadowOffset: { width: 0, height: 4 },
+        shadowOffset: {width: 0, height: 4},
         shadowOpacity: 0.15,
         shadowRadius: 8,
       },
