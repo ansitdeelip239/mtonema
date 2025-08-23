@@ -8,6 +8,13 @@ export const config = {
   // apiUrl: 'https://api.mtone.in',
 
   bypass_emails: ['demop@mtone.in', 'demot@mtone.in'],
+
+  allowed_admins: [
+    'info@dncrproperty.com',
+    'shashi225@gmail.com',
+    'atique159@gmail.com',
+    'ansitdeelip239@gmail.com',
+  ],
 };
 
 export default config;

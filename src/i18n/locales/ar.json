@@ -53,6 +53,25 @@
       "verifyOtp": "تحقق من الرمز",
       "didntReceiveCode": "لم تتلق الرمز؟",
       "resendOtp": "إعادة إرسال الرمز"
+    },
+    "followUpScreen": {
+      "title": "المتابعات",
+      "overdueTitle": "المتابعات المتأخرة",
+      "overdueSubtitle": "المتابعات التي تجاوزت تاريخ الاستحقاق",
+      "upcomingTitle": "المتابعات القادمة",
+      "upcomingSubtitle": "المتابعات المجدولة للأيام السبعة القادمة",
+      "somedayTitle": "المتابعات المستقبلية",
+      "somedaySubtitle": "المتابعات المجدولة لتواريخ لاحقة",
+      "todayTitle": "متابعات اليوم",
+      "noTodayFollowUps": "لا توجد متابعات مجدولة لليوم",
+      "refreshError": "خطأ في تحديث المتابعات",
+      "salutationGreeting": {
+        "hi": "مرحبا",
+        "goodMorning": "صباح الخير",
+        "goodAfternoon": "بعد الظهر الطيب",
+        "goodEvening": "مساء الخير",
+        "goodNight": "تصبح على خير"
+      }
     }
   },
   "components": {

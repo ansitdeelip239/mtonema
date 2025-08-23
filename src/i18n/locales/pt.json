@@ -53,6 +53,25 @@
       "verifyOtp": "Verificar OTP",
       "didntReceiveCode": "Não recebeu o código?",
       "resendOtp": "Reenviar OTP"
+    },
+    "followUpScreen": {
+      "title": "Acompanhamentos",
+      "overdueTitle": "Acompanhamentos Atrasados",
+      "overdueSubtitle": "Acompanhamentos que passaram da data de vencimento",
+      "upcomingTitle": "Próximos Acompanhamentos",
+      "upcomingSubtitle": "Acompanhamentos agendados para os próximos 7 dias",
+      "somedayTitle": "Acompanhamentos Futuros",
+      "somedaySubtitle": "Acompanhamentos agendados para datas posteriores",
+      "todayTitle": "Acompanhamentos de Hoje",
+      "noTodayFollowUps": "Nenhum acompanhamento agendado para hoje",
+      "refreshError": "Erro ao atualizar acompanhamentos",
+      "salutationGreeting": {
+        "hi": "Oi",
+        "goodMorning": "Bom dia",
+        "goodAfternoon": "Boa tarde",
+        "goodEvening": "Boa tarde",
+        "goodNight": "Boa noite"
+      }
     }
   },
   "components": {

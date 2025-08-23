@@ -13,29 +13,22 @@ import GetIcon from '../components/GetIcon';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import SubscriptionGuard from '../components/SubscriptionGuard';
 import SubscriptionProvider from '../context/SubscriptionProvider';
+import config from '../config';
 
 const MainNavigator = () => {
   const {user, logout} = useAuth();
-
-  // Array of allowed admin emails
-  const allowedAdminEmails = [
-    'info@dncrproperty.com',
-    'shashi225@gmail.com',
-    'atique159@gmail.com',
-    'ansitdeelip239@gmail.com',
-  ];
 
   // Check if user has admin role and email is in the allowed list
   const isAuthorizedAdmin =
     user?.role === Roles.ADMIN &&
     user?.email &&
-    allowedAdminEmails.includes(user.email);
+    config.allowed_admins.includes(user.email);
 
   // Check if user is an unauthorized admin
   const isUnauthorizedAdmin =
     user?.role === Roles.ADMIN &&
     user?.email &&
-    !allowedAdminEmails.includes(user.email);
+    !config.allowed_admins.includes(user.email);
 
   const handleLogout = () => {
     Alert.alert('Logout', 'Are you sure you want to logout?', [

@@ -53,6 +53,25 @@
       "verifyOtp": "OTP सत्यापित करें",
       "didntReceiveCode": "कोड नहीं मिला?",
       "resendOtp": "OTP पुनः भेजें"
+    },
+    "followUpScreen": {
+      "title": "फॉलो-अप्स",
+      "overdueTitle": "विलंबित फॉलो-अप्स",
+      "overdueSubtitle": "फॉलो-अप्स जो अपनी नियत तारीख पार कर गए हैं",
+      "upcomingTitle": "आगामी फॉलो-अप्स",
+      "upcomingSubtitle": "अगले 7 दिनों के लिए निर्धारित फॉलो-अप्स",
+      "somedayTitle": "भविष्य के फॉलो-अप्स",
+      "somedaySubtitle": "बाद की तारीखों के लिए निर्धारित फॉलो-अप्स",
+      "todayTitle": "आज के फॉलो-अप्स",
+      "noTodayFollowUps": "आज के लिए कोई फॉलो-अप्स निर्धारित नहीं हैं",
+      "refreshError": "फॉलो-अप्स को रिफ्रेश करने में त्रुटि",
+      "salutationGreeting": {
+        "hi": "नमस्ते",
+        "goodMorning": "सुप्रभात",
+        "goodAfternoon": "शुभ दोपहर",
+        "goodEvening": "शुभ संध्या",
+        "goodNight": "शुभ रात्रि"
+      }
     }
   },
   "components": {

@@ -46,15 +46,31 @@ export const formatTime = (date: Date): string => {
 
 // Time-based configurations
 const timeConfig: {
-  nightOwl: {greeting: string; icon: IconEnum};
-  morning: {greeting: string; icon: IconEnum};
-  afternoon: {greeting: string; icon: IconEnum};
-  evening: {greeting: string; icon: IconEnum};
+  nightOwl: {greeting: string; icon: IconEnum; translationKey: string};
+  morning: {greeting: string; icon: IconEnum; translationKey: string};
+  afternoon: {greeting: string; icon: IconEnum; translationKey: string};
+  evening: {greeting: string; icon: IconEnum; translationKey: string};
 } = {
-  nightOwl: {greeting: 'Hey Night Owl', icon: 'night'},
-  morning: {greeting: 'Good Morning', icon: 'morning'},
-  afternoon: {greeting: 'Good Afternoon', icon: 'afternoon'},
-  evening: {greeting: 'Good Evening', icon: 'evening'},
+  nightOwl: {
+    greeting: 'Hey Night Owl',
+    icon: 'night',
+    translationKey: 'screens.followUpScreen.salutationGreeting.heyNightOwl', // ✅ Add translation key
+  },
+  morning: {
+    greeting: 'Good Morning',
+    icon: 'morning',
+    translationKey: 'screens.followUpScreen.salutationGreeting.goodMorning', // ✅ Add translation key
+  },
+  afternoon: {
+    greeting: 'Good Afternoon',
+    icon: 'afternoon',
+    translationKey: 'screens.followUpScreen.salutationGreeting.goodAfternoon', // ✅ Add translation key
+  },
+  evening: {
+    greeting: 'Good Evening',
+    icon: 'evening',
+    translationKey: 'screens.followUpScreen.salutationGreeting.goodEvening', // ✅ Add translation key
+  },
 };
 
 const getTimeOfDay = () => {
@@ -83,6 +99,10 @@ export const getGreeting = () => {
 // Get time-based icon name
 export const getTimeIcon = (): IconEnum => {
   return getTimeOfDay().icon;
+};
+
+export const getGreetingTranslationKey = (): string => {
+  return getTimeOfDay().translationKey;
 };
 
 // Extract user's first name from full name

@@ -161,9 +161,9 @@ const PaymentScreen: React.FC<PaymentScreenProps> = ({
         amount: orderData.amount,
         order_id: orderData.razorpayOrderId,
         prefill: {
-          email: user.email || 'ansitdeelip239@gmail.com',
-          contact: user.phone || '7485898570',
-          name: user.name || 'User',
+          email: user.email as string,
+          contact: user.phone as string,
+          name: user.name as string,
         },
         theme: {color: '#53a20e'},
       });

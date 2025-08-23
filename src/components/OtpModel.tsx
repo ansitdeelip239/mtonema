@@ -147,14 +147,14 @@ const OtpModel: React.FC<OtpModelProps> = ({
                 </Text>
               </View>
 
-              <View style={styles.otpContainer}>
+              <View style={[styles.otpContainer, {direction: 'ltr'}]}>
                 <OtpInput
                   ref={otpInputRef}
                   numberOfDigits={6}
                   onTextChange={onChangeText}
                   onFilled={onChangeText}
                   theme={{
-                    pinCodeContainerStyle: styles.otpBox,
+                    pinCodeContainerStyle: {...styles.otpBox, direction: 'ltr'},
                     focusedPinCodeContainerStyle: StyleSheet.flatten([
                       styles.activeOtpBox,
                       themeColor
@@ -163,6 +163,7 @@ const OtpModel: React.FC<OtpModelProps> = ({
                             backgroundColor: lightenColor(themeColor, 0.9),
                           }
                         : null,
+                      {direction: 'ltr'},
                     ]),
                   }}
                   focusColor={themeColor || Colors.MT_PRIMARY_1}

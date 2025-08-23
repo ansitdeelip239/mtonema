@@ -1,4 +1,4 @@
-import React, { useEffect, useCallback, useState } from 'react';
+import React, {useEffect, useCallback, useState} from 'react';
 import {
   View,
   Text,
@@ -13,21 +13,37 @@ import {
 import Colors from '../../../constants/Colors';
 import GetIcon from '../../../components/GetIcon';
 import Header from '../../../components/Header';
-import { PartnerDrawerParamList } from '../../../types/navigation';
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { FollowUpStackParamList } from '../../../navigator/components/FollowUpScreenStack';
-import { useFollowUps } from '../../../hooks/useFollowUps';
+import {PartnerDrawerParamList} from '../../../types/navigation';
+import {NativeStackScreenProps} from '@react-navigation/native-stack';
+import {FollowUpStackParamList} from '../../../navigator/components/FollowUpScreenStack';
+import {useFollowUps} from '../../../hooks/useFollowUps';
 import FollowUpListSection from './components/FollowUpListSection';
-import { usePartner } from '../../../context/PartnerProvider';
-import { navigate } from '../../../navigator/NavigationRef';
-import { Badge } from 'react-native-paper';
-import { useTheme } from '../../../context/ThemeProvider';
+import {usePartner} from '../../../context/PartnerProvider';
+import {navigate} from '../../../navigator/NavigationRef';
+import {Badge} from 'react-native-paper';
+import {useTheme} from '../../../context/ThemeProvider';
 import SalutationGreeting from './components/Salutation';
+import { useTranslation } from 'react-i18next';
 
 type Props = NativeStackScreenProps<FollowUpStackParamList, 'FollowUpScreen'>;
 
-const FollowUpScreen: React.FC<Props> = ({ navigation }) => {
-  const { theme } = useTheme();
+const FollowUpScreen: React.FC<Props> = ({navigation}) => {
+  const {t} = useTranslation();
+  const {theme} = useTheme();
+
+  // ✅ Define all translations at the top
+  const translations = {
+    title: t('screens.followUpScreen.title'),
+    overdueTitle: t('screens.followUpScreen.overdueTitle'),
+    overdueSubtitle: t('screens.followUpScreen.overdueSubtitle'),
+    upcomingTitle: t('screens.followUpScreen.upcomingTitle'),
+    upcomingSubtitle: t('screens.followUpScreen.upcomingSubtitle'),
+    somedayTitle: t('screens.followUpScreen.somedayTitle'),
+    somedaySubtitle: t('screens.followUpScreen.somedaySubtitle'),
+    todayTitle: t('screens.followUpScreen.todayTitle'),
+    noTodayFollowUps: t('screens.followUpScreen.noTodayFollowUps'),
+    refreshError: t('screens.followUpScreen.refreshError'),
+  };
 
   const {
     followUps: todayFollowUps,
@@ -57,7 +73,7 @@ const FollowUpScreen: React.FC<Props> = ({ navigation }) => {
   } = useFollowUps('someday', 1);
 
   const [isRefreshing, setIsRefreshing] = useState(false);
-  const { clientsUpdated } = usePartner();
+  const {clientsUpdated} = usePartner();
   const [activeSection, setActiveSection] = useState<string | null>(null);
 
   const isToday = useCallback((dateString: string | null): boolean => {
@@ -103,7 +119,7 @@ const FollowUpScreen: React.FC<Props> = ({ navigation }) => {
         fetchSomedayFollowUps(),
       ]);
     } catch (error) {
-      console.error('Error refreshing follow-ups:', error);
+      console.error(translations.refreshError, error); // ✅ Use translation
     } finally {
       setIsRefreshing(false);
     }
@@ -112,6 +128,7 @@ const FollowUpScreen: React.FC<Props> = ({ navigation }) => {
     fetchOverdueFollowUps,
     fetchUpcomingFollowUps,
     fetchSomedayFollowUps,
+    translations.refreshError,
   ]);
 
   const navigateToScreen = (screenType: string) => {
@@ -127,12 +144,12 @@ const FollowUpScreen: React.FC<Props> = ({ navigation }) => {
   const handleFollowUpPress = (clientId: number) => {
     navigate('Clients', {
       screen: 'ClientProfileScreen',
-      params: { clientId },
+      params: {clientId},
     });
   };
 
   const handleScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
-    const { layoutMeasurement, contentOffset, contentSize } = event.nativeEvent;
+    const {layoutMeasurement, contentOffset, contentSize} = event.nativeEvent;
     const paddingToBottom = 20;
     const isCloseToBottom =
       layoutMeasurement.height + contentOffset.y >=
@@ -149,11 +166,9 @@ const FollowUpScreen: React.FC<Props> = ({ navigation }) => {
 
   return (
     <>
-      {
-        Platform.OS === 'android' && (
-          <Header<PartnerDrawerParamList> title="Follow-Ups" />
-        )
-      }
+      {Platform.OS === 'android' && (
+        <Header<PartnerDrawerParamList> title={translations.title} />
+      )}
 
       <ScrollView
         style={styles.content}
@@ -167,7 +182,6 @@ const FollowUpScreen: React.FC<Props> = ({ navigation }) => {
         }
         onScroll={handleScroll}
         scrollEventThrottle={400}>
-        {/* Salutation - Now inside ScrollView */}
         <SalutationGreeting />
 
         {/* Navigation Buttons */}
@@ -180,13 +194,15 @@ const FollowUpScreen: React.FC<Props> = ({ navigation }) => {
                 style={[
                   styles.navButtonIconContainer,
                   styles.overdueIconContainer,
-                  { backgroundColor: Colors.red },
+                  {backgroundColor: Colors.red},
                 ]}>
                 <GetIcon iconName="calendarOverdue" size={24} />
               </View>
               <View style={styles.navButtonTextContainer}>
                 <View style={styles.titleContainer}>
-                  <Text style={styles.navButtonTitle}>Overdue Follow-ups</Text>
+                  <Text style={styles.navButtonTitle}>
+                    {translations.overdueTitle}
+                  </Text>
                   {overdueFollowUps.length > 0 && (
                     <Badge style={styles.overdueBadge} size={22}>
                       {overduePagination?.totalCount}
@@ -194,7 +210,7 @@ const FollowUpScreen: React.FC<Props> = ({ navigation }) => {
                   )}
                 </View>
                 <Text style={styles.navButtonSubtitle}>
-                  Follow-ups that have passed their due date
+                  {translations.overdueSubtitle}
                 </Text>
               </View>
               <GetIcon
@@ -212,13 +228,15 @@ const FollowUpScreen: React.FC<Props> = ({ navigation }) => {
               <View
                 style={[
                   styles.navButtonIconContainer,
-                  { backgroundColor: theme.primaryColor },
+                  {backgroundColor: theme.primaryColor},
                 ]}>
                 <GetIcon iconName="calendarUpcoming" size={24} />
               </View>
               <View style={styles.navButtonTextContainer}>
                 <View style={styles.titleContainer}>
-                  <Text style={styles.navButtonTitle}>Upcoming Follow-ups</Text>
+                  <Text style={styles.navButtonTitle}>
+                    {translations.upcomingTitle}
+                  </Text>
                   {upcomingFollowUps.length > 0 && (
                     <Badge
                       style={{
@@ -231,7 +249,7 @@ const FollowUpScreen: React.FC<Props> = ({ navigation }) => {
                   )}
                 </View>
                 <Text style={styles.navButtonSubtitle}>
-                  Follow-ups scheduled for the next 7 days
+                  {translations.upcomingSubtitle}
                 </Text>
               </View>
               <GetIcon
@@ -246,25 +264,27 @@ const FollowUpScreen: React.FC<Props> = ({ navigation }) => {
             style={[
               styles.navButton,
               styles.somedayButton,
-              { borderLeftColor: theme.secondaryColor },
+              {borderLeftColor: theme.secondaryColor},
             ]}
             onPress={() => navigateToScreen('someday')}>
             <View style={styles.navButtonContent}>
               <View
                 style={[
                   styles.navButtonIconContainer,
-                  { backgroundColor: theme.secondaryColor },
+                  {backgroundColor: theme.secondaryColor},
                 ]}>
                 <GetIcon iconName="calendarSomeday" size={24} />
               </View>
               <View style={styles.navButtonTextContainer}>
                 <View style={styles.titleContainer}>
-                  <Text style={styles.navButtonTitle}>Someday Follow-ups</Text>
+                  <Text style={styles.navButtonTitle}>
+                    {translations.somedayTitle}
+                  </Text>
                   {somedayFollowUps.length > 0 && (
                     <Badge
                       style={[
                         styles.somedayBadge,
-                        { backgroundColor: theme.secondaryColor },
+                        {backgroundColor: theme.secondaryColor},
                       ]}
                       size={22}>
                       {somedayPagination?.totalCount}
@@ -272,7 +292,7 @@ const FollowUpScreen: React.FC<Props> = ({ navigation }) => {
                   )}
                 </View>
                 <Text style={styles.navButtonSubtitle}>
-                  Follow-ups scheduled for later dates
+                  {translations.somedaySubtitle}
                 </Text>
               </View>
               <GetIcon
@@ -289,11 +309,11 @@ const FollowUpScreen: React.FC<Props> = ({ navigation }) => {
           onLayout={() => setCurrentSection('today')}
           style={styles.sectionContainer}>
           <FollowUpListSection
-            title="Today's Follow-ups"
+            title={translations.todayTitle}
             iconName="calendarToday"
             isLoading={isTodayLoading}
             followUps={getTodayFollowUps()}
-            emptyText="No follow-ups scheduled for today"
+            emptyText={translations.noTodayFollowUps}
             onFollowUpPress={handleFollowUpPress}
             filterType="today"
             onEndReached={() => {
@@ -304,7 +324,7 @@ const FollowUpScreen: React.FC<Props> = ({ navigation }) => {
             isLoadingMore={isLoadingMoreToday}
           />
         </View>
-        {/* Add gap at the bottom to avoid content being hidden by bottom tab */}
+
         <View style={styles.bottomGap} />
       </ScrollView>
     </>
@@ -329,7 +349,7 @@ const styles = StyleSheet.create({
     marginBottom: 12,
     elevation: 2,
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
+    shadowOffset: {width: 0, height: 1},
     shadowOpacity: 0.22,
     shadowRadius: 2.22,
   },

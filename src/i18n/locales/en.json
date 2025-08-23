@@ -53,6 +53,25 @@
       "verifyOtp": "Verify OTP",
       "didntReceiveCode": "Didn't receive the code?",
       "resendOtp": "Resend OTP"
+    },
+    "followUpScreen": {
+      "title": "Follow-Ups",
+      "overdueTitle": "Overdue Follow-ups",
+      "overdueSubtitle": "Follow-ups that have passed their due date",
+      "upcomingTitle": "Upcoming Follow-ups",
+      "upcomingSubtitle": "Follow-ups scheduled for the next 7 days",
+      "somedayTitle": "Someday Follow-ups",
+      "somedaySubtitle": "Follow-ups scheduled for later dates",
+      "todayTitle": "Today's Follow-ups",
+      "noTodayFollowUps": "No follow-ups scheduled for today",
+      "refreshError": "Error refreshing follow-ups",
+      "salutationGreeting": {
+        "hi": "Hi",
+        "goodMorning": "Good morning",
+        "goodAfternoon": "Good afternoon",
+        "goodEvening": "Good evening",
+        "goodNight": "Good night"
+      }
     }
   },
   "components": {
