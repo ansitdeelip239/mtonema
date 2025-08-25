@@ -10,7 +10,10 @@
     "back": "Voltar",
     "next": "Continuar",
     "restartApp": "Reiniciar App",
-    "email": "Email"
+    "email": "E-mail",
+    "success": "Sucesso",
+    "error": "Erro",
+    "ok": "OK"
   },
   "navigation": {
     "partner": {
@@ -22,47 +25,58 @@
         "settings": "Configurações",
         "buyPremium": "Comprar Premium",
         "helpCenter": "Central de Ajuda",
-        "chatWithUs": "Converse Conosco"
+        "chatWithUs": "Converse Conosco",
+        "logout": "Sair",
+        "logoutConfirmation": "Tem certeza de que deseja sair?",
+        "loggingOut": "Saindo...",
+        "underDevelopment": "Este recurso está em desenvolvimento"
+      },
+      "bottomTab": {
+        "followUp": "Acompanhamentos",
+        "clients": "Clientes",
+        "add": "Adicionar",
+        "listings": "Anúncios",
+        "agentData": "Dados do Agente"
       }
     }
   },
   "screens": {
     "partnerLoginScreen": {
       "welcomePartner": "Bem-vindo Parceiro",
-      "signInToDashboard": "Entre para acessar seu painel",
+      "signInToDashboard": "Faça login para acessar seu painel",
       "continueToLogin": "Continuar para Login",
-      "getStartedFree": "Comece GRÁTIS",
-      "securePartnerAccess": "Acesso Seguro de Parceiros",
+      "getStartedFree": "Comece GRATUITAMENTE",
+      "securePartnerAccess": "Acesso Seguro do Parceiro",
       "appTitle": "MT One: App e CRM"
     },
     "languageSelectionScreen": {
       "selectLanguage": "Selecionar Idioma",
-      "choosePreferredLanguage": "Escolha seu idioma preferido para o aplicativo",
+      "choosePreferredLanguage": "Escolha seu idioma preferido para o app",
       "currentLanguage": "Idioma Atual"
     },
     "emailScreen": {
       "partnerSignIn": "Login do Parceiro",
       "buyerSellerSignIn": "Login Comprador/Vendedor",
       "welcomeBack": "Bem-vindo de Volta",
-      "enterEmailMessage": "Por favor, insira seu endereço de email para continuar",
-      "emailLabel": "Email",
-      "emailPlaceholder": "Digite seu endereço de email",
+      "enterEmailMessage": "Por favor, digite seu endereço de e-mail para continuar",
+      "emailLabel": "E-mail",
+      "emailPlaceholder": "Digite seu endereço de e-mail",
       "continue": "Continuar",
       "verifyNow": "Verificar Agora",
       "sendingOtp": "Enviando OTP...",
       "verifying": "Verificando...",
-      "emailVerificationFailed": "Falha na verificação do email",
-      "emailNotFound": "Email não encontrado",
+      "emailVerificationFailed": "Falha na verificação do e-mail",
+      "emailNotFound": "E-mail não encontrado",
       "unexpectedError": "Ocorreu um erro inesperado",
       "failedToSendOtp": "Falha ao enviar OTP. Tente novamente",
-      "errorSendingOtp": "Ocorreu um erro ao enviar OTP.",
-      "enterEmailToContinue": "Por favor, insira seu endereço de email para continuar"
+      "errorSendingOtp": "Ocorreu um erro ao enviar o OTP.",
+      "enterEmailToContinue": "Por favor, digite seu endereço de e-mail para continuar"
     },
     "otpScreen": {
       "verifyOTP": "Verificar OTP",
-      "enterOtp": "Inserir OTP",
-      "otpSentMessage": "Enviamos um código de 6 dígitos para seu endereço de email registrado",
-      "enterValidOtp": "Por favor, insira um OTP válido de 6 dígitos.",
+      "enterOtp": "Digite o OTP",
+      "otpSentMessage": "Enviamos um código de 6 dígitos para seu endereço de e-mail registrado",
+      "enterValidOtp": "Por favor, digite um OTP válido de 6 dígitos.",
       "verifying": "Verificando...",
       "verifyOtp": "Verificar OTP",
       "didntReceiveCode": "Não recebeu o código?",
@@ -70,7 +84,7 @@
     },
     "followUpScreen": {
       "title": "Acompanhamentos",
-      "overdueTitle": "Acompanhamentos Atrasados",
+      "overdueTitle": "Acompanhamentos em Atraso",
       "overdueSubtitle": "Acompanhamentos que passaram da data de vencimento",
       "upcomingTitle": "Próximos Acompanhamentos",
       "upcomingSubtitle": "Acompanhamentos agendados para os próximos 7 dias",
@@ -88,28 +102,46 @@
         "goodNight": "Boa noite"
       },
       "overdueFollowUps": {
-        "title": "Acompanhamentos Atrasados",
-        "empty": "Nenhum acompanhamento atrasado"
+        "title": "Acompanhamentos em Atraso",
+        "empty": "Nenhum acompanhamento em atraso"
       },
       "upcomingFollowUps": {
         "title": "Próximos Acompanhamentos",
-        "empty": "Nenhum acompanhamento próximo"
+        "empty": "Nenhum próximo acompanhamento"
       },
       "somedayFollowUps": {
         "title": "Acompanhamentos Futuros",
-        "empty": "Nenhum acompanhamento futuro"
+        "empty": "Nenhum acompanhamento futuro agendado"
       },
       "followUpCard": {
         "followUp": "Acompanhamento",
         "assigned": "Atribuído:"
       }
+    },
+    "clientScreen": {
+      "title": "Clientes",
+      "addClient": "Adicionar Cliente",
+      "activityAddedSuccess": "Atividade adicionada com sucesso",
+      "failedToAddActivity": "Falha ao adicionar atividade",
+      "loadingMoreClients": "Carregando mais clientes...",
+      "searchingClients": "Procurando clientes...",
+      "loadingClients": "Carregando clientes...",
+      "noClientsFound": "Nenhum Cliente Encontrado",
+      "pullToRefresh": "Puxe para baixo para atualizar",
+      "showingClientsFrom": "Mostrando clientes de",
+      "selected": "selecionado",
+      "partner": "parceiro",
+      "teamMember": "membro da equipe",
+      "plural": "s",
+      "edit": "Editar",
+      "searchPlaceholder": "Buscar Clientes..."
     }
   },
   "components": {
     "languageSwitcher": {
       "changeLanguage": "Alterar Idioma",
       "switchToLanguage": "Mudar para {{languageName}}?",
-      "rtlChangeWarning": "Isso mudará a direção do layout do aplicativo e o aplicativo será reiniciado.",
+      "rtlChangeWarning": "Isso mudará a direção do layout do app e o app será reiniciado.",
       "languageChangeTitle": "Alterar Idioma"
     }
   }

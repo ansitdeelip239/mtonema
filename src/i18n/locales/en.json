@@ -10,7 +10,10 @@
     "back": "Back",
     "next": "Continue",
     "restartApp": "Restart App",
-    "email": "Email"
+    "email": "Email",
+    "success": "Success",
+    "error": "Error",
+    "ok": "OK"
   },
   "navigation": {
     "partner": {
@@ -22,7 +25,18 @@
         "settings": "Settings",
         "buyPremium": "Buy Premium",
         "helpCenter": "Help Center",
-        "chatWithUs": "Chat with Us"
+        "chatWithUs": "Chat with Us",
+        "logout": "Logout",
+        "logoutConfirmation": "Are you sure you want to logout?",
+        "loggingOut": "Logging out...",
+        "underDevelopment": "This feature is under development"
+      },
+      "bottomTab": {
+        "followUp": "Follow-Ups",
+        "clients": "Clients",
+        "add": "Add",
+        "listings": "Listings",
+        "agentData": "Agent Data"
       }
     }
   },
@@ -103,6 +117,24 @@
         "followUp": "Follow Up",
         "assigned": "Assigned:"
       }
+    },
+    "clientScreen": {
+      "title": "Clients",
+      "addClient": "Add Client",
+      "activityAddedSuccess": "Activity added successfully",
+      "failedToAddActivity": "Failed to add activity",
+      "loadingMoreClients": "Loading more clients...",
+      "searchingClients": "Searching clients...",
+      "loadingClients": "Loading clients...",
+      "noClientsFound": "No Clients Found",
+      "pullToRefresh": "Pull down to refresh",
+      "showingClientsFrom": "Showing clients from",
+      "selected": "selected",
+      "partner": "partner",
+      "teamMember": "team member",
+      "plural": "s",
+      "edit": "Edit",
+      "searchPlaceholder": "Search Clients..."
     }
   },
   "components": {

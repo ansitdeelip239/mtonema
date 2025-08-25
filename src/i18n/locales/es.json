@@ -9,8 +9,11 @@
     "edit": "Editar",
     "back": "Atrás",
     "next": "Continuar",
-    "restartApp": "Reiniciar App",
-    "email": "Correo Electrónico"
+    "restartApp": "Reiniciar Aplicación",
+    "email": "Correo Electrónico",
+    "success": "Éxito",
+    "error": "Error",
+    "ok": "Aceptar"
   },
   "navigation": {
     "partner": {
@@ -19,10 +22,21 @@
         "groups": "Grupos",
         "teams": "Equipos",
         "content": "Contenido",
-        "settings": "Configuraciones",
+        "settings": "Configuración",
         "buyPremium": "Comprar Premium",
         "helpCenter": "Centro de Ayuda",
-        "chatWithUs": "Chatea con Nosotros"
+        "chatWithUs": "Chatea con Nosotros",
+        "logout": "Cerrar Sesión",
+        "logoutConfirmation": "¿Estás seguro de que quieres cerrar sesión?",
+        "loggingOut": "Cerrando sesión...",
+        "underDevelopment": "Esta función está en desarrollo"
+      },
+      "bottomTab": {
+        "followUp": "Seguimientos",
+        "clients": "Clientes",
+        "add": "Agregar",
+        "listings": "Propiedades",
+        "agentData": "Datos de Agente"
       }
     }
   },
@@ -30,9 +44,9 @@
     "partnerLoginScreen": {
       "welcomePartner": "Bienvenido Socio",
       "signInToDashboard": "Inicia sesión para acceder a tu panel",
-      "continueToLogin": "Continuar al Login",
-      "getStartedFree": "Comienza GRATIS",
-      "securePartnerAccess": "Acceso Seguro de Socios",
+      "continueToLogin": "Continuar al Inicio de Sesión",
+      "getStartedFree": "Comenzar GRATIS",
+      "securePartnerAccess": "Acceso Seguro de Socio",
       "appTitle": "MT One: App y CRM"
     },
     "languageSelectionScreen": {
@@ -41,8 +55,8 @@
       "currentLanguage": "Idioma Actual"
     },
     "emailScreen": {
-      "partnerSignIn": "Iniciar Sesión del Socio",
-      "buyerSellerSignIn": "Iniciar Sesión Comprador/Vendedor",
+      "partnerSignIn": "Inicio de Sesión de Socio",
+      "buyerSellerSignIn": "Inicio de Sesión Comprador/Vendedor",
       "welcomeBack": "Bienvenido de Nuevo",
       "enterEmailMessage": "Por favor ingresa tu dirección de correo electrónico para continuar",
       "emailLabel": "Correo Electrónico",
@@ -51,17 +65,17 @@
       "verifyNow": "Verificar Ahora",
       "sendingOtp": "Enviando OTP...",
       "verifying": "Verificando...",
-      "emailVerificationFailed": "La verificación de correo falló",
-      "emailNotFound": "Correo no encontrado",
+      "emailVerificationFailed": "La verificación del correo electrónico falló",
+      "emailNotFound": "Correo electrónico no encontrado",
       "unexpectedError": "Ocurrió un error inesperado",
       "failedToSendOtp": "Error al enviar OTP. Por favor intenta de nuevo",
-      "errorSendingOtp": "Ocurrió un error al enviar OTP.",
+      "errorSendingOtp": "Ocurrió un error al enviar el OTP.",
       "enterEmailToContinue": "Por favor ingresa tu dirección de correo electrónico para continuar"
     },
     "otpScreen": {
       "verifyOTP": "Verificar OTP",
       "enterOtp": "Ingresar OTP",
-      "otpSentMessage": "Hemos enviado un código de 6 dígitos a tu dirección de correo registrada",
+      "otpSentMessage": "Hemos enviado un código de 6 dígitos a tu dirección de correo electrónico registrada",
       "enterValidOtp": "Por favor ingresa un OTP válido de 6 dígitos.",
       "verifying": "Verificando...",
       "verifyOtp": "Verificar OTP",
@@ -70,15 +84,15 @@
     },
     "followUpScreen": {
       "title": "Seguimientos",
-      "overdueTitle": "Seguimientos Vencidos",
-      "overdueSubtitle": "Seguimientos que han pasado su fecha de vencimiento",
+      "overdueTitle": "Seguimientos Atrasados",
+      "overdueSubtitle": "Seguimientos que han pasado su fecha límite",
       "upcomingTitle": "Próximos Seguimientos",
       "upcomingSubtitle": "Seguimientos programados para los próximos 7 días",
       "somedayTitle": "Seguimientos Futuros",
       "somedaySubtitle": "Seguimientos programados para fechas posteriores",
       "todayTitle": "Seguimientos de Hoy",
       "noTodayFollowUps": "No hay seguimientos programados para hoy",
-      "refreshError": "Error al actualizar seguimientos",
+      "refreshError": "Error al actualizar los seguimientos",
       "loading": "Cargando seguimientos...",
       "salutationGreeting": {
         "hi": "Hola",
@@ -88,8 +102,8 @@
         "goodNight": "Buenas noches"
       },
       "overdueFollowUps": {
-        "title": "Seguimientos Vencidos",
-        "empty": "No hay seguimientos vencidos"
+        "title": "Seguimientos Atrasados",
+        "empty": "No hay seguimientos atrasados"
       },
       "upcomingFollowUps": {
         "title": "Próximos Seguimientos",
@@ -97,12 +111,30 @@
       },
       "somedayFollowUps": {
         "title": "Seguimientos Futuros",
-        "empty": "No hay seguimientos futuros"
+        "empty": "No hay seguimientos futuros programados"
       },
       "followUpCard": {
         "followUp": "Seguimiento",
         "assigned": "Asignado:"
       }
+    },
+    "clientScreen": {
+      "title": "Clientes",
+      "addClient": "Agregar Cliente",
+      "activityAddedSuccess": "Actividad agregada exitosamente",
+      "failedToAddActivity": "Error al agregar actividad",
+      "loadingMoreClients": "Cargando más clientes...",
+      "searchingClients": "Buscando clientes...",
+      "loadingClients": "Cargando clientes...",
+      "noClientsFound": "No se Encontraron Clientes",
+      "pullToRefresh": "Desliza hacia abajo para actualizar",
+      "showingClientsFrom": "Mostrando clientes de",
+      "selected": "seleccionado",
+      "partner": "socio",
+      "teamMember": "miembro del equipo",
+      "plural": "s",
+      "edit": "Editar",
+      "searchPlaceholder": "Buscar Clientes..."
     }
   },
   "components": {

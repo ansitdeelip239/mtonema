@@ -1,16 +1,19 @@
 {
   "common": {
-    "welcome": "أهلاً وسهلاً",
+    "welcome": "مرحباً",
     "loading": "جاري التحميل...",
     "submit": "إرسال",
     "cancel": "إلغاء",
     "save": "حفظ",
     "delete": "حذف",
-    "edit": "تعديل",
+    "edit": "تحرير",
     "back": "رجوع",
     "next": "متابعة",
     "restartApp": "إعادة تشغيل التطبيق",
-    "email": "البريد الإلكتروني"
+    "email": "البريد الإلكتروني",
+    "success": "نجح",
+    "error": "خطأ",
+    "ok": "موافق"
   },
   "navigation": {
     "partner": {
@@ -20,23 +23,34 @@
         "teams": "الفرق",
         "content": "المحتوى",
         "settings": "الإعدادات",
-        "buyPremium": "شراء بريميوم",
+        "buyPremium": "شراء النسخة المميزة",
         "helpCenter": "مركز المساعدة",
-        "chatWithUs": "الدردشة معنا"
+        "chatWithUs": "تحدث معنا",
+        "logout": "تسجيل الخروج",
+        "logoutConfirmation": "هل أنت متأكد من أنك تريد تسجيل الخروج؟",
+        "loggingOut": "جاري تسجيل الخروج...",
+        "underDevelopment": "هذه الميزة قيد التطوير"
+      },
+      "bottomTab": {
+        "followUp": "المتابعات",
+        "clients": "العملاء",
+        "add": "إضافة",
+        "listings": "العقارات",
+        "agentData": "بيانات الوكيل"
       }
     }
   },
   "screens": {
     "partnerLoginScreen": {
-      "welcomePartner": "أهلاً بالشريك",
-      "signInToDashboard": "سجل دخولك للوصول إلى لوحة التحكم",
-      "continueToLogin": "متابعة إلى تسجيل الدخول",
+      "welcomePartner": "مرحباً بالشريك",
+      "signInToDashboard": "سجل الدخول للوصول إلى لوحة التحكم",
+      "continueToLogin": "المتابعة إلى تسجيل الدخول",
       "getStartedFree": "ابدأ مجاناً",
-      "securePartnerAccess": "وصول آمن للشركاء",
-      "appTitle": "MT One: التطبيق ونظام إدارة العملاء"
+      "securePartnerAccess": "وصول آمن للشريك",
+      "appTitle": "MT One: تطبيق ونظام إدارة العلاقات"
     },
     "languageSelectionScreen": {
-      "selectLanguage": "اختر اللغة",
+      "selectLanguage": "اختيار اللغة",
       "choosePreferredLanguage": "اختر لغتك المفضلة للتطبيق",
       "currentLanguage": "اللغة الحالية"
     },
@@ -44,34 +58,34 @@
       "partnerSignIn": "تسجيل دخول الشريك",
       "buyerSellerSignIn": "تسجيل دخول المشتري/البائع",
       "welcomeBack": "مرحباً بعودتك",
-      "enterEmailMessage": "الرجاء إدخال عنوان بريدك الإلكتروني للمتابعة",
+      "enterEmailMessage": "يرجى إدخال عنوان البريد الإلكتروني للمتابعة",
       "emailLabel": "البريد الإلكتروني",
       "emailPlaceholder": "أدخل عنوان بريدك الإلكتروني",
       "continue": "متابعة",
       "verifyNow": "تحقق الآن",
-      "sendingOtp": "إرسال رمز التحقق...",
+      "sendingOtp": "جاري إرسال رمز التحقق...",
       "verifying": "جاري التحقق...",
-      "emailVerificationFailed": "فشل في التحقق من البريد الإلكتروني",
+      "emailVerificationFailed": "فشل التحقق من البريد الإلكتروني",
       "emailNotFound": "البريد الإلكتروني غير موجود",
       "unexpectedError": "حدث خطأ غير متوقع",
-      "failedToSendOtp": "فشل في إرسال رمز التحقق. الرجاء المحاولة مرة أخرى",
+      "failedToSendOtp": "فشل في إرسال رمز التحقق. يرجى المحاولة مرة أخرى",
       "errorSendingOtp": "حدث خطأ أثناء إرسال رمز التحقق.",
-      "enterEmailToContinue": "الرجاء إدخال عنوان بريدك الإلكتروني للمتابعة"
+      "enterEmailToContinue": "يرجى إدخال عنوان بريدك الإلكتروني للمتابعة"
     },
     "otpScreen": {
       "verifyOTP": "تحقق من رمز التحقق",
-      "enterOtp": "إدخال رمز التحقق",
+      "enterOtp": "أدخل رمز التحقق",
       "otpSentMessage": "لقد أرسلنا رمز مكون من 6 أرقام إلى عنوان بريدك الإلكتروني المسجل",
-      "enterValidOtp": "الرجاء إدخال رمز تحقق صحيح مكون من 6 أرقام.",
+      "enterValidOtp": "يرجى إدخال رمز تحقق صحيح مكون من 6 أرقام.",
       "verifying": "جاري التحقق...",
-      "verifyOtp": "تحقق من الرمز",
-      "didntReceiveCode": "لم تتلق الرمز؟",
-      "resendOtp": "إعادة إرسال الرمز"
+      "verifyOtp": "تحقق من رمز التحقق",
+      "didntReceiveCode": "لم تستلم الرمز؟",
+      "resendOtp": "إعادة إرسال رمز التحقق"
     },
     "followUpScreen": {
       "title": "المتابعات",
       "overdueTitle": "المتابعات المتأخرة",
-      "overdueSubtitle": "المتابعات التي تجاوزت تاريخ الاستحقاق",
+      "overdueSubtitle": "المتابعات التي تجاوزت تاريخ استحقاقها",
       "upcomingTitle": "المتابعات القادمة",
       "upcomingSubtitle": "المتابعات المجدولة للأيام السبعة القادمة",
       "somedayTitle": "المتابعات المستقبلية",
@@ -81,9 +95,9 @@
       "refreshError": "خطأ في تحديث المتابعات",
       "loading": "جاري تحميل المتابعات...",
       "salutationGreeting": {
-        "hi": "مرحبا",
+        "hi": "مرحباً",
         "goodMorning": "صباح الخير",
-        "goodAfternoon": "بعد الظهر الطيب",
+        "goodAfternoon": "مساء الخير",
         "goodEvening": "مساء الخير",
         "goodNight": "تصبح على خير"
       },
@@ -97,19 +111,37 @@
       },
       "somedayFollowUps": {
         "title": "المتابعات المستقبلية",
-        "empty": "لا توجد متابعات مستقبلية"
+        "empty": "لا توجد متابعات مستقبلية مجدولة"
       },
       "followUpCard": {
         "followUp": "متابعة",
-        "assigned": "مُعين:"
+        "assigned": "مُسند إلى:"
       }
+    },
+    "clientScreen": {
+      "title": "العملاء",
+      "addClient": "إضافة عميل",
+      "activityAddedSuccess": "تم إضافة النشاط بنجاح",
+      "failedToAddActivity": "فشل في إضافة النشاط",
+      "loadingMoreClients": "تحميل المزيد من العملاء...",
+      "searchingClients": "البحث عن العملاء...",
+      "loadingClients": "تحميل العملاء...",
+      "noClientsFound": "لم يتم العثور على عملاء",
+      "pullToRefresh": "اسحب لأسفل للتحديث",
+      "showingClientsFrom": "عرض العملاء من",
+      "selected": "محدد",
+      "partner": "شريك",
+      "teamMember": "عضو الفريق",
+      "plural": "ين",
+      "edit": "تحرير",
+      "searchPlaceholder": "البحث عن العملاء..."
     }
   },
   "components": {
     "languageSwitcher": {
       "changeLanguage": "تغيير اللغة",
       "switchToLanguage": "التبديل إلى {{languageName}}؟",
-      "rtlChangeWarning": "سيؤدي هذا إلى تغيير اتجاه تخطيط التطبيق وسيتم إعادة تشغيل التطبيق.",
+      "rtlChangeWarning": "هذا سيغير اتجاه تخطيط التطبيق وسيتم إعادة تشغيل التطبيق.",
       "languageChangeTitle": "تغيير اللغة"
     }
   }

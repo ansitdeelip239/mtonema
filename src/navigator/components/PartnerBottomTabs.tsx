@@ -8,64 +8,68 @@ import FollowUpScreenStack from './FollowUpScreenStack';
 import AgentDataScreenStack from './AgentDataStack';
 import ListingScreenStack from './PropertyListingScreenStack';
 import {useTheme} from '../../context/ThemeProvider';
-import { CommonActions } from '@react-navigation/native';
+import {CommonActions} from '@react-navigation/native';
 import AddPropertyStack from './AddPropertyStack';
+import {useTranslation} from 'react-i18next';
 
 const Tab = createBottomTabNavigator<PartnerBottomTabParamList>();
 
-const tabScreens: Array<TabScreen<PartnerBottomTabParamList>> = [
-  {
-    name: 'FollowUp',
-    component: FollowUpScreenStack,
-    icon: 'calendar',
-    label: 'Follow Ups',
-  },
-  {
-    name: 'Clients',
-    component: ClientScreenStack,
-    icon: 'client',
-    listeners: ({navigation}) => ({
-      tabPress: () => {
-        // Reset the Clients stack to show only ClientScreen
-        navigation.dispatch(
-          CommonActions.reset({
-            index: 0,
-            routes: [
-              {
-                name: 'Clients',
-                state: {
-                  routes: [{name: 'ClientScreen'}],
-                  index: 0,
-                },
-              },
-            ],
-          }),
-        );
-      },
-    }),
-  },
-  {
-    name: 'AddProperty',
-    component: AddPropertyStack,
-    icon: 'listproperty',
-    label: 'Add',
-  },
-  {
-    name: 'Property',
-    component: ListingScreenStack,
-    icon: 'home',
-    label: 'Listings',
-  },
-  {
-    name: 'AgentData',
-    component: AgentDataScreenStack,
-    icon: 'realEstate',
-    label: 'Agent Data',
-  },
-] as const;
-
 const PartnerBottomTabs = () => {
   const {theme} = useTheme();
+  const {t} = useTranslation();
+
+  // Move tabScreens inside component to access t() function
+  const tabScreens: Array<TabScreen<PartnerBottomTabParamList>> = [
+    {
+      name: 'FollowUp',
+      component: FollowUpScreenStack,
+      icon: 'calendar',
+      label: t('navigation.partner.bottomTab.followUp', 'Follow Ups'),
+    },
+    {
+      name: 'Clients',
+      component: ClientScreenStack,
+      icon: 'client',
+      label: t('navigation.partner.bottomTab.clients', 'Clients'),
+      listeners: ({navigation}) => ({
+        tabPress: () => {
+          // Reset the Clients stack to show only ClientScreen
+          navigation.dispatch(
+            CommonActions.reset({
+              index: 0,
+              routes: [
+                {
+                  name: 'Clients',
+                  state: {
+                    routes: [{name: 'ClientScreen'}],
+                    index: 0,
+                  },
+                },
+              ],
+            }),
+          );
+        },
+      }),
+    },
+    {
+      name: 'AddProperty',
+      component: AddPropertyStack,
+      icon: 'listproperty',
+      label: t('navigation.partner.bottomTab.add', 'Add'),
+    },
+    {
+      name: 'Property',
+      component: ListingScreenStack,
+      icon: 'home',
+      label: t('navigation.partner.bottomTab.listings', 'Listings'),
+    },
+    {
+      name: 'AgentData',
+      component: AgentDataScreenStack,
+      icon: 'realEstate',
+      label: t('navigation.partner.bottomTab.agentData', 'Agent Data'),
+    },
+  ] as const;
 
   return (
     <Tab.Navigator
