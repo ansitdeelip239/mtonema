@@ -33,16 +33,16 @@ const FollowUpScreen: React.FC<Props> = ({navigation}) => {
 
   // ✅ Define all translations at the top
   const translations = {
-    title: t('screens.followUpScreen.title'),
-    overdueTitle: t('screens.followUpScreen.overdueTitle'),
-    overdueSubtitle: t('screens.followUpScreen.overdueSubtitle'),
-    upcomingTitle: t('screens.followUpScreen.upcomingTitle'),
-    upcomingSubtitle: t('screens.followUpScreen.upcomingSubtitle'),
-    somedayTitle: t('screens.followUpScreen.somedayTitle'),
-    somedaySubtitle: t('screens.followUpScreen.somedaySubtitle'),
-    todayTitle: t('screens.followUpScreen.todayTitle'),
-    noTodayFollowUps: t('screens.followUpScreen.noTodayFollowUps'),
-    refreshError: t('screens.followUpScreen.refreshError'),
+    title: t('followUp.title'),
+    overdueTitle: t('followUp.overdue.title'),
+    overdueSubtitle: t('followUp.overdue.subtitle'),
+    upcomingTitle: t('followUp.upcoming.title'),
+    upcomingSubtitle: t('followUp.upcoming.subtitle'),
+    somedayTitle: t('followUp.someday.title'),
+    somedaySubtitle: t('followUp.someday.subtitle'),
+    todayTitle: t('followUp.today.title'),
+    noTodayFollowUps: t('followUp.today.empty'),
+    refreshError: t('errors.refreshError'),
   };
 
   const {

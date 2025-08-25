@@ -125,7 +125,7 @@ const LanguageSelectionScreen: React.FC = () => {
 
         {/* Title Section */}
         <View style={styles.titleSection}>
-          <Text style={styles.title}>{t('screens.languageSelectionScreen.selectLanguage')}</Text>
+          <Text style={styles.title}>{t('language.selectLanguage')}</Text>
           <Text style={styles.subtitle}>
             Choose your preferred language for the app
           </Text>
@@ -158,7 +158,7 @@ const LanguageSelectionScreen: React.FC = () => {
               <Text style={styles.continueButtonText}>
           {selectedLanguage === currentLanguage
             ? 'Next'
-            : t('screens.languageSelectionScreen.selectLanguage')}
+            : t('language.selectLanguage')}
               </Text>
             )}
           </TouchableOpacity>

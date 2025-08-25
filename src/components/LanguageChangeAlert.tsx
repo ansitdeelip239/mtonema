@@ -12,7 +12,7 @@ export const showLanguageChangeAlert = (
     `Switch to ${languageName}? The app will restart to apply changes.`,
     [
       {
-        text: t('common.cancel', 'Cancel'),
+        text: t('common.actions.cancel', 'Cancel'),
         style: 'cancel',
         onPress: onCancel,
       },
@@ -49,12 +49,12 @@ export const showRTLChangeAlert = (
     `${translations.switchToLanguage} ${translations.rtlChangeWarning}`, // ✅ Now localized with interpolation
     [
       {
-        text: t('common.cancel'), // ✅ Already localized
+        text: t('common.actions.cancel'), // ✅ Already localized
         style: 'cancel',
         onPress: onCancel,
       },
       {
-        text: t('common.restartApp'), // ✅ Now localized
+        text: t('app.restart'), // ✅ Now localized
         onPress: onConfirm,
       },
     ],

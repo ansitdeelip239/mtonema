@@ -91,8 +91,8 @@ const SomedayFollowUpScreen: React.FC<Props> = ({ navigation }) => {
         <FollowUpListSection
           isLoading={isLoading}
           followUps={followUps || []}
-          emptyText={t('screens.followUpScreen.overdueFollowUps.empty', 'No overdue follow-ups scheduled')}
-          title={t('screens.followUpScreen.overdueFollowUps.title', 'Overdue Follow-Ups')}
+          emptyText={t('followUp.overdue.empty', 'No overdue follow-ups scheduled')}
+          title={t('followUp.overdue.title', 'Overdue Follow-Ups')}
           showTitle={false}
           onFollowUpPress={handleFollowUpPress}
           onEndReached={() => {

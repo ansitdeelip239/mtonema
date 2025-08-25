@@ -50,7 +50,7 @@ const PartnerNavigator = () => {
         component={PartnerBottomTabs}
         options={{
           headerShown: false,
-          drawerLabel: t('navigation.partner.drawer.home'), // Add localized label
+          drawerLabel: t('navigation.drawer.home'), // Add localized label
           // eslint-disable-next-line react/no-unstable-nested-components
           drawerIcon: ({color}) => (
             <GetIcon iconName="home" color={color} size="25" />
@@ -62,7 +62,7 @@ const PartnerNavigator = () => {
         component={GroupsScreen}
         options={{
           headerShown: isIOS,
-          drawerLabel: t('navigation.partner.drawer.groups'), // Add localized label
+          drawerLabel: t('navigation.drawer.groups'), // Add localized label
           // eslint-disable-next-line react/no-unstable-nested-components
           drawerIcon: ({color}) => (
             <GetIcon iconName="group" color={color} size="25" />
@@ -75,7 +75,7 @@ const PartnerNavigator = () => {
         component={TeamStack}
         options={{
           headerShown: isIOS,
-          drawerLabel: t('navigation.partner.drawer.teams'), // Add localized label
+          drawerLabel: t('navigation.drawer.teams'), // Add localized label
           // eslint-disable-next-line react/no-unstable-nested-components
           drawerIcon: ({color}) => (
             <GetIcon iconName="partner" color={color} size="25" />
@@ -88,7 +88,7 @@ const PartnerNavigator = () => {
         component={ContentTemplateScreenStack}
         options={{
           headerShown: false,
-          drawerLabel: t('navigation.partner.drawer.content'), // Add localized label
+          drawerLabel: t('navigation.drawer.content'), // Add localized label
           // eslint-disable-next-line react/no-unstable-nested-components
           drawerIcon: ({color}) => (
             <GetIcon iconName="notes" color={color} size="25" />
@@ -100,7 +100,7 @@ const PartnerNavigator = () => {
         component={SettingsScreen}
         options={{
           headerShown: false,
-          drawerLabel: t('navigation.partner.drawer.settings'), // Add localized label
+          drawerLabel: t('navigation.drawer.settings'), // Add localized label
           // eslint-disable-next-line react/no-unstable-nested-components
           drawerIcon: ({color}) => (
             <GetIcon iconName="settings" color={color} size="25" />

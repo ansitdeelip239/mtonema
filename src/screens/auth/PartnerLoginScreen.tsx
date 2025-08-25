@@ -22,12 +22,12 @@ const PartnerLoginScreen: React.FC<Props> = ({navigation}) => {
   const {t} = useTranslation();
 
   const translations = {
-    appTitle: t('screens.partnerLoginScreen.appTitle'),
-    welcomePartner: t('screens.partnerLoginScreen.welcomePartner'),
-    signInToDashboard: t('screens.partnerLoginScreen.signInToDashboard'),
-    continueToLogin: t('screens.partnerLoginScreen.continueToLogin'),
-    getStartedFree: t('screens.partnerLoginScreen.getStartedFree'),
-    securePartnerAccess: t('screens.partnerLoginScreen.securePartnerAccess'),
+    appTitle: t('app.title'),
+    welcomePartner: t('greetings.welcomePartner'),
+    signInToDashboard: t('auth.signIn.dashboard'),
+    continueToLogin: t('auth.signIn.continueToLogin'),
+    getStartedFree: t('auth.signIn.getStartedFree'),
+    securePartnerAccess: t('auth.signIn.securePartnerAccess'),
   };
 
   const partnerLocation = null;

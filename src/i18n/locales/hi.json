@@ -1,148 +1,201 @@
 {
   "common": {
-    "welcome": "स्वागत है",
-    "loading": "लोड हो रहा है...",
-    "submit": "सबमिट करें",
-    "cancel": "रद्द करें",
-    "save": "सेव करें",
-    "delete": "डिलीट करें",
-    "edit": "संपादित करें",
-    "back": "वापस",
-    "next": "जारी रखें",
-    "restartApp": "ऐप को रीस्टार्ट करें",
-    "email": "ईमेल",
-    "success": "सफलता",
-    "error": "त्रुटि",
-    "ok": "ठीक है"
-  },
-  "navigation": {
-    "partner": {
-      "drawer": {
-        "home": "होम",
-        "groups": "समूह",
-        "teams": "टीमें",
-        "content": "कंटेंट",
-        "settings": "सेटिंग्स",
-        "buyPremium": "प्रीमियम खरीदें",
-        "helpCenter": "सहायता केंद्र",
-        "chatWithUs": "हमसे चैट करें",
-        "logout": "लॉगआउट",
-        "logoutConfirmation": "क्या आप वाकई लॉगआउट करना चाहते हैं?",
-        "loggingOut": "लॉगआउट हो रहा है...",
-        "underDevelopment": "यह फीचर विकास के चरण में है"
-      },
-      "bottomTab": {
-        "followUp": "फॉलो-अप्स",
-        "clients": "ग्राहक",
-        "add": "जोड़ें",
-        "listings": "लिस्टिंग्स",
-        "agentData": "एजेंट डेटा"
-      }
+    "actions": {
+      "submit": "सबमिट करें",
+      "cancel": "रद्द करें",
+      "save": "सेव करें",
+      "delete": "डिलीट करें",
+      "edit": "संपादित करें",
+      "add": "जोड़ें",
+      "back": "वापस",
+      "next": "जारी रखें",
+      "search": "खोजें",
+      "filter": "फिल्टर करें",
+      "sort": "क्रमबद्ध करें",
+      "refresh": "रिफ्रेश करें",
+      "retry": "पुनः प्रयास करें",
+      "close": "बंद करें",
+      "confirm": "पुष्टि करें",
+      "ok": "ठीक है",
+      "yes": "हाँ",
+      "no": "नहीं"
+    },
+    "states": {
+      "loading": "लोड हो रहा है...",
+      "loadingMore": "और लोड हो रहा है...",
+      "searching": "खोज रहे हैं...",
+      "verifying": "सत्यापित कर रहे हैं...",
+      "sending": "भेज रहे हैं...",
+      "success": "सफलता",
+      "error": "त्रुटि",
+      "empty": "कोई डेटा उपलब्ध नहीं",
+      "refreshToLoad": "अपडेट के लिए नीचे खींचें"
+    },
+    "labels": {
+      "email": "ईमेल",
+      "name": "नाम",
+      "phone": "फोन",
+      "address": "पता"
     }
   },
-  "screens": {
-    "partnerLoginScreen": {
-      "welcomePartner": "पार्टनर का स्वागत है",
-      "signInToDashboard": "अपने डैशबोर्ड तक पहुंचने के लिए साइन इन करें",
+  "errors": {
+    "network": "नेटवर्क कनेक्शन त्रुटि",
+    "validation": "कृपया अपना इनपुट जांचें",
+    "unauthorized": "सेशन समाप्त हो गया। कृपया पुनः लॉगिन करें",
+    "generic": "कुछ गलत हुआ। कृपया पुनः प्रयास करें",
+    "emailVerificationFailed": "ईमेल सत्यापन असफल",
+    "emailNotFound": "ईमेल नहीं मिला",
+    "unexpectedError": "एक अप्रत्याशित त्रुटि हुई",
+    "failedToSendOtp": "OTP भेजने में असफल। कृपया पुनः प्रयास करें",
+    "refreshError": "डेटा रिफ्रेश करने में त्रुटि"
+  },
+  "validation": {
+    "required": "यह फील्ड आवश्यक है",
+    "invalidEmail": "कृपया एक वैध ईमेल पता दर्ज करें",
+    "invalidOtp": "कृपया एक वैध 6-अंकीय OTP दर्ज करें",
+    "minLength": "न्यूनतम {{count}} अक्षर आवश्यक हैं"
+  },
+  "time": {
+    "today": "आज",
+    "overdue": "बकाया",
+    "upcoming": "आगामी",
+    "someday": "कभी न कभी",
+    "hoursLeft": "{{hours}} घंटे",
+    "minutesLeft": "{{minutes}} मिनट",
+    "oneDay": "1 दिन",
+    "multipleDays": "{{days}} दिन"
+  },
+  "greetings": {
+    "welcome": "स्वागत है",
+    "welcomeBack": "वापस स्वागत है",
+    "welcomePartner": "पार्टनर का स्वागत है",
+    "hi": "नमस्ते",
+    "goodMorning": "सुप्रभात",
+    "goodAfternoon": "शुभ दोपहर",
+    "goodEvening": "शुभ संध्या",
+    "goodNight": "शुभ रात्रि"
+  },
+  "navigation": {
+    "drawer": {
+      "home": "होम",
+      "groups": "समूह",
+      "teams": "टीमें",
+      "content": "कंटेंट",
+      "settings": "सेटिंग्स",
+      "buyPremium": "प्रीमियम खरीदें",
+      "helpCenter": "सहायता केंद्र",
+      "chatWithUs": "हमसे चैट करें",
+      "logout": "लॉगआउट",
+      "logoutConfirmation": "क्या आप वाकई लॉगआउट करना चाहते हैं?",
+      "loggingOut": "लॉगआउट हो रहा है...",
+      "underDevelopment": "यह फीचर विकास के चरण में है"
+    },
+    "bottomTab": {
+      "followUp": "फॉलो-अप्स",
+      "clients": "ग्राहक",
+      "add": "जोड़ें",
+      "listings": "लिस्टिंग्स",
+      "agentData": "एजेंट डेटा"
+    }
+  },
+  "auth": {
+    "signIn": {
+      "partner": "पार्टनर साइन इन",
+      "buyerSeller": "खरीदार/विक्रेता साइन इन",
+      "dashboard": "अपने डैशबोर्ड तक पहुंचने के लिए साइन इन करें",
+      "account": "अपने खाते में साइन इन करें",
+      "toAccess": "अपने {{resource}} तक पहुंचने के लिए साइन इन करें",
       "continueToLogin": "लॉगिन पर जारी रखें",
       "getStartedFree": "मुफ्त में शुरू करें",
       "securePartnerAccess": "सुरक्षित पार्टनर एक्सेस",
-      "appTitle": "MT One: ऐप और CRM"
+      "prompt": "जारी रखने के लिए साइन इन करें"
     },
-    "languageSelectionScreen": {
-      "selectLanguage": "भाषा चुनें",
-      "choosePreferredLanguage": "ऐप के लिए अपनी पसंदीदा भाषा चुनें",
-      "currentLanguage": "वर्तमान भाषा"
+    "email": {
+      "enterEmailMessage": "जारी रखने के लिए अपना ईमेल पता दर्ज करें",
+      "placeholder": "अपना ईमेल पता दर्ज करें",
+      "enterToContinue": "जारी रखने के लिए अपना ईमेल पता दर्ज करें"
     },
-    "emailScreen": {
-      "partnerSignIn": "पार्टनर साइन इन",
-      "buyerSellerSignIn": "खरीदार/विक्रेता साइन इन",
-      "welcomeBack": "वापस स्वागत है",
-      "enterEmailMessage": "कृपया जारी रखने के लिए अपना ईमेल पता दर्ज करें",
-      "emailLabel": "ईमेल",
-      "emailPlaceholder": "अपना ईमेल पता दर्ज करें",
-      "continue": "जारी रखें",
-      "verifyNow": "अभी सत्यापित करें",
-      "sendingOtp": "OTP भेजा जा रहा है...",
-      "verifying": "सत्यापित हो रहा है...",
-      "emailVerificationFailed": "ईमेल सत्यापन असफल",
-      "emailNotFound": "ईमेल नहीं मिला",
-      "unexpectedError": "एक अप्रत्याशित त्रुटि हुई",
-      "failedToSendOtp": "OTP भेजने में असफल। कृपया पुनः प्रयास करें",
-      "errorSendingOtp": "OTP भेजने में त्रुटि हुई।",
-      "enterEmailToContinue": "कृपया जारी रखने के लिए अपना ईमेल पता दर्ज करें"
-    },
-    "otpScreen": {
-      "verifyOTP": "OTP सत्यापित करें",
-      "enterOtp": "OTP दर्ज करें",
-      "otpSentMessage": "हमने आपके पंजीकृत ईमेल पते पर 6-अंकीय कोड भेजा है",
-      "enterValidOtp": "कृपया एक वैध 6-अंकीय OTP दर्ज करें।",
-      "verifying": "सत्यापित हो रहा है...",
-      "verifyOtp": "OTP सत्यापित करें",
-      "didntReceiveCode": "कोड प्राप्त नहीं हुआ?",
-      "resendOtp": "OTP पुनः भेजें"
-    },
-    "followUpScreen": {
-      "title": "फॉलो-अप्स",
-      "overdueTitle": "बकाया फॉलो-अप्स",
-      "overdueSubtitle": "फॉलो-अप्स जो अपनी नियत तारीख से गुजर गए हैं",
-      "upcomingTitle": "आगामी फॉलो-अप्स",
-      "upcomingSubtitle": "अगले 7 दिनों के लिए निर्धारित फॉलो-अप्स",
-      "somedayTitle": "भविष्य के फॉलो-अप्स",
-      "somedaySubtitle": "बाद की तारीखों के लिए निर्धारित फॉलो-अप्स",
-      "todayTitle": "आज के फॉलो-अप्स",
-      "noTodayFollowUps": "आज के लिए कोई फॉलो-अप्स निर्धारित नहीं हैं",
-      "refreshError": "फॉलो-अप्स रिफ्रेश करने में त्रुटि",
-      "loading": "फॉलो-अप्स लोड हो रहे हैं...",
-      "salutationGreeting": {
-        "hi": "नमस्ते",
-        "goodMorning": "सुप्रभात",
-        "goodAfternoon": "शुभ दोपहर",
-        "goodEvening": "शुभ संध्या",
-        "goodNight": "शुभ रात्रि"
-      },
-      "overdueFollowUps": {
-        "title": "बकाया फॉलो-अप्स",
-        "empty": "कोई बकाया फॉलो-अप्स नहीं हैं"
-      },
-      "upcomingFollowUps": {
-        "title": "आगामी फॉलो-अप्स",
-        "empty": "कोई आगामी फॉलो-अप्स नहीं हैं"
-      },
-      "somedayFollowUps": {
-        "title": "भविष्य के फॉलो-अप्स",
-        "empty": "कोई भविष्य के फॉलो-अप्स निर्धारित नहीं हैं"
-      },
-      "followUpCard": {
-        "followUp": "फॉलो-अप",
-        "assigned": "निर्दिष्ट:"
-      }
-    },
-    "clientScreen": {
-      "title": "ग्राहक",
-      "addClient": "ग्राहक जोड़ें",
-      "activityAddedSuccess": "गतिविधि सफलतापूर्वक जोड़ी गई",
-      "failedToAddActivity": "गतिविधि जोड़ने में असफल",
-      "loadingMoreClients": "अधिक ग्राहक लोड हो रहे हैं...",
-      "searchingClients": "ग्राहकों की खोज हो रही है...",
-      "loadingClients": "ग्राहक लोड हो रहे हैं...",
-      "noClientsFound": "कोई ग्राहक नहीं मिले",
-      "pullToRefresh": "अपडेट के लिए नीचे खींचें",
-      "showingClientsFrom": "यहाँ से ग्राहक दिखाए जा रहे हैं",
-      "selected": "चयनित",
-      "partner": "साझीदार",
-      "teamMember": "टीम सदस्य",
-      "plural": "",
-      "edit": "संपादित करें",
-      "searchPlaceholder": "ग्राहकों की खोज करें..."
+    "otp": {
+      "title": "OTP सत्यापित करें",
+      "enter": "OTP दर्ज करें",
+      "sentMessage": "हमने आपके पंजीकृत ईमेल पते पर 6-अंकीय कोड भेजा है",
+      "verify": "OTP सत्यापित करें",
+      "didntReceive": "कोड प्राप्त नहीं हुआ?",
+      "resend": "OTP पुनः भेजें"
     }
   },
-  "components": {
-    "languageSwitcher": {
-      "changeLanguage": "भाषा बदलें",
-      "switchToLanguage": "{{languageName}} में बदलें?",
-      "rtlChangeWarning": "इससे ऐप लेआउट दिशा बदल जाएगी और ऐप रीस्टार्ट होगा।",
-      "languageChangeTitle": "भाषा बदलें"
+  "followUp": {
+    "title": "फॉलो-अप्स",
+    "loadingFollowUp": "फॉलो-अप लोड हो रहा है...",
+    "toBeScheduledLater": "बाद में निर्धारित किया जाएगा",
+    "noDateSet": "कोई तारीख निर्धारित नहीं",
+    "status": {
+      "overdue": "फॉलो-अप बकाया",
+      "today": "आज फॉलो-अप",
+      "in": "{{timeLeft}} में फॉलो-अप",
+      "someday": "फॉलो-अप: कभी न कभी",
+      "noScheduled": "कोई फॉलो-अप निर्धारित नहीं"
+    },
+    "card": {
+      "followUp": "फॉलो-अप",
+      "assigned": "निर्दिष्ट:"
+    },
+    "overdue": {
+      "title": "बकाया फॉलो-अप्स",
+      "subtitle": "फॉलो-अप्स जो अपनी नियत तारीख से गुजर गए हैं",
+      "empty": "कोई बकाया फॉलो-अप्स नहीं हैं"
+    },
+    "upcoming": {
+      "title": "आगामी फॉलो-अप्स",
+      "subtitle": "अगले 7 दिनों के लिए निर्धारित फॉलो-अप्स",
+      "empty": "कोई आगामी फॉलो-अप्स नहीं हैं"
+    },
+    "today": {
+      "title": "आज के फॉलो-अप्स",
+      "empty": "आज के लिए कोई फॉलो-अप्स निर्धारित नहीं हैं"
+    },
+    "someday": {
+      "title": "भविष्य के फॉलो-अप्स",
+      "subtitle": "बाद की तारीखों के लिए निर्धारित फॉलो-अप्स",
+      "empty": "कोई भविष्य के फॉलो-अप्स निर्धारित नहीं हैं"
+    }
+  },
+  "clients": {
+    "title": "ग्राहक",
+    "add": "ग्राहक जोड़ें",
+    "search": "ग्राहकों की खोज करें...",
+    "noClientsFound": "कोई ग्राहक नहीं मिले",
+    "showingFrom": "यहाँ से ग्राहक दिखाए जा रहे हैं",
+    "selected": "चयनित",
+    "partner": "साझीदार",
+    "teamMember": "टीम सदस्य",
+    "activityAddedSuccess": "गतिविधि सफलतापूर्वक जोड़ी गई",
+    "failedToAddActivity": "गतिविधि जोड़ने में असफल",
+    "loading": "ग्राहक लोड हो रहे हैं...",
+    "searching": "ग्राहकों की खोज कर रहे हैं..."
+  },
+  "language": {
+    "selectLanguage": "भाषा चुनें",
+    "choosePreferred": "ऐप के लिए अपनी पसंदीदा भाषा चुनें",
+    "current": "वर्तमान भाषा",
+    "change": "भाषा बदलें",
+    "switchTo": "{{languageName}} में बदलें?",
+    "rtlWarning": "इससे ऐप लेआउट दिशा बदल जाएगी और ऐप रीस्टार्ट होगा।"
+  },
+  "app": {
+    "title": "MT One: ऐप और CRM",
+    "restart": "ऐप को रीस्टार्ट करें"
+  },
+  "plurals": {
+    "client": {
+      "zero": "कोई ग्राहक नहीं",
+      "one": "{{count}} ग्राहक",
+      "other": "{{count}} ग्राहक"
+    },
+    "followUp": {
+      "zero": "कोई फॉलो-अप्स नहीं",
+      "one": "{{count}} फॉलो-अप",
+      "other": "{{count}} फॉलो-अप्स"
     }
   }
 }

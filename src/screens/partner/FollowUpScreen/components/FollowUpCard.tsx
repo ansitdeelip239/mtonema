@@ -122,7 +122,7 @@ const FollowUpCard: React.FC<FollowUpCardProps> = ({
           {item.assignedUsers && item.assignedUsers.length > 0 && (
             <View style={styles.assignedContainer}>
               <Text style={styles.assignedLabel}>
-                {t('screens.followUpScreen.followUpCard.assigned', 'Assigned:')}{' '}
+                {t('followUp.card.assigned', 'Assigned:')}{' '}
               </Text>
               <View style={styles.assignedBadgesWrapper}>
                 {item.assignedUsers.map(user => (

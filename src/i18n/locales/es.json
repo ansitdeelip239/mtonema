@@ -1,148 +1,201 @@
 {
   "common": {
-    "welcome": "Bienvenido",
-    "loading": "Cargando...",
-    "submit": "Enviar",
-    "cancel": "Cancelar",
-    "save": "Guardar",
-    "delete": "Eliminar",
-    "edit": "Editar",
-    "back": "Atrás",
-    "next": "Continuar",
-    "restartApp": "Reiniciar Aplicación",
-    "email": "Correo Electrónico",
-    "success": "Éxito",
-    "error": "Error",
-    "ok": "Aceptar"
-  },
-  "navigation": {
-    "partner": {
-      "drawer": {
-        "home": "Inicio",
-        "groups": "Grupos",
-        "teams": "Equipos",
-        "content": "Contenido",
-        "settings": "Configuración",
-        "buyPremium": "Comprar Premium",
-        "helpCenter": "Centro de Ayuda",
-        "chatWithUs": "Chatea con Nosotros",
-        "logout": "Cerrar Sesión",
-        "logoutConfirmation": "¿Estás seguro de que quieres cerrar sesión?",
-        "loggingOut": "Cerrando sesión...",
-        "underDevelopment": "Esta función está en desarrollo"
-      },
-      "bottomTab": {
-        "followUp": "Seguimientos",
-        "clients": "Clientes",
-        "add": "Agregar",
-        "listings": "Propiedades",
-        "agentData": "Datos de Agente"
-      }
+    "actions": {
+      "submit": "Enviar",
+      "cancel": "Cancelar",
+      "save": "Guardar",
+      "delete": "Eliminar",
+      "edit": "Editar",
+      "add": "Agregar",
+      "back": "Atrás",
+      "next": "Continuar",
+      "search": "Buscar",
+      "filter": "Filtrar",
+      "sort": "Ordenar",
+      "refresh": "Actualizar",
+      "retry": "Reintentar",
+      "close": "Cerrar",
+      "confirm": "Confirmar",
+      "ok": "Aceptar",
+      "yes": "Sí",
+      "no": "No"
+    },
+    "states": {
+      "loading": "Cargando...",
+      "loadingMore": "Cargando más...",
+      "searching": "Buscando...",
+      "verifying": "Verificando...",
+      "sending": "Enviando...",
+      "success": "Éxito",
+      "error": "Error",
+      "empty": "No hay datos disponibles",
+      "refreshToLoad": "Desliza hacia abajo para actualizar"
+    },
+    "labels": {
+      "email": "Correo electrónico",
+      "name": "Nombre",
+      "phone": "Teléfono",
+      "address": "Dirección"
     }
   },
-  "screens": {
-    "partnerLoginScreen": {
-      "welcomePartner": "Bienvenido Socio",
-      "signInToDashboard": "Inicia sesión para acceder a tu panel",
+  "errors": {
+    "network": "Error de conexión de red",
+    "validation": "Por favor revisa tu entrada",
+    "unauthorized": "Sesión expirada. Inicia sesión nuevamente",
+    "generic": "Algo salió mal. Inténtalo de nuevo",
+    "emailVerificationFailed": "Error en la verificación del correo",
+    "emailNotFound": "Correo no encontrado",
+    "unexpectedError": "Ocurrió un error inesperado",
+    "failedToSendOtp": "Error al enviar OTP. Inténtalo de nuevo",
+    "refreshError": "Error al actualizar datos"
+  },
+  "validation": {
+    "required": "Este campo es obligatorio",
+    "invalidEmail": "Ingresa un correo válido",
+    "invalidOtp": "Ingresa un OTP válido de 6 dígitos",
+    "minLength": "Se requieren mínimo {{count}} caracteres"
+  },
+  "time": {
+    "today": "Hoy",
+    "overdue": "Vencido",
+    "upcoming": "Próximo",
+    "someday": "Algún día",
+    "hoursLeft": "{{hours}} hrs",
+    "minutesLeft": "{{minutes}} mins",
+    "oneDay": "1 día",
+    "multipleDays": "{{days}} días"
+  },
+  "greetings": {
+    "welcome": "Bienvenido",
+    "welcomeBack": "Bienvenido de nuevo",
+    "welcomePartner": "Bienvenido Socio",
+    "hi": "Hola",
+    "goodMorning": "Buenos días",
+    "goodAfternoon": "Buenas tardes",
+    "goodEvening": "Buenas tardes",
+    "goodNight": "Buenas noches"
+  },
+  "navigation": {
+    "drawer": {
+      "home": "Inicio",
+      "groups": "Grupos",
+      "teams": "Equipos",
+      "content": "Contenido",
+      "settings": "Configuración",
+      "buyPremium": "Comprar Premium",
+      "helpCenter": "Centro de Ayuda",
+      "chatWithUs": "Chatea con Nosotros",
+      "logout": "Cerrar Sesión",
+      "logoutConfirmation": "¿Estás seguro de que quieres cerrar sesión?",
+      "loggingOut": "Cerrando sesión...",
+      "underDevelopment": "Esta función está en desarrollo"
+    },
+    "bottomTab": {
+      "followUp": "Seguimientos",
+      "clients": "Clientes",
+      "add": "Agregar",
+      "listings": "Propiedades",
+      "agentData": "Datos de Agente"
+    }
+  },
+  "auth": {
+    "signIn": {
+      "partner": "Inicio de Sesión de Socio",
+      "buyerSeller": "Inicio de Sesión Comprador/Vendedor",
+      "dashboard": "Inicia sesión para acceder a tu panel",
+      "account": "Inicia sesión en tu cuenta",
+      "toAccess": "Inicia sesión para acceder a tu {{resource}}",
       "continueToLogin": "Continuar al Inicio de Sesión",
       "getStartedFree": "Comenzar GRATIS",
       "securePartnerAccess": "Acceso Seguro de Socio",
-      "appTitle": "MT One: App y CRM"
+      "prompt": "Inicia sesión para continuar"
     },
-    "languageSelectionScreen": {
-      "selectLanguage": "Seleccionar Idioma",
-      "choosePreferredLanguage": "Elige tu idioma preferido para la aplicación",
-      "currentLanguage": "Idioma Actual"
+    "email": {
+      "enterEmailMessage": "Ingresa tu correo para continuar",
+      "placeholder": "Ingresa tu dirección de correo",
+      "enterToContinue": "Ingresa tu correo para continuar"
     },
-    "emailScreen": {
-      "partnerSignIn": "Inicio de Sesión de Socio",
-      "buyerSellerSignIn": "Inicio de Sesión Comprador/Vendedor",
-      "welcomeBack": "Bienvenido de Nuevo",
-      "enterEmailMessage": "Por favor ingresa tu dirección de correo electrónico para continuar",
-      "emailLabel": "Correo Electrónico",
-      "emailPlaceholder": "Ingresa tu dirección de correo electrónico",
-      "continue": "Continuar",
-      "verifyNow": "Verificar Ahora",
-      "sendingOtp": "Enviando OTP...",
-      "verifying": "Verificando...",
-      "emailVerificationFailed": "La verificación del correo electrónico falló",
-      "emailNotFound": "Correo electrónico no encontrado",
-      "unexpectedError": "Ocurrió un error inesperado",
-      "failedToSendOtp": "Error al enviar OTP. Por favor intenta de nuevo",
-      "errorSendingOtp": "Ocurrió un error al enviar el OTP.",
-      "enterEmailToContinue": "Por favor ingresa tu dirección de correo electrónico para continuar"
-    },
-    "otpScreen": {
-      "verifyOTP": "Verificar OTP",
-      "enterOtp": "Ingresar OTP",
-      "otpSentMessage": "Hemos enviado un código de 6 dígitos a tu dirección de correo electrónico registrada",
-      "enterValidOtp": "Por favor ingresa un OTP válido de 6 dígitos.",
-      "verifying": "Verificando...",
-      "verifyOtp": "Verificar OTP",
-      "didntReceiveCode": "¿No recibiste el código?",
-      "resendOtp": "Reenviar OTP"
-    },
-    "followUpScreen": {
-      "title": "Seguimientos",
-      "overdueTitle": "Seguimientos Atrasados",
-      "overdueSubtitle": "Seguimientos que han pasado su fecha límite",
-      "upcomingTitle": "Próximos Seguimientos",
-      "upcomingSubtitle": "Seguimientos programados para los próximos 7 días",
-      "somedayTitle": "Seguimientos Futuros",
-      "somedaySubtitle": "Seguimientos programados para fechas posteriores",
-      "todayTitle": "Seguimientos de Hoy",
-      "noTodayFollowUps": "No hay seguimientos programados para hoy",
-      "refreshError": "Error al actualizar los seguimientos",
-      "loading": "Cargando seguimientos...",
-      "salutationGreeting": {
-        "hi": "Hola",
-        "goodMorning": "Buenos días",
-        "goodAfternoon": "Buenas tardes",
-        "goodEvening": "Buenas tardes",
-        "goodNight": "Buenas noches"
-      },
-      "overdueFollowUps": {
-        "title": "Seguimientos Atrasados",
-        "empty": "No hay seguimientos atrasados"
-      },
-      "upcomingFollowUps": {
-        "title": "Próximos Seguimientos",
-        "empty": "No hay próximos seguimientos"
-      },
-      "somedayFollowUps": {
-        "title": "Seguimientos Futuros",
-        "empty": "No hay seguimientos futuros programados"
-      },
-      "followUpCard": {
-        "followUp": "Seguimiento",
-        "assigned": "Asignado:"
-      }
-    },
-    "clientScreen": {
-      "title": "Clientes",
-      "addClient": "Agregar Cliente",
-      "activityAddedSuccess": "Actividad agregada exitosamente",
-      "failedToAddActivity": "Error al agregar actividad",
-      "loadingMoreClients": "Cargando más clientes...",
-      "searchingClients": "Buscando clientes...",
-      "loadingClients": "Cargando clientes...",
-      "noClientsFound": "No se Encontraron Clientes",
-      "pullToRefresh": "Desliza hacia abajo para actualizar",
-      "showingClientsFrom": "Mostrando clientes de",
-      "selected": "seleccionado",
-      "partner": "socio",
-      "teamMember": "miembro del equipo",
-      "plural": "s",
-      "edit": "Editar",
-      "searchPlaceholder": "Buscar Clientes..."
+    "otp": {
+      "title": "Verificar OTP",
+      "enter": "Ingresar OTP",
+      "sentMessage": "Enviamos un código de 6 dígitos a tu correo registrado",
+      "verify": "Verificar OTP",
+      "didntReceive": "¿No recibiste el código?",
+      "resend": "Reenviar OTP"
     }
   },
-  "components": {
-    "languageSwitcher": {
-      "changeLanguage": "Cambiar Idioma",
-      "switchToLanguage": "¿Cambiar a {{languageName}}?",
-      "rtlChangeWarning": "Esto cambiará la dirección del diseño de la aplicación y la aplicación se reiniciará.",
-      "languageChangeTitle": "Cambiar Idioma"
+  "followUp": {
+    "title": "Seguimientos",
+    "loadingFollowUp": "Cargando seguimiento...",
+    "toBeScheduledLater": "Por programar más tarde",
+    "noDateSet": "Sin fecha establecida",
+    "status": {
+      "overdue": "Seguimiento Atrasado",
+      "today": "Seguimiento Hoy",
+      "in": "Seguimiento en {{timeLeft}}",
+      "someday": "Seguimiento: Algún día",
+      "noScheduled": "Sin Seguimiento Programado"
+    },
+    "card": {
+      "followUp": "Seguimiento",
+      "assigned": "Asignado:"
+    },
+    "overdue": {
+      "title": "Seguimientos Atrasados",
+      "subtitle": "Seguimientos que pasaron su fecha límite",
+      "empty": "No hay seguimientos atrasados"
+    },
+    "upcoming": {
+      "title": "Próximos Seguimientos",
+      "subtitle": "Seguimientos programados para los próximos 7 días",
+      "empty": "No hay próximos seguimientos"
+    },
+    "today": {
+      "title": "Seguimientos de Hoy",
+      "empty": "No hay seguimientos programados para hoy"
+    },
+    "someday": {
+      "title": "Seguimientos Futuros",
+      "subtitle": "Seguimientos programados para fechas posteriores",
+      "empty": "No hay seguimientos futuros programados"
+    }
+  },
+  "clients": {
+    "title": "Clientes",
+    "add": "Agregar Cliente",
+    "search": "Buscar Clientes...",
+    "noClientsFound": "No se Encontraron Clientes",
+    "showingFrom": "Mostrando clientes de",
+    "selected": "seleccionado",
+    "partner": "socio",
+    "teamMember": "miembro del equipo",
+    "activityAddedSuccess": "Actividad agregada exitosamente",
+    "failedToAddActivity": "Error al agregar actividad",
+    "loading": "Cargando clientes...",
+    "searching": "Buscando clientes..."
+  },
+  "language": {
+    "selectLanguage": "Seleccionar Idioma",
+    "choosePreferred": "Elige tu idioma preferido para la aplicación",
+    "current": "Idioma Actual",
+    "change": "Cambiar Idioma",
+    "switchTo": "¿Cambiar a {{languageName}}?",
+    "rtlWarning": "Esto cambiará la dirección del diseño de la aplicación y se reiniciará."
+  },
+  "app": {
+    "title": "MT One: App y CRM",
+    "restart": "Reiniciar Aplicación"
+  },
+  "plurals": {
+    "client": {
+      "zero": "Sin clientes",
+      "one": "{{count}} cliente",
+      "other": "{{count}} clientes"
+    },
+    "followUp": {
+      "zero": "Sin seguimientos",
+      "one": "{{count}} seguimiento",
+      "other": "{{count}} seguimientos"
     }
   }
 }

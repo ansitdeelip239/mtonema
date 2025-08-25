@@ -24,13 +24,13 @@ const PartnerBottomTabs = () => {
       name: 'FollowUp',
       component: FollowUpScreenStack,
       icon: 'calendar',
-      label: t('navigation.partner.bottomTab.followUp', 'Follow Ups'),
+      label: t('navigation.bottomTab.followUp', 'Follow Ups'),
     },
     {
       name: 'Clients',
       component: ClientScreenStack,
       icon: 'client',
-      label: t('navigation.partner.bottomTab.clients', 'Clients'),
+      label: t('navigation.bottomTab.clients', 'Clients'),
       listeners: ({navigation}) => ({
         tabPress: () => {
           // Reset the Clients stack to show only ClientScreen
@@ -55,19 +55,19 @@ const PartnerBottomTabs = () => {
       name: 'AddProperty',
       component: AddPropertyStack,
       icon: 'listproperty',
-      label: t('navigation.partner.bottomTab.add', 'Add'),
+      label: t('navigation.bottomTab.add', 'Add'),
     },
     {
       name: 'Property',
       component: ListingScreenStack,
       icon: 'home',
-      label: t('navigation.partner.bottomTab.listings', 'Listings'),
+      label: t('navigation.bottomTab.listings', 'Listings'),
     },
     {
       name: 'AgentData',
       component: AgentDataScreenStack,
       icon: 'realEstate',
-      label: t('navigation.partner.bottomTab.agentData', 'Agent Data'),
+      label: t('navigation.bottomTab.agentData', 'Agent Data'),
     },
   ] as const;
 

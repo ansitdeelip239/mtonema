@@ -68,7 +68,7 @@ const UpcomingFollowUpScreen: React.FC<Props> = ({navigation}) => {
     <SafeAreaView style={styles.container}>
       {Platform.OS === 'android' && (
         <Header
-          title={t('screens.followUpScreen.upcomingFollowUps.title', 'Upcoming Follow-Ups')}
+          title={t('followUp.upcoming.title', 'Upcoming Follow-Ups')}
           backButton={true}
           navigation={navigation}
         />
@@ -90,10 +90,10 @@ const UpcomingFollowUpScreen: React.FC<Props> = ({navigation}) => {
           isLoading={isLoading}
           followUps={followUps || []}
           emptyText={t(
-            'screens.followUpScreen.upcomingFollowUps.empty',
+            'followUp.upcoming.empty',
             'No upcoming follow-ups scheduled',
           )}
-          title={t('screens.followUpScreen.upcomingFollowUps.title', 'Upcoming Follow-Ups')}
+          title={t('followUp.upcoming.title', 'Upcoming Follow-Ups')}
           showTitle={false}
           onFollowUpPress={handleFollowUpPress}
           onEndReached={() => {

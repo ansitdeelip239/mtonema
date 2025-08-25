@@ -1,148 +1,201 @@
 {
   "common": {
-    "welcome": "Bem-vindo",
-    "loading": "Carregando...",
-    "submit": "Enviar",
-    "cancel": "Cancelar",
-    "save": "Salvar",
-    "delete": "Excluir",
-    "edit": "Editar",
-    "back": "Voltar",
-    "next": "Continuar",
-    "restartApp": "Reiniciar App",
-    "email": "E-mail",
-    "success": "Sucesso",
-    "error": "Erro",
-    "ok": "OK"
-  },
-  "navigation": {
-    "partner": {
-      "drawer": {
-        "home": "Início",
-        "groups": "Grupos",
-        "teams": "Equipes",
-        "content": "Conteúdo",
-        "settings": "Configurações",
-        "buyPremium": "Comprar Premium",
-        "helpCenter": "Central de Ajuda",
-        "chatWithUs": "Converse Conosco",
-        "logout": "Sair",
-        "logoutConfirmation": "Tem certeza de que deseja sair?",
-        "loggingOut": "Saindo...",
-        "underDevelopment": "Este recurso está em desenvolvimento"
-      },
-      "bottomTab": {
-        "followUp": "Acompanhamentos",
-        "clients": "Clientes",
-        "add": "Adicionar",
-        "listings": "Anúncios",
-        "agentData": "Dados do Agente"
-      }
+    "actions": {
+      "submit": "Enviar",
+      "cancel": "Cancelar",
+      "save": "Salvar",
+      "delete": "Excluir",
+      "edit": "Editar",
+      "add": "Adicionar",
+      "back": "Voltar",
+      "next": "Continuar",
+      "search": "Pesquisar",
+      "filter": "Filtrar",
+      "sort": "Ordenar",
+      "refresh": "Atualizar",
+      "retry": "Tentar novamente",
+      "close": "Fechar",
+      "confirm": "Confirmar",
+      "ok": "OK",
+      "yes": "Sim",
+      "no": "Não"
+    },
+    "states": {
+      "loading": "Carregando...",
+      "loadingMore": "Carregando mais...",
+      "searching": "Pesquisando...",
+      "verifying": "Verificando...",
+      "sending": "Enviando...",
+      "success": "Sucesso",
+      "error": "Erro",
+      "empty": "Nenhum dado disponível",
+      "refreshToLoad": "Puxe para baixo para atualizar"
+    },
+    "labels": {
+      "email": "E-mail",
+      "name": "Nome",
+      "phone": "Telefone",
+      "address": "Endereço"
     }
   },
-  "screens": {
-    "partnerLoginScreen": {
-      "welcomePartner": "Bem-vindo Parceiro",
-      "signInToDashboard": "Faça login para acessar seu painel",
+  "errors": {
+    "network": "Erro de conexão de rede",
+    "validation": "Verifique sua entrada",
+    "unauthorized": "Sessão expirada. Faça login novamente",
+    "generic": "Algo deu errado. Tente novamente",
+    "emailVerificationFailed": "Falha na verificação do e-mail",
+    "emailNotFound": "E-mail não encontrado",
+    "unexpectedError": "Ocorreu um erro inesperado",
+    "failedToSendOtp": "Falha ao enviar OTP. Tente novamente",
+    "refreshError": "Erro ao atualizar dados"
+  },
+  "validation": {
+    "required": "Este campo é obrigatório",
+    "invalidEmail": "Digite um e-mail válido",
+    "invalidOtp": "Digite um OTP válido de 6 dígitos",
+    "minLength": "Mínimo de {{count}} caracteres necessários"
+  },
+  "time": {
+    "today": "Hoje",
+    "overdue": "Atrasado",
+    "upcoming": "Próximo",
+    "someday": "Algum dia",
+    "hoursLeft": "{{hours}} hrs",
+    "minutesLeft": "{{minutes}} mins",
+    "oneDay": "1 dia",
+    "multipleDays": "{{days}} dias"
+  },
+  "greetings": {
+    "welcome": "Bem-vindo",
+    "welcomeBack": "Bem-vindo de volta",
+    "welcomePartner": "Bem-vindo Parceiro",
+    "hi": "Oi",
+    "goodMorning": "Bom dia",
+    "goodAfternoon": "Boa tarde",
+    "goodEvening": "Boa tarde",
+    "goodNight": "Boa noite"
+  },
+  "navigation": {
+    "drawer": {
+      "home": "Início",
+      "groups": "Grupos",
+      "teams": "Equipes",
+      "content": "Conteúdo",
+      "settings": "Configurações",
+      "buyPremium": "Comprar Premium",
+      "helpCenter": "Central de Ajuda",
+      "chatWithUs": "Converse Conosco",
+      "logout": "Sair",
+      "logoutConfirmation": "Tem certeza de que deseja sair?",
+      "loggingOut": "Saindo...",
+      "underDevelopment": "Este recurso está em desenvolvimento"
+    },
+    "bottomTab": {
+      "followUp": "Acompanhamentos",
+      "clients": "Clientes",
+      "add": "Adicionar",
+      "listings": "Anúncios",
+      "agentData": "Dados do Agente"
+    }
+  },
+  "auth": {
+    "signIn": {
+      "partner": "Login do Parceiro",
+      "buyerSeller": "Login Comprador/Vendedor",
+      "dashboard": "Faça login para acessar seu painel",
+      "account": "Faça login em sua conta",
+      "toAccess": "Faça login para acessar seu {{resource}}",
       "continueToLogin": "Continuar para Login",
       "getStartedFree": "Comece GRATUITAMENTE",
       "securePartnerAccess": "Acesso Seguro do Parceiro",
-      "appTitle": "MT One: App e CRM"
+      "prompt": "Faça login para continuar"
     },
-    "languageSelectionScreen": {
-      "selectLanguage": "Selecionar Idioma",
-      "choosePreferredLanguage": "Escolha seu idioma preferido para o app",
-      "currentLanguage": "Idioma Atual"
+    "email": {
+      "enterEmailMessage": "Digite seu e-mail para continuar",
+      "placeholder": "Digite seu endereço de e-mail",
+      "enterToContinue": "Digite seu e-mail para continuar"
     },
-    "emailScreen": {
-      "partnerSignIn": "Login do Parceiro",
-      "buyerSellerSignIn": "Login Comprador/Vendedor",
-      "welcomeBack": "Bem-vindo de Volta",
-      "enterEmailMessage": "Por favor, digite seu endereço de e-mail para continuar",
-      "emailLabel": "E-mail",
-      "emailPlaceholder": "Digite seu endereço de e-mail",
-      "continue": "Continuar",
-      "verifyNow": "Verificar Agora",
-      "sendingOtp": "Enviando OTP...",
-      "verifying": "Verificando...",
-      "emailVerificationFailed": "Falha na verificação do e-mail",
-      "emailNotFound": "E-mail não encontrado",
-      "unexpectedError": "Ocorreu um erro inesperado",
-      "failedToSendOtp": "Falha ao enviar OTP. Tente novamente",
-      "errorSendingOtp": "Ocorreu um erro ao enviar o OTP.",
-      "enterEmailToContinue": "Por favor, digite seu endereço de e-mail para continuar"
-    },
-    "otpScreen": {
-      "verifyOTP": "Verificar OTP",
-      "enterOtp": "Digite o OTP",
-      "otpSentMessage": "Enviamos um código de 6 dígitos para seu endereço de e-mail registrado",
-      "enterValidOtp": "Por favor, digite um OTP válido de 6 dígitos.",
-      "verifying": "Verificando...",
-      "verifyOtp": "Verificar OTP",
-      "didntReceiveCode": "Não recebeu o código?",
-      "resendOtp": "Reenviar OTP"
-    },
-    "followUpScreen": {
-      "title": "Acompanhamentos",
-      "overdueTitle": "Acompanhamentos em Atraso",
-      "overdueSubtitle": "Acompanhamentos que passaram da data de vencimento",
-      "upcomingTitle": "Próximos Acompanhamentos",
-      "upcomingSubtitle": "Acompanhamentos agendados para os próximos 7 dias",
-      "somedayTitle": "Acompanhamentos Futuros",
-      "somedaySubtitle": "Acompanhamentos agendados para datas posteriores",
-      "todayTitle": "Acompanhamentos de Hoje",
-      "noTodayFollowUps": "Nenhum acompanhamento agendado para hoje",
-      "refreshError": "Erro ao atualizar acompanhamentos",
-      "loading": "Carregando acompanhamentos...",
-      "salutationGreeting": {
-        "hi": "Oi",
-        "goodMorning": "Bom dia",
-        "goodAfternoon": "Boa tarde",
-        "goodEvening": "Boa tarde",
-        "goodNight": "Boa noite"
-      },
-      "overdueFollowUps": {
-        "title": "Acompanhamentos em Atraso",
-        "empty": "Nenhum acompanhamento em atraso"
-      },
-      "upcomingFollowUps": {
-        "title": "Próximos Acompanhamentos",
-        "empty": "Nenhum próximo acompanhamento"
-      },
-      "somedayFollowUps": {
-        "title": "Acompanhamentos Futuros",
-        "empty": "Nenhum acompanhamento futuro agendado"
-      },
-      "followUpCard": {
-        "followUp": "Acompanhamento",
-        "assigned": "Atribuído:"
-      }
-    },
-    "clientScreen": {
-      "title": "Clientes",
-      "addClient": "Adicionar Cliente",
-      "activityAddedSuccess": "Atividade adicionada com sucesso",
-      "failedToAddActivity": "Falha ao adicionar atividade",
-      "loadingMoreClients": "Carregando mais clientes...",
-      "searchingClients": "Procurando clientes...",
-      "loadingClients": "Carregando clientes...",
-      "noClientsFound": "Nenhum Cliente Encontrado",
-      "pullToRefresh": "Puxe para baixo para atualizar",
-      "showingClientsFrom": "Mostrando clientes de",
-      "selected": "selecionado",
-      "partner": "parceiro",
-      "teamMember": "membro da equipe",
-      "plural": "s",
-      "edit": "Editar",
-      "searchPlaceholder": "Buscar Clientes..."
+    "otp": {
+      "title": "Verificar OTP",
+      "enter": "Digite o OTP",
+      "sentMessage": "Enviamos um código de 6 dígitos para seu e-mail registrado",
+      "verify": "Verificar OTP",
+      "didntReceive": "Não recebeu o código?",
+      "resend": "Reenviar OTP"
     }
   },
-  "components": {
-    "languageSwitcher": {
-      "changeLanguage": "Alterar Idioma",
-      "switchToLanguage": "Mudar para {{languageName}}?",
-      "rtlChangeWarning": "Isso mudará a direção do layout do app e o app será reiniciado.",
-      "languageChangeTitle": "Alterar Idioma"
+  "followUp": {
+    "title": "Acompanhamentos",
+    "loadingFollowUp": "Carregando acompanhamento...",
+    "toBeScheduledLater": "A ser agendado mais tarde",
+    "noDateSet": "Nenhuma data definida",
+    "status": {
+      "overdue": "Acompanhamento Atrasado",
+      "today": "Acompanhamento Hoje",
+      "in": "Acompanhamento em {{timeLeft}}",
+      "someday": "Acompanhamento: Algum dia",
+      "noScheduled": "Nenhum Acompanhamento Agendado"
+    },
+    "card": {
+      "followUp": "Acompanhamento",
+      "assigned": "Atribuído:"
+    },
+    "overdue": {
+      "title": "Acompanhamentos em Atraso",
+      "subtitle": "Acompanhamentos que passaram da data de vencimento",
+      "empty": "Nenhum acompanhamento em atraso"
+    },
+    "upcoming": {
+      "title": "Próximos Acompanhamentos",
+      "subtitle": "Acompanhamentos agendados para os próximos 7 dias",
+      "empty": "Nenhum próximo acompanhamento"
+    },
+    "today": {
+      "title": "Acompanhamentos de Hoje",
+      "empty": "Nenhum acompanhamento agendado para hoje"
+    },
+    "someday": {
+      "title": "Acompanhamentos Futuros",
+      "subtitle": "Acompanhamentos agendados para datas posteriores",
+      "empty": "Nenhum acompanhamento futuro agendado"
+    }
+  },
+  "clients": {
+    "title": "Clientes",
+    "add": "Adicionar Cliente",
+    "search": "Buscar Clientes...",
+    "noClientsFound": "Nenhum Cliente Encontrado",
+    "showingFrom": "Mostrando clientes de",
+    "selected": "selecionado",
+    "partner": "parceiro",
+    "teamMember": "membro da equipe",
+    "activityAddedSuccess": "Atividade adicionada com sucesso",
+    "failedToAddActivity": "Falha ao adicionar atividade",
+    "loading": "Carregando clientes...",
+    "searching": "Pesquisando clientes..."
+  },
+  "language": {
+    "selectLanguage": "Selecionar Idioma",
+    "choosePreferred": "Escolha seu idioma preferido para o app",
+    "current": "Idioma Atual",
+    "change": "Alterar Idioma",
+    "switchTo": "Mudar para {{languageName}}?",
+    "rtlWarning": "Isso mudará a direção do layout do app e o app será reiniciado."
+  },
+  "app": {
+    "title": "MT One: App e CRM",
+    "restart": "Reiniciar App"
+  },
+  "plurals": {
+    "client": {
+      "zero": "Nenhum cliente",
+      "one": "{{count}} cliente",
+      "other": "{{count}} clientes"
+    },
+    "followUp": {
+      "zero": "Nenhum acompanhamento",
+      "one": "{{count}} acompanhamento",
+      "other": "{{count}} acompanhamentos"
     }
   }
 }

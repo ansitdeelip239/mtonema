@@ -1,8 +1,15 @@
 import React from 'react';
-import {View, Text, TouchableOpacity, StyleSheet, ActivityIndicator} from 'react-native';
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  StyleSheet,
+  ActivityIndicator,
+} from 'react-native';
 import GetIcon from '../../../../components/GetIcon';
 import {Client} from '../../../../types';
 import {formatFollowUpDate, formatTime} from '../../../../utils/dateUtils';
+import {useTranslation} from 'react-i18next';
 
 interface FollowUpCardProps {
   client: Client;
@@ -10,7 +17,13 @@ interface FollowUpCardProps {
   onPress: () => void;
 }
 
-const FollowUpCard: React.FC<FollowUpCardProps> = ({client, isLoading = false, onPress}) => {
+const FollowUpCard: React.FC<FollowUpCardProps> = ({
+  client,
+  isLoading = false,
+  onPress,
+}) => {
+  const {t} = useTranslation();
+
   // Helper function to convert UTC date to local time
   const getLocalDate = (dateString: string) => {
     if (!dateString) {
@@ -52,7 +65,7 @@ const FollowUpCard: React.FC<FollowUpCardProps> = ({client, isLoading = false, o
     const daysLeft = Math.round(diffTime / (1000 * 60 * 60 * 24));
 
     if (daysLeft < 0) {
-      return 'Overdue';
+      return t('time.overdue', 'Overdue');
     } else if (daysLeft === 0) {
       // Calculate time difference in hours and minutes
       const timeRemainingMs =
@@ -63,14 +76,18 @@ const FollowUpCard: React.FC<FollowUpCardProps> = ({client, isLoading = false, o
       );
 
       if (hoursLeft > 0) {
-        return `${hoursLeft} hrs`;
+        return t('time.hoursLeft', '{{hours}} hrs', {hours: hoursLeft});
       } else if (minutesLeft > 0) {
-        return `${minutesLeft} mins`;
+        return t('time.minutesLeft', '{{minutes}} mins', {
+          minutes: minutesLeft,
+        });
       } else {
-        return 'Today';
+        return t('time.today', 'Today');
       }
     } else {
-      return daysLeft === 1 ? '1 day' : `${daysLeft} days`;
+      return daysLeft === 1
+        ? t('time.oneDay', '1 day')
+        : t('time.multipleDays', '{{days}} days', {days: daysLeft});
     }
   };
 
@@ -83,11 +100,32 @@ const FollowUpCard: React.FC<FollowUpCardProps> = ({client, isLoading = false, o
     ? localFollowUpDate.getTime() < new Date().getTime()
     : false;
 
-  const isToday = localFollowUpDate ? getDaysText() === 'Today' : false;
+  const isToday = localFollowUpDate
+    ? getDaysText() === t('time.today', 'Today')
+    : false;
 
   const isLessThanOneHour = localFollowUpDate
     ? localFollowUpDate.getTime() - new Date().getTime() < 1000 * 60 * 60
     : false;
+
+  // Get follow-up title based on status
+  const getFollowUpTitle = () => {
+    if (localFollowUpDate) {
+      if (isOverdue) {
+        return t('followUp.status.overdue', 'Follow Up Overdue');
+      } else if (isToday) {
+        return t('followUp.status.today', 'Follow Up Today');
+      } else {
+        return t('followUp.status.in', 'Follow Up in {{timeLeft}}', {
+          timeLeft: getDaysText(),
+        });
+      }
+    } else if (isSomedayFollowUp) {
+      return t('followUp.status.someday', 'Follow Up: Someday');
+    } else {
+      return t('followUp.status.noScheduled', 'No Follow Up Scheduled');
+    }
+  };
 
   return (
     <TouchableOpacity
@@ -107,20 +145,15 @@ const FollowUpCard: React.FC<FollowUpCardProps> = ({client, isLoading = false, o
         {isLoading ? (
           <View style={styles.loadingContainer}>
             <ActivityIndicator size="small" color="#666" />
-            <Text style={styles.loadingText}>Loading follow-up...</Text>
+            <Text style={styles.loadingText}>
+              {t('common.states.loading', 'Loading follow-up...')}
+            </Text>
           </View>
         ) : (
           <>
-            <Text style={[styles.sectionTitle, isOverdue && styles.overdueText]}>
-              {localFollowUpDate
-                ? isOverdue
-                  ? 'Follow Up Overdue'
-                  : isToday
-                  ? 'Follow Up Today'
-                  : `Follow Up in ${getDaysText()}`
-                : isSomedayFollowUp
-                ? 'Follow Up: Someday'
-                : 'No Follow Up Scheduled'}
+            <Text
+              style={[styles.sectionTitle, isOverdue && styles.overdueText]}>
+              {getFollowUpTitle()}
             </Text>
             <View style={styles.scheduleButton}>
               {hasFollowUp ? (
@@ -139,14 +172,19 @@ const FollowUpCard: React.FC<FollowUpCardProps> = ({client, isLoading = false, o
               <Text style={[styles.infoValue, isOverdue && styles.overdueText]}>
                 {formatFollowUpDate(localFollowUpDate)}
               </Text>
-              <Text style={[styles.followUpTime, isOverdue && styles.overdueText]}>
+              <Text
+                style={[styles.followUpTime, isOverdue && styles.overdueText]}>
                 {formatTime(localFollowUpDate)}
               </Text>
             </View>
           ) : isSomedayFollowUp ? (
-            <Text style={styles.infoValue}>To be scheduled later</Text>
+            <Text style={styles.infoValue}>
+              {t('followUp.toBeScheduledLater', 'To be scheduled later')}
+            </Text>
           ) : (
-            <Text style={styles.infoValue}>No date set</Text>
+            <Text style={styles.infoValue}>
+              {t('followUp.noDateSet', 'No date set')}
+            </Text>
           )}
         </>
       )}

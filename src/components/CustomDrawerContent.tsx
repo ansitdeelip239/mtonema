@@ -117,7 +117,7 @@ const CustomDrawerContent = (props: any) => {
               <GetIcon iconName="premium" color="white" size="25" />
             </View>
             <Text style={styles.premiumItemText}>
-              {t('navigation.partner.drawer.buyPremium', 'Buy Premium')}
+              {t('navigation.drawer.buyPremium', 'Buy Premium')}
             </Text>
           </TouchableOpacity>
         )}
@@ -140,7 +140,7 @@ const CustomDrawerContent = (props: any) => {
             <GetIcon iconName="about" color="#444" size="25" />
           </View>
           <Text style={styles.itemText}>
-            {t('navigation.partner.drawer.helpCenter', 'Help Center')}
+            {t('navigation.drawer.helpCenter', 'Help Center')}
           </Text>
         </TouchableOpacity>
 
@@ -151,7 +151,7 @@ const CustomDrawerContent = (props: any) => {
             <GetIcon iconName="faq" color="#444" size="25" />
           </View>
           <Text style={styles.itemText}>
-            {t('navigation.partner.drawer.chatWithUs', 'Chat With Us')}
+            {t('navigation.drawer.chatWithUs', 'Chat With Us')}
           </Text>
         </TouchableOpacity>
       </View>
@@ -165,7 +165,7 @@ const CustomDrawerContent = (props: any) => {
           <View style={styles.modalContent}>
             <Text style={styles.modalText}>
               {t(
-                'navigation.partner.drawer.underDevelopment',
+                'navigation.drawer.underDevelopment',
                 'This feature is under development.',
               )}
             </Text>
@@ -175,7 +175,7 @@ const CustomDrawerContent = (props: any) => {
                 {backgroundColor: theme.primaryColor},
               ]}
               onPress={() => setModalVisible(false)}>
-              <Text style={styles.textWhite}>{t('common.ok', 'OK')}</Text>
+              <Text style={styles.textWhite}>{t('common.actions.ok', 'OK')}</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -191,7 +191,7 @@ const CustomDrawerContent = (props: any) => {
           <View style={styles.drawerItem}>
             <GetIcon iconName="logout" color={Colors.white} size="25" />
             <Text style={styles.logouttxt}>
-              {t('navigation.partner.drawer.logout', 'Logout')}
+              {t('navigation.drawer.logout', 'Logout')}
             </Text>
           </View>
         </TouchableOpacity>
@@ -207,7 +207,7 @@ const CustomDrawerContent = (props: any) => {
           <View style={styles.modalContent}>
             <Text style={styles.modalText}>
               {t(
-                'navigation.partner.drawer.logoutConfirmation',
+                'navigation.drawer.logoutConfirmation',
                 'Are you sure you want to logout?',
               )}
             </Text>
@@ -216,7 +216,7 @@ const CustomDrawerContent = (props: any) => {
                 style={styles.whiteButton}
                 onPress={() => setLogoutModalVisible(false)}>
                 <Text style={styles.textBlack}>
-                  {t('common.cancel', 'Cancel')}
+                  {t('common.actions.cancel', 'Cancel')}
                 </Text>
               </TouchableOpacity>
               <TouchableOpacity
@@ -227,7 +227,7 @@ const CustomDrawerContent = (props: any) => {
                 onPress={confirmLogout}
                 disabled={isLoggingOut}>
                 <Text style={styles.textWhite}>
-                  {t('navigation.partner.drawer.logout', 'Log out')}
+                  {t('navigation.drawer.logout', 'Log out')}
                 </Text>
               </TouchableOpacity>
             </View>
@@ -244,7 +244,7 @@ const CustomDrawerContent = (props: any) => {
         <View style={styles.loadingModalContainer}>
           <ActivityIndicator size="large" color="#ffffff" />
           <Text style={styles.loadingText}>
-            {t('navigation.partner.drawer.loggingOut', 'Logging out...')}
+            {t('navigation.drawer.loggingOut', 'Logging out...')}
           </Text>
         </View>
       </Modal>

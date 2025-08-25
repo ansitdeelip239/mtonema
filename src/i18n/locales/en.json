@@ -1,148 +1,201 @@
 {
   "common": {
-    "welcome": "Welcome",
-    "loading": "Loading...",
-    "submit": "Submit",
-    "cancel": "Cancel",
-    "save": "Save",
-    "delete": "Delete",
-    "edit": "Edit",
-    "back": "Back",
-    "next": "Continue",
-    "restartApp": "Restart App",
-    "email": "Email",
-    "success": "Success",
-    "error": "Error",
-    "ok": "OK"
-  },
-  "navigation": {
-    "partner": {
-      "drawer": {
-        "home": "Home",
-        "groups": "Groups",
-        "teams": "Teams",
-        "content": "Content",
-        "settings": "Settings",
-        "buyPremium": "Buy Premium",
-        "helpCenter": "Help Center",
-        "chatWithUs": "Chat with Us",
-        "logout": "Logout",
-        "logoutConfirmation": "Are you sure you want to logout?",
-        "loggingOut": "Logging out...",
-        "underDevelopment": "This feature is under development"
-      },
-      "bottomTab": {
-        "followUp": "Follow-Ups",
-        "clients": "Clients",
-        "add": "Add",
-        "listings": "Listings",
-        "agentData": "Agent Data"
-      }
+    "actions": {
+      "submit": "Submit",
+      "cancel": "Cancel",
+      "save": "Save",
+      "delete": "Delete",
+      "edit": "Edit",
+      "add": "Add",
+      "back": "Back",
+      "next": "Continue",
+      "search": "Search",
+      "filter": "Filter",
+      "sort": "Sort",
+      "refresh": "Refresh",
+      "retry": "Retry",
+      "close": "Close",
+      "confirm": "Confirm",
+      "ok": "OK",
+      "yes": "Yes",
+      "no": "No"
+    },
+    "states": {
+      "loading": "Loading...",
+      "loadingMore": "Loading more...",
+      "searching": "Searching...",
+      "verifying": "Verifying...",
+      "sending": "Sending...",
+      "success": "Success",
+      "error": "Error",
+      "empty": "No data available",
+      "refreshToLoad": "Pull down to refresh"
+    },
+    "labels": {
+      "email": "Email",
+      "name": "Name",
+      "phone": "Phone",
+      "address": "Address"
     }
   },
-  "screens": {
-    "partnerLoginScreen": {
-      "welcomePartner": "Welcome Partner",
-      "signInToDashboard": "Sign in to access your dashboard",
+  "errors": {
+    "network": "Network connection error",
+    "validation": "Please check your input",
+    "unauthorized": "Session expired. Please login again",
+    "generic": "Something went wrong. Please try again",
+    "emailVerificationFailed": "Email verification failed",
+    "emailNotFound": "Email not found",
+    "unexpectedError": "An unexpected error occurred",
+    "failedToSendOtp": "Failed to send OTP. Please try again",
+    "refreshError": "Error refreshing data"
+  },
+  "validation": {
+    "required": "This field is required",
+    "invalidEmail": "Please enter a valid email address",
+    "invalidOtp": "Please enter a valid 6-digit OTP",
+    "minLength": "Minimum {{count}} characters required"
+  },
+  "time": {
+    "today": "Today",
+    "overdue": "Overdue",
+    "upcoming": "Upcoming",
+    "someday": "Someday",
+    "hoursLeft": "{{hours}} hrs",
+    "minutesLeft": "{{minutes}} mins",
+    "oneDay": "1 day",
+    "multipleDays": "{{days}} days"
+  },
+  "greetings": {
+    "welcome": "Welcome",
+    "welcomeBack": "Welcome Back",
+    "welcomePartner": "Welcome Partner",
+    "hi": "Hi",
+    "goodMorning": "Good morning",
+    "goodAfternoon": "Good afternoon",
+    "goodEvening": "Good evening",
+    "goodNight": "Hey Night Owl"
+  },
+  "navigation": {
+    "drawer": {
+      "home": "Home",
+      "groups": "Groups",
+      "teams": "Teams",
+      "content": "Content",
+      "settings": "Settings",
+      "buyPremium": "Buy Premium",
+      "helpCenter": "Help Center",
+      "chatWithUs": "Chat with Us",
+      "logout": "Logout",
+      "logoutConfirmation": "Are you sure you want to logout?",
+      "loggingOut": "Logging out...",
+      "underDevelopment": "This feature is under development"
+    },
+    "bottomTab": {
+      "followUp": "Follow-Ups",
+      "clients": "Clients",
+      "add": "Add",
+      "listings": "Listings",
+      "agentData": "Agent Data"
+    }
+  },
+  "auth": {
+    "signIn": {
+      "partner": "Partner Sign In",
+      "buyerSeller": "Buyer/Seller Sign In",
+      "dashboard": "Sign in to access your dashboard",
+      "account": "Sign in to your account",
+      "toAccess": "Sign in to access your {{resource}}",
       "continueToLogin": "Continue to Login",
       "getStartedFree": "Get started for FREE",
       "securePartnerAccess": "Secure Partner Access",
-      "appTitle": "MT One: App & CRM"
+      "prompt": "Please sign in to continue"
     },
-    "languageSelectionScreen": {
-      "selectLanguage": "Select Language",
-      "choosePreferredLanguage": "Choose your preferred language for the app",
-      "currentLanguage": "Current Language"
-    },
-    "emailScreen": {
-      "partnerSignIn": "Partner Sign In",
-      "buyerSellerSignIn": "Buyer/Seller Sign In",
-      "welcomeBack": "Welcome Back",
+    "email": {
       "enterEmailMessage": "Please enter your email address to continue",
-      "emailLabel": "Email",
-      "emailPlaceholder": "Enter your email address",
-      "continue": "Continue",
-      "verifyNow": "Verify Now",
-      "sendingOtp": "Sending OTP...",
-      "verifying": "Verifying...",
-      "emailVerificationFailed": "Email verification failed",
-      "emailNotFound": "Email not found",
-      "unexpectedError": "An unexpected error occurred",
-      "failedToSendOtp": "Failed to send OTP. Please try again",
-      "errorSendingOtp": "An error occurred while sending OTP.",
-      "enterEmailToContinue": "Please enter your email address to continue"
+      "placeholder": "Enter your email address",
+      "enterToContinue": "Please enter your email address to continue"
     },
-    "otpScreen": {
-      "verifyOTP": "Verify OTP",
-      "enterOtp": "Enter OTP",
-      "otpSentMessage": "We've sent a 6-digit code to your registered E-mail address",
-      "enterValidOtp": "Please enter a valid 6-digit OTP.",
-      "verifying": "Verifying...",
-      "verifyOtp": "Verify OTP",
-      "didntReceiveCode": "Didn't receive the code?",
-      "resendOtp": "Resend OTP"
-    },
-    "followUpScreen": {
-      "title": "Follow-Ups",
-      "overdueTitle": "Overdue Follow-ups",
-      "overdueSubtitle": "Follow-ups that have passed their due date",
-      "upcomingTitle": "Upcoming Follow-ups",
-      "upcomingSubtitle": "Follow-ups scheduled for the next 7 days",
-      "somedayTitle": "Someday Follow-ups",
-      "somedaySubtitle": "Follow-ups scheduled for later dates",
-      "todayTitle": "Today's Follow-ups",
-      "noTodayFollowUps": "No follow-ups scheduled for today",
-      "refreshError": "Error refreshing follow-ups",
-      "loading": "Loading follow-ups...",
-      "salutationGreeting": {
-        "hi": "Hi",
-        "goodMorning": "Good morning",
-        "goodAfternoon": "Good afternoon",
-        "goodEvening": "Good evening",
-        "goodNight": "Good night"
-      },
-      "overdueFollowUps": {
-        "title": "Overdue Follow-Ups",
-        "empty": "No overdue follow-ups"
-      },
-      "upcomingFollowUps": {
-        "title": "Upcoming Follow-Ups",
-        "empty": "No upcoming follow-ups"
-      },
-      "somedayFollowUps": {
-        "title": "Someday Follow-Ups",
-        "empty": "No someday follow-ups scheduled"
-      },
-      "followUpCard": {
-        "followUp": "Follow Up",
-        "assigned": "Assigned:"
-      }
-    },
-    "clientScreen": {
-      "title": "Clients",
-      "addClient": "Add Client",
-      "activityAddedSuccess": "Activity added successfully",
-      "failedToAddActivity": "Failed to add activity",
-      "loadingMoreClients": "Loading more clients...",
-      "searchingClients": "Searching clients...",
-      "loadingClients": "Loading clients...",
-      "noClientsFound": "No Clients Found",
-      "pullToRefresh": "Pull down to refresh",
-      "showingClientsFrom": "Showing clients from",
-      "selected": "selected",
-      "partner": "partner",
-      "teamMember": "team member",
-      "plural": "s",
-      "edit": "Edit",
-      "searchPlaceholder": "Search Clients..."
+    "otp": {
+      "title": "Verify OTP",
+      "enter": "Enter OTP",
+      "sentMessage": "We've sent a 6-digit code to your registered E-mail address",
+      "verify": "Verify OTP",
+      "didntReceive": "Didn't receive the code?",
+      "resend": "Resend OTP"
     }
   },
-  "components": {
-    "languageSwitcher": {
-      "changeLanguage": "Change Language",
-      "switchToLanguage": "Switch to {{languageName}}?",
-      "rtlChangeWarning": "This will change the app layout direction and the app will restart.",
-      "languageChangeTitle": "Change Language"
+  "followUp": {
+    "title": "Follow-Ups",
+    "loadingFollowUp": "Loading follow-up...",
+    "toBeScheduledLater": "To be scheduled later",
+    "noDateSet": "No date set",
+    "status": {
+      "overdue": "Follow Up Overdue",
+      "today": "Follow Up Today",
+      "in": "Follow Up in {{timeLeft}}",
+      "someday": "Follow Up: Someday",
+      "noScheduled": "No Follow Up Scheduled"
+    },
+    "card": {
+      "followUp": "Follow Up",
+      "assigned": "Assigned:"
+    },
+    "overdue": {
+      "title": "Overdue Follow-ups",
+      "subtitle": "Follow-ups that have passed their due date",
+      "empty": "No overdue follow-ups"
+    },
+    "upcoming": {
+      "title": "Upcoming Follow-ups",
+      "subtitle": "Follow-ups scheduled for the next 7 days",
+      "empty": "No upcoming follow-ups"
+    },
+    "today": {
+      "title": "Today's Follow-ups",
+      "empty": "No follow-ups scheduled for today"
+    },
+    "someday": {
+      "title": "Someday Follow-ups",
+      "subtitle": "Follow-ups scheduled for later dates",
+      "empty": "No someday follow-ups scheduled"
+    }
+  },
+  "clients": {
+    "title": "Clients",
+    "add": "Add Client",
+    "search": "Search Clients...",
+    "noClientsFound": "No Clients Found",
+    "showingFrom": "Showing clients from",
+    "selected": "selected",
+    "partner": "partner",
+    "teamMember": "team member",
+    "activityAddedSuccess": "Activity added successfully",
+    "failedToAddActivity": "Failed to add activity",
+    "loading": "Loading clients...",
+    "searching": "Searching clients..."
+  },
+  "language": {
+    "selectLanguage": "Select Language",
+    "choosePreferred": "Choose your preferred language for the app",
+    "current": "Current Language",
+    "change": "Change Language",
+    "switchTo": "Switch to {{languageName}}?",
+    "rtlWarning": "This will change the app layout direction and the app will restart."
+  },
+  "app": {
+    "title": "MT One: App & CRM",
+    "restart": "Restart App"
+  },
+  "plurals": {
+    "client": {
+      "zero": "No clients",
+      "one": "{{count}} client",
+      "other": "{{count}} clients"
+    },
+    "followUp": {
+      "zero": "No follow-ups",
+      "one": "{{count}} follow-up",
+      "other": "{{count}} follow-ups"
     }
   }
 }

@@ -66,7 +66,7 @@ const OverdueFollowUpScreen: React.FC<Props> = ({navigation}) => {
     <SafeAreaView style={styles.container}>
       {Platform.OS === 'android' && (
         <Header
-          title={t('screens.followUpScreen.overdueFollowUps.title', 'Overdue Follow-Ups')}
+          title={t('followUp.overdue.title', 'Overdue Follow-Ups')}
           backButton={true}
           navigation={navigation}
         />
@@ -87,7 +87,7 @@ const OverdueFollowUpScreen: React.FC<Props> = ({navigation}) => {
         <FollowUpListSection
           isLoading={isLoading}
           followUps={followUps || []}
-          emptyText={t('screens.followUpScreen.overdueFollowUps.empty', 'No overdue follow-ups')}
+          emptyText={t('followUp.overdue.empty', 'No overdue follow-ups')}
           showTitle={false}
           onFollowUpPress={handleFollowUpPress}
           onEndReached={() => {

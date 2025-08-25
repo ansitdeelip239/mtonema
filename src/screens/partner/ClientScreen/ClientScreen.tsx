@@ -122,9 +122,9 @@ const ClientScreen: React.FC<Props> = ({navigation}) => {
       setClientsUpdated(true);
       Toast.show({
         type: 'success',
-        text1: t('common.success', 'Success'),
+        text1: t('common.states.success', 'Success'),
         text2: t(
-          'screens.clientScreen.activityAddedSuccess',
+          'clients.activityAddedSuccess',
           'Activity added successfully',
         ),
       });
@@ -135,9 +135,9 @@ const ClientScreen: React.FC<Props> = ({navigation}) => {
     } catch (err) {
       Toast.show({
         type: 'error',
-        text1: t('common.error', 'Error'),
+        text1: t('common.states.error', 'Error'),
         text2: t(
-          'screens.clientScreen.failedToAddActivity',
+          'clients.failedToAddActivity',
           'Failed to add activity',
         ),
       });
@@ -164,7 +164,7 @@ const ClientScreen: React.FC<Props> = ({navigation}) => {
         <ActivityIndicator size="small" color="#0066cc" />
         <Text style={styles.loadingMoreText}>
           {t(
-            'screens.clientScreen.loadingMoreClients',
+            'clients.loadingMoreClients',
             'Loading more clients...',
           )}
         </Text>
@@ -181,11 +181,11 @@ const ClientScreen: React.FC<Props> = ({navigation}) => {
           <Text style={styles.loadingStateText}>
             {isSearching
               ? t(
-                  'screens.clientScreen.searchingClients',
+                  'clients.searching',
                   'Searching clients...',
                 )
               : t(
-                  'screens.clientScreen.loadingClients',
+                  'clients.loading',
                   'Loading clients...',
                 )}
           </Text>
@@ -232,13 +232,13 @@ const ClientScreen: React.FC<Props> = ({navigation}) => {
           <View style={styles.emptyStateContainer}>
             <Text style={styles.emptyText}>
               {t(
-                'screens.clientScreen.noClientsFound',
+                'clients.noClientsFound',
                 'No Clients Found',
               )}
             </Text>
             <Text style={styles.pullToRefreshHint}>
               {t(
-                'screens.clientScreen.pullToRefresh',
+                'clients.pullToRefresh',
                 'Pull down to refresh',
               )}
             </Text>
@@ -252,7 +252,7 @@ const ClientScreen: React.FC<Props> = ({navigation}) => {
     <View style={styles.container}>
       {Platform.OS === 'android' && (
         <Header<PartnerDrawerParamList>
-          title={t('screens.clientScreen.title', 'Clients')}
+          title={t('clients.title', 'Clients')}
           showFilterButton={
             user?.role === Roles.ADMIN || user?.role === Roles.PARTNER
           }
@@ -263,7 +263,7 @@ const ClientScreen: React.FC<Props> = ({navigation}) => {
               navigation.navigate('AddClientScreen', {editMode: false});
             }}>
             <Text style={styles.buttonText}>
-              {t('screens.clientScreen.addClient', 'Add Client')}
+              {t('clients.addClient', 'Add Client')}
             </Text>
           </TouchableOpacity>
         </Header>
@@ -275,23 +275,23 @@ const ClientScreen: React.FC<Props> = ({navigation}) => {
           <GetIcon iconName="filter" size={16} color={theme.primaryColor} />
           <Text style={[styles.filterText, {color: theme.primaryColor}]}>
             {t(
-              'screens.clientScreen.showingClientsFrom',
+              'clients.showingClientsFrom',
               'Showing clients from',
             )}{' '}
             {selectedPartnerIds.length}{' '}
-            {t('screens.clientScreen.selected', 'selected')}{' '}
+            {t('clients.selected', 'selected')}{' '}
             {user?.role === Roles.ADMIN
-              ? t('screens.clientScreen.partner', 'partner')
-              : t('screens.clientScreen.teamMember', 'team member')}
+              ? t('clients.partner', 'partner')
+              : t('clients.teamMember', 'team member')}
             {selectedPartnerIds.length > 1
-              ? t('screens.clientScreen.plural', 's')
+              ? t('clients.plural', 's')
               : ''}
           </Text>
           <TouchableOpacity
             onPress={handleFilterPress}
             style={styles.editFilterButton}>
             <Text style={[styles.editFilterText, {color: theme.primaryColor}]}>
-              {t('screens.clientScreen.edit', 'Edit')}
+              {t('clients.edit', 'Edit')}
             </Text>
           </TouchableOpacity>
         </View>
@@ -302,7 +302,7 @@ const ClientScreen: React.FC<Props> = ({navigation}) => {
         <View style={styles.searchContainer}>
           <SearchHeader
             placeholder={t(
-              'screens.clientScreen.searchPlaceholder',
+              'clients.searchPlaceholder',
               'Search Clients...',
             )}
             onSearch={handleSearchWithLoading}

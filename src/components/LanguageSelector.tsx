@@ -119,9 +119,9 @@ const LanguageSelector: React.FC<LanguageSelectorProps> = ({
       onRequestClose={onClose}>
       <SafeAreaView style={styles.container}>
         <View style={styles.header}>
-          <Text style={styles.title}>{t('screens.languageSelectionScreen.selectLanguage')}</Text>
+          <Text style={styles.title}>{t('language.selectLanguage')}</Text>
           <TouchableOpacity onPress={onClose} style={styles.closeButton}>
-            <Text style={styles.closeButtonText}>{t('common.cancel')}</Text>
+            <Text style={styles.closeButtonText}>{t('common.actions.cancel')}</Text>
           </TouchableOpacity>
         </View>
 

@@ -154,7 +154,7 @@ const OtpScreen: React.FC<Props> = ({ navigation, route }) => {
       {
         Platform.OS === 'android' && (
           <HeaderComponent
-            title={t('screens.otpScreen.verifyOTP')}
+            title={t('auth.otp.title')}
             onBackPress={navigation.goBack}
           />
         )

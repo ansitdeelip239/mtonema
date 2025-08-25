@@ -54,22 +54,22 @@ const timeConfig: {
   nightOwl: {
     greeting: 'Hey Night Owl',
     icon: 'night',
-    translationKey: 'screens.followUpScreen.salutationGreeting.heyNightOwl', // ✅ Add translation key
+    translationKey: 'greetings.goodNight', // ✅ Add translation key
   },
   morning: {
     greeting: 'Good Morning',
     icon: 'morning',
-    translationKey: 'screens.followUpScreen.salutationGreeting.goodMorning', // ✅ Add translation key
+    translationKey: 'greetings.goodMorning', // ✅ Add translation key
   },
   afternoon: {
     greeting: 'Good Afternoon',
     icon: 'afternoon',
-    translationKey: 'screens.followUpScreen.salutationGreeting.goodAfternoon', // ✅ Add translation key
+    translationKey: 'greetings.goodAfternoon', // ✅ Add translation key
   },
   evening: {
     greeting: 'Good Evening',
     icon: 'evening',
-    translationKey: 'screens.followUpScreen.salutationGreeting.goodEvening', // ✅ Add translation key
+    translationKey: 'greetings.goodEvening', // ✅ Add translation key
   },
 };
 

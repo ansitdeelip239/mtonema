@@ -13,7 +13,7 @@ const SalutationGreeting: React.FC = () => {
 
   // ✅ Define all translations at the top
   const translations = {
-    hi: t('screens.followUpScreen.salutationGreeting.hi'),
+    hi: t('greetings.hi'),
     greeting: t(getGreetingTranslationKey()),
   };
 

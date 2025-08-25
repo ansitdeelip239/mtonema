@@ -45,13 +45,13 @@ const OtpModel: React.FC<OtpModelProps> = ({
 
   // ✅ Define all translations at the top
   const translations = {
-    enterOtp: t('screens.otpScreen.enterOtp'),
-    otpSentMessage: t('screens.otpScreen.otpSentMessage'),
-    enterValidOtp: t('screens.otpScreen.enterValidOtp'),
-    verifying: t('screens.otpScreen.verifying'),
-    verifyOtp: t('screens.otpScreen.verifyOtp'),
-    didntReceiveCode: t('screens.otpScreen.didntReceiveCode'),
-    resendOtp: t('screens.otpScreen.resendOtp'),
+    enterOtp: t('auth.otp.enter'),
+    otpSentMessage: t('auth.otp.sentMessage'),
+    enterValidOtp: t('validation.invalidOtp'),
+    verifying: t('common.states.verifying'),
+    verifyOtp: t('auth.otp.verify'),
+    didntReceiveCode: t('auth.otp.didntReceive'),
+    resendOtp: t('auth.otp.resend'),
   };
 
   const logoHeight = useRef(new Animated.Value(150)).current;
