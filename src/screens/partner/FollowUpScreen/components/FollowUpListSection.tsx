@@ -11,6 +11,7 @@ import {FollowUpType} from '../../../../types';
 import GetIcon, {IconEnum} from '../../../../components/GetIcon';
 import Colors from '../../../../constants/Colors';
 import {useTheme} from '../../../../context/ThemeProvider';
+import {useTranslation} from 'react-i18next';
 
 interface FollowUpListSectionProps {
   title?: string;
@@ -38,6 +39,8 @@ const FollowUpListSection: React.FC<FollowUpListSectionProps> = ({
   isLoadingMore = false,
 }) => {
   const {theme} = useTheme();
+  const {t} = useTranslation();
+
   const renderFollowUpItem = ({item}: {item: FollowUpType}) => (
     <FollowUpCard
       item={item}
@@ -70,7 +73,9 @@ const FollowUpListSection: React.FC<FollowUpListSectionProps> = ({
       {isLoading ? (
         <View style={styles.loaderContainer}>
           <ActivityIndicator size="large" color={theme.primaryColor} />
-          <Text style={styles.loaderText}>Loading follow-ups...</Text>
+          <Text style={styles.loaderText}>
+            {t('screens.followUpScreen.loading', 'Loading follow-ups...')}
+          </Text>
         </View>
       ) : followUps && followUps.length > 0 ? (
         <FlatList

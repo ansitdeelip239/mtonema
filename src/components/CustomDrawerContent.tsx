@@ -22,10 +22,12 @@ import {useTheme} from '../context/ThemeProvider';
 import {navigationRef} from '../navigator/NavigationRef';
 import PaymentScreen from '../screens/partner/PaymentScreen/PaymentScreen';
 import Roles from '../constants/Roles';
+import { useTranslation } from 'react-i18next';
 
 const CustomDrawerContent = (props: any) => {
   const {user, logout} = useAuth();
   const {theme} = useTheme();
+  const {t} = useTranslation();
   const {isInTrial, isPartnerOrTeam} = useSubscription();
   const [userName, setUserName] = useState(user?.name || '');
   const [isLoggingOut, setIsLoggingOut] = useState(false);
@@ -114,7 +116,7 @@ const CustomDrawerContent = (props: any) => {
             <View style={styles.iconContainer}>
               <GetIcon iconName="premium" color="white" size="25" />
             </View>
-            <Text style={styles.premiumItemText}>Buy Premium</Text>
+            <Text style={styles.premiumItemText}>{t('navigation.partner.drawer.buyPremium', 'Buy Premium')}</Text>
           </TouchableOpacity>
         )}
 
@@ -135,7 +137,7 @@ const CustomDrawerContent = (props: any) => {
           <View style={styles.iconContainer}>
             <GetIcon iconName="about" color="#444" size="25" />
           </View>
-          <Text style={styles.itemText}>Help Center</Text>
+          <Text style={styles.itemText}>{t('navigation.partner.drawer.helpCenter', 'Help Center')}</Text>
         </TouchableOpacity>
 
         <TouchableOpacity
@@ -144,7 +146,7 @@ const CustomDrawerContent = (props: any) => {
           <View style={styles.iconContainer}>
             <GetIcon iconName="faq" color="#444" size="25" />
           </View>
-          <Text style={styles.itemText}>Chat With Us</Text>
+          <Text style={styles.itemText}>{t('navigation.partner.drawer.chatWithUs', 'Chat With Us')}</Text>
         </TouchableOpacity>
       </View>
       {/* Under Development Modal */}

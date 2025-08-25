@@ -13,12 +13,15 @@ import {Platform} from 'react-native';
 import FilterPartnerStack from './components/FilterPartnerStack';
 import PaymentBottomTabs from './components/PaymentBottomTabs';
 import TeamStack from './components/TeamStack';
+import SettingsScreen from '../screens/partner/Settings/SettingsScreen';
+import {useTranslation} from 'react-i18next'; // Add this import
 
 const Drawer = createDrawerNavigator<PartnerDrawerParamList>();
 
 const PartnerNavigator = () => {
   // Get theme from context
   const {theme} = useTheme();
+  const {t} = useTranslation(); // Add this hook
 
   const isIOS = Platform.OS === 'ios';
 
@@ -26,6 +29,7 @@ const PartnerNavigator = () => {
   const drawerStyles = {
     drawerType: 'front' as const,
     drawerActiveTintColor: 'white',
+    drawerInactiveTintColor: 'black',
     drawerActiveBackgroundColor: theme.primaryColor,
     drawerStyle: {width: 240},
     headerStyle: {backgroundColor: theme.primaryColor},
@@ -46,8 +50,7 @@ const PartnerNavigator = () => {
         component={PartnerBottomTabs}
         options={{
           headerShown: false,
-          // headerTitle: isIOS ? '' : 'Home', // Hide title text on iOS
-          // headerTitleStyle: isIOS ? {opacity: 0} : undefined, // Extra fallback
+          drawerLabel: t('navigation.partner.drawer.home'), // Add localized label
           // eslint-disable-next-line react/no-unstable-nested-components
           drawerIcon: ({color}) => (
             <GetIcon iconName="home" color={color} size="25" />
@@ -59,8 +62,7 @@ const PartnerNavigator = () => {
         component={GroupsScreen}
         options={{
           headerShown: isIOS,
-          // headerTitle: isIOS ? '' : 'Groups', // Hide title text on iOS
-          // headerTitleStyle: isIOS ? {opacity: 0} : undefined, // Extra fallback
+          drawerLabel: t('navigation.partner.drawer.groups'), // Add localized label
           // eslint-disable-next-line react/no-unstable-nested-components
           drawerIcon: ({color}) => (
             <GetIcon iconName="group" color={color} size="25" />
@@ -73,8 +75,7 @@ const PartnerNavigator = () => {
         component={TeamStack}
         options={{
           headerShown: isIOS,
-          // headerTitle: isIOS ? '' : 'Groups', // Hide title text on iOS
-          // headerTitleStyle: isIOS ? {opacity: 0} : undefined, // Extra fallback
+          drawerLabel: t('navigation.partner.drawer.teams'), // Add localized label
           // eslint-disable-next-line react/no-unstable-nested-components
           drawerIcon: ({color}) => (
             <GetIcon iconName="partner" color={color} size="25" />
@@ -87,9 +88,22 @@ const PartnerNavigator = () => {
         component={ContentTemplateScreenStack}
         options={{
           headerShown: false,
+          drawerLabel: t('navigation.partner.drawer.content'), // Add localized label
           // eslint-disable-next-line react/no-unstable-nested-components
           drawerIcon: ({color}) => (
             <GetIcon iconName="notes" color={color} size="25" />
+          ),
+        }}
+      />
+      <Drawer.Screen
+        name="Settings"
+        component={SettingsScreen}
+        options={{
+          headerShown: false,
+          drawerLabel: t('navigation.partner.drawer.settings'), // Add localized label
+          // eslint-disable-next-line react/no-unstable-nested-components
+          drawerIcon: ({color}) => (
+            <GetIcon iconName="settings" color={color} size="25" />
           ),
         }}
       />

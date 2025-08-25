@@ -16,6 +16,7 @@ import { useFollowUps } from '../../../hooks/useFollowUps';
 import FollowUpListSection from './components/FollowUpListSection';
 import { navigate } from '../../../navigator/NavigationRef';
 import { useTheme } from '../../../context/ThemeProvider';
+import { useTranslation } from 'react-i18next';
 
 type Props = NativeStackScreenProps<
   FollowUpStackParamList,
@@ -36,6 +37,7 @@ const SomedayFollowUpScreen: React.FC<Props> = ({ navigation }) => {
   } = useFollowUps('someday'); // Default page size (10)
 
   const { theme } = useTheme();
+  const {t} = useTranslation();
 
   // Add useEffect to fetch data when component mounts
   useEffect(() => {
@@ -89,7 +91,8 @@ const SomedayFollowUpScreen: React.FC<Props> = ({ navigation }) => {
         <FollowUpListSection
           isLoading={isLoading}
           followUps={followUps || []}
-          emptyText="No someday follow-ups scheduled"
+          emptyText={t('screens.followUpScreen.overdueFollowUps.empty', 'No overdue follow-ups scheduled')}
+          title={t('screens.followUpScreen.overdueFollowUps.title', 'Overdue Follow-Ups')}
           showTitle={false}
           onFollowUpPress={handleFollowUpPress}
           onEndReached={() => {

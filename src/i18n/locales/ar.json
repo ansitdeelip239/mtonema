@@ -12,6 +12,20 @@
     "restartApp": "إعادة تشغيل التطبيق",
     "email": "البريد الإلكتروني"
   },
+  "navigation": {
+    "partner": {
+      "drawer": {
+        "home": "الرئيسية",
+        "groups": "المجموعات",
+        "teams": "الفرق",
+        "content": "المحتوى",
+        "settings": "الإعدادات",
+        "buyPremium": "شراء بريميوم",
+        "helpCenter": "مركز المساعدة",
+        "chatWithUs": "الدردشة معنا"
+      }
+    }
+  },
   "screens": {
     "partnerLoginScreen": {
       "welcomePartner": "أهلاً بالشريك",
@@ -65,12 +79,29 @@
       "todayTitle": "متابعات اليوم",
       "noTodayFollowUps": "لا توجد متابعات مجدولة لليوم",
       "refreshError": "خطأ في تحديث المتابعات",
+      "loading": "جاري تحميل المتابعات...",
       "salutationGreeting": {
         "hi": "مرحبا",
         "goodMorning": "صباح الخير",
         "goodAfternoon": "بعد الظهر الطيب",
         "goodEvening": "مساء الخير",
         "goodNight": "تصبح على خير"
+      },
+      "overdueFollowUps": {
+        "title": "المتابعات المتأخرة",
+        "empty": "لا توجد متابعات متأخرة"
+      },
+      "upcomingFollowUps": {
+        "title": "المتابعات القادمة",
+        "empty": "لا توجد متابعات قادمة"
+      },
+      "somedayFollowUps": {
+        "title": "المتابعات المستقبلية",
+        "empty": "لا توجد متابعات مستقبلية"
+      },
+      "followUpCard": {
+        "followUp": "متابعة",
+        "assigned": "مُعين:"
       }
     }
   },

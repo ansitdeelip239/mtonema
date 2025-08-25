@@ -5,8 +5,8 @@ import {formatFollowUpDate, formatTime} from '../../../../utils/dateUtils';
 import GetIcon from '../../../../components/GetIcon';
 import {useTheme} from '../../../../context/ThemeProvider';
 import GroupBadges from '../../ClientScreen/components/GroupBadge';
-// import {parseHtmlToText} from '../../../../utils/parseHtmlToText';
-import { getPastelColor } from '../../../../utils/getPastelColor';
+import {getPastelColor} from '../../../../utils/getPastelColor';
+import {useTranslation} from 'react-i18next';
 
 interface FollowUpCardProps {
   item: FollowUpType;
@@ -20,6 +20,7 @@ const FollowUpCard: React.FC<FollowUpCardProps> = ({
   onPress,
 }) => {
   const {theme} = useTheme();
+  const {t} = useTranslation();
 
   const getLocalDate = (dateString: string) => {
     if (!dateString) {
@@ -53,9 +54,6 @@ const FollowUpCard: React.FC<FollowUpCardProps> = ({
     ? getLocalDate(item.followUpDate)
     : null;
 
-  // Parse HTML notes to plain text
-  // const parsedNotes = parseHtmlToText(item.client.notes || '');
-
   const handleCardPress = () => {
     if (onPress) {
       onPress();
@@ -79,7 +77,9 @@ const FollowUpCard: React.FC<FollowUpCardProps> = ({
             <View style={styles.nameStatusContainer}>
               <Text style={styles.clientName}>{item.client.clientName}</Text>
               <View style={styles.statusRow}>
-                <Text style={styles.timeText}>Follow Up</Text>
+                <Text style={styles.timeText}>
+                  {t('screen.followupScreen.followUpCard.followUp', 'Follow Up')}
+                </Text>
               </View>
             </View>
             <View style={styles.timeContainer}>
@@ -118,13 +118,12 @@ const FollowUpCard: React.FC<FollowUpCardProps> = ({
             </View>
           )}
 
-          {/* Notes */}
-          {/* {parsedNotes && <Text style={styles.notes}>{parsedNotes}</Text>} */}
-
           {/* Assigned Users */}
           {item.assignedUsers && item.assignedUsers.length > 0 && (
             <View style={styles.assignedContainer}>
-              <Text style={styles.assignedLabel}>Assigned:</Text>
+              <Text style={styles.assignedLabel}>
+                {t('screens.followUpScreen.followUpCard.assigned', 'Assigned:')}{' '}
+              </Text>
               <View style={styles.assignedBadgesWrapper}>
                 {item.assignedUsers.map(user => (
                   <View key={user.id} style={styles.assignedBadge}>
@@ -140,6 +139,7 @@ const FollowUpCard: React.FC<FollowUpCardProps> = ({
   );
 };
 
+// ... styles remain the same ...
 const styles = StyleSheet.create({
   followUpCard: {
     backgroundColor: 'white',
@@ -263,70 +263,7 @@ const styles = StyleSheet.create({
     fontWeight: '500',
     fontSize: 11,
   },
-  // Legacy styles (to be removed)
-  followUpHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginBottom: 4,
-  },
-  clientSection: {
-    flex: 1,
-    marginRight: 8,
-  },
-  horizontalRule: {
-    borderBottomColor: '#e0e0e0',
-    borderBottomWidth: 1,
-    marginVertical: 8,
-    marginHorizontal: -8,
-  },
-  assignedUsersContainerWrapper: {
-    marginTop: 2,
-    marginBottom: 4,
-  },
-  assignedUsersLabel: {
-    fontSize: 13,
-    color: '#555',
-    fontWeight: 'bold',
-    marginBottom: 2,
-    marginLeft: 2,
-  },
-  assignedUsersContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    flexWrap: 'wrap',
-    marginLeft: 2,
-  },
-  assignedUsersList: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    alignItems: 'center',
-  },
-  assignedUserBadge: {
-    backgroundColor: '#e6f2ff',
-    borderRadius: 12,
-    paddingHorizontal: 10,
-    paddingVertical: 4,
-    marginRight: 8,
-    marginBottom: 4,
-    borderWidth: 1,
-    borderColor: '#b3d4fc',
-  },
-  assignedUserName: {
-    fontSize: 13,
-    color: '#2563eb',
-    fontWeight: '500',
-  },
-  noAssignedUserText: {
-    fontSize: 12,
-    color: '#888',
-    fontStyle: 'italic',
-    marginLeft: 2,
-  },
-  noGroupText: {
-    fontSize: 12,
-    color: '#888',
-    fontStyle: 'italic',
-  },
+  // ... other legacy styles remain the same
 });
 
 export default FollowUpCard;

@@ -34,10 +34,6 @@ const LanguageSelectionScreen: React.FC = () => {
   };
 
   const handleContinue = (): void => {
-    if (selectedLanguage === currentLanguage) {
-      return; // No change needed
-    }
-
     const newLanguage = supportedLanguages.find(
       lang => lang.code === selectedLanguage,
     );
@@ -151,19 +147,18 @@ const LanguageSelectionScreen: React.FC = () => {
           <TouchableOpacity
             style={[
               styles.continueButton,
-              (isSubmitting || selectedLanguage === currentLanguage) &&
-                styles.disabledButton,
+              isSubmitting && styles.disabledButton,
             ]}
             onPress={handleContinue}
-            disabled={isSubmitting || selectedLanguage === currentLanguage}
+            disabled={isSubmitting}
             activeOpacity={0.8}>
             {isSubmitting ? (
               <ActivityIndicator size="small" color="#ffffff" />
             ) : (
               <Text style={styles.continueButtonText}>
-                {selectedLanguage === currentLanguage
-                  ? 'Current Language'
-                  : t('screens.languageSelectionScreen.currentLanguage')}
+          {selectedLanguage === currentLanguage
+            ? 'Next'
+            : t('screens.languageSelectionScreen.selectLanguage')}
               </Text>
             )}
           </TouchableOpacity>

@@ -12,6 +12,20 @@
     "restartApp": "Restart App",
     "email": "Email"
   },
+  "navigation": {
+    "partner": {
+      "drawer": {
+        "home": "Home",
+        "groups": "Groups",
+        "teams": "Teams",
+        "content": "Content",
+        "settings": "Settings",
+        "buyPremium": "Buy Premium",
+        "helpCenter": "Help Center",
+        "chatWithUs": "Chat with Us"
+      }
+    }
+  },
   "screens": {
     "partnerLoginScreen": {
       "welcomePartner": "Welcome Partner",
@@ -65,12 +79,29 @@
       "todayTitle": "Today's Follow-ups",
       "noTodayFollowUps": "No follow-ups scheduled for today",
       "refreshError": "Error refreshing follow-ups",
+      "loading": "Loading follow-ups...",
       "salutationGreeting": {
         "hi": "Hi",
         "goodMorning": "Good morning",
         "goodAfternoon": "Good afternoon",
         "goodEvening": "Good evening",
         "goodNight": "Good night"
+      },
+      "overdueFollowUps": {
+        "title": "Overdue Follow-Ups",
+        "empty": "No overdue follow-ups"
+      },
+      "upcomingFollowUps": {
+        "title": "Upcoming Follow-Ups",
+        "empty": "No upcoming follow-ups"
+      },
+      "somedayFollowUps": {
+        "title": "Someday Follow-Ups",
+        "empty": "No someday follow-ups scheduled"
+      },
+      "followUpCard": {
+        "followUp": "Follow Up",
+        "assigned": "Assigned:"
       }
     }
   },

@@ -12,6 +12,20 @@
     "restartApp": "ऐप रीस्टार्ट करें",
     "email": "ईमेल"
   },
+  "navigation": {
+    "partner": {
+      "drawer": {
+        "home": "होम",
+        "groups": "ग्रुप्स",
+        "teams": "टीम्स",
+        "content": "कंटेंट",
+        "settings": "सेटिंग्स",
+        "buyPremium": "प्रीमियम खरीदें",
+        "helpCenter": "हेल्प सेंटर",
+        "chatWithUs": "हमसे चैट करें"
+      }
+    }
+  },
   "screens": {
     "partnerLoginScreen": {
       "welcomePartner": "आपका स्वागत है, पार्टनर",
@@ -71,6 +85,23 @@
         "goodAfternoon": "शुभ दोपहर",
         "goodEvening": "शुभ संध्या",
         "goodNight": "शुभ रात्रि"
+      },
+      "overdueFollowUps": {
+        "title": "विलंबित फॉलो-अप्स",
+        "empty": "कोई विलंबित फॉलो-अप्स नहीं",
+        "loading": "फॉलो-अप्स लोड हो रहे हैं..."
+      },
+      "upcomingFollowUps": {
+        "title": "आगामी फॉलो-अप्स",
+        "empty": "कोई आगामी फॉलो-अप्स नहीं"
+      },
+      "somedayFollowUps": {
+        "title": "भविष्य के फॉलो-अप्स",
+        "empty": "कोई भविष्य के फॉलो-अप्स नहीं"
+      },
+      "followUpCard": {
+        "followUp": "फॉलो अप",
+        "assigned": "सौंपा गया:"
       }
     }
   },

@@ -49,6 +49,7 @@ export type PartnerDrawerParamList = {
   'Groups': undefined;
   'Teams': undefined;
   'Content': undefined;
+  'Settings': undefined;
   'Profile Screen': undefined;
   'Filter Partners': undefined;
   'Payments': undefined;

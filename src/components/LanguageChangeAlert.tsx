@@ -8,11 +8,11 @@ export const showLanguageChangeAlert = (
   onCancel?: () => void,
 ) => {
   Alert.alert(
-    t('language.changeLanguage'),
+    t('language.changeLanguage', 'Change Language'),
     `Switch to ${languageName}? The app will restart to apply changes.`,
     [
       {
-        text: t('common.cancel'),
+        text: t('common.cancel', 'Cancel'),
         style: 'cancel',
         onPress: onCancel,
       },
@@ -32,11 +32,16 @@ export const showRTLChangeAlert = (
   onCancel?: () => void,
 ) => {
   const translations = {
-    changeLanguage: t('components.languageSwitcher.changeLanguage'),
-    switchToLanguage: t('components.languageSwitcher.switchToLanguage', {
-      languageName,
-    }),
-    rtlChangeWarning: t('components.languageSwitcher.rtlChangeWarning'),
+    changeLanguage: t('components.languageSwitcher.changeLanguage', 'Change Language'),
+    switchToLanguage: t(
+      'components.languageSwitcher.switchToLanguage',
+      `Switch to ${languageName}?`,
+      { languageName }
+    ),
+    rtlChangeWarning: t(
+      'components.languageSwitcher.rtlChangeWarning',
+      'This language requires RTL layout. The app will restart to apply changes.'
+    ),
   };
 
   Alert.alert(

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, {useEffect} from 'react';
 import {
   View,
   StyleSheet,
@@ -9,20 +9,21 @@ import {
   NativeSyntheticEvent,
   Platform,
 } from 'react-native';
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { FollowUpStackParamList } from '../../../navigator/components/FollowUpScreenStack';
+import {NativeStackScreenProps} from '@react-navigation/native-stack';
+import {FollowUpStackParamList} from '../../../navigator/components/FollowUpScreenStack';
 import Header from '../../../components/Header';
-import { useFollowUps } from '../../../hooks/useFollowUps';
+import {useFollowUps} from '../../../hooks/useFollowUps';
 import FollowUpListSection from './components/FollowUpListSection';
-import { navigate } from '../../../navigator/NavigationRef';
-import { useTheme } from '../../../context/ThemeProvider';
+import {navigate} from '../../../navigator/NavigationRef';
+import {useTheme} from '../../../context/ThemeProvider';
+import {useTranslation} from 'react-i18next';
 
 type Props = NativeStackScreenProps<
   FollowUpStackParamList,
   'UpcomingFollowUpScreen'
 >;
 
-const UpcomingFollowUpScreen: React.FC<Props> = ({ navigation }) => {
+const UpcomingFollowUpScreen: React.FC<Props> = ({navigation}) => {
   // Updated hook usage with pagination properties
   const {
     followUps,
@@ -35,7 +36,8 @@ const UpcomingFollowUpScreen: React.FC<Props> = ({ navigation }) => {
     fetchFollowUps,
   } = useFollowUps('upcoming');
 
-  const { theme } = useTheme();
+  const {theme} = useTheme();
+  const {t} = useTranslation();
 
   // Add useEffect to fetch data when component mounts
   useEffect(() => {
@@ -45,13 +47,13 @@ const UpcomingFollowUpScreen: React.FC<Props> = ({ navigation }) => {
   const handleFollowUpPress = (clientId: number) => {
     navigate('Clients', {
       screen: 'ClientProfileScreen',
-      params: { clientId },
+      params: {clientId},
     });
   };
 
   // Handle scroll to implement infinite scrolling
   const handleScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
-    const { layoutMeasurement, contentOffset, contentSize } = event.nativeEvent;
+    const {layoutMeasurement, contentOffset, contentSize} = event.nativeEvent;
     const paddingToBottom = 20; // How far from the bottom to trigger loading more
     const isCloseToBottom =
       layoutMeasurement.height + contentOffset.y >=
@@ -64,15 +66,13 @@ const UpcomingFollowUpScreen: React.FC<Props> = ({ navigation }) => {
 
   return (
     <SafeAreaView style={styles.container}>
-      {
-        Platform.OS === 'android' && (
-          <Header
-            title="Upcoming Follow-ups"
-            backButton={true}
-            navigation={navigation}
-          />
-        )
-      }
+      {Platform.OS === 'android' && (
+        <Header
+          title={t('screens.followUpScreen.upcomingFollowUps.title', 'Upcoming Follow-Ups')}
+          backButton={true}
+          navigation={navigation}
+        />
+      )}
 
       <ScrollView
         style={styles.content}
@@ -89,7 +89,11 @@ const UpcomingFollowUpScreen: React.FC<Props> = ({ navigation }) => {
         <FollowUpListSection
           isLoading={isLoading}
           followUps={followUps || []}
-          emptyText="No upcoming follow-ups scheduled"
+          emptyText={t(
+            'screens.followUpScreen.upcomingFollowUps.empty',
+            'No upcoming follow-ups scheduled',
+          )}
+          title={t('screens.followUpScreen.upcomingFollowUps.title', 'Upcoming Follow-Ups')}
           showTitle={false}
           onFollowUpPress={handleFollowUpPress}
           onEndReached={() => {

@@ -12,6 +12,20 @@
     "restartApp": "Reiniciar App",
     "email": "Correo Electrónico"
   },
+  "navigation": {
+    "partner": {
+      "drawer": {
+        "home": "Inicio",
+        "groups": "Grupos",
+        "teams": "Equipos",
+        "content": "Contenido",
+        "settings": "Configuraciones",
+        "buyPremium": "Comprar Premium",
+        "helpCenter": "Centro de Ayuda",
+        "chatWithUs": "Chatea con Nosotros"
+      }
+    }
+  },
   "screens": {
     "partnerLoginScreen": {
       "welcomePartner": "Bienvenido Socio",
@@ -65,12 +79,29 @@
       "todayTitle": "Seguimientos de Hoy",
       "noTodayFollowUps": "No hay seguimientos programados para hoy",
       "refreshError": "Error al actualizar seguimientos",
+      "loading": "Cargando seguimientos...",
       "salutationGreeting": {
         "hi": "Hola",
         "goodMorning": "Buenos días",
         "goodAfternoon": "Buenas tardes",
         "goodEvening": "Buenas tardes",
         "goodNight": "Buenas noches"
+      },
+      "overdueFollowUps": {
+        "title": "Seguimientos Vencidos",
+        "empty": "No hay seguimientos vencidos"
+      },
+      "upcomingFollowUps": {
+        "title": "Próximos Seguimientos",
+        "empty": "No hay próximos seguimientos"
+      },
+      "somedayFollowUps": {
+        "title": "Seguimientos Futuros",
+        "empty": "No hay seguimientos futuros"
+      },
+      "followUpCard": {
+        "followUp": "Seguimiento",
+        "assigned": "Asignado:"
       }
     }
   },
