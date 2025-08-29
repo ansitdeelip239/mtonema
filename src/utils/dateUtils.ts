@@ -206,7 +206,8 @@ export const formatLocalizedTime = (
       // Replace Arabic AM/PM (ص/م)
       formattedTime = formattedTime.replace(/\bص\b/g, t('time.am'));
       formattedTime = formattedTime.replace(/\bم\b/g, t('time.pm'));
-    }    return formattedTime;
+    }
+    return formattedTime;
   } catch (error) {
     console.warn('Error formatting localized time:', error);
     return 'Invalid time';
