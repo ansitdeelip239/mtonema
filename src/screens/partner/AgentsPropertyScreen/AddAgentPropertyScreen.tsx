@@ -32,6 +32,7 @@ import { useAuth } from '../../../hooks/useAuth';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { AgentDataStackParamList } from '../../../navigator/components/AgentDataStack';
 import { useTheme } from '../../../context/ThemeProvider';
+import { useTranslation } from 'react-i18next';
 
 // type Props = BottomTabScreenProps<PartnerBottomTabParamList, 'AddProperty'>;
 type Props = NativeStackScreenProps<
@@ -52,6 +53,7 @@ const AddAgentPropertyScreen: React.FC<Props> = ({ navigation, route }) => {
   const { showError } = useDialog();
   const { user } = useAuth();
   const { theme } = useTheme();
+  const { t } = useTranslation();
 
   const editMode = route.params?.editMode;
   const propertyData = route.params?.propertyData;
@@ -153,8 +155,8 @@ const AddAgentPropertyScreen: React.FC<Props> = ({ navigation, route }) => {
           Toast.show({
             type: 'success',
             text1: editMode
-              ? 'Property updated successfully'
-              : 'Property added successfully',
+              ? t('agentProperty.messages.propertyUpdated')
+              : t('agentProperty.messages.propertyAdded'),
           });
           setAgentPropertyUpdated(prev => !prev);
           navigation.navigate('AgentDataScreen');
@@ -163,7 +165,7 @@ const AddAgentPropertyScreen: React.FC<Props> = ({ navigation, route }) => {
           //   type: 'error',
           //   text1: 'Failed to update agent property',
           // });
-          showError('Failed to update agent property');
+          showError(t('agentProperty.messages.updateFailed'));
           throw new Error('Failed to update agent property');
         }
       } catch (error) {
@@ -183,7 +185,7 @@ const AddAgentPropertyScreen: React.FC<Props> = ({ navigation, route }) => {
         //   type: 'error',
         //   text1: 'Please check your input and try again',
         // });
-        showError('Please check your input and try again');
+        showError(t('agentProperty.messages.validationError'));
       }
     },
   });
@@ -231,8 +233,8 @@ const AddAgentPropertyScreen: React.FC<Props> = ({ navigation, route }) => {
             formInput={formInput}
             handleFieldChange={handleFieldChange}
             errors={errors}
-            label="Agent Name*"
-            placeholder="Eg. John Doe"
+            label={t('agentProperty.labels.agentName')}
+            placeholder={t('agentProperty.placeholders.agentName')}
             searchType="AgentName"
             onAgentSelect={(agentName, contactNo) => {
               handleFieldChange('agentName', agentName);
@@ -244,12 +246,12 @@ const AddAgentPropertyScreen: React.FC<Props> = ({ navigation, route }) => {
         <View style={styles.formField}>
           <MaterialTextInput<AgentPropertyFormType>
             style={styles.input}
-            label="Agent Contact No.*"
+            label={t('agentProperty.labels.agentContactNo')}
             field="agentContactNo"
             formInput={formInput}
             setFormInput={handleFieldChange}
             mode="outlined"
-            placeholder="Eg. 1234567890"
+            placeholder={t('agentProperty.placeholders.agentContactNo')}
             keyboardType="number-pad"
             errorMessage={errors.agentContactNo}
           />
@@ -262,22 +264,22 @@ const AddAgentPropertyScreen: React.FC<Props> = ({ navigation, route }) => {
             formInput={formInput}
             handleFieldChange={handleFieldChange}
             errors={errors}
-            label="Property Location*"
-            placeholder="Eg. Navi Mumbai, Thane, etc."
+            label={t('agentProperty.labels.propertyLocation')}
+            placeholder={t('agentProperty.placeholders.propertyLocation')}
             searchType="AgentPropertyLocation"
           />
         </View>
 
         <View style={styles.dropdownField}>
           <FilterOption
-            label="Property Type"
+            label={t('agentProperty.labels.propertyType')}
             options={masterData?.AgentPropertyType || []}
             selectedValue={formInput.propertyType}
             onSelect={value => handleFieldSelect('propertyType', value)}
             error={errors.propertyType}
           />
           <FilterOption
-            label="BHK Type"
+            label={t('agentProperty.labels.bhkType')}
             options={masterData?.BhkType || []}
             selectedValue={formInput.bhkType}
             onSelect={value => handleFieldSelect('bhkType', value)}
@@ -288,12 +290,12 @@ const AddAgentPropertyScreen: React.FC<Props> = ({ navigation, route }) => {
         <View style={styles.formField}>
           <MaterialTextInput<AgentPropertyFormType>
             style={styles.input}
-            label="Demand Price"
+            label={t('agentProperty.labels.demandPrice')}
             field="demandPrice"
             formInput={formInput}
             setFormInput={handleFieldChange}
             mode="outlined"
-            placeholder="Enter amount"
+            placeholder={t('agentProperty.placeholders.demandPrice')}
             keyboardType="number-pad"
             rightComponent={
               <Text>{formatCurrency(formInput.demandPrice)}</Text>
@@ -306,12 +308,12 @@ const AddAgentPropertyScreen: React.FC<Props> = ({ navigation, route }) => {
         <View style={styles.formField}>
           <MaterialTextInput<AgentPropertyFormType>
             style={styles.input}
-            label="Security Deposit Amount"
+            label={t('agentProperty.labels.securityDepositAmount')}
             field="securityDepositAmount"
             formInput={formInput}
             setFormInput={handleFieldChange}
             mode="outlined"
-            placeholder="Enter deposit amount"
+            placeholder={t('agentProperty.placeholders.securityDepositAmount')}
             keyboardType="number-pad"
             onFocus={() => scrollToEnd()}
             rightComponent={
@@ -323,7 +325,7 @@ const AddAgentPropertyScreen: React.FC<Props> = ({ navigation, route }) => {
         </View>
 
         <View style={styles.switchContainer}>
-          <Text>Negotiable</Text>
+          <Text>{t('agentProperty.labels.negotiable')}</Text>
           <Switch
             value={formInput.negotiable}
             onValueChange={value => handleFieldChange('negotiable', value)}
@@ -333,12 +335,12 @@ const AddAgentPropertyScreen: React.FC<Props> = ({ navigation, route }) => {
         <View style={styles.formField}>
           <MaterialTextInput<AgentPropertyFormType>
             style={styles.input}
-            label="Property Notes"
+            label={t('agentProperty.labels.propertyNotes')}
             field="propertyNotes"
             formInput={formInput}
             setFormInput={handleFieldChange}
             mode="outlined"
-            placeholder="Add additional details"
+            placeholder={t('agentProperty.placeholders.propertyNotes')}
             multiline
             numberOfLines={4}
             onFocus={() => scrollToEnd()}
@@ -354,6 +356,7 @@ const AddAgentPropertyScreen: React.FC<Props> = ({ navigation, route }) => {
       masterData,
       scrollToEnd,
       errors,
+      t,
     ],
   );
 
@@ -362,7 +365,7 @@ const AddAgentPropertyScreen: React.FC<Props> = ({ navigation, route }) => {
       {
         Platform.OS === 'android' && (
           <Header<PartnerDrawerParamList>
-            title={editMode ? "Edit Agent's Property" : "Add Agent's Property"}
+            title={editMode ? t('agentProperty.titles.editAgentProperty') : t('agentProperty.titles.addAgentProperty')}
             backButton={true}
             onBackPress={() => navigation.navigate('AgentDataScreen')}
           />
@@ -390,7 +393,7 @@ const AddAgentPropertyScreen: React.FC<Props> = ({ navigation, route }) => {
               buttonColor={theme.primaryColor}
               textColor="white"
               loading={loading}>
-              Submit
+              {t('agentProperty.buttons.submit')}
             </Button>
           </ScrollView>
         </TouchableWithoutFeedback>

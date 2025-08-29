@@ -678,5 +678,58 @@
       "continueEditing": "Continuar Editando",
       "discard": "Descartar"
     }
+  },
+  "agentProperty": {
+    "titles": {
+      "addAgentProperty": "Agregar Propiedad del Agente",
+      "editAgentProperty": "Editar Propiedad del Agente",
+      "agentProperty": "Propiedad del Agente",
+      "deleteProperty": "Eliminar Propiedad"
+    },
+    "labels": {
+      "agentName": "Nombre del Agente*",
+      "agentContactNo": "Número de Contacto del Agente*",
+      "propertyLocation": "Ubicación de la Propiedad*",
+      "propertyType": "Tipo de Propiedad",
+      "bhkType": "Tipo BHK",
+      "demandPrice": "Precio Demandado",
+      "securityDepositAmount": "Monto del Depósito de Seguridad",
+      "negotiable": "Negociable",
+      "fixedPrice": "Precio Fijo",
+      "propertyNotes": "Notas de la Propiedad",
+      "location": "Ubicación",
+      "contactNo": "Número de Contacto",
+      "dateAdded": "Fecha Agregada",
+      "notes": "Notas"
+    },
+    "placeholders": {
+      "agentName": "Ej. Juan Pérez",
+      "agentContactNo": "Ej. 1234567890",
+      "propertyLocation": "Ej. Navi Mumbai, Thane, etc.",
+      "demandPrice": "Ingrese el monto",
+      "securityDepositAmount": "Ingrese el monto del depósito",
+      "propertyNotes": "Agregar detalles adicionales",
+      "searchByName": "Buscar por nombre..."
+    },
+    "messages": {
+      "propertyUpdated": "Propiedad actualizada exitosamente",
+      "propertyAdded": "Propiedad agregada exitosamente",
+      "updateFailed": "Error al actualizar propiedad del agente",
+      "validationError": "Por favor revise su entrada e intente nuevamente",
+      "noProperties": "No hay propiedades disponibles",
+      "deleteSuccess": "Propiedad eliminada exitosamente",
+      "deleteError": "Error al eliminar la propiedad",
+      "notSpecified": "No Especificado",
+      "na": "N/A",
+      "deleteConfirmation": "Esta acción no se puede deshacer. ¿Está seguro de que desea eliminar esta propiedad?"
+    },
+    "buttons": {
+      "add": "Agregar",
+      "submit": "Enviar",
+      "filterProperties": "Filtrar Propiedades",
+      "clearAll": "Limpiar Todo",
+      "cancel": "Cancelar",
+      "applyFilters": "Aplicar Filtros"
+    }
   }
 }

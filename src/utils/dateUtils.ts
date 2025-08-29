@@ -142,6 +142,7 @@ export const formatLocalizedDate = (
     // Use short month for English, long month for other languages
     const isEnglish = locale.startsWith('en');
     const dateFormatter = new Intl.DateTimeFormat(finalLocale, {
+      year: 'numeric',
       month: isEnglish ? 'short' : 'long',
       day: 'numeric',
     });

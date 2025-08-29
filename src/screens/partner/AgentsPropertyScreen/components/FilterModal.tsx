@@ -13,6 +13,7 @@ import {useMaster} from '../../../../context/MasterProvider';
 import FilterOption from '../../../../components/FilterOption';
 import {FilterValues} from '../../../../types';
 import { useTheme } from '../../../../context/ThemeProvider';
+import { useTranslation } from 'react-i18next';
 
 const FilterModal = ({
   initialFilters,
@@ -28,6 +29,7 @@ const FilterModal = ({
   const [filters, setFilters] = useState<FilterValues>(initialFilters);
   const {masterData} = useMaster();
   const {theme} = useTheme();
+  const { t } = useTranslation();
 
   const fadeAnim = useRef(new Animated.Value(0)).current;
   const slideAnim = useRef(new Animated.Value(300)).current;
@@ -131,10 +133,12 @@ const FilterModal = ({
           onStartShouldSetResponder={() => true}
           onTouchEnd={e => e.stopPropagation()}>
           <View style={styles.headerContainer}>
-            <Text style={styles.modalTitle}>Filter Properties</Text>
+            <Text style={styles.modalTitle}>{t('agentProperty.buttons.filterProperties')}</Text>
             {hasActiveFilters && (
               <TouchableOpacity onPress={handleClearAllFilters}>
-                <Text style={[styles.clearAllText, {color: theme.primaryColor}]}>Clear All</Text>
+                                <Text style={[styles.clearAllText, {color: theme.primaryColor}]}>
+                  {t('agentProperty.buttons.clearAll')}
+                </Text>
               </TouchableOpacity>
             )}
           </View>
@@ -149,19 +153,19 @@ const FilterModal = ({
             <TouchableWithoutFeedback>
               <View style={styles.filterOptionsContainer}>
                 <FilterOption
-                  label="Location"
+                  label={t('agentProperty.labels.location')}
                   options={mappedLocations}
                   selectedValue={filters.propertyLocation}
                   onSelect={value => handleSelect('propertyLocation', value)}
                 />
                 <FilterOption
-                  label="Property Type"
+                  label={t('agentProperty.labels.propertyType')}
                   options={propertyTypes}
                   selectedValue={filters.propertyType}
                   onSelect={value => handleSelect('propertyType', value)}
                 />
                 <FilterOption
-                  label="BHK Type"
+                  label={t('agentProperty.labels.bhkType')}
                   options={bhkTypes}
                   selectedValue={filters.bhkType}
                   onSelect={value => handleSelect('bhkType', value)}
@@ -174,13 +178,13 @@ const FilterModal = ({
             <TouchableOpacity
               style={[styles.button, styles.cancelButton]}
               onPress={handleClose}>
-              <Text style={styles.buttonText}>Cancel</Text>
+              <Text style={styles.buttonText}>{t('agentProperty.buttons.cancel')}</Text>
             </TouchableOpacity>
             <TouchableOpacity
               style={[styles.button, {backgroundColor: theme.primaryColor}]}
               onPress={handleApplyFilter}>
               <Text style={[styles.buttonText, styles.applyText]}>
-                Apply Filters
+                {t('agentProperty.buttons.applyFilters')}
               </Text>
             </TouchableOpacity>
           </View>

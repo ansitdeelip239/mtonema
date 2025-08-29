@@ -10,6 +10,9 @@ import ConfirmationModal from '../../../../components/ConfirmationModal';
 import {AgentDataStackParamList} from '../../../../navigator/components/AgentDataStack';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {useTheme} from '../../../../context/ThemeProvider';
+import {useTranslation} from 'react-i18next';
+import {formatLocalizedDate} from '../../../../utils/dateUtils';
+import i18n from 'i18next';
 
 interface RenderItemProps {
   item: AgentData;
@@ -29,6 +32,7 @@ const RenderItem: React.FC<RenderItemProps> = ({
   const [isDeleting, setIsDeleting] = useState(false);
 
   const {theme} = useTheme();
+  const {t} = useTranslation();
 
   const onEdit = () => {
     navigation.navigate('AddAgentDataScreen', {
@@ -48,7 +52,7 @@ const RenderItem: React.FC<RenderItemProps> = ({
       if (response.success) {
         Toast.show({
           type: 'success',
-          text1: 'Property Deleted Successfully',
+          text1: t('agentProperty.messages.deleteSuccess'),
           visibilityTime: 3000,
         });
         onDataUpdate();
@@ -57,7 +61,7 @@ const RenderItem: React.FC<RenderItemProps> = ({
       console.error('Error in deleting property:', error);
       Toast.show({
         type: 'error',
-        text1: 'Error in deleting property',
+        text1: t('agentProperty.messages.deleteError'),
         visibilityTime: 4000,
       });
     } finally {
@@ -80,7 +84,7 @@ const RenderItem: React.FC<RenderItemProps> = ({
                 {backgroundColor: theme.primaryColor + '15'},
               ]}>
               <Text style={[styles.badgeText, {color: theme.primaryColor}]}>
-                {item.negotiable ? 'Negotiable' : 'Fixed Price'}
+                {item.negotiable ? t('agentProperty.labels.negotiable') : t('agentProperty.labels.fixedPrice')}
               </Text>
             </View>
           </View>
@@ -110,29 +114,17 @@ const RenderItem: React.FC<RenderItemProps> = ({
 
         <View style={styles.contentSection}>
           <View style={styles.row}>
-            <Text style={styles.label}>BHK Type</Text>
+            <Text style={styles.label}>{t('agentProperty.labels.bhkType')}</Text>
             <Text style={styles.colon}>:</Text>
-            <Text style={styles.value}>{item.bhkType || 'Not Specified'}</Text>
+            <Text style={styles.value}>{item.bhkType || t('agentProperty.messages.notSpecified')}</Text>
           </View>
           <View style={styles.row}>
-            <Text style={styles.label}>Location</Text>
+            <Text style={styles.label}>{t('agentProperty.labels.location')}</Text>
             <Text style={styles.colon}>:</Text>
-            <Text style={styles.value}>{item.propertyLocation || 'N/A'}</Text>
+            <Text style={styles.value}>{item.propertyLocation || t('agentProperty.messages.na')}</Text>
           </View>
           <View style={styles.row}>
-            <Text style={styles.label}>Demand Price</Text>
-            <Text style={styles.colon}>:</Text>
-            <Text
-              style={[
-                styles.value,
-                styles.priceText,
-                {color: theme.primaryColor},
-              ]}>
-              {formatCurrency(item.demandPrice) || 'N/A'}
-            </Text>
-          </View>
-          <View style={styles.row}>
-            <Text style={styles.label}>Security Deposit</Text>
+            <Text style={styles.label}>{t('agentProperty.labels.demandPrice')}</Text>
             <Text style={styles.colon}>:</Text>
             <Text
               style={[
@@ -140,30 +132,38 @@ const RenderItem: React.FC<RenderItemProps> = ({
                 styles.priceText,
                 {color: theme.primaryColor},
               ]}>
-              {formatCurrency(item.securityDepositAmount) || 'N/A'}
+              {formatCurrency(item.demandPrice) || t('agentProperty.messages.na')}
             </Text>
           </View>
           <View style={styles.row}>
-            <Text style={styles.label}>Contact No.</Text>
+            <Text style={styles.label}>{t('agentProperty.labels.securityDepositAmount')}</Text>
             <Text style={styles.colon}>:</Text>
-            <Text style={styles.value}>{item.agentContactNo || 'N/A'}</Text>
+            <Text
+              style={[
+                styles.value,
+                styles.priceText,
+                {color: theme.primaryColor},
+              ]}>
+              {formatCurrency(item.securityDepositAmount) || t('agentProperty.messages.na')}
+            </Text>
           </View>
           <View style={styles.row}>
-            <Text style={styles.label}>Property Type</Text>
+            <Text style={styles.label}>{t('agentProperty.labels.contactNo')}</Text>
             <Text style={styles.colon}>:</Text>
-            <Text style={styles.value}>{item.propertyType || 'N/A'}</Text>
+            <Text style={styles.value}>{item.agentContactNo || t('agentProperty.messages.na')}</Text>
           </View>
           <View style={styles.row}>
-            <Text style={styles.label}>Date Added</Text>
+            <Text style={styles.label}>{t('agentProperty.labels.propertyType')}</Text>
+            <Text style={styles.colon}>:</Text>
+            <Text style={styles.value}>{item.propertyType || t('agentProperty.messages.na')}</Text>
+          </View>
+          <View style={styles.row}>
+            <Text style={styles.label}>{t('agentProperty.labels.dateAdded')}</Text>
             <Text style={styles.colon}>:</Text>
             <Text style={styles.value}>
               {item.createdOn
-                ? new Date(item.createdOn).toLocaleDateString('en-GB', {
-                    day: '2-digit',
-                    month: 'short',
-                    year: 'numeric',
-                  })
-                : 'N/A'}
+                ? formatLocalizedDate(item.createdOn, i18n.language)
+                : t('agentProperty.messages.na')}
             </Text>
           </View>
         </View>
@@ -172,7 +172,7 @@ const RenderItem: React.FC<RenderItemProps> = ({
           <>
             <View style={styles.divider} />
             <View style={styles.notes}>
-              <Text style={styles.notesLabel}>Notes</Text>
+              <Text style={styles.notesLabel}>{t('agentProperty.labels.notes')}</Text>
               <Text style={styles.notesText}>{item.propertyNotes}</Text>
             </View>
           </>
@@ -181,8 +181,8 @@ const RenderItem: React.FC<RenderItemProps> = ({
 
       <ConfirmationModal
         visible={isDeleteModalVisible}
-        title="Delete Property"
-        message="This action cannot be undone. Are you sure you want to delete this property?"
+        title={t('agentProperty.titles.deleteProperty')}
+        message={t('agentProperty.messages.deleteConfirmation')}
         onConfirm={handleConfirmDelete}
         onCancel={() => setIsDeleteModalVisible(false)}
         isLoading={isDeleting}

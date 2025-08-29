@@ -6,6 +6,7 @@ import Colors from '../../../../constants/Colors';
 import FilterModal from './FilterModal';
 import GetIcon from '../../../../components/GetIcon';
 import { useTheme } from '../../../../context/ThemeProvider';
+import { useTranslation } from 'react-i18next';
 
 const SearchAndFilter = ({
   initialFilters,
@@ -22,12 +23,13 @@ const SearchAndFilter = ({
   const [modalVisible, setModalVisible] = useState(false);
 
   const {theme} = useTheme();
+  const { t } = useTranslation();
 
   return (
     <View style={styles.container}>
       <View style={styles.searchContainer}>
         <Searchbar
-          placeholder="Search by name..."
+          placeholder={t('agentProperty.placeholders.searchByName')}
           placeholderTextColor={Colors.placeholderColor}
           value={searchText}
           onChangeText={text => {

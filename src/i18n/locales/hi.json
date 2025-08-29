@@ -678,5 +678,58 @@
       "continueEditing": "संपादन जारी रखें",
       "discard": "त्यागें"
     }
+  },
+  "agentProperty": {
+    "titles": {
+      "addAgentProperty": "एजेंट की संपत्ति जोड़ें",
+      "editAgentProperty": "एजेंट की संपत्ति संपादित करें",
+      "agentProperty": "एजेंट की संपत्ति",
+      "deleteProperty": "संपत्ति हटाएं"
+    },
+    "labels": {
+      "agentName": "एजेंट का नाम*",
+      "agentContactNo": "एजेंट का संपर्क नंबर*",
+      "propertyLocation": "संपत्ति का स्थान*",
+      "propertyType": "संपत्ति प्रकार",
+      "bhkType": "BHK प्रकार",
+      "demandPrice": "मांग मूल्य",
+      "securityDepositAmount": "सुरक्षा जमा राशि",
+      "negotiable": "सौदेबाजी योग्य",
+      "fixedPrice": "निश्चित मूल्य",
+      "propertyNotes": "संपत्ति नोट्स",
+      "location": "स्थान",
+      "contactNo": "संपर्क नंबर",
+      "dateAdded": "जोड़ने की तारीख",
+      "notes": "नोट्स"
+    },
+    "placeholders": {
+      "agentName": "उदा. जॉन डो",
+      "agentContactNo": "उदा. 1234567890",
+      "propertyLocation": "उदा. नवी मुंबई, ठाणे, आदि।",
+      "demandPrice": "राशि दर्ज करें",
+      "securityDepositAmount": "जमा राशि दर्ज करें",
+      "propertyNotes": "अतिरिक्त विवरण जोड़ें",
+      "searchByName": "नाम से खोजें..."
+    },
+    "messages": {
+      "propertyUpdated": "संपत्ति सफलतापूर्वक अपडेट की गई",
+      "propertyAdded": "संपत्ति सफलतापूर्वक जोड़ी गई",
+      "updateFailed": "एजेंट संपत्ति अपडेट करने में विफल",
+      "validationError": "कृपया अपना इनपुट जांचें और पुनः प्रयास करें",
+      "noProperties": "कोई संपत्तियाँ उपलब्ध नहीं हैं",
+      "deleteSuccess": "संपत्ति सफलतापूर्वक हटा दी गई",
+      "deleteError": "संपत्ति हटाने में त्रुटि",
+      "notSpecified": "निर्दिष्ट नहीं",
+      "na": "लागू नहीं",
+      "deleteConfirmation": "यह कार्य पूर्ववत नहीं किया जा सकता। क्या आप वाकई इस संपत्ति को हटाना चाहते हैं?"
+    },
+    "buttons": {
+      "add": "जोड़ें",
+      "submit": "सबमिट करें",
+      "filterProperties": "संपत्तियाँ फ़िल्टर करें",
+      "clearAll": "सभी साफ़ करें",
+      "cancel": "रद्द करें",
+      "applyFilters": "फ़िल्टर लागू करें"
+    }
   }
 }

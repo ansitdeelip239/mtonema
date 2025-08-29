@@ -21,6 +21,7 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { AgentDataStackParamList } from '../../../navigator/components/AgentDataStack';
 import SearchAndFilter from './components/SearchAndFilter';
 import { useTheme } from '../../../context/ThemeProvider';
+import { useTranslation } from 'react-i18next';
 
 // type Props = BottomTabScreenProps<PartnerBottomTabParamList, 'Property'>;
 type Props = NativeStackScreenProps<AgentDataStackParamList, 'AgentDataScreen'>;
@@ -43,6 +44,7 @@ const AgentDataScreen: React.FC<Props> = ({ navigation }) => {
   const { user } = useAuth();
   const { agentPropertyUpdated, setAgentPropertyUpdated } = usePartner();
   const { theme } = useTheme();
+  const { t } = useTranslation();
   const PAGE_SIZE = 10;
 
   const isInitialRender = useRef(true);
@@ -165,7 +167,7 @@ const AgentDataScreen: React.FC<Props> = ({ navigation }) => {
 
     return (
       <View style={styles.emptyContainer}>
-        <Text style={styles.emptyText}>No properties available</Text>
+        <Text style={styles.emptyText}>{t('agentProperty.messages.noProperties')}</Text>
       </View>
     );
   };
@@ -174,7 +176,7 @@ const AgentDataScreen: React.FC<Props> = ({ navigation }) => {
     <View style={styles.container}>
       {
         Platform.OS === 'android' && (
-          <Header<PartnerDrawerParamList> title="Agent's Property">
+          <Header<PartnerDrawerParamList> title={t('agentProperty.titles.agentProperty')}>
             <TouchableOpacity
               style={[styles.addButton, { backgroundColor: theme.secondaryColor }]}
               onPress={() => {
@@ -183,7 +185,7 @@ const AgentDataScreen: React.FC<Props> = ({ navigation }) => {
                   propertyData: {} as AgentData,
                 });
               }}>
-              <Text style={styles.buttonText}>Add</Text>
+              <Text style={styles.buttonText}>{t('agentProperty.buttons.add')}</Text>
             </TouchableOpacity>
           </Header>
         )

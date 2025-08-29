@@ -684,5 +684,58 @@
       "propertyImage": "صورة {{propertyName}}",
       "propertyPlaceholder": "صورة العقار النائبة"
     }
+  },
+  "agentProperty": {
+    "titles": {
+      "addAgentProperty": "إضافة عقار الوكيل",
+      "editAgentProperty": "تعديل عقار الوكيل",
+      "agentProperty": "عقار الوكيل",
+      "deleteProperty": "حذف العقار"
+    },
+    "labels": {
+      "agentName": "اسم الوكيل*",
+      "agentContactNo": "رقم الاتصال بالوكيل*",
+      "propertyLocation": "موقع العقار*",
+      "propertyType": "نوع العقار",
+      "bhkType": "نوع BHK",
+      "demandPrice": "السعر المطلوب",
+      "securityDepositAmount": "مبلغ الضمان",
+      "negotiable": "قابل للتفاوض",
+      "fixedPrice": "سعر ثابت",
+      "propertyNotes": "ملاحظات العقار",
+      "location": "الموقع",
+      "contactNo": "رقم الاتصال",
+      "dateAdded": "تاريخ الإضافة",
+      "notes": "ملاحظات"
+    },
+    "placeholders": {
+      "agentName": "مثال: محمد أحمد",
+      "agentContactNo": "مثال: 1234567890",
+      "propertyLocation": "مثال: نيفي مومباي، تانه، إلخ.",
+      "demandPrice": "أدخل المبلغ",
+      "securityDepositAmount": "أدخل مبلغ الضمان",
+      "propertyNotes": "إضافة تفاصيل إضافية",
+      "searchByName": "البحث بالاسم..."
+    },
+    "messages": {
+      "propertyUpdated": "تم تحديث العقار بنجاح",
+      "propertyAdded": "تم إضافة العقار بنجاح",
+      "updateFailed": "فشل في تحديث عقار الوكيل",
+      "validationError": "يرجى التحقق من إدخالك وحاول مرة أخرى",
+      "noProperties": "لا توجد عقارات متاحة",
+      "deleteSuccess": "تم حذف العقار بنجاح",
+      "deleteError": "خطأ في حذف العقار",
+      "notSpecified": "غير محدد",
+      "na": "غير متوفر",
+      "deleteConfirmation": "لا يمكن التراجع عن هذا الإجراء. هل أنت متأكد من أنك تريد حذف هذا العقار؟"
+    },
+    "buttons": {
+      "add": "إضافة",
+      "submit": "إرسال",
+      "filterProperties": "تصفية العقارات",
+      "clearAll": "مسح الكل",
+      "cancel": "إلغاء",
+      "applyFilters": "تطبيق المرشحات"
+    }
   }
 }

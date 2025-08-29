@@ -678,5 +678,56 @@
       "continueEditing": "Continue Editing",
       "discard": "Discard"
     }
+  },
+  "agentProperty": {
+    "titles": {
+      "addAgentProperty": "Add Agent's Property",
+      "editAgentProperty": "Edit Agent's Property",
+      "agentProperty": "Agent's Property",
+      "deleteProperty": "Delete Property"
+    },
+    "labels": {
+      "agentName": "Agent Name*",
+      "agentContactNo": "Agent Contact No.*",
+      "propertyLocation": "Property Location*",
+      "propertyType": "Property Type",
+      "bhkType": "BHK Type",
+      "demandPrice": "Demand Price",
+      "securityDepositAmount": "Security Deposit Amount",
+      "negotiable": "Negotiable",
+      "fixedPrice": "Fixed Price",
+      "propertyNotes": "Property Notes",
+      "location": "Location",
+      "contactNo": "Contact No.",
+      "dateAdded": "Date Added",
+      "notes": "Notes"
+    },
+    "placeholders": {
+      "agentName": "Eg. John Doe",
+      "agentContactNo": "Eg. 1234567890",
+      "propertyLocation": "Eg. Navi Mumbai, Thane, etc.",
+      "demandPrice": "Enter amount",
+      "securityDepositAmount": "Enter deposit amount",
+      "propertyNotes": "Add additional details",
+      "searchByName": "Search by name..."
+    },
+    "messages": {
+      "propertyAdded": "Property added successfully",
+      "propertyUpdated": "Property updated successfully",
+      "updateFailed": "Failed to update property",
+      "validationError": "Please fix the validation errors",
+      "noProperties": "No properties found",
+      "deleteSuccess": "Property Deleted Successfully",
+      "deleteError": "Error in deleting property",
+      "notSpecified": "Not Specified",
+      "na": "N/A",
+      "deleteConfirmation": "This action cannot be undone. Are you sure you want to delete this property?"
+    },
+    "buttons": {
+      "add": "Add",
+      "submit": "Submit",
+      "cancel": "Cancel",
+      "applyFilters": "Apply Filters"
+    }
   }
 }
