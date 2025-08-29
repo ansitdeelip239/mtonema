@@ -38,6 +38,7 @@ import { useMaster } from '../../../context/MasterProvider';
 import { useBottomTab } from '../../../context/BottomTabProvider';
 import { formatWhatsappNumber } from '../../../utils/phoneUtils';
 import ContactInfoCard from './components/ContactInfoCard';
+import { useTranslation } from 'react-i18next';
 
 type Props = NativeStackScreenProps<
   ClientStackParamList,
@@ -82,6 +83,7 @@ const ClientProfileScreen: React.FC<Props> = ({ route, navigation }) => {
   // Get activity type master data
   const { masterData } = useMaster();
   const { hideBottomTabs, showBottomTabs } = useBottomTab();
+  const { t } = useTranslation();
 
   const fetchDuplicateClients = useCallback(async () => {
     try {
@@ -108,7 +110,7 @@ const ClientProfileScreen: React.FC<Props> = ({ route, navigation }) => {
       }
     } catch (error) {
       console.error('Error in fetchClient', error);
-      showError('Failed to fetch client data');
+      showError(t('clientProfile.fetchClientFailed', 'Failed to fetch client details'));
       navigation.goBack();
     } finally {
       setLoading(false);
@@ -131,11 +133,11 @@ const ClientProfileScreen: React.FC<Props> = ({ route, navigation }) => {
         );
       }
     } catch (error) {
-      showError('Failed to fetch follow-up date');
+      showError(t('clientProfile.fetchFollowUpFailed', 'Failed to fetch follow-up details'));
     } finally {
       setFollowUpLoading(false);
     }
-  }, [route.params.clientId, navigation, showError, fetchDuplicateClients]);
+  }, [route.params.clientId, navigation, showError, fetchDuplicateClients, t]);
 
   const fetchAssignedUsers = useCallback(async () => {
     try {
@@ -150,11 +152,11 @@ const ClientProfileScreen: React.FC<Props> = ({ route, navigation }) => {
       }
     } catch (error) {
       console.error('Error in fetchAssignedUsers', error);
-      showError('Failed to fetch assigned users');
+      showError(t('clientProfile.fetchAssignedUsersFailed', 'Failed to fetch assigned users'));
     } finally {
       setAssignedUsersLoading(false);
     }
-  }, [route.params.clientId, showError]);
+  }, [route.params.clientId, showError, t]);
 
   useEffect(() => {
     fetchClient();
@@ -166,7 +168,9 @@ const ClientProfileScreen: React.FC<Props> = ({ route, navigation }) => {
 
   useLayoutEffect(() => {
     navigation.setOptions({
+      // eslint-disable-next-line react/no-unstable-nested-components
       headerRight: () => (
+        // eslint-disable-next-line react-native/no-inline-styles
         <View style={{ flexDirection: 'row', marginRight: 10 }}>
           <TouchableOpacity
             onPress={() => {
@@ -175,6 +179,7 @@ const ClientProfileScreen: React.FC<Props> = ({ route, navigation }) => {
                 clientData: client ?? undefined,
               });
             }}
+            // eslint-disable-next-line react-native/no-inline-styles
             style={{ marginHorizontal: 10 }}
           >
             <GetIcon iconName="edit" color="#fff" size={18} />
@@ -184,6 +189,7 @@ const ClientProfileScreen: React.FC<Props> = ({ route, navigation }) => {
             onPress={() => {
               setIsDeleteModalVisible(true);
             }}
+            // eslint-disable-next-line react-native/no-inline-styles
             style={{ marginHorizontal: 10 }}
           >
             <GetIcon iconName="delete" color="#fff" size={18} />
@@ -279,15 +285,15 @@ const ClientProfileScreen: React.FC<Props> = ({ route, navigation }) => {
       if (response.success) {
         Toast.show({
           type: 'success',
-          text1: 'Success',
-          text2: 'Activity deleted successfully',
+          text1: t('common.states.success', 'Success'),
+          text2: t('clientProfile.activityDeleted', 'Activity deleted successfully'),
         });
         await fetchClient();
         setClientsUpdated(prev => !prev);
       }
     } catch (error) {
       console.error('Error in handleDeleteActivity', error);
-      showError('Failed to delete activity');
+      showError(t('clientProfile.deleteActivityFailed', 'Failed to delete activity'));
     } finally {
       setIsDeletingActivity(false);
     }
@@ -306,17 +312,17 @@ const ClientProfileScreen: React.FC<Props> = ({ route, navigation }) => {
       if (response.success) {
         Toast.show({
           type: 'success',
-          text1: 'Success',
-          text2: 'Client deleted successfully',
+          text1: t('common.states.success', 'Success'),
+          text2: t('clientProfile.clientDeleted', 'Client deleted successfully'),
         });
         setClientsUpdated(prev => !prev);
         navigation.goBack();
       } else {
-        showError('Failed to delete client');
+        showError(t('clientProfile.deleteClientFailed', 'Failed to delete client'));
       }
     } catch (error) {
       console.error('Error in handleDelete', error);
-      showError('Failed to delete client');
+      showError(t('clientProfile.deleteClientFailed'));
     } finally {
       setIsDeleteModalVisible(false);
     }
@@ -399,23 +405,22 @@ const ClientProfileScreen: React.FC<Props> = ({ route, navigation }) => {
               if (followUpResponse.success) {
                 Toast.show({
                   type: 'success',
-                  text1: 'Success',
-                  text2:
-                    'Activity added and follow-up rescheduled for 1 days later',
+                  text1: t('common.states.success', 'Success'),
+                  text2: t('clientProfile.activityAddedRescheduled', 'Activity added and follow-up rescheduled'),
                 });
               } else {
                 Toast.show({
                   type: 'success',
-                  text1: 'Activity Added',
-                  text2: 'Activity added but could not reschedule follow-up',
+                  text1: t('common.states.success', 'Success'),
+                  text2: t('clientProfile.activityAddedRescheduleFailed', 'Activity added but failed to reschedule follow-up'),
                 });
               }
             } catch (followUpError) {
               console.error('Error rescheduling follow-up:', followUpError);
               Toast.show({
                 type: 'success',
-                text1: 'Activity Added',
-                text2: 'Activity added but could not reschedule follow-up',
+                text1: t('common.states.success'),
+                text2: t('clientProfile.activityAddedRescheduleFailed'),
               });
             }
           } else {
@@ -429,22 +434,22 @@ const ClientProfileScreen: React.FC<Props> = ({ route, navigation }) => {
               if (followUpResponse.success) {
                 Toast.show({
                   type: 'success',
-                  text1: 'Success',
-                  text2: 'Activity added and follow-up marked as completed',
+                  text1: t('common.states.success', 'Success'),
+                  text2: t('clientProfile.activityAddedCompleted', 'Activity added and follow-up completed'),
                 });
               } else {
                 Toast.show({
                   type: 'success',
-                  text1: 'Activity Added',
-                  text2: 'Activity added but could not update follow-up status',
+                  text1: t('common.states.success', 'Success'),
+                  text2: t('clientProfile.activityAddedUpdateFailed', 'Activity added but failed to update follow-up'),
                 });
               }
             } catch (followUpError) {
               console.error('Error updating follow-up status:', followUpError);
               Toast.show({
                 type: 'success',
-                text1: 'Activity Added',
-                text2: 'Activity added but could not update follow-up status',
+                text1: t('common.states.success'),
+                text2: t('clientProfile.activityAddedUpdateFailed'),
               });
             }
           }
@@ -452,10 +457,10 @@ const ClientProfileScreen: React.FC<Props> = ({ route, navigation }) => {
           // Regular success message for edits or when no follow-up exists
           Toast.show({
             type: 'success',
-            text1: 'Success',
+            text1: t('common.states.success', 'Success'),
             text2: activityId
-              ? 'Activity updated successfully'
-              : 'Activity added successfully',
+              ? t('clientProfile.activityUpdated', 'Activity updated successfully')
+              : t('clientProfile.activityAdded', 'Activity added successfully'),
           });
         }
 
@@ -505,15 +510,15 @@ const ClientProfileScreen: React.FC<Props> = ({ route, navigation }) => {
       if (response.success) {
         Toast.show({
           type: 'success',
-          text1: 'Success',
-          text2: 'Follow-up scheduled successfully',
+          text1: t('common.states.success', 'Success'),
+          text2: t('clientProfile.followUpScheduled', 'Follow-up scheduled successfully'),
         });
 
         // Update client data with new follow-up info
         fetchClient();
         setClientsUpdated(prev => !prev);
       } else {
-        showError('Failed to schedule follow-up');
+        showError(t('clientProfile.scheduleFollowUpFailed', 'Failed to schedule follow-up'));
       }
     } catch (error) {
       console.error('Error scheduling follow-up:', error);
@@ -535,15 +540,15 @@ const ClientProfileScreen: React.FC<Props> = ({ route, navigation }) => {
       if (response.success) {
         Toast.show({
           type: 'success',
-          text1: 'Success',
-          text2: 'Follow-up removed successfully',
+          text1: t('common.states.success', 'Success'),
+          text2: t('clientProfile.followUpRemoved', 'Follow-up removed successfully'),
         });
 
         // Update client data with new follow-up info
         fetchClient();
         setClientsUpdated(prev => !prev);
       } else {
-        showError('Failed to remove follow-up');
+        showError(t('clientProfile.removeFollowUpFailed', 'Failed to remove follow-up'));
       }
     } catch (error) {
       console.error('Error removing follow-up:', error);
@@ -569,7 +574,7 @@ const ClientProfileScreen: React.FC<Props> = ({ route, navigation }) => {
       {
         Platform.OS === 'android' && (
           <Header
-            title="Client Profile"
+            title={t('clientProfile.title', 'Client Profile')}
             navigation={navigation}
             backButton={true}
             onBackPress={() => {
@@ -597,14 +602,14 @@ const ClientProfileScreen: React.FC<Props> = ({ route, navigation }) => {
                     });
                   }
                 }}
-                title="Edit"
+                title={t('clientProfile.edit', 'Edit')}
                 titleStyle={styles.menuItemTitle}
                 // eslint-disable-next-line react/no-unstable-nested-components
                 leadingIcon={() => <GetIcon iconName="edit" />}
               />
               <Menu.Item
                 onPress={handleDelete}
-                title="Delete"
+                title={t('clientProfile.delete', 'Delete')}
                 titleStyle={styles.menuItemTitle}
                 // eslint-disable-next-line react/no-unstable-nested-components
                 leadingIcon={() => <GetIcon iconName="delete" />}
@@ -631,7 +636,7 @@ const ClientProfileScreen: React.FC<Props> = ({ route, navigation }) => {
               style={styles.duplicateWarning}
               onPress={() => setIsDuplicateModalVisible(true)}>
               <Text style={styles.duplicateWarningText}>
-                Duplicate Client Found
+                {t('clientProfile.duplicateClientFound', 'Duplicate client found')}
               </Text>
             </TouchableOpacity>
           )}
@@ -695,7 +700,7 @@ const ClientProfileScreen: React.FC<Props> = ({ route, navigation }) => {
             activeOpacity={0.7}>
             <GetIcon iconName="message" size={20} color="white" />
             <Text style={styles.sendResponseButtonText}>
-              Send Quick Response
+              {t('clientProfile.sendQuickResponse', 'Send Quick Response')}
             </Text>
           </TouchableOpacity>
         </View>
@@ -734,8 +739,8 @@ const ClientProfileScreen: React.FC<Props> = ({ route, navigation }) => {
 
       <ConfirmationModal
         visible={isDeleteModalVisible}
-        title="Delete Client"
-        message="Are you sure you want to delete this client?"
+        title={t('clientProfile.deleteClient', 'Delete Client')}
+        message={t('clientProfile.deleteClientConfirm', 'Are you sure you want to delete this client?')}
         onConfirm={handleConfirmDelete}
         onCancel={() => setIsDeleteModalVisible(false)}
       />

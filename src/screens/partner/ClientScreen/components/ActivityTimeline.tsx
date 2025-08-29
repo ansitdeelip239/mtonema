@@ -1,8 +1,10 @@
 import React, {useState} from 'react';
 import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
+import {useTranslation} from 'react-i18next';
+import i18n from '../../../../i18n';
 import GetIcon, {IconEnum} from '../../../../components/GetIcon';
 import {ClientActivityDataModel} from '../../../../types';
-import {formatDate} from '../../../../utils/dateUtils';
+import {formatLocalizedDate, formatLocalizedTime} from '../../../../utils/dateUtils';
 import Colors from '../../../../constants/Colors';
 
 const getActivityIcon = (activityType: string): IconEnum => {
@@ -51,14 +53,15 @@ const ActivityTimeline: React.FC<ActivityTimelineProps> = ({
   onPress,
   isClickable = true,
 }) => {
+  const {t} = useTranslation();
   const [isDescriptionExpanded, setIsDescriptionExpanded] = useState(false);
 
   const activityColor = getActivityColor(activity.activityType.name);
   const hasDescription = activity.description && activity.description !== '-';
 
   // Format date and time separately for different styling
-  const dateString = formatDate(activity.createdOn, 'MMM d');
-  const timeString = formatDate(activity.createdOn, 'h:mm a');
+  const dateString = formatLocalizedDate(activity.createdOn, i18n.language);
+  const timeString = formatLocalizedTime(activity.createdOn, i18n.language, t);
 
   const handlePress = () => {
     if (isClickable) {
@@ -133,7 +136,7 @@ const ActivityTimeline: React.FC<ActivityTimelineProps> = ({
                   <GetIcon iconName="chevronRight" size={12} color="#666" />
                 </View>
                 <Text style={styles.foldUnfoldText}>
-                  {isDescriptionExpanded ? 'Show less' : 'Show more'}
+                  {isDescriptionExpanded ? t('common.labels.showLess', 'Show less') : t('common.labels.showMore', 'Show more')}
                 </Text>
               </TouchableOpacity>
             )}
@@ -147,7 +150,7 @@ const ActivityTimeline: React.FC<ActivityTimelineProps> = ({
           </View>
           <View style={styles.createdByTextContainer}>
             <View style={styles.createdByNameRow}>
-              <Text style={styles.createdByLabel}>by </Text>
+              <Text style={styles.createdByLabel}>{t('common.labels.by', 'by')} </Text>
               <Text style={styles.createdByName}>
                 {JSON.parse(activity.createdBy).Name}
               </Text>

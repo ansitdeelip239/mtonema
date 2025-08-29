@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { View, StyleSheet, SafeAreaView, Platform } from 'react-native';
+import { useTranslation } from 'react-i18next';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { ClientStackParamList } from '../../../navigator/components/ClientScreenStack';
 import Header from '../../../components/Header';
@@ -34,6 +35,7 @@ const MessageTemplateScreen: React.FC<Props> = ({ route, navigation }) => {
   const { showError } = useDialog();
   const { messageTemplateUpdated } = usePartner();
   const { hideBottomTabs, showBottomTabs } = useBottomTab();
+  const { t } = useTranslation();
 
   // State management
   const [contentTemplates, setContentTemplates] = useState<ContentTemplate[]>(
@@ -120,18 +122,18 @@ const MessageTemplateScreen: React.FC<Props> = ({ route, navigation }) => {
           setHasNextPage(responsePagingModel.nextPage);
           setCurrentPage(pageNumber);
         } else {
-          showError('Failed to fetch content templates');
+          showError(t('messageTemplate.errors.fetchFailed', 'Failed to fetch content templates'));
         }
       } catch (error) {
         console.error('Error fetching content templates:', error);
-        showError('Error loading content templates');
+        showError(t('messageTemplate.errors.loadingError', 'Error loading content templates'));
       } finally {
         setLoading(false);
         setRefreshing(false);
         setLoadingMore(false);
       }
     },
-    [user?.id, showError],
+    [user?.id, showError, t],
   );
 
   // Initial load
@@ -201,7 +203,7 @@ const MessageTemplateScreen: React.FC<Props> = ({ route, navigation }) => {
         {
           Platform.OS === 'android' && (
             <Header<PartnerDrawerParamList>
-              title="Select Message Template"
+              title={t('messageTemplate.headers.selectTemplate', 'Select Message Template')}
               navigation={navigation}
               backButton={true}
             />
@@ -217,7 +219,7 @@ const MessageTemplateScreen: React.FC<Props> = ({ route, navigation }) => {
       {
         Platform.OS === 'android' && (
           <Header<PartnerDrawerParamList>
-            title="Select Message Template"
+            title={t('messageTemplate.headers.selectTemplate', 'Select Message Template')}
             navigation={navigation}
             backButton={true}
           />

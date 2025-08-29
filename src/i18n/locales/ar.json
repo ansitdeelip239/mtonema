@@ -7,6 +7,7 @@
       "delete": "حذف",
       "edit": "تحرير",
       "add": "إضافة",
+      "addActivity": "إضافة نشاط",
       "back": "رجوع",
       "next": "متابعة",
       "search": "بحث",
@@ -18,7 +19,8 @@
       "confirm": "تأكيد",
       "ok": "موافق",
       "yes": "نعم",
-      "no": "لا"
+      "no": "لا",
+      "call": "اتصال"
     },
     "states": {
       "loading": "جاري التحميل...",
@@ -29,13 +31,24 @@
       "success": "نجح",
       "error": "خطأ",
       "empty": "لا توجد بيانات متاحة",
-      "refreshToLoad": "اسحب لأسفل للتحديث"
+      "refreshToLoad": "اسحب لأسفل للتحديث",
+      "assigned": "مُعيّن",
+      "unassigned": "غير مُعيّن",
+      "loadingAssignments": "جاري تحميل التعيينات..."
     },
     "labels": {
       "email": "البريد الإلكتروني",
       "name": "الاسم",
       "phone": "الهاتف",
-      "address": "العنوان"
+      "mobile": "الجوال",
+      "whatsapp": "واتساب",
+      "address": "العنوان",
+      "description": "الوصف",
+      "groups": "المجموعات",
+      "notes": "الملاحظات",
+      "showMore": "عرض المزيد",
+      "showLess": "عرض أقل",
+      "by": "بواسطة"
     }
   },
   "errors": {
@@ -63,7 +76,10 @@
     "hoursLeft": "{{hours}} ساعات",
     "minutesLeft": "{{minutes}} دقائق",
     "oneDay": "يوم واحد",
-    "multipleDays": "{{days}} أيام"
+    "multipleDays": "{{days}} أيام",
+    "am": "ص",
+    "pm": "م",
+    "timeFormat": "h:mm a"
   },
   "greetings": {
     "welcome": "مرحباً",
@@ -172,7 +188,26 @@
     "activityAddedSuccess": "تم إضافة النشاط بنجاح",
     "failedToAddActivity": "فشل في إضافة النشاط",
     "loading": "جاري تحميل العملاء...",
-    "searching": "جاري البحث عن العملاء..."
+    "searching": "جاري البحث عن العملاء...",
+    "plural": "ين",
+    "edit": "تحرير"
+  },
+  "clientCard": {
+    "new": "جديد",
+    "assigned": "مُسند إلى:"
+  },
+  "filterDrawer": {
+    "title": "الترتيب والتصفية",
+    "sortDirection": "اتجاه الترتيب",
+    "sortBy": "الترتيب حسب",
+    "ascending": "تصاعدي",
+    "descending": "تنازلي",
+    "createdDate": "تاريخ الإنشاء",
+    "createdDateDescription": "الترتيب حسب وقت إضافة العميل",
+    "lastActivityDate": "تاريخ آخر نشاط",
+    "lastActivityDateDescription": "الترتيب حسب النشاط الأحدث",
+    "cancel": "إلغاء",
+    "apply": "تطبيق"
   },
   "language": {
     "selectLanguage": "اختيار اللغة",
@@ -202,6 +237,183 @@
       "few": "{{count}} متابعات",
       "many": "{{count}} متابعة",
       "other": "{{count}} متابعة"
+    }
+  },
+  "addActivityModal": {
+    "addActivity": "إضافة نشاط",
+    "editActivity": "تحرير النشاط",
+    "selectActivityType": "اختيار نوع النشاط",
+    "deleteActivity": "حذف النشاط",
+    "deleteActivityConfirm": "هل أنت متأكد من أنك تريد حذف هذا النشاط؟"
+  },
+  "clientProfile": {
+    "title": "ملف العميل",
+    "edit": "تحرير",
+    "delete": "حذف",
+    "sendQuickResponse": "إرسال رد سريع",
+    "duplicateClientFound": "تم العثور على عميل مكرر",
+    "deleteClient": "حذف العميل",
+    "deleteClientConfirm": "هل أنت متأكد من أنك تريد حذف هذا العميل؟",
+    "activityDeleted": "تم حذف النشاط بنجاح",
+    "clientDeleted": "تم حذف العميل بنجاح",
+    "activityAddedRescheduled": "تمت إضافة النشاط وإعادة جدولة المتابعة ليوم واحد لاحقاً",
+    "activityAddedRescheduleFailed": "تمت إضافة النشاط لكن لم يتمكن من إعادة جدولة المتابعة",
+    "activityAddedCompleted": "تمت إضافة النشاط وتم وضع علامة مكتملة على المتابعة",
+    "activityAddedUpdateFailed": "تمت إضافة النشاط لكن لم يتمكن من تحديث حالة المتابعة",
+    "activityUpdated": "تم تحديث النشاط بنجاح",
+    "activityAdded": "تمت إضافة النشاط بنجاح",
+    "followUpScheduled": "تم جدولة المتابعة بنجاح",
+    "followUpRemoved": "تم إزالة المتابعة بنجاح",
+    "fetchClientFailed": "فشل في جلب بيانات العميل",
+    "fetchFollowUpFailed": "فشل في جلب تاريخ المتابعة",
+    "fetchAssignedUsersFailed": "فشل في جلب المستخدمين المعينين",
+    "deleteActivityFailed": "فشل في حذف النشاط",
+    "deleteClientFailed": "فشل في حذف العميل",
+    "scheduleFollowUpFailed": "فشل في جدولة المتابعة",
+    "removeFollowUpFailed": "فشل في إزالة المتابعة",
+    "assignedTo": "مُعيّن إلى",
+    "noUsersAssigned": "لا يوجد مستخدمون مُعيّنون",
+    "contactInformation": "معلومات الاتصال",
+    "recentActivities": "الأنشطة الأخيرة",
+    "noActivitiesYet": "لا توجد أنشطة بعد"
+  },
+  "clientAssignment": {
+    "title": "تعيين العميل",
+    "assignTeamMembers": "تعيين أعضاء الفريق",
+    "selectTeamMembers": "اختر أعضاء الفريق لتعيينهم لهذا العميل",
+    "usersSelected": "{{count}} مستخدم محدد",
+    "usersSelected_plural": "{{count}} مستخدمين محددين",
+    "noTeamMembersFound": "لم يتم العثور على أعضاء الفريق",
+    "loadingTeamMembers": "جاري تحميل أعضاء الفريق...",
+    "userEmailNotAvailable": "البريد الإلكتروني للمستخدم غير متوفر",
+    "fetchTeamMembersFailed": "فشل في جلب أعضاء الفريق",
+    "errorLoadingTeamMembers": "خطأ في تحميل أعضاء الفريق",
+    "usersAssignedSuccessfully": "تم تعيين المستخدمين بنجاح",
+    "assignUsersFailed": "فشل في تعيين المستخدمين",
+    "errorAssigningUsers": "خطأ في تعيين المستخدمين",
+    "assigning": "جاري التعيين...",
+    "assignUsers": "تعيين {{count}} مستخدم",
+    "assignUsers_plural": "تعيين {{count}} مستخدمين"
+  },
+  "addClient": {
+    "headers": {
+      "addClient": "إضافة عميل",
+      "editClient": "تحرير العميل"
+    },
+    "labels": {
+      "clientName": "اسم العميل*",
+      "displayName": "الاسم المعروض",
+      "mobileNumber": "رقم الهاتف المحمول",
+      "whatsappNumber": "رقم الواتساب",
+      "email": "البريد الإلكتروني",
+      "notes": "الملاحظات"
+    },
+    "placeholders": {
+      "clientName": "مثال: محمد أحمد",
+      "displayName": "مثال: محمد أحمد",
+      "mobileNumber": "مثال: 1234567890",
+      "whatsappNumber": "مثال: 1234567890",
+      "email": "مثال: email@example.com",
+      "notes": "إضافة ملاحظات إضافية"
+    },
+    "buttons": {
+      "submit": "إرسال"
+    },
+    "errors": {
+      "clientNameRequired": "اسم العميل مطلوب",
+      "provideValidClientName": "يرجى تقديم اسم عميل صحيح",
+      "addError": "خطأ في إضافة العميل",
+      "updateError": "خطأ في تحديث العميل",
+      "unexpectedError": "حدث خطأ غير متوقع"
+    },
+    "success": {
+      "clientAdded": "تم إضافة العميل بنجاح",
+      "clientUpdated": "تم تحديث العميل بنجاح"
+    }
+  },
+  "groupsToggle": {
+    "labels": {
+      "selectGroups": "تحديد المجموعات"
+    },
+    "placeholders": {
+      "searchGroups": "البحث في المجموعات..."
+    },
+    "buttons": {
+      "addGroup": "إضافة مجموعة",
+      "more": "المزيد",
+      "showLess": "عرض أقل"
+    },
+    "errors": {
+      "groupNameRequired": "اسم المجموعة مطلوب",
+      "addGroupFailed": "فشل في إضافة المجموعة",
+      "tryAgain": "يرجى المحاولة مرة أخرى",
+      "unexpectedError": "حدث خطأ غير متوقع"
+    },
+    "success": {
+      "groupAdded": "تم إضافة المجموعة بنجاح"
+    }
+  },
+  "messagePreview": {
+    "headers": {
+      "messagePreview": "معاينة الرسالة"
+    },
+    "labels": {
+      "messagePreview": "معاينة الرسالة",
+      "sendingTo": "إرسال إلى",
+      "template": "القالب",
+      "messageContent": "محتوى الرسالة",
+      "recipientInformation": "معلومات المستلم",
+      "whatsapp": "واتساب",
+      "email": "البريد الإلكتروني",
+      "phone": "الهاتف"
+    },
+    "options": {
+      "sendViaWhatsapp": "إرسال عبر واتساب",
+      "sendViaEmail": "إرسال عبر البريد الإلكتروني",
+      "sendViaSms": "إرسال عبر الرسائل النصية"
+    },
+    "errors": {
+      "error": "خطأ",
+      "whatsappNotAvailable": "رقم واتساب غير متوفر لهذا العميل.",
+      "whatsappOpenFailed": "فشل في فتح واتساب. يرجى التأكد من تثبيت واتساب.",
+      "emailNotAvailable": "عنوان البريد الإلكتروني غير متوفر لهذا العميل.",
+      "emailOpenFailed": "فشل في فتح تطبيق البريد الإلكتروني.",
+      "phoneNotAvailable": "رقم الهاتف غير متوفر لهذا العميل.",
+      "smsOpenFailed": "فشل في فتح تطبيق الرسائل النصية.",
+      "noWhatsappNumber": "لا يوجد رقم واتساب متاح",
+      "noEmailAddress": "لا يوجد عنوان بريد إلكتروني متاح",
+      "noPhoneNumber": "لا يوجد رقم هاتف متاح"
+    },
+    "emailSubject": "رسالة من الوكيل"
+  },
+  "messageTemplate": {
+    "headers": {
+      "selectTemplate": "تحديد قالب الرسالة"
+    },
+    "errors": {
+      "fetchFailed": "فشل في جلب قوالب المحتوى",
+      "loadingError": "خطأ في تحميل قوالب المحتوى"
+    }
+  },
+  "contentTemplate": {
+    "labels": {
+      "by": "بواسطة",
+      "created": "تم الإنشاء"
+    },
+    "errors": {
+      "invalidDate": "تاريخ غير صحيح"
+    },
+    "emptyState": {
+      "title": "لا توجد قوالب محتوى",
+      "subtitle": "لم تقم بإنشاء أي قوالب محتوى بعد."
+    },
+    "header": {
+      "templatesFound": "{{count}} قالب تم العثور عليه",
+      "templatesFound_plural": "{{count}} قوالب تم العثور عليها"
+    },
+    "loading": {
+      "loadingTemplates": "جاري تحميل قوالب المحتوى...",
+      "loadingMore": "جاري تحميل المزيد..."
     }
   }
 }

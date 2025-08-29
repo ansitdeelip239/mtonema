@@ -1,5 +1,6 @@
 import React from 'react';
 import {View, Text, StyleSheet, TouchableOpacity, ActivityIndicator} from 'react-native';
+import { useTranslation } from 'react-i18next';
 import GetIcon from '../../../../components/GetIcon';
 
 interface AssignedUser {
@@ -19,6 +20,7 @@ const AssignedUsersCard: React.FC<AssignedUsersCardProps> = ({
   isLoading = false,
   onPress,
 }) => {
+  const { t } = useTranslation();
   const isAssigned = assignedUsers.length > 0;
 
   return (
@@ -40,12 +42,12 @@ const AssignedUsersCard: React.FC<AssignedUsersCardProps> = ({
           {isLoading ? (
             <View style={styles.loadingContainer}>
               <ActivityIndicator size="small" color="#666" />
-              <Text style={styles.loadingText}>Loading assignments...</Text>
+              <Text style={styles.loadingText}>{t('common.states.loadingAssignments')}</Text>
             </View>
           ) : (
             <>
               <Text style={styles.label}>
-                {isAssigned ? 'Assigned To' : 'Unassigned'}
+                {isAssigned ? t('clientProfile.assignedTo') : t('common.states.unassigned')}
               </Text>
               {isAssigned && (
                 <View style={styles.badgesContainer}>
@@ -57,7 +59,7 @@ const AssignedUsersCard: React.FC<AssignedUsersCardProps> = ({
                 </View>
               )}
               {!isAssigned && (
-                <Text style={styles.description}>No users assigned</Text>
+                <Text style={styles.description}>{t('clientProfile.noUsersAssigned')}</Text>
               )}
             </>
           )}

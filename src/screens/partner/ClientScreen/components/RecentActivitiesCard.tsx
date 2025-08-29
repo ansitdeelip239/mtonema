@@ -1,5 +1,6 @@
 import React from 'react';
 import {View, Text, TouchableOpacity, StyleSheet} from 'react-native';
+import { useTranslation } from 'react-i18next';
 import {ClientActivityDataModel} from '../../../../types';
 import ActivityTimeline from './ActivityTimeline';
 import GetIcon from '../../../../components/GetIcon';
@@ -17,6 +18,7 @@ const RecentActivitiesCard: React.FC<RecentActivitiesCardProps> = ({
   onAddActivity,
   onActivityPress,
 }) => {
+  const { t } = useTranslation();
   const {theme} = useTheme();
   const {masterData} = useMaster();
 
@@ -58,7 +60,7 @@ const RecentActivitiesCard: React.FC<RecentActivitiesCardProps> = ({
       return (
         <View>
           {renderAddButton(true)}
-          <Text style={styles.noActivityText}>No activities yet</Text>
+          <Text style={styles.noActivityText}>{t('clientProfile.noActivitiesYet', 'No activities yet')}</Text>
         </View>
       );
     }
@@ -109,7 +111,7 @@ const RecentActivitiesCard: React.FC<RecentActivitiesCardProps> = ({
         </View>
 
         <View style={styles.contentSection}>
-          <Text style={[styles.addActivityText, {color: theme.primaryColor}]}>Add Activity</Text>
+          <Text style={[styles.addActivityText, {color: theme.primaryColor}]}>{t('common.actions.addActivity', 'Add Activity')}</Text>
         </View>
       </TouchableOpacity>
     );
@@ -117,7 +119,7 @@ const RecentActivitiesCard: React.FC<RecentActivitiesCardProps> = ({
 
   return (
     <View style={styles.infoCard}>
-      <Text style={styles.sectionTitle}>Recent Activities</Text>
+      <Text style={styles.sectionTitle}>{t('clientProfile.recentActivities', 'Recent Activities')}</Text>
       {renderActivities()}
     </View>
   );

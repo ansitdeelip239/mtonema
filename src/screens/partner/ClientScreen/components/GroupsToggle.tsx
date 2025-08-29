@@ -1,6 +1,7 @@
 import React, {useState, useCallback, useMemo} from 'react';
 import {TextInput} from 'react-native';
 import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
+import {useTranslation} from 'react-i18next';
 import {usePartner} from '../../../../context/PartnerProvider';
 import GetIcon from '../../../../components/GetIcon';
 import Colors from '../../../../constants/Colors';
@@ -22,6 +23,7 @@ const GroupsToggleComponent: React.FC<GroupsToggleComponentProps> = ({
   const {groups, reloadGroups} = usePartner();
   const {user} = useAuth();
   const {theme} = useTheme();
+  const {t} = useTranslation();
   const [showAllGroups, setShowAllGroups] = useState(false);
   const [showAddGroupModal, setShowAddGroupModal] = useState(false);
   const [isAddingGroup, setIsAddingGroup] = useState(false);
@@ -33,7 +35,7 @@ const GroupsToggleComponent: React.FC<GroupsToggleComponentProps> = ({
       if (!groupName.trim()) {
         Toast.show({
           type: 'error',
-          text1: 'Group name is required',
+          text1: t('groupsToggle.errors.groupNameRequired', 'Group name is required'),
         });
         return;
       }
@@ -51,7 +53,7 @@ const GroupsToggleComponent: React.FC<GroupsToggleComponentProps> = ({
         if (response.success) {
           Toast.show({
             type: 'success',
-            text1: 'Group added successfully',
+            text1: t('groupsToggle.success.groupAdded', 'Group added successfully'),
           });
 
           reloadGroups();
@@ -61,22 +63,22 @@ const GroupsToggleComponent: React.FC<GroupsToggleComponentProps> = ({
         } else {
           Toast.show({
             type: 'error',
-            text1: 'Failed to add group',
-            text2: response.message || 'Please try again',
+            text1: t('groupsToggle.errors.addGroupFailed', 'Failed to add group'),
+            text2: response.message || t('groupsToggle.errors.tryAgain', 'Please try again'),
           });
         }
       } catch (error) {
         console.error('Error adding group:', error);
         Toast.show({
           type: 'error',
-          text1: 'Failed to add group',
-          text2: 'An unexpected error occurred',
+          text1: t('groupsToggle.errors.addGroupFailed', 'Failed to add group'),
+          text2: t('groupsToggle.errors.unexpectedError', 'An unexpected error occurred'),
         });
       } finally {
         setIsAddingGroup(false);
       }
     },
-    [reloadGroups, user?.email],
+    [reloadGroups, user?.email, t],
   );
 
   const toggleGroup = useCallback(
@@ -140,7 +142,7 @@ const GroupsToggleComponent: React.FC<GroupsToggleComponentProps> = ({
         <TouchableOpacity
           style={styles.groupLabelWithIcon}
           onPress={() => setShowAllGroups(!showAllGroups)}>
-          <Text style={styles.groupsLabel}>Select Groups</Text>
+          <Text style={styles.groupsLabel}>{t('groupsToggle.labels.selectGroups', 'Select Groups')}</Text>
           <View style={styles.foldIconButton}>
             <GetIcon
               iconName={showAllGroups ? 'fold' : 'unfold'}
@@ -154,14 +156,14 @@ const GroupsToggleComponent: React.FC<GroupsToggleComponentProps> = ({
           onPress={() => setShowAddGroupModal(true)}
           style={[styles.addGroupButton, {backgroundColor: theme.primaryColor}]}>
           <GetIcon iconName="plus" size={16} color="white" />
-          <Text style={styles.addGroupButtonText}>Add Group</Text>
+          <Text style={styles.addGroupButtonText}>{t('groupsToggle.buttons.addGroup', 'Add Group')}</Text>
         </TouchableOpacity>
       </View>
 
       {/* Search bar for groups */}
       <TextInput
         style={styles.searchBar}
-        placeholder="Search groups..."
+        placeholder={t('groupsToggle.placeholders.searchGroups', 'Search groups...')}
         value={searchText}
         onChangeText={setSearchText}
         placeholderTextColor="#888"
@@ -202,7 +204,7 @@ const GroupsToggleComponent: React.FC<GroupsToggleComponentProps> = ({
             ]}
             onPress={() => setShowAllGroups(true)}>
             <Text style={styles.moreButtonText}>
-              +{unselectedGroups.length - unselectedToShow.length} More
+              +{unselectedGroups.length - unselectedToShow.length} {t('groupsToggle.buttons.more', 'More')}
             </Text>
           </TouchableOpacity>
         )}
@@ -215,7 +217,7 @@ const GroupsToggleComponent: React.FC<GroupsToggleComponentProps> = ({
               {borderColor: theme.primaryColor},
             ]}
             onPress={() => setShowAllGroups(false)}>
-            <Text style={styles.moreButtonText}>Show Less</Text>
+            <Text style={styles.moreButtonText}>{t('groupsToggle.buttons.showLess', 'Show Less')}</Text>
           </TouchableOpacity>
         )}
       </View>

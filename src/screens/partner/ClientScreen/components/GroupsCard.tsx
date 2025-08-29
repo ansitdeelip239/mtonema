@@ -1,5 +1,6 @@
 import React from 'react';
 import {View, Text, StyleSheet} from 'react-native';
+import { useTranslation } from 'react-i18next';
 import {Client} from '../../../../types';
 import GroupBadges from './GroupBadge';
 
@@ -8,13 +9,14 @@ interface GroupsCardProps {
 }
 
 const GroupsCard: React.FC<GroupsCardProps> = ({client}) => {
+  const { t } = useTranslation();
   if (!client.groups || client.groups.length === 0) {
     return null;
   }
 
   return (
     <View style={styles.infoCard}>
-      <Text style={styles.sectionTitle}>Groups</Text>
+      <Text style={styles.sectionTitle}>{t('common.labels.groups')}</Text>
       <GroupBadges groups={client.groups} />
     </View>
   );

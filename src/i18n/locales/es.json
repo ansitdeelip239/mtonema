@@ -7,6 +7,7 @@
       "delete": "Eliminar",
       "edit": "Editar",
       "add": "Agregar",
+      "addActivity": "Agregar Actividad",
       "back": "Atrás",
       "next": "Continuar",
       "search": "Buscar",
@@ -18,7 +19,8 @@
       "confirm": "Confirmar",
       "ok": "Aceptar",
       "yes": "Sí",
-      "no": "No"
+      "no": "No",
+      "call": "Llamar"
     },
     "states": {
       "loading": "Cargando...",
@@ -29,13 +31,24 @@
       "success": "Éxito",
       "error": "Error",
       "empty": "No hay datos disponibles",
-      "refreshToLoad": "Desliza hacia abajo para actualizar"
+      "refreshToLoad": "Desliza hacia abajo para actualizar",
+      "assigned": "Asignado",
+      "unassigned": "Sin asignar",
+      "loadingAssignments": "Cargando asignaciones..."
     },
     "labels": {
       "email": "Correo electrónico",
       "name": "Nombre",
       "phone": "Teléfono",
-      "address": "Dirección"
+      "mobile": "Móvil",
+      "whatsapp": "WhatsApp",
+      "address": "Dirección",
+      "description": "Descripción",
+      "groups": "Grupos",
+      "notes": "Notas",
+      "showMore": "Mostrar más",
+      "showLess": "Mostrar menos",
+      "by": "por"
     }
   },
   "errors": {
@@ -63,7 +76,10 @@
     "hoursLeft": "{{hours}} hrs",
     "minutesLeft": "{{minutes}} mins",
     "oneDay": "1 día",
-    "multipleDays": "{{days}} días"
+    "multipleDays": "{{days}} días",
+    "am": "a.m.",
+    "pm": "p.m.",
+    "timeFormat": "h:mm a"
   },
   "greetings": {
     "welcome": "Bienvenido",
@@ -172,7 +188,26 @@
     "activityAddedSuccess": "Actividad agregada exitosamente",
     "failedToAddActivity": "Error al agregar actividad",
     "loading": "Cargando clientes...",
-    "searching": "Buscando clientes..."
+    "searching": "Buscando clientes...",
+    "plural": "s",
+    "edit": "Editar"
+  },
+  "clientCard": {
+    "new": "Nuevo",
+    "assigned": "Asignado:"
+  },
+  "filterDrawer": {
+    "title": "Ordenar y Filtrar",
+    "sortDirection": "Dirección de Orden",
+    "sortBy": "Ordenar Por",
+    "ascending": "Ascendente",
+    "descending": "Descendente",
+    "createdDate": "Fecha de Creación",
+    "createdDateDescription": "Ordenar por cuándo se agregó el cliente",
+    "lastActivityDate": "Última Fecha de Actividad",
+    "lastActivityDateDescription": "Ordenar por actividad más reciente",
+    "cancel": "Cancelar",
+    "apply": "Aplicar"
   },
   "language": {
     "selectLanguage": "Seleccionar Idioma",
@@ -196,6 +231,183 @@
       "zero": "Sin seguimientos",
       "one": "{{count}} seguimiento",
       "other": "{{count}} seguimientos"
+    }
+  },
+  "addActivityModal": {
+    "addActivity": "Agregar Actividad",
+    "editActivity": "Editar Actividad",
+    "selectActivityType": "Seleccionar Tipo de Actividad",
+    "deleteActivity": "Eliminar Actividad",
+    "deleteActivityConfirm": "¿Estás seguro de que quieres eliminar esta actividad?"
+  },
+  "clientProfile": {
+    "title": "Perfil del Cliente",
+    "edit": "Editar",
+    "delete": "Eliminar",
+    "sendQuickResponse": "Enviar Respuesta Rápida",
+    "duplicateClientFound": "Cliente Duplicado Encontrado",
+    "deleteClient": "Eliminar Cliente",
+    "deleteClientConfirm": "¿Estás seguro de que quieres eliminar este cliente?",
+    "activityDeleted": "Actividad eliminada exitosamente",
+    "clientDeleted": "Cliente eliminado exitosamente",
+    "activityAddedRescheduled": "Actividad agregada y seguimiento reprogramado para 1 día después",
+    "activityAddedRescheduleFailed": "Actividad agregada pero no se pudo reprogramar el seguimiento",
+    "activityAddedCompleted": "Actividad agregada y seguimiento marcado como completado",
+    "activityAddedUpdateFailed": "Actividad agregada pero no se pudo actualizar el estado del seguimiento",
+    "activityUpdated": "Actividad actualizada exitosamente",
+    "activityAdded": "Actividad agregada exitosamente",
+    "followUpScheduled": "Seguimiento programado exitosamente",
+    "followUpRemoved": "Seguimiento eliminado exitosamente",
+    "fetchClientFailed": "Error al obtener datos del cliente",
+    "fetchFollowUpFailed": "Error al obtener fecha de seguimiento",
+    "fetchAssignedUsersFailed": "Error al obtener usuarios asignados",
+    "deleteActivityFailed": "Error al eliminar actividad",
+    "deleteClientFailed": "Error al eliminar cliente",
+    "scheduleFollowUpFailed": "Error al programar seguimiento",
+    "removeFollowUpFailed": "Error al eliminar seguimiento",
+    "assignedTo": "Asignado a",
+    "noUsersAssigned": "No hay usuarios asignados",
+    "contactInformation": "Información de Contacto",
+    "recentActivities": "Actividades Recientes",
+    "noActivitiesYet": "No hay actividades aún"
+  },
+  "clientAssignment": {
+    "title": "Asignación de Cliente",
+    "assignTeamMembers": "Asignar Miembros del Equipo",
+    "selectTeamMembers": "Seleccionar miembros del equipo para asignar a este cliente",
+    "usersSelected": "{{count}} usuario seleccionado",
+    "usersSelected_plural": "{{count}} usuarios seleccionados",
+    "noTeamMembersFound": "No se encontraron miembros del equipo",
+    "loadingTeamMembers": "Cargando miembros del equipo...",
+    "userEmailNotAvailable": "El correo electrónico del usuario no está disponible",
+    "fetchTeamMembersFailed": "Error al obtener miembros del equipo",
+    "errorLoadingTeamMembers": "Error al cargar miembros del equipo",
+    "usersAssignedSuccessfully": "Usuarios asignados exitosamente",
+    "assignUsersFailed": "Error al asignar usuarios",
+    "errorAssigningUsers": "Error al asignar usuarios",
+    "assigning": "Asignando...",
+    "assignUsers": "Asignar {{count}} Usuario",
+    "assignUsers_plural": "Asignar {{count}} Usuarios"
+  },
+  "addClient": {
+    "headers": {
+      "addClient": "Agregar Cliente",
+      "editClient": "Editar Cliente"
+    },
+    "labels": {
+      "clientName": "Nombre del Cliente*",
+      "displayName": "Nombre para Mostrar",
+      "mobileNumber": "Número de Móvil",
+      "whatsappNumber": "Número de WhatsApp",
+      "email": "Correo Electrónico",
+      "notes": "Notas"
+    },
+    "placeholders": {
+      "clientName": "Ej. Juan Pérez",
+      "displayName": "Ej. Juan Pérez",
+      "mobileNumber": "Ej. 1234567890",
+      "whatsappNumber": "Ej. 1234567890",
+      "email": "Ej. correo@ejemplo.com",
+      "notes": "Agregar notas adicionales"
+    },
+    "buttons": {
+      "submit": "Enviar"
+    },
+    "errors": {
+      "clientNameRequired": "El nombre del cliente es obligatorio",
+      "provideValidClientName": "Por favor proporcione un nombre de cliente válido",
+      "addError": "Error al agregar cliente",
+      "updateError": "Error al actualizar cliente",
+      "unexpectedError": "Ocurrió un error inesperado"
+    },
+    "success": {
+      "clientAdded": "Cliente agregado exitosamente",
+      "clientUpdated": "Cliente actualizado exitosamente"
+    }
+  },
+  "groupsToggle": {
+    "labels": {
+      "selectGroups": "Seleccionar Grupos"
+    },
+    "placeholders": {
+      "searchGroups": "Buscar grupos..."
+    },
+    "buttons": {
+      "addGroup": "Agregar Grupo",
+      "more": "Más",
+      "showLess": "Mostrar Menos"
+    },
+    "errors": {
+      "groupNameRequired": "El nombre del grupo es obligatorio",
+      "addGroupFailed": "Error al agregar grupo",
+      "tryAgain": "Por favor inténtelo de nuevo",
+      "unexpectedError": "Ocurrió un error inesperado"
+    },
+    "success": {
+      "groupAdded": "Grupo agregado exitosamente"
+    }
+  },
+  "messagePreview": {
+    "headers": {
+      "messagePreview": "Vista Previa del Mensaje"
+    },
+    "labels": {
+      "messagePreview": "Vista Previa del Mensaje",
+      "sendingTo": "Enviando a",
+      "template": "Plantilla",
+      "messageContent": "Contenido del Mensaje",
+      "recipientInformation": "Información del Destinatario",
+      "whatsapp": "WhatsApp",
+      "email": "Correo Electrónico",
+      "phone": "Teléfono"
+    },
+    "options": {
+      "sendViaWhatsapp": "Enviar por WhatsApp",
+      "sendViaEmail": "Enviar por Correo",
+      "sendViaSms": "Enviar por SMS"
+    },
+    "errors": {
+      "error": "Error",
+      "whatsappNotAvailable": "Número de WhatsApp no disponible para este cliente.",
+      "whatsappOpenFailed": "Error al abrir WhatsApp. Por favor asegúrese de que WhatsApp esté instalado.",
+      "emailNotAvailable": "Dirección de correo no disponible para este cliente.",
+      "emailOpenFailed": "Error al abrir la aplicación de correo.",
+      "phoneNotAvailable": "Número de teléfono no disponible para este cliente.",
+      "smsOpenFailed": "Error al abrir la aplicación de SMS.",
+      "noWhatsappNumber": "No hay número de WhatsApp disponible",
+      "noEmailAddress": "No hay dirección de correo disponible",
+      "noPhoneNumber": "No hay número de teléfono disponible"
+    },
+    "emailSubject": "Mensaje del Agente"
+  },
+  "messageTemplate": {
+    "headers": {
+      "selectTemplate": "Seleccionar Plantilla de Mensaje"
+    },
+    "errors": {
+      "fetchFailed": "Error al obtener plantillas de contenido",
+      "loadingError": "Error al cargar plantillas de contenido"
+    }
+  },
+  "contentTemplate": {
+    "labels": {
+      "by": "por",
+      "created": "Creado"
+    },
+    "errors": {
+      "invalidDate": "Fecha inválida"
+    },
+    "emptyState": {
+      "title": "No hay Plantillas de Contenido",
+      "subtitle": "Aún no has creado ninguna plantilla de contenido."
+    },
+    "header": {
+      "templatesFound": "{{count}} plantilla encontrada",
+      "templatesFound_plural": "{{count}} plantillas encontradas"
+    },
+    "loading": {
+      "loadingTemplates": "Cargando plantillas de contenido...",
+      "loadingMore": "Cargando más..."
     }
   }
 }

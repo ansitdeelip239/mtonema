@@ -1,13 +1,14 @@
 import React from 'react';
 import {View, Text, StyleSheet, Linking, TouchableOpacity} from 'react-native';
 import {Client} from '../../../../types';
-import {formatDate} from '../../../../utils/dateUtils';
+import {formatLocalizedTime} from '../../../../utils/dateUtils';
 import GroupBadges from './GroupBadge';
 import {ClientStackParamList} from '../../../../navigator/components/ClientScreenStack';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import GetIcon from '../../../../components/GetIcon';
 import {getPastelColor} from '../../../../utils/getPastelColor';
 import {formatWhatsappNumber} from '../../../../utils/phoneUtils';
+import { useTranslation } from 'react-i18next';
 
 interface ClientCardProps {
   client: Client;
@@ -28,6 +29,8 @@ export const ClientCard: React.FC<ClientCardProps> = ({
   navigation,
   onContactPress,
 }) => {
+  const {t, i18n} = useTranslation();
+
   const handleWhatsapp = () => {
     const number = formatWhatsappNumber(client.whatsappNumber);
     Linking.openURL(`https://api.whatsapp.com/send?phone=${number}`);
@@ -76,14 +79,14 @@ export const ClientCard: React.FC<ClientCardProps> = ({
                   const isNewClient = createdDate > oneDayAgo;
                   return isNewClient ? (
                     <View style={[styles.statusBadge, styles.newStatus]}>
-                      <Text style={styles.statusText}>New</Text>
+                      <Text style={styles.statusText}>{t('clientCard.new')}</Text>
                     </View>
                   ) : null;
                 })()}
                 <Text style={styles.timeText}>
                   {client.lastActivityDate
-                    ? formatDate(client.lastActivityDate, 'h:mm a')
-                    : formatDate(client.createdOn, 'h:mm a')}
+                    ? formatLocalizedTime(client.lastActivityDate, i18n.language, t)
+                    : formatLocalizedTime(client.createdOn, i18n.language, t)}
                 </Text>
               </View>
             </View>
@@ -119,7 +122,7 @@ export const ClientCard: React.FC<ClientCardProps> = ({
           {/* Assigned Team Members - Compact version */}
           {client.assignedTeamIds && client.assignedTeamIds.length > 0 && (
             <View style={styles.assignedContainer}>
-              <Text style={styles.assignedLabel}>Assigned:</Text>
+              <Text style={styles.assignedLabel}>{t('clientCard.assigned')}</Text>
               <View style={styles.assignedBadgesWrapper}>
                 {client.assignedTeamIds.map(member => (
                   <View key={member.id} style={styles.assignedBadge}>

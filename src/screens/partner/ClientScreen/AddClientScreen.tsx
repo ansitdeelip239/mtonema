@@ -9,6 +9,7 @@ import {
   Keyboard,
 } from 'react-native';
 import { Button } from 'react-native-paper';
+import { useTranslation } from 'react-i18next';
 import { ClientForm } from '../../../types';
 import { MaterialTextInput } from '../../../components/MaterialTextInput';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
@@ -36,6 +37,7 @@ const AddClientScreen: React.FC<Props> = ({ navigation, route }) => {
   const { user } = useAuth();
   const { theme } = useTheme();
   const { showError } = useDialog();
+  const { t } = useTranslation();
 
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
 
@@ -120,9 +122,9 @@ const AddClientScreen: React.FC<Props> = ({ navigation, route }) => {
         if (!cleanedData.clientName) {
           setFieldErrors(prev => ({
             ...prev,
-            clientName: 'Client name is required',
+            clientName: t('addClient.errors.clientNameRequired', 'Client name is required'),
           }));
-          showError('Please provide a valid Client Name');
+          showError(t('addClient.errors.provideValidClientName', 'Please provide a valid Client Name'));
           return;
         }
 
@@ -136,7 +138,7 @@ const AddClientScreen: React.FC<Props> = ({ navigation, route }) => {
               ...prev,
               clientName: validationError.errors[0].message,
             }));
-            showError('Please provide a valid Client Name');
+            showError(t('addClient.errors.provideValidClientName', 'Please provide a valid Client Name'));
             return;
           }
         }
@@ -148,22 +150,22 @@ const AddClientScreen: React.FC<Props> = ({ navigation, route }) => {
           Toast.show({
             type: 'success',
             text1: editMode
-              ? 'Client updated successfully'
-              : 'Client added successfully',
+              ? t('addClient.success.clientUpdated', 'Client updated successfully')
+              : t('addClient.success.clientAdded', 'Client added successfully'),
           });
           setClientsUpdated(prev => !prev);
           navigation.goBack();
         } else {
           Toast.show({
             type: 'error',
-            text1: editMode ? 'Error updating client' : 'Error adding client',
+            text1: editMode ? t('addClient.errors.updateError', 'Error updating client') : t('addClient.errors.addError', 'Error adding client'),
           });
         }
       } catch (err) {
         console.error('Error in onSubmit:', err);
         Toast.show({
           type: 'error',
-          text1: 'An unexpected error occurred',
+          text1: t('addClient.errors.unexpectedError', 'An unexpected error occurred'),
         });
       }
     },
@@ -208,7 +210,7 @@ const AddClientScreen: React.FC<Props> = ({ navigation, route }) => {
       {
         Platform.OS === 'android' && (
           <Header<PartnerDrawerParamList>
-            title={editMode ? 'Edit Client' : 'Add Client'}
+            title={editMode ? t('addClient.headers.editClient', 'Edit Client') : t('addClient.headers.addClient', 'Add Client')}
             backButton={true}
             navigation={navigation}
           />
@@ -228,58 +230,58 @@ const AddClientScreen: React.FC<Props> = ({ navigation, route }) => {
             <View style={styles.formContainer}>
               <MaterialTextInput<ClientForm>
                 style={styles.input}
-                label="Client Name*"
+                label={t('addClient.labels.clientName', 'Client Name*')}
                 field="clientName"
                 formInput={formInput}
                 setFormInput={handleFieldChange}
                 mode="outlined"
-                placeholder="Eg. John Doe"
+                placeholder={t('addClient.placeholders.clientName', 'Eg. John Doe')}
                 errorMessage={fieldErrors.clientName}
               />
 
               <MaterialTextInput<ClientForm>
                 style={styles.input}
-                label="Display Name"
+                label={t('addClient.labels.displayName', 'Display Name')}
                 field="displayName"
                 formInput={formInput}
                 setFormInput={handleFieldChange}
                 mode="outlined"
-                placeholder="Eg. John Doe"
+                placeholder={t('addClient.placeholders.displayName', 'Eg. John Doe')}
                 errorMessage={fieldErrors.displayName}
               />
 
               <MaterialTextInput<ClientForm>
                 style={styles.input}
-                label="Mobile Number"
+                label={t('addClient.labels.mobileNumber', 'Mobile Number')}
                 field="mobileNumber"
                 formInput={formInput}
                 setFormInput={handleFieldChange}
                 mode="outlined"
-                placeholder="Eg. 1234567890"
+                placeholder={t('addClient.placeholders.mobileNumber', 'Eg. 1234567890')}
                 keyboardType="number-pad"
                 errorMessage={fieldErrors.mobileNumber}
               />
 
               <MaterialTextInput<ClientForm>
                 style={styles.input}
-                label="WhatsApp Number"
+                label={t('addClient.labels.whatsappNumber', 'WhatsApp Number')}
                 field="whatsappNumber"
                 formInput={formInput}
                 setFormInput={handleFieldChange}
                 mode="outlined"
-                placeholder="Eg. 1234567890"
+                placeholder={t('addClient.placeholders.whatsappNumber', 'Eg. 1234567890')}
                 keyboardType="number-pad"
                 errorMessage={fieldErrors.whatsappNumber}
               />
 
               <MaterialTextInput<ClientForm>
                 style={styles.input}
-                label="Email"
+                label={t('addClient.labels.email', 'Email')}
                 field="emailId"
                 formInput={formInput}
                 setFormInput={handleFieldChange}
                 mode="outlined"
-                placeholder="Eg. email@example.com"
+                placeholder={t('addClient.placeholders.email', 'Eg. email@example.com')}
                 keyboardType="email-address"
                 autoCapitalize="none"
                 errorMessage={fieldErrors.emailId}
@@ -292,12 +294,12 @@ const AddClientScreen: React.FC<Props> = ({ navigation, route }) => {
 
               <MaterialTextInput<ClientForm>
                 style={styles.input}
-                label="Notes"
+                label={t('addClient.labels.notes', 'Notes')}
                 field="notes"
                 formInput={formInput}
                 setFormInput={handleFieldChange}
                 mode="outlined"
-                placeholder="Add additional notes"
+                placeholder={t('addClient.placeholders.notes', 'Add additional notes')}
                 multiline
                 numberOfLines={4}
                 onFocus={() => scrollToEnd()}
@@ -310,7 +312,7 @@ const AddClientScreen: React.FC<Props> = ({ navigation, route }) => {
               buttonColor={theme.primaryColor}
               textColor="white"
               loading={formLoading}>
-              Submit
+              {t('addClient.buttons.submit', 'Submit')}
             </Button>
           </ScrollView>
         </TouchableWithoutFeedback>

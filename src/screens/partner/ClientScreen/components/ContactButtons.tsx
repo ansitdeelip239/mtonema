@@ -1,5 +1,6 @@
 import React from 'react';
 import {View, Text, TouchableOpacity, StyleSheet} from 'react-native';
+import {useTranslation} from 'react-i18next';
 import GetIcon from '../../../../components/GetIcon';
 import {Client} from '../../../../types';
 
@@ -12,6 +13,7 @@ const ContactButtons: React.FC<ContactButtonsProps> = ({
   client,
   handleContact,
 }) => {
+  const {t} = useTranslation();
   if (!client.mobileNumber && !client.whatsappNumber && !client.emailId) {
     return null;
   }
@@ -24,7 +26,7 @@ const ContactButtons: React.FC<ContactButtonsProps> = ({
           style={styles.contactButton}
           onPress={() => handleContact('phone')}>
           <GetIcon iconName="phone" size="24" color="#0066cc" />
-          <Text style={styles.contactText}>Call</Text>
+          <Text style={styles.contactText}>{t('common.actions.call', 'Call')}</Text>
         </TouchableOpacity>
       )}
       {client.whatsappNumber && (
@@ -33,7 +35,7 @@ const ContactButtons: React.FC<ContactButtonsProps> = ({
           style={styles.contactButton}
           onPress={() => handleContact('whatsapp')}>
           <GetIcon iconName="whatsapp" size="24" color="#0066cc" />
-          <Text style={styles.contactText}>WhatsApp</Text>
+          <Text style={styles.contactText}>{t('common.labels.whatsapp', 'WhatsApp')}</Text>
         </TouchableOpacity>
       )}
       {client.emailId && (
@@ -42,7 +44,7 @@ const ContactButtons: React.FC<ContactButtonsProps> = ({
           style={styles.contactButton}
           onPress={() => handleContact('email')}>
           <GetIcon iconName="contactus" size="24" color="#0066cc" />
-          <Text style={styles.contactText}>Email</Text>
+          <Text style={styles.contactText}>{t('common.labels.email', 'Email')}</Text>
         </TouchableOpacity>
       )}
     </View>

@@ -1,5 +1,6 @@
 import React from 'react';
 import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
+import { useTranslation } from 'react-i18next';
 import GetIcon from '../../../../components/GetIcon';
 import {ContentTemplate} from '../../../../types';
 
@@ -14,6 +15,8 @@ const ContentTemplateCard: React.FC<ContentTemplateCardProps> = ({
   onPress,
   onEdit,
 }) => {
+  const { t } = useTranslation();
+
   // Format date
   const formatDate = (dateString: string) => {
     try {
@@ -24,7 +27,7 @@ const ContentTemplateCard: React.FC<ContentTemplateCardProps> = ({
         day: 'numeric',
       });
     } catch {
-      return 'Invalid date';
+      return t('contentTemplate.errors.invalidDate', 'Invalid date');
     }
   };
 
@@ -38,7 +41,9 @@ const ContentTemplateCard: React.FC<ContentTemplateCardProps> = ({
           <Text style={styles.templateName} numberOfLines={1}>
             {item.name}
           </Text>
-          <Text style={styles.templateCreator}>by {item.creatorName}</Text>
+          <Text style={styles.templateCreator}>
+            {t('contentTemplate.labels.by', 'by')} {item.creatorName}
+          </Text>
         </View>
         <View style={styles.templateActions}>
           {/* <TouchableOpacity
@@ -65,7 +70,7 @@ const ContentTemplateCard: React.FC<ContentTemplateCardProps> = ({
 
       <View style={styles.templateFooter}>
         <Text style={styles.templateDate}>
-          Created: {formatDate(item.createdOn)}
+          {t('contentTemplate.labels.created', 'Created')}: {formatDate(item.createdOn)}
         </Text>
         <View
           style={[

@@ -9,6 +9,7 @@ import {ClientActivityDataModel} from '../../../../types';
 import GetIcon from '../../../../components/GetIcon';
 import ConfirmationModal from '../../../../components/ConfirmationModal';
 import {useTheme} from '../../../../context/ThemeProvider';
+import { useTranslation } from 'react-i18next';
 
 interface AddActivityModalProps {
   visible: boolean;
@@ -47,6 +48,7 @@ const AddActivityModal: React.FC<AddActivityModalProps> = ({
   const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false);
   const {masterData} = useMaster();
   const {theme} = useTheme();
+  const {t} = useTranslation();
 
   useEffect(() => {
     if (!visible) {
@@ -139,7 +141,7 @@ const AddActivityModal: React.FC<AddActivityModalProps> = ({
           <View style={styles.modalContent}>
             <View style={styles.modalHeader}>
               <Text style={styles.modalTitle}>
-                {editMode ? 'Edit Activity' : 'Add Activity'}
+                {editMode ? t('addActivityModal.editActivity') : t('addActivityModal.addActivity')}
               </Text>
               {editMode && (
                 <TouchableOpacity
@@ -151,7 +153,7 @@ const AddActivityModal: React.FC<AddActivityModalProps> = ({
             </View>
 
             <FilterOption
-              label="Select Activity Type"
+              label={t('addActivityModal.selectActivityType')}
               options={filteredActivityTypes}
               selectedValue={
                 masterData?.ActivityType.find(
@@ -162,7 +164,7 @@ const AddActivityModal: React.FC<AddActivityModalProps> = ({
             />
 
             <MaterialTextInput
-              label="Description"
+              label={t('common.labels.description')}
               field="description"
               formInput={formData}
               setFormInput={handleFormChange}
@@ -194,7 +196,7 @@ const AddActivityModal: React.FC<AddActivityModalProps> = ({
                   {color: theme.primaryColor},
                 ]}
                 onPress={onClose}>
-                Cancel
+                {t('common.actions.cancel')}
               </Button>
 
               <Button
@@ -207,7 +209,7 @@ const AddActivityModal: React.FC<AddActivityModalProps> = ({
                 onPress={handleSubmit}
                 loading={isLoading}
                 disabled={isLoading}>
-                Submit
+                {t('common.actions.submit')}
               </Button>
             </View>
           </View>
@@ -216,8 +218,8 @@ const AddActivityModal: React.FC<AddActivityModalProps> = ({
 
       <ConfirmationModal
         visible={isDeleteModalVisible}
-        title="Delete Activity"
-        message="Are you sure you want to delete this activity?"
+        title={t('addActivityModal.deleteActivity')}
+        message={t('addActivityModal.deleteActivityConfirm')}
         onConfirm={handleConfirmDelete}
         onCancel={() => setIsDeleteModalVisible(false)}
         isLoading={isDeletingActivity}

@@ -1,5 +1,6 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
+import { useTranslation } from 'react-i18next';
 import { Client } from '../../../../types';
 
 interface ContactInfoCardProps {
@@ -7,10 +8,11 @@ interface ContactInfoCardProps {
 }
 
 const ContactInfoCard: React.FC<ContactInfoCardProps> = ({ client }) => {
+  const { t } = useTranslation();
   const contactFields = [
-    { label: 'Mobile', value: client.mobileNumber },
-    { label: 'WhatsApp', value: client.whatsappNumber },
-    { label: 'Email', value: client.emailId },
+    { label: t('common.labels.mobile'), value: client.mobileNumber },
+    { label: t('common.labels.whatsapp'), value: client.whatsappNumber },
+    { label: t('common.labels.email'), value: client.emailId },
   ].filter(field => field.value);
 
   if (contactFields.length === 0) {
@@ -19,7 +21,7 @@ const ContactInfoCard: React.FC<ContactInfoCardProps> = ({ client }) => {
 
   return (
     <View style={styles.infoCard}>
-      <Text style={styles.sectionTitle}>Contact Information</Text>
+      <Text style={styles.sectionTitle}>{t('clientProfile.contactInformation')}</Text>
       {contactFields.map(field => (
         <View key={field.label} style={styles.infoRow}>
           <Text style={styles.infoLabel} selectable>{field.label}</Text>

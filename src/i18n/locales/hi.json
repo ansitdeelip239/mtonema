@@ -7,6 +7,7 @@
       "delete": "डिलीट करें",
       "edit": "संपादित करें",
       "add": "जोड़ें",
+      "addActivity": "गतिविधि जोड़ें",
       "back": "वापस",
       "next": "जारी रखें",
       "search": "खोजें",
@@ -18,7 +19,8 @@
       "confirm": "पुष्टि करें",
       "ok": "ठीक है",
       "yes": "हाँ",
-      "no": "नहीं"
+      "no": "नहीं",
+      "call": "कॉल करें"
     },
     "states": {
       "loading": "लोड हो रहा है...",
@@ -29,13 +31,24 @@
       "success": "सफलता",
       "error": "त्रुटि",
       "empty": "कोई डेटा उपलब्ध नहीं",
-      "refreshToLoad": "अपडेट के लिए नीचे खींचें"
+      "refreshToLoad": "अपडेट के लिए नीचे खींचें",
+      "assigned": "सौंपा गया",
+      "unassigned": "असौंपित",
+      "loadingAssignments": "असाइनमेंट लोड हो रहे हैं..."
     },
     "labels": {
       "email": "ईमेल",
       "name": "नाम",
       "phone": "फोन",
-      "address": "पता"
+      "mobile": "मोबाइल",
+      "whatsapp": "व्हाट्सएप",
+      "address": "पता",
+      "description": "विवरण",
+      "groups": "समूह",
+      "notes": "नोट्स",
+      "showMore": "और दिखाएं",
+      "showLess": "कम दिखाएं",
+      "by": "द्वारा"
     }
   },
   "errors": {
@@ -63,7 +76,10 @@
     "hoursLeft": "{{hours}} घंटे",
     "minutesLeft": "{{minutes}} मिनट",
     "oneDay": "1 दिन",
-    "multipleDays": "{{days}} दिन"
+    "multipleDays": "{{days}} दिन",
+    "am": "पूर्वाह्न",
+    "pm": "अपराह्न",
+    "timeFormat": "h:mm a"
   },
   "greetings": {
     "welcome": "स्वागत है",
@@ -172,7 +188,26 @@
     "activityAddedSuccess": "गतिविधि सफलतापूर्वक जोड़ी गई",
     "failedToAddActivity": "गतिविधि जोड़ने में असफल",
     "loading": "ग्राहक लोड हो रहे हैं...",
-    "searching": "ग्राहकों की खोज कर रहे हैं..."
+    "searching": "ग्राहकों की खोज कर रहे हैं...",
+    "plural": "",
+    "edit": "संपादित करें"
+  },
+  "clientCard": {
+    "new": "नया",
+    "assigned": "निर्दिष्ट:"
+  },
+  "filterDrawer": {
+    "title": "क्रमबद्ध करें और फ़िल्टर करें",
+    "sortDirection": "क्रम दिशा",
+    "sortBy": "इसके अनुसार क्रमबद्ध करें",
+    "ascending": "आरोही",
+    "descending": "अवरोही",
+    "createdDate": "निर्माण तिथि",
+    "createdDateDescription": "ग्राहक जोड़े जाने के समय के अनुसार क्रमबद्ध करें",
+    "lastActivityDate": "अंतिम गतिविधि तिथि",
+    "lastActivityDateDescription": "सबसे हालिया गतिविधि के अनुसार क्रमबद्ध करें",
+    "cancel": "रद्द करें",
+    "apply": "लागू करें"
   },
   "language": {
     "selectLanguage": "भाषा चुनें",
@@ -196,6 +231,183 @@
       "zero": "कोई फॉलो-अप्स नहीं",
       "one": "{{count}} फॉलो-अप",
       "other": "{{count}} फॉलो-अप्स"
+    }
+  },
+  "addActivityModal": {
+    "addActivity": "गतिविधि जोड़ें",
+    "editActivity": "गतिविधि संपादित करें",
+    "selectActivityType": "गतिविधि प्रकार चुनें",
+    "deleteActivity": "गतिविधि हटाएं",
+    "deleteActivityConfirm": "क्या आप वाकई इस गतिविधि को हटाना चाहते हैं?"
+  },
+  "clientProfile": {
+    "title": "ग्राहक प्रोफ़ाइल",
+    "edit": "संपादित करें",
+    "delete": "हटाएं",
+    "sendQuickResponse": "त्वरित प्रतिक्रिया भेजें",
+    "duplicateClientFound": "डुप्लिकेट ग्राहक मिला",
+    "deleteClient": "ग्राहक हटाएं",
+    "deleteClientConfirm": "क्या आप वाकई इस ग्राहक को हटाना चाहते हैं?",
+    "activityDeleted": "गतिविधि सफलतापूर्वक हटा दी गई",
+    "clientDeleted": "ग्राहक सफलतापूर्वक हटा दिया गया",
+    "activityAddedRescheduled": "गतिविधि जोड़ी गई और फॉलो-अप को 1 दिन बाद के लिए पुनर्निर्धारित किया गया",
+    "activityAddedRescheduleFailed": "गतिविधि जोड़ी गई लेकिन फॉलो-अप को पुनर्निर्धारित नहीं किया जा सका",
+    "activityAddedCompleted": "गतिविधि जोड़ी गई और फॉलो-अप को पूरा के रूप में चिह्नित किया गया",
+    "activityAddedUpdateFailed": "गतिविधि जोड़ी गई लेकिन फॉलो-अप की स्थिति अपडेट नहीं की जा सकी",
+    "activityUpdated": "गतिविधि सफलतापूर्वक अपडेट की गई",
+    "activityAdded": "गतिविधि सफलतापूर्वक जोड़ी गई",
+    "followUpScheduled": "फॉलो-अप सफलतापूर्वक निर्धारित किया गया",
+    "followUpRemoved": "फॉलो-अप सफलतापूर्वक हटा दिया गया",
+    "fetchClientFailed": "ग्राहक डेटा प्राप्त करने में विफल",
+    "fetchFollowUpFailed": "फॉलो-अप तिथि प्राप्त करने में विफल",
+    "fetchAssignedUsersFailed": "निर्दिष्ट उपयोगकर्ताओं को प्राप्त करने में विफल",
+    "deleteActivityFailed": "गतिविधि हटाने में विफल",
+    "deleteClientFailed": "ग्राहक हटाने में विफल",
+    "scheduleFollowUpFailed": "फॉलो-अप निर्धारित करने में विफल",
+    "removeFollowUpFailed": "फॉलो-अप हटाने में विफल",
+    "assignedTo": "को सौंपा गया",
+    "noUsersAssigned": "कोई उपयोगकर्ता सौंपा नहीं गया",
+    "contactInformation": "संपर्क जानकारी",
+    "recentActivities": "हाल की गतिविधियाँ",
+    "noActivitiesYet": "अभी तक कोई गतिविधियाँ नहीं"
+  },
+  "clientAssignment": {
+    "title": "क्लाइंट असाइनमेंट",
+    "assignTeamMembers": "टीम सदस्यों को असाइन करें",
+    "selectTeamMembers": "इस क्लाइंट को असाइन करने के लिए टीम सदस्यों का चयन करें",
+    "usersSelected": "{{count}} उपयोगकर्ता चयनित",
+    "usersSelected_plural": "{{count}} उपयोगकर्ता चयनित",
+    "noTeamMembersFound": "कोई टीम सदस्य नहीं मिला",
+    "loadingTeamMembers": "टीम सदस्य लोड हो रहे हैं...",
+    "userEmailNotAvailable": "उपयोगकर्ता ईमेल उपलब्ध नहीं है",
+    "fetchTeamMembersFailed": "टीम सदस्यों को प्राप्त करने में विफल",
+    "errorLoadingTeamMembers": "टीम सदस्यों को लोड करने में त्रुटि",
+    "usersAssignedSuccessfully": "उपयोगकर्ता सफलतापूर्वक असाइन किए गए",
+    "assignUsersFailed": "उपयोगकर्ताओं को असाइन करने में विफल",
+    "errorAssigningUsers": "उपयोगकर्ताओं को असाइन करने में त्रुटि",
+    "assigning": "असाइन किया जा रहा है...",
+    "assignUsers": "{{count}} उपयोगकर्ता असाइन करें",
+    "assignUsers_plural": "{{count}} उपयोगकर्ता असाइन करें"
+  },
+  "addClient": {
+    "headers": {
+      "addClient": "क्लाइंट जोड़ें",
+      "editClient": "क्लाइंट संपादित करें"
+    },
+    "labels": {
+      "clientName": "क्लाइंट का नाम*",
+      "displayName": "प्रदर्शित नाम",
+      "mobileNumber": "मोबाइल नंबर",
+      "whatsappNumber": "व्हाट्सएप नंबर",
+      "email": "ईमेल",
+      "notes": "नोट्स"
+    },
+    "placeholders": {
+      "clientName": "उदा. राहुल कुमार",
+      "displayName": "उदा. राहुल कुमार",
+      "mobileNumber": "उदा. 1234567890",
+      "whatsappNumber": "उदा. 1234567890",
+      "email": "उदा. email@example.com",
+      "notes": "अतिरिक्त नोट्स जोड़ें"
+    },
+    "buttons": {
+      "submit": "सबमिट करें"
+    },
+    "errors": {
+      "clientNameRequired": "क्लाइंट का नाम आवश्यक है",
+      "provideValidClientName": "कृपया एक वैध क्लाइंट नाम प्रदान करें",
+      "addError": "क्लाइंट जोड़ने में त्रुटि",
+      "updateError": "क्लाइंट अपडेट करने में त्रुटि",
+      "unexpectedError": "एक अप्रत्याशित त्रुटि हुई"
+    },
+    "success": {
+      "clientAdded": "क्लाइंट सफलतापूर्वक जोड़ा गया",
+      "clientUpdated": "क्लाइंट सफलतापूर्वक अपडेट किया गया"
+    }
+  },
+  "groupsToggle": {
+    "labels": {
+      "selectGroups": "समूह चुनें"
+    },
+    "placeholders": {
+      "searchGroups": "समूह खोजें..."
+    },
+    "buttons": {
+      "addGroup": "समूह जोड़ें",
+      "more": "अधिक",
+      "showLess": "कम दिखाएं"
+    },
+    "errors": {
+      "groupNameRequired": "समूह का नाम आवश्यक है",
+      "addGroupFailed": "समूह जोड़ने में विफल",
+      "tryAgain": "कृपया पुनः प्रयास करें",
+      "unexpectedError": "एक अप्रत्याशित त्रुटि हुई"
+    },
+    "success": {
+      "groupAdded": "समूह सफलतापूर्वक जोड़ा गया"
+    }
+  },
+  "messagePreview": {
+    "headers": {
+      "messagePreview": "संदेश पूर्वावलोकन"
+    },
+    "labels": {
+      "messagePreview": "संदेश पूर्वावलोकन",
+      "sendingTo": "को भेजा जा रहा है",
+      "template": "टेम्प्लेट",
+      "messageContent": "संदेश सामग्री",
+      "recipientInformation": "प्राप्तकर्ता जानकारी",
+      "whatsapp": "व्हाट्सएप",
+      "email": "ईमेल",
+      "phone": "फोन"
+    },
+    "options": {
+      "sendViaWhatsapp": "व्हाट्सएप के माध्यम से भेजें",
+      "sendViaEmail": "ईमेल के माध्यम से भेजें",
+      "sendViaSms": "एसएमएस के माध्यम से भेजें"
+    },
+    "errors": {
+      "error": "त्रुटि",
+      "whatsappNotAvailable": "इस ग्राहक के लिए व्हाट्सएप नंबर उपलब्ध नहीं है।",
+      "whatsappOpenFailed": "व्हाट्सएप खोलने में विफल। कृपया सुनिश्चित करें कि व्हाट्सएप स्थापित है।",
+      "emailNotAvailable": "इस ग्राहक के लिए ईमेल पता उपलब्ध नहीं है।",
+      "emailOpenFailed": "ईमेल ऐप खोलने में विफल।",
+      "phoneNotAvailable": "इस ग्राहक के लिए फोन नंबर उपलब्ध नहीं है।",
+      "smsOpenFailed": "एसएमएस ऐप खोलने में विफल।",
+      "noWhatsappNumber": "कोई व्हाट्सएप नंबर उपलब्ध नहीं",
+      "noEmailAddress": "कोई ईमेल पता उपलब्ध नहीं",
+      "noPhoneNumber": "कोई फोन नंबर उपलब्ध नहीं"
+    },
+    "emailSubject": "एजेंट से संदेश"
+  },
+  "messageTemplate": {
+    "headers": {
+      "selectTemplate": "संदेश टेम्प्लेट चुनें"
+    },
+    "errors": {
+      "fetchFailed": "सामग्री टेम्प्लेट प्राप्त करने में विफल",
+      "loadingError": "सामग्री टेम्प्लेट लोड करने में त्रुटि"
+    }
+  },
+  "contentTemplate": {
+    "labels": {
+      "by": "द्वारा",
+      "created": "बनाया गया"
+    },
+    "errors": {
+      "invalidDate": "अमान्य तारीख"
+    },
+    "emptyState": {
+      "title": "कोई सामग्री टेम्प्लेट नहीं",
+      "subtitle": "आपने अभी तक कोई सामग्री टेम्प्लेट नहीं बनाया है।"
+    },
+    "header": {
+      "templatesFound": "{{count}} टेम्प्लेट मिला",
+      "templatesFound_plural": "{{count}} टेम्प्लेट मिले"
+    },
+    "loading": {
+      "loadingTemplates": "सामग्री टेम्प्लेट लोड हो रहे हैं...",
+      "loadingMore": "अधिक लोड हो रहे हैं..."
     }
   }
 }

@@ -14,6 +14,7 @@ import {
 } from 'react-native-gesture-handler';
 import GetIcon from '../../../../components/GetIcon';
 import {useTheme} from '../../../../context/ThemeProvider';
+import { useTranslation } from 'react-i18next';
 
 interface FilterDrawerProps {
   visible: boolean;
@@ -34,6 +35,7 @@ const FilterDrawer: React.FC<FilterDrawerProps> = ({
   onFilterChange,
 }) => {
   const {theme} = useTheme();
+  const {t} = useTranslation();
   const fadeAnim = useRef(new Animated.Value(0)).current;
   const slideAnim = useRef(new Animated.Value(500)).current;
   const gestureTranslateY = useRef(new Animated.Value(0)).current;
@@ -214,7 +216,7 @@ const FilterDrawer: React.FC<FilterDrawerProps> = ({
 
             {/* Header */}
             <View style={styles.header}>
-              <Text style={styles.title}>Sort & Filter</Text>
+              <Text style={styles.title}>{t('filterDrawer.title')}</Text>
               <TouchableOpacity
                 onPress={handleCancel}
                 style={styles.closeButton}>
@@ -224,7 +226,7 @@ const FilterDrawer: React.FC<FilterDrawerProps> = ({
 
             {/* Sort Direction */}
             <View style={styles.section}>
-              <Text style={styles.sectionTitle}>Sort Direction</Text>
+              <Text style={styles.sectionTitle}>{t('filterDrawer.sortDirection')}</Text>
               <TouchableOpacity
                 style={[
                   styles.directionButton,
@@ -239,14 +241,14 @@ const FilterDrawer: React.FC<FilterDrawerProps> = ({
                   size={20}
                 />
                 <Text style={styles.directionText}>
-                  {tempSortDirection === 'asc' ? 'Ascending' : 'Descending'}
+                  {tempSortDirection === 'asc' ? t('filterDrawer.ascending') : t('filterDrawer.descending')}
                 </Text>
               </TouchableOpacity>
             </View>
 
             {/* Sort By Options */}
             <View style={styles.section}>
-              <Text style={styles.sectionTitle}>Sort By</Text>
+              <Text style={styles.sectionTitle}>{t('filterDrawer.sortBy')}</Text>
 
               <TouchableOpacity
                 style={[
@@ -264,9 +266,9 @@ const FilterDrawer: React.FC<FilterDrawerProps> = ({
                     size={20}
                   />
                   <View style={styles.optionText}>
-                    <Text style={styles.optionTitle}>Created Date</Text>
+                    <Text style={styles.optionTitle}>{t('filterDrawer.createdDate')}</Text>
                     <Text style={styles.optionSubtitle}>
-                      Sort by when client was added
+                      {t('filterDrawer.createdDateDescription')}
                     </Text>
                   </View>
                 </View>
@@ -295,9 +297,9 @@ const FilterDrawer: React.FC<FilterDrawerProps> = ({
                     size={20}
                   />
                   <View style={styles.optionText}>
-                    <Text style={styles.optionTitle}>Last Activity Date</Text>
+                    <Text style={styles.optionTitle}>{t('filterDrawer.lastActivityDate')}</Text>
                     <Text style={styles.optionSubtitle}>
-                      Sort by most recent activity
+                      {t('filterDrawer.lastActivityDateDescription')}
                     </Text>
                   </View>
                 </View>
@@ -316,7 +318,7 @@ const FilterDrawer: React.FC<FilterDrawerProps> = ({
               <TouchableOpacity
                 style={[styles.button, styles.cancelButton]}
                 onPress={handleCancel}>
-                <Text style={styles.cancelButtonText}>Cancel</Text>
+                <Text style={styles.cancelButtonText}>{t('filterDrawer.cancel')}</Text>
               </TouchableOpacity>
 
               <TouchableOpacity
@@ -326,7 +328,7 @@ const FilterDrawer: React.FC<FilterDrawerProps> = ({
                   {backgroundColor: theme.primaryColor},
                 ]}
                 onPress={handleApply}>
-                <Text style={styles.applyButtonText}>Apply</Text>
+                <Text style={styles.applyButtonText}>{t('filterDrawer.apply')}</Text>
               </TouchableOpacity>
             </View>
           </Animated.View>

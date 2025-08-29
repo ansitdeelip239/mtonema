@@ -1,5 +1,6 @@
 import React from 'react';
 import {View, Text, StyleSheet, ActivityIndicator} from 'react-native';
+import { useTranslation } from 'react-i18next';
 import Colors from '../../../../constants/Colors';
 
 interface ContentLoadingIndicatorProps {
@@ -11,12 +12,14 @@ const ContentLoadingIndicator: React.FC<ContentLoadingIndicatorProps> = ({
   type,
   text,
 }) => {
+  const { t } = useTranslation();
+
   if (type === 'initial') {
     return (
       <View style={styles.loadingContainer}>
         <ActivityIndicator size="large" color={Colors.MT_PRIMARY_1} />
         <Text style={styles.loadingText}>
-          {text || 'Loading content templates...'}
+          {text || t('contentTemplate.loading.loadingTemplates', 'Loading content templates...')}
         </Text>
       </View>
     );
@@ -25,7 +28,9 @@ const ContentLoadingIndicator: React.FC<ContentLoadingIndicatorProps> = ({
   return (
     <View style={styles.loadingMoreContainer}>
       <ActivityIndicator size="small" color={Colors.MT_PRIMARY_1} />
-      <Text style={styles.loadingMoreText}>{text || 'Loading more...'}</Text>
+      <Text style={styles.loadingMoreText}>
+        {text || t('contentTemplate.loading.loadingMore', 'Loading more...')}
+      </Text>
     </View>
   );
 };

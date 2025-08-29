@@ -10,6 +10,7 @@ import {
   Alert,
   Platform,
 } from 'react-native';
+import { useTranslation } from 'react-i18next';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { ClientStackParamList } from '../../../navigator/components/ClientScreenStack';
 import Header from '../../../components/Header';
@@ -54,6 +55,7 @@ const MessagePreviewScreen: React.FC<Props> = ({ route, navigation }) => {
 
   const { user } = useAuth();
   const { setClientsUpdated } = usePartner();
+  const { t } = useTranslation();
 
   // Hide bottom tabs when this screen is focused
   useFocusEffect(
@@ -69,7 +71,10 @@ const MessagePreviewScreen: React.FC<Props> = ({ route, navigation }) => {
   const handleWhatsAppLink = useCallback(
     async (content: string) => {
       if (!clientWhatsapp) {
-        Alert.alert('Error', 'WhatsApp number not available for this client.');
+        Alert.alert(
+          t('messagePreview.errors.error', 'Error'),
+          t('messagePreview.errors.whatsappNotAvailable', 'WhatsApp number not available for this client.')
+        );
         return;
       }
 
@@ -99,24 +104,27 @@ const MessagePreviewScreen: React.FC<Props> = ({ route, navigation }) => {
       } catch (error) {
         console.error('Error opening WhatsApp:', error);
         Alert.alert(
-          'Error',
-          'Failed to open WhatsApp. Please make sure WhatsApp is installed.',
+          t('messagePreview.errors.error', 'Error'),
+          t('messagePreview.errors.whatsappOpenFailed', 'Failed to open WhatsApp. Please make sure WhatsApp is installed.')
         );
       }
     },
-    [clientWhatsapp, clientId, messageContent, user?.email, setClientsUpdated],
+    [clientWhatsapp, clientId, messageContent, user?.email, setClientsUpdated, t],
   );
 
   // Handle Email deep linking
   const handleEmailLink = useCallback(
     async (content: string) => {
       if (!clientEmail) {
-        Alert.alert('Error', 'Email address not available for this client.');
+        Alert.alert(
+          t('messagePreview.errors.error', 'Error'),
+          t('messagePreview.errors.emailNotAvailable', 'Email address not available for this client.')
+        );
         return;
       }
 
       try {
-        const subject = 'Message from Agent';
+        const subject = t('messagePreview.emailSubject', 'Message from Agent');
         const emailUrl = `mailto:${clientEmail}?subject=${encodeURIComponent(
           subject,
         )}&body=${encodeURIComponent(content)}`;
@@ -124,17 +132,23 @@ const MessagePreviewScreen: React.FC<Props> = ({ route, navigation }) => {
         await Linking.openURL(emailUrl);
       } catch (error) {
         console.error('Error opening email:', error);
-        Alert.alert('Error', 'Failed to open email app.');
+        Alert.alert(
+          t('messagePreview.errors.error', 'Error'),
+          t('messagePreview.errors.emailOpenFailed', 'Failed to open email app.')
+        );
       }
     },
-    [clientEmail],
+    [clientEmail, t],
   );
 
   // Handle SMS deep linking
   const handleSMSLink = useCallback(
     async (content: string) => {
       if (!clientPhone) {
-        Alert.alert('Error', 'Phone number not available for this client.');
+        Alert.alert(
+          t('messagePreview.errors.error', 'Error'),
+          t('messagePreview.errors.phoneNotAvailable', 'Phone number not available for this client.')
+        );
         return;
       }
 
@@ -143,10 +157,13 @@ const MessagePreviewScreen: React.FC<Props> = ({ route, navigation }) => {
         await Linking.openURL(smsUrl);
       } catch (error) {
         console.error('Error opening SMS:', error);
-        Alert.alert('Error', 'Failed to open SMS app.');
+        Alert.alert(
+          t('messagePreview.errors.error', 'Error'),
+          t('messagePreview.errors.smsOpenFailed', 'Failed to open SMS app.')
+        );
       }
     },
-    [clientPhone],
+    [clientPhone, t],
   );
 
   const handleSendMessage = useCallback(
@@ -171,27 +188,27 @@ const MessagePreviewScreen: React.FC<Props> = ({ route, navigation }) => {
   const messageOptions: MessageOption[] = [
     {
       type: 'whatsapp',
-      title: 'Send via WhatsApp',
+      title: t('messagePreview.options.sendViaWhatsapp', 'Send via WhatsApp'),
       icon: 'whatsapp',
       color: '#25D366',
       available: !!clientWhatsapp,
-      unavailableReason: !clientWhatsapp ? 'No WhatsApp number available' : '',
+      unavailableReason: !clientWhatsapp ? t('messagePreview.errors.noWhatsappNumber', 'No WhatsApp number available') : '',
     },
     {
       type: 'email',
-      title: 'Send via Email',
+      title: t('messagePreview.options.sendViaEmail', 'Send via Email'),
       icon: 'email',
       color: '#4CAF50',
       available: !!clientEmail,
-      unavailableReason: !clientEmail ? 'No email address available' : '',
+      unavailableReason: !clientEmail ? t('messagePreview.errors.noEmailAddress', 'No email address available') : '',
     },
     {
       type: 'sms',
-      title: 'Send via SMS',
+      title: t('messagePreview.options.sendViaSms', 'Send via SMS'),
       icon: 'message',
       color: '#2196F3',
       available: !!clientPhone,
-      unavailableReason: !clientPhone ? 'No phone number available' : '',
+      unavailableReason: !clientPhone ? t('messagePreview.errors.noPhoneNumber', 'No phone number available') : '',
     },
   ];
 
@@ -205,7 +222,7 @@ const MessagePreviewScreen: React.FC<Props> = ({ route, navigation }) => {
       {
         Platform.OS === 'android' && (
           <Header<PartnerDrawerParamList>
-            title="Message Preview"
+            title={t('messagePreview.headers.messagePreview', 'Message Preview')}
             navigation={navigation}
             backButton={true}
           />
@@ -216,30 +233,42 @@ const MessagePreviewScreen: React.FC<Props> = ({ route, navigation }) => {
         style={styles.content}
         contentContainerStyle={styles.scrollContent}>
         <View style={styles.header}>
-          <Text style={styles.headerTitle}>Message Preview</Text>
-          <Text style={styles.headerSubtitle}>Sending to {clientName}</Text>
-          <Text style={styles.templateName}>Template: {templateName}</Text>
+          <Text style={styles.headerTitle}>{t('messagePreview.labels.messagePreview', 'Message Preview')}</Text>
+          <Text style={styles.headerSubtitle}>
+            {t('messagePreview.labels.sendingTo', 'Sending to')} {clientName}
+          </Text>
+          <Text style={styles.templateName}>
+            {t('messagePreview.labels.template', 'Template')}: {templateName}
+          </Text>
         </View>
 
         <View style={styles.messagePreviewContainer}>
-          <Text style={styles.messagePreviewLabel}>Message Content:</Text>
+          <Text style={styles.messagePreviewLabel}>
+            {t('messagePreview.labels.messageContent', 'Message Content')}:
+          </Text>
           <View style={styles.messagePreview}>
             <Text style={styles.messageContent}>{messageContent}</Text>
           </View>
         </View>
 
         <View style={styles.recipientInfo}>
-          <Text style={styles.recipientInfoTitle}>Recipient Information:</Text>
+          <Text style={styles.recipientInfoTitle}>
+            {t('messagePreview.labels.recipientInformation', 'Recipient Information')}:
+          </Text>
           {clientWhatsapp && (
             <Text style={styles.recipientInfoText}>
-              WhatsApp: {clientWhatsapp}
+              {t('messagePreview.labels.whatsapp', 'WhatsApp')}: {clientWhatsapp}
             </Text>
           )}
           {clientEmail && (
-            <Text style={styles.recipientInfoText}>Email: {clientEmail}</Text>
+            <Text style={styles.recipientInfoText}>
+              {t('messagePreview.labels.email', 'Email')}: {clientEmail}
+            </Text>
           )}
           {clientPhone && (
-            <Text style={styles.recipientInfoText}>Phone: {clientPhone}</Text>
+            <Text style={styles.recipientInfoText}>
+              {t('messagePreview.labels.phone', 'Phone')}: {clientPhone}
+            </Text>
           )}
         </View>
       </ScrollView>

@@ -1,5 +1,6 @@
 import React from 'react';
 import {View, Text, StyleSheet} from 'react-native';
+import { useTranslation } from 'react-i18next';
 import { parseHtmlToText } from '../../../../utils/parseHtmlToText';
 
 interface NotesCardProps {
@@ -7,6 +8,7 @@ interface NotesCardProps {
 }
 
 const NotesCard: React.FC<NotesCardProps> = ({notes}) => {
+  const { t } = useTranslation();
   if (!notes) {
     return null;
   }
@@ -15,7 +17,7 @@ const NotesCard: React.FC<NotesCardProps> = ({notes}) => {
 
   return (
     <View style={styles.infoCard}>
-      <Text style={styles.sectionTitle}>Notes</Text>
+      <Text style={styles.sectionTitle}>{t('common.labels.notes')}</Text>
       <Text style={styles.notesText} selectable>{parsedNotes}</Text>
     </View>
   );

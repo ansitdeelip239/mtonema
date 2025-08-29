@@ -9,6 +9,7 @@ import {
   Platform,
 } from 'react-native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { useTranslation } from 'react-i18next';
 import { ClientStackParamList } from '../../../navigator/components/ClientScreenStack';
 import Header from '../../../components/Header';
 import PartnerService from '../../../services/PartnerService';
@@ -40,10 +41,11 @@ const ClientAssignmentScreen: React.FC<Props> = ({ navigation, route }) => {
   const { showError } = useDialog();
   const { setClientsUpdated } = usePartner();
   const { theme } = useTheme();
+  const { t } = useTranslation();
 
   const fetchTeamMembers = useCallback(async () => {
     if (!user?.email) {
-      showError('User email is not available');
+      showError(t('clientAssignment.userEmailNotAvailable', 'User email is not available'));
       return;
     }
 
@@ -61,15 +63,15 @@ const ClientAssignmentScreen: React.FC<Props> = ({ navigation, route }) => {
         );
         setUsers(usersWithSelection);
       } else {
-        showError('Failed to fetch team members');
+        showError(t('clientAssignment.fetchTeamMembersFailed', 'Failed to fetch team members'));
       }
     } catch (error) {
       console.error('Error fetching team members:', error);
-      showError('Error loading team members');
+      showError(t('clientAssignment.errorLoadingTeamMembers', 'Error loading team members'));
     } finally {
       setLoading(false);
     }
-  }, [user?.email, assignedUsers, showError]);
+  }, [user?.email, assignedUsers, showError, t]);
 
   useEffect(() => {
     fetchTeamMembers();
@@ -99,18 +101,18 @@ const ClientAssignmentScreen: React.FC<Props> = ({ navigation, route }) => {
         // showSuccess('Users assigned successfully');
         Toast.show({
           type: 'success',
-          text1: 'Success',
-          text2: 'Users assigned successfully',
+          text1: t('common.states.success', 'Success'),
+          text2: t('clientAssignment.usersAssignedSuccessfully', 'Users assigned successfully'),
         });
 
         setClientsUpdated(prev => !prev);
         navigation.goBack();
       } else {
-        showError('Failed to assign users');
+        showError(t('clientAssignment.assignUsersFailed', 'Failed to assign users'));
       }
     } catch (error) {
       console.error('Error assigning users:', error);
-      showError('Error assigning users');
+      showError(t('clientAssignment.errorAssigningUsers', 'Error assigning users'));
     } finally {
       setSubmitting(false);
     }
@@ -157,7 +159,7 @@ const ClientAssignmentScreen: React.FC<Props> = ({ navigation, route }) => {
 
   const renderEmptyComponent = () => (
     <View style={styles.emptyContainer}>
-      <Text style={styles.emptyText}>No team members found</Text>
+      <Text style={styles.emptyText}>{t('clientAssignment.noTeamMembersFound', 'No team members found')}</Text>
     </View>
   );
 
@@ -167,7 +169,7 @@ const ClientAssignmentScreen: React.FC<Props> = ({ navigation, route }) => {
         {
           Platform.OS === 'android' && (
             <Header
-              title="Client Assignment"
+              title={t('clientAssignment.title', 'Client Assignment')}
               backButton={true}
               onBackPress={() => navigation.goBack()}
             />
@@ -175,7 +177,7 @@ const ClientAssignmentScreen: React.FC<Props> = ({ navigation, route }) => {
         }
         <View style={styles.loadingContainer}>
           <ActivityIndicator size="large" color={theme.primaryColor} />
-          <Text style={styles.loadingText}>Loading team members...</Text>
+          <Text style={styles.loadingText}>{t('clientAssignment.loadingTeamMembers', 'Loading team members...')}</Text>
         </View>
       </View>
     );
@@ -186,7 +188,7 @@ const ClientAssignmentScreen: React.FC<Props> = ({ navigation, route }) => {
       {
         Platform.OS === 'android' && (
           <Header
-            title="Client Assignment"
+            title={t('clientAssignment.title', 'Client Assignment')}
             backButton={true}
             onBackPress={() => navigation.goBack()}
           />
@@ -195,14 +197,15 @@ const ClientAssignmentScreen: React.FC<Props> = ({ navigation, route }) => {
 
       <View style={styles.content}>
         <View style={styles.headerSection}>
-          <Text style={styles.sectionTitle}>Assign Team Members</Text>
+          <Text style={styles.sectionTitle}>{t('clientAssignment.assignTeamMembers', 'Assign Team Members')}</Text>
           <Text style={styles.sectionSubtitle}>
-            Select team members to assign to this client
+            {t('clientAssignment.selectTeamMembers', 'Select team members to assign to this client')}
           </Text>
           {getSelectedCount() > 0 && (
             <Text style={[styles.selectedCount, { color: theme.primaryColor }]}>
-              {getSelectedCount()} user{getSelectedCount() > 1 ? 's' : ''}{' '}
-              selected
+              {t('clientAssignment.usersSelected', {
+                count: getSelectedCount(),
+              })}
             </Text>
           )}
         </View>
@@ -229,12 +232,13 @@ const ClientAssignmentScreen: React.FC<Props> = ({ navigation, route }) => {
             {submitting ? (
               <>
                 <ActivityIndicator size="small" color="white" />
-                <Text style={styles.submitButtonText}>Assigning...</Text>
+                <Text style={styles.submitButtonText}>{t('clientAssignment.assigning', 'Assigning...')}</Text>
               </>
             ) : (
               <Text style={styles.submitButtonText}>
-                Assign {getSelectedCount()} User
-                {getSelectedCount() !== 1 ? 's' : ''}
+                {t('clientAssignment.assignUsers', {
+                  count: getSelectedCount(),
+                })}
               </Text>
             )}
           </TouchableOpacity>

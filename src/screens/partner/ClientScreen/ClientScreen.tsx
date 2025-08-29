@@ -263,7 +263,7 @@ const ClientScreen: React.FC<Props> = ({navigation}) => {
               navigation.navigate('AddClientScreen', {editMode: false});
             }}>
             <Text style={styles.buttonText}>
-              {t('clients.addClient', 'Add Client')}
+              {t('clients.add', 'Add Client')}
             </Text>
           </TouchableOpacity>
         </Header>
@@ -275,7 +275,7 @@ const ClientScreen: React.FC<Props> = ({navigation}) => {
           <GetIcon iconName="filter" size={16} color={theme.primaryColor} />
           <Text style={[styles.filterText, {color: theme.primaryColor}]}>
             {t(
-              'clients.showingClientsFrom',
+              'clients.showingFrom',
               'Showing clients from',
             )}{' '}
             {selectedPartnerIds.length}{' '}
@@ -302,7 +302,7 @@ const ClientScreen: React.FC<Props> = ({navigation}) => {
         <View style={styles.searchContainer}>
           <SearchHeader
             placeholder={t(
-              'clients.searchPlaceholder',
+              'clients.search',
               'Search Clients...',
             )}
             onSearch={handleSearchWithLoading}

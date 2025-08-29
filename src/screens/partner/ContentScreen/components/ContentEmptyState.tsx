@@ -1,14 +1,19 @@
 import React from 'react';
 import {View, Text, StyleSheet} from 'react-native';
+import { useTranslation } from 'react-i18next';
 import GetIcon from '../../../../components/GetIcon';
 
 const ContentEmptyState: React.FC = () => {
+  const { t } = useTranslation();
+
   return (
     <View style={styles.emptyContainer}>
       <GetIcon iconName="notes" size={64} color="#ccc" />
-      <Text style={styles.emptyTitle}>No Content Templates</Text>
+      <Text style={styles.emptyTitle}>
+        {t('contentTemplate.emptyState.title', 'No Content Templates')}
+      </Text>
       <Text style={styles.emptySubtitle}>
-        You haven't created any content templates yet.
+        {t('contentTemplate.emptyState.subtitle', 'You haven\'t created any content templates yet.')}
       </Text>
     </View>
   );
