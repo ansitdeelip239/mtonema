@@ -59,7 +59,7 @@ const PartnerPropertyForm: React.FC<PartnerPropertyFormProps> = ({
   const steps = [
     t('partnerPropertyForm.steps.basicInfo', 'Basic Info'),
     t('partnerPropertyForm.steps.propertyDetails', 'Property Details'),
-    t('partnerPropertyForm.steps.mediaSubmit', 'Media & Submit'),
+    t('partnerPropertyForm.steps.mediaAndSubmit', 'Media & Submit'),
   ];
 
   // Use the property data mapping hook
