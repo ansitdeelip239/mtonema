@@ -577,6 +577,49 @@
       "addFailed": "संपत्ति जोड़ने में विफल"
     }
   },
+  "listings": {
+    "titles": {
+      "propertyListings": "संपत्ति सूची",
+      "filterProperties": "संपत्तियाँ फ़िल्टर करें",
+      "deleteProperty": "संपत्ति हटाएँ",
+      "noPropertiesFound": "कोई संपत्तियाँ नहीं मिलीं"
+    },
+    "messages": {
+      "loadingMore": "अधिक संपत्तियाँ लोड हो रही हैं...",
+      "noProperties": "कोई संपत्तियाँ नहीं मिलीं।",
+      "deleteConfirmation": "क्या आप वाकई इस संपत्ति को हटाना चाहते हैं?",
+      "propertyDeleted": "संपत्ति हटा दी गई",
+      "deleteFailed": "संपत्ति हटाने में विफल",
+      "fetchFailed": "संपत्तियाँ प्राप्त करने में विफल",
+      "emptyState": "आपने अभी तक कोई संपत्तियाँ नहीं जोड़ी हैं। अपनी पहली संपत्ति जोड़कर शुरू करें।"
+    },
+    "placeholders": {
+      "searchByName": "नाम से खोजें..."
+    },
+    "labels": {
+      "propertyFor": "संपत्ति के लिए",
+      "status": "स्थिति",
+      "city": "शहर",
+      "featured": "विशेष",
+      "deleted": "हटाया गया",
+      "unnamedProperty": "बेनाम संपत्ति",
+      "locationNotSpecified": "स्थान निर्दिष्ट नहीं",
+      "priceOnRequest": "मूल्य पर अनुरोध",
+      "forSale": "बिक्री के लिए"
+    },
+    "buttons": {
+      "edit": "संपादित करें",
+      "delete": "हटाएँ",
+      "cancel": "रद्द करें",
+      "applyFilters": "फ़िल्टर लागू करें",
+      "clearAll": "सभी साफ़ करें",
+      "addProperty": "संपत्ति जोड़ें"
+    },
+    "accessibility": {
+      "propertyImage": "{{propertyName}} की छवि",
+      "propertyPlaceholder": "संपत्ति प्लेसहोल्डर छवि"
+    }
+  },
   "addContent": {
     "headers": {
       "newTemplate": "नया टेम्प्लेट",

@@ -641,5 +641,48 @@
       "updateFailed": "فشل في تحديث العقار",
       "addFailed": "فشل في إضافة العقار"
     }
+  },
+  "listings": {
+    "titles": {
+      "propertyListings": "قائمة العقارات",
+      "filterProperties": "تصفية العقارات",
+      "deleteProperty": "حذف العقار",
+      "noPropertiesFound": "لم يتم العثور على عقارات"
+    },
+    "messages": {
+      "loadingMore": "جارٍ تحميل المزيد من العقارات...",
+      "noProperties": "لم يتم العثور على عقارات.",
+      "deleteConfirmation": "هل أنت متأكد من أنك تريد حذف هذا العقار؟",
+      "propertyDeleted": "تم حذف العقار",
+      "deleteFailed": "فشل في حذف العقار",
+      "fetchFailed": "فشل في جلب العقارات",
+      "emptyState": "لم تقم بإضافة أي عقارات بعد. ابدأ بإضافة عقارك الأول."
+    },
+    "placeholders": {
+      "searchByName": "البحث بالاسم..."
+    },
+    "labels": {
+      "propertyFor": "العقار لـ",
+      "status": "الحالة",
+      "city": "المدينة",
+      "featured": "مميز",
+      "deleted": "محذوف",
+      "unnamedProperty": "عقار بدون اسم",
+      "locationNotSpecified": "الموقع غير محدد",
+      "priceOnRequest": "السعر عند الطلب",
+      "forSale": "للبيع"
+    },
+    "buttons": {
+      "edit": "تعديل",
+      "delete": "حذف",
+      "cancel": "إلغاء",
+      "applyFilters": "تطبيق المرشحات",
+      "clearAll": "مسح الكل",
+      "addProperty": "إضافة عقار"
+    },
+    "accessibility": {
+      "propertyImage": "صورة {{propertyName}}",
+      "propertyPlaceholder": "صورة العقار النائبة"
+    }
   }
 }

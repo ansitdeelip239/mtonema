@@ -577,6 +577,49 @@
       "addFailed": "Failed to add property"
     }
   },
+  "listings": {
+    "titles": {
+      "propertyListings": "Property Listings",
+      "filterProperties": "Filter Properties",
+      "deleteProperty": "Delete Property",
+      "noPropertiesFound": "No Properties Found"
+    },
+    "messages": {
+      "loadingMore": "Loading more properties...",
+      "noProperties": "No properties found.",
+      "deleteConfirmation": "Are you sure you want to delete this property?",
+      "propertyDeleted": "Property deleted",
+      "deleteFailed": "Failed to delete property",
+      "fetchFailed": "Failed to fetch properties",
+      "emptyState": "You haven't added any properties yet. Get started by adding your first property."
+    },
+    "placeholders": {
+      "searchByName": "Search by name..."
+    },
+    "labels": {
+      "propertyFor": "Property For",
+      "status": "Status",
+      "city": "City",
+      "featured": "Featured",
+      "deleted": "Deleted",
+      "unnamedProperty": "Unnamed Property",
+      "locationNotSpecified": "Location not specified",
+      "priceOnRequest": "Price on request",
+      "forSale": "For Sale"
+    },
+    "buttons": {
+      "edit": "Edit",
+      "delete": "Delete",
+      "cancel": "Cancel",
+      "applyFilters": "Apply Filters",
+      "clearAll": "Clear All",
+      "addProperty": "Add Property"
+    },
+    "accessibility": {
+      "propertyImage": "Image of {{propertyName}}",
+      "propertyPlaceholder": "Property placeholder image"
+    }
+  },
   "addContent": {
     "headers": {
       "newTemplate": "New Template",

@@ -577,6 +577,49 @@
       "addFailed": "Erro ao adicionar propriedade"
     }
   },
+  "listings": {
+    "titles": {
+      "propertyListings": "Listagem de Propriedades",
+      "filterProperties": "Filtrar Propriedades",
+      "deleteProperty": "Excluir Propriedade",
+      "noPropertiesFound": "Nenhuma Propriedade Encontrada"
+    },
+    "messages": {
+      "loadingMore": "Carregando mais propriedades...",
+      "noProperties": "Nenhuma propriedade encontrada.",
+      "deleteConfirmation": "Tem certeza de que deseja excluir esta propriedade?",
+      "propertyDeleted": "Propriedade excluída",
+      "deleteFailed": "Erro ao excluir propriedade",
+      "fetchFailed": "Erro ao buscar propriedades",
+      "emptyState": "Você ainda não adicionou propriedades. Comece adicionando sua primeira propriedade."
+    },
+    "placeholders": {
+      "searchByName": "Buscar por nome..."
+    },
+    "labels": {
+      "propertyFor": "Propriedade Para",
+      "status": "Status",
+      "city": "Cidade",
+      "featured": "Destaque",
+      "deleted": "Excluído",
+      "unnamedProperty": "Propriedade Sem Nome",
+      "locationNotSpecified": "Localização não especificada",
+      "priceOnRequest": "Preço sob consulta",
+      "forSale": "À Venda"
+    },
+    "buttons": {
+      "edit": "Editar",
+      "delete": "Excluir",
+      "cancel": "Cancelar",
+      "applyFilters": "Aplicar Filtros",
+      "clearAll": "Limpar Tudo",
+      "addProperty": "Adicionar Propriedade"
+    },
+    "accessibility": {
+      "propertyImage": "Imagem de {{propertyName}}",
+      "propertyPlaceholder": "Imagem de marcador de propriedade"
+    }
+  },
   "addContent": {
     "headers": {
       "newTemplate": "Novo Modelo",

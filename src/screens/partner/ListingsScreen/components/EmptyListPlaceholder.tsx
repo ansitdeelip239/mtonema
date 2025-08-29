@@ -3,10 +3,12 @@ import {View, Text, StyleSheet, Image} from 'react-native';
 // import {useNavigation} from '@react-navigation/native';
 import {Button} from 'react-native-paper';
 import { useTheme } from '../../../../context/ThemeProvider';
+import { useTranslation } from 'react-i18next';
 
 const EmptyListPlaceholder = () => {
   // const navigation = useNavigation();
   const {theme} = useTheme();
+  const { t } = useTranslation();
 
   return (
     <View style={styles.container}>
@@ -15,10 +17,9 @@ const EmptyListPlaceholder = () => {
         style={styles.image}
         resizeMode="contain"
       />
-      <Text style={styles.title}>No Properties Found</Text>
+      <Text style={styles.title}>{t('listings.titles.noPropertiesFound')}</Text>
       <Text style={styles.subtitle}>
-        You haven't added any properties yet. Get started by adding your first
-        property.
+        {t('listings.messages.emptyState')}
       </Text>
       <Button
         mode="contained"
@@ -26,7 +27,7 @@ const EmptyListPlaceholder = () => {
         labelStyle={styles.buttonLabel}
         // onPress={() => navigation.navigate('AddProperty')}
         >
-        Add Property
+        {t('listings.buttons.addProperty')}
       </Button>
     </View>
   );

@@ -21,6 +21,7 @@ import { usePartner } from '../../../context/PartnerProvider';
 import Swipeable from 'react-native-gesture-handler/Swipeable';
 import { TouchableOpacity } from 'react-native';
 import ConfirmationModal from '../../../components/ConfirmationModal';
+import { useTranslation } from 'react-i18next';
 
 const PAGE_SIZE = 10;
 
@@ -42,6 +43,7 @@ const ListingScreen: React.FC<Props> = ({ navigation }) => {
   const [debouncedSearchQuery, setDebouncedSearchQuery] = useState('');
 
   const { partnerPropertyUpdated } = usePartner();
+  const { t } = useTranslation();
 
   const [searchQuery, setSearchQuery] = useState('');
   const [filters, setFilters] = useState({
@@ -161,16 +163,16 @@ const ListingScreen: React.FC<Props> = ({ navigation }) => {
       const response = await PartnerService.deletePartnerProperty(deletingId);
       if (response.success) {
         setProperties(prev => prev.filter(p => p.id !== deletingId));
-        ToastAndroid.show('Property deleted', ToastAndroid.SHORT);
+        ToastAndroid.show(t('listings.messages.propertyDeleted'), ToastAndroid.SHORT);
       }
     } catch (err) {
-      ToastAndroid.show('Failed to delete property', ToastAndroid.LONG);
+      ToastAndroid.show(t('listings.messages.deleteFailed'), ToastAndroid.LONG);
     } finally {
       setIsDeleting(false);
       setShowDeleteModal(false);
       setDeletingId(null);
     }
-  }, [deletingId]);
+  }, [deletingId, t]);
 
   // Render left action for swipe (Edit)
   const renderLeftActions = (propertyItem: Property) => (
@@ -189,7 +191,7 @@ const ListingScreen: React.FC<Props> = ({ navigation }) => {
             });
           }, 100);
         }}>
-        <Text style={styles.editButtonText}>Edit</Text>
+        <Text style={styles.editButtonText}>{t('listings.buttons.edit')}</Text>
       </TouchableOpacity>
     </View>
   );
@@ -209,7 +211,7 @@ const ListingScreen: React.FC<Props> = ({ navigation }) => {
             setShowDeleteModal(true);
           }, 100);
         }}>
-        <Text style={styles.deleteButtonText}>Delete</Text>
+        <Text style={styles.deleteButtonText}>{t('listings.buttons.delete')}</Text>
       </TouchableOpacity>
     </View>
   );
@@ -249,7 +251,7 @@ const ListingScreen: React.FC<Props> = ({ navigation }) => {
     isLoading && properties.length > 0 ? (
       <View style={styles.footerLoader}>
         <ActivityIndicator size="small" />
-        <Text style={styles.loadingText}>Loading more properties...</Text>
+                      <Text style={styles.loadingText}>{t('listings.messages.loadingMore')}</Text>
       </View>
     ) : null;
 
@@ -264,7 +266,7 @@ const ListingScreen: React.FC<Props> = ({ navigation }) => {
     <View style={styles.container}>
       {
         Platform.OS === 'android' && (
-          <Header title="Property Listings" />
+          <Header title={t('listings.titles.propertyListings')} />
         )
       }
 
@@ -294,15 +296,15 @@ const ListingScreen: React.FC<Props> = ({ navigation }) => {
             </View>
           ) : (
             <View style={styles.centerContainer}>
-              <Text>No properties found.</Text>
+              <Text>{t('listings.messages.noProperties')}</Text>
             </View>
           )
         }
       />
       <ConfirmationModal
         visible={showDeleteModal}
-        title="Delete Property"
-        message="Are you sure you want to delete this property?"
+        title={t('listings.titles.deleteProperty')}
+        message={t('listings.messages.deleteConfirmation')}
         onConfirm={handleDeleteProperty}
         onCancel={() => {
           setShowDeleteModal(false);

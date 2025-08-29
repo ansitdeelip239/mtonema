@@ -15,6 +15,7 @@ import {FilterValues} from '../types';
 import {convertToMasterDetailModel} from '../../../../utils/formUtils';
 import {useTheme} from '../../../../context/ThemeProvider';
 import {usePartner} from '../../../../context/PartnerProvider';
+import { useTranslation } from 'react-i18next';
 
 const FilterModal = ({
   initialFilters,
@@ -29,6 +30,7 @@ const FilterModal = ({
   const {masterData} = useMaster();
   const {cities} = usePartner();
   const {theme} = useTheme();
+  const { t } = useTranslation();
 
   const fadeAnim = useRef(new Animated.Value(0)).current;
   const slideAnim = useRef(new Animated.Value(300)).current;
@@ -127,12 +129,12 @@ const FilterModal = ({
           onStartShouldSetResponder={() => true}
           onTouchEnd={e => e.stopPropagation()}>
           <View style={styles.headerContainer}>
-            <Text style={styles.modalTitle}>Filter Properties</Text>
+            <Text style={styles.modalTitle}>{t('listings.titles.filterProperties')}</Text>
             {hasActiveFilters && (
               <TouchableOpacity onPress={handleClearAllFilters}>
                 <Text
                   style={[styles.clearAllText, {color: theme.primaryColor}]}>
-                  Clear All
+                  {t('listings.buttons.clearAll')}
                 </Text>
               </TouchableOpacity>
             )}
@@ -148,19 +150,19 @@ const FilterModal = ({
             <TouchableWithoutFeedback>
               <View style={styles.filterOptionsContainer}>
                 <FilterOption
-                  label="Property For"
+                  label={t('listings.labels.propertyFor')}
                   options={propertyForTypes}
                   selectedValue={filters.propertyFor}
                   onSelect={value => handleSelect('propertyFor', value)}
                 />
                 <FilterOption
-                  label="Status"
+                  label={t('listings.labels.status')}
                   options={statusTypes}
                   selectedValue={filters.status}
                   onSelect={value => handleSelect('status', value)}
                 />
                 <FilterOption
-                  label="City"
+                  label={t('listings.labels.city')}
                   options={cities}
                   selectedValue={filters.city}
                   onSelect={value => handleSelect('city', value)}
@@ -173,13 +175,13 @@ const FilterModal = ({
             <TouchableOpacity
               style={[styles.button, styles.cancelButton]}
               onPress={handleClose}>
-              <Text style={styles.buttonText}>Cancel</Text>
+              <Text style={styles.buttonText}>{t('listings.buttons.cancel')}</Text>
             </TouchableOpacity>
             <TouchableOpacity
               style={[styles.button, {backgroundColor: theme.primaryColor}]}
               onPress={handleApplyFilter}>
               <Text style={[styles.buttonText, styles.applyText]}>
-                Apply Filters
+                {t('listings.buttons.applyFilters')}
               </Text>
             </TouchableOpacity>
           </View>

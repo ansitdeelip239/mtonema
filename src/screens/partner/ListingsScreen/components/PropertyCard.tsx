@@ -11,6 +11,7 @@ import {Property} from '../types';
 import {formatCurrency} from '../../../../utils/currency';
 import GetIcon from '../../../../components/GetIcon';
 import { useTheme } from '../../../../context/ThemeProvider';
+import { useTranslation } from 'react-i18next';
 
 // Default placeholder image for when no images are available
 const placeholderImage = require('../../../../assets/Images/dncr_black_logo.png');
@@ -30,6 +31,7 @@ const IMAGE_HEIGHT = CARD_HEIGHT - 24; // Maintain some padding
 const PropertyCard = memo(
   ({property, onPress}: PropertyCardProps) => {
     const {theme} = useTheme();
+    const { t } = useTranslation();
     // Memoize expensive operations
     const displayImage = useMemo(() => {
       if (!property.imageURL) {
@@ -51,8 +53,8 @@ const PropertyCard = memo(
     // Memoize formatted values
     const formattedPrice = useMemo(
       () =>
-        property.price ? formatCurrency(property.price) : 'Price on request',
-      [property.price],
+        property.price ? formatCurrency(property.price) : t('listings.labels.priceOnRequest'),
+      [property.price, t],
     );
 
     const formattedArea = useMemo(
@@ -87,9 +89,7 @@ const PropertyCard = memo(
                   style={styles.image}
                   resizeMode="cover"
                   accessible={true}
-                  accessibilityLabel={`Image of ${
-                    property.propertyName || 'property'
-                  }`}
+                  accessibilityLabel={t('listings.accessibility.propertyImage', { propertyName: property.propertyName || t('listings.labels.unnamedProperty') })}
                   fadeDuration={0}
                   progressiveRenderingEnabled={false}
                 />
@@ -99,28 +99,28 @@ const PropertyCard = memo(
                   style={styles.image}
                   resizeMode="contain"
                   accessible={true}
-                  accessibilityLabel="Property placeholder image"
+                  accessibilityLabel={t('listings.accessibility.propertyPlaceholder')}
                 />
               )}
 
               {/* Property For Label */}
               <View style={styles.propertyForBadge}>
                 <Text style={styles.propertyForText}>
-                  {property.propertyFor || 'For Sale'}
+                  {property.propertyFor || t('listings.labels.forSale')}
                 </Text>
               </View>
 
               {/* Featured Badge */}
               {property.featured && (
                 <View style={[styles.featuredBadge, {backgroundColor: theme.primaryColor}]}>
-                  <Text style={styles.featuredText}>Featured</Text>
+                  <Text style={styles.featuredText}>{t('listings.labels.featured')}</Text>
                 </View>
               )}
 
               {/* Deleted Badge */}
               {isDeleted && (
                 <View style={styles.deletedBadge}>
-                  <Text style={styles.deletedText}>Deleted</Text>
+                  <Text style={styles.deletedText}>{t('listings.labels.deleted')}</Text>
                 </View>
               )}
             </View>
@@ -129,7 +129,7 @@ const PropertyCard = memo(
             <View style={styles.detailsContainer}>
               {/* Property Name */}
               <Text style={styles.title} numberOfLines={2} ellipsizeMode="tail">
-                {property.propertyName || 'Unnamed Property'}
+                {property.propertyName || t('listings.labels.unnamedProperty')}
               </Text>
 
               {/* Price */}
@@ -146,7 +146,7 @@ const PropertyCard = memo(
                   style={styles.location}
                   numberOfLines={1}
                   ellipsizeMode="tail">
-                  {property.location || 'Location not specified'}
+                  {property.location || t('listings.labels.locationNotSpecified')}
                   {property.city ? `, ${property.city}` : ''}
                 </Text>
               </View>
