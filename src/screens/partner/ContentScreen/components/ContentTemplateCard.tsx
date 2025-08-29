@@ -1,8 +1,10 @@
 import React from 'react';
 import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
-import { useTranslation } from 'react-i18next';
+import {useTranslation} from 'react-i18next';
 import GetIcon from '../../../../components/GetIcon';
 import {ContentTemplate} from '../../../../types';
+import Status from '../../../../constants/Status';
+import {formatLocalizedDate} from '../../../../utils/dateUtils';
 
 interface ContentTemplateCardProps {
   item: ContentTemplate;
@@ -15,19 +17,41 @@ const ContentTemplateCard: React.FC<ContentTemplateCardProps> = ({
   onPress,
   onEdit,
 }) => {
-  const { t } = useTranslation();
+  const {t, i18n} = useTranslation();
 
-  // Format date
+  // Format date with localization
   const formatDate = (dateString: string) => {
     try {
-      const date = new Date(dateString);
-      return date.toLocaleDateString('en-US', {
-        year: 'numeric',
-        month: 'short',
-        day: 'numeric',
-      });
+      return formatLocalizedDate(dateString, i18n.language);
     } catch {
       return t('contentTemplate.errors.invalidDate', 'Invalid date');
+    }
+  };
+
+  // Handle "by" preposition based on language
+  const getCreatorText = (creatorName: string) => {
+    const currentLanguage = i18n.language;
+
+    // For Hindi, the format is "Name द्वारा" (name comes first)
+    if (currentLanguage === 'hi') {
+      return `${creatorName} ${t('contentTemplate.labels.by', 'द्वारा')}`;
+    }
+
+    // For other languages, use "by Name" format
+    return `${t('contentTemplate.labels.by', 'by')} ${creatorName}`;
+  };
+
+  // Get localized status
+  const getLocalizedStatus = (status: string) => {
+    switch (status) {
+      case Status.ACTIVE:
+        return t('contentTemplate.status.active', 'Active');
+      case Status.INACTIVE:
+        return t('contentTemplate.status.inactive', 'Inactive');
+      case Status.DELETED:
+        return t('contentTemplate.status.deleted', 'Deleted');
+      default:
+        return status;
     }
   };
 
@@ -42,7 +66,7 @@ const ContentTemplateCard: React.FC<ContentTemplateCardProps> = ({
             {item.name}
           </Text>
           <Text style={styles.templateCreator}>
-            {t('contentTemplate.labels.by', 'by')} {item.creatorName}
+            {getCreatorText(item.creatorName)}
           </Text>
         </View>
         <View style={styles.templateActions}>
@@ -70,23 +94,24 @@ const ContentTemplateCard: React.FC<ContentTemplateCardProps> = ({
 
       <View style={styles.templateFooter}>
         <Text style={styles.templateDate}>
-          {t('contentTemplate.labels.created', 'Created')}: {formatDate(item.createdOn)}
+          {t('contentTemplate.labels.created', 'Created')}:{' '}
+          {formatDate(item.createdOn)}
         </Text>
         <View
           style={[
             styles.statusBadge,
-            item.recordStatus === 'Active'
+            item.recordStatus === Status.ACTIVE
               ? styles.activeBadge
               : styles.inactiveBadge,
           ]}>
           <Text
             style={[
               styles.statusText,
-              item.recordStatus === 'Active'
+              item.recordStatus === Status.ACTIVE
                 ? styles.activeText
                 : styles.inactiveText,
             ]}>
-            {item.recordStatus}
+            {getLocalizedStatus(item.recordStatus)}
           </Text>
         </View>
       </View>

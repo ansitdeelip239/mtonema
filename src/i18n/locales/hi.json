@@ -394,6 +394,11 @@
       "by": "द्वारा",
       "created": "बनाया गया"
     },
+    "status": {
+      "active": "सक्रिय",
+      "inactive": "निष्क्रिय",
+      "deleted": "हटाया गया"
+    },
     "errors": {
       "invalidDate": "अमान्य तारीख"
     },
@@ -408,6 +413,227 @@
     "loading": {
       "loadingTemplates": "सामग्री टेम्प्लेट लोड हो रहे हैं...",
       "loadingMore": "अधिक लोड हो रहे हैं..."
+    }
+  },
+  "contentScreen": {
+    "headers": {
+      "contentTemplates": "सामग्री टेम्प्लेट",
+      "messageTemplates": "संदेश टेम्प्लेट"
+    },
+    "buttons": {
+      "addTemplate": "टेम्प्लेट जोड़ें"
+    },
+    "errors": {
+      "fetchFailed": "सामग्री टेम्प्लेट प्राप्त करने में विफल",
+      "loadingError": "सामग्री टेम्प्लेट लोड करने में त्रुटि"
+    }
+  },
+  "partnerPropertyForm": {
+    "titles": {
+      "addProperty": "संपत्ति जोड़ें"
+    },
+    "steps": {
+      "basicInfo": "मूल जानकारी",
+      "propertyDetails": "संपत्ति विवरण",
+      "mediaAndSubmit": "मीडिया और सबमिट"
+    },
+    "buttons": {
+      "clear": "साफ़ करें"
+    },
+    "basicDetails": {
+      "labels": {
+        "propertyName": "संपत्ति का नाम*",
+        "sellerType": "विक्रेता प्रकार*",
+        "city": "शहर*",
+        "propertyFor": "संपत्ति के लिए*",
+        "propertyType": "संपत्ति प्रकार*",
+        "location": "स्थान*",
+        "price": "मूल्य*"
+      },
+      "placeholders": {
+        "propertyName": "संपत्ति का नाम दर्ज करें",
+        "location": "स्थान विवरण दर्ज करें",
+        "price": "संपत्ति का मूल्य दर्ज करें"
+      }
+    },
+    "mediaAndSubmit": {
+      "labels": {
+        "videoURL": "वीडियो URL",
+        "images": "छवियाँ",
+        "tags": "टैग"
+      },
+      "placeholders": {
+        "videoURL": "यूट्यूब या विमियो लिंक दर्ज करें",
+        "tags": "उदा., #लक्जरी"
+      },
+      "descriptions": {
+        "optionalStep": "यह कदम वैकल्पिक है। आप इन विवरणों को भरने के बिना आगे बढ़ सकते हैं।",
+        "imagesDescription": "अपनी संपत्ति की छवियाँ अपलोड करें। एक छवि को डिफ़ॉल्ट डिस्प्ले छवि के रूप में चुनें।",
+        "submitDescription": "अपनी संपत्ति की सूची सबमिट करने से पहले सभी विवरणों की सावधानीपूर्वक समीक्षा करें।",
+        "selectedImages": "चयनित छवियाँ ({{count}})"
+      },
+      "buttons": {
+        "selectImages": "छवियाँ चुनें",
+        "addTag": "जोड़ें"
+      }
+    },
+    "navigation": {
+      "next": "अगला",
+      "back": "वापस"
+    },
+    "propertyDetails": {
+      "optionalStepText": "यह कदम वैकल्पिक है। आप इन विवरणों को भरने के बिना आगे बढ़ सकते हैं।",
+      "noSelectionText": "कृपया पिछले कदम में संपत्ति प्रकार चुनें।",
+      "goBack": "वापस जाएं",
+      "fields": {
+        "propertyForType": {
+          "label": "संपत्ति श्रेणी"
+        },
+        "readyToMove": {
+          "label": "स्थानांतरण के लिए तैयार"
+        },
+        "lifts": {
+          "label": "लिफ्ट उपलब्ध"
+        },
+        "pantry": {
+          "label": "पैंट्री"
+        },
+        "floor": {
+          "label": "मंजिल",
+          "placeholder": "मंजिल संख्या दर्ज करें"
+        },
+        "furnishing": {
+          "label": "साज-सज्जा प्रकार"
+        },
+        "parking": {
+          "label": "कार पार्किंग"
+        },
+        "facing": {
+          "label": "सामना करने की दिशा"
+        },
+        "location": {
+          "label": "स्थान",
+          "placeholder": "संपत्ति का स्थान दर्ज करें"
+        },
+        "zipCode": {
+          "label": "पिन कोड",
+          "placeholder": "पिन कोड दर्ज करें"
+        },
+        "price": {
+          "label": "मूल्य",
+          "placeholder": "संपत्ति का मूल्य दर्ज करें"
+        },
+        "area": {
+          "label": "संपत्ति क्षेत्र",
+          "placeholder": "संपत्ति का क्षेत्र दर्ज करें"
+        },
+        "lmUnit": {
+          "label": "क्षेत्र इकाई"
+        },
+        "propertyAge": {
+          "label": "संपत्ति की आयु"
+        },
+        "gatedSecurity": {
+          "label": "गेटेड कम्युनिटी सुरक्षा"
+        },
+        "surveillanceCameras": {
+          "label": "निगरानी"
+        },
+        "alarmSystem": {
+          "label": "अलार्म सिस्टम"
+        },
+        "shortDescription": {
+          "label": "संक्षिप्त विवरण",
+          "placeholder": "एक संक्षिप्त विवरण दर्ज करें"
+        },
+        "longDescription": {
+          "label": "विस्तृत विवरण",
+          "placeholder": "एक विस्तृत विवरण दर्ज करें"
+        },
+        "bhkType": {
+          "label": "कॉन्फ़िगरेशन"
+        },
+        "ceilingHeight": {
+          "label": "छत की ऊंचाई",
+          "placeholder": "छत की ऊंचाई दर्ज करें"
+        },
+        "constructionDone": {
+          "label": "कोई निर्माण"
+        },
+        "boundaryWall": {
+          "label": "सीमा"
+        },
+        "openSide": {
+          "label": "खुले पक्ष की संख्या"
+        }
+      }
+    },
+    "success": {
+      "propertyUpdated": "संपत्ति सफलतापूर्वक अपडेट की गई",
+      "propertyAdded": "संपत्ति सफलतापूर्वक जोड़ी गई"
+    },
+    "errors": {
+      "updateFailed": "संपत्ति अपडेट करने में विफल",
+      "addFailed": "संपत्ति जोड़ने में विफल"
+    }
+  },
+  "addContent": {
+    "headers": {
+      "newTemplate": "नया टेम्प्लेट",
+      "editTemplate": "टेम्प्लेट संपादित करें"
+    },
+    "labels": {
+      "templateName": "टेम्प्लेट का नाम",
+      "messageContent": "संदेश सामग्री",
+      "availableVariables": "उपलब्ध चर",
+      "preview": "पूर्वावलोकन"
+    },
+    "placeholders": {
+      "templateName": "टेम्प्लेट का नाम दर्ज करें",
+      "messageContent": "यहाँ अपना संदेश टेम्प्लेट टाइप करें...\n\nआप संदेशों को व्यक्तिगत बनाने के लिए {name}, {phone}, {email} जैसे चर का उपयोग कर सकते हैं।",
+      "preview": "आपका संदेश पूर्वावलोकन यहाँ दिखाई देगा..."
+    },
+    "helpers": {
+      "templateName": "अपने टेम्प्लेट को एक वर्णनात्मक नाम दें",
+      "variablesInfo": "संदेश भेजते समय घुंघराले ब्रेसिज़ में चर वास्तविक मूल्यों से बदल दिए जाएंगे।",
+      "variablesDescription": "अपने संदेश में कोई भी चर जोड़ने के लिए नीचे दिए गए किसी भी चर पर टैप करें",
+      "variablesAutoReplace": "संदेश भेजते समय ये चर स्वचालित रूप से बदल दिए जाएंगे"
+    },
+    "variables": {
+      "name": "क्लाइंट का नाम",
+      "phone": "फोन नंबर",
+      "whatsapp": "व्हाट्सएप नंबर",
+      "email": "ईमेल पता",
+      "senderName": "आपका नाम",
+      "senderEmail": "आपका ईमेल",
+      "senderAddress": "आपका पता",
+      "senderPhone": "आपका फोन"
+    },
+    "buttons": {
+      "cancel": "रद्द करें",
+      "saveTemplate": "टेम्प्लेट सहेजें",
+      "updateTemplate": "टेम्प्लेट अपडेट करें",
+      "saving": "सहेजा जा रहा है...",
+      "updating": "अपडेट हो रहा है..."
+    },
+    "errors": {
+      "templateNameRequired": "कृपया टेम्प्लेट का नाम दर्ज करें",
+      "contentRequired": "कृपया टेम्प्लेट सामग्री दर्ज करें",
+      "userNotFound": "उपयोगकर्ता नहीं मिला",
+      "createFailed": "टेम्प्लेट बनाने में विफल",
+      "updateFailed": "टेम्प्लेट अपडेट करने में विफल"
+    },
+    "success": {
+      "templateCreated": "टेम्प्लेट बनाया गया",
+      "templateUpdated": "टेम्प्लेट अपडेट किया गया",
+      "createMessage": "आपका संदेश टेम्प्लेट सफलतापूर्वक सहेजा गया है।",
+      "updateMessage": "आपका संदेश टेम्प्लेट सफलतापूर्वक अपडेट किया गया है।"
+    },
+    "alerts": {
+      "discardTitle": "परिवर्तनों को त्यागें",
+      "discardMessage": "क्या आप वाकई अपने परिवर्तनों को त्यागना चाहते हैं?",
+      "continueEditing": "संपादन जारी रखें",
+      "discard": "त्यागें"
     }
   }
 }

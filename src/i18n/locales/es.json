@@ -394,6 +394,11 @@
       "by": "por",
       "created": "Creado"
     },
+    "status": {
+      "active": "Activo",
+      "inactive": "Inactivo",
+      "deleted": "Eliminado"
+    },
     "errors": {
       "invalidDate": "Fecha inválida"
     },
@@ -408,6 +413,227 @@
     "loading": {
       "loadingTemplates": "Cargando plantillas de contenido...",
       "loadingMore": "Cargando más..."
+    }
+  },
+  "contentScreen": {
+    "headers": {
+      "contentTemplates": "Plantillas de Contenido",
+      "messageTemplates": "Plantillas de Mensajes"
+    },
+    "buttons": {
+      "addTemplate": "Agregar Plantilla"
+    },
+    "errors": {
+      "fetchFailed": "Error al obtener plantillas de contenido",
+      "loadingError": "Error al cargar plantillas de contenido"
+    }
+  },
+  "partnerPropertyForm": {
+    "titles": {
+      "addProperty": "Agregar Propiedad"
+    },
+    "steps": {
+      "basicInfo": "Información Básica",
+      "propertyDetails": "Detalles de la Propiedad",
+      "mediaAndSubmit": "Medios y Enviar"
+    },
+    "buttons": {
+      "clear": "Limpiar"
+    },
+    "basicDetails": {
+      "labels": {
+        "propertyName": "Nombre de la Propiedad*",
+        "sellerType": "Tipo de Vendedor*",
+        "city": "Ciudad*",
+        "propertyFor": "Propiedad Para*",
+        "propertyType": "Tipo de Propiedad*",
+        "location": "Ubicación*",
+        "price": "Precio*"
+      },
+      "placeholders": {
+        "propertyName": "Ingrese un nombre de propiedad",
+        "location": "Ingrese detalles de ubicación",
+        "price": "Ingrese precio de la propiedad"
+      }
+    },
+    "mediaAndSubmit": {
+      "labels": {
+        "videoURL": "URL del Video",
+        "images": "Imágenes",
+        "tags": "Etiquetas"
+      },
+      "placeholders": {
+        "videoURL": "Ingrese URL de YouTube o Vimeo",
+        "tags": "Ej., #lujo"
+      },
+      "descriptions": {
+        "optionalStep": "Este paso es opcional. Puede continuar sin completar estos detalles.",
+        "imagesDescription": "Suba imágenes de su propiedad. Seleccione una imagen como imagen de visualización predeterminada.",
+        "submitDescription": "Revise todos los detalles cuidadosamente antes de enviar el listado de su propiedad.",
+        "selectedImages": "Imágenes Seleccionadas ({{count}})"
+      },
+      "buttons": {
+        "selectImages": "Seleccionar Imágenes",
+        "addTag": "Agregar"
+      }
+    },
+    "navigation": {
+      "next": "Siguiente",
+      "back": "Atrás"
+    },
+    "propertyDetails": {
+      "optionalStepText": "Este paso es opcional. Puede continuar sin completar estos detalles.",
+      "noSelectionText": "Por favor seleccione un Tipo de Propiedad en el paso anterior.",
+      "goBack": "Volver",
+      "fields": {
+        "propertyForType": {
+          "label": "Categoría de Propiedad"
+        },
+        "readyToMove": {
+          "label": "Listo para Mudarse"
+        },
+        "lifts": {
+          "label": "Ascensor Disponible"
+        },
+        "pantry": {
+          "label": "Despensa"
+        },
+        "floor": {
+          "label": "Piso",
+          "placeholder": "Ingrese el número de piso"
+        },
+        "furnishing": {
+          "label": "Tipo de Mobiliario"
+        },
+        "parking": {
+          "label": "Estacionamiento de Autos"
+        },
+        "facing": {
+          "label": "Dirección de Orientación"
+        },
+        "location": {
+          "label": "Ubicación",
+          "placeholder": "Ingrese la ubicación de la propiedad"
+        },
+        "zipCode": {
+          "label": "Código Postal",
+          "placeholder": "Ingrese el código postal"
+        },
+        "price": {
+          "label": "Precio",
+          "placeholder": "Ingrese el precio de la propiedad"
+        },
+        "area": {
+          "label": "Área de Propiedad",
+          "placeholder": "Ingrese el área de la propiedad"
+        },
+        "lmUnit": {
+          "label": "Unidad de Área"
+        },
+        "propertyAge": {
+          "label": "Edad de la Propiedad"
+        },
+        "gatedSecurity": {
+          "label": "Seguridad de Comunidad Cerrada"
+        },
+        "surveillanceCameras": {
+          "label": "Vigilancia"
+        },
+        "alarmSystem": {
+          "label": "Sistema de Alarma"
+        },
+        "shortDescription": {
+          "label": "Descripción Corta",
+          "placeholder": "Ingrese una descripción corta"
+        },
+        "longDescription": {
+          "label": "Descripción Larga",
+          "placeholder": "Ingrese una descripción detallada"
+        },
+        "bhkType": {
+          "label": "Configuración"
+        },
+        "ceilingHeight": {
+          "label": "Altura del Techo",
+          "placeholder": "Ingrese la altura del techo"
+        },
+        "constructionDone": {
+          "label": "Alguna Construcción"
+        },
+        "boundaryWall": {
+          "label": "Límite"
+        },
+        "openSide": {
+          "label": "Núm. de Lado Abierto"
+        }
+      }
+    },
+    "success": {
+      "propertyUpdated": "Propiedad actualizada exitosamente",
+      "propertyAdded": "Propiedad agregada exitosamente"
+    },
+    "errors": {
+      "updateFailed": "Error al actualizar propiedad",
+      "addFailed": "Error al agregar propiedad"
+    }
+  },
+  "addContent": {
+    "headers": {
+      "newTemplate": "Nueva Plantilla",
+      "editTemplate": "Editar Plantilla"
+    },
+    "labels": {
+      "templateName": "Nombre de Plantilla",
+      "messageContent": "Contenido del Mensaje",
+      "availableVariables": "Variables Disponibles",
+      "preview": "Vista Previa"
+    },
+    "placeholders": {
+      "templateName": "Ingrese nombre de plantilla",
+      "messageContent": "Escriba su plantilla de mensaje aquí...\n\nPuede usar variables como {name}, {phone}, {email} para personalizar mensajes.",
+      "preview": "La vista previa de su mensaje aparecerá aquí..."
+    },
+    "helpers": {
+      "templateName": "Dé un nombre descriptivo a su plantilla",
+      "variablesInfo": "Las variables entre llaves serán reemplazadas con valores reales al enviar mensajes.",
+      "variablesDescription": "Toque cualquier variable a continuación para agregarla a su mensaje",
+      "variablesAutoReplace": "Estas variables serán reemplazadas automáticamente al enviar mensajes"
+    },
+    "variables": {
+      "name": "Nombre del cliente",
+      "phone": "Número de teléfono",
+      "whatsapp": "Número de Whatsapp",
+      "email": "Dirección de correo electrónico",
+      "senderName": "Su nombre",
+      "senderEmail": "Su correo electrónico",
+      "senderAddress": "Su dirección",
+      "senderPhone": "Su teléfono"
+    },
+    "buttons": {
+      "cancel": "Cancelar",
+      "saveTemplate": "Guardar Plantilla",
+      "updateTemplate": "Actualizar Plantilla",
+      "saving": "Guardando...",
+      "updating": "Actualizando..."
+    },
+    "errors": {
+      "templateNameRequired": "Por favor ingrese un nombre de plantilla",
+      "contentRequired": "Por favor ingrese contenido de plantilla",
+      "userNotFound": "Usuario no encontrado",
+      "createFailed": "Error al crear plantilla",
+      "updateFailed": "Error al actualizar plantilla"
+    },
+    "success": {
+      "templateCreated": "Plantilla Creada",
+      "templateUpdated": "Plantilla Actualizada",
+      "createMessage": "Su plantilla de mensaje ha sido guardada exitosamente.",
+      "updateMessage": "Su plantilla de mensaje ha sido actualizada exitosamente."
+    },
+    "alerts": {
+      "discardTitle": "Descartar Cambios",
+      "discardMessage": "¿Está seguro de que desea descartar sus cambios?",
+      "continueEditing": "Continuar Editando",
+      "discard": "Descartar"
     }
   }
 }

@@ -1,5 +1,6 @@
 import React, {useCallback, useMemo} from 'react';
 import {View, StyleSheet, Text} from 'react-native';
+import { useTranslation } from 'react-i18next';
 import PropertyFieldRenderer from '../components/PropertyFieldRenderer';
 import FormNavigationButtons from '../components/FormNavigationButtons';
 import {PartnerPropertyFormType} from '../../../../../schema/PartnerPropertyFormSchema';
@@ -25,6 +26,7 @@ const PropertyDetailsStep: React.FC<PropertyDetailsStepProps> = ({
   onBack,
   showBackButton = false,
 }) => {
+  const { t } = useTranslation();
   const handleFieldSelect = useCallback(
     (field: keyof PartnerPropertyFormType, value: string) => {
       handleSelect(field, value);
@@ -89,8 +91,7 @@ const PropertyDetailsStep: React.FC<PropertyDetailsStepProps> = ({
       {formInput.propertyType ? (
         <View>
           <Text style={styles.optionalStepText}>
-            This step is optional. You can proceed without filling these
-            details.
+            {t('partnerPropertyForm.propertyDetails.optionalStepText', 'This step is optional. You can proceed without filling these details.')}
           </Text>
 
           <View style={styles.fieldsContainer}>
@@ -128,13 +129,13 @@ const PropertyDetailsStep: React.FC<PropertyDetailsStepProps> = ({
       ) : (
         <View style={styles.noSelectionContainer}>
           <Text style={styles.noSelectionText}>
-            Please select a Property Type in the previous step.
+            {t('partnerPropertyForm.propertyDetails.noSelectionText', 'Please select a Property Type in the previous step.')}
           </Text>
           {onBack && (
             <FormNavigationButtons
               onBack={onBack}
               showBackButton={true}
-              nextButtonText="Go Back"
+              nextButtonText={t('partnerPropertyForm.propertyDetails.goBack', 'Go Back')}
             />
           )}
         </View>

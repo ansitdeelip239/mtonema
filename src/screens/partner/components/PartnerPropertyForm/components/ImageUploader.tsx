@@ -5,6 +5,7 @@ import {
   TouchableOpacity,
   ActivityIndicator,
 } from 'react-native';
+import { useTranslation } from 'react-i18next';
 import ImagePicker from 'react-native-image-crop-picker';
 import Toast from 'react-native-toast-message';
 import {ImageData} from '../../../../../types/image';
@@ -23,6 +24,7 @@ const ImageUploader: React.FC<ImageUploaderProps> = ({
 }) => {
   const [uploading, setUploading] = useState(false);
   const {theme} = useTheme();
+  const { t } = useTranslation();
 
   const handleSelectImages = useCallback(async () => {
     if (disabled) {
@@ -138,7 +140,9 @@ const ImageUploader: React.FC<ImageUploaderProps> = ({
       ) : (
         <>
           <GetIcon iconName="calendarSomeday" size={20} />
-          <Text style={[styles.uploadButtonText, {color: theme.primaryColor}]}>Select Images</Text>
+          <Text style={[styles.uploadButtonText, {color: theme.primaryColor}]}>
+            {t('partnerPropertyForm.mediaAndSubmit.buttons.selectImages', 'Select Images')}
+          </Text>
         </>
       )}
     </TouchableOpacity>

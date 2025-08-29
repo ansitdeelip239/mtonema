@@ -1,5 +1,6 @@
 import React from 'react';
 import {Text} from 'react-native';
+import {useTranslation} from 'react-i18next';
 import {PartnerPropertyFormType} from '../../../../../schema/PartnerPropertyFormSchema';
 import {useMaster} from '../../../../../context/MasterProvider';
 import FilterOption from '../../../../../components/FilterOption';
@@ -28,6 +29,7 @@ const PropertyFieldRenderer: React.FC<PropertyFieldRendererProps> = ({
   handleFieldSelect,
   toggleBooleanField,
 }) => {
+  const {t} = useTranslation();
   const {masterData} = useMaster();
 
   switch (field) {
@@ -35,7 +37,7 @@ const PropertyFieldRenderer: React.FC<PropertyFieldRendererProps> = ({
       return (
         <FilterOption
           key={field}
-          label="Property Category"
+          label={t('partnerPropertyForm.propertyDetails.fields.propertyForType.label', 'Property Category')}
           options={convertToMasterDetailModel(['Residential', 'Commercial'])}
           selectedValue={
             formInput.propertyForType === null
@@ -59,7 +61,7 @@ const PropertyFieldRenderer: React.FC<PropertyFieldRendererProps> = ({
       return (
         <FilterOption
           key={field}
-          label="Ready To Move"
+          label={t('partnerPropertyForm.propertyDetails.fields.readyToMove.label', 'Ready To Move')}
           options={convertToMasterDetailModel(['Yes', 'No'])}
           selectedValue={
             formInput.readyToMove === null
@@ -76,7 +78,7 @@ const PropertyFieldRenderer: React.FC<PropertyFieldRendererProps> = ({
       return (
         <FilterOption
           key={field}
-          label="Lift Available"
+          label={t('partnerPropertyForm.propertyDetails.fields.lifts.label', 'Lift Available')}
           options={convertToMasterDetailModel(['Yes', 'No'])}
           selectedValue={
             formInput.lifts === null ? null : formInput.lifts ? 'Yes' : 'No'
@@ -89,7 +91,7 @@ const PropertyFieldRenderer: React.FC<PropertyFieldRendererProps> = ({
       return (
         <FilterOption
           key={field}
-          label="Pantry"
+          label={t('partnerPropertyForm.propertyDetails.fields.pantry.label', 'Pantry')}
           options={convertToMasterDetailModel(['Yes', 'No'])}
           selectedValue={
             formInput.pantry === null ? null : formInput.pantry ? 'Yes' : 'No'
@@ -105,9 +107,9 @@ const PropertyFieldRenderer: React.FC<PropertyFieldRendererProps> = ({
           field="floor"
           formInput={formInput}
           setFormInput={handleInputChange}
-          label="Floor"
+          label={t('partnerPropertyForm.propertyDetails.fields.floor.label', 'Floor')}
           mode="outlined"
-          placeholder="Enter floor number"
+          placeholder={t('partnerPropertyForm.propertyDetails.fields.floor.placeholder', 'Enter floor number')}
           keyboardType="number-pad"
         />
       );
@@ -116,7 +118,7 @@ const PropertyFieldRenderer: React.FC<PropertyFieldRendererProps> = ({
       return (
         <FilterOption
           key={field}
-          label="Furnished Type"
+          label={t('partnerPropertyForm.propertyDetails.fields.furnishing.label', 'Furnished Type')}
           options={masterData?.FurnishType || []}
           selectedValue={formInput.furnishing}
           onSelect={value => handleFieldSelect('furnishing', value)}
@@ -127,7 +129,7 @@ const PropertyFieldRenderer: React.FC<PropertyFieldRendererProps> = ({
       return (
         <FilterOption
           key={field}
-          label="Car Parking"
+          label={t('partnerPropertyForm.propertyDetails.fields.parking.label', 'Car Parking')}
           options={convertToMasterDetailModel([
             'Yes-Shaded',
             'Yes-Unshaded',
@@ -142,7 +144,7 @@ const PropertyFieldRenderer: React.FC<PropertyFieldRendererProps> = ({
       return (
         <FilterOption
           key={field}
-          label="Direction of Facing"
+          label={t('partnerPropertyForm.propertyDetails.fields.facing.label', 'Direction of Facing')}
           options={masterData?.Facing || []}
           selectedValue={formInput.facing}
           onSelect={value => handleFieldSelect('facing', value)}
@@ -156,9 +158,9 @@ const PropertyFieldRenderer: React.FC<PropertyFieldRendererProps> = ({
           field="location"
           formInput={formInput}
           setFormInput={handleInputChange}
-          label="Location"
+          label={t('partnerPropertyForm.propertyDetails.fields.location.label', 'Location')}
           mode="outlined"
-          placeholder="Enter property location"
+          placeholder={t('partnerPropertyForm.propertyDetails.fields.location.placeholder', 'Enter property location')}
           autoCapitalize="words"
           autoCorrect={false}
           returnKeyType="done"
@@ -172,9 +174,9 @@ const PropertyFieldRenderer: React.FC<PropertyFieldRendererProps> = ({
           field="zipCode"
           formInput={formInput}
           setFormInput={handleInputChange}
-          label="Zip Code"
+          label={t('partnerPropertyForm.propertyDetails.fields.zipCode.label', 'Zip Code')}
           mode="outlined"
-          placeholder="Enter ZIP code"
+          placeholder={t('partnerPropertyForm.propertyDetails.fields.zipCode.placeholder', 'Enter ZIP code')}
           keyboardType="number-pad"
         />
       );
@@ -186,9 +188,9 @@ const PropertyFieldRenderer: React.FC<PropertyFieldRendererProps> = ({
           field="price"
           formInput={formInput}
           setFormInput={handleInputChange}
-          label="Price"
+          label={t('partnerPropertyForm.propertyDetails.fields.price.label', 'Price')}
           mode="outlined"
-          placeholder="Enter property price"
+          placeholder={t('partnerPropertyForm.propertyDetails.fields.price.placeholder', 'Enter property price')}
           keyboardType="number-pad"
           rightComponent={<Text>{formatCurrency(formInput.price)}</Text>}
         />
@@ -201,9 +203,9 @@ const PropertyFieldRenderer: React.FC<PropertyFieldRendererProps> = ({
           field="area"
           formInput={formInput}
           setFormInput={handleInputChange}
-          label="Property Area"
+          label={t('partnerPropertyForm.propertyDetails.fields.area.label', 'Property Area')}
           mode="outlined"
-          placeholder="Enter property area"
+          placeholder={t('partnerPropertyForm.propertyDetails.fields.area.placeholder', 'Enter property area')}
           keyboardType="number-pad"
         />
       );
@@ -212,7 +214,7 @@ const PropertyFieldRenderer: React.FC<PropertyFieldRendererProps> = ({
       return (
         <FilterOption
           key={field}
-          label="Area Unit"
+          label={t('partnerPropertyForm.propertyDetails.fields.lmUnit.label', 'Area Unit')}
           options={masterData?.AreaUnit || []}
           selectedValue={formInput.lmUnit}
           onSelect={value => handleFieldSelect('lmUnit', value)}
@@ -223,7 +225,7 @@ const PropertyFieldRenderer: React.FC<PropertyFieldRendererProps> = ({
       return (
         <FilterOption
           key={field}
-          label="Age of Property"
+          label={t('partnerPropertyForm.propertyDetails.fields.propertyAge.label', 'Age of Property')}
           options={convertToMasterDetailModel([
             '0-5 Yrs',
             '6-10 Yrs',
@@ -240,7 +242,7 @@ const PropertyFieldRenderer: React.FC<PropertyFieldRendererProps> = ({
       return (
         <FilterOption
           key={field}
-          label="Gated Community Security"
+          label={t('partnerPropertyForm.propertyDetails.fields.gatedSecurity.label', 'Gated Community Security')}
           options={convertToMasterDetailModel(['Yes', 'No'])}
           selectedValue={
             formInput.gatedSecurity === null
@@ -259,7 +261,7 @@ const PropertyFieldRenderer: React.FC<PropertyFieldRendererProps> = ({
       return (
         <FilterOption
           key={field}
-          label="Surveillance"
+          label={t('partnerPropertyForm.propertyDetails.fields.surveillanceCameras.label', 'Surveillance')}
           options={convertToMasterDetailModel(['Yes', 'No'])}
           selectedValue={
             formInput.surveillanceCameras === null
@@ -276,7 +278,7 @@ const PropertyFieldRenderer: React.FC<PropertyFieldRendererProps> = ({
       return (
         <FilterOption
           key={field}
-          label="Alarm System"
+          label={t('partnerPropertyForm.propertyDetails.fields.alarmSystem.label', 'Alarm System')}
           options={convertToMasterDetailModel(['Yes', 'No'])}
           selectedValue={
             formInput.alarmSystem === null
@@ -296,9 +298,9 @@ const PropertyFieldRenderer: React.FC<PropertyFieldRendererProps> = ({
           field="shortDescription"
           formInput={formInput}
           setFormInput={handleInputChange}
-          label="Short Description"
+          label={t('partnerPropertyForm.propertyDetails.fields.shortDescription.label', 'Short Description')}
           mode="outlined"
-          placeholder="Enter a short description"
+          placeholder={t('partnerPropertyForm.propertyDetails.fields.shortDescription.placeholder', 'Enter a short description')}
           multiline
           numberOfLines={3}
         />
@@ -311,9 +313,9 @@ const PropertyFieldRenderer: React.FC<PropertyFieldRendererProps> = ({
           field="longDescription"
           formInput={formInput}
           setFormInput={handleInputChange}
-          label="Long Description"
+          label={t('partnerPropertyForm.propertyDetails.fields.longDescription.label', 'Long Description')}
           mode="outlined"
-          placeholder="Enter a detailed description"
+          placeholder={t('partnerPropertyForm.propertyDetails.fields.longDescription.placeholder', 'Enter a detailed description')}
           multiline
           numberOfLines={5}
         />
@@ -323,7 +325,7 @@ const PropertyFieldRenderer: React.FC<PropertyFieldRendererProps> = ({
       return (
         <FilterOption
           key={field}
-          label="Configuration"
+          label={t('partnerPropertyForm.propertyDetails.fields.bhkType.label', 'Configuration')}
           options={masterData?.BhkType || []}
           selectedValue={formInput.bhkType}
           onSelect={value => handleFieldSelect('bhkType', value)}
@@ -337,9 +339,9 @@ const PropertyFieldRenderer: React.FC<PropertyFieldRendererProps> = ({
           field="ceilingHeight"
           formInput={formInput}
           setFormInput={handleInputChange}
-          label="Ceiling Height"
+          label={t('partnerPropertyForm.propertyDetails.fields.ceilingHeight.label', 'Ceiling Height')}
           mode="outlined"
-          placeholder="Enter ceiling height"
+          placeholder={t('partnerPropertyForm.propertyDetails.fields.ceilingHeight.placeholder', 'Enter ceiling height')}
         />
       );
 
@@ -347,7 +349,7 @@ const PropertyFieldRenderer: React.FC<PropertyFieldRendererProps> = ({
       return (
         <FilterOption
           key={field}
-          label="Any Construction"
+          label={t('partnerPropertyForm.propertyDetails.fields.constructionDone.label', 'Any Construction')}
           options={convertToMasterDetailModel(['Yes', 'No'])}
           selectedValue={
             formInput.constructionDone === null
@@ -364,7 +366,7 @@ const PropertyFieldRenderer: React.FC<PropertyFieldRendererProps> = ({
       return (
         <FilterOption
           key={field}
-          label="Boundary"
+          label={t('partnerPropertyForm.propertyDetails.fields.boundaryWall.label', 'Boundary')}
           options={convertToMasterDetailModel(['Yes', 'No'])}
           selectedValue={
             formInput.boundaryWall === null
@@ -381,7 +383,7 @@ const PropertyFieldRenderer: React.FC<PropertyFieldRendererProps> = ({
       return (
         <FilterOption
           key={field}
-          label="No. of Open Side"
+          label={t('partnerPropertyForm.propertyDetails.fields.openSide.label', 'No. of Open Side')}
           options={convertToMasterDetailModel(['One', 'Two', 'Three', 'Four'])}
           selectedValue={formInput.openSide}
           onSelect={value => handleFieldSelect('openSide', value)}

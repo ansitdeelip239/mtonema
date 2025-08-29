@@ -1,5 +1,6 @@
 import React, {useState, useCallback, useMemo, useEffect} from 'react';
 import {View, Text, StyleSheet} from 'react-native';
+import { useTranslation } from 'react-i18next';
 import ImagePreviewList from '../components/ImagePreviewList';
 import TagsInput from '../components/TagsInput';
 import FormNavigationButtons from '../components/FormNavigationButtons';
@@ -28,6 +29,7 @@ const MediaAndSubmitStep: React.FC<MediaAndSubmitStepProps> = ({
   isSubmitting = false,
   submitButtonText = 'Submit',
 }) => {
+  const { t } = useTranslation();
   // Get image types from master data
   const {masterData} = useMaster();
   const imageTypes = useMemo(
@@ -207,13 +209,14 @@ const MediaAndSubmitStep: React.FC<MediaAndSubmitStepProps> = ({
   return (
     <View style={styles.container}>
       <Text style={styles.optionalStepText}>
-        This step is optional. You can proceed without filling these details.
+        {t('partnerPropertyForm.mediaAndSubmit.descriptions.optionalStep', 'This step is optional. You can proceed without filling these details.')}
       </Text>
 
-      <Text style={styles.sectionTitle}>Images</Text>
+      <Text style={styles.sectionTitle}>
+        {t('partnerPropertyForm.mediaAndSubmit.labels.images', 'Images')}
+      </Text>
       <Text style={styles.sectionDescription}>
-        Upload images of your property. Select one image as the default display
-        image.
+        {t('partnerPropertyForm.mediaAndSubmit.descriptions.imagesDescription', 'Upload images of your property. Select one image as the default display image.')}
       </Text>
 
       {/* Image upload button */}
@@ -238,9 +241,9 @@ const MediaAndSubmitStep: React.FC<MediaAndSubmitStepProps> = ({
           field="videoURL"
           formInput={formInput}
           setFormInput={handleInputChange}
-          label="Video URL"
+          label={t('partnerPropertyForm.mediaAndSubmit.labels.videoURL', 'Video URL')}
           mode="outlined"
-          placeholder="Enter YouTube or Vimeo URL"
+          placeholder={t('partnerPropertyForm.mediaAndSubmit.placeholders.videoURL', 'Enter YouTube or Vimeo URL')}
         />
       </View>
 
@@ -253,7 +256,7 @@ const MediaAndSubmitStep: React.FC<MediaAndSubmitStepProps> = ({
       {/* Submit section */}
       <View style={styles.submitSection}>
         <Text style={styles.submitDescription}>
-          Review all details carefully before submitting your property listing.
+          {t('partnerPropertyForm.mediaAndSubmit.descriptions.submitDescription', 'Review all details carefully before submitting your property listing.')}
         </Text>
       </View>
 

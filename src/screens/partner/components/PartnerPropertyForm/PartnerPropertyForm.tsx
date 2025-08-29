@@ -7,6 +7,7 @@ import {
   Platform,
   Dimensions,
 } from 'react-native';
+import { useTranslation } from 'react-i18next';
 import { PartnerPropertyApiSubmissionType } from '../../../../schema/PartnerPropertyFormSchema';
 import { useAuth } from '../../../../hooks/useAuth';
 import { usePartner } from '../../../../context/PartnerProvider';
@@ -33,7 +34,6 @@ import MediaAndSubmitStep from './steps/MediaAndSubmitStep';
 import { usePropertyDataMapping } from './hooks/usePropertyDataMapping';
 
 const { width } = Dimensions.get('window');
-const steps = ['Basic Info', 'Property Details', 'Media & Submit'];
 
 type PartnerPropertyFormProps = {
   editMode?: boolean;
@@ -53,6 +53,14 @@ const PartnerPropertyForm: React.FC<PartnerPropertyFormProps> = ({
   const { user } = useAuth();
   const { setPartnerPropertyUpdated } = usePartner();
   const { theme } = useTheme();
+  const { t } = useTranslation();
+
+  // Get translated steps
+  const steps = [
+    t('partnerPropertyForm.steps.basicInfo', 'Basic Info'),
+    t('partnerPropertyForm.steps.propertyDetails', 'Property Details'),
+    t('partnerPropertyForm.steps.mediaSubmit', 'Media & Submit'),
+  ];
 
   // Use the property data mapping hook
   const propertyDataMapping = usePropertyDataMapping(propertyData);
@@ -92,8 +100,8 @@ const PartnerPropertyForm: React.FC<PartnerPropertyFormProps> = ({
           Toast.show({
             type: 'success',
             text1: editMode
-              ? 'Property updated successfully'
-              : 'Property added successfully',
+              ? t('partnerPropertyForm.success.propertyUpdated', 'Property updated successfully')
+              : t('partnerPropertyForm.success.propertyAdded', 'Property added successfully'),
           });
 
           setPartnerPropertyUpdated(prev => !prev);
@@ -109,9 +117,9 @@ const PartnerPropertyForm: React.FC<PartnerPropertyFormProps> = ({
         Toast.show({
           type: 'error',
           text1: editMode
-            ? 'Failed to update property'
-            : 'Failed to add property',
-          text2: 'Please try again later.',
+            ? t('partnerPropertyForm.errors.updateFailed', 'Failed to update property')
+            : t('partnerPropertyForm.errors.addFailed', 'Failed to add property'),
+          text2: t('partnerPropertyForm.errors.tryAgain', 'Please try again later.'),
         });
       }
     },

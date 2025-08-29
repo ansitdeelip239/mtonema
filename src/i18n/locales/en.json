@@ -394,6 +394,11 @@
       "by": "by",
       "created": "Created"
     },
+    "status": {
+      "active": "Active",
+      "inactive": "Inactive",
+      "deleted": "Deleted"
+    },
     "errors": {
       "invalidDate": "Invalid date"
     },
@@ -408,6 +413,227 @@
     "loading": {
       "loadingTemplates": "Loading content templates...",
       "loadingMore": "Loading more..."
+    }
+  },
+  "contentScreen": {
+    "headers": {
+      "contentTemplates": "Content Templates",
+      "messageTemplates": "Message Templates"
+    },
+    "buttons": {
+      "addTemplate": "Add Template"
+    },
+    "errors": {
+      "fetchFailed": "Failed to fetch content templates",
+      "loadingError": "Error loading content templates"
+    }
+  },
+  "partnerPropertyForm": {
+    "titles": {
+      "addProperty": "Add Property"
+    },
+    "steps": {
+      "basicInfo": "Basic Info",
+      "propertyDetails": "Property Details",
+      "mediaAndSubmit": "Media & Submit"
+    },
+    "buttons": {
+      "clear": "Clear"
+    },
+    "basicDetails": {
+      "labels": {
+        "propertyName": "Property Name*",
+        "sellerType": "Seller Type*",
+        "city": "City*",
+        "propertyFor": "Property For*",
+        "propertyType": "Property Type*",
+        "location": "Location*",
+        "price": "Price*"
+      },
+      "placeholders": {
+        "propertyName": "Enter a property name",
+        "location": "Enter location details",
+        "price": "Enter property price"
+      }
+    },
+    "mediaAndSubmit": {
+      "labels": {
+        "videoURL": "Video URL",
+        "images": "Images",
+        "tags": "Tags"
+      },
+      "placeholders": {
+        "videoURL": "Enter YouTube or Vimeo URL",
+        "tags": "Eg., #luxury"
+      },
+      "descriptions": {
+        "optionalStep": "This step is optional. You can proceed without filling these details.",
+        "imagesDescription": "Upload images of your property. Select one image as the default display image.",
+        "submitDescription": "Review all details carefully before submitting your property listing.",
+        "selectedImages": "Selected Images ({{count}})"
+      },
+      "buttons": {
+        "selectImages": "Select Images",
+        "addTag": "Add"
+      }
+    },
+    "navigation": {
+      "next": "Next",
+      "back": "Back"
+    },
+    "propertyDetails": {
+      "optionalStepText": "This step is optional. You can proceed without filling these details.",
+      "noSelectionText": "Please select a Property Type in the previous step.",
+      "goBack": "Go Back",
+      "fields": {
+        "propertyForType": {
+          "label": "Property Category"
+        },
+        "readyToMove": {
+          "label": "Ready To Move"
+        },
+        "lifts": {
+          "label": "Lift Available"
+        },
+        "pantry": {
+          "label": "Pantry"
+        },
+        "floor": {
+          "label": "Floor",
+          "placeholder": "Enter floor number"
+        },
+        "furnishing": {
+          "label": "Furnished Type"
+        },
+        "parking": {
+          "label": "Car Parking"
+        },
+        "facing": {
+          "label": "Direction of Facing"
+        },
+        "location": {
+          "label": "Location",
+          "placeholder": "Enter property location"
+        },
+        "zipCode": {
+          "label": "Zip Code",
+          "placeholder": "Enter ZIP code"
+        },
+        "price": {
+          "label": "Price",
+          "placeholder": "Enter property price"
+        },
+        "area": {
+          "label": "Property Area",
+          "placeholder": "Enter property area"
+        },
+        "lmUnit": {
+          "label": "Area Unit"
+        },
+        "propertyAge": {
+          "label": "Age of Property"
+        },
+        "gatedSecurity": {
+          "label": "Gated Community Security"
+        },
+        "surveillanceCameras": {
+          "label": "Surveillance"
+        },
+        "alarmSystem": {
+          "label": "Alarm System"
+        },
+        "shortDescription": {
+          "label": "Short Description",
+          "placeholder": "Enter a short description"
+        },
+        "longDescription": {
+          "label": "Long Description",
+          "placeholder": "Enter a detailed description"
+        },
+        "bhkType": {
+          "label": "Configuration"
+        },
+        "ceilingHeight": {
+          "label": "Ceiling Height",
+          "placeholder": "Enter ceiling height"
+        },
+        "constructionDone": {
+          "label": "Any Construction"
+        },
+        "boundaryWall": {
+          "label": "Boundary"
+        },
+        "openSide": {
+          "label": "No. of Open Side"
+        }
+      }
+    },
+    "success": {
+      "propertyUpdated": "Property updated successfully",
+      "propertyAdded": "Property added successfully"
+    },
+    "errors": {
+      "updateFailed": "Failed to update property",
+      "addFailed": "Failed to add property"
+    }
+  },
+  "addContent": {
+    "headers": {
+      "newTemplate": "New Template",
+      "editTemplate": "Edit Template"
+    },
+    "labels": {
+      "templateName": "Template Name",
+      "messageContent": "Message Content",
+      "availableVariables": "Available Variables",
+      "preview": "Preview"
+    },
+    "placeholders": {
+      "templateName": "Enter template name",
+      "messageContent": "Type your message template here...\n\nYou can use variables like {name}, {phone}, {email} to personalize messages.",
+      "preview": "Your message preview will appear here..."
+    },
+    "helpers": {
+      "templateName": "Give your template a descriptive name",
+      "variablesInfo": "Variables in curly braces will be replaced with actual values when sending messages.",
+      "variablesDescription": "Tap on any variable below to add it to your message",
+      "variablesAutoReplace": "These variables will be automatically replaced when sending messages"
+    },
+    "variables": {
+      "name": "Client name",
+      "phone": "Phone number",
+      "whatsapp": "Whatsapp number",
+      "email": "Email address",
+      "senderName": "Your name",
+      "senderEmail": "Your email",
+      "senderAddress": "Your address",
+      "senderPhone": "Your phone"
+    },
+    "buttons": {
+      "cancel": "Cancel",
+      "saveTemplate": "Save Template",
+      "updateTemplate": "Update Template",
+      "saving": "Saving...",
+      "updating": "Updating..."
+    },
+    "errors": {
+      "templateNameRequired": "Please enter a template name",
+      "contentRequired": "Please enter template content",
+      "userNotFound": "User not found",
+      "createFailed": "Failed to create template",
+      "updateFailed": "Failed to update template"
+    },
+    "success": {
+      "templateCreated": "Template Created",
+      "templateUpdated": "Template Updated",
+      "createMessage": "Your message template has been saved successfully.",
+      "updateMessage": "Your message template has been updated successfully."
+    },
+    "alerts": {
+      "discardTitle": "Discard Changes",
+      "discardMessage": "Are you sure you want to discard your changes?",
+      "continueEditing": "Continue Editing",
+      "discard": "Discard"
     }
   }
 }

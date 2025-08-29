@@ -1,5 +1,6 @@
 import React from 'react';
 import {TouchableOpacity, Text, StyleSheet} from 'react-native';
+import { useTranslation } from 'react-i18next';
 
 interface ClearFormButtonProps {
   onPress: () => void;
@@ -10,11 +11,13 @@ const ClearFormButton: React.FC<ClearFormButtonProps> = ({
   onPress,
   backgroundColor,
 }) => {
+  const { t } = useTranslation();
+
   return (
     <TouchableOpacity
       onPress={onPress}
       style={[styles.clearButton, {backgroundColor}]}>
-      <Text style={styles.clearButtonText}>Clear</Text>
+      <Text style={styles.clearButtonText}>{t('partnerPropertyForm.buttons.clear', 'Clear')}</Text>
     </TouchableOpacity>
   );
 };

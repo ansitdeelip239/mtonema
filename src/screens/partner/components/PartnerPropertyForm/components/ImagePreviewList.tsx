@@ -8,6 +8,7 @@ import {
   ScrollView,
 } from 'react-native';
 import {Picker} from '@react-native-picker/picker';
+import { useTranslation } from 'react-i18next';
 import GetIcon from '../../../../../components/GetIcon';
 import {ImageData} from '../../../../../types/image';
 import {MasterDetailModel} from '../../../../../types';
@@ -31,6 +32,7 @@ const ImagePreviewList: React.FC<ImagePreviewListProps> = ({
   onCategoryChange,
 }) => {
   const {theme} = useTheme();
+  const { t } = useTranslation();
 
   if (images.length === 0) {
     return null;
@@ -39,7 +41,7 @@ const ImagePreviewList: React.FC<ImagePreviewListProps> = ({
   return (
     <View style={styles.imageSection}>
       <Text style={styles.imageListTitle}>
-        Selected Images ({images.length})
+        {t('partnerPropertyForm.mediaAndSubmit.descriptions.selectedImages', { count: images.length })}
       </Text>
       <ScrollView
         horizontal

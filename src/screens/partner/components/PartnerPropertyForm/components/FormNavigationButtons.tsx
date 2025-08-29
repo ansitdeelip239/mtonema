@@ -6,6 +6,7 @@ import {
   StyleSheet,
   ActivityIndicator,
 } from 'react-native';
+import {useTranslation} from 'react-i18next';
 import {useTheme} from '../../../../../context/ThemeProvider';
 
 interface FormNavigationButtonsProps {
@@ -23,9 +24,13 @@ const FormNavigationButtons: React.FC<FormNavigationButtonsProps> = ({
   showBackButton = false,
   isNextEnabled = true,
   isSubmitting = false,
-  nextButtonText = 'Next',
+  nextButtonText,
 }) => {
+  const {t} = useTranslation();
   const {theme} = useTheme();
+
+  const defaultNextText = t('partnerPropertyForm.navigation.next', 'Next');
+  const finalNextText = nextButtonText || defaultNextText;
 
   return (
     <View style={styles.buttonsContainer}>
@@ -34,15 +39,19 @@ const FormNavigationButtons: React.FC<FormNavigationButtonsProps> = ({
           style={[styles.button, styles.backButton]}
           onPress={onBack}
           disabled={isSubmitting}>
-          <Text style={styles.backButtonText}>Back</Text>
+          <Text style={styles.backButtonText}>
+            {t('partnerPropertyForm.navigation.back', 'Back')}
+          </Text>
         </TouchableOpacity>
       )}
 
       <TouchableOpacity
         style={[
           styles.button,
-          // eslint-disable-next-line react-native/no-inline-styles
-          isNextEnabled ? {backgroundColor: theme.primaryColor, marginLeft: 'auto'} : styles.disabledButton,
+          isNextEnabled
+            // eslint-disable-next-line react-native/no-inline-styles
+            ? {backgroundColor: theme.primaryColor, marginLeft: 'auto'}
+            : styles.disabledButton,
           showBackButton ? {} : styles.fullWidthButton,
         ]}
         onPress={isNextEnabled ? onNext : undefined}
@@ -54,7 +63,7 @@ const FormNavigationButtons: React.FC<FormNavigationButtonsProps> = ({
             style={
               isNextEnabled ? styles.nextButtonText : styles.disabledButtonText
             }>
-            {nextButtonText}
+            {finalNextText}
           </Text>
         )}
       </TouchableOpacity>

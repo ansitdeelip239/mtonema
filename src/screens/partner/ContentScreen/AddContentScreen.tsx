@@ -11,6 +11,7 @@ import {
   Platform,
 } from 'react-native';
 import React, { useState, useCallback, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { ContentTemplateStackParamList } from '../../../navigator/components/ContentTemplateStack';
 import Header from '../../../components/Header';
@@ -35,6 +36,7 @@ const AddContentScreen: React.FC<Props> = ({ navigation, route }) => {
   const { user } = useAuth();
   const { showError } = useDialog();
   const { setMessageTemplateUpdated } = usePartner();
+  const { t } = useTranslation();
 
   const [templateName, setTemplateName] = useState('');
   const [content, setContent] = useState('');
@@ -54,17 +56,17 @@ const AddContentScreen: React.FC<Props> = ({ navigation, route }) => {
 
   const handleSave = useCallback(async () => {
     if (!templateName.trim()) {
-      showError('Please enter a template name');
+      showError(t('addContent.errors.templateNameRequired', 'Please enter a template name'));
       return;
     }
 
     if (!content.trim()) {
-      showError('Please enter template content');
+      showError(t('addContent.errors.contentRequired', 'Please enter template content'));
       return;
     }
 
     if (!user?.id) {
-      showError('User not found');
+      showError(t('addContent.errors.userNotFound', 'User not found'));
       return;
     }
 
@@ -92,10 +94,10 @@ const AddContentScreen: React.FC<Props> = ({ navigation, route }) => {
       if (response.success) {
         Toast.show({
           type: 'success',
-          text1: editMode ? 'Template Updated' : 'Template Created',
+          text1: editMode ? t('addContent.success.templateUpdated', 'Template Updated') : t('addContent.success.templateCreated', 'Template Created'),
           text2: editMode
-            ? 'Your message template has been updated successfully.'
-            : 'Your message template has been saved successfully.',
+            ? t('addContent.success.updateMessage', 'Your message template has been updated successfully.')
+            : t('addContent.success.createMessage', 'Your message template has been saved successfully.'),
         });
         setMessageTemplateUpdated(prev => !prev);
         navigation.goBack();
@@ -105,7 +107,7 @@ const AddContentScreen: React.FC<Props> = ({ navigation, route }) => {
         `Error ${editMode ? 'updating' : 'creating'} template:`,
         error,
       );
-      showError(`Failed to ${editMode ? 'update' : 'create'} template`);
+      showError(editMode ? t('addContent.errors.updateFailed', 'Failed to update template') : t('addContent.errors.createFailed', 'Failed to create template'));
     } finally {
       setSaving(false);
     }
@@ -118,17 +120,18 @@ const AddContentScreen: React.FC<Props> = ({ navigation, route }) => {
     editMode,
     templateData,
     setMessageTemplateUpdated,
+    t,
   ]);
 
   const handleCancel = useCallback(() => {
     if (templateName.trim() || content.trim()) {
       Alert.alert(
-        'Discard Changes',
-        'Are you sure you want to discard your changes?',
+        t('addContent.alerts.discardTitle', 'Discard Changes'),
+        t('addContent.alerts.discardMessage', 'Are you sure you want to discard your changes?'),
         [
-          { text: 'Continue Editing', style: 'cancel' },
+          { text: t('addContent.alerts.continueEditing', 'Continue Editing'), style: 'cancel' },
           {
-            text: 'Discard',
+            text: t('addContent.alerts.discard', 'Discard'),
             style: 'destructive',
             onPress: () => navigation.goBack(),
           },
@@ -137,26 +140,26 @@ const AddContentScreen: React.FC<Props> = ({ navigation, route }) => {
     } else {
       navigation.goBack();
     }
-  }, [templateName, content, navigation]);
+  }, [templateName, content, navigation, t]);
 
   // Available variables
   const variables = [
-    { id: 'name', variable: '{name}', description: 'Client name' },
-    { id: 'phone', variable: '{phone}', description: 'Phone number' },
+    { id: 'name', variable: '{name}', description: t('addContent.variables.name', 'Client name') },
+    { id: 'phone', variable: '{phone}', description: t('addContent.variables.phone', 'Phone number') },
     {
       id: 'whatsapp_number',
       variable: '{whatsapp_number}',
-      description: 'Whatsapp number',
+      description: t('addContent.variables.whatsapp', 'Whatsapp number'),
     },
-    { id: 'email', variable: '{email}', description: 'Email address' },
-    { id: 'sender_name', variable: '{sender_name}', description: 'Your name' },
-    { id: 'sender_email', variable: '{sender_email}', description: 'Your email' },
+    { id: 'email', variable: '{email}', description: t('addContent.variables.email', 'Email address') },
+    { id: 'sender_name', variable: '{sender_name}', description: t('addContent.variables.senderName', 'Your name') },
+    { id: 'sender_email', variable: '{sender_email}', description: t('addContent.variables.senderEmail', 'Your email') },
     {
       id: 'sender_address',
       variable: '{sender_address}',
-      description: 'Your address',
+      description: t('addContent.variables.senderAddress', 'Your address'),
     },
-    { id: 'sender_phone', variable: '{sender_phone}', description: 'Your phone' },
+    { id: 'sender_phone', variable: '{sender_phone}', description: t('addContent.variables.senderPhone', 'Your phone') },
   ];
 
   return (
@@ -164,7 +167,7 @@ const AddContentScreen: React.FC<Props> = ({ navigation, route }) => {
       {
         Platform.OS === 'android' && (
           <Header<PartnerDrawerParamList>
-            title={editMode ? 'Edit Template' : 'New Template'}
+            title={editMode ? t('addContent.headers.editTemplate', 'Edit Template') : t('addContent.headers.newTemplate', 'New Template')}
             backButton={true}
             onBackPress={handleCancel}
           />
@@ -174,46 +177,43 @@ const AddContentScreen: React.FC<Props> = ({ navigation, route }) => {
       <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
         {/* Template Name Input */}
         <View style={styles.section}>
-          <Text style={styles.label}>Template Name *</Text>
+          <Text style={styles.label}>{t('addContent.labels.templateName', 'Template Name')} *</Text>
           <TextInput
             style={styles.nameInput}
             value={templateName}
             onChangeText={setTemplateName}
-            placeholder="Enter template name"
+            placeholder={t('addContent.placeholders.templateName', 'Enter template name')}
             placeholderTextColor="#999"
             maxLength={100}
           />
           <Text style={styles.helperText}>
-            Give your template a descriptive name
+            {t('addContent.helpers.templateName', 'Give your template a descriptive name')}
           </Text>
         </View>
 
         {/* Content Editor */}
         <View style={styles.section}>
-          <Text style={styles.label}>Message Content *</Text>
+          <Text style={styles.label}>{t('addContent.labels.messageContent', 'Message Content')} *</Text>
           <TextInput
             style={styles.contentInput}
             value={content}
             onChangeText={setContent}
-            placeholder={
-              'Type your message template here...\n\nYou can use variables like {name}, {phone}, {email} to personalize messages.'
-            }
+            placeholder={t('addContent.placeholders.messageContent', 'Type your message template here...\n\nYou can use variables like {name}, {phone}, {email} to personalize messages.')}
             placeholderTextColor="#999"
             multiline
             textAlignVertical="top"
             scrollEnabled
           />
           <Text style={styles.helperText}>
-            Variables in curly braces will be replaced with actual values when
-            sending messages.
+            {t('addContent.helpers.variablesInfo', 'Variables in curly braces will be replaced with actual values when sending messages.')}
           </Text>
         </View>
 
         {/* Template Variables */}
         <View style={styles.section}>
-          <Text style={styles.label}>Available Variables</Text>
+          <Text style={styles.label}>{t('addContent.labels.availableVariables', 'Available Variables')}</Text>
           <Text style={[styles.helperText, styles.variablesDescription]}>
-            Tap on any variable below to add it to your message
+            {t('addContent.helpers.variablesDescription', 'Tap on any variable below to add it to your message')}
           </Text>
           <View style={styles.variablesContainer}>
             {variables.map(variable => (
@@ -230,16 +230,16 @@ const AddContentScreen: React.FC<Props> = ({ navigation, route }) => {
             ))}
           </View>
           <Text style={styles.helperText}>
-            These variables will be automatically replaced when sending messages
+            {t('addContent.helpers.variablesAutoReplace', 'These variables will be automatically replaced when sending messages')}
           </Text>
         </View>
 
         {/* Preview Section */}
         <View style={styles.section}>
-          <Text style={styles.label}>Preview</Text>
+          <Text style={styles.label}>{t('addContent.labels.preview', 'Preview')}</Text>
           <View style={styles.previewContainer}>
             <Text style={styles.previewText}>
-              {content || 'Your message preview will appear here...'}
+              {content || t('addContent.placeholders.preview', 'Your message preview will appear here...')}
             </Text>
           </View>
         </View>
@@ -254,7 +254,7 @@ const AddContentScreen: React.FC<Props> = ({ navigation, route }) => {
           style={styles.cancelButton}
           onPress={handleCancel}
           disabled={saving}>
-          <Text style={styles.cancelButtonText}>Cancel</Text>
+          <Text style={styles.cancelButtonText}>{t('addContent.buttons.cancel', 'Cancel')}</Text>
         </TouchableOpacity>
 
         <TouchableOpacity
@@ -269,13 +269,13 @@ const AddContentScreen: React.FC<Props> = ({ navigation, route }) => {
             <>
               <ActivityIndicator size="small" color="white" />
               <Text style={styles.saveButtonText}>
-                {editMode ? 'Updating...' : 'Saving...'}
+                {editMode ? t('addContent.buttons.updating', 'Updating...') : t('addContent.buttons.saving', 'Saving...')}
               </Text>
             </>
           ) : (
             <>
               <Text style={styles.saveButtonText}>
-                {editMode ? 'Update Template' : 'Save Template'}
+                {editMode ? t('addContent.buttons.updateTemplate', 'Update Template') : t('addContent.buttons.saveTemplate', 'Save Template')}
               </Text>
             </>
           )}

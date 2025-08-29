@@ -400,6 +400,11 @@
       "by": "بواسطة",
       "created": "تم الإنشاء"
     },
+    "status": {
+      "active": "نشط",
+      "inactive": "غير نشط",
+      "deleted": "محذوف"
+    },
     "errors": {
       "invalidDate": "تاريخ غير صحيح"
     },
@@ -414,6 +419,227 @@
     "loading": {
       "loadingTemplates": "جاري تحميل قوالب المحتوى...",
       "loadingMore": "جاري تحميل المزيد..."
+    }
+  },
+  "contentScreen": {
+    "headers": {
+      "contentTemplates": "قوالب المحتوى",
+      "messageTemplates": "قوالب الرسائل"
+    },
+    "buttons": {
+      "addTemplate": "إضافة قالب"
+    },
+    "errors": {
+      "fetchFailed": "فشل في جلب قوالب المحتوى",
+      "loadingError": "خطأ في تحميل قوالب المحتوى"
+    }
+  },
+  "addContent": {
+    "headers": {
+      "newTemplate": "قالب جديد",
+      "editTemplate": "تحرير القالب"
+    },
+    "labels": {
+      "templateName": "اسم القالب",
+      "messageContent": "محتوى الرسالة",
+      "availableVariables": "المتغيرات المتاحة",
+      "preview": "المعاينة"
+    },
+    "placeholders": {
+      "templateName": "أدخل اسم القالب",
+      "messageContent": "اكتب قالب رسالتك هنا...\n\nيمكنك استخدام متغيرات مثل {name}، {phone}، {email} لتخصيص الرسائل.",
+      "preview": "ستظهر معاينة رسالتك هنا..."
+    },
+    "helpers": {
+      "templateName": "أعطِ قالبك اسماً وصفياً",
+      "variablesInfo": "سيتم استبدال المتغيرات بين الأقواس المتعرجة بالقيم الفعلية عند إرسال الرسائل.",
+      "variablesDescription": "اضغط على أي متغير أدناه لإضافته إلى رسالتك",
+      "variablesAutoReplace": "سيتم استبدال هذه المتغيرات تلقائياً عند إرسال الرسائل"
+    },
+    "variables": {
+      "name": "اسم العميل",
+      "phone": "رقم الهاتف",
+      "whatsapp": "رقم الواتساب",
+      "email": "عنوان البريد الإلكتروني",
+      "senderName": "اسمك",
+      "senderEmail": "بريدك الإلكتروني",
+      "senderAddress": "عنوانك",
+      "senderPhone": "هاتفك"
+    },
+    "buttons": {
+      "cancel": "إلغاء",
+      "saveTemplate": "حفظ القالب",
+      "updateTemplate": "تحديث القالب",
+      "saving": "جاري الحفظ...",
+      "updating": "جاري التحديث..."
+    },
+    "errors": {
+      "templateNameRequired": "يرجى إدخال اسم القالب",
+      "contentRequired": "يرجى إدخال محتوى القالب",
+      "userNotFound": "المستخدم غير موجود",
+      "createFailed": "فشل في إنشاء القالب",
+      "updateFailed": "فشل في تحديث القالب"
+    },
+    "success": {
+      "templateCreated": "تم إنشاء القالب",
+      "templateUpdated": "تم تحديث القالب",
+      "createMessage": "تم حفظ قالب رسالتك بنجاح.",
+      "updateMessage": "تم تحديث قالب رسالتك بنجاح."
+    },
+    "alerts": {
+      "discardTitle": "تجاهل التغييرات",
+      "discardMessage": "هل أنت متأكد من أنك تريد تجاهل تغييراتك؟",
+      "continueEditing": "متابعة التحرير",
+      "discard": "تجاهل"
+    }
+  },
+  "partnerPropertyForm": {
+    "titles": {
+      "addProperty": "إضافة عقار"
+    },
+    "steps": {
+      "basicInfo": "المعلومات الأساسية",
+      "propertyDetails": "تفاصيل العقار",
+      "mediaAndSubmit": "الوسائط والإرسال"
+    },
+    "buttons": {
+      "clear": "مسح"
+    },
+    "basicDetails": {
+      "labels": {
+        "propertyName": "اسم العقار*",
+        "sellerType": "نوع البائع*",
+        "city": "المدينة*",
+        "propertyFor": "العقار لـ*",
+        "propertyType": "نوع العقار*",
+        "location": "الموقع*",
+        "price": "السعر*"
+      },
+      "placeholders": {
+        "propertyName": "أدخل اسم العقار",
+        "location": "أدخل تفاصيل الموقع",
+        "price": "أدخل سعر العقار"
+      }
+    },
+    "mediaAndSubmit": {
+      "labels": {
+        "videoURL": "رابط الفيديو",
+        "images": "الصور",
+        "tags": "العلامات"
+      },
+      "placeholders": {
+        "videoURL": "أدخل رابط يوتيوب أو فيميو",
+        "tags": "مثال، #فاخر"
+      },
+      "descriptions": {
+        "optionalStep": "هذه الخطوة اختيارية. يمكنك المتابعة دون ملء هذه التفاصيل.",
+        "imagesDescription": "قم بتحميل صور عقارك. حدد صورة واحدة كصورة العرض الافتراضية.",
+        "submitDescription": "راجع جميع التفاصيل بعناية قبل إرسال إعلان عقارك.",
+        "selectedImages": "الصور المحددة ({{count}})"
+      },
+      "buttons": {
+        "selectImages": "تحديد الصور",
+        "addTag": "إضافة"
+      }
+    },
+    "navigation": {
+      "next": "التالي",
+      "back": "العودة"
+    },
+    "propertyDetails": {
+      "optionalStepText": "هذه الخطوة اختيارية. يمكنك المتابعة دون ملء هذه التفاصيل.",
+      "noSelectionText": "يرجى تحديد نوع العقار في الخطوة السابقة.",
+      "goBack": "العودة",
+      "fields": {
+        "propertyForType": {
+          "label": "فئة العقار"
+        },
+        "readyToMove": {
+          "label": "جاهز للانتقال"
+        },
+        "lifts": {
+          "label": "مصعد متاح"
+        },
+        "pantry": {
+          "label": "مطبخ"
+        },
+        "floor": {
+          "label": "الطابق",
+          "placeholder": "أدخل رقم الطابق"
+        },
+        "furnishing": {
+          "label": "نوع التأثيث"
+        },
+        "parking": {
+          "label": "موقف سيارات"
+        },
+        "facing": {
+          "label": "اتجاه الواجهة"
+        },
+        "location": {
+          "label": "الموقع",
+          "placeholder": "أدخل موقع العقار"
+        },
+        "zipCode": {
+          "label": "الرمز البريدي",
+          "placeholder": "أدخل الرمز البريدي"
+        },
+        "price": {
+          "label": "السعر",
+          "placeholder": "أدخل سعر العقار"
+        },
+        "area": {
+          "label": "مساحة العقار",
+          "placeholder": "أدخل مساحة العقار"
+        },
+        "lmUnit": {
+          "label": "وحدة المساحة"
+        },
+        "propertyAge": {
+          "label": "عمر العقار"
+        },
+        "gatedSecurity": {
+          "label": "أمن المجتمع المغلق"
+        },
+        "surveillanceCameras": {
+          "label": "المراقبة"
+        },
+        "alarmSystem": {
+          "label": "نظام الإنذار"
+        },
+        "shortDescription": {
+          "label": "وصف قصير",
+          "placeholder": "أدخل وصف قصير"
+        },
+        "longDescription": {
+          "label": "وصف طويل",
+          "placeholder": "أدخل وصف مفصل"
+        },
+        "bhkType": {
+          "label": "التكوين"
+        },
+        "ceilingHeight": {
+          "label": "ارتفاع السقف",
+          "placeholder": "أدخل ارتفاع السقف"
+        },
+        "constructionDone": {
+          "label": "أي بناء"
+        },
+        "boundaryWall": {
+          "label": "الحدود"
+        },
+        "openSide": {
+          "label": "عدد الجانب المفتوح"
+        }
+      }
+    },
+    "success": {
+      "propertyUpdated": "تم تحديث العقار بنجاح",
+      "propertyAdded": "تم إضافة العقار بنجاح"
+    },
+    "errors": {
+      "updateFailed": "فشل في تحديث العقار",
+      "addFailed": "فشل في إضافة العقار"
     }
   }
 }

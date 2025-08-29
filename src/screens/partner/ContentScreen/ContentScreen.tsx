@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { View, StyleSheet, SafeAreaView, Platform } from 'react-native';
-import { AnimatedFAB } from 'react-native-paper';
+import { View, StyleSheet, SafeAreaView, Platform, I18nManager, TouchableOpacity, Text } from 'react-native';
+import { useTranslation } from 'react-i18next';
 import Header from '../../../components/Header';
 import { PartnerDrawerParamList } from '../../../types/navigation';
 import { useAuth } from '../../../hooks/useAuth';
@@ -28,6 +28,7 @@ const ContentScreen: React.FC<Props> = ({ navigation }) => {
   const { showError } = useDialog();
   const { theme } = useTheme();
   const { messageTemplateUpdated } = usePartner();
+  const { t } = useTranslation();
 
   // State management
   const [contentTemplates, setContentTemplates] = useState<ContentTemplate[]>(
@@ -39,7 +40,6 @@ const ContentScreen: React.FC<Props> = ({ navigation }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [hasNextPage, setHasNextPage] = useState(true);
   const [totalCount, setTotalCount] = useState(0);
-  const [isExtended, setIsExtended] = useState(true);
 
   // Fetch content templates
   const fetchContentTemplates = useCallback(
@@ -75,18 +75,18 @@ const ContentScreen: React.FC<Props> = ({ navigation }) => {
           setHasNextPage(responsePagingModel.nextPage);
           setCurrentPage(pageNumber);
         } else {
-          showError('Failed to fetch content templates');
+          showError(t('contentScreen.errors.fetchFailed', 'Failed to fetch content templates'));
         }
       } catch (error) {
         console.error('Error fetching content templates:', error);
-        showError('Error loading content templates');
+        showError(t('contentScreen.errors.loadingError', 'Error loading content templates'));
       } finally {
         setLoading(false);
         setRefreshing(false);
         setLoadingMore(false);
       }
     },
-    [user?.id, showError],
+    [user?.id, showError, t],
   );
 
   // Initial load
@@ -108,16 +108,6 @@ const ContentScreen: React.FC<Props> = ({ navigation }) => {
       fetchContentTemplates(nextPage);
     }
   }, [loadingMore, hasNextPage, currentPage, fetchContentTemplates]);
-
-  // Handle scroll for FAB animation
-  const handleScroll = useCallback(
-    ({ nativeEvent }: { nativeEvent: { contentOffset: { y: number } } }) => {
-      const currentScrollPosition =
-        Math.floor(nativeEvent?.contentOffset?.y) ?? 0;
-      setIsExtended(currentScrollPosition <= 0);
-    },
-    [],
-  );
 
   // Handle template actions
   const handleTemplatePress = useCallback((item: ContentTemplate) => {
@@ -146,7 +136,7 @@ const ContentScreen: React.FC<Props> = ({ navigation }) => {
   if (loading && contentTemplates.length === 0) {
     return (
       <SafeAreaView style={styles.container}>
-        <Header<PartnerDrawerParamList> title="Content Templates" />
+        <Header<PartnerDrawerParamList> title={t('contentScreen.headers.contentTemplates', 'Content Templates')} />
         <ContentLoadingIndicator type="initial" />
       </SafeAreaView>
     );
@@ -156,7 +146,7 @@ const ContentScreen: React.FC<Props> = ({ navigation }) => {
     <SafeAreaView style={styles.container}>
       {
         Platform.OS === 'android' && (
-          <Header<PartnerDrawerParamList> title="Message Templates" />
+          <Header<PartnerDrawerParamList> title={t('contentScreen.headers.messageTemplates', 'Message Templates')} />
         )
       }
 
@@ -170,26 +160,24 @@ const ContentScreen: React.FC<Props> = ({ navigation }) => {
           loadingMore={loadingMore}
           onRefresh={handleRefresh}
           onLoadMore={handleLoadMore}
-          onScroll={handleScroll}
           onTemplatePress={handleTemplatePress}
           onTemplateView={handleTemplateView}
           onTemplateEdit={handleTemplateEdit}
         />
 
-        {/* Animated FAB */}
-        <AnimatedFAB
-          // eslint-disable-next-line react/no-unstable-nested-components
-          icon={() => <GetIcon iconName="plus" color="white" size={24} />}
-          label="Add Template"
-          color="white"
-          extended={isExtended}
-          onPress={handleAddContent}
-          visible={true}
-          animateFrom="right"
-          iconMode="static"
-          variant="primary"
+        {/* Simple FAB with fixed text */}
+        <TouchableOpacity
           style={[styles.fab, { backgroundColor: theme.primaryColor }]}
-        />
+          onPress={handleAddContent}
+          activeOpacity={0.8}
+        >
+          <View style={styles.fabContent}>
+            <GetIcon iconName="plus" color="white" size={24} />
+            <Text style={styles.fabText}>
+              {t('contentScreen.buttons.addTemplate', 'Add Template')}
+            </Text>
+          </View>
+        </TouchableOpacity>
       </View>
     </SafeAreaView>
   );
@@ -205,8 +193,33 @@ const styles = StyleSheet.create({
   },
   fab: {
     bottom: 16,
-    right: 16,
+    right: I18nManager.isRTL ? undefined : 16,
+    left: I18nManager.isRTL ? 16 : undefined,
     position: 'absolute',
+    minWidth: 140,
+    paddingHorizontal: 16,
+    paddingVertical: 12,
+    borderRadius: 28,
+    elevation: 6,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 3,
+    },
+    shadowOpacity: 0.27,
+    shadowRadius: 4.65,
+  },
+  fabText: {
+    fontSize: 14,
+    fontWeight: '500',
+    color: 'white',
+    textAlign: I18nManager.isRTL ? 'right' : 'left',
+    writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr',
+  },
+  fabContent: {
+    flexDirection: I18nManager.isRTL ? 'row-reverse' : 'row',
+    alignItems: 'center',
+    gap: 8,
   },
 });
 

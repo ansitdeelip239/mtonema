@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   TextInput,
 } from 'react-native';
+import { useTranslation } from 'react-i18next';
 import Colors from '../../../../../constants/Colors';
 import GetIcon from '../../../../../components/GetIcon';
 import { useTheme } from '../../../../../context/ThemeProvider';
@@ -18,6 +19,7 @@ interface TagsInputProps {
 const TagsInput: React.FC<TagsInputProps> = ({tags, onTagsChange}) => {
   const [tagInput, setTagInput] = useState<string>('');
   const {theme} = useTheme();
+  const { t } = useTranslation();
 
   const handleAddTag = () => {
     if (!tagInput.trim()) {
@@ -55,13 +57,15 @@ const TagsInput: React.FC<TagsInputProps> = ({tags, onTagsChange}) => {
 
   return (
     <View style={styles.tagsSection}>
-      <Text style={styles.fieldTitle}>Tags</Text>
+      <Text style={styles.fieldTitle}>
+        {t('partnerPropertyForm.mediaAndSubmit.labels.tags', 'Tags')}
+      </Text>
       <View style={styles.tagInputContainer}>
         <View style={styles.tagInputWrapper}>
           <TextInput
             value={tagInput}
             onChangeText={setTagInput}
-            placeholder="Eg., #luxury"
+            placeholder={t('partnerPropertyForm.mediaAndSubmit.placeholders.tags', 'Eg., #luxury')}
             style={styles.tagTextInput}
             autoCapitalize="none"
             returnKeyType="done"
@@ -77,7 +81,9 @@ const TagsInput: React.FC<TagsInputProps> = ({tags, onTagsChange}) => {
           ]}
           onPress={handleAddTag}
           disabled={!tagInput.trim()}>
-          <Text style={styles.addTagButtonText}>Add</Text>
+          <Text style={styles.addTagButtonText}>
+            {t('partnerPropertyForm.mediaAndSubmit.buttons.addTag', 'Add')}
+          </Text>
         </TouchableOpacity>
       </View>
 

@@ -394,6 +394,11 @@
       "by": "por",
       "created": "Criado"
     },
+    "status": {
+      "active": "Ativo",
+      "inactive": "Inativo",
+      "deleted": "Excluído"
+    },
     "errors": {
       "invalidDate": "Data inválida"
     },
@@ -408,6 +413,227 @@
     "loading": {
       "loadingTemplates": "Carregando modelos de conteúdo...",
       "loadingMore": "Carregando mais..."
+    }
+  },
+  "contentScreen": {
+    "headers": {
+      "contentTemplates": "Modelos de Conteúdo",
+      "messageTemplates": "Modelos de Mensagens"
+    },
+    "buttons": {
+      "addTemplate": "Adicionar Modelo"
+    },
+    "errors": {
+      "fetchFailed": "Falha ao buscar modelos de conteúdo",
+      "loadingError": "Erro ao carregar modelos de conteúdo"
+    }
+  },
+  "partnerPropertyForm": {
+    "titles": {
+      "addProperty": "Adicionar Propriedade"
+    },
+    "steps": {
+      "basicInfo": "Informações Básicas",
+      "propertyDetails": "Detalhes da Propriedade",
+      "mediaAndSubmit": "Mídia e Enviar"
+    },
+    "buttons": {
+      "clear": "Limpar"
+    },
+    "basicDetails": {
+      "labels": {
+        "propertyName": "Nome da Propriedade*",
+        "sellerType": "Tipo de Vendedor*",
+        "city": "Cidade*",
+        "propertyFor": "Propriedade Para*",
+        "propertyType": "Tipo de Propriedade*",
+        "location": "Localização*",
+        "price": "Preço*"
+      },
+      "placeholders": {
+        "propertyName": "Digite um nome da propriedade",
+        "location": "Digite detalhes da localização",
+        "price": "Digite preço da propriedade"
+      }
+    },
+    "mediaAndSubmit": {
+      "labels": {
+        "videoURL": "URL do Vídeo",
+        "images": "Imagens",
+        "tags": "Etiquetas"
+      },
+      "placeholders": {
+        "videoURL": "Digite URL do YouTube ou Vimeo",
+        "tags": "Ex., #luxo"
+      },
+      "descriptions": {
+        "optionalStep": "Este passo é opcional. Você pode prosseguir sem preencher estes detalhes.",
+        "imagesDescription": "Faça upload de imagens da sua propriedade. Selecione uma imagem como imagem de exibição padrão.",
+        "submitDescription": "Revise todos os detalhes cuidadosamente antes de enviar o anúncio da sua propriedade.",
+        "selectedImages": "Imagens Selecionadas ({{count}})"
+      },
+      "buttons": {
+        "selectImages": "Selecionar Imagens",
+        "addTag": "Adicionar"
+      }
+    },
+    "navigation": {
+      "next": "Próximo",
+      "back": "Voltar"
+    },
+    "propertyDetails": {
+      "optionalStepText": "Este passo é opcional. Você pode continuar sem preencher estes detalhes.",
+      "noSelectionText": "Por favor selecione um Tipo de Propriedade no passo anterior.",
+      "goBack": "Voltar",
+      "fields": {
+        "propertyForType": {
+          "label": "Categoria da Propriedade"
+        },
+        "readyToMove": {
+          "label": "Pronto para Mudar"
+        },
+        "lifts": {
+          "label": "Elevador Disponível"
+        },
+        "pantry": {
+          "label": "Cozinha"
+        },
+        "floor": {
+          "label": "Andar",
+          "placeholder": "Digite o número do andar"
+        },
+        "furnishing": {
+          "label": "Tipo de Mobília"
+        },
+        "parking": {
+          "label": "Estacionamento de Carro"
+        },
+        "facing": {
+          "label": "Direção de Orientação"
+        },
+        "location": {
+          "label": "Localização",
+          "placeholder": "Digite a localização da propriedade"
+        },
+        "zipCode": {
+          "label": "Código Postal",
+          "placeholder": "Digite o código postal"
+        },
+        "price": {
+          "label": "Preço",
+          "placeholder": "Digite o preço da propriedade"
+        },
+        "area": {
+          "label": "Área da Propriedade",
+          "placeholder": "Digite a área da propriedade"
+        },
+        "lmUnit": {
+          "label": "Unidade de Área"
+        },
+        "propertyAge": {
+          "label": "Idade da Propriedade"
+        },
+        "gatedSecurity": {
+          "label": "Segurança de Condomínio Fechado"
+        },
+        "surveillanceCameras": {
+          "label": "Vigilância"
+        },
+        "alarmSystem": {
+          "label": "Sistema de Alarme"
+        },
+        "shortDescription": {
+          "label": "Descrição Curta",
+          "placeholder": "Digite uma descrição curta"
+        },
+        "longDescription": {
+          "label": "Descrição Longa",
+          "placeholder": "Digite uma descrição detalhada"
+        },
+        "bhkType": {
+          "label": "Configuração"
+        },
+        "ceilingHeight": {
+          "label": "Altura do Teto",
+          "placeholder": "Digite a altura do teto"
+        },
+        "constructionDone": {
+          "label": "Alguma Construção"
+        },
+        "boundaryWall": {
+          "label": "Limite"
+        },
+        "openSide": {
+          "label": "Núm. de Lado Aberto"
+        }
+      }
+    },
+    "success": {
+      "propertyUpdated": "Propriedade atualizada com sucesso",
+      "propertyAdded": "Propriedade adicionada com sucesso"
+    },
+    "errors": {
+      "updateFailed": "Erro ao atualizar propriedade",
+      "addFailed": "Erro ao adicionar propriedade"
+    }
+  },
+  "addContent": {
+    "headers": {
+      "newTemplate": "Novo Modelo",
+      "editTemplate": "Editar Modelo"
+    },
+    "labels": {
+      "templateName": "Nome do Modelo",
+      "messageContent": "Conteúdo da Mensagem",
+      "availableVariables": "Variáveis Disponíveis",
+      "preview": "Visualização"
+    },
+    "placeholders": {
+      "templateName": "Digite o nome do modelo",
+      "messageContent": "Digite seu modelo de mensagem aqui...\n\nVocê pode usar variáveis como {name}, {phone}, {email} para personalizar mensagens.",
+      "preview": "A visualização da sua mensagem aparecerá aqui..."
+    },
+    "helpers": {
+      "templateName": "Dê um nome descritivo ao seu modelo",
+      "variablesInfo": "Variáveis entre chaves serão substituídas por valores reais ao enviar mensagens.",
+      "variablesDescription": "Toque em qualquer variável abaixo para adicioná-la à sua mensagem",
+      "variablesAutoReplace": "Essas variáveis serão substituídas automaticamente ao enviar mensagens"
+    },
+    "variables": {
+      "name": "Nome do cliente",
+      "phone": "Número de telefone",
+      "whatsapp": "Número do Whatsapp",
+      "email": "Endereço de e-mail",
+      "senderName": "Seu nome",
+      "senderEmail": "Seu e-mail",
+      "senderAddress": "Seu endereço",
+      "senderPhone": "Seu telefone"
+    },
+    "buttons": {
+      "cancel": "Cancelar",
+      "saveTemplate": "Salvar Modelo",
+      "updateTemplate": "Atualizar Modelo",
+      "saving": "Salvando...",
+      "updating": "Atualizando..."
+    },
+    "errors": {
+      "templateNameRequired": "Por favor digite um nome de modelo",
+      "contentRequired": "Por favor digite conteúdo do modelo",
+      "userNotFound": "Usuário não encontrado",
+      "createFailed": "Falha ao criar modelo",
+      "updateFailed": "Falha ao atualizar modelo"
+    },
+    "success": {
+      "templateCreated": "Modelo Criado",
+      "templateUpdated": "Modelo Atualizado",
+      "createMessage": "Seu modelo de mensagem foi salvo com sucesso.",
+      "updateMessage": "Seu modelo de mensagem foi atualizado com sucesso."
+    },
+    "alerts": {
+      "discardTitle": "Descartar Alterações",
+      "discardMessage": "Tem certeza de que deseja descartar suas alterações?",
+      "continueEditing": "Continuar Editando",
+      "discard": "Descartar"
     }
   }
 }

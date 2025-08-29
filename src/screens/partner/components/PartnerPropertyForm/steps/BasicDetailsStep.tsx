@@ -1,5 +1,6 @@
 import React, {useCallback, useState, useEffect, useRef} from 'react';
 import {View, StyleSheet, Text} from 'react-native';
+import { useTranslation } from 'react-i18next';
 import FormNavigationButtons from '../components/FormNavigationButtons';
 import partnerPropertyFormSchema, {
   PartnerPropertyFormType,
@@ -34,6 +35,7 @@ const BasicDetailsStep: React.FC<BasicDetailsStepProps> = ({
   onBack,
   showBackButton = false,
 }) => {
+  const { t } = useTranslation();
   const {masterData} = useMaster();
   const {cities} = usePartner();
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -302,14 +304,14 @@ const BasicDetailsStep: React.FC<BasicDetailsStepProps> = ({
         field="propertyName"
         formInput={formInput}
         setFormInput={handleTextInputChange}
-        label="Property Name*"
+        label={t('partnerPropertyForm.basicDetails.labels.propertyName', 'Property Name*')}
         mode="outlined"
-        placeholder="Enter a property name"
+        placeholder={t('partnerPropertyForm.basicDetails.placeholders.propertyName', 'Enter a property name')}
         errorMessage={getErrorMessage('propertyName')}
       />
 
       <FilterOption
-        label="Seller Type*"
+        label={t('partnerPropertyForm.basicDetails.labels.sellerType', 'Seller Type*')}
         options={masterData?.SellerType || []}
         selectedValue={formInput.sellerType}
         onSelect={value => handleFieldSelect('sellerType', value)}
@@ -317,7 +319,7 @@ const BasicDetailsStep: React.FC<BasicDetailsStepProps> = ({
       />
 
       <FilterOption
-        label="City*"
+        label={t('partnerPropertyForm.basicDetails.labels.city', 'City*')}
         options={cities || []}
         selectedValue={formInput.city}
         onSelect={value => handleFieldSelect('city', value)}
@@ -325,7 +327,7 @@ const BasicDetailsStep: React.FC<BasicDetailsStepProps> = ({
       />
 
       <FilterOption
-        label="Property For*"
+        label={t('partnerPropertyForm.basicDetails.labels.propertyFor', 'Property For*')}
         options={masterData?.PropertyFor || []}
         selectedValue={formInput.propertyFor}
         onSelect={value => handleFieldSelect('propertyFor', value)}
@@ -333,7 +335,7 @@ const BasicDetailsStep: React.FC<BasicDetailsStepProps> = ({
       />
 
       <FilterOption
-        label="Property Type*"
+        label={t('partnerPropertyForm.basicDetails.labels.propertyType', 'Property Type*')}
         options={masterData?.PropertyType || []}
         selectedValue={formInput.propertyType}
         onSelect={value => handleFieldSelect('propertyType', value)}
@@ -344,9 +346,9 @@ const BasicDetailsStep: React.FC<BasicDetailsStepProps> = ({
         field="location"
         formInput={formInput}
         setFormInput={handleTextInputChange}
-        label="Location*"
+        label={t('partnerPropertyForm.basicDetails.labels.location', 'Location*')}
         mode="outlined"
-        placeholder="Enter location details"
+        placeholder={t('partnerPropertyForm.basicDetails.placeholders.location', 'Enter location details')}
         errorMessage={getErrorMessage('location')}
         suggestions={locationSuggestions}
         onSuggestionSelect={handleLocationSuggestionSelect}
@@ -357,9 +359,9 @@ const BasicDetailsStep: React.FC<BasicDetailsStepProps> = ({
         field="price"
         formInput={formInput}
         setFormInput={handleTextInputChange}
-        label="Price*"
+        label={t('partnerPropertyForm.basicDetails.labels.price', 'Price*')}
         mode="outlined"
-        placeholder="Enter property price"
+        placeholder={t('partnerPropertyForm.basicDetails.placeholders.price', 'Enter property price')}
         keyboardType="number-pad"
         maxLength={10}
         errorMessage={getErrorMessage('price')}
