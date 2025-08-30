@@ -11,8 +11,11 @@ import {
 } from 'react-native';
 import {NextBillResponse} from '../../../../types/payment';
 import GetIcon from '../../../../components/GetIcon';
-import {formatDate as formatDateUtil} from '../../../../utils/dateUtils';
-import {formatCurrency} from '../../../../utils/currency';
+import {formatLocalizedDate} from '../../../../utils/dateUtils';
+import {formatCurrency, formatLocalizedNumber} from '../../../../utils/currency';
+import { useTranslation } from 'react-i18next';
+import i18n from '../../../../i18n';
+import BillingCycle from '../../../../constants/BillingCycle';
 
 interface PaymentModalProps {
   visible: boolean;
@@ -30,6 +33,9 @@ const PaymentModal: React.FC<PaymentModalProps> = ({
   // Animation values
   const backdropOpacity = useRef(new Animated.Value(0)).current;
   const slideAnim = useRef(new Animated.Value(300)).current; // Start 300px below
+
+  const { t } = useTranslation();
+  const currentLanguage = i18n.language;
 
   // Handle modal show/hide animations
   useEffect(() => {
@@ -111,9 +117,9 @@ const PaymentModal: React.FC<PaymentModalProps> = ({
             <View style={styles.modalIconWrapper}>
               <GetIcon iconName="transaction" size={32} color="#6366f1" />
             </View>
-            <Text style={styles.modalTitle}>Payment Confirmation</Text>
+            <Text style={styles.modalTitle}>{t('billing.paymentModal.title', 'Payment Details')}</Text>
             <Text style={styles.modalSubtitle}>
-              Review and confirm your payment details
+              {t('billing.paymentModal.subtitle', 'Review and confirm your payment details')}
             </Text>
           </View>
 
@@ -124,13 +130,13 @@ const PaymentModal: React.FC<PaymentModalProps> = ({
             bounces={false}>
             {/* Payment Summary */}
             <View style={styles.paymentSummary}>
-              <Text style={styles.summaryTitle}>Payment Summary</Text>
+              <Text style={styles.summaryTitle}>{t('billing.paymentModal.paymentSummary', 'Payment Summary')}</Text>
 
               <View style={styles.summaryCard}>
                 <View style={styles.amountSection}>
-                  <Text style={styles.totalLabel}>Total Amount</Text>
+                  <Text style={styles.totalLabel}>{t('billing.paymentModal.totalAmount', 'Total Amount')}</Text>
                   <Text style={styles.totalAmount}>
-                    {nextBill && formatCurrency(nextBill.amount)}
+                    {nextBill && formatCurrency(nextBill.amount, currentLanguage)}
                   </Text>
                 </View>
 
@@ -138,27 +144,27 @@ const PaymentModal: React.FC<PaymentModalProps> = ({
 
                 <View style={styles.detailsSection}>
                   <View style={styles.summaryRow}>
-                    <Text style={styles.summaryLabel}>Billing Cycle</Text>
+                    <Text style={styles.summaryLabel}>{t('billing.nextBill.billingCycle', 'Billing Cycle')}</Text>
                     <Text style={styles.summaryValue}>
-                      {nextBill?.billingCycle}
+                      {nextBill?.billingCycle === BillingCycle.MONTHLY ? t('billing.nextBill.billingCycleValues.Monthly', 'Monthly') : t('billing.nextBill.billingCycleValues.Yearly', 'Yearly')}
                     </Text>
                   </View>
                   <View style={styles.summaryRow}>
-                    <Text style={styles.summaryLabel}>Duration</Text>
+                    <Text style={styles.summaryLabel}>{t('billing.nextBill.duration', 'Duration')}</Text>
                     <Text style={styles.summaryValue}>
-                      {nextBill?.durationDays} days
+                      {nextBill && formatLocalizedNumber(nextBill.durationDays, currentLanguage)} {t('billing.nextBill.days', 'days')}
                     </Text>
                   </View>
                   <View style={styles.summaryRow}>
-                    <Text style={styles.summaryLabel}>Service Period</Text>
+                    <Text style={styles.summaryLabel}>{t('billing.paymentModal.servicePeriod', 'Service Period')}</Text>
                     <Text style={styles.summaryValue}>
                       {nextBill &&
-                        `${formatDateUtil(
+                        `${formatLocalizedDate(
                           nextBill.startDate,
-                          'dd MMM yyyy',
-                        )} - ${formatDateUtil(
+                          currentLanguage,
+                        )} - ${formatLocalizedDate(
                           nextBill.endDate,
-                          'dd MMM yyyy',
+                          currentLanguage,
                         )}`}
                     </Text>
                   </View>
@@ -170,12 +176,12 @@ const PaymentModal: React.FC<PaymentModalProps> = ({
           {/* Action Buttons */}
           <View style={styles.actionButtons}>
             <TouchableOpacity style={styles.cancelButton} onPress={onClose}>
-              <Text style={styles.cancelButtonText}>Cancel</Text>
+              <Text style={styles.cancelButtonText}>{t('common.actions.cancel', 'Cancel')}</Text>
             </TouchableOpacity>
 
             <TouchableOpacity style={styles.confirmButton} onPress={onConfirm}>
               <GetIcon iconName="rupee" size={16} color="white" />
-              <Text style={styles.confirmButtonText}>Confirm & Pay</Text>
+              <Text style={styles.confirmButtonText}>{t('billing.paymentModal.confirmAndPay', 'Confirm & Pay')}</Text>
             </TouchableOpacity>
           </View>
 
@@ -183,7 +189,7 @@ const PaymentModal: React.FC<PaymentModalProps> = ({
           <View style={styles.securityBadge}>
             <GetIcon iconName="rupee" size={14} color="#059669" />
             <Text style={styles.securityText}>
-              Secured with bank-level encryption
+              {t('billing.paymentModal.securityText', 'Secured with bank-level encryption')}
             </Text>
           </View>
         </Animated.View>

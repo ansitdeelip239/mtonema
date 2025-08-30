@@ -133,7 +133,12 @@
       "email": "ईमेल",
       "phone": "फोन",
       "role": "भूमिका",
-      "location": "स्थान"
+      "location": "स्थान",
+      "fullName": "पूरा नाम *",
+      "fullNameEdit": "पूरा नाम * (संपादित करें)",
+      "emailEdit": "ईमेल पता * (संपादित करें)",
+      "phoneEdit": "फोन नंबर * (संपादित करें)",
+      "locationEdit": "स्थान * (संपादित करें)"
     },
     "status": {
       "active": "सक्रिय",
@@ -185,6 +190,11 @@
       "verify": "OTP सत्यापित करें",
       "didntReceive": "कोड प्राप्त नहीं हुआ?",
       "resend": "OTP पुनः भेजें"
+    },
+    "switchAccount": {
+      "title": "खाता बदलें",
+      "confirmMessage": "क्या आप वाकई लॉगआउट करना चाहते हैं और एक अलग खाता इस्तेमाल करना चाहते हैं?",
+      "logout": "लॉगआउट"
     }
   },
   "followUp": {
@@ -861,6 +871,78 @@
       "clearAll": "सभी साफ़ करें",
       "cancel": "रद्द करें",
       "applyFilters": "फ़िल्टर लागू करें"
+    }
+  },
+  "billing": {
+    "title": "बिलिंग और भुगतान",
+    "subtitle": "अपनी सदस्यता और भुगतान इतिहास प्रबंधित करें",
+    "switchPlanButton": "बिलिंग प्लान बदलें",
+    "success": {
+      "title": "भुगतान सफल",
+      "subtitle": "आपकी सदस्यता सफलतापूर्वक सक्रिय हो गई है!"
+    },
+    "errors": {
+      "loadFailed": "बिलिंग जानकारी लोड करने में विफल।",
+      "paymentFailed": "भुगतान विफल",
+      "generic": "कुछ गलत हो गया",
+      "loadPlansFailed": "बिलिंग प्लान लोड करने में विफल।"
+    },
+    "nextBill": {
+      "title": "अगला बिल",
+      "billingCycle": "बिलिंग चक्र",
+      "duration": "अवधि",
+      "days": "दिन",
+      "billingPeriod": "बिलिंग अवधि",
+      "payNow": "अभी भुगतान करें",
+      "billingCycleValues": {
+        "Monthly": "मासिक",
+        "Yearly": "वार्षिक"
+      }
+    },
+    "paymentHistory": {
+      "title": "भुगतान इतिहास",
+      "status": {
+        "success": "सफल",
+        "failed": "विफल"
+      }
+    },
+    "paymentModal": {
+      "title": "भुगतान विवरण",
+      "subtitle": "अपने भुगतान विवरण की समीक्षा करें और पुष्टि करें",
+      "paymentSummary": "भुगतान सारांश",
+      "totalAmount": "कुल राशि",
+      "servicePeriod": "सेवा अवधि",
+      "confirmAndPay": "पुष्टि करें और भुगतान करें",
+      "securityText": "बैंक-स्तरीय एन्क्रिप्शन के साथ सुरक्षित"
+    },
+    "loading": {
+      "billingInfo": "बिलिंग जानकारी लोड हो रही है..."
+    },
+    "retry": {
+      "tryAgain": "पुनः प्रयास करें"
+    },
+    "planSwitcher": {
+      "title": "बिलिंग प्लान बदलें",
+      "switchPlan": "प्लान बदलें",
+      "planSwitched": "प्लान बदल दिया गया!",
+      "planUpdated": "आपका बिलिंग प्लान अपडेट कर दिया गया है।",
+      "switchFailed": "प्लान बदलने में विफल।",
+      "selectPlan": "{{planName}} प्लान चुनें",
+      "submitChange": "प्लान बदलाव सबमिट करें",
+      "maxUsers": "अधिकतम उपयोगकर्ता:",
+      "trialPlan": "ट्रायल प्लान",
+      "perMonth": "/माह"
+    },
+    "paymentLoading": {
+      "creatingOrder": "भुगतान आदेश बनाया जा रहा है...",
+      "processingPayment": "भुगतान संसाधित किया जा रहा है...",
+      "verifyingPayment": "भुगतान सत्यापित किया जा रहा है...",
+      "loading": "लोड हो रहा है...",
+      "steps": {
+        "order": "आदेश",
+        "payment": "भुगतान",
+        "verify": "सत्यापित करें"
+      }
     }
   }
 }

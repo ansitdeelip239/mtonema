@@ -216,17 +216,32 @@ export const formatLocalizedTime = (
 
 const getLocalizedLocale = (locale: string): string => {
   const localeMap: Record<string, string> = {
-    en: 'en-US',
+    'en': 'en-US',
     'en-US': 'en-US',
-    es: 'es-ES',
+    'es': 'es-ES',
     'es-ES': 'es-ES',
-    pt: 'pt-BR',
+    'pt': 'pt-BR',
     'pt-BR': 'pt-BR',
-    hi: 'hi-IN-u-nu-deva', // Hindi with Devanagari digits
+    'hi': 'hi-IN-u-nu-deva', // Hindi with Devanagari digits
     'hi-IN': 'hi-IN-u-nu-deva', // Hindi with Devanagari digits
-    ar: 'ar-SA-u-nu-arab', // Arabic with Arabic-Indic digits
+    'ar': 'ar-SA-u-nu-arab', // Arabic with Arabic-Indic digits
     'ar-SA': 'ar-SA-u-nu-arab', // Arabic with Arabic-Indic digits
   };
 
   return localeMap[locale] || locale;
+};
+
+// Localized number formatting using Intl.NumberFormat
+export const formatLocalizedNumber = (
+  number: number,
+  locale: string = 'en-US',
+): string => {
+  try {
+    const finalLocale = getLocalizedLocale(locale);
+    const numberFormatter = new Intl.NumberFormat(finalLocale);
+    return numberFormatter.format(number);
+  } catch (error) {
+    console.warn('Error formatting localized number:', error);
+    return number.toString();
+  }
 };

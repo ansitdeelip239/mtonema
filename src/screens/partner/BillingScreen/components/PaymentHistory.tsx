@@ -3,7 +3,10 @@ import {View, Text, StyleSheet} from 'react-native';
 import GetIcon from '../../../../components/GetIcon';
 import {NextBillResponse} from '../../../../types/payment';
 import { convertPaiseToRupees } from '../../../../utils/currency';
-import { formatDate as formatDateUtil } from '../../../../utils/dateUtils';
+import {formatLocalizedDate} from '../../../../utils/dateUtils';
+import { useTranslation } from 'react-i18next';
+import i18n from '../../../../i18n';
+import TransactionStatus from '../../../../constants/TransactionStatus';
 
 interface PaymentHistoryProps {
   paymentHistory: NextBillResponse['transactionHistory'];
@@ -12,6 +15,9 @@ interface PaymentHistoryProps {
 const PaymentHistory: React.FC<PaymentHistoryProps> = ({
   paymentHistory,
 }) => {
+  const { t } = useTranslation();
+  const currentLanguage = i18n.language;
+
   if (!paymentHistory || paymentHistory.length === 0) {
     return null;
   }
@@ -20,7 +26,7 @@ const PaymentHistory: React.FC<PaymentHistoryProps> = ({
     <View style={styles.historySection}>
       <View style={styles.sectionHeader}>
         <GetIcon iconName="time" size={20} color="#6b7280" />
-        <Text style={styles.sectionTitle}>Payment History</Text>
+        <Text style={styles.sectionTitle}>{t('billing.paymentHistory.title', 'Payment History')}</Text>
       </View>
       {paymentHistory.map((txn, index) => (
         <View
@@ -33,28 +39,30 @@ const PaymentHistory: React.FC<PaymentHistoryProps> = ({
             <View
               style={[
                 styles.statusIndicator,
-                txn.statusName === 'Success'
+                txn.statusName === TransactionStatus.CAPTURED
                   ? styles.successIndicator
                   : styles.failureIndicator,
               ]}
             />
             <View style={styles.historyInfo}>
               <Text style={styles.historyDate}>
-                {formatDateUtil(txn.transactionDate, 'dd MMM yyyy')}
+                {formatLocalizedDate(txn.transactionDate, currentLanguage)}
               </Text>
               <Text
                 style={[
                   styles.historyStatus,
-                  txn.statusName === 'Success'
+                  txn.statusName === TransactionStatus.CAPTURED
                     ? styles.successStatus
                     : styles.failureStatus,
                 ]}>
-                {txn.statusName}
+                {txn.statusName === TransactionStatus.CAPTURED
+                  ? t('billing.paymentHistory.status.success', 'Success')
+                  : t('billing.paymentHistory.status.failed', 'Failed')}
               </Text>
             </View>
           </View>
           <Text style={styles.historyAmount}>
-            {convertPaiseToRupees(txn.amount)}
+            {convertPaiseToRupees(txn.amount, currentLanguage)}
           </Text>
         </View>
       ))}

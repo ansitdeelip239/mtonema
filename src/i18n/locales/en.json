@@ -133,7 +133,22 @@
       "email": "Email",
       "phone": "Phone",
       "role": "Role",
-      "location": "Location"
+      "location": "Location",
+      "fullName": "Full Name *",
+      "fullNameEdit": "Full Name * (Edit)",
+      "emailEdit": "Email Address * (Edit)",
+      "phoneEdit": "Phone Number * (Edit)",
+      "locationEdit": "Location * (Edit)"
+    },
+    "placeholders": {
+      "fullName": "Enter team member's full name",
+      "editFullName": "Edit team member's full name",
+      "email": "Enter email address",
+      "editEmail": "Edit email address",
+      "phone": "Enter 10-digit phone number",
+      "editPhone": "Edit 10-digit phone number",
+      "location": "Enter location (City, State, Country)",
+      "editLocation": "Edit location (City, State, Country)"
     },
     "status": {
       "active": "Active",
@@ -185,6 +200,11 @@
       "verify": "Verify OTP",
       "didntReceive": "Didn't receive the code?",
       "resend": "Resend OTP"
+    },
+    "switchAccount": {
+      "title": "Switch Account",
+      "confirmMessage": "Are you sure you want to logout and use a different account?",
+      "logout": "Logout"
     }
   },
   "followUp": {
@@ -861,6 +881,78 @@
       "applyFilters": "Apply Filters",
       "filterProperties": "Filter Properties",
       "clearAll": "Clear All"
+    }
+  },
+  "billing": {
+    "title": "Billing and Payments",
+    "subtitle": "Manage your subscription and payment history",
+    "switchPlanButton": "Switch Billing Plan",
+    "success": {
+      "title": "Payment Successful",
+      "subtitle": "Your subscription has been activated successfully!"
+    },
+    "errors": {
+      "loadFailed": "Failed to load billing information.",
+      "paymentFailed": "Payment failed",
+      "generic": "Something went wrong",
+      "loadPlansFailed": "Failed to load billing plans."
+    },
+    "nextBill": {
+      "title": "Next Bill",
+      "billingCycle": "Billing Cycle",
+      "duration": "Duration",
+      "days": "days",
+      "billingPeriod": "Billing Period",
+      "payNow": "Pay Now",
+      "billingCycleValues": {
+        "Monthly": "Monthly",
+        "Yearly": "Yearly"
+      }
+    },
+    "paymentHistory": {
+      "title": "Payment History",
+      "status": {
+        "success": "Success",
+        "failed": "Failed"
+      }
+    },
+    "paymentModal": {
+      "title": "Payment Details",
+      "subtitle": "Review and confirm your payment details",
+      "paymentSummary": "Payment Summary",
+      "totalAmount": "Total Amount",
+      "servicePeriod": "Service Period",
+      "confirmAndPay": "Confirm & Pay",
+      "securityText": "Secured with bank-level encryption"
+    },
+    "loading": {
+      "billingInfo": "Loading billing information..."
+    },
+    "retry": {
+      "tryAgain": "Try Again"
+    },
+    "planSwitcher": {
+      "title": "Switch Billing Plan",
+      "switchPlan": "Switch Plan",
+      "planSwitched": "Plan switched!",
+      "planUpdated": "Your billing plan has been updated.",
+      "switchFailed": "Failed to switch plan.",
+      "selectPlan": "Select {{planName}} plan",
+      "submitChange": "Submit plan change",
+      "maxUsers": "Max Users:",
+      "trialPlan": "Trial Plan",
+      "perMonth": "/mo"
+    },
+    "paymentLoading": {
+      "creatingOrder": "Creating payment order...",
+      "processingPayment": "Processing payment...",
+      "verifyingPayment": "Verifying payment...",
+      "loading": "Loading...",
+      "steps": {
+        "order": "Order",
+        "payment": "Payment",
+        "verify": "Verify"
+      }
     }
   }
 }

@@ -1,18 +1,23 @@
 import React from 'react';
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import GetIcon from '../../../../components/GetIcon';
+import { useTranslation } from 'react-i18next';
 
 export const ErrorComponent = React.memo(
-  ({error, onRetry}: {error: string; onRetry: () => void}) => (
+  ({error, onRetry}: {error: string; onRetry: () => void}) => {
+    const { t } = useTranslation();
+
+    return (
     <View style={styles.errorContainer}>
       <GetIcon iconName="clear" size={48} color="#ef4444" />
-      <Text style={styles.errorTitle}>Something went wrong</Text>
+      <Text style={styles.errorTitle}>{t('billing.errors.generic', 'Something went wrong')}</Text>
       <Text style={styles.errorText}>{error}</Text>
       <TouchableOpacity style={styles.retryButton} onPress={onRetry}>
-        <Text style={styles.retryButtonText}>Try Again</Text>
+        <Text style={styles.retryButtonText}>{t('billing.retry.tryAgain', 'Try Again')}</Text>
       </TouchableOpacity>
     </View>
-  ),
+    );
+  },
 );
 
 const styles = StyleSheet.create({

@@ -16,6 +16,8 @@ import GetIcon from '../../../../components/GetIcon';
 import PartnerService from '../../../../services/PartnerService';
 import {Plan} from '../../../../types/payment';
 import {convertPaiseToRupees, formatCurrency} from '../../../../utils/currency';
+import { useTranslation } from 'react-i18next';
+import i18n from '../../../../i18n';
 
 export interface BillingPlanSwitcherModalProps {
   visible: boolean;
@@ -32,6 +34,8 @@ const BillingPlanSwitcherModal: React.FC<BillingPlanSwitcherModalProps> = ({
   onPlanSwitched,
 }) => {
   const {theme} = useTheme();
+  const { t } = useTranslation();
+  const currentLanguage = i18n.language;
   const [plans, setPlans] = useState<Plan[]>([]);
   const [selectedPlanId, setSelectedPlanId] = useState<number>(currentPlanId);
   const [loading, setLoading] = useState<boolean>(false);
@@ -90,7 +94,7 @@ const BillingPlanSwitcherModal: React.FC<BillingPlanSwitcherModalProps> = ({
           setPlans(response.data);
         }
       } catch (fetchErr) {
-        setError('Failed to load billing plans.');
+        setError(t('billing.errors.loadPlansFailed', 'Failed to load billing plans.'));
       } finally {
         setLoading(false);
       }
@@ -104,7 +108,7 @@ const BillingPlanSwitcherModal: React.FC<BillingPlanSwitcherModalProps> = ({
       setSelectedPlanId(currentPlanId);
       setError(null);
     };
-  }, [visible, currentPlanId]);
+  }, [visible, currentPlanId, t]);
 
   // Submit plan change
   const handleSubmit = async () => {
@@ -120,14 +124,14 @@ const BillingPlanSwitcherModal: React.FC<BillingPlanSwitcherModalProps> = ({
       if (response.success) {
         Toast.show({
           type: 'success',
-          text1: 'Plan switched!',
-          text2: 'Your billing plan has been updated.',
+          text1: t('billing.planSwitcher.planSwitched', 'Plan switched!'),
+          text2: t('billing.planSwitcher.planUpdated', 'Your billing plan has been updated.'),
         });
         onPlanSwitched();
         onClose();
       }
     } catch (err: any) {
-      setError(err?.message || 'Failed to switch plan.');
+      setError(err?.message || t('billing.planSwitcher.switchFailed', 'Failed to switch plan.'));
     } finally {
       setSubmitting(false);
     }
@@ -171,7 +175,7 @@ const BillingPlanSwitcherModal: React.FC<BillingPlanSwitcherModalProps> = ({
           ]}>
           <View style={styles.iconTitleRow}>
             <GetIcon iconName="bill" size={24} color="#6366f1" />
-            <Text style={styles.modalTitle}>Switch Billing Plan</Text>
+            <Text style={styles.modalTitle}>{t('billing.planSwitcher.title', 'Switch Billing Plan')}</Text>
           </View>
 
           {loading ? (
@@ -193,7 +197,7 @@ const BillingPlanSwitcherModal: React.FC<BillingPlanSwitcherModalProps> = ({
                   ]}
                   onPress={() => setSelectedPlanId(plan.id)}
                   disabled={submitting}
-                  accessibilityLabel={`Select ${plan.planName} plan`}>
+                  accessibilityLabel={t('billing.planSwitcher.selectPlan', 'Select {{planName}} plan', { planName: plan.planName })}>
                   <View style={styles.planHeader}>
                     <View style={styles.radioCircle}>
                       {selectedPlanId === plan.id && (
@@ -203,20 +207,20 @@ const BillingPlanSwitcherModal: React.FC<BillingPlanSwitcherModalProps> = ({
                     <Text style={styles.planName}>{plan.planName}</Text>
                   </View>
                   <Text style={styles.planPrice}>
-                    {formatCurrency(convertPaiseToRupees(plan.price))}/mo
+                    {formatCurrency(convertPaiseToRupees(plan.price, currentLanguage), currentLanguage)}
                   </Text>
                   <View style={styles.featuresList}>
                     <Text style={styles.featureText}>
-                      • Max Users: {plan.maxUsers}
+                      • {t('billing.planSwitcher.maxUsers', 'Max Users:')} {plan.maxUsers}
                     </Text>
                     <Text style={styles.featureText}>
-                      • Duration: {plan.durationDays} days
+                      • {t('billing.nextBill.duration', 'Duration:')} {plan.durationDays} {t('billing.nextBill.days', 'days')}
                     </Text>
                     <Text style={styles.featureText}>
-                      • Billing Cycle: {plan.billingCycle}
+                      • {t('billing.nextBill.billingCycle', 'Billing Cycle:')} {plan.billingCycle}
                     </Text>
                     {plan.isTrial && (
-                      <Text style={styles.featureText}>• Trial Plan</Text>
+                      <Text style={styles.featureText}>• {t('billing.planSwitcher.trialPlan', 'Trial Plan')}</Text>
                     )}
                     {plan.description && (
                       <Text style={styles.featureText}>
@@ -238,11 +242,11 @@ const BillingPlanSwitcherModal: React.FC<BillingPlanSwitcherModalProps> = ({
             ]}
             onPress={handleSubmit}
             disabled={submitting || selectedPlanId === currentPlanId}
-            accessibilityLabel="Submit plan change">
+            accessibilityLabel={t('billing.planSwitcher.submitChange', 'Submit plan change')}>
             {submitting ? (
               <ActivityIndicator size="small" color="#fff" />
             ) : (
-              <Text style={styles.submitButtonText}>Switch Plan</Text>
+              <Text style={styles.submitButtonText}>{t('billing.planSwitcher.switchPlan', 'Switch Plan')}</Text>
             )}
           </TouchableOpacity>
         </Animated.View>

@@ -1,4 +1,26 @@
-const formatCurrency = (value: string | number | null | undefined) => {
+const formatLocalizedNumber = (number: number, numberLocale: string) => {
+  try {
+    const localeMap: Record<string, string> = {
+      'en': 'en-IN',
+      'en-IN': 'en-IN',
+      'es': 'es-ES',
+      'es-ES': 'es-ES',
+      'pt': 'pt-BR',
+      'pt-BR': 'pt-BR',
+      'ar': 'ar-SA-u-nu-arab',
+      'ar-SA': 'ar-SA-u-nu-arab',
+      'hi': 'hi-IN-u-nu-deva',
+      'hi-IN': 'hi-IN-u-nu-deva',
+      'en-US': 'en-US',
+    };
+    const finalLocale = localeMap[numberLocale] || 'en-IN';
+    return new Intl.NumberFormat(finalLocale).format(number);
+  } catch (error) {
+    return number.toString();
+  }
+};
+
+const formatCurrency = (value: string | number | null | undefined, locale: string = 'en-IN') => {
   if (value === null || value === undefined) {
     return '';
   }
@@ -11,23 +33,38 @@ const formatCurrency = (value: string | number | null | undefined) => {
       return valueStr;
     }
 
-    // Helper function to format with optional decimals
-    const formatWithDecimals = (amount: number) => {
-      // If the number is a whole number, don't show decimal places
-      return Number.isInteger(amount) ? amount.toString() : amount.toFixed(2);
+
+    // Get currency symbol based on locale
+    const getCurrencySymbol = (currencyLocale: string) => {
+      const currencySymbols: Record<string, string> = {
+        'en': '₹',
+        'en-IN': '₹',
+        'es': '€',
+        'es-ES': '€',
+        'pt': 'R$',
+        'pt-BR': 'R$',
+        'ar': 'ر.س',
+        'ar-SA': 'ر.س',
+        'hi': '₹',
+        'hi-IN': '₹',
+        'en-US': '$',
+      };
+      return currencySymbols[currencyLocale] || '₹';
     };
+
+    const currencySymbol = getCurrencySymbol(locale);
 
     if (num >= 10000000) {
       const amountInCrores = num / 10000000;
-      return `₹${formatWithDecimals(amountInCrores)} Cr`;
+      return `${currencySymbol}${formatLocalizedNumber(amountInCrores, locale)} Cr`;
     } else if (num >= 100000) {
       const amountInLacs = num / 100000;
-      return `₹${formatWithDecimals(amountInLacs)} Lacs`;
+      return `${currencySymbol}${formatLocalizedNumber(amountInLacs, locale)} Lacs`;
     } else if (num >= 1000) {
       const amountInThousands = num / 1000;
-      return `₹${formatWithDecimals(amountInThousands)} K`;
+      return `${currencySymbol}${formatLocalizedNumber(amountInThousands, locale)} K`;
     } else {
-      return `₹${formatWithDecimals(num)}`;
+      return `${currencySymbol}${formatLocalizedNumber(num, locale)}`;
     }
   } catch (error) {
     console.error('Currency formatting error:', error);
@@ -36,8 +73,34 @@ const formatCurrency = (value: string | number | null | undefined) => {
 };
 
 
-const convertPaiseToRupees = (price: number) => {
-  return `₹${(price / 100).toFixed(2)}`;
+const convertPaiseToRupees = (price: number, locale: string = 'en-IN') => {
+  const rupees = price / 100;
+
+  const currencySymbol = locale === 'es' || locale === 'es-ES' ? '€' :
+    locale === 'pt' || locale === 'pt-BR' ? 'R$' :
+    locale === 'ar' || locale === 'ar-SA' ? 'ر.س' :
+    locale === 'en-US' ? '$' : '₹';
+
+  // Use the same locale mapping as formatLocalizedNumber for consistent digit systems
+  const localeMap: Record<string, string> = {
+    'en': 'en-IN',
+    'en-IN': 'en-IN',
+    'es': 'es-ES',
+    'es-ES': 'es-ES',
+    'pt': 'pt-BR',
+    'pt-BR': 'pt-BR',
+    'ar': 'ar-SA-u-nu-arab',
+    'ar-SA': 'ar-SA-u-nu-arab',
+    'hi': 'hi-IN-u-nu-deva',
+    'hi-IN': 'hi-IN-u-nu-deva',
+    'en-US': 'en-US',
+  };
+  const finalLocale = localeMap[locale] || 'en-IN';
+
+  return `${currencySymbol}${new Intl.NumberFormat(finalLocale, {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  }).format(rupees)}`;
 };
 
-export {formatCurrency, convertPaiseToRupees};
+export {formatCurrency, convertPaiseToRupees, formatLocalizedNumber};

@@ -3,7 +3,9 @@ import {NextBillResponse} from '../../../../types/payment';
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import GetIcon from '../../../../components/GetIcon';
 import {formatCurrency} from '../../../../utils/currency';
-import {formatDate} from '../../../../utils/dateUtils';
+import {formatLocalizedDate, formatLocalizedNumber} from '../../../../utils/dateUtils';
+import { useTranslation } from 'react-i18next';
+import i18n from '../../../../i18n';
 
 export const NextBillCard = React.memo(
   ({
@@ -12,16 +14,25 @@ export const NextBillCard = React.memo(
   }: {
     nextBill: NextBillResponse['nextBill'];
     onPayNow: () => void;
-  }) => (
+  }) => {
+    const { t } = useTranslation();
+    const currentLanguage = i18n.language;
+
+    // Get translated billing cycle value
+    const getTranslatedBillingCycle = (billingCycle: string) => {
+      return t(`billing.nextBill.billingCycleValues.${billingCycle}`, billingCycle);
+    };
+
+    return (
     <View style={styles.billCard}>
       <View style={styles.cardHeader}>
         <View style={styles.cardHeaderLeft}>
           <GetIcon iconName="bill" size={24} color="#6366f1" />
-          <Text style={styles.cardTitle}>Next Bill</Text>
+          <Text style={styles.cardTitle}>{t('billing.nextBill.title', 'Next Bill')}</Text>
         </View>
         <View style={styles.amountBadge}>
           <Text style={styles.amountText}>
-            {formatCurrency(nextBill.amount)}
+            {formatCurrency(nextBill.amount, currentLanguage)}
           </Text>
         </View>
       </View>
@@ -29,30 +40,31 @@ export const NextBillCard = React.memo(
       <View style={styles.billDetails}>
         <View style={styles.detailRow}>
           <View style={styles.detailItem}>
-            <Text style={styles.detailLabel}>Billing Cycle</Text>
-            <Text style={styles.detailValue}>{nextBill.billingCycle}</Text>
+            <Text style={styles.detailLabel}>{t('billing.nextBill.billingCycle', 'Billing Cycle')}</Text>
+            <Text style={styles.detailValue}>{getTranslatedBillingCycle(nextBill.billingCycle)}</Text>
           </View>
           <View style={styles.detailItem}>
-            <Text style={styles.detailLabel}>Duration</Text>
-            <Text style={styles.detailValue}>{nextBill.durationDays} days</Text>
+            <Text style={styles.detailLabel}>{t('billing.nextBill.duration', 'Duration')}</Text>
+            <Text style={styles.detailValue}>{formatLocalizedNumber(nextBill.durationDays, currentLanguage)} {t('billing.nextBill.days', 'days')}</Text>
           </View>
         </View>
 
         <View style={styles.periodInfo}>
-          <Text style={styles.detailLabel}>Billing Period</Text>
+          <Text style={styles.detailLabel}>{t('billing.nextBill.billingPeriod', 'Billing Period')}</Text>
           <Text style={styles.periodText}>
-            {formatDate(nextBill.startDate, 'dd MMM yyyy')} -{' '}
-            {formatDate(nextBill.endDate, 'dd MMM yyyy')}
+            {formatLocalizedDate(nextBill.startDate, currentLanguage)} -{' '}
+            {formatLocalizedDate(nextBill.endDate, currentLanguage)}
           </Text>
         </View>
       </View>
 
       <TouchableOpacity style={styles.payButton} onPress={onPayNow}>
         <GetIcon iconName="rupee" size={20} color="white" />
-        <Text style={styles.payButtonText}>Pay Now</Text>
+        <Text style={styles.payButtonText}>{t('billing.nextBill.payNow', 'Pay Now')}</Text>
       </TouchableOpacity>
     </View>
-  ),
+    );
+  },
 );
 
 const styles = StyleSheet.create({

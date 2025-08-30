@@ -1,5 +1,6 @@
 import React from 'react';
 import {ActivityIndicator, StyleSheet, Text, View} from 'react-native';
+import { useTranslation } from 'react-i18next';
 
 interface PaymentLoadingOverlayProps {
   isCreatingOrder: boolean; // payNextBill API call
@@ -9,28 +10,29 @@ interface PaymentLoadingOverlayProps {
 
 export const PaymentLoadingOverlay = React.memo(
   ({isCreatingOrder, isPaying, isVerifying}: PaymentLoadingOverlayProps) => {
+    const { t } = useTranslation();
     // Determine the loading message and color based on current state
     const getLoadingState = () => {
       if (isCreatingOrder) {
         return {
-          message: 'Creating payment order...',
+          message: t('billing.paymentLoading.creatingOrder', 'Creating payment order...'),
           color: '#f59e0b', // Amber for order creation
         };
       }
       if (isPaying) {
         return {
-          message: 'Processing payment...',
+          message: t('billing.paymentLoading.processingPayment', 'Processing payment...'),
           color: '#6366f1', // Blue for payment processing
         };
       }
       if (isVerifying) {
         return {
-          message: 'Verifying payment...',
+          message: t('billing.paymentLoading.verifyingPayment', 'Verifying payment...'),
           color: '#10b981', // Green for verification
         };
       }
       return {
-        message: 'Loading...',
+        message: t('billing.paymentLoading.loading', 'Loading...'),
         color: '#6366f1',
       };
     };
@@ -51,10 +53,11 @@ export const PaymentLoadingOverlay = React.memo(
                   styles.progressDot,
                   (isCreatingOrder || isPaying || isVerifying) &&
                     styles.activeDot,
+                  // eslint-disable-next-line react-native/no-inline-styles
                   isCreatingOrder && {backgroundColor: '#f59e0b'},
                 ]}
               />
-              <Text style={styles.stepLabel}>Order</Text>
+              <Text style={styles.stepLabel}>{t('billing.paymentLoading.steps.order', 'Order')}</Text>
             </View>
 
             <View style={styles.progressLine} />
@@ -64,10 +67,11 @@ export const PaymentLoadingOverlay = React.memo(
                 style={[
                   styles.progressDot,
                   (isPaying || isVerifying) && styles.activeDot,
+                  // eslint-disable-next-line react-native/no-inline-styles
                   isPaying && {backgroundColor: '#6366f1'},
                 ]}
               />
-              <Text style={styles.stepLabel}>Payment</Text>
+              <Text style={styles.stepLabel}>{t('billing.paymentLoading.steps.payment', 'Payment')}</Text>
             </View>
 
             <View style={styles.progressLine} />
@@ -77,10 +81,11 @@ export const PaymentLoadingOverlay = React.memo(
                 style={[
                   styles.progressDot,
                   isVerifying && styles.activeDot,
+                  // eslint-disable-next-line react-native/no-inline-styles
                   isVerifying && {backgroundColor: '#10b981'},
                 ]}
               />
-              <Text style={styles.stepLabel}>Verify</Text>
+              <Text style={styles.stepLabel}>{t('billing.paymentLoading.steps.verify', 'Verify')}</Text>
             </View>
           </View>
         </View>

@@ -1,20 +1,22 @@
 import React, { useState } from 'react';
 import { TouchableOpacity, Text, ActivityIndicator, StyleSheet, View, Alert } from 'react-native';
+import { useTranslation } from 'react-i18next';
 import GetIcon from './GetIcon';
 import { useAuth } from '../hooks/useAuth';
 
 const SwitchAccountButton: React.FC = () => {
   const [isLoggingOut, setIsLoggingOut] = useState(false);
   const { logout } = useAuth();
+  const { t } = useTranslation();
 
   const handleLogout = () => {
     Alert.alert(
-      'Switch Account',
-      'Are you sure you want to logout and use a different account?',
+      t('auth.switchAccount.title', 'Switch Account'),
+      t('auth.switchAccount.confirmMessage', 'Are you sure you want to logout and use a different account?'),
       [
-        { text: 'Cancel', style: 'cancel' },
+        { text: t('common.actions.cancel', 'Cancel'), style: 'cancel' },
         {
-          text: 'Logout',
+          text: t('auth.switchAccount.logout', 'Logout'),
           style: 'destructive',
           onPress: async () => {
             setIsLoggingOut(true);
@@ -38,7 +40,7 @@ const SwitchAccountButton: React.FC = () => {
       ) : (
         <View style={styles.row}>
           <GetIcon iconName="logout" size={18} color="#ff6b6b" />
-          <Text style={styles.logoutText}>Switch Account</Text>
+          <Text style={styles.logoutText}>{t('auth.switchAccount.title', 'Switch Account')}</Text>
         </View>
       )}
     </TouchableOpacity>

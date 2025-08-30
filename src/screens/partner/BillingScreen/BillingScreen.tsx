@@ -13,6 +13,7 @@ import {ErrorComponent} from './components/ErrorComponent';
 import {PaymentLoadingOverlay} from '../../../components/PaymentLoading';
 import {NextBillCard} from './components/NextBillCard';
 import BillingPlanSwitcherModal from './components/BillingPlanSwitcherModal';
+import { useTranslation } from 'react-i18next';
 
 type Props = {
   onPaymentSuccess?: () => void;
@@ -35,13 +36,14 @@ const BillingScreen: React.FC<Props> = ({onPaymentSuccess}) => {
   >([]);
 
   const {theme} = useTheme();
+  const { t } = useTranslation();
 
   // Hook manages Razorpay payment and verification
   const {isPaying, isVerifying, processPayment} = useRazorpayPayment({
     onPaymentSuccess,
     successMessage: {
-      title: 'Payment Success',
-      subtitle: 'Your subscription has been activated successfully!',
+      title: t('billing.success.title', 'Payment Success'),
+      subtitle: t('billing.success.subtitle', 'Your subscription has been activated successfully!'),
     },
   });
 
@@ -52,11 +54,11 @@ const BillingScreen: React.FC<Props> = ({onPaymentSuccess}) => {
       setNextBill(response.data.nextBill);
       setPaymentHistory(response.data.transactionHistory);
     } catch (err) {
-      setState(prev => ({...prev, error: 'Failed to load billing info.'}));
+      setState(prev => ({...prev, error: t('billing.errors.loadFailed', 'Failed to load billing info.')}));
     } finally {
       setState(prev => ({...prev, loading: false}));
     }
-  }, []);
+  }, [t]);
 
   const handlePayNow = useCallback(() => {
     setState(prev => ({...prev, showPaymentModal: true}));
@@ -65,10 +67,10 @@ const BillingScreen: React.FC<Props> = ({onPaymentSuccess}) => {
   const showPaymentError = useCallback((message: string) => {
     Toast.show({
       type: 'error',
-      text1: 'Payment Failed',
+      text1: t('billing.errors.paymentFailed', 'Payment Failed'),
       text2: message,
     });
-  }, []);
+  }, [t]);
 
   const handlePaymentConfirm = useCallback(async () => {
     if (!nextBill) {
@@ -110,15 +112,15 @@ const BillingScreen: React.FC<Props> = ({onPaymentSuccess}) => {
       const errorMessage =
         typeof err === 'object' && err !== null && 'description' in err
           ? (err as {description?: string}).description ||
-            'Something went wrong'
-          : 'Something went wrong';
+            t('billing.errors.generic', 'Something went wrong')
+          : t('billing.errors.generic', 'Something went wrong');
 
       showPaymentError(errorMessage);
     } finally {
       // Reset paying state after payNextBill API completes
       setState(prev => ({...prev, paying: false}));
     }
-  }, [nextBill, theme.primaryColor, processPayment, showPaymentError]);
+  }, [nextBill, theme.primaryColor, processPayment, showPaymentError, t]);
 
   useEffect(() => {
     fetchNextBill();
@@ -144,9 +146,9 @@ const BillingScreen: React.FC<Props> = ({onPaymentSuccess}) => {
 
         <View style={styles.header}>
           <View style={styles.headerLeft}>
-            <Text style={styles.title}>Billing & Payments</Text>
+            <Text style={styles.title}>{t('billing.title', 'Billing & Payments')}</Text>
             <Text style={styles.subtitle}>
-              Manage your subscription and payment history
+              {t('billing.subtitle', 'Manage your subscription and payment history')}
             </Text>
           </View>
         </View>
@@ -157,7 +159,7 @@ const BillingScreen: React.FC<Props> = ({onPaymentSuccess}) => {
           onPress={() => setShowPlanModal(true)}
           accessibilityLabel="Switch Billing Plan"
         >
-          <Text style={styles.switchPlanButtonText}>Switch Billing Plan</Text>
+          <Text style={styles.switchPlanButtonText}>{t('billing.switchPlanButton', 'Switch Billing Plan')}</Text>
         </TouchableOpacity>
 
         {nextBill && (

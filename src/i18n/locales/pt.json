@@ -133,7 +133,22 @@
       "email": "E-mail",
       "phone": "Telefone",
       "role": "Função",
-      "location": "Localização"
+      "location": "Localização",
+      "fullName": "Nome completo *",
+      "fullNameEdit": "Nome completo * (Editar)",
+      "emailEdit": "Endereço de e-mail * (Editar)",
+      "phoneEdit": "Número de telefone * (Editar)",
+      "locationEdit": "Localização * (Editar)"
+    },
+    "placeholders": {
+      "fullName": "Digite o nome completo do membro da equipe",
+      "editFullName": "Editar o nome completo do membro da equipe",
+      "email": "Digite o endereço de e-mail",
+      "editEmail": "Editar o endereço de e-mail",
+      "phone": "Digite o número de telefone de 10 dígitos",
+      "editPhone": "Editar o número de telefone de 10 dígitos",
+      "location": "Digite a localização (Cidade, Estado, País)",
+      "editLocation": "Editar a localização (Cidade, Estado, País)"
     },
     "status": {
       "active": "Ativo",
@@ -185,6 +200,11 @@
       "verify": "Verificar OTP",
       "didntReceive": "Não recebeu o código?",
       "resend": "Reenviar OTP"
+    },
+    "switchAccount": {
+      "title": "Trocar Conta",
+      "confirmMessage": "Tem certeza de que deseja sair e usar uma conta diferente?",
+      "logout": "Sair"
     }
   },
   "followUp": {
@@ -861,6 +881,78 @@
       "clearAll": "Limpar Tudo",
       "cancel": "Cancelar",
       "applyFilters": "Aplicar Filtros"
+    }
+  },
+  "billing": {
+    "title": "Faturamento e Pagamentos",
+    "subtitle": "Gerencie sua assinatura e histórico de pagamentos",
+    "switchPlanButton": "Alterar Plano de Faturamento",
+    "success": {
+      "title": "Pagamento Bem-Sucedido",
+      "subtitle": "Sua assinatura foi ativada com sucesso!"
+    },
+    "errors": {
+      "loadFailed": "Falha ao carregar informações de faturamento.",
+      "paymentFailed": "Pagamento Falhou",
+      "generic": "Algo deu errado",
+      "loadPlansFailed": "Falha ao carregar planos de faturamento."
+    },
+    "nextBill": {
+      "title": "Próxima Fatura",
+      "billingCycle": "Ciclo de Faturamento",
+      "duration": "Duração",
+      "days": "dias",
+      "billingPeriod": "Período de Faturamento",
+      "payNow": "Pagar Agora",
+      "billingCycleValues": {
+        "Monthly": "Mensal",
+        "Yearly": "Anual"
+      }
+    },
+    "paymentHistory": {
+      "title": "Histórico de Pagamentos",
+      "status": {
+        "success": "Sucesso",
+        "failed": "Falhou"
+      }
+    },
+    "paymentModal": {
+      "title": "Detalhes do Pagamento",
+      "subtitle": "Revise e confirme os detalhes do seu pagamento",
+      "paymentSummary": "Resumo do Pagamento",
+      "totalAmount": "Valor Total",
+      "servicePeriod": "Período de Serviço",
+      "confirmAndPay": "Confirmar e Pagar",
+      "securityText": "Protegido com criptografia de nível bancário"
+    },
+    "loading": {
+      "billingInfo": "Carregando informações de faturamento..."
+    },
+    "retry": {
+      "tryAgain": "Tentar Novamente"
+    },
+    "planSwitcher": {
+      "title": "Alterar Plano de Faturamento",
+      "switchPlan": "Alterar Plano",
+      "planSwitched": "Plano alterado!",
+      "planUpdated": "Seu plano de faturamento foi atualizado.",
+      "switchFailed": "Falha ao alterar o plano.",
+      "selectPlan": "Selecionar plano {{planName}}",
+      "submitChange": "Enviar alteração de plano",
+      "maxUsers": "Máx. Usuários:",
+      "trialPlan": "Plano de Teste",
+      "perMonth": "/mês"
+    },
+    "paymentLoading": {
+      "creatingOrder": "Criando pedido de pagamento...",
+      "processingPayment": "Processando pagamento...",
+      "verifyingPayment": "Verificando pagamento...",
+      "loading": "Carregando...",
+      "steps": {
+        "order": "Pedido",
+        "payment": "Pagamento",
+        "verify": "Verificar"
+      }
     }
   }
 }

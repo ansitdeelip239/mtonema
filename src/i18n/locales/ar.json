@@ -133,7 +133,22 @@
       "email": "البريد الإلكتروني",
       "phone": "الهاتف",
       "role": "الدور",
-      "location": "الموقع"
+      "location": "الموقع",
+      "fullName": "الاسم الكامل *",
+      "fullNameEdit": "الاسم الكامل * (تحرير)",
+      "emailEdit": "عنوان البريد الإلكتروني * (تحرير)",
+      "phoneEdit": "رقم الهاتف * (تحرير)",
+      "locationEdit": "الموقع * (تحرير)"
+    },
+    "placeholders": {
+      "fullName": "أدخل الاسم الكامل لعضو الفريق",
+      "editFullName": "تحرير الاسم الكامل لعضو الفريق",
+      "email": "أدخل عنوان البريد الإلكتروني",
+      "editEmail": "تحرير عنوان البريد الإلكتروني",
+      "phone": "أدخل رقم الهاتف المكون من 10 أرقام",
+      "editPhone": "تحرير رقم الهاتف المكون من 10 أرقام",
+      "location": "أدخل الموقع (المدينة، الولاية، البلد)",
+      "editLocation": "تحرير الموقع (المدينة، الولاية، البلد)"
     },
     "status": {
       "active": "نشط",
@@ -185,6 +200,11 @@
       "verify": "تحقق من رمز التحقق",
       "didntReceive": "لم تستلم الرمز؟",
       "resend": "إعادة إرسال رمز التحقق"
+    },
+    "switchAccount": {
+      "title": "تبديل الحساب",
+      "confirmMessage": "هل أنت متأكد من أنك تريد تسجيل الخروج واستخدام حساب مختلف؟",
+      "logout": "تسجيل الخروج"
     }
   },
   "followUp": {
@@ -867,6 +887,78 @@
       "clearAll": "مسح الكل",
       "cancel": "إلغاء",
       "applyFilters": "تطبيق المرشحات"
+    }
+  },
+  "billing": {
+    "title": "الفوترة والمدفوعات",
+    "subtitle": "إدارة اشتراكك وتاريخ المدفوعات",
+    "switchPlanButton": "تبديل خطة الفوترة",
+    "success": {
+      "title": "نجح الدفع",
+      "subtitle": "تم تفعيل اشتراكك بنجاح!"
+    },
+    "errors": {
+      "loadFailed": "فشل في تحميل معلومات الفوترة.",
+      "paymentFailed": "فشل الدفع",
+      "generic": "حدث خطأ ما",
+      "loadPlansFailed": "فشل في تحميل خطط الفوترة."
+    },
+    "nextBill": {
+      "title": "الفاتورة التالية",
+      "billingCycle": "دورة الفوترة",
+      "duration": "المدة",
+      "days": "أيام",
+      "billingPeriod": "فترة الفوترة",
+      "payNow": "ادفع الآن",
+      "billingCycleValues": {
+        "Monthly": "شهري",
+        "Yearly": "سنوي"
+      }
+    },
+    "paymentHistory": {
+      "title": "تاريخ المدفوعات",
+      "status": {
+        "success": "نجح",
+        "failed": "فشل"
+      }
+    },
+    "paymentModal": {
+      "title": "تفاصيل الدفع",
+      "subtitle": "راجع وأكد تفاصيل الدفع الخاصة بك",
+      "paymentSummary": "ملخص الدفع",
+      "totalAmount": "المبلغ الإجمالي",
+      "servicePeriod": "فترة الخدمة",
+      "confirmAndPay": "تأكيد والدفع",
+      "securityText": "محمي بتشفير مستوى البنك"
+    },
+    "loading": {
+      "billingInfo": "جاري تحميل معلومات الفوترة..."
+    },
+    "retry": {
+      "tryAgain": "حاول مرة أخرى"
+    },
+    "planSwitcher": {
+      "title": "تبديل خطة الفوترة",
+      "switchPlan": "تبديل الخطة",
+      "planSwitched": "تم تبديل الخطة!",
+      "planUpdated": "تم تحديث خطة الفوترة الخاصة بك.",
+      "switchFailed": "فشل في تبديل الخطة.",
+      "selectPlan": "اختر خطة {{planName}}",
+      "submitChange": "إرسال تغيير الخطة",
+      "maxUsers": "الحد الأقصى للمستخدمين:",
+      "trialPlan": "خطة تجريبية",
+      "perMonth": "/شهر"
+    },
+    "paymentLoading": {
+      "creatingOrder": "إنشاء طلب الدفع...",
+      "processingPayment": "معالجة الدفع...",
+      "verifyingPayment": "التحقق من الدفع...",
+      "loading": "جاري التحميل...",
+      "steps": {
+        "order": "الطلب",
+        "payment": "الدفع",
+        "verify": "التحقق"
+      }
     }
   }
 }

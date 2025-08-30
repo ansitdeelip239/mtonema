@@ -1,12 +1,17 @@
 import React from 'react';
 import {ActivityIndicator, StyleSheet, Text, View} from 'react-native';
+import { useTranslation } from 'react-i18next';
 
-export const LoadingComponent = React.memo(() => (
+export const LoadingComponent = React.memo(() => {
+  const { t } = useTranslation();
+
+  return (
   <View style={styles.loadingContainer}>
     <ActivityIndicator size="large" color="#6366f1" />
-    <Text style={styles.loadingText}>Loading billing information...</Text>
+    <Text style={styles.loadingText}>{t('billing.loading.billingInfo', 'Loading billing information...')}</Text>
   </View>
-));
+  );
+});
 
 const styles = StyleSheet.create({
   loadingContainer: {
