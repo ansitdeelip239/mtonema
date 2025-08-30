@@ -92,6 +92,7 @@
     "goodNight": "Boa noite"
   },
   "navigation": {
+    "groups": "Grupos",
     "drawer": {
       "home": "Início",
       "groups": "Grupos",
@@ -111,6 +112,7 @@
       "clients": "Clientes",
       "add": "Adicionar",
       "listings": "Anúncios",
+      "groups": "Grupos",
       "agentData": "Dados do Agente"
     }
   },
@@ -729,6 +731,38 @@
       "discardMessage": "Tem certeza de que deseja descartar suas alterações?",
       "continueEditing": "Continuar Editando",
       "discard": "Descartar"
+    }
+  },
+  "groups": {
+    "messages": {
+      "noGroupsAvailable": "Nenhum grupo disponível. Os grupos aparecerão aqui quando criados.",
+      "loadFailed": "Erro ao carregar grupos",
+      "tryAgainLater": "Por favor, tente novamente mais tarde",
+      "groupCreated": "Grupo criado com sucesso",
+      "groupUpdated": "Grupo atualizado com sucesso",
+      "groupDeleted": "Grupo excluído com sucesso",
+      "saveFailed": "Erro ao salvar grupo",
+      "saveError": "Erro ao salvar grupo",
+      "deleteFailed": "Erro ao excluir grupo",
+      "deleteError": "Erro ao excluir grupo",
+      "noColorsAvailable": "Nenhuma cor disponível"
+    },
+    "placeholders": {
+      "groupName": "Nome do Grupo"
+    },
+    "labels": {
+      "selectColor": "Selecionar Cor"
+    },
+    "buttons": {
+      "addGroup": "+ Adicionar Grupo"
+    },
+    "modals": {
+      "addGroup": "Adicionar Novo Grupo",
+      "editGroup": "Editar Grupo",
+      "deleteGroup": {
+        "title": "Excluir Grupo",
+        "message": "Tem certeza de que deseja excluir este grupo?"
+      }
     }
   },
   "agentProperty": {

@@ -92,6 +92,7 @@
     "goodNight": "Hey Night Owl"
   },
   "navigation": {
+    "groups": "Groups",
     "drawer": {
       "home": "Home",
       "groups": "Groups",
@@ -111,6 +112,7 @@
       "clients": "Clients",
       "add": "Add",
       "listings": "Listings",
+      "groups": "Groups",
       "agentData": "Agent Data"
     }
   },
@@ -729,6 +731,38 @@
       "discardMessage": "Are you sure you want to discard your changes?",
       "continueEditing": "Continue Editing",
       "discard": "Discard"
+    }
+  },
+  "groups": {
+    "messages": {
+      "noGroupsAvailable": "No groups available. Groups will appear here when created.",
+      "loadFailed": "Failed to load groups",
+      "tryAgainLater": "Please try again later",
+      "groupCreated": "Group created successfully",
+      "groupUpdated": "Group updated successfully",
+      "groupDeleted": "Group deleted successfully",
+      "saveFailed": "Failed to save group",
+      "saveError": "Error saving group",
+      "deleteFailed": "Failed to delete group",
+      "deleteError": "Error deleting group",
+      "noColorsAvailable": "No colors available"
+    },
+    "placeholders": {
+      "groupName": "Group Name"
+    },
+    "labels": {
+      "selectColor": "Select Color"
+    },
+    "buttons": {
+      "addGroup": "+ Add Group"
+    },
+    "modals": {
+      "addGroup": "Add New Group",
+      "editGroup": "Edit Group",
+      "deleteGroup": {
+        "title": "Delete Group",
+        "message": "Are you sure you want to delete this group?"
+      }
     }
   },
   "agentProperty": {

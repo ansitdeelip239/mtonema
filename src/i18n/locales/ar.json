@@ -92,6 +92,7 @@
     "goodNight": "تصبح على خير"
   },
   "navigation": {
+    "groups": "المجموعات",
     "drawer": {
       "home": "الرئيسية",
       "groups": "المجموعات",
@@ -111,6 +112,7 @@
       "clients": "العملاء",
       "add": "إضافة",
       "listings": "العقارات",
+      "groups": "المجموعات",
       "agentData": "بيانات الوكيل"
     }
   },
@@ -734,6 +736,38 @@
       "deleteProperty": {
         "title": "حذف العقار",
         "message": "هل أنت متأكد من أنك تريد حذف هذا العقار؟"
+      }
+    }
+  },
+  "groups": {
+    "messages": {
+      "noGroupsAvailable": "لا توجد مجموعات متاحة. ستظهر المجموعات هنا عند إنشائها.",
+      "loadFailed": "فشل في تحميل المجموعات",
+      "tryAgainLater": "يرجى المحاولة مرة أخرى لاحقاً",
+      "groupCreated": "تم إنشاء المجموعة بنجاح",
+      "groupUpdated": "تم تحديث المجموعة بنجاح",
+      "groupDeleted": "تم حذف المجموعة بنجاح",
+      "saveFailed": "فشل في حفظ المجموعة",
+      "saveError": "خطأ في حفظ المجموعة",
+      "deleteFailed": "فشل في حذف المجموعة",
+      "deleteError": "خطأ في حذف المجموعة",
+      "noColorsAvailable": "لا توجد ألوان متاحة"
+    },
+    "placeholders": {
+      "groupName": "اسم المجموعة"
+    },
+    "labels": {
+      "selectColor": "اختر اللون"
+    },
+    "buttons": {
+      "addGroup": "+ إضافة مجموعة"
+    },
+    "modals": {
+      "addGroup": "إضافة مجموعة جديدة",
+      "editGroup": "تعديل المجموعة",
+      "deleteGroup": {
+        "title": "حذف المجموعة",
+        "message": "هل أنت متأكد من أنك تريد حذف هذه المجموعة؟"
       }
     }
   },

@@ -92,6 +92,7 @@
     "goodNight": "शुभ रात्रि"
   },
   "navigation": {
+    "groups": "समूह",
     "drawer": {
       "home": "होम",
       "groups": "समूह",
@@ -111,6 +112,7 @@
       "clients": "ग्राहक",
       "add": "जोड़ें",
       "listings": "लिस्टिंग्स",
+      "groups": "समूह",
       "agentData": "एजेंट डेटा"
     }
   },
@@ -729,6 +731,38 @@
       "discardMessage": "क्या आप वाकई अपने परिवर्तनों को त्यागना चाहते हैं?",
       "continueEditing": "संपादन जारी रखें",
       "discard": "त्यागें"
+    }
+  },
+  "groups": {
+    "messages": {
+      "noGroupsAvailable": "कोई समूह उपलब्ध नहीं हैं। समूह तब दिखाई देंगे जब बनाए जाएंगे।",
+      "loadFailed": "समूह लोड करने में विफल",
+      "tryAgainLater": "कृपया बाद में पुनः प्रयास करें",
+      "groupCreated": "समूह सफलतापूर्वक बनाया गया",
+      "groupUpdated": "समूह सफलतापूर्वक अपडेट किया गया",
+      "groupDeleted": "समूह सफलतापूर्वक हटाया गया",
+      "saveFailed": "समूह सहेजने में विफल",
+      "saveError": "समूह सहेजने में त्रुटि",
+      "deleteFailed": "समूह हटाने में विफल",
+      "deleteError": "समूह हटाने में त्रुटि",
+      "noColorsAvailable": "कोई रंग उपलब्ध नहीं हैं"
+    },
+    "placeholders": {
+      "groupName": "समूह का नाम"
+    },
+    "labels": {
+      "selectColor": "रंग चुनें"
+    },
+    "buttons": {
+      "addGroup": "+ समूह जोड़ें"
+    },
+    "modals": {
+      "addGroup": "नया समूह जोड़ें",
+      "editGroup": "समूह संपादित करें",
+      "deleteGroup": {
+        "title": "समूह हटाएँ",
+        "message": "क्या आप वाकई इस समूह को हटाना चाहते हैं?"
+      }
     }
   },
   "agentProperty": {

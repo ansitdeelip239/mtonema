@@ -45,6 +45,7 @@ const ListingScreenStack = () => {
         options={{
           headerBackVisible: false, // hide back button on initial screen
           title: 'Listings', // Optional: set a friendly title
+          // eslint-disable-next-line react/no-unstable-nested-components
           headerLeft: () => (
             <TouchableOpacity
               onPress={() => drawerNavigation.toggleDrawer()}

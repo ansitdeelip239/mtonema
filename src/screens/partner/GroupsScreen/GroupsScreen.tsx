@@ -21,8 +21,9 @@ import AddGroupModal from './components/AddGroupModal';
 import Toast from 'react-native-toast-message';
 import { usePartner } from '../../../context/PartnerProvider';
 import { useTheme } from '../../../context/ThemeProvider';
+import { t } from 'i18next';
 
-// Updated EmptyList component to use theme
+// Updated EmptyList component to use theme and translation
 const EmptyList = memo(
   ({ isLoading, themeColor }: { isLoading: boolean; themeColor: string }) => {
     if (isLoading) {
@@ -36,7 +37,7 @@ const EmptyList = memo(
     return (
       <View style={styles.emptyContainer}>
         <Text style={styles.emptyText}>
-          No groups available. Groups will appear here when created.
+          {t('groups.messages.noGroupsAvailable', { defaultValue: 'No groups available' })}
         </Text>
       </View>
     );
@@ -132,8 +133,8 @@ const GroupsScreen = () => {
         console.error('Error fetching groups:', error);
         Toast.show({
           type: 'error',
-          text1: 'Failed to load groups',
-          text2: 'Please try again later',
+          text1: t('groups.messages.loadFailed', { defaultValue: 'Failed to load groups' }),
+          text2: t('groups.messages.tryAgainLater', { defaultValue: 'Please try again later' }),
         });
       } finally {
         setIsLoading(false);
@@ -169,7 +170,7 @@ const GroupsScreen = () => {
     return (
       <View style={styles.footerLoader}>
         <ActivityIndicator size="small" color={theme.primaryColor} />
-        <Text style={styles.loadingMoreText}>Loading more...</Text>
+        <Text style={styles.loadingMoreText}>{t('common.states.loadingMore', { defaultValue: 'Loading more...' })}</Text>
       </View>
     );
   }, [isLoadingMore, theme.primaryColor]);
@@ -210,20 +211,20 @@ const GroupsScreen = () => {
           setSelectedGroup(null);
           Toast.show({
             type: 'success',
-            text1: groupId ? 'Group updated successfully' : response.message,
+            text1: groupId ? t('groups.messages.groupUpdated', { defaultValue: 'Group updated successfully' }) : t('groups.messages.groupCreated', { defaultValue: 'Group created successfully' }),
           });
           reloadGroups();
         } else {
           Toast.show({
             type: 'error',
-            text1: response.message || 'Failed to save group',
+            text1: t('groups.messages.saveFailed', { defaultValue: 'Failed to save group' }),
           });
         }
       } catch (error) {
         console.error('Error saving group:', error);
         Toast.show({
           type: 'error',
-          text1: 'Error saving group',
+          text1: t('groups.messages.saveError', { defaultValue: 'Error saving group' }),
           text2: (error as Error).message,
         });
       } finally {
@@ -248,21 +249,21 @@ const GroupsScreen = () => {
           setSelectedGroup(null);
           Toast.show({
             type: 'success',
-            text1: 'Group deleted successfully',
+            text1: t('groups.messages.groupDeleted', { defaultValue: 'Group deleted successfully' }),
           });
           reloadGroups();
           setClientsUpdated(prev => !prev);
         } else {
           Toast.show({
             type: 'error',
-            text1: response.message || 'Failed to delete group',
+            text1: response.message || t('groups.messages.deleteFailed', { defaultValue: 'Failed to delete group' }),
           });
         }
       } catch (error) {
         console.error('Error deleting group:', error);
         Toast.show({
           type: 'error',
-          text1: 'Error deleting group',
+          text1: t('groups.messages.deleteError', { defaultValue: 'Error deleting group' }),
           text2: (error as Error).message,
         });
       } finally {
@@ -338,13 +339,13 @@ const GroupsScreen = () => {
       {
         Platform.OS === 'android' && (
           <Header<PartnerDrawerParamList>
-            title="Groups"
+            title={t('navigation.groups', { defaultValue: 'Groups' })}
             children={
               <TouchableOpacity
                 onPress={toggleModal}
                 style={[styles.addButton, { backgroundColor: theme.secondaryColor }]} // Updated with theme
                 disabled={isSaving || isDeleting}>
-                <Text style={styles.addButtonText}>+ Add Group</Text>
+                <Text style={styles.addButtonText}>{t('groups.buttons.addGroup', { defaultValue: 'Add Group' })}</Text>
               </TouchableOpacity>
             }
           />

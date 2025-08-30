@@ -13,6 +13,7 @@ import {
 import {useMaster} from '../../../../context/MasterProvider';
 import GetIcon from '../../../../components/GetIcon';
 import {Group2} from '../../../../types';
+import i18n from '../../../../i18n';
 
 // Get screen width to calculate button size and spacing
 const screenWidth = Dimensions.get('window').width;
@@ -139,7 +140,7 @@ const AddGroupModal: React.FC<AddGroupModalProps> = ({
           {/* Modal Header with conditional Delete Button */}
           <View style={modalStyles.modalHeader}>
             <Text style={styles.modalTitle}>
-              {isEditMode ? 'Edit Group' : 'Add New Group'}
+              {isEditMode ? i18n.t('groups.modals.editGroup', { defaultValue: 'Edit Group' }) : i18n.t('groups.modals.addGroup', { defaultValue: 'Add Group' })}
             </Text>
             {isEditMode && onDelete && (
               <TouchableOpacity
@@ -153,7 +154,7 @@ const AddGroupModal: React.FC<AddGroupModalProps> = ({
 
           <TextInput
             style={styles.input}
-            placeholder="Group Name"
+            placeholder={i18n.t('groups.placeholders.groupName', { defaultValue: 'Enter group name' })}
             placeholderTextColor={'#999'}
             value={groupName}
             onChangeText={setGroupName}
@@ -161,7 +162,7 @@ const AddGroupModal: React.FC<AddGroupModalProps> = ({
             editable={!isLoading && !isDeleting}
           />
 
-          <Text style={modalStyles.colorSectionTitle}>Select Color</Text>
+          <Text style={modalStyles.colorSectionTitle}>{i18n.t('groups.labels.selectColor', { defaultValue: 'Select Color' })}</Text>
 
           <ScrollView style={modalStyles.colorContainer}>
             <View style={modalStyles.colorGrid}>
@@ -176,7 +177,7 @@ const AddGroupModal: React.FC<AddGroupModalProps> = ({
                 ))
               ) : (
                 <Text style={modalStyles.noColorsText}>
-                  No colors available
+                  {i18n.t('groups.messages.noColorsAvailable', { defaultValue: 'No colors available' })}
                 </Text>
               )}
             </View>
@@ -187,7 +188,7 @@ const AddGroupModal: React.FC<AddGroupModalProps> = ({
               style={[styles.modalButton, styles.cancelButton]}
               onPress={handleClose}
               disabled={isLoading || isDeleting}>
-              <Text style={styles.buttonText}>Cancel</Text>
+              <Text style={styles.buttonText}>{i18n.t('common.actions.cancel', { defaultValue: 'Cancel' })}</Text>
             </TouchableOpacity>
             <TouchableOpacity
               style={[
@@ -206,7 +207,7 @@ const AddGroupModal: React.FC<AddGroupModalProps> = ({
               {isLoading ? (
                 <ActivityIndicator size="small" color="#FFFFFF" />
               ) : (
-                <Text style={styles.buttonText}>Save</Text>
+                <Text style={styles.buttonText}>{i18n.t('common.actions.save', { defaultValue: 'Save' })}</Text>
               )}
             </TouchableOpacity>
           </View>
@@ -215,16 +216,16 @@ const AddGroupModal: React.FC<AddGroupModalProps> = ({
           {showDeleteConfirmation && (
             <View style={modalStyles.confirmationOverlay}>
               <View style={modalStyles.confirmationBox}>
-                <Text style={modalStyles.confirmationTitle}>Delete Group</Text>
+                <Text style={modalStyles.confirmationTitle}>{i18n.t('groups.modals.deleteGroup.title', { defaultValue: 'Delete Group' })}</Text>
                 <Text style={modalStyles.confirmationText}>
-                  Are you sure you want to delete this group?
+                  {i18n.t('groups.modals.deleteGroup.message', { defaultValue: 'Are you sure you want to delete this group?' })}
                 </Text>
                 <View style={modalStyles.confirmationButtons}>
                   <TouchableOpacity
                     style={modalStyles.confirmCancel}
                     onPress={() => setShowDeleteConfirmation(false)}
                     disabled={isDeleting}>
-                    <Text style={modalStyles.confirmCancelText}>Cancel</Text>
+                    <Text style={modalStyles.confirmCancelText}>{i18n.t('common.actions.cancel', { defaultValue: 'Cancel' })}</Text>
                   </TouchableOpacity>
                   <TouchableOpacity
                     style={modalStyles.confirmDelete}
@@ -233,7 +234,7 @@ const AddGroupModal: React.FC<AddGroupModalProps> = ({
                     {isDeleting ? (
                       <ActivityIndicator size="small" color="#fff" />
                     ) : (
-                      <Text style={modalStyles.confirmDeleteText}>Delete</Text>
+                      <Text style={modalStyles.confirmDeleteText}>{i18n.t('common.actions.delete', { defaultValue: 'Delete' })}</Text>
                     )}
                   </TouchableOpacity>
                 </View>
