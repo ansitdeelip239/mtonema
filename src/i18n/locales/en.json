@@ -588,10 +588,14 @@
       "loadingMore": "Loading more properties...",
       "noProperties": "No properties found.",
       "deleteConfirmation": "Are you sure you want to delete this property?",
-      "propertyDeleted": "Property deleted",
+      "propertyDeleted": "Property deleted successfully",
       "deleteFailed": "Failed to delete property",
       "fetchFailed": "Failed to fetch properties",
-      "emptyState": "You haven't added any properties yet. Get started by adding your first property."
+      "emptyState": "You haven't added any properties yet. Get started by adding your first property.",
+      "loadingDetails": "Loading property details...",
+      "loadFailed": "Failed to load property details",
+      "errorLoading": "Error loading property details",
+      "propertyNotFound": "Property not found"
     },
     "placeholders": {
       "searchByName": "Search by name..."
@@ -601,11 +605,26 @@
       "status": "Status",
       "city": "City",
       "featured": "Featured",
+      "notFeatured": "Not Featured",
       "deleted": "Deleted",
       "unnamedProperty": "Unnamed Property",
       "locationNotSpecified": "Location not specified",
       "priceOnRequest": "Price on request",
-      "forSale": "For Sale"
+      "forSale": "For Sale",
+      "for": "For",
+      "sale": "Sale",
+      "type": "Type",
+      "category": "Category",
+      "notSpecified": "Not specified",
+      "zipCode": "ZIP Code",
+      "sellerType": "Seller Type",
+      "configuration": "Configuration",
+      "area": "Area",
+      "furnishing": "Furnishing",
+      "facing": "Facing",
+      "seller": "Seller",
+      "playVideo": "Play Video",
+      "videoTour": "Video Tour"
     },
     "buttons": {
       "edit": "Edit",
@@ -618,6 +637,39 @@
     "accessibility": {
       "propertyImage": "Image of {{propertyName}}",
       "propertyPlaceholder": "Property placeholder image"
+    },
+    "sections": {
+      "propertyDetails": "Property Details",
+      "overview": "Overview",
+      "description": "Description",
+      "features": "Features",
+      "specifications": "Specifications",
+      "tags": "Tags",
+      "contactInformation": "Contact Information"
+    },
+    "features": {
+      "readyToMove": "Ready to Move",
+      "constructionDone": "Construction Done",
+      "boundaryWall": "Boundary Wall",
+      "elevators": "Elevators",
+      "alarmSystem": "Alarm System",
+      "securityCameras": "Security Cameras",
+      "gatedSecurity": "Gated Security",
+      "pantry": "Pantry"
+    },
+    "specs": {
+      "floor": "Floor",
+      "parking": "Parking",
+      "openSide": "Open Side",
+      "propertyAge": "Property Age",
+      "ceilingHeight": "Ceiling Height",
+      "listedOn": "Listed On"
+    },
+    "modals": {
+      "deleteProperty": {
+        "title": "Delete Property",
+        "message": "Are you sure you want to delete this property?"
+      }
     }
   },
   "addContent": {
@@ -727,7 +779,9 @@
       "add": "Add",
       "submit": "Submit",
       "cancel": "Cancel",
-      "applyFilters": "Apply Filters"
+      "applyFilters": "Apply Filters",
+      "filterProperties": "Filter Properties",
+      "clearAll": "Clear All"
     }
   }
 }

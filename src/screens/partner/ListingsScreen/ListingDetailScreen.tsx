@@ -1,4 +1,3 @@
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import React, { useEffect, useState, useMemo } from 'react';
 import {
   Text,
@@ -13,6 +12,7 @@ import {
   useWindowDimensions,
   Switch,
 } from 'react-native';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { ListingScreenStackParamList } from '../../../navigator/components/PropertyListingScreenStack';
 import { Property } from './types';
 import PartnerService from '../../../services/PartnerService';
@@ -27,6 +27,7 @@ import { Appbar, Menu } from 'react-native-paper';
 import ConfirmationModal from '../../../components/ConfirmationModal';
 import { getYouTubeThumbnailUrl } from '../../../utils/formUtils';
 import { useTheme } from '../../../context/ThemeProvider';
+import { useTranslation } from 'react-i18next';
 
 type Props = NativeStackScreenProps<
   ListingScreenStackParamList,
@@ -55,6 +56,7 @@ const ListingDetailScreen: React.FC<Props> = ({ route, navigation }) => {
   const { width } = useWindowDimensions();
   const { setPartnerPropertyUpdated } = usePartner();
   const { theme } = useTheme();
+  const { t } = useTranslation();
 
   const handleFeaturedToggle = async (newValue: boolean) => {
     setIsFeatured(newValue);
@@ -108,7 +110,7 @@ const ListingDetailScreen: React.FC<Props> = ({ route, navigation }) => {
       if (response.success) {
         Toast.show({
           type: 'success',
-          text1: 'Property deleted successfully',
+          text1: t('listings.messages.propertyDeleted'),
           position: 'top',
           visibilityTime: 2000,
         });
@@ -119,7 +121,7 @@ const ListingDetailScreen: React.FC<Props> = ({ route, navigation }) => {
       console.error('Error deleting property:', err);
       Toast.show({
         type: 'error',
-        text1: 'Failed to delete property',
+        text1: t('listings.messages.deleteFailed'),
         position: 'top',
         visibilityTime: 2000,
       });
@@ -150,18 +152,18 @@ const ListingDetailScreen: React.FC<Props> = ({ route, navigation }) => {
           setProperty(response.data);
           setIsFeatured(response.data.featured || false);
         } else {
-          setError('Could not load property details');
+          setError(t('listings.messages.loadFailed'));
         }
       } catch (err) {
         console.error('Error fetching property details:', err);
-        setError('Error loading property details. Please try again.');
+        setError(t('listings.messages.errorLoading'));
       } finally {
         setLoading(false);
       }
     };
 
     fetchPropertyDetails();
-  }, [propertyId]); // Add dependency to prevent infinite fetch loop
+  }, [propertyId, t]); // Add dependency to prevent infinite fetch loop
 
   // Process main property image
   const displayImages = useMemo(() => {
@@ -200,12 +202,12 @@ const ListingDetailScreen: React.FC<Props> = ({ route, navigation }) => {
       images.push({
         isVideo: true,
         videoUrl: property.videoURL,
-        type: 'Video Tour',
+        type: t('listings.labels.videoTour'),
       });
     }
 
     return images;
-  }, [property?.imageURL, property?.videoURL]);
+  }, [property?.imageURL, property?.videoURL, t]);
 
   // Function to handle image scroll events
   const handleImageScroll = (event: any) => {
@@ -266,7 +268,7 @@ const ListingDetailScreen: React.FC<Props> = ({ route, navigation }) => {
       {
         Platform.OS === 'android' && (
           <Header
-            title={property?.propertyName || 'Property Details'}
+            title={property?.propertyName || t('listings.sections.propertyDetails')}
             backButton={true}
             onBackPress={() => navigation.goBack()}>
             {!loading && property && (
@@ -287,7 +289,7 @@ const ListingDetailScreen: React.FC<Props> = ({ route, navigation }) => {
                     closeMenu();
                     handleEditProperty();
                   }}
-                  title="Edit"
+                  title={t('common.actions.edit')}
                   titleStyle={styles.menuItemTitle}
                   // eslint-disable-next-line react/no-unstable-nested-components
                   leadingIcon={() => <GetIcon iconName="edit" />}
@@ -297,7 +299,7 @@ const ListingDetailScreen: React.FC<Props> = ({ route, navigation }) => {
                     closeMenu();
                     setShowDeleteModal(true);
                   }}
-                  title="Delete"
+                  title={t('common.actions.delete')}
                   titleStyle={styles.menuItemTitle}
                   // eslint-disable-next-line react/no-unstable-nested-components
                   leadingIcon={() => <GetIcon iconName="delete" />}
@@ -312,15 +314,15 @@ const ListingDetailScreen: React.FC<Props> = ({ route, navigation }) => {
       {loading ? (
         <View style={styles.contentLoadingContainer}>
           <ActivityIndicator size="large" color={theme.primaryColor} />
-          <Text style={styles.loadingText}>Loading property details...</Text>
+          <Text style={styles.loadingText}>{t('listings.messages.loadingDetails')}</Text>
         </View>
       ) : error || !property ? (
         <View style={styles.contentErrorContainer}>
-          <Text style={styles.errorText}>{error || 'Property not found'}</Text>
+          <Text style={styles.errorText}>{error || t('listings.messages.propertyNotFound')}</Text>
           <TouchableOpacity
             style={[styles.retryButton, { backgroundColor: theme.primaryColor }]}
             onPress={() => navigation.goBack()}>
-            <Text style={styles.buttonText}>Go Back</Text>
+            <Text style={styles.buttonText}>{t('common.actions.back')}</Text>
           </TouchableOpacity>
         </View>
       ) : (
@@ -376,7 +378,7 @@ const ListingDetailScreen: React.FC<Props> = ({ route, navigation }) => {
                                   color="#fff"
                                 />
                                 <Text style={styles.playVideoText}>
-                                  Play Video
+                                  {t('listings.labels.playVideo')}
                                 </Text>
                               </View>
                             </View>
@@ -433,14 +435,14 @@ const ListingDetailScreen: React.FC<Props> = ({ route, navigation }) => {
             <View style={styles.badgeContainer}>
               <View style={[styles.badge, styles.mainBadge]}>
                 <Text style={styles.badgeText}>
-                  For {property.propertyFor || 'Sale'}
+                  {t('listings.labels.for')} {property.propertyFor || t('listings.labels.sale')}
                 </Text>
               </View>
 
               {property.featured && (
                 <View
                   style={[styles.badge, { backgroundColor: theme.primaryColor }]}>
-                  <Text style={styles.badgeText}>Featured</Text>
+                  <Text style={styles.badgeText}>{t('listings.labels.featured')}</Text>
                 </View>
               )}
             </View>
@@ -449,13 +451,13 @@ const ListingDetailScreen: React.FC<Props> = ({ route, navigation }) => {
           {/* Property Title & Price Section */}
           <View style={styles.section}>
             <Text style={styles.propertyTitle}>
-              {property.propertyName || 'Unnamed Property'}
+              {property.propertyName || t('listings.labels.unnamedProperty')}
             </Text>
 
             <Text style={[styles.propertyPrice, { color: theme.primaryColor }]}>
               {property.price
                 ? formatCurrency(property.price)
-                : 'Price on request'}
+                : t('listings.labels.priceOnRequest')}
             </Text>
 
             {/* Location with ZIP code - Updated for better formatting */}
@@ -475,7 +477,7 @@ const ListingDetailScreen: React.FC<Props> = ({ route, navigation }) => {
 
           {/* Property Overview */}
           <View style={[styles.section, styles.overviewSection]}>
-            <Text style={styles.sectionTitle}>Overview</Text>
+            <Text style={styles.sectionTitle}>{t('listings.sections.overview')}</Text>
 
             <View style={styles.overviewGrid}>
               {/* Property Type */}
@@ -488,7 +490,7 @@ const ListingDetailScreen: React.FC<Props> = ({ route, navigation }) => {
                   />
                 </View>
                 <View style={styles.overviewTextContainer}>
-                  <Text style={styles.overviewLabel}>Type</Text>
+                  <Text style={styles.overviewLabel}>{t('listings.labels.type')}</Text>
                   <Text style={styles.overviewValue}>
                     {property.propertyType || 'Not specified'}
                   </Text>
@@ -505,9 +507,9 @@ const ListingDetailScreen: React.FC<Props> = ({ route, navigation }) => {
                   />
                 </View>
                 <View style={styles.overviewTextContainer}>
-                  <Text style={styles.overviewLabel}>Category</Text>
+                  <Text style={styles.overviewLabel}>{t('listings.labels.category')}</Text>
                   <Text style={styles.overviewValue}>
-                    {property.propertyForType || 'Not specified'}
+                    {property.propertyForType || t('listings.labels.notSpecified')}
                   </Text>
                 </View>
               </View>
@@ -523,7 +525,7 @@ const ListingDetailScreen: React.FC<Props> = ({ route, navigation }) => {
                     />
                   </View>
                   <View style={styles.overviewTextContainer}>
-                    <Text style={styles.overviewLabel}>ZIP Code</Text>
+                    <Text style={styles.overviewLabel}>{t('listings.labels.zipCode')}</Text>
                     <Text style={styles.overviewValue}>{property.zipCode}</Text>
                   </View>
                 </View>
@@ -540,7 +542,7 @@ const ListingDetailScreen: React.FC<Props> = ({ route, navigation }) => {
                     />
                   </View>
                   <View style={styles.overviewTextContainer}>
-                    <Text style={styles.overviewLabel}>Seller Type</Text>
+                    <Text style={styles.overviewLabel}>{t('listings.labels.sellerType')}</Text>
                     <Text style={styles.overviewValue}>
                       {property.sellerType}
                     </Text>
@@ -559,7 +561,7 @@ const ListingDetailScreen: React.FC<Props> = ({ route, navigation }) => {
                     />
                   </View>
                   <View style={styles.overviewTextContainer}>
-                    <Text style={styles.overviewLabel}>Configuration</Text>
+                    <Text style={styles.overviewLabel}>{t('listings.labels.configuration')}</Text>
                     <Text style={styles.overviewValue}>{property.bhkType}</Text>
                   </View>
                 </View>
@@ -576,7 +578,7 @@ const ListingDetailScreen: React.FC<Props> = ({ route, navigation }) => {
                     />
                   </View>
                   <View style={styles.overviewTextContainer}>
-                    <Text style={styles.overviewLabel}>Area</Text>
+                    <Text style={styles.overviewLabel}>{t('listings.labels.area')}</Text>
                     <Text style={styles.overviewValue}>
                       {property.area} {property.lmUnit || 'sq ft'}
                     </Text>
@@ -595,7 +597,7 @@ const ListingDetailScreen: React.FC<Props> = ({ route, navigation }) => {
                     />
                   </View>
                   <View style={styles.overviewTextContainer}>
-                    <Text style={styles.overviewLabel}>Furnishing</Text>
+                    <Text style={styles.overviewLabel}>{t('listings.labels.furnishing')}</Text>
                     <Text style={styles.overviewValue}>
                       {property.furnishing}
                     </Text>
@@ -614,7 +616,7 @@ const ListingDetailScreen: React.FC<Props> = ({ route, navigation }) => {
                     />
                   </View>
                   <View style={styles.overviewTextContainer}>
-                    <Text style={styles.overviewLabel}>Facing</Text>
+                    <Text style={styles.overviewLabel}>{t('listings.labels.facing')}</Text>
                     <Text style={styles.overviewValue}>{property.facing}</Text>
                   </View>
                 </View>
@@ -625,7 +627,7 @@ const ListingDetailScreen: React.FC<Props> = ({ route, navigation }) => {
           {/* Description */}
           {(property.shortDescription || property.longDescription) && (
             <View style={styles.section}>
-              <Text style={styles.sectionTitle}>Description</Text>
+              <Text style={styles.sectionTitle}>{t('listings.sections.description')}</Text>
 
               {property.shortDescription && (
                 <View style={styles.descriptionContainer}>
@@ -650,7 +652,7 @@ const ListingDetailScreen: React.FC<Props> = ({ route, navigation }) => {
             <View style={styles.featuredContainer}>
               <View style={styles.featuredTextContainer}>
                 <Text style={styles.featuredTitle}>
-                  {isFeatured ? 'Featured' : 'Not Featured'}
+                  {isFeatured ? t('listings.labels.featured') : t('listings.labels.notFeatured')}
                 </Text>
               </View>
 
@@ -666,7 +668,7 @@ const ListingDetailScreen: React.FC<Props> = ({ route, navigation }) => {
 
           {/* Additional Features */}
           <View style={styles.section}>
-            <Text style={styles.sectionTitle}>Features</Text>
+            <Text style={styles.sectionTitle}>{t('listings.sections.features')}</Text>
 
             <View style={styles.featuresGrid}>
               {/* Ready to Move */}
@@ -684,7 +686,7 @@ const ListingDetailScreen: React.FC<Props> = ({ route, navigation }) => {
                     color={property.readyToMove ? '#fff' : '#888'}
                   />
                 </View>
-                <Text style={styles.featureText}>Ready to Move</Text>
+                <Text style={styles.featureText}>{t('listings.features.readyToMove')}</Text>
               </View>
 
               {/* Construction Done */}
@@ -702,7 +704,7 @@ const ListingDetailScreen: React.FC<Props> = ({ route, navigation }) => {
                     color={property.constructionDone ? '#fff' : '#888'}
                   />
                 </View>
-                <Text style={styles.featureText}>Construction Done</Text>
+                <Text style={styles.featureText}>{t('listings.features.constructionDone')}</Text>
               </View>
 
               {/* Boundary Wall */}
@@ -720,7 +722,7 @@ const ListingDetailScreen: React.FC<Props> = ({ route, navigation }) => {
                     color={property.boundaryWall ? '#fff' : '#888'}
                   />
                 </View>
-                <Text style={styles.featureText}>Boundary Wall</Text>
+                <Text style={styles.featureText}>{t('listings.features.boundaryWall')}</Text>
               </View>
 
               {/* Lifts */}
@@ -738,7 +740,7 @@ const ListingDetailScreen: React.FC<Props> = ({ route, navigation }) => {
                     color={property.lifts ? '#fff' : '#888'}
                   />
                 </View>
-                <Text style={styles.featureText}>Elevators</Text>
+                <Text style={styles.featureText}>{t('listings.features.elevators')}</Text>
               </View>
 
               {/* Alarm System */}
@@ -756,7 +758,7 @@ const ListingDetailScreen: React.FC<Props> = ({ route, navigation }) => {
                     color={property.alarmSystem ? '#fff' : '#888'}
                   />
                 </View>
-                <Text style={styles.featureText}>Alarm System</Text>
+                <Text style={styles.featureText}>{t('listings.features.alarmSystem')}</Text>
               </View>
 
               {/* Surveillance Cameras */}
@@ -774,7 +776,7 @@ const ListingDetailScreen: React.FC<Props> = ({ route, navigation }) => {
                     color={property.surveillanceCameras ? '#fff' : '#888'}
                   />
                 </View>
-                <Text style={styles.featureText}>Security Cameras</Text>
+                <Text style={styles.featureText}>{t('listings.features.securityCameras')}</Text>
               </View>
 
               {/* Gated Security */}
@@ -792,7 +794,7 @@ const ListingDetailScreen: React.FC<Props> = ({ route, navigation }) => {
                     color={property.gatedSecurity ? '#fff' : '#888'}
                   />
                 </View>
-                <Text style={styles.featureText}>Gated Security</Text>
+                <Text style={styles.featureText}>{t('listings.features.gatedSecurity')}</Text>
               </View>
 
               {/* Pantry */}
@@ -810,20 +812,20 @@ const ListingDetailScreen: React.FC<Props> = ({ route, navigation }) => {
                     color={property.pantry ? '#fff' : '#888'}
                   />
                 </View>
-                <Text style={styles.featureText}>Pantry</Text>
+                <Text style={styles.featureText}>{t('listings.features.pantry')}</Text>
               </View>
             </View>
           </View>
 
           {/* Property Specifications */}
           <View style={styles.section}>
-            <Text style={styles.sectionTitle}>Specifications</Text>
+            <Text style={styles.sectionTitle}>{t('listings.sections.specifications')}</Text>
 
             <View style={styles.specsList}>
               {/* Floor */}
               {property.floor && (
                 <View style={styles.specItem}>
-                  <Text style={styles.specLabel}>Floor</Text>
+                  <Text style={styles.specLabel}>{t('listings.specs.floor')}</Text>
                   <Text style={styles.specValue}>{property.floor}</Text>
                 </View>
               )}
@@ -831,7 +833,7 @@ const ListingDetailScreen: React.FC<Props> = ({ route, navigation }) => {
               {/* Parking */}
               {property.parking && (
                 <View style={styles.specItem}>
-                  <Text style={styles.specLabel}>Parking</Text>
+                  <Text style={styles.specLabel}>{t('listings.specs.parking')}</Text>
                   <Text style={styles.specValue}>{property.parking}</Text>
                 </View>
               )}
@@ -839,7 +841,7 @@ const ListingDetailScreen: React.FC<Props> = ({ route, navigation }) => {
               {/* Open Side */}
               {property.openSide && (
                 <View style={styles.specItem}>
-                  <Text style={styles.specLabel}>Open Side</Text>
+                  <Text style={styles.specLabel}>{t('listings.specs.openSide')}</Text>
                   <Text style={styles.specValue}>{property.openSide}</Text>
                 </View>
               )}
@@ -847,7 +849,7 @@ const ListingDetailScreen: React.FC<Props> = ({ route, navigation }) => {
               {/* Property Age */}
               {property.propertyAge && (
                 <View style={styles.specItem}>
-                  <Text style={styles.specLabel}>Property Age</Text>
+                  <Text style={styles.specLabel}>{t('listings.specs.propertyAge')}</Text>
                   <Text style={styles.specValue}>{property.propertyAge}</Text>
                 </View>
               )}
@@ -855,7 +857,7 @@ const ListingDetailScreen: React.FC<Props> = ({ route, navigation }) => {
               {/* Ceiling Height */}
               {property.ceilingHeight && (
                 <View style={styles.specItem}>
-                  <Text style={styles.specLabel}>Ceiling Height</Text>
+                  <Text style={styles.specLabel}>{t('listings.specs.ceilingHeight')}</Text>
                   <Text style={styles.specValue}>{property.ceilingHeight}</Text>
                 </View>
               )}
@@ -863,7 +865,7 @@ const ListingDetailScreen: React.FC<Props> = ({ route, navigation }) => {
               {/* CreatedOn Date */}
               {property.createdOn && (
                 <View style={styles.specItem}>
-                  <Text style={styles.specLabel}>Listed On</Text>
+                  <Text style={styles.specLabel}>{t('listings.specs.listedOn')}</Text>
                   <Text style={styles.specValue}>
                     {new Date(property.createdOn).toLocaleDateString()}
                   </Text>
@@ -875,7 +877,7 @@ const ListingDetailScreen: React.FC<Props> = ({ route, navigation }) => {
           {/* Tags */}
           {displayTags.length > 0 && (
             <View style={styles.section}>
-              <Text style={styles.sectionTitle}>Tags</Text>
+              <Text style={styles.sectionTitle}>{t('listings.sections.tags')}</Text>
               <View style={styles.tagsContainer}>
                 {displayTags.map((tag: string, index: number) => (
                   <View key={index} style={styles.tag}>
@@ -888,7 +890,7 @@ const ListingDetailScreen: React.FC<Props> = ({ route, navigation }) => {
 
           {/* Contact Information */}
           <View style={[styles.section, styles.sellerSection]}>
-            <Text style={styles.sectionTitle}>Contact Information</Text>
+            <Text style={styles.sectionTitle}>{t('listings.sections.contactInformation')}</Text>
 
             <View style={styles.sellerCard}>
               <View style={styles.sellerDetails}>
@@ -901,7 +903,7 @@ const ListingDetailScreen: React.FC<Props> = ({ route, navigation }) => {
                 </View>
                 <View style={styles.sellerInfo}>
                   <Text style={styles.sellerName}>
-                    {property.sellerName || 'Seller'}
+                    {property.sellerName || t('listings.labels.seller')}
                   </Text>
                   <Text style={styles.sellerType}>
                     {property.sellerType || ''}
@@ -920,8 +922,8 @@ const ListingDetailScreen: React.FC<Props> = ({ route, navigation }) => {
           {/* Add at the bottom of your component return statement */}
           <ConfirmationModal
             visible={showDeleteModal}
-            title="Delete Property"
-            message="Are you sure you want to delete this property?"
+            title={t('listings.modals.deleteProperty.title')}
+            message={t('listings.modals.deleteProperty.message')}
             onConfirm={handleDeleteProperty}
             onCancel={() => setShowDeleteModal(false)}
             isLoading={isDeleting}

@@ -653,10 +653,14 @@
       "loadingMore": "جارٍ تحميل المزيد من العقارات...",
       "noProperties": "لم يتم العثور على عقارات.",
       "deleteConfirmation": "هل أنت متأكد من أنك تريد حذف هذا العقار؟",
-      "propertyDeleted": "تم حذف العقار",
+      "propertyDeleted": "تم حذف العقار بنجاح",
       "deleteFailed": "فشل في حذف العقار",
       "fetchFailed": "فشل في جلب العقارات",
-      "emptyState": "لم تقم بإضافة أي عقارات بعد. ابدأ بإضافة عقارك الأول."
+      "emptyState": "لم تقم بإضافة أي عقارات بعد. ابدأ بإضافة عقارك الأول.",
+      "loadingDetails": "جارٍ تحميل تفاصيل العقار...",
+      "loadFailed": "فشل في تحميل تفاصيل العقار",
+      "errorLoading": "خطأ في تحميل تفاصيل العقار",
+      "propertyNotFound": "العقار غير موجود"
     },
     "placeholders": {
       "searchByName": "البحث بالاسم..."
@@ -666,11 +670,26 @@
       "status": "الحالة",
       "city": "المدينة",
       "featured": "مميز",
+      "notFeatured": "غير مميز",
       "deleted": "محذوف",
       "unnamedProperty": "عقار بدون اسم",
       "locationNotSpecified": "الموقع غير محدد",
       "priceOnRequest": "السعر عند الطلب",
-      "forSale": "للبيع"
+      "forSale": "للبيع",
+      "for": "لـ",
+      "sale": "بيع",
+      "type": "النوع",
+      "category": "الفئة",
+      "notSpecified": "غير محدد",
+      "zipCode": "الرمز البريدي",
+      "sellerType": "نوع البائع",
+      "configuration": "التكوين",
+      "area": "المساحة",
+      "furnishing": "التأثيث",
+      "facing": "الاتجاه",
+      "seller": "البائع",
+      "playVideo": "تشغيل الفيديو",
+      "videoTour": "جولة فيديو"
     },
     "buttons": {
       "edit": "تعديل",
@@ -683,6 +702,39 @@
     "accessibility": {
       "propertyImage": "صورة {{propertyName}}",
       "propertyPlaceholder": "صورة العقار النائبة"
+    },
+    "sections": {
+      "propertyDetails": "تفاصيل العقار",
+      "overview": "نظرة عامة",
+      "description": "الوصف",
+      "features": "المميزات",
+      "specifications": "المواصفات",
+      "tags": "العلامات",
+      "contactInformation": "معلومات الاتصال"
+    },
+    "features": {
+      "readyToMove": "جاهز للانتقال",
+      "constructionDone": "الإنشاء مكتمل",
+      "boundaryWall": "جدار المحدود",
+      "elevators": "المصاعد",
+      "alarmSystem": "نظام الإنذار",
+      "securityCameras": "كاميرات الأمان",
+      "gatedSecurity": "أمان البوابة",
+      "pantry": "المطبخ"
+    },
+    "specs": {
+      "floor": "الطابق",
+      "parking": "موقف السيارات",
+      "openSide": "الجانب المفتوح",
+      "propertyAge": "عمر العقار",
+      "ceilingHeight": "ارتفاع السقف",
+      "listedOn": "مُدرج في"
+    },
+    "modals": {
+      "deleteProperty": {
+        "title": "حذف العقار",
+        "message": "هل أنت متأكد من أنك تريد حذف هذا العقار؟"
+      }
     }
   },
   "agentProperty": {

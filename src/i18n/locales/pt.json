@@ -588,10 +588,14 @@
       "loadingMore": "Carregando mais propriedades...",
       "noProperties": "Nenhuma propriedade encontrada.",
       "deleteConfirmation": "Tem certeza de que deseja excluir esta propriedade?",
-      "propertyDeleted": "Propriedade excluída",
+      "propertyDeleted": "Propriedade excluída com sucesso",
       "deleteFailed": "Erro ao excluir propriedade",
       "fetchFailed": "Erro ao buscar propriedades",
-      "emptyState": "Você ainda não adicionou propriedades. Comece adicionando sua primeira propriedade."
+      "emptyState": "Você ainda não adicionou propriedades. Comece adicionando sua primeira propriedade.",
+      "loadingDetails": "Carregando detalhes da propriedade...",
+      "loadFailed": "Erro ao carregar detalhes da propriedade",
+      "errorLoading": "Erro ao carregar detalhes da propriedade",
+      "propertyNotFound": "Propriedade não encontrada"
     },
     "placeholders": {
       "searchByName": "Buscar por nome..."
@@ -601,11 +605,26 @@
       "status": "Status",
       "city": "Cidade",
       "featured": "Destaque",
+      "notFeatured": "Não Destaque",
       "deleted": "Excluído",
       "unnamedProperty": "Propriedade Sem Nome",
       "locationNotSpecified": "Localização não especificada",
       "priceOnRequest": "Preço sob consulta",
-      "forSale": "À Venda"
+      "forSale": "À Venda",
+      "for": "Para",
+      "sale": "Venda",
+      "type": "Tipo",
+      "category": "Categoria",
+      "notSpecified": "Não especificado",
+      "zipCode": "CEP",
+      "sellerType": "Tipo de Vendedor",
+      "configuration": "Configuração",
+      "area": "Área",
+      "furnishing": "Mobília",
+      "facing": "Orientação",
+      "seller": "Vendedor",
+      "playVideo": "Reproduzir Vídeo",
+      "videoTour": "Tour Virtual"
     },
     "buttons": {
       "edit": "Editar",
@@ -618,6 +637,39 @@
     "accessibility": {
       "propertyImage": "Imagem de {{propertyName}}",
       "propertyPlaceholder": "Imagem de marcador de propriedade"
+    },
+    "sections": {
+      "propertyDetails": "Detalhes da Propriedade",
+      "overview": "Visão Geral",
+      "description": "Descrição",
+      "features": "Características",
+      "specifications": "Especificações",
+      "tags": "Etiquetas",
+      "contactInformation": "Informações de Contato"
+    },
+    "features": {
+      "readyToMove": "Pronto para Mudar",
+      "constructionDone": "Construção Concluída",
+      "boundaryWall": "Muro de Limite",
+      "elevators": "Elevadores",
+      "alarmSystem": "Sistema de Alarme",
+      "securityCameras": "Câmeras de Segurança",
+      "gatedSecurity": "Segurança Portão",
+      "pantry": "Despensa"
+    },
+    "specs": {
+      "floor": "Andar",
+      "parking": "Estacionamento",
+      "openSide": "Lado Aberto",
+      "propertyAge": "Idade da Propriedade",
+      "ceilingHeight": "Altura do Teto",
+      "listedOn": "Publicado em"
+    },
+    "modals": {
+      "deleteProperty": {
+        "title": "Excluir Propriedade",
+        "message": "Tem certeza de que deseja excluir esta propriedade?"
+      }
     }
   },
   "addContent": {

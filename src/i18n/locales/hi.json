@@ -588,10 +588,14 @@
       "loadingMore": "अधिक संपत्तियाँ लोड हो रही हैं...",
       "noProperties": "कोई संपत्तियाँ नहीं मिलीं।",
       "deleteConfirmation": "क्या आप वाकई इस संपत्ति को हटाना चाहते हैं?",
-      "propertyDeleted": "संपत्ति हटा दी गई",
+      "propertyDeleted": "संपत्ति सफलतापूर्वक हटा दी गई",
       "deleteFailed": "संपत्ति हटाने में विफल",
       "fetchFailed": "संपत्तियाँ प्राप्त करने में विफल",
-      "emptyState": "आपने अभी तक कोई संपत्तियाँ नहीं जोड़ी हैं। अपनी पहली संपत्ति जोड़कर शुरू करें।"
+      "emptyState": "आपने अभी तक कोई संपत्तियाँ नहीं जोड़ी हैं। अपनी पहली संपत्ति जोड़कर शुरू करें।",
+      "loadingDetails": "संपत्ति विवरण लोड हो रहा है...",
+      "loadFailed": "संपत्ति विवरण लोड करने में विफल",
+      "errorLoading": "संपत्ति विवरण लोड करने में त्रुटि",
+      "propertyNotFound": "संपत्ति नहीं मिली"
     },
     "placeholders": {
       "searchByName": "नाम से खोजें..."
@@ -601,11 +605,26 @@
       "status": "स्थिति",
       "city": "शहर",
       "featured": "विशेष",
+      "notFeatured": "विशेष नहीं",
       "deleted": "हटाया गया",
       "unnamedProperty": "बेनाम संपत्ति",
       "locationNotSpecified": "स्थान निर्दिष्ट नहीं",
       "priceOnRequest": "मूल्य पर अनुरोध",
-      "forSale": "बिक्री के लिए"
+      "forSale": "बिक्री के लिए",
+      "for": "के लिए",
+      "sale": "बिक्री",
+      "type": "प्रकार",
+      "category": "श्रेणी",
+      "notSpecified": "निर्दिष्ट नहीं",
+      "zipCode": "पिन कोड",
+      "sellerType": "विक्रेता प्रकार",
+      "configuration": "कॉन्फ़िगरेशन",
+      "area": "क्षेत्र",
+      "furnishing": "साज-सज्जा",
+      "facing": "सामना",
+      "seller": "विक्रेता",
+      "playVideo": "वीडियो चलाएं",
+      "videoTour": "वीडियो दौरा"
     },
     "buttons": {
       "edit": "संपादित करें",
@@ -618,6 +637,39 @@
     "accessibility": {
       "propertyImage": "{{propertyName}} की छवि",
       "propertyPlaceholder": "संपत्ति प्लेसहोल्डर छवि"
+    },
+    "sections": {
+      "propertyDetails": "संपत्ति विवरण",
+      "overview": "अवलोकन",
+      "description": "विवरण",
+      "features": "सुविधाएँ",
+      "specifications": "विशेषताएँ",
+      "tags": "टैग",
+      "contactInformation": "संपर्क जानकारी"
+    },
+    "features": {
+      "readyToMove": "स्थानांतरण के लिए तैयार",
+      "constructionDone": "निर्माण पूरा हुआ",
+      "boundaryWall": "सीमा दीवार",
+      "elevators": "लिफ्ट",
+      "alarmSystem": "अलार्म सिस्टम",
+      "securityCameras": "सुरक्षा कैमरे",
+      "gatedSecurity": "गेटेड सुरक्षा",
+      "pantry": "पैंट्री"
+    },
+    "specs": {
+      "floor": "मंजिल",
+      "parking": "पार्किंग",
+      "openSide": "खुला पक्ष",
+      "propertyAge": "संपत्ति की आयु",
+      "ceilingHeight": "छत की ऊँचाई",
+      "listedOn": "सूचीबद्ध"
+    },
+    "modals": {
+      "deleteProperty": {
+        "title": "संपत्ति हटाएँ",
+        "message": "क्या आप वाकई इस संपत्ति को हटाना चाहते हैं?"
+      }
     }
   },
   "addContent": {

@@ -588,10 +588,14 @@
       "loadingMore": "Cargando más propiedades...",
       "noProperties": "No se encontraron propiedades.",
       "deleteConfirmation": "¿Estás seguro de que quieres eliminar esta propiedad?",
-      "propertyDeleted": "Propiedad eliminada",
+      "propertyDeleted": "Propiedad eliminada exitosamente",
       "deleteFailed": "Error al eliminar propiedad",
       "fetchFailed": "Error al obtener propiedades",
-      "emptyState": "Aún no has agregado propiedades. Comienza agregando tu primera propiedad."
+      "emptyState": "Aún no has agregado propiedades. Comienza agregando tu primera propiedad.",
+      "loadingDetails": "Cargando detalles de la propiedad...",
+      "loadFailed": "Error al cargar detalles de la propiedad",
+      "errorLoading": "Error al cargar detalles de la propiedad",
+      "propertyNotFound": "Propiedad no encontrada"
     },
     "placeholders": {
       "searchByName": "Buscar por nombre..."
@@ -601,11 +605,26 @@
       "status": "Estado",
       "city": "Ciudad",
       "featured": "Destacado",
+      "notFeatured": "No Destacado",
       "deleted": "Eliminado",
       "unnamedProperty": "Propiedad Sin Nombre",
       "locationNotSpecified": "Ubicación no especificada",
       "priceOnRequest": "Precio a consultar",
-      "forSale": "En Venta"
+      "forSale": "En Venta",
+      "for": "Para",
+      "sale": "Venta",
+      "type": "Tipo",
+      "category": "Categoría",
+      "notSpecified": "No especificado",
+      "zipCode": "Código Postal",
+      "sellerType": "Tipo de Vendedor",
+      "configuration": "Configuración",
+      "area": "Área",
+      "furnishing": "Amueblado",
+      "facing": "Orientación",
+      "seller": "Vendedor",
+      "playVideo": "Reproducir Video",
+      "videoTour": "Tour Virtual"
     },
     "buttons": {
       "edit": "Editar",
@@ -618,6 +637,39 @@
     "accessibility": {
       "propertyImage": "Imagen de {{propertyName}}",
       "propertyPlaceholder": "Imagen de marcador de propiedad"
+    },
+    "sections": {
+      "propertyDetails": "Detalles de la Propiedad",
+      "overview": "Resumen",
+      "description": "Descripción",
+      "features": "Características",
+      "specifications": "Especificaciones",
+      "tags": "Etiquetas",
+      "contactInformation": "Información de Contacto"
+    },
+    "features": {
+      "readyToMove": "Listo para Mudarse",
+      "constructionDone": "Construcción Terminada",
+      "boundaryWall": "Muro Perimetral",
+      "elevators": "Ascensores",
+      "alarmSystem": "Sistema de Alarma",
+      "securityCameras": "Cámaras de Seguridad",
+      "gatedSecurity": "Seguridad Puerta",
+      "pantry": "Despensa"
+    },
+    "specs": {
+      "floor": "Piso",
+      "parking": "Estacionamiento",
+      "openSide": "Lado Abierto",
+      "propertyAge": "Antigüedad de la Propiedad",
+      "ceilingHeight": "Altura del Techo",
+      "listedOn": "Publicado el"
+    },
+    "modals": {
+      "deleteProperty": {
+        "title": "Eliminar Propiedad",
+        "message": "¿Estás seguro de que quieres eliminar esta propiedad?"
+      }
     }
   },
   "addContent": {
