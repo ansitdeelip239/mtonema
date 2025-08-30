@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   ScrollView,
 } from 'react-native';
+import {useTranslation} from 'react-i18next';
 import GetIcon from '../../../components/GetIcon';
 import SwitchAccountButton from '../../../components/SwitchAccountButton';
 
@@ -16,6 +17,7 @@ interface TeamSubscriptionScreenProps {
 const TeamSubscriptionScreen: React.FC<TeamSubscriptionScreenProps> = ({
   onCheckStatus,
 }) => {
+  const {t} = useTranslation();
   return (
     <ScrollView
       style={styles.container}
@@ -24,10 +26,9 @@ const TeamSubscriptionScreen: React.FC<TeamSubscriptionScreenProps> = ({
         <View style={styles.iconContainer}>
           <GetIcon iconName="clear" size={48} color="#ef4444" />
         </View>
-        <Text style={styles.title}>Subscription Expired</Text>
+        <Text style={styles.title}>{t('subscription.expired.title', 'Subscription Expired')}</Text>
         <Text style={styles.subtitle}>
-          Your team's subscription has expired and needs to be renewed by your
-          partner.
+          {t('subscription.expired.subtitle', 'Your team\'s subscription has expired and needs to be renewed by your partner.')}
         </Text>
       </View>
 
@@ -35,11 +36,10 @@ const TeamSubscriptionScreen: React.FC<TeamSubscriptionScreenProps> = ({
         <View style={styles.section}>
           <View style={styles.sectionHeader}>
             <GetIcon iconName="clear" size={20} color="#ef4444" />
-            <Text style={styles.sectionTitle}>Access Restricted</Text>
+            <Text style={styles.sectionTitle}>{t('subscription.expired.accessRestricted', 'Access Restricted')}</Text>
           </View>
           <Text style={styles.sectionText}>
-            As a team member, you cannot purchase or renew subscriptions
-            directly. Please contact your partner to restore access.
+            {t('subscription.expired.accessRestrictedText', 'As a team member, you cannot purchase or renew subscriptions directly. Please contact your partner to restore access.')}
           </Text>
         </View>
 
@@ -48,7 +48,7 @@ const TeamSubscriptionScreen: React.FC<TeamSubscriptionScreenProps> = ({
         <View style={styles.section}>
           <View style={styles.sectionHeader}>
             <GetIcon iconName="about" size={20} color="#6366f1" />
-            <Text style={styles.sectionTitle}>What happens next?</Text>
+            <Text style={styles.sectionTitle}>{t('subscription.expired.whatHappensNext', 'What happens next?')}</Text>
           </View>
           <View style={styles.steps}>
             <View style={styles.step}>
@@ -56,7 +56,7 @@ const TeamSubscriptionScreen: React.FC<TeamSubscriptionScreenProps> = ({
                 <Text style={styles.stepNumberText}>1</Text>
               </View>
               <Text style={styles.stepText}>
-                Contact your partner using the information above
+                {t('subscription.expired.steps.contactPartner', 'Contact your partner using the information above')}
               </Text>
             </View>
             <View style={styles.step}>
@@ -64,7 +64,7 @@ const TeamSubscriptionScreen: React.FC<TeamSubscriptionScreenProps> = ({
                 <Text style={styles.stepNumberText}>2</Text>
               </View>
               <Text style={styles.stepText}>
-                Request subscription renewal for team access
+                {t('subscription.expired.steps.requestRenewal', 'Request subscription renewal for team access')}
               </Text>
             </View>
             <View style={styles.step}>
@@ -72,7 +72,7 @@ const TeamSubscriptionScreen: React.FC<TeamSubscriptionScreenProps> = ({
                 <Text style={styles.stepNumberText}>3</Text>
               </View>
               <Text style={styles.stepText}>
-                Wait for partner to complete the renewal process
+                {t('subscription.expired.steps.waitForRenewal', 'Wait for partner to complete the renewal process')}
               </Text>
             </View>
             <View style={styles.step}>
@@ -80,7 +80,7 @@ const TeamSubscriptionScreen: React.FC<TeamSubscriptionScreenProps> = ({
                 <Text style={styles.stepNumberText}>4</Text>
               </View>
               <Text style={styles.stepText}>
-                Refresh this page to check your access status
+                {t('subscription.expired.steps.refreshStatus', 'Refresh this page to check your access status')}
               </Text>
             </View>
           </View>
@@ -93,7 +93,7 @@ const TeamSubscriptionScreen: React.FC<TeamSubscriptionScreenProps> = ({
           onPress={onCheckStatus}
           activeOpacity={0.8}>
           <GetIcon iconName="ascending" size={18} color="white" />
-          <Text style={styles.checkButtonText}>Check Status Again</Text>
+          <Text style={styles.checkButtonText}>{t('subscription.expired.checkStatus', 'Check Status Again')}</Text>
         </TouchableOpacity>
         <View style={styles.switchAccountContainer}>
           <SwitchAccountButton />

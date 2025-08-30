@@ -954,5 +954,40 @@
         "verify": "Verificar"
       }
     }
+  },
+  "settings": {
+    "title": "Configuración",
+    "language": {
+      "title": "Idioma",
+      "current": "Idioma Actual"
+    },
+    "about": {
+      "title": "Acerca de"
+    },
+    "version": {
+      "title": "Versión de la App"
+    },
+    "help": {
+      "title": "Ayuda y Soporte"
+    }
+  },
+  "activity": {
+    "createdBy": "por {{name}}"
+  },
+  "subscription": {
+    "expired": {
+      "title": "Suscripción Expirada",
+      "subtitle": "La suscripción de tu equipo ha expirado y necesita ser renovada por tu socio.",
+      "accessRestricted": "Acceso Restringido",
+      "accessRestrictedText": "Como miembro del equipo, no puedes comprar o renovar suscripciones directamente. Por favor contacta a tu socio para restaurar el acceso.",
+      "whatHappensNext": "¿Qué sucede después?",
+      "steps": {
+        "contactPartner": "Contacta a tu socio usando la información de arriba",
+        "requestRenewal": "Solicita la renovación de la suscripción para acceso del equipo",
+        "waitForRenewal": "Espera a que el socio complete el proceso de renovación",
+        "refreshStatus": "Actualiza esta página para verificar tu estado de acceso"
+      },
+      "checkStatus": "Verificar Estado Nuevamente"
+    }
   }
 }

@@ -66,39 +66,6 @@ const SettingsScreen = () => {
         {/* Add other settings sections here */}
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>
-            {t('settings.general.title', 'General')}
-          </Text>
-
-          {/* Example: Notifications */}
-          <TouchableOpacity style={styles.settingRow} activeOpacity={0.7}>
-            <View style={styles.settingInfo}>
-              <Text style={styles.settingLabel}>
-                {t('settings.notifications.title', 'Notifications')}
-              </Text>
-              <Text style={styles.settingValue}>
-                {t('settings.notifications.enabled', 'Enabled')}
-              </Text>
-            </View>
-            <Text style={styles.chevron}>›</Text>
-          </TouchableOpacity>
-
-          {/* Example: Theme */}
-          <TouchableOpacity style={styles.settingRow} activeOpacity={0.7}>
-            <View style={styles.settingInfo}>
-              <Text style={styles.settingLabel}>
-                {t('settings.theme.title', 'Theme')}
-              </Text>
-              <Text style={styles.settingValue}>
-                {t('settings.theme.system', 'System')}
-              </Text>
-            </View>
-            <Text style={styles.chevron}>›</Text>
-          </TouchableOpacity>
-        </View>
-
-        {/* About Section */}
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>
             {t('settings.about.title', 'About')}
           </Text>
 

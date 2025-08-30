@@ -954,5 +954,40 @@
         "verify": "Verificar"
       }
     }
+  },
+  "settings": {
+    "title": "Configurações",
+    "language": {
+      "title": "Idioma",
+      "current": "Idioma Atual"
+    },
+    "about": {
+      "title": "Sobre"
+    },
+    "version": {
+      "title": "Versão do App"
+    },
+    "help": {
+      "title": "Ajuda e Suporte"
+    }
+  },
+  "activity": {
+    "createdBy": "por {{name}}"
+  },
+  "subscription": {
+    "expired": {
+      "title": "Assinatura Expirada",
+      "subtitle": "A assinatura da sua equipe expirou e precisa ser renovada pelo seu parceiro.",
+      "accessRestricted": "Acesso Restrito",
+      "accessRestrictedText": "Como membro da equipe, você não pode comprar ou renovar assinaturas diretamente. Entre em contato com seu parceiro para restaurar o acesso.",
+      "whatHappensNext": "O que acontece a seguir?",
+      "steps": {
+        "contactPartner": "Entre em contato com seu parceiro usando as informações acima",
+        "requestRenewal": "Solicite a renovação da assinatura para acesso da equipe",
+        "waitForRenewal": "Aguarde o parceiro completar o processo de renovação",
+        "refreshStatus": "Atualize esta página para verificar seu status de acesso"
+      },
+      "checkStatus": "Verificar Status Novamente"
+    }
   }
 }

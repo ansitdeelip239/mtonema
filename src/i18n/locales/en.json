@@ -844,7 +844,7 @@
       "propertyType": "Property Type",
       "bhkType": "BHK Type",
       "demandPrice": "Demand Price",
-      "securityDepositAmount": "Security Deposit Amount",
+      "securityDepositAmount": "Security Deposit",
       "negotiable": "Negotiable",
       "fixedPrice": "Fixed Price",
       "propertyNotes": "Property Notes",
@@ -953,6 +953,41 @@
         "payment": "Payment",
         "verify": "Verify"
       }
+    }
+  },
+  "settings": {
+    "title": "Settings",
+    "language": {
+      "title": "Language",
+      "current": "Current Language"
+    },
+    "about": {
+      "title": "About"
+    },
+    "version": {
+      "title": "App Version"
+    },
+    "help": {
+      "title": "Help & Support"
+    }
+  },
+  "activity": {
+    "createdBy": "by {{name}}"
+  },
+  "subscription": {
+    "expired": {
+      "title": "Subscription Expired",
+      "subtitle": "Your team's subscription has expired and needs to be renewed by your partner.",
+      "accessRestricted": "Access Restricted",
+      "accessRestrictedText": "As a team member, you cannot purchase or renew subscriptions directly. Please contact your partner to restore access.",
+      "whatHappensNext": "What happens next?",
+      "steps": {
+        "contactPartner": "Contact your partner using the information above",
+        "requestRenewal": "Request subscription renewal for team access",
+        "waitForRenewal": "Wait for partner to complete the renewal process",
+        "refreshStatus": "Refresh this page to check your access status"
+      },
+      "checkStatus": "Check Status Again"
     }
   }
 }

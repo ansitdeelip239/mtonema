@@ -150,9 +150,8 @@ const ActivityTimeline: React.FC<ActivityTimelineProps> = ({
           </View>
           <View style={styles.createdByTextContainer}>
             <View style={styles.createdByNameRow}>
-              <Text style={styles.createdByLabel}>{t('common.labels.by', 'by')} </Text>
               <Text style={styles.createdByName}>
-                {JSON.parse(activity.createdBy).Name}
+                {t('activity.createdBy', 'by {{name}}', {name: JSON.parse(activity.createdBy).Name})}
               </Text>
             </View>
             {/* <Text style={styles.createdByEmail}>

@@ -1,12 +1,13 @@
 import React from 'react';
 import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
 import {FollowUpType} from '../../../../types';
-import {formatFollowUpDate, formatTime} from '../../../../utils/dateUtils';
+import {formatLocalizedDate, formatLocalizedTime} from '../../../../utils/dateUtils';
 import GetIcon from '../../../../components/GetIcon';
 import {useTheme} from '../../../../context/ThemeProvider';
 import GroupBadges from '../../ClientScreen/components/GroupBadge';
 import {getPastelColor} from '../../../../utils/getPastelColor';
 import {useTranslation} from 'react-i18next';
+import i18n from '../../../../i18n';
 
 interface FollowUpCardProps {
   item: FollowUpType;
@@ -21,6 +22,7 @@ const FollowUpCard: React.FC<FollowUpCardProps> = ({
 }) => {
   const {theme} = useTheme();
   const {t} = useTranslation();
+  const currentLanguage = i18n.language;
 
   const getLocalDate = (dateString: string) => {
     if (!dateString) {
@@ -78,7 +80,7 @@ const FollowUpCard: React.FC<FollowUpCardProps> = ({
               <Text style={styles.clientName}>{item.client.clientName}</Text>
               <View style={styles.statusRow}>
                 <Text style={styles.timeText}>
-                  {t('screen.followupScreen.followUpCard.followUp', 'Follow Up')}
+                  {t('followUp.card.followUp', 'Follow Up')}
                 </Text>
               </View>
             </View>
@@ -87,7 +89,7 @@ const FollowUpCard: React.FC<FollowUpCardProps> = ({
                 <>
                   {filterType !== 'today' && (
                     <Text style={styles.followUpDate}>
-                      {formatFollowUpDate(localFollowUpDate)}
+                      {formatLocalizedDate(localFollowUpDate, currentLanguage)}
                     </Text>
                   )}
                   <View style={styles.timeWrapper}>
@@ -101,7 +103,7 @@ const FollowUpCard: React.FC<FollowUpCardProps> = ({
                         styles.followUpTime,
                         {color: theme.primaryColor},
                       ]}>
-                      {formatTime(localFollowUpDate)}
+                      {formatLocalizedTime(localFollowUpDate, currentLanguage, t)}
                     </Text>
                   </View>
                 </>

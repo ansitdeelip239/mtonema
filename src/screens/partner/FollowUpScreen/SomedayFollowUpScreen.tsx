@@ -69,7 +69,7 @@ const SomedayFollowUpScreen: React.FC<Props> = ({ navigation }) => {
       {
         Platform.OS === 'android' && (
           <Header
-            title="Someday Follow-ups"
+            title={t('followUp.someday.title', 'Someday Follow-ups')}
             backButton={true}
             navigation={navigation}
           />

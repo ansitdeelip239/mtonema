@@ -8,8 +8,8 @@ export const showLanguageChangeAlert = (
   onCancel?: () => void,
 ) => {
   Alert.alert(
-    t('language.changeLanguage', 'Change Language'),
-    `Switch to ${languageName}? The app will restart to apply changes.`,
+    t('language.change', 'Change Language'),
+    `${t('language.switchTo', 'Switch to {{languageName}}?', { languageName })} ${t('language.rtlWarning', 'This will change the app layout direction and the app will restart.')}`,
     [
       {
         text: t('common.actions.cancel', 'Cancel'),
@@ -17,7 +17,7 @@ export const showLanguageChangeAlert = (
         onPress: onCancel,
       },
       {
-        text: 'OK',
+        text: t('app.restart', 'Restart App'),
         onPress: onConfirm,
       },
     ],
@@ -32,29 +32,29 @@ export const showRTLChangeAlert = (
   onCancel?: () => void,
 ) => {
   const translations = {
-    changeLanguage: t('components.languageSwitcher.changeLanguage', 'Change Language'),
+    changeLanguage: t('language.change', 'Change Language'),
     switchToLanguage: t(
-      'components.languageSwitcher.switchToLanguage',
-      `Switch to ${languageName}?`,
+      'language.switchTo',
+      'Switch to {{languageName}}?',
       { languageName }
     ),
     rtlChangeWarning: t(
-      'components.languageSwitcher.rtlChangeWarning',
-      'This language requires RTL layout. The app will restart to apply changes.'
+      'language.rtlWarning',
+      'This will change the app layout direction and the app will restart.'
     ),
   };
 
   Alert.alert(
-    translations.changeLanguage, // ✅ Now localized
-    `${translations.switchToLanguage} ${translations.rtlChangeWarning}`, // ✅ Now localized with interpolation
+    translations.changeLanguage,
+    `${translations.switchToLanguage} ${translations.rtlChangeWarning}`,
     [
       {
-        text: t('common.actions.cancel'), // ✅ Already localized
+        text: t('common.actions.cancel'),
         style: 'cancel',
         onPress: onCancel,
       },
       {
-        text: t('app.restart'), // ✅ Now localized
+        text: t('app.restart'),
         onPress: onConfirm,
       },
     ],

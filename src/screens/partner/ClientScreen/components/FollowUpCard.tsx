@@ -8,8 +8,10 @@ import {
 } from 'react-native';
 import GetIcon from '../../../../components/GetIcon';
 import {Client} from '../../../../types';
-import {formatFollowUpDate, formatTime} from '../../../../utils/dateUtils';
+import {formatLocalizedDate, formatLocalizedTime} from '../../../../utils/dateUtils';
+import {formatLocalizedNumber} from '../../../../utils/currency';
 import {useTranslation} from 'react-i18next';
+import i18n from '../../../../i18n';
 
 interface FollowUpCardProps {
   client: Client;
@@ -23,6 +25,7 @@ const FollowUpCard: React.FC<FollowUpCardProps> = ({
   onPress,
 }) => {
   const {t} = useTranslation();
+  const currentLanguage = i18n.language;
 
   // Helper function to convert UTC date to local time
   const getLocalDate = (dateString: string) => {
@@ -76,10 +79,10 @@ const FollowUpCard: React.FC<FollowUpCardProps> = ({
       );
 
       if (hoursLeft > 0) {
-        return t('time.hoursLeft', '{{hours}} hrs', {hours: hoursLeft});
+        return t('time.hoursLeft', '{{hours}} hrs', {hours: formatLocalizedNumber(hoursLeft, currentLanguage)});
       } else if (minutesLeft > 0) {
         return t('time.minutesLeft', '{{minutes}} mins', {
-          minutes: minutesLeft,
+          minutes: formatLocalizedNumber(minutesLeft, currentLanguage),
         });
       } else {
         return t('time.today', 'Today');
@@ -87,7 +90,7 @@ const FollowUpCard: React.FC<FollowUpCardProps> = ({
     } else {
       return daysLeft === 1
         ? t('time.oneDay', '1 day')
-        : t('time.multipleDays', '{{days}} days', {days: daysLeft});
+        : t('time.multipleDays', '{{days}} days', {days: formatLocalizedNumber(daysLeft, currentLanguage)});
     }
   };
 
@@ -170,11 +173,11 @@ const FollowUpCard: React.FC<FollowUpCardProps> = ({
           {localFollowUpDate ? (
             <View style={styles.followUpDateContainer}>
               <Text style={[styles.infoValue, isOverdue && styles.overdueText]}>
-                {formatFollowUpDate(localFollowUpDate)}
+                {formatLocalizedDate(localFollowUpDate, currentLanguage)}
               </Text>
               <Text
                 style={[styles.followUpTime, isOverdue && styles.overdueText]}>
-                {formatTime(localFollowUpDate)}
+                {formatLocalizedTime(localFollowUpDate, currentLanguage, t)}
               </Text>
             </View>
           ) : isSomedayFollowUp ? (
