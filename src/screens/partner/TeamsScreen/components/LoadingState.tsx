@@ -1,16 +1,20 @@
 import React from 'react';
 import {StyleSheet, Text, View, ActivityIndicator} from 'react-native';
+import { useTranslation } from 'react-i18next';
 
 interface LoadingStateProps {
   message?: string;
 }
 
 const LoadingState: React.FC<LoadingStateProps> = React.memo(
-  ({message = 'Loading...'}) => {
+  ({message}) => {
+    const { t } = useTranslation();
+    const displayMessage = message || t('common.states.loading', 'Loading...');
+
     return (
       <View style={styles.centerContainer}>
         <ActivityIndicator size="large" color="#007bff" />
-        <Text style={styles.loadingText}>{message}</Text>
+        <Text style={styles.loadingText}>{displayMessage}</Text>
       </View>
     );
   },

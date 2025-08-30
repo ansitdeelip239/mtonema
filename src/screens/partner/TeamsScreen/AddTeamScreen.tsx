@@ -29,6 +29,7 @@ import {usePartner} from '../../../context/PartnerProvider';
 import {useRazorpayPayment} from '../../../hooks/useRazorpayPayment';
 import { PaymentLoadingOverlay } from '../../../components/PaymentLoading';
 import Roles from '../../../constants/Roles';
+import { useTranslation } from 'react-i18next';
 
 type Props = NativeStackScreenProps<TeamStackParamList, 'Add Teams Screen'>;
 
@@ -37,6 +38,7 @@ const AddTeamScreen: React.FC<Props> = ({navigation, route}) => {
   const {theme} = useTheme();
   const {setTeamUpdated} = usePartner();
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const { t } = useTranslation();
 
   // If editMode, prefill with teamData
   const editMode = route?.params?.editMode === true;
@@ -58,14 +60,14 @@ const AddTeamScreen: React.FC<Props> = ({navigation, route}) => {
   const onPaymentSuccess = useCallback(() => {
     Toast.show({
       type: 'success',
-      text1: 'Success',
-      text2: 'Team member added successfully!',
+      text1: t('common.success.title', 'Success'),
+      text2: t('teams.messages.memberAdded', 'Team member added successfully!'),
     });
 
     setTeamUpdated(true);
     resetForm();
     navigation.goBack();
-  }, []);
+  }, [t, setTeamUpdated, navigation]);
 
   const {isPaying, isVerifying, processPayment} = useRazorpayPayment({
     onPaymentSuccess,
@@ -91,8 +93,8 @@ const AddTeamScreen: React.FC<Props> = ({navigation, route}) => {
         if (!user?.id) {
           Toast.show({
             type: 'error',
-            text1: 'Error',
-            text2: 'User ID is not available. Please log in again.',
+            text1: t('common.errors.error', 'Error'),
+            text2: t('teams.errors.userIdRequired', 'User ID is not available. Please log in again.'),
           });
           return;
         }
@@ -115,8 +117,8 @@ const AddTeamScreen: React.FC<Props> = ({navigation, route}) => {
 
           Toast.show({
             type: 'success',
-            text1: 'Success',
-            text2: 'Team member updated successfully!',
+            text1: t('common.success.title', 'Success'),
+            text2: t('teams.messages.memberUpdated', 'Team member updated successfully!'),
           });
         } else {
           // If user is ADMIN, skip payment gateway
@@ -124,8 +126,8 @@ const AddTeamScreen: React.FC<Props> = ({navigation, route}) => {
             await PartnerService.addTeamMember(payload);
             Toast.show({
               type: 'success',
-              text1: 'Success',
-              text2: 'Team member added successfully!',
+              text1: t('common.success.title', 'Success'),
+              text2: t('teams.messages.memberAdded', 'Team member added successfully!'),
             });
             setTeamUpdated(true);
             resetForm();
@@ -154,22 +156,22 @@ const AddTeamScreen: React.FC<Props> = ({navigation, route}) => {
         if (error.response?.data?.message) {
           Toast.show({
             type: 'error',
-            text1: 'Error',
+            text1: t('common.errors.error', 'Error'),
             text2: error.response.data.message,
           });
         } else if (error.message) {
           Toast.show({
             type: 'error',
-            text1: 'Error',
+            text1: t('common.errors.error', 'Error'),
             text2: error.message,
           });
         } else {
           Toast.show({
             type: 'error',
-            text1: 'Error',
+            text1: t('common.errors.error', 'Error'),
             text2: editMode
-              ? 'Failed to update team member. Please try again.'
-              : 'Failed to add team member. Please try again.',
+              ? t('teams.errors.updateFailed', 'Failed to update team member. Please try again.')
+              : t('teams.errors.addFailed', 'Failed to add team member. Please try again.'),
           });
         }
       }
@@ -249,7 +251,7 @@ const AddTeamScreen: React.FC<Props> = ({navigation, route}) => {
     <SafeAreaView style={styles.container}>
       {Platform.OS === 'android' && (
         <Header
-          title={editMode ? 'Edit Team Member' : 'Add Team Member'}
+          title={editMode ? t('teams.headers.editMember', 'Edit Team Member') : t('teams.headers.addMember', 'Add Team Member')}
           backButton
           onBackPress={() => navigation.goBack()}
         />
@@ -265,12 +267,12 @@ const AddTeamScreen: React.FC<Props> = ({navigation, route}) => {
           <Card style={styles.formCard}>
             <Card.Content style={styles.cardContent}>
               <Text style={styles.title}>
-                {editMode ? 'Edit Team Member' : 'Add New Team Member'}
+                {editMode ? t('teams.headers.editMember', 'Edit Team Member') : t('teams.headers.addNewMember', 'Add New Team Member')}
               </Text>
               <Text style={styles.subtitle}>
                 {editMode
-                  ? 'Update the details of your team member'
-                  : 'Fill in the details to add a new member to your team'}
+                  ? t('teams.messages.editDescription', 'Update the details of your team member')
+                  : t('teams.messages.addDescription', 'Fill in the details to add a new member to your team')}
               </Text>
 
               <View style={styles.formContainer}>
@@ -278,11 +280,11 @@ const AddTeamScreen: React.FC<Props> = ({navigation, route}) => {
                   field="name"
                   formInput={formInput}
                   setFormInput={handleInputChangeWithValidation}
-                  label={editMode ? 'Full Name * (Edit)' : 'Full Name *'}
+                  label={editMode ? t('teams.labels.fullNameEdit', 'Full Name * (Edit)') : t('teams.labels.fullName', 'Full Name *')}
                   placeholder={
                     editMode
-                      ? "Edit team member's full name"
-                      : "Enter team member's full name"
+                      ? t('teams.placeholders.editFullName', "Edit team member's full name")
+                      : t('teams.placeholders.fullName', "Enter team member's full name")
                   }
                   mode="outlined"
                   errorMessage={fieldErrors.name}
@@ -295,10 +297,10 @@ const AddTeamScreen: React.FC<Props> = ({navigation, route}) => {
                   formInput={formInput}
                   setFormInput={handleInputChangeWithValidation}
                   label={
-                    editMode ? 'Email Address * (Edit)' : 'Email Address *'
+                    editMode ? t('teams.labels.emailEdit', 'Email Address * (Edit)') : t('teams.labels.email', 'Email Address *')
                   }
                   placeholder={
-                    editMode ? 'Edit email address' : 'Enter email address'
+                    editMode ? t('teams.placeholders.editEmail', 'Edit email address') : t('teams.placeholders.email', 'Enter email address')
                   }
                   mode="outlined"
                   errorMessage={fieldErrors.email}
@@ -312,11 +314,11 @@ const AddTeamScreen: React.FC<Props> = ({navigation, route}) => {
                   field="phone"
                   formInput={formInput}
                   setFormInput={handleInputChangeWithValidation}
-                  label={editMode ? 'Phone Number * (Edit)' : 'Phone Number *'}
+                  label={editMode ? t('teams.labels.phoneEdit', 'Phone Number * (Edit)') : t('teams.labels.phone', 'Phone Number *')}
                   placeholder={
                     editMode
-                      ? 'Edit 10-digit phone number'
-                      : 'Enter 10-digit phone number'
+                      ? t('teams.placeholders.editPhone', 'Edit 10-digit phone number')
+                      : t('teams.placeholders.phone', 'Enter 10-digit phone number')
                   }
                   mode="outlined"
                   errorMessage={fieldErrors.phone}
@@ -328,11 +330,11 @@ const AddTeamScreen: React.FC<Props> = ({navigation, route}) => {
                   field="location"
                   formInput={formInput}
                   setFormInput={handleInputChangeWithValidation}
-                  label={editMode ? 'Location * (Edit)' : 'Location *'}
+                  label={editMode ? t('teams.labels.locationEdit', 'Location * (Edit)') : t('teams.labels.location', 'Location *')}
                   placeholder={
                     editMode
-                      ? 'Edit location (City, State, Country)'
-                      : 'Enter location (City, State, Country)'
+                      ? t('teams.placeholders.editLocation', 'Edit location (City, State, Country)')
+                      : t('teams.placeholders.location', 'Enter location (City, State, Country)')
                   }
                   mode="outlined"
                   errorMessage={fieldErrors.location}
@@ -354,7 +356,7 @@ const AddTeamScreen: React.FC<Props> = ({navigation, route}) => {
                   styles.cancelButtonText,
                   loading && styles.disabledButtonText,
                 ]}>
-                Cancel
+                {t('common.actions.cancel', 'Cancel')}
               </Text>
             </TouchableOpacity>
 
@@ -383,11 +385,11 @@ const AddTeamScreen: React.FC<Props> = ({navigation, route}) => {
                   ]}>
                   {loading
                     ? editMode
-                      ? 'Updating...'
-                      : 'Adding...'
+                      ? t('teams.states.updating', 'Updating...')
+                      : t('teams.states.adding', 'Adding...')
                     : editMode
-                    ? 'Update Member'
-                    : 'Add Member'}
+                    ? t('teams.actions.updateMember', 'Update Member')
+                    : t('teams.actions.addMember', 'Add Member')}
                 </Text>
               </View>
             </TouchableOpacity>

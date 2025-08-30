@@ -36,6 +36,12 @@
       "unassigned": "غير مُعيّن",
       "loadingAssignments": "جاري تحميل التعيينات..."
     },
+    "success": {
+      "title": "نجح"
+    },
+    "errors": {
+      "error": "خطأ"
+    },
     "labels": {
       "email": "البريد الإلكتروني",
       "name": "الاسم",
@@ -114,6 +120,45 @@
       "listings": "العقارات",
       "groups": "المجموعات",
       "agentData": "بيانات الوكيل"
+    }
+  },
+  "teams": {
+    "headers": {
+      "addMember": "إضافة عضو الفريق",
+      "editMember": "تحرير عضو الفريق"
+    },
+    "labels": {
+      "member": "عضو",
+      "members": "أعضاء",
+      "email": "البريد الإلكتروني",
+      "phone": "الهاتف",
+      "role": "الدور",
+      "location": "الموقع"
+    },
+    "status": {
+      "active": "نشط",
+      "inactive": "غير نشط"
+    },
+    "messages": {
+      "noMembersFound": "لم يتم العثور على أعضاء الفريق.",
+      "memberAdded": "تم إضافة عضو الفريق بنجاح!",
+      "memberUpdated": "تم تحديث عضو الفريق بنجاح!"
+    },
+    "states": {
+      "loadingMembers": "جاري تحميل أعضاء الفريق..."
+    },
+    "errors": {
+      "userIdNotAvailable": "معرف المستخدم غير متوفر",
+      "fetchFailed": "فشل في جلب أعضاء الفريق",
+      "userIdRequired": "معرف المستخدم غير متوفر. يرجى تسجيل الدخول مرة أخرى.",
+      "updateFailed": "فشل في تحديث عضو الفريق. يرجى المحاولة مرة أخرى.",
+      "addFailed": "فشل في إضافة عضو الفريق. يرجى المحاولة مرة أخرى."
+    },
+    "modals": {
+      "deleteMember": {
+        "title": "حذف عضو الفريق",
+        "message": "هل أنت متأكد من أنك تريد حذف {{name}}؟ لا يمكن التراجع عن هذا الإجراء."
+      }
     }
   },
   "auth": {

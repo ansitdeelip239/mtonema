@@ -16,6 +16,7 @@ import GetIcon from '../../../components/GetIcon';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {TeamStackParamList} from '../../../navigator/components/TeamStack';
 import { usePartner } from '../../../context/PartnerProvider';
+import { useTranslation } from 'react-i18next';
 
 const INITIAL_PAGE = 1;
 const PAGE_SIZE = 10;
@@ -42,6 +43,7 @@ const TeamsScreen: React.FC<Props> = ({navigation}) => {
   const [hasMore, setHasMore] = useState(true);
   const {user} = useAuth();
   const {teamUpdated} = usePartner();
+  const { t } = useTranslation();
 
   const fetchTeamMembers = React.useCallback(
     async (page: number, isLoadMore = false) => {
@@ -79,16 +81,16 @@ const TeamsScreen: React.FC<Props> = ({navigation}) => {
 
           setHasMore(newMembers.length === PAGE_SIZE);
         } else {
-          setError('User ID is not available');
+          setError(t('teams.errors.userIdNotAvailable', 'User ID is not available'));
         }
       } catch (err) {
-        setError('Failed to fetch team members');
+        setError(t('teams.errors.fetchFailed', 'Failed to fetch team members'));
       } finally {
         setLoading(false);
         setLoadingMore(false);
       }
     },
-    [user?.id],
+    [user?.id, t],
   );
 
   useEffect(() => {
@@ -139,7 +141,7 @@ const TeamsScreen: React.FC<Props> = ({navigation}) => {
   return (
     <SafeAreaView style={styles.container}>
       {Platform.OS === 'android' && (
-        <Header<PartnerDrawerParamList> title="Teams">
+        <Header<PartnerDrawerParamList> title={t('navigation.drawer.teams', 'Teams')}>
           <TouchableOpacity
             onPress={() => navigation.navigate('Add Teams Screen')}
             style={styles.addButton}
@@ -152,7 +154,7 @@ const TeamsScreen: React.FC<Props> = ({navigation}) => {
       <TeamHeader memberCount={teamMemberCount} />
 
       {loading && !loadingMore ? (
-        <LoadingState message="Loading team members..." />
+        <LoadingState message={t('teams.states.loadingMembers', 'Loading team members...')} />
       ) : (
         <FlatList
           data={teamMembers}
@@ -166,7 +168,7 @@ const TeamsScreen: React.FC<Props> = ({navigation}) => {
             error ? (
               <ErrorState message={error} />
             ) : (
-              <EmptyState message="No team members found." />
+              <EmptyState message={t('teams.messages.noMembersFound', 'No team members found.')} />
             )
           }
           refreshing={loading}

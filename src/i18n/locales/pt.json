@@ -36,6 +36,12 @@
       "unassigned": "Não atribuído",
       "loadingAssignments": "Carregando atribuições..."
     },
+    "success": {
+      "title": "Sucesso"
+    },
+    "errors": {
+      "error": "Erro"
+    },
     "labels": {
       "email": "E-mail",
       "name": "Nome",
@@ -114,6 +120,45 @@
       "listings": "Anúncios",
       "groups": "Grupos",
       "agentData": "Dados do Agente"
+    }
+  },
+  "teams": {
+    "headers": {
+      "addMember": "Adicionar Membro da Equipe",
+      "editMember": "Editar Membro da Equipe"
+    },
+    "labels": {
+      "member": "membro",
+      "members": "membros",
+      "email": "E-mail",
+      "phone": "Telefone",
+      "role": "Função",
+      "location": "Localização"
+    },
+    "status": {
+      "active": "Ativo",
+      "inactive": "Inativo"
+    },
+    "messages": {
+      "noMembersFound": "Nenhum membro da equipe encontrado.",
+      "memberAdded": "Membro da equipe adicionado com sucesso!",
+      "memberUpdated": "Membro da equipe atualizado com sucesso!"
+    },
+    "states": {
+      "loadingMembers": "Carregando membros da equipe..."
+    },
+    "errors": {
+      "userIdNotAvailable": "ID do usuário não disponível",
+      "fetchFailed": "Falha ao buscar membros da equipe",
+      "userIdRequired": "ID do usuário não disponível. Por favor, faça login novamente.",
+      "updateFailed": "Falha ao atualizar membro da equipe. Por favor, tente novamente.",
+      "addFailed": "Falha ao adicionar membro da equipe. Por favor, tente novamente."
+    },
+    "modals": {
+      "deleteMember": {
+        "title": "Excluir Membro da Equipe",
+        "message": "Tem certeza de que deseja excluir {{name}}? Esta ação não pode ser desfeita."
+      }
     }
   },
   "auth": {

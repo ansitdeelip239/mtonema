@@ -3,6 +3,7 @@ import React, {useState} from 'react';
 import {StyleSheet, Text, View, TouchableOpacity} from 'react-native';
 import GetIcon from '../../../../components/GetIcon';
 import ConfirmationModal from '../../../../components/ConfirmationModal';
+import { useTranslation } from 'react-i18next';
 import { TeamMember } from '../../../../types';
 
 interface TeamMemberCardProps {
@@ -15,6 +16,7 @@ const TeamMemberCard: React.FC<TeamMemberCardProps> = React.memo(
   ({item, onEdit, onDelete}) => {
     const [showDeleteModal, setShowDeleteModal] = useState(false);
     const [isDeleting, setIsDeleting] = useState(false);
+    const { t } = useTranslation();
 
     const handleEdit = () => {
       console.log('Edit clicked for member:', item);
@@ -63,7 +65,7 @@ const TeamMemberCard: React.FC<TeamMemberCardProps> = React.memo(
                     styles.statusText,
                     {color: item.isActive ? '#4caf50' : '#f44336'},
                   ]}>
-                  {item.isActive ? 'Active' : 'Inactive'}
+                  {item.isActive ? t('teams.status.active', 'Active') : t('teams.status.inactive', 'Inactive')}
                 </Text>
               </View>
             </View>
@@ -87,19 +89,19 @@ const TeamMemberCard: React.FC<TeamMemberCardProps> = React.memo(
 
           <View style={styles.cardBody}>
             <View style={styles.infoRow}>
-              <Text style={styles.label}>Email:</Text>
+              <Text style={styles.label}>{t('teams.labels.email', 'Email')}:</Text>
               <Text style={styles.value}>{item.email}</Text>
             </View>
             <View style={styles.infoRow}>
-              <Text style={styles.label}>Phone:</Text>
+              <Text style={styles.label}>{t('teams.labels.phone', 'Phone')}:</Text>
               <Text style={styles.value}>{item.phone}</Text>
             </View>
             <View style={styles.infoRow}>
-              <Text style={styles.label}>Role:</Text>
+              <Text style={styles.label}>{t('teams.labels.role', 'Role')}:</Text>
               <Text style={[styles.value, styles.roleText]}>{item.role}</Text>
             </View>
             <View style={styles.infoRow}>
-              <Text style={styles.label}>Location:</Text>
+              <Text style={styles.label}>{t('teams.labels.location', 'Location')}:</Text>
               <Text style={styles.value}>{item.location}</Text>
             </View>
           </View>
@@ -107,8 +109,8 @@ const TeamMemberCard: React.FC<TeamMemberCardProps> = React.memo(
 
         <ConfirmationModal
           visible={showDeleteModal}
-          title="Delete Team Member"
-          message={`Are you sure you want to delete ${item.name}? This action cannot be undone.`}
+          title={t('teams.modals.deleteMember.title', 'Delete Team Member')}
+          message={t('teams.modals.deleteMember.message', 'Are you sure you want to delete {{name}}? This action cannot be undone.', { name: item.name })}
           onConfirm={handleConfirmDelete}
           onCancel={handleCancelDelete}
           isLoading={isDeleting}

@@ -36,6 +36,12 @@
       "unassigned": "Unassigned",
       "loadingAssignments": "Loading assignments..."
     },
+    "success": {
+      "title": "Success"
+    },
+    "errors": {
+      "error": "Error"
+    },
     "labels": {
       "email": "Email",
       "name": "Name",
@@ -114,6 +120,45 @@
       "listings": "Listings",
       "groups": "Groups",
       "agentData": "Agent Data"
+    }
+  },
+  "teams": {
+    "headers": {
+      "addMember": "Add Team Member",
+      "editMember": "Edit Team Member"
+    },
+    "labels": {
+      "member": "member",
+      "members": "members",
+      "email": "Email",
+      "phone": "Phone",
+      "role": "Role",
+      "location": "Location"
+    },
+    "status": {
+      "active": "Active",
+      "inactive": "Inactive"
+    },
+    "messages": {
+      "noMembersFound": "No team members found.",
+      "memberAdded": "Team member added successfully!",
+      "memberUpdated": "Team member updated successfully!"
+    },
+    "states": {
+      "loadingMembers": "Loading team members..."
+    },
+    "errors": {
+      "userIdNotAvailable": "User ID is not available",
+      "fetchFailed": "Failed to fetch team members",
+      "userIdRequired": "User ID is not available. Please log in again.",
+      "updateFailed": "Failed to update team member. Please try again.",
+      "addFailed": "Failed to add team member. Please try again."
+    },
+    "modals": {
+      "deleteMember": {
+        "title": "Delete Team Member",
+        "message": "Are you sure you want to delete {{name}}? This action cannot be undone."
+      }
     }
   },
   "auth": {

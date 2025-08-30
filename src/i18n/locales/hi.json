@@ -36,6 +36,12 @@
       "unassigned": "असौंपित",
       "loadingAssignments": "असाइनमेंट लोड हो रहे हैं..."
     },
+    "success": {
+      "title": "सफलता"
+    },
+    "errors": {
+      "error": "त्रुटि"
+    },
     "labels": {
       "email": "ईमेल",
       "name": "नाम",
@@ -114,6 +120,45 @@
       "listings": "लिस्टिंग्स",
       "groups": "समूह",
       "agentData": "एजेंट डेटा"
+    }
+  },
+  "teams": {
+    "headers": {
+      "addMember": "टीम सदस्य जोड़ें",
+      "editMember": "टीम सदस्य संपादित करें"
+    },
+    "labels": {
+      "member": "सदस्य",
+      "members": "सदस्य",
+      "email": "ईमेल",
+      "phone": "फोन",
+      "role": "भूमिका",
+      "location": "स्थान"
+    },
+    "status": {
+      "active": "सक्रिय",
+      "inactive": "निष्क्रिय"
+    },
+    "messages": {
+      "noMembersFound": "कोई टीम सदस्य नहीं मिला।",
+      "memberAdded": "टीम सदस्य सफलतापूर्वक जोड़ा गया!",
+      "memberUpdated": "टीम सदस्य सफलतापूर्वक अपडेट किया गया!"
+    },
+    "states": {
+      "loadingMembers": "टीम सदस्य लोड हो रहे हैं..."
+    },
+    "errors": {
+      "userIdNotAvailable": "उपयोगकर्ता ID उपलब्ध नहीं है",
+      "fetchFailed": "टीम सदस्य प्राप्त करने में विफल",
+      "userIdRequired": "उपयोगकर्ता ID उपलब्ध नहीं है। कृपया फिर से लॉग इन करें।",
+      "updateFailed": "टीम सदस्य अपडेट करने में विफल। कृपया पुनः प्रयास करें।",
+      "addFailed": "टीम सदस्य जोड़ने में विफल। कृपया पुनः प्रयास करें।"
+    },
+    "modals": {
+      "deleteMember": {
+        "title": "टीम सदस्य हटाएं",
+        "message": "क्या आप वाकई {{name}} को हटाना चाहते हैं? यह कार्य पूर्ववत नहीं किया जा सकता।"
+      }
     }
   },
   "auth": {
