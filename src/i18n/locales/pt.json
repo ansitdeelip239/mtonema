@@ -447,6 +447,49 @@
     },
     "emailSubject": "Mensagem do Agente"
   },
+  "partnerFilter": {
+    "title": {
+      "partners": "Filtrar Parceiros",
+      "teamMembers": "Filtrar Membros da Equipe"
+    },
+    "accessDenied": {
+      "title": "Acesso Negado",
+      "message": "Você não tem permissão para acessar esta página."
+    },
+    "buttons": {
+      "goBack": "Voltar",
+      "selectAll": "Selecionar Tudo",
+      "deselectAll": "Desmarcar Tudo",
+      "applyFilter": "Aplicar Filtro"
+    },
+    "loading": {
+      "partners": "Carregando parceiros...",
+      "teamMembers": "Carregando membros da equipe..."
+    },
+    "selection": {
+      "partners": "parceiros",
+      "teamMembers": "membros da equipe",
+      "selected": "selecionados"
+    },
+    "empty": {
+      "partners": "Nenhum parceiro encontrado",
+      "teamMembers": "Nenhum membro da equipe encontrado"
+    },
+    "toast": {
+      "filterCleared": "Filtro Limpo",
+      "filterClearedMessage": "Mostrando clientes apenas para sua conta.",
+      "filterApplied": "Filtro Aplicado",
+      "filterAppliedMessage": "Mostrando clientes para {{formattedCount}} parceiro selecionado",
+      "filterAppliedMessage_plural": "Mostrando clientes para {{formattedCount}} parceiros selecionados"
+    },
+    "errors": {
+      "fetchFailed": "Falha ao buscar {{type}}. Tente novamente.",
+      "applyFailed": "Falha ao aplicar filtros. Tente novamente."
+    },
+    "labels": {
+      "role": "Função"
+    }
+  },
   "messageTemplate": {
     "headers": {
       "selectTemplate": "Selecionar Modelo de Mensagem"

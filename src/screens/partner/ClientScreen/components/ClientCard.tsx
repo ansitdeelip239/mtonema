@@ -1,7 +1,7 @@
 import React from 'react';
 import {View, Text, StyleSheet, Linking, TouchableOpacity} from 'react-native';
 import {Client} from '../../../../types';
-import {formatLocalizedTime} from '../../../../utils/dateUtils';
+import {formatLocalizedTime, formatLocalizedDate} from '../../../../utils/dateUtils';
 import GroupBadges from './GroupBadge';
 import {ClientStackParamList} from '../../../../navigator/components/ClientScreenStack';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
@@ -84,9 +84,12 @@ export const ClientCard: React.FC<ClientCardProps> = ({
                   ) : null;
                 })()}
                 <Text style={styles.timeText}>
-                  {client.lastActivityDate
-                    ? formatLocalizedTime(client.lastActivityDate, i18n.language, t)
-                    : formatLocalizedTime(client.createdOn, i18n.language, t)}
+                  {(() => {
+                    const activityDate = client.lastActivityDate || client.createdOn;
+                    const formattedDate = formatLocalizedDate(activityDate, i18n.language);
+                    const formattedTime = formatLocalizedTime(activityDate, i18n.language, t);
+                    return `${formattedDate} ${t('common.labels.at', 'at')} ${formattedTime}`;
+                  })()}
                 </Text>
               </View>
             </View>

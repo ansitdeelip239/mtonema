@@ -447,6 +447,49 @@
     },
     "emailSubject": "Message from Agent"
   },
+  "partnerFilter": {
+    "title": {
+      "partners": "Filter Partners",
+      "teamMembers": "Filter Team Members"
+    },
+    "accessDenied": {
+      "title": "Access Denied",
+      "message": "You do not have permission to access this page."
+    },
+    "buttons": {
+      "goBack": "Go Back",
+      "selectAll": "Select All",
+      "deselectAll": "Deselect All",
+      "applyFilter": "Apply Filter"
+    },
+    "loading": {
+      "partners": "Loading partners...",
+      "teamMembers": "Loading team members..."
+    },
+    "selection": {
+      "partners": "partners",
+      "teamMembers": "team members",
+      "selected": "selected"
+    },
+    "empty": {
+      "partners": "No partners found",
+      "teamMembers": "No team members found"
+    },
+    "toast": {
+      "filterCleared": "Filter Cleared",
+      "filterClearedMessage": "Showing clients for your account only.",
+      "filterApplied": "Filter Applied",
+      "filterAppliedMessage": "Showing clients for {{formattedCount}} selected partner",
+      "filterAppliedMessage_plural": "Showing clients for {{formattedCount}} selected partners"
+    },
+    "errors": {
+      "fetchFailed": "Failed to fetch {{type}}. Please try again.",
+      "applyFailed": "Failed to apply filters. Please try again."
+    },
+    "labels": {
+      "role": "Role"
+    }
+  },
   "messageTemplate": {
     "headers": {
       "selectTemplate": "Select Message Template"

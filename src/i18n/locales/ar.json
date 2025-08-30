@@ -560,6 +560,49 @@
       "discard": "تجاهل"
     }
   },
+  "partnerFilter": {
+    "title": {
+      "partners": "تصفية الشركاء",
+      "teamMembers": "تصفية أعضاء الفريق"
+    },
+    "accessDenied": {
+      "title": "تم رفض الوصول",
+      "message": "ليس لديك صلاحية للوصول إلى هذه الصفحة."
+    },
+    "buttons": {
+      "goBack": "العودة",
+      "selectAll": "تحديد الكل",
+      "deselectAll": "إلغاء تحديد الكل",
+      "applyFilter": "تطبيق المرشح"
+    },
+    "loading": {
+      "partners": "جاري تحميل الشركاء...",
+      "teamMembers": "جاري تحميل أعضاء الفريق..."
+    },
+    "selection": {
+      "partners": "شركاء",
+      "teamMembers": "أعضاء الفريق",
+      "selected": "محدد"
+    },
+    "empty": {
+      "partners": "لم يتم العثور على شركاء",
+      "teamMembers": "لم يتم العثور على أعضاء فريق"
+    },
+    "toast": {
+      "filterCleared": "تم مسح المرشح",
+      "filterClearedMessage": "عرض العملاء لحسابك فقط.",
+      "filterApplied": "تم تطبيق المرشح",
+      "filterAppliedMessage": "عرض العملاء للشريك المحدد {{formattedCount}}",
+      "filterAppliedMessage_plural": "عرض العملاء للشركاء المحددين {{formattedCount}}"
+    },
+    "errors": {
+      "fetchFailed": "فشل في جلب {{type}}. يرجى المحاولة مرة أخرى.",
+      "applyFailed": "فشل في تطبيق المرشحات. يرجى المحاولة مرة أخرى."
+    },
+    "labels": {
+      "role": "الدور"
+    }
+  },
   "partnerPropertyForm": {
     "titles": {
       "addProperty": "إضافة عقار"

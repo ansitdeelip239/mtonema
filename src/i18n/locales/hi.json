@@ -485,6 +485,49 @@
       "loadingError": "सामग्री टेम्प्लेट लोड करने में त्रुटि"
     }
   },
+  "partnerFilter": {
+    "title": {
+      "partners": "पार्टनर फ़िल्टर करें",
+      "teamMembers": "टीम सदस्य फ़िल्टर करें"
+    },
+    "accessDenied": {
+      "title": "पहुंच अस्वीकृत",
+      "message": "आपको इस पृष्ठ तक पहुंचने की अनुमति नहीं है।"
+    },
+    "buttons": {
+      "goBack": "वापस जाएं",
+      "selectAll": "सभी चुनें",
+      "deselectAll": "सभी अचयनित करें",
+      "applyFilter": "फ़िल्टर लागू करें"
+    },
+    "loading": {
+      "partners": "पार्टनर लोड हो रहे हैं...",
+      "teamMembers": "टीम सदस्य लोड हो रहे हैं..."
+    },
+    "selection": {
+      "partners": "पार्टनर",
+      "teamMembers": "टीम सदस्य",
+      "selected": "चयनित"
+    },
+    "empty": {
+      "partners": "कोई पार्टनर नहीं मिला",
+      "teamMembers": "कोई टीम सदस्य नहीं मिला"
+    },
+    "toast": {
+      "filterCleared": "फ़िल्टर साफ़ किया गया",
+      "filterClearedMessage": "केवल आपके खाते के लिए ग्राहक दिखा रहा है।",
+      "filterApplied": "फ़िल्टर लागू किया गया",
+      "filterAppliedMessage": "{{formattedCount}} चयनित पार्टनर के लिए ग्राहक दिखा रहा है",
+      "filterAppliedMessage_plural": "{{formattedCount}} चयनित पार्टनर के लिए ग्राहक दिखा रहा है"
+    },
+    "errors": {
+      "fetchFailed": "{{type}} प्राप्त करने में विफल। कृपया पुनः प्रयास करें।",
+      "applyFailed": "फ़िल्टर लागू करने में विफल। कृपया पुनः प्रयास करें।"
+    },
+    "labels": {
+      "role": "भूमिका"
+    }
+  },
   "partnerPropertyForm": {
     "titles": {
       "addProperty": "संपत्ति जोड़ें"

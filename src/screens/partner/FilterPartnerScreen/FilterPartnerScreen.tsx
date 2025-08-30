@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   View,
   Text,
@@ -11,23 +11,26 @@ import {
 } from 'react-native';
 import Header from '../../../components/Header';
 import { useTheme } from '../../../context/ThemeProvider';
-import { getGradientColors } from '../../../utils/colorUtils';
 import { useNavigation } from '@react-navigation/native';
 import { DrawerNavigationProp } from '@react-navigation/drawer';
 import { PartnerDrawerParamList } from '../../../types/navigation';
 import GetIcon from '../../../components/GetIcon';
 import { useAuth } from '../../../hooks/useAuth';
+import { useTranslation } from 'react-i18next';
 import Roles from '../../../constants/Roles';
 import PartnerService from '../../../services/PartnerService';
 import { User } from '../../../types';
 import { usePartner } from '../../../context/PartnerProvider';
 import Toast from 'react-native-toast-message';
+import { formatLocalizedNumber } from '../../../utils/dateUtils';
+import i18n from '../../../i18n';
 
 const FilterPartnerScreen = () => {
   const { theme } = useTheme();
   const navigation =
     useNavigation<DrawerNavigationProp<PartnerDrawerParamList>>();
   const { user } = useAuth();
+  const { t } = useTranslation();
   const { selectedPartnerIds, setSelectedPartnerIds, setClientsUpdated } =
     usePartner();
 
@@ -45,17 +48,17 @@ const FilterPartnerScreen = () => {
   useEffect(() => {
     if (!user || (user.role !== Roles.ADMIN && user.role !== Roles.PARTNER)) {
       Alert.alert(
-        'Access Denied',
-        'You do not have permission to access this page.',
+        t('partnerFilter.accessDenied.title'),
+        t('partnerFilter.accessDenied.message'),
         [
           {
-            text: 'OK',
+            text: t('partnerFilter.buttons.goBack'),
             onPress: () => navigation.goBack(),
           },
         ],
       );
     }
-  }, [user, navigation]);
+  }, [user, navigation, t]);
 
   // Fetch partners from API
   useEffect(() => {
@@ -73,7 +76,7 @@ const FilterPartnerScreen = () => {
           if (response.success && response.data && response.data.users) {
             setPartners(response.data.users);
           } else {
-            Alert.alert('Error', 'Failed to fetch partners');
+            Alert.alert(t('common.errors.error'), t('partnerFilter.errors.fetchFailed', { type: t('partnerFilter.selection.partners') }));
           }
         } else if (user.role === Roles.PARTNER) {
           response = await PartnerService.getAllTeamMembers(
@@ -89,26 +92,21 @@ const FilterPartnerScreen = () => {
               })),
             );
           } else {
-            Alert.alert('Error', 'Failed to fetch partners');
+            Alert.alert(t('common.errors.error'), t('partnerFilter.errors.fetchFailed', { type: t('partnerFilter.selection.teamMembers') }));
           }
         }
 
         console.log('API Response:', response);
       } catch (error) {
         console.error('Error fetching partners:', error);
-        Alert.alert('Error', 'Failed to fetch partners. Please try again.');
+        Alert.alert(t('common.errors.error'), t('partnerFilter.errors.fetchFailed', { type: user?.role === Roles.ADMIN ? t('partnerFilter.selection.partners') : t('partnerFilter.selection.teamMembers') }));
       } finally {
         setIsLoading(false);
       }
     };
 
     fetchPartners();
-  }, [user]);
-
-  // Create gradient colors from theme
-  const headerGradientColors = useMemo(() => {
-    return getGradientColors(theme.primaryColor);
-  }, [theme.primaryColor]);
+  }, [user, t]);
 
   // Early return if user is not admin or partner
   if (!user || (user.role !== Roles.ADMIN && user.role !== Roles.PARTNER)) {
@@ -121,14 +119,14 @@ const FilterPartnerScreen = () => {
         />
         <View style={styles.accessDeniedContainer}>
           <GetIcon iconName="faq" size={48} color="#ff6b6b" />
-          <Text style={styles.accessDeniedTitle}>Access Denied</Text>
+          <Text style={styles.accessDeniedTitle}>{t('partnerFilter.accessDenied.title')}</Text>
           <Text style={styles.accessDeniedText}>
-            You do not have permission to access this page.
+            {t('partnerFilter.accessDenied.message')}
           </Text>
           <TouchableOpacity
             style={[styles.backButton, { backgroundColor: theme.primaryColor }]}
             onPress={() => navigation.goBack()}>
-            <Text style={styles.backButtonText}>Go Back</Text>
+            <Text style={styles.backButtonText}>{t('partnerFilter.buttons.goBack')}</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -167,17 +165,16 @@ const FilterPartnerScreen = () => {
       if (selectedPartners.length === 0) {
         Toast.show({
           type: 'success',
-          text1: 'Filter Cleared',
-          text2: 'Showing clients for your account only.',
+          text1: t('partnerFilter.toast.filterCleared'),
+          text2: t('partnerFilter.toast.filterClearedMessage'),
           position: 'top',
           visibilityTime: 2000,
         });
       } else {
         Toast.show({
           type: 'success',
-          text1: 'Filter Applied',
-          text2: `Showing clients for ${selectedPartners.length
-            } selected partner${selectedPartners.length > 1 ? 's' : ''}.`,
+          text1: t('partnerFilter.toast.filterApplied'),
+          text2: t('partnerFilter.toast.filterAppliedMessage', { formattedCount: formatLocalizedNumber(selectedPartners.length, i18n.language) }),
           position: 'top',
           visibilityTime: 2000,
         });
@@ -186,7 +183,7 @@ const FilterPartnerScreen = () => {
       // Navigate back after applying filter
       navigation.goBack();
     } catch (error) {
-      Alert.alert('Error', 'Failed to apply filters. Please try again.');
+      Alert.alert(t('common.errors.error'), t('partnerFilter.errors.applyFailed'));
     } finally {
       setIsApplying(false);
     }
@@ -229,7 +226,7 @@ const FilterPartnerScreen = () => {
             )}
             <View style={styles.detailRow}>
               <GetIcon iconName="user" size={12} color="#666" />
-              <Text style={styles.detailText}>Role: {item.role}</Text>
+              <Text style={styles.detailText}>{t('partnerFilter.labels.role')}: {item.role}</Text>
             </View>
           </View>
         </View>
@@ -256,7 +253,7 @@ const FilterPartnerScreen = () => {
         <View style={styles.centerContainer}>
           <ActivityIndicator size="large" color={theme.primaryColor} />
           <Text style={styles.loadingText}>
-            {user?.role === Roles.ADMIN ? 'Loading partners...' : 'Loading team members...'}
+            {user?.role === Roles.ADMIN ? t('partnerFilter.loading.partners') : t('partnerFilter.loading.teamMembers')}
           </Text>
         </View>
       );
@@ -266,16 +263,16 @@ const FilterPartnerScreen = () => {
       <>
         <View style={styles.selectionHeader}>
           <Text style={styles.selectionText}>
-            {selectedPartners.length} of {partners.length}{' '}
-            {user.role === Roles.ADMIN ? 'partners' : 'team members'} selected
+            {formatLocalizedNumber(selectedPartners.length, i18n.language)} of {formatLocalizedNumber(partners.length, i18n.language)}{' '}
+            {user.role === Roles.ADMIN ? t('partnerFilter.selection.partners') : t('partnerFilter.selection.teamMembers')} {t('partnerFilter.selection.selected')}
           </Text>
           <TouchableOpacity
             onPress={handleSelectAll}
             style={[styles.selectAllButton, { borderColor: theme.primaryColor }]}>
             <Text style={[styles.selectAllText, { color: theme.primaryColor }]}>
               {selectedPartners.length === partners.length
-                ? 'Deselect All'
-                : 'Select All'}
+                ? t('partnerFilter.buttons.deselectAll')
+                : t('partnerFilter.buttons.selectAll')}
             </Text>
           </TouchableOpacity>
         </View>
@@ -288,7 +285,9 @@ const FilterPartnerScreen = () => {
           showsVerticalScrollIndicator={false}
           ListEmptyComponent={
             <View style={styles.emptyContainer}>
-              <Text style={styles.emptyText}>No partners found</Text>
+              <Text style={styles.emptyText}>
+                {user.role === Roles.ADMIN ? t('partnerFilter.empty.partners') : t('partnerFilter.empty.teamMembers')}
+              </Text>
             </View>
           }
         />
@@ -307,7 +306,7 @@ const FilterPartnerScreen = () => {
               <ActivityIndicator size="small" color="white" />
             ) : (
               <Text style={styles.applyButtonText}>
-                Apply Filter ({selectedPartners.length})
+                {t('partnerFilter.buttons.applyFilter')} ({formatLocalizedNumber(selectedPartners.length, i18n.language)})
               </Text>
             )}
           </TouchableOpacity>
@@ -323,8 +322,8 @@ const FilterPartnerScreen = () => {
           <Header<PartnerDrawerParamList>
             title={
               user.role === Roles.ADMIN
-                ? 'Filter Partners'
-                : 'Filter Team Members'
+                ? t('partnerFilter.title.partners')
+                : t('partnerFilter.title.teamMembers')
             }
             backButton={true}
             onBackPress={handleBack}
