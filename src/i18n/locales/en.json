@@ -54,7 +54,8 @@
       "notes": "Notes",
       "showMore": "Show more",
       "showLess": "Show less",
-      "by": "by"
+      "by": "by",
+      "at": "at"
     }
   },
   "errors": {
@@ -106,12 +107,17 @@
       "content": "Content",
       "settings": "Settings",
       "buyPremium": "Buy Premium",
+      "payments": "Payments",
       "helpCenter": "Help Center",
       "chatWithUs": "Chat with Us",
       "logout": "Logout",
       "logoutConfirmation": "Are you sure you want to logout?",
       "loggingOut": "Logging out...",
       "underDevelopment": "This feature is under development"
+    },
+    "paymentTabs": {
+      "plans": "Plans",
+      "transactions": "Transactions"
     },
     "bottomTab": {
       "followUp": "Follow-Ups",
@@ -257,7 +263,9 @@
     "loading": "Loading clients...",
     "searching": "Searching clients...",
     "plural": "s",
-    "edit": "Edit"
+    "edit": "Edit",
+    "pullToRefresh": "Pull down to refresh",
+    "loadingMoreClients": "Loading more clients..."
   },
   "clientCard": {
     "new": "New",
@@ -929,6 +937,9 @@
   "billing": {
     "title": "Billing and Payments",
     "subtitle": "Manage your subscription and payment history",
+    "plans": {
+      "title": "Payment Plans"
+    },
     "switchPlanButton": "Switch Billing Plan",
     "success": {
       "title": "Payment Successful",
@@ -939,6 +950,15 @@
       "paymentFailed": "Payment failed",
       "generic": "Something went wrong",
       "loadPlansFailed": "Failed to load billing plans."
+    },
+    "empty": {
+      "title": "No Plans Yet",
+      "message": "Create your first payment plan to get started",
+      "createButton": "Create Plan"
+    },
+    "delete": {
+      "title": "Delete Plan",
+      "confirmMessage": "Are you sure you want to delete the plan \"{{planName}}\"?"
     },
     "nextBill": {
       "title": "Next Bill",
@@ -969,7 +989,8 @@
       "securityText": "Secured with bank-level encryption"
     },
     "loading": {
-      "billingInfo": "Loading billing information..."
+      "billingInfo": "Loading billing information...",
+      "plans": "Loading plans..."
     },
     "retry": {
       "tryAgain": "Try Again"
@@ -995,6 +1016,51 @@
         "order": "Order",
         "payment": "Payment",
         "verify": "Verify"
+      }
+    },
+    "planItem": {
+      "badge": {
+        "trial": "TRIAL",
+        "premium": "PREMIUM"
+      },
+      "features": {
+        "users": "users",
+        "days": "days"
+      }
+    },
+    "addPlan": {
+      "title": {
+        "add": "Add Plan",
+        "edit": "Edit Plan"
+      },
+      "form": {
+        "planName": "Plan Name*",
+        "description": "Description",
+        "price": "Price (₹)",
+        "billingCycle": "Billing Cycle",
+        "duration": "Duration (Days)",
+        "maxUsers": "Max Users",
+        "isTrial": "Is Trial?"
+      },
+      "placeholders": {
+        "planName": "Eg. Premium Plan",
+        "description": "Describe the plan",
+        "price": "Eg. 999",
+        "duration": "Eg. 30",
+        "maxUsers": "Eg. 5"
+      },
+      "messages": {
+        "success": {
+          "add": "Plan added successfully",
+          "edit": "Plan updated successfully"
+        },
+        "error": {
+          "add": "Failed to add plan",
+          "edit": "Failed to update plan",
+          "addGeneric": "An error occurred while saving the plan",
+          "editGeneric": "An error occurred while updating the plan",
+          "validation": "Please check your input"
+        }
       }
     }
   },
@@ -1031,6 +1097,71 @@
         "refreshStatus": "Refresh this page to check your access status"
       },
       "checkStatus": "Check Status Again"
+    }
+  },
+  "transactions": {
+    "title": "Transactions",
+    "loading": "Loading transactions...",
+    "loadingMore": "Loading more...",
+    "noInternetConnection": "No Internet Connection",
+    "connectionLost": "Connection Lost",
+    "connectionLostMessage": "Please check your internet connection",
+    "noInternetLoadMessage": "Please check your internet connection and pull down to refresh.",
+    "noInternetFilterMessage": "Unable to load more data without internet connection.",
+    "noInternetApplyFiltersMessage": "Please check your internet connection to apply filters.",
+    "failedToLoad": "Failed to Load",
+    "failedToLoadMessage": "Unable to load transactions. Please try again.",
+    "connectionError": "Connection Error",
+    "connectionErrorMessage": "Unable to connect to the server. Please check your internet connection.",
+    "error": "Error",
+    "errorMessage": "Failed to load transactions. Please try again.",
+    "loadMoreFailed": "Load More Failed",
+    "loadMoreFailedMessage": "Unable to load more transactions.",
+    "dataRefreshed": "Transactions Updated",
+    "dataRefreshedMessage": "Data has been refreshed successfully.",
+    "filtersApplied": "Filters Applied",
+    "filtersAppliedMessage": "Transactions filtered successfully.",
+    "filtersReset": "Filters Reset",
+    "filtersResetMessage": "All filters have been reset to default.",
+    "noTransactionsFound": "No Transactions Found",
+    "noTransactionsFoundMessage": "Transactions will appear here once users make payments",
+    "adjustFiltersMessage": "Try adjusting your filters to see more results",
+    "summary": {
+      "title": "Transaction Summary",
+      "total": "Total",
+      "successful": "Successful",
+      "failed": "Failed",
+      "totalAmount": "Total Amount"
+    },
+    "filters": {
+      "title": "Filter Transactions",
+      "reset": "Reset",
+      "apply": "Apply Filters",
+      "search": "Search",
+      "searchPlaceholder": "Search by name, email, or transaction ID",
+      "status": "Status",
+      "paymentMethod": "Payment Method",
+      "sortBy": "Sort By",
+      "sortOrder": "Sort Order",
+      "all": "All",
+      "date": "Date",
+      "amount": "Amount",
+      "newestFirst": "Newest First",
+      "oldestFirst": "Oldest First"
+    },
+    "status": {
+      "captured": "Captured",
+      "completed": "Completed",
+      "failed": "Failed",
+      "cancelled": "Cancelled",
+      "pending": "Pending",
+      "authorized": "Authorized"
+    },
+    "paymentMethods": {
+      "upi": "UPI",
+      "card": "Card",
+      "netbanking": "Net Banking",
+      "wallet": "Wallet"
     }
   }
 }

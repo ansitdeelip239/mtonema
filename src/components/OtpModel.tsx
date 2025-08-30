@@ -29,6 +29,8 @@ interface OtpModelProps {
   onPress: () => void;
   isLoading?: boolean;
   themeColor?: string;
+  onResendOtp: () => void;
+  isResendingOtp?: boolean;
 }
 
 const OtpModel: React.FC<OtpModelProps> = ({
@@ -37,6 +39,8 @@ const OtpModel: React.FC<OtpModelProps> = ({
   onPress,
   isLoading = false,
   themeColor,
+  onResendOtp,
+  isResendingOtp = false,
 }) => {
   const otpInputRef = useRef(null);
   const {showError} = useDialog();
@@ -204,8 +208,9 @@ const OtpModel: React.FC<OtpModelProps> = ({
                       styles.resendLink,
                       themeColor ? {color: themeColor} : null,
                     ]}
-                    onPress={() => {}}>
-                    {translations.resendOtp}
+                    onPress={onResendOtp}
+                    disabled={isResendingOtp}>
+                    {isResendingOtp ? translations.verifying : translations.resendOtp}
                   </Text>
                 </Text>
               </View>

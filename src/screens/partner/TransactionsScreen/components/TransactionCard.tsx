@@ -1,6 +1,7 @@
 // components/TransactionCard.tsx
 import React from 'react';
 import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
+import {useTranslation} from 'react-i18next';
 import {Transaction} from '../../../../types';
 import {convertPaiseToRupees} from '../../../../utils/currency';
 import GetIcon, {IconEnum} from '../../../../components/GetIcon';
@@ -12,6 +13,7 @@ interface TransactionCardProps {
 
 const TransactionCard = React.memo<TransactionCardProps>(
   ({transaction, onPress}) => {
+    const {t} = useTranslation();
     if (!transaction || !transaction.id) {
       console.warn(
         'TransactionCard received invalid transaction:',
@@ -40,6 +42,29 @@ const TransactionCard = React.memo<TransactionCardProps>(
       }
     };
 
+    const getTranslatedStatus = (status: string) => {
+      if (!status) {
+        return t('transactions.status.pending');
+      }
+
+      switch (status.toLowerCase()) {
+        case 'captured':
+          return t('transactions.status.captured');
+        case 'completed':
+          return t('transactions.status.completed');
+        case 'failed':
+          return t('transactions.status.failed');
+        case 'cancelled':
+          return t('transactions.status.cancelled');
+        case 'pending':
+          return t('transactions.status.pending');
+        case 'authorized':
+          return t('transactions.status.authorized');
+        default:
+          return status.toUpperCase();
+      }
+    };
+
     const getMethodIcon = (method: string): IconEnum => {
       if (!method) {
         return 'rupee';
@@ -55,6 +80,24 @@ const TransactionCard = React.memo<TransactionCardProps>(
           return 'compass';
         default:
           return 'rupee';
+      }
+    };
+
+    const getTranslatedMethod = (method: string) => {
+      if (!method) {
+        return '';
+      }
+      switch (method.toLowerCase()) {
+        case 'upi':
+          return t('transactions.paymentMethods.upi');
+        case 'card':
+          return t('transactions.paymentMethods.card');
+        case 'netbanking':
+          return t('transactions.paymentMethods.netbanking');
+        case 'wallet':
+          return t('transactions.paymentMethods.wallet');
+        default:
+          return method;
       }
     };
 
@@ -89,7 +132,7 @@ const TransactionCard = React.memo<TransactionCardProps>(
               {backgroundColor: getStatusColor(transaction.status)},
             ]}>
             <Text style={styles.statusText}>
-              {transaction.status.toUpperCase()}
+              {getTranslatedStatus(transaction.status)}
             </Text>
           </View>
         </View>
@@ -110,7 +153,7 @@ const TransactionCard = React.memo<TransactionCardProps>(
                 size={16}
                 color="#666"
               />
-              <Text style={styles.method}>{transaction.method}</Text>
+              <Text style={styles.method}>{getTranslatedMethod(transaction.method)}</Text>
             </View>
           </View>
         </View>

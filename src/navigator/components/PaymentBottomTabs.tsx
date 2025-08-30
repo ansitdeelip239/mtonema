@@ -7,26 +7,28 @@ import {PaymentBottomTabParamList} from '../../types/navigation';
 import PlansStack from './PlansStack';
 import {PaymentBottomBar} from './PaymentBottomBar';
 import TransactionsStack from './TransactionsStack';
+import {useTranslation} from 'react-i18next';
 
 const Tab = createBottomTabNavigator<PaymentBottomTabParamList>();
 
-const tabScreens: Array<TabScreen<PaymentBottomTabParamList>> = [
-  {
-    name: 'Plans',
-    component: PlansStack,
-    icon: 'calendar',
-    label: 'Plans',
-  },
-  {
-    name: 'Transactions',
-    component: TransactionsStack,
-    icon: 'transaction',
-    label: 'Transactions',
-  },
-] as const;
-
 const PaymentBottomTabs = () => {
   const {theme} = useTheme();
+  const {t} = useTranslation();
+
+  const tabScreens: Array<TabScreen<PaymentBottomTabParamList>> = [
+    {
+      name: 'Plans',
+      component: PlansStack,
+      icon: 'calendar',
+      label: t('navigation.paymentTabs.plans', 'Plans'),
+    },
+    {
+      name: 'Transactions',
+      component: TransactionsStack,
+      icon: 'transaction',
+      label: t('navigation.paymentTabs.transactions', 'Transactions'),
+    },
+  ] as const;
 
   return (
     <Tab.Navigator

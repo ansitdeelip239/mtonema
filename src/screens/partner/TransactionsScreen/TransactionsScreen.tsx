@@ -12,6 +12,7 @@ import {
 } from 'react-native';
 import NetInfo, {NetInfoState} from '@react-native-community/netinfo';
 import Toast from 'react-native-toast-message'; // Add this package
+import {useTranslation} from 'react-i18next';
 import Header from '../../../components/Header';
 import GetIcon from '../../../components/GetIcon';
 import Colors from '../../../constants/Colors';
@@ -55,6 +56,7 @@ interface TransactionsScreenState {
 }
 
 const TransactionsScreen = () => {
+  const {t} = useTranslation();
   // State management
   const [state, setState] = useState<TransactionsScreenState>({
     transactions: [],
@@ -99,8 +101,8 @@ const TransactionsScreen = () => {
         if (!isConnected) {
           Toast.show({
             type: 'error',
-            text1: 'Connection Lost',
-            text2: 'Please check your internet connection',
+            text1: t('transactions.connectionLost'),
+            text2: t('transactions.connectionLostMessage'),
             position: 'top',
           });
         }
@@ -119,7 +121,7 @@ const TransactionsScreen = () => {
         networkUnsubscribeRef.current();
       }
     };
-  }, [updateState]);
+  }, [updateState, t]);
 
   // Component mount/unmount tracking
   useEffect(() => {
@@ -216,8 +218,8 @@ const TransactionsScreen = () => {
         if (!state.hasInitiallyLoaded) {
           showToast(
             'error',
-            'No Internet Connection',
-            'Please check your internet connection and try again.',
+            t('transactions.noInternetConnection'),
+            t('transactions.noInternetLoadMessage'),
           );
         }
         return;
@@ -285,8 +287,8 @@ const TransactionsScreen = () => {
           if (!loadMore && state.hasInitiallyLoaded) {
             showToast(
               'success',
-              'Transactions Updated',
-              'Data has been refreshed successfully.',
+              t('transactions.dataRefreshed'),
+              t('transactions.dataRefreshedMessage'),
             );
           }
         } else {
@@ -299,8 +301,8 @@ const TransactionsScreen = () => {
           if (!state.hasInitiallyLoaded) {
             showToast(
               'error',
-              'Failed to Load',
-              'Unable to load transactions. Please try again.',
+              t('transactions.failedToLoad'),
+              t('transactions.failedToLoadMessage'),
             );
           }
 
@@ -328,22 +330,22 @@ const TransactionsScreen = () => {
           if (!state.hasInitiallyLoaded) {
             showToast(
               'error',
-              'Connection Error',
-              'Unable to connect to the server. Please check your internet connection.',
+              t('transactions.connectionError'),
+              t('transactions.connectionErrorMessage'),
             );
           }
         } else {
           if (!state.hasInitiallyLoaded) {
             showToast(
               'error',
-              'Error',
-              'Failed to load transactions. Please try again.',
+              t('transactions.error'),
+              t('transactions.errorMessage'),
             );
           } else if (loadMore) {
             showToast(
               'error',
-              'Load More Failed',
-              'Unable to load more transactions.',
+              t('transactions.loadMoreFailed'),
+              t('transactions.loadMoreFailedMessage'),
             );
           }
         }
@@ -362,6 +364,7 @@ const TransactionsScreen = () => {
       showToast,
       validateTransaction,
       isNetworkError,
+      t,
     ],
   );
 
@@ -387,8 +390,8 @@ const TransactionsScreen = () => {
     if (!connected) {
       showToast(
         'error',
-        'No Internet Connection',
-        'Please check your internet connection and try again.',
+        t('transactions.noInternetConnection'),
+        t('transactions.noInternetLoadMessage'),
       );
       return;
     }
@@ -400,7 +403,7 @@ const TransactionsScreen = () => {
       filters: refreshFilters,
     });
     fetchTransactionsRef.current(refreshFilters);
-  }, [state.filters, checkNetworkConnectivity, updateState, showToast]);
+  }, [state.filters, checkNetworkConnectivity, updateState, showToast, t]);
 
   // Handle load more with better error handling
   const handleLoadMore = useCallback(async () => {
@@ -412,8 +415,8 @@ const TransactionsScreen = () => {
     if (!connected) {
       showToast(
         'info',
-        'No Internet Connection',
-        'Unable to load more data without internet connection.',
+        t('transactions.noInternetConnection'),
+        t('transactions.noInternetFilterMessage'),
       );
       return;
     }
@@ -431,22 +434,21 @@ const TransactionsScreen = () => {
     checkNetworkConnectivity,
     updateState,
     showToast,
+    t,
   ]);
 
   // Handle apply filters
   const handleApplyFilters = useCallback(
     async (newFilters: TransactionFilters) => {
       const connected = await checkNetworkConnectivity();
-      if (!connected) {
-        showToast(
-          'error',
-          'No Internet Connection',
-          'Please check your internet connection to apply filters.',
-        );
-        return;
-      }
-
-      const resetFilters = {...newFilters, pageNumber: 1};
+    if (!connected) {
+      showToast(
+        'error',
+        t('transactions.noInternetConnection'),
+        t('transactions.noInternetApplyFiltersMessage'),
+      );
+      return;
+    }      const resetFilters = {...newFilters, pageNumber: 1};
       updateState({
         filters: resetFilters,
         filterModalVisible: false,
@@ -456,11 +458,11 @@ const TransactionsScreen = () => {
       flatListRef.current?.scrollToOffset({offset: 0, animated: true});
       showToast(
         'info',
-        'Filters Applied',
-        'Transactions filtered successfully.',
+        t('transactions.filtersApplied'),
+        t('transactions.filtersAppliedMessage'),
       );
     },
-    [checkNetworkConnectivity, updateState, showToast],
+    [checkNetworkConnectivity, updateState, showToast, t],
   );
 
   // Handle reset filters
@@ -468,10 +470,10 @@ const TransactionsScreen = () => {
     handleApplyFilters(DEFAULT_FILTERS);
     showToast(
       'info',
-      'Filters Reset',
-      'All filters have been reset to default.',
+      t('transactions.filtersReset'),
+      t('transactions.filtersResetMessage'),
     );
-  }, [handleApplyFilters, showToast]);
+  }, [handleApplyFilters, showToast, t]);
 
   // Handle transaction press
   const handleTransactionPress = useCallback((transaction: Transaction) => {
@@ -483,7 +485,7 @@ const TransactionsScreen = () => {
   const headerComponent = useMemo(
     () => (
       <Header
-        title="Transactions"
+        title={t('transactions.title')}
         children={
           <TouchableOpacity
             style={styles.filterButton}
@@ -497,7 +499,7 @@ const TransactionsScreen = () => {
         }
       />
     ),
-    [updateState],
+    [updateState, t],
   );
 
   // Memoized summary component
@@ -509,28 +511,28 @@ const TransactionsScreen = () => {
     return (
       <View style={styles.summaryContainer}>
         <View style={styles.summaryCard}>
-          <Text style={styles.summaryTitle}>Transaction Summary</Text>
+          <Text style={styles.summaryTitle}>{t('transactions.summary.title')}</Text>
           <View style={styles.summaryGrid}>
             <View style={styles.summaryItem}>
-              <Text style={styles.summaryLabel}>Total</Text>
+              <Text style={styles.summaryLabel}>{t('transactions.summary.total')}</Text>
               <Text style={styles.summaryValue}>
                 {state.summary.totalTransactions}
               </Text>
             </View>
             <View style={styles.summaryItem}>
-              <Text style={styles.summaryLabel}>Successful</Text>
+              <Text style={styles.summaryLabel}>{t('transactions.summary.successful')}</Text>
               <Text style={[styles.summaryValue, styles.summaryValueGreen]}>
                 {state.summary.successfulTransactions}
               </Text>
             </View>
             <View style={styles.summaryItem}>
-              <Text style={styles.summaryLabel}>Failed</Text>
+              <Text style={styles.summaryLabel}>{t('transactions.summary.failed')}</Text>
               <Text style={[styles.summaryValue, styles.summaryValueRed]}>
                 {state.summary.failedTransactions}
               </Text>
             </View>
             <View style={styles.summaryItem}>
-              <Text style={styles.summaryLabel}>Total Amount</Text>
+              <Text style={styles.summaryLabel}>{t('transactions.summary.totalAmount')}</Text>
               <Text style={[styles.summaryValue, styles.summaryValueGreen]}>
                 ₹{(state.summary.totalAmount / 100).toLocaleString('en-IN')}
               </Text>
@@ -539,7 +541,7 @@ const TransactionsScreen = () => {
         </View>
       </View>
     );
-  }, [state.summary]);
+  }, [state.summary, t]);
 
   // Connection status component
   const connectionStatusComponent = useMemo(() => {
@@ -550,10 +552,10 @@ const TransactionsScreen = () => {
     return (
       <View style={styles.connectionStatus}>
         <GetIcon iconName="clear" size={16} color="#fff" />
-        <Text style={styles.connectionStatusText}>No Internet Connection</Text>
+        <Text style={styles.connectionStatusText}>{t('transactions.noInternetConnection')}</Text>
       </View>
     );
-  }, [state.isConnected]);
+  }, [state.isConnected, t]);
 
   // Empty component with better messaging
   const emptyComponent = useMemo(() => {
@@ -561,9 +563,9 @@ const TransactionsScreen = () => {
       return (
         <View style={styles.emptyContainer}>
           <GetIcon iconName="clear" size={64} color="#E0E0E0" />
-          <Text style={styles.emptyTitle}>No Internet Connection</Text>
+          <Text style={styles.emptyTitle}>{t('transactions.noInternetConnection')}</Text>
           <Text style={styles.emptyMessage}>
-            Please check your internet connection and pull down to refresh.
+            {t('transactions.noInternetLoadMessage')}
           </Text>
         </View>
       );
@@ -581,18 +583,18 @@ const TransactionsScreen = () => {
     return (
       <View style={styles.emptyContainer}>
         <GetIcon iconName="edit" size={64} color="#E0E0E0" />
-        <Text style={styles.emptyTitle}>No Transactions Found</Text>
+        <Text style={styles.emptyTitle}>{t('transactions.noTransactionsFound')}</Text>
         <Text style={styles.emptyMessage}>
           {activeFilterCount > 0
-            ? 'Try adjusting your filters to see more results'
-            : 'Transactions will appear here once users make payments'}
+            ? t('transactions.adjustFiltersMessage')
+            : t('transactions.noTransactionsFoundMessage')}
         </Text>
         {activeFilterCount > 0 && (
           <TouchableOpacity
             style={styles.resetButton}
             onPress={handleResetFilters}
             activeOpacity={0.8}>
-            <Text style={styles.resetButtonText}>Reset Filters</Text>
+            <Text style={styles.resetButtonText}>{t('common.actions.reset')}</Text>
           </TouchableOpacity>
         )}
       </View>
@@ -602,6 +604,7 @@ const TransactionsScreen = () => {
     state.hasInitiallyLoaded,
     state.isConnected,
     handleResetFilters,
+    t,
   ]);
 
   // Render transaction item
@@ -630,10 +633,10 @@ const TransactionsScreen = () => {
     return (
       <View style={styles.footerLoader}>
         <ActivityIndicator size="small" color={Colors.MT_PRIMARY_2} />
-        <Text style={styles.footerLoaderText}>Loading more...</Text>
+        <Text style={styles.footerLoaderText}>{t('transactions.loadingMore')}</Text>
       </View>
     );
-  }, [state.isLoadingMore]);
+  }, [state.isLoadingMore, t]);
 
   // Loading screen
   if (state.isLoading && state.transactions.length === 0) {
@@ -643,7 +646,7 @@ const TransactionsScreen = () => {
         {connectionStatusComponent}
         <View style={styles.loadingContainer}>
           <ActivityIndicator size="large" color={Colors.MT_PRIMARY_2} />
-          <Text style={styles.loadingText}>Loading transactions...</Text>
+          <Text style={styles.loadingText}>{t('transactions.loading')}</Text>
         </View>
         <FilterModal
           visible={state.filterModalVisible}

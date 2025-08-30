@@ -54,7 +54,8 @@
       "notes": "नोट्स",
       "showMore": "और दिखाएं",
       "showLess": "कम दिखाएं",
-      "by": "द्वारा"
+      "by": "द्वारा",
+      "at": "पर"
     }
   },
   "errors": {
@@ -106,12 +107,17 @@
       "content": "कंटेंट",
       "settings": "सेटिंग्स",
       "buyPremium": "प्रीमियम खरीदें",
+      "payments": "भुगतान",
       "helpCenter": "सहायता केंद्र",
       "chatWithUs": "हमसे चैट करें",
       "logout": "लॉगआउट",
       "logoutConfirmation": "क्या आप वाकई लॉगआउट करना चाहते हैं?",
       "loggingOut": "लॉगआउट हो रहा है...",
       "underDevelopment": "यह फीचर विकास के चरण में है"
+    },
+    "paymentTabs": {
+      "plans": "योजनाएं",
+      "transactions": "लेनदेन"
     },
     "bottomTab": {
       "followUp": "फॉलो-अप्स",
@@ -247,7 +253,9 @@
     "loading": "ग्राहक लोड हो रहे हैं...",
     "searching": "ग्राहकों की खोज कर रहे हैं...",
     "plural": "",
-    "edit": "संपादित करें"
+    "edit": "संपादित करें",
+    "pullToRefresh": "रिफ्रेश करने के लिए नीचे खींचें",
+    "loadingMoreClients": "और ग्राहक लोड हो रहे हैं..."
   },
   "clientCard": {
     "new": "नया",
@@ -919,6 +927,9 @@
   "billing": {
     "title": "बिलिंग और भुगतान",
     "subtitle": "अपनी सदस्यता और भुगतान इतिहास प्रबंधित करें",
+    "plans": {
+      "title": "भुगतान प्लान"
+    },
     "switchPlanButton": "बिलिंग प्लान बदलें",
     "success": {
       "title": "भुगतान सफल",
@@ -929,6 +940,15 @@
       "paymentFailed": "भुगतान विफल",
       "generic": "कुछ गलत हो गया",
       "loadPlansFailed": "बिलिंग प्लान लोड करने में विफल।"
+    },
+    "empty": {
+      "title": "अभी तक कोई प्लान नहीं",
+      "message": "शुरू करने के लिए अपना पहला भुगतान प्लान बनाएं",
+      "createButton": "प्लान बनाएं"
+    },
+    "delete": {
+      "title": "प्लान हटाएं",
+      "confirmMessage": "क्या आप वाकई \"{{planName}}\" प्लान को हटाना चाहते हैं?"
     },
     "nextBill": {
       "title": "अगला बिल",
@@ -959,7 +979,8 @@
       "securityText": "बैंक-स्तरीय एन्क्रिप्शन के साथ सुरक्षित"
     },
     "loading": {
-      "billingInfo": "बिलिंग जानकारी लोड हो रही है..."
+      "billingInfo": "बिलिंग जानकारी लोड हो रही है...",
+      "plans": "प्लान लोड हो रहे हैं..."
     },
     "retry": {
       "tryAgain": "पुनः प्रयास करें"
@@ -985,6 +1006,51 @@
         "order": "आदेश",
         "payment": "भुगतान",
         "verify": "सत्यापित करें"
+      }
+    },
+    "planItem": {
+      "badge": {
+        "trial": "ट्रायल",
+        "premium": "प्रीमियम"
+      },
+      "features": {
+        "users": "उपयोगकर्ता",
+        "days": "दिन"
+      }
+    },
+    "addPlan": {
+      "title": {
+        "add": "प्लान जोड़ें",
+        "edit": "प्लान संपादित करें"
+      },
+      "form": {
+        "planName": "प्लान का नाम*",
+        "description": "विवरण",
+        "price": "मूल्य (₹)",
+        "billingCycle": "बिलिंग चक्र",
+        "duration": "अवधि (दिन)",
+        "maxUsers": "अधिकतम उपयोगकर्ता",
+        "isTrial": "क्या यह ट्रायल है?"
+      },
+      "placeholders": {
+        "planName": "उदा. प्रीमियम प्लान",
+        "description": "प्लान का वर्णन करें",
+        "price": "उदा. 999",
+        "duration": "उदा. 30",
+        "maxUsers": "उदा. 5"
+      },
+      "messages": {
+        "success": {
+          "add": "प्लान सफलतापूर्वक जोड़ा गया",
+          "edit": "प्लान सफलतापूर्वक अपडेट किया गया"
+        },
+        "error": {
+          "add": "प्लान जोड़ने में विफल",
+          "edit": "प्लान अपडेट करने में विफल",
+          "addGeneric": "प्लान सहेजते समय एक त्रुटि हुई",
+          "editGeneric": "प्लान अपडेट करते समय एक त्रुटि हुई",
+          "validation": "कृपया अपना इनपुट जांचें"
+        }
       }
     }
   },
@@ -1021,6 +1087,71 @@
         "refreshStatus": "अपनी एक्सेस स्थिति जांचने के लिए इस पेज को रिफ्रेश करें"
       },
       "checkStatus": "स्थिति फिर से जांचें"
+    }
+  },
+  "transactions": {
+    "title": "लेन-देन",
+    "loading": "लेन-देन लोड हो रहा है...",
+    "loadingMore": "और लोड हो रहा है...",
+    "noInternetConnection": "इंटरनेट कनेक्शन नहीं है",
+    "connectionLost": "कनेक्शन खो गया",
+    "connectionLostMessage": "कृपया अपना इंटरनेट कनेक्शन जांचें",
+    "noInternetLoadMessage": "कृपया अपना इंटरनेट कनेक्शन जांचें और रिफ्रेश करने के लिए नीचे खींचें।",
+    "noInternetFilterMessage": "इंटरनेट कनेक्शन के बिना अधिक डेटा लोड नहीं किया जा सकता।",
+    "noInternetApplyFiltersMessage": "फिल्टर लागू करने के लिए कृपया अपना इंटरनेट कनेक्शन जांचें।",
+    "failedToLoad": "लोड करने में विफल",
+    "failedToLoadMessage": "लेन-देन लोड नहीं किए जा सके। कृपया पुनः प्रयास करें।",
+    "connectionError": "कनेक्शन त्रुटि",
+    "connectionErrorMessage": "सर्वर से कनेक्ट नहीं हो सकता। कृपया अपना इंटरनेट कनेक्शन जांचें।",
+    "error": "त्रुटि",
+    "errorMessage": "लेन-देन लोड करने में त्रुटि। कृपया पुनः प्रयास करें।",
+    "loadMoreFailed": "अधिक लोड करने में विफल",
+    "loadMoreFailedMessage": "अधिक लेन-देन लोड नहीं किए जा सके।",
+    "dataRefreshed": "लेन-देन अपडेट किए गए",
+    "dataRefreshedMessage": "डेटा सफलतापूर्वक अपडेट किया गया है।",
+    "filtersApplied": "फिल्टर लागू किए गए",
+    "filtersAppliedMessage": "लेन-देन सफलतापूर्वक फिल्टर किए गए।",
+    "filtersReset": "फिल्टर रीसेट किए गए",
+    "filtersResetMessage": "सभी फिल्टर डिफ़ॉल्ट मानों पर रीसेट कर दिए गए हैं।",
+    "noTransactionsFound": "कोई लेन-देन नहीं मिला",
+    "noTransactionsFoundMessage": "एक बार जब उपयोगकर्ता भुगतान करेंगे तो लेन-देन यहां दिखाई देंगे",
+    "adjustFiltersMessage": "अधिक परिणाम देखने के लिए अपने फिल्टर समायोजित करने का प्रयास करें",
+    "summary": {
+      "title": "लेन-देन सारांश",
+      "total": "कुल",
+      "successful": "सफल",
+      "failed": "विफल",
+      "totalAmount": "कुल राशि"
+    },
+    "filters": {
+      "title": "लेन-देन फिल्टर करें",
+      "reset": "रीसेट",
+      "apply": "फिल्टर लागू करें",
+      "search": "खोजें",
+      "searchPlaceholder": "नाम, ईमेल या लेन-देन ID द्वारा खोजें",
+      "status": "स्थिति",
+      "paymentMethod": "भुगतान विधि",
+      "sortBy": "इसके अनुसार क्रमबद्ध करें",
+      "sortOrder": "क्रमबद्ध क्रम",
+      "all": "सभी",
+      "date": "तारीख",
+      "amount": "राशि",
+      "newestFirst": "नवीनतम पहले",
+      "oldestFirst": "सबसे पुराना पहले"
+    },
+    "status": {
+      "captured": "कैप्चर किया गया",
+      "completed": "पूर्ण",
+      "failed": "विफल",
+      "cancelled": "रद्द",
+      "pending": "लंबित",
+      "authorized": "अधिकृत"
+    },
+    "paymentMethods": {
+      "upi": "UPI",
+      "card": "कार्ड",
+      "netbanking": "नेट बैंकिंग",
+      "wallet": "वॉलेट"
     }
   }
 }

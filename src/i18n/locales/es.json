@@ -54,7 +54,8 @@
       "notes": "Notas",
       "showMore": "Mostrar más",
       "showLess": "Mostrar menos",
-      "by": "por"
+      "by": "por",
+      "at": "a las"
     }
   },
   "errors": {
@@ -106,12 +107,17 @@
       "content": "Contenido",
       "settings": "Configuración",
       "buyPremium": "Comprar Premium",
+      "payments": "Pagos",
       "helpCenter": "Centro de Ayuda",
       "chatWithUs": "Chatea con Nosotros",
       "logout": "Cerrar Sesión",
       "logoutConfirmation": "¿Estás seguro de que quieres cerrar sesión?",
       "loggingOut": "Cerrando sesión...",
       "underDevelopment": "Esta función está en desarrollo"
+    },
+    "paymentTabs": {
+      "plans": "Planes",
+      "transactions": "Transacciones"
     },
     "bottomTab": {
       "followUp": "Seguimientos",
@@ -257,7 +263,9 @@
     "loading": "Cargando clientes...",
     "searching": "Buscando clientes...",
     "plural": "s",
-    "edit": "Editar"
+    "edit": "Editar",
+    "pullToRefresh": "Desliza hacia abajo para actualizar",
+    "loadingMoreClients": "Cargando más clientes..."
   },
   "clientCard": {
     "new": "Nuevo",
@@ -929,6 +937,9 @@
   "billing": {
     "title": "Facturación y Pagos",
     "subtitle": "Gestiona tu suscripción e historial de pagos",
+    "plans": {
+      "title": "Planes de Pago"
+    },
     "switchPlanButton": "Cambiar Plan de Facturación",
     "success": {
       "title": "Pago Exitoso",
@@ -939,6 +950,15 @@
       "paymentFailed": "Pago Fallido",
       "generic": "Algo salió mal",
       "loadPlansFailed": "Error al cargar los planes de facturación."
+    },
+    "empty": {
+      "title": "Aún No Hay Planes",
+      "message": "Crea tu primer plan de pago para comenzar",
+      "createButton": "Crear Plan"
+    },
+    "delete": {
+      "title": "Eliminar Plan",
+      "confirmMessage": "¿Estás seguro de que quieres eliminar el plan \"{{planName}}\"?"
     },
     "nextBill": {
       "title": "Próxima Factura",
@@ -969,7 +989,8 @@
       "securityText": "Protegido con encriptación de nivel bancario"
     },
     "loading": {
-      "billingInfo": "Cargando información de facturación..."
+      "billingInfo": "Cargando información de facturación...",
+      "plans": "Cargando planes..."
     },
     "retry": {
       "tryAgain": "Intentar de Nuevo"
@@ -995,6 +1016,51 @@
         "order": "Orden",
         "payment": "Pago",
         "verify": "Verificar"
+      }
+    },
+    "planItem": {
+      "badge": {
+        "trial": "PRUEBA",
+        "premium": "PREMIUM"
+      },
+      "features": {
+        "users": "usuarios",
+        "days": "días"
+      }
+    },
+    "addPlan": {
+      "title": {
+        "add": "Agregar Plan",
+        "edit": "Editar Plan"
+      },
+      "form": {
+        "planName": "Nombre del Plan*",
+        "description": "Descripción",
+        "price": "Precio (₹)",
+        "billingCycle": "Ciclo de Facturación",
+        "duration": "Duración (Días)",
+        "maxUsers": "Máximo de Usuarios",
+        "isTrial": "¿Es de Prueba?"
+      },
+      "placeholders": {
+        "planName": "Ej. Plan Premium",
+        "description": "Describe el plan",
+        "price": "Ej. 999",
+        "duration": "Ej. 30",
+        "maxUsers": "Ej. 5"
+      },
+      "messages": {
+        "success": {
+          "add": "Plan agregado exitosamente",
+          "edit": "Plan actualizado exitosamente"
+        },
+        "error": {
+          "add": "Error al agregar plan",
+          "edit": "Error al actualizar plan",
+          "addGeneric": "Ocurrió un error al guardar el plan",
+          "editGeneric": "Ocurrió un error al actualizar el plan",
+          "validation": "Por favor verifica tu entrada"
+        }
       }
     }
   },
@@ -1031,6 +1097,71 @@
         "refreshStatus": "Actualiza esta página para verificar tu estado de acceso"
       },
       "checkStatus": "Verificar Estado Nuevamente"
+    }
+  },
+  "transactions": {
+    "title": "Transacciones",
+    "loading": "Cargando transacciones...",
+    "loadingMore": "Cargando más...",
+    "noInternetConnection": "Sin conexión a internet",
+    "connectionLost": "Conexión perdida",
+    "connectionLostMessage": "Por favor verifica tu conexión a internet",
+    "noInternetLoadMessage": "Por favor verifica tu conexión a internet y desliza hacia abajo para actualizar.",
+    "noInternetFilterMessage": "No se puede cargar más datos sin conexión a internet.",
+    "noInternetApplyFiltersMessage": "Por favor verifica tu conexión a internet para aplicar filtros.",
+    "failedToLoad": "Error al cargar",
+    "failedToLoadMessage": "No se pudieron cargar las transacciones. Por favor intenta de nuevo.",
+    "connectionError": "Error de conexión",
+    "connectionErrorMessage": "No se puede conectar al servidor. Por favor verifica tu conexión a internet.",
+    "error": "Error",
+    "errorMessage": "Error al cargar transacciones. Por favor intenta de nuevo.",
+    "loadMoreFailed": "Error al cargar más",
+    "loadMoreFailedMessage": "No se pudieron cargar más transacciones.",
+    "dataRefreshed": "Transacciones actualizadas",
+    "dataRefreshedMessage": "Los datos han sido actualizados exitosamente.",
+    "filtersApplied": "Filtros aplicados",
+    "filtersAppliedMessage": "Transacciones filtradas exitosamente.",
+    "filtersReset": "Filtros restablecidos",
+    "filtersResetMessage": "Todos los filtros han sido restablecidos a los valores predeterminados.",
+    "noTransactionsFound": "No se encontraron transacciones",
+    "noTransactionsFoundMessage": "Las transacciones aparecerán aquí una vez que los usuarios realicen pagos",
+    "adjustFiltersMessage": "Intenta ajustar tus filtros para ver más resultados",
+    "summary": {
+      "title": "Resumen de transacciones",
+      "total": "Total",
+      "successful": "Exitosas",
+      "failed": "Fallidas",
+      "totalAmount": "Monto total"
+    },
+    "filters": {
+      "title": "Filtrar transacciones",
+      "reset": "Restablecer",
+      "apply": "Aplicar filtros",
+      "search": "Buscar",
+      "searchPlaceholder": "Buscar por nombre, correo electrónico o ID de transacción",
+      "status": "Estado",
+      "paymentMethod": "Método de pago",
+      "sortBy": "Ordenar por",
+      "sortOrder": "Orden de clasificación",
+      "all": "Todos",
+      "date": "Fecha",
+      "amount": "Monto",
+      "newestFirst": "Más recientes primero",
+      "oldestFirst": "Más antiguos primero"
+    },
+    "status": {
+      "captured": "Capturado",
+      "completed": "Completado",
+      "failed": "Fallido",
+      "cancelled": "Cancelado",
+      "pending": "Pendiente",
+      "authorized": "Autorizado"
+    },
+    "paymentMethods": {
+      "upi": "UPI",
+      "card": "Tarjeta",
+      "netbanking": "Banco en línea",
+      "wallet": "Billetera"
     }
   }
 }

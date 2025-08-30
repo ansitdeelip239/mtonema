@@ -19,10 +19,12 @@ import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {PlansStackParamList} from '../../../navigator/components/PlansStack';
 import GetIcon from '../../../components/GetIcon';
 import PlanItem from './components/PlanItem';
+import {useTranslation} from 'react-i18next';
 
 type Props = NativeStackScreenProps<PlansStackParamList, 'Plans Screen'>;
 
 const PlansScreen: React.FC<Props> = ({navigation}) => {
+  const {t} = useTranslation();
   const [plans, setPlans] = useState<Plan[]>([]);
   const [isLoadingPlans, setIsLoadingPlans] = useState(true);
   const [deleteModal, setDeleteModal] = useState<{
@@ -53,15 +55,15 @@ const PlansScreen: React.FC<Props> = ({navigation}) => {
           useNativeDriver: true,
         }).start();
       } else {
-        Alert.alert('Error', 'Failed to load plans. Please try again.');
+        Alert.alert(t('common.errors.error', 'Error'), t('plans.errors.loadFailed', 'Failed to load plans. Please try again.'));
       }
     } catch (error) {
       console.error('Error fetching plans:', error);
-      Alert.alert('Error', 'Failed to load plans. Please try again.');
+      Alert.alert(t('common.errors.error', 'Error'), t('plans.errors.loadFailed', 'Failed to load plans. Please try again.'));
     } finally {
       setIsLoadingPlans(false);
     }
-  }, [fadeAnim]);
+  }, [fadeAnim, t]);
 
   // Only use useFocusEffect to avoid duplicate calls
   useFocusEffect(
@@ -99,14 +101,14 @@ const PlansScreen: React.FC<Props> = ({navigation}) => {
         setDeleteModal({visible: false, plan: null, loading: false});
         fetchPlans(); // Refresh the list
       } else {
-        Alert.alert('Error', 'Failed to delete plan.');
+        Alert.alert(t('common.errors.error', 'Error'), t('plans.errors.deleteFailed', 'Failed to delete plan.'));
       }
     } catch (err) {
-      Alert.alert('Error', 'Failed to delete plan.');
+      Alert.alert(t('common.errors.error', 'Error'), t('plans.errors.deleteFailed', 'Failed to delete plan.'));
     } finally {
       setDeleteModal(prev => ({...prev, loading: false}));
     }
-  }, [deleteModal.plan, fetchPlans]);
+  }, [deleteModal.plan, fetchPlans, t]);
 
   const cancelDelete = useCallback(() => {
     setDeleteModal({visible: false, plan: null, loading: false});
@@ -120,7 +122,7 @@ const PlansScreen: React.FC<Props> = ({navigation}) => {
   const headerComponent = useMemo(
     () => (
       <Header
-        title="Payment Plans"
+        title={t('billing.plans.title', 'Payment Plans')}
         children={
           <TouchableOpacity
             style={styles.addButton}
@@ -131,7 +133,7 @@ const PlansScreen: React.FC<Props> = ({navigation}) => {
         }
       />
     ),
-    [navigateToAddPlan],
+    [navigateToAddPlan, t],
   );
 
   // Memoized empty component
@@ -139,19 +141,19 @@ const PlansScreen: React.FC<Props> = ({navigation}) => {
     () => (
       <View style={styles.emptyContainer}>
         <GetIcon iconName="plus" size={64} color="#E0E0E0" />
-        <Text style={styles.emptyTitle}>No Plans Yet</Text>
+        <Text style={styles.emptyTitle}>{t('billing.empty.title', 'No Plans Yet')}</Text>
         <Text style={styles.emptyMessage}>
-          Create your first payment plan to get started
+          {t('billing.empty.message', 'Create your first payment plan to get started')}
         </Text>
         <TouchableOpacity
           style={styles.emptyButton}
           onPress={navigateToAddPlan}
           activeOpacity={0.8}>
-          <Text style={styles.emptyButtonText}>Create Plan</Text>
+          <Text style={styles.emptyButtonText}>{t('billing.empty.createButton', 'Create Plan')}</Text>
         </TouchableOpacity>
       </View>
     ),
-    [navigateToAddPlan],
+    [navigateToAddPlan, t],
   );
 
   const renderItem = useCallback(
@@ -175,7 +177,7 @@ const PlansScreen: React.FC<Props> = ({navigation}) => {
         {headerComponent}
         <View style={styles.loadingContainer}>
           <ActivityIndicator size="large" color="#4CAF50" />
-          <Text style={styles.loadingText}>Loading plans...</Text>
+          <Text style={styles.loadingText}>{t('billing.loading.plans', 'Loading plans...')}</Text>
         </View>
       </View>
     );
@@ -211,8 +213,8 @@ const PlansScreen: React.FC<Props> = ({navigation}) => {
 
       <ConfirmationModal
         visible={deleteModal.visible}
-        title="Delete Plan"
-        message={`Are you sure you want to delete the plan "${deleteModal.plan?.planName}"?`}
+        title={t('billing.delete.title', 'Delete Plan')}
+        message={t('billing.delete.confirmMessage', 'Are you sure you want to delete the plan "{{planName}}"?', {planName: deleteModal.plan?.planName})}
         onConfirm={confirmDeletePlan}
         onCancel={cancelDelete}
         isLoading={deleteModal.loading}

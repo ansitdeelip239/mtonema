@@ -129,7 +129,7 @@ const CustomDrawerContent = (props: any) => {
             <View style={styles.iconContainer}>
               <GetIcon iconName="rupee" color="#444" size="25" />
             </View>
-            <Text style={styles.itemText}>Payments</Text>
+            <Text style={styles.itemText}>{t('navigation.drawer.payments', 'Payments')}</Text>
           </TouchableOpacity>
         )}
 

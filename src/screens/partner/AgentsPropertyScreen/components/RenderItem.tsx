@@ -75,7 +75,7 @@ const RenderItem: React.FC<RenderItemProps> = ({
       <Surface style={styles.card}>
         <View style={styles.header}>
           <View style={styles.titleContainer}>
-            <Text style={[styles.name, {color: theme.primaryColor}]}>
+            <Text style={[styles.name, {color: theme.primaryColor}]} selectable>
               {item.agentName || 'N/A'}
             </Text>
             <View
@@ -83,7 +83,7 @@ const RenderItem: React.FC<RenderItemProps> = ({
                 styles.badge,
                 {backgroundColor: theme.primaryColor + '15'},
               ]}>
-              <Text style={[styles.badgeText, {color: theme.primaryColor}]}>
+              <Text style={[styles.badgeText, {color: theme.primaryColor}]} selectable>
                 {item.negotiable ? t('agentProperty.labels.negotiable') : t('agentProperty.labels.fixedPrice')}
               </Text>
             </View>
@@ -114,53 +114,53 @@ const RenderItem: React.FC<RenderItemProps> = ({
 
         <View style={styles.contentSection}>
           <View style={styles.row}>
-            <Text style={styles.label}>{t('agentProperty.labels.bhkType')}</Text>
+            <Text style={styles.label} selectable>{t('agentProperty.labels.bhkType')}</Text>
             <Text style={styles.colon}>:</Text>
-            <Text style={styles.value}>{item.bhkType || t('agentProperty.messages.notSpecified')}</Text>
+            <Text style={styles.value} selectable>{item.bhkType || t('agentProperty.messages.notSpecified')}</Text>
           </View>
           <View style={styles.row}>
-            <Text style={styles.label}>{t('agentProperty.labels.location')}</Text>
+            <Text style={styles.label} selectable>{t('agentProperty.labels.location')}</Text>
             <Text style={styles.colon}>:</Text>
-            <Text style={styles.value}>{item.propertyLocation || t('agentProperty.messages.na')}</Text>
+            <Text style={styles.value} selectable>{item.propertyLocation || t('agentProperty.messages.na')}</Text>
           </View>
           <View style={styles.row}>
-            <Text style={styles.label}>{t('agentProperty.labels.demandPrice')}</Text>
+            <Text style={styles.label} selectable>{t('agentProperty.labels.demandPrice')}</Text>
             <Text style={styles.colon}>:</Text>
             <Text
               style={[
                 styles.value,
                 styles.priceText,
                 {color: theme.primaryColor},
-              ]}>
+              ]} selectable>
               {formatCurrency(item.demandPrice) || t('agentProperty.messages.na')}
             </Text>
           </View>
           <View style={styles.row}>
-            <Text style={styles.label}>{t('agentProperty.labels.securityDepositAmount')}</Text>
+            <Text style={styles.label} selectable>{t('agentProperty.labels.securityDepositAmount')}</Text>
             <Text style={styles.colon}>:</Text>
             <Text
               style={[
                 styles.value,
                 styles.priceText,
                 {color: theme.primaryColor},
-              ]}>
+              ]} selectable>
               {formatCurrency(item.securityDepositAmount) || t('agentProperty.messages.na')}
             </Text>
           </View>
           <View style={styles.row}>
-            <Text style={styles.label}>{t('agentProperty.labels.contactNo')}</Text>
+            <Text style={styles.label} selectable>{t('agentProperty.labels.contactNo')}</Text>
             <Text style={styles.colon}>:</Text>
-            <Text style={styles.value}>{item.agentContactNo || t('agentProperty.messages.na')}</Text>
+            <Text style={styles.value} selectable>{item.agentContactNo || t('agentProperty.messages.na')}</Text>
           </View>
           <View style={styles.row}>
-            <Text style={styles.label}>{t('agentProperty.labels.propertyType')}</Text>
+            <Text style={styles.label} selectable>{t('agentProperty.labels.propertyType')}</Text>
             <Text style={styles.colon}>:</Text>
-            <Text style={styles.value}>{item.propertyType || t('agentProperty.messages.na')}</Text>
+            <Text style={styles.value} selectable>{item.propertyType || t('agentProperty.messages.na')}</Text>
           </View>
           <View style={styles.row}>
-            <Text style={styles.label}>{t('agentProperty.labels.dateAdded')}</Text>
+            <Text style={styles.label} selectable>{t('agentProperty.labels.dateAdded')}</Text>
             <Text style={styles.colon}>:</Text>
-            <Text style={styles.value}>
+            <Text style={styles.value} selectable>
               {item.createdOn
                 ? formatLocalizedDate(item.createdOn, i18n.language)
                 : t('agentProperty.messages.na')}
@@ -172,8 +172,8 @@ const RenderItem: React.FC<RenderItemProps> = ({
           <>
             <View style={styles.divider} />
             <View style={styles.notes}>
-              <Text style={styles.notesLabel}>{t('agentProperty.labels.notes')}</Text>
-              <Text style={styles.notesText}>{item.propertyNotes}</Text>
+              <Text style={styles.notesLabel} selectable>{t('agentProperty.labels.notes')}</Text>
+              <Text style={styles.notesText} selectable>{item.propertyNotes}</Text>
             </View>
           </>
         )}

@@ -8,6 +8,7 @@ import {
   ScrollView,
   TextInput,
 } from 'react-native';
+import {useTranslation} from 'react-i18next';
 import {TransactionFilters} from '../../../../types';
 import GetIcon from '../../../../components/GetIcon';
 import Colors from '../../../../constants/Colors';
@@ -67,6 +68,7 @@ const FilterModal = React.memo<FilterModalProps>(
     onClose,
     onReset,
   }) => {
+    const {t} = useTranslation();
     const [localFilters, setLocalFilters] =
       useState<TransactionFilters>(filters);
 
@@ -84,19 +86,19 @@ const FilterModal = React.memo<FilterModalProps>(
             <TouchableOpacity onPress={onClose}>
               <GetIcon iconName="clear" size={24} color="#333" />
             </TouchableOpacity>
-            <Text style={styles.title}>Filter Transactions</Text>
+            <Text style={styles.title}>{t('transactions.filters.title')}</Text>
             <TouchableOpacity onPress={onReset}>
-              <Text style={styles.resetText}>Reset</Text>
+              <Text style={styles.resetText}>{t('transactions.filters.reset')}</Text>
             </TouchableOpacity>
           </View>
 
           <ScrollView
             style={styles.content}
             showsVerticalScrollIndicator={false}>
-            <FilterSection title="Search">
+            <FilterSection title={t('transactions.filters.search')}>
               <TextInput
                 style={styles.searchInput}
-                placeholder="Search by name, email, or transaction ID"
+              placeholder={t('transactions.filters.searchPlaceholder')}
                 value={localFilters.searchQuery || ''}
                 onChangeText={text =>
                   setLocalFilters(prev => ({...prev, searchQuery: text}))
@@ -104,10 +106,10 @@ const FilterModal = React.memo<FilterModalProps>(
               />
             </FilterSection>
 
-            <FilterSection title="Status">
+            <FilterSection title={t('transactions.filters.status')}>
               <View style={styles.filterGrid}>
                 <FilterButton
-                  title="All"
+                  title={t('transactions.filters.all')}
                   selected={
                     !localFilters.status || localFilters.status === 'all'
                   }
@@ -126,10 +128,10 @@ const FilterModal = React.memo<FilterModalProps>(
               </View>
             </FilterSection>
 
-            <FilterSection title="Payment Method">
+            <FilterSection title={t('transactions.filters.paymentMethod')}>
               <View style={styles.filterGrid}>
                 <FilterButton
-                  title="All"
+                  title={t('transactions.filters.all')}
                   selected={
                     !localFilters.method || localFilters.method === 'all'
                   }
@@ -148,12 +150,12 @@ const FilterModal = React.memo<FilterModalProps>(
               </View>
             </FilterSection>
 
-            <FilterSection title="Sort By">
+            <FilterSection title={t('transactions.filters.sortBy')}>
               <View style={styles.filterGrid}>
                 {[
-                  {key: 'transactionDate', label: 'Date'},
-                  {key: 'amount', label: 'Amount'},
-                  {key: 'status', label: 'Status'},
+                  {key: 'transactionDate', label: t('transactions.filters.date')},
+                  {key: 'amount', label: t('transactions.filters.amount')},
+                  {key: 'status', label: t('transactions.filters.status')},
                 ].map(sort => (
                   <FilterButton
                     key={sort.key}
@@ -167,17 +169,17 @@ const FilterModal = React.memo<FilterModalProps>(
               </View>
             </FilterSection>
 
-            <FilterSection title="Sort Order">
+            <FilterSection title={t('transactions.filters.sortOrder')}>
               <View style={styles.filterGrid}>
                 <FilterButton
-                  title="Newest First"
+                  title={t('transactions.filters.newestFirst')}
                   selected={localFilters.sortOrder === 'desc'}
                   onPress={() =>
                     setLocalFilters(prev => ({...prev, sortOrder: 'desc'}))
                   }
                 />
                 <FilterButton
-                  title="Oldest First"
+                  title={t('transactions.filters.oldestFirst')}
                   selected={localFilters.sortOrder === 'asc'}
                   onPress={() =>
                     setLocalFilters(prev => ({...prev, sortOrder: 'asc'}))
@@ -191,7 +193,7 @@ const FilterModal = React.memo<FilterModalProps>(
             <TouchableOpacity
               style={styles.applyButton}
               onPress={() => onApply(localFilters)}>
-              <Text style={styles.applyButtonText}>Apply Filters</Text>
+              <Text style={styles.applyButtonText}>{t('transactions.filters.apply')}</Text>
             </TouchableOpacity>
           </View>
         </View>

@@ -12,7 +12,7 @@ import PlansFormSchema from '../../../schema/PlansFormSchema';
 import PartnerService from '../../../services/PartnerService';
 import Toast from 'react-native-toast-message';
 import { useState } from 'react';
-import { convertPaiseToRupees } from '../../../utils/currency';
+import {useTranslation} from 'react-i18next';
 
 type Props = NativeStackScreenProps<PlansStackParamList, 'Add Plan Screen'> & {
   route: {
@@ -36,6 +36,7 @@ isTrial: boolean;
 const AddPlanScreen: React.FC<Props> = ({navigation, route}) => {
   const {masterData} = useMaster();
   const {theme} = useTheme();
+  const {t} = useTranslation();
 
   const editMode = route?.params?.editMode;
   const planData = route?.params?.planData;
@@ -60,7 +61,7 @@ const AddPlanScreen: React.FC<Props> = ({navigation, route}) => {
         isTrial: false,
       };
 
-  const {formInput, handleInputChange, loading: formLoading, onSubmit, setFormInput} = useForm<PlansForm>({
+  const {formInput, handleInputChange, onSubmit} = useForm<PlansForm>({
     initialState,
     onSubmit: async data => {
       const result = PlansFormSchema.safeParse(data);
@@ -68,7 +69,7 @@ const AddPlanScreen: React.FC<Props> = ({navigation, route}) => {
         const firstError = result.error.errors[0];
         Toast.show({
           type: 'error',
-          text1: firstError.message || 'Please check your input',
+          text1: firstError.message || t('billing.addPlan.messages.error.validation', 'Please check your input'),
         });
         return;
       }
@@ -76,10 +77,10 @@ const AddPlanScreen: React.FC<Props> = ({navigation, route}) => {
       const payload = {
         planName: data.planName.trim(),
         description: data.description?.trim() || '',
-        price: parseInt(data.price),
+        price: parseInt(data.price, 10),
         billingCycle: data.billingCycle,
-        durationDays: parseInt(data.durationDays),
-        maxUsers: parseInt(data.maxUsers),
+        durationDays: parseInt(data.durationDays, 10),
+        maxUsers: parseInt(data.maxUsers, 10),
         isTrial: data.isTrial,
       };
 
@@ -94,19 +95,19 @@ const AddPlanScreen: React.FC<Props> = ({navigation, route}) => {
         if (response && response.data) {
           Toast.show({
             type: 'success',
-            text1: editMode ? 'Plan updated successfully' : 'Plan added successfully',
+            text1: editMode ? t('billing.addPlan.messages.success.edit', 'Plan updated successfully') : t('billing.addPlan.messages.success.add', 'Plan added successfully'),
           });
           navigation.goBack();
         } else {
           Toast.show({
             type: 'error',
-            text1: editMode ? 'Failed to update plan' : 'Failed to add plan',
+            text1: editMode ? t('billing.addPlan.messages.error.edit', 'Failed to update plan') : t('billing.addPlan.messages.error.add', 'Failed to add plan'),
           });
         }
       } catch (err) {
         Toast.show({
           type: 'error',
-          text1: editMode ? 'An error occurred while updating the plan' : 'An error occurred while saving the plan',
+          text1: editMode ? t('billing.addPlan.messages.error.editGeneric', 'An error occurred while updating the plan') : t('billing.addPlan.messages.error.addGeneric', 'An error occurred while saving the plan'),
         });
       } finally {
         setLoading(false);
@@ -119,7 +120,7 @@ const AddPlanScreen: React.FC<Props> = ({navigation, route}) => {
   return (
     <View style={styles.container}>
       <Header
-        title={editMode ? 'Edit Plan' : 'Add Plan'}
+        title={editMode ? t('billing.addPlan.title.edit', 'Edit Plan') : t('billing.addPlan.title.add', 'Add Plan')}
         backButton
         onBackPress={() => navigation.goBack()}
       />
@@ -129,38 +130,38 @@ const AddPlanScreen: React.FC<Props> = ({navigation, route}) => {
         <View style={styles.formContainer}>
           <MaterialTextInput<PlansForm>
             style={styles.input}
-            label="Plan Name*"
+            label={t('billing.addPlan.form.planName', 'Plan Name*')}
             field="planName"
             formInput={formInput}
             setFormInput={handleInputChange}
             mode="outlined"
-            placeholder="Eg. Premium Plan"
+            placeholder={t('billing.addPlan.placeholders.planName', 'Eg. Premium Plan')}
           />
           <MaterialTextInput<PlansForm>
             style={styles.input}
-            label="Description"
+            label={t('billing.addPlan.form.description', 'Description')}
             field="description"
             formInput={formInput}
             setFormInput={handleInputChange}
             mode="outlined"
-            placeholder="Describe the plan"
+            placeholder={t('billing.addPlan.placeholders.description', 'Describe the plan')}
             multiline
             numberOfLines={3}
           />
           <MaterialTextInput<PlansForm>
             style={styles.input}
-            label="Price (₹)"
+            label={t('billing.addPlan.form.price', 'Price (₹)')}
             field="price"
             formInput={formInput}
             setFormInput={handleInputChange}
             mode="outlined"
-            placeholder="Eg. 999"
+            placeholder={t('billing.addPlan.placeholders.price', 'Eg. 999')}
             keyboardType="number-pad"
           />
           {/* Billing Cycle Toggle using FilterOption */}
-          <View style={{marginBottom: 8}}>
+          <View style={styles.billingCycleView}>
             <FilterOption
-              label="Billing Cycle"
+              label={t('billing.addPlan.form.billingCycle', 'Billing Cycle')}
               options={masterData?.BillingCycle || []}
               selectedValue={formInput.billingCycle}
               onSelect={val => handleInputChange('billingCycle', val)}
@@ -168,26 +169,26 @@ const AddPlanScreen: React.FC<Props> = ({navigation, route}) => {
           </View>
           <MaterialTextInput<PlansForm>
             style={styles.input}
-            label="Duration (Days)"
+            label={t('billing.addPlan.form.duration', 'Duration (Days)')}
             field="durationDays"
             formInput={formInput}
             setFormInput={handleInputChange}
             mode="outlined"
-            placeholder="Eg. 30"
+            placeholder={t('billing.addPlan.placeholders.duration', 'Eg. 30')}
             keyboardType="number-pad"
           />
           <MaterialTextInput<PlansForm>
             style={styles.input}
-            label="Max Users"
+            label={t('billing.addPlan.form.maxUsers', 'Max Users')}
             field="maxUsers"
             formInput={formInput}
             setFormInput={handleInputChange}
             mode="outlined"
-            placeholder="Eg. 5"
+            placeholder={t('billing.addPlan.placeholders.maxUsers', 'Eg. 5')}
             keyboardType="number-pad"
           />
             <View style={styles.toggleRow}>
-            <Text style={styles.toggleLabel}>Is Trial?</Text>
+            <Text style={styles.toggleLabel}>{t('billing.addPlan.form.isTrial', 'Is Trial?')}</Text>
             <Switch
               value={formInput.isTrial}
               onValueChange={val => handleInputChange('isTrial', val)}
@@ -204,7 +205,7 @@ const AddPlanScreen: React.FC<Props> = ({navigation, route}) => {
           loading={loading}
           style={styles.submitBtn}
         >
-          Submit
+          {t('common.actions.submit', 'Submit')}
         </Button>
       </ScrollView>
     </View>
@@ -226,6 +227,9 @@ const styles = StyleSheet.create({
   },
   input: {
     flex: 1,
+  },
+  billingCycleView: {
+    marginBottom: 8,
   },
   toggleRow: {
     flexDirection: 'row',

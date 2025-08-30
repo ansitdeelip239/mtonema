@@ -2,6 +2,7 @@
 import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { Platform, TouchableOpacity } from 'react-native';
+import { useTranslation } from 'react-i18next';
 import { useTheme } from '../../context/ThemeProvider';
 import { useNavigation } from '@react-navigation/native';
 import { DrawerNavigationProp } from '@react-navigation/drawer';
@@ -17,6 +18,7 @@ const Stack = createNativeStackNavigator<TransactionsStackParamList>();
 
 const TransactionsStack = () => {
   const { theme } = useTheme();
+  const { t } = useTranslation();
   const isIOS = Platform.OS === 'ios';
 
   const drawerNavigation =
@@ -30,7 +32,7 @@ const TransactionsStack = () => {
         headerTintColor: '#fff',
         headerTitleAlign: 'center',
         headerBackVisible: true,
-        headerBackTitle: 'Back',
+        headerBackTitle: t('common.actions.back'),
         // eslint-disable-next-line react/no-unstable-nested-components
         headerLeft: () => {
           const hamburgerButtonStyle = { marginLeft: 16, padding: 4 };
@@ -51,7 +53,7 @@ const TransactionsStack = () => {
         name="Transactions Screen"
         component={TransactionsScreen}
         options={{
-          title: 'Plans',
+          title: t('transactions.title'),
           headerBackVisible: false, // hide back button on root screen
         }}
       />

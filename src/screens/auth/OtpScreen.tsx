@@ -1,28 +1,30 @@
-import React, { useState, useCallback, useEffect } from 'react';
-import { StyleSheet, SafeAreaView, Platform } from 'react-native';
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { AuthStackParamList } from '../../navigator/AuthNavigator';
+import React, {useState, useCallback, useEffect} from 'react';
+import {StyleSheet, SafeAreaView, Platform} from 'react-native';
+import {NativeStackScreenProps} from '@react-navigation/native-stack';
+import {AuthStackParamList} from '../../navigator/AuthNavigator';
 import AuthService from '../../services/AuthService';
-import { useAuth } from '../../hooks/useAuth';
+import {useAuth} from '../../hooks/useAuth';
 import OtpModel from '../../components/OtpModel';
-import { useDialog } from '../../hooks/useDialog';
-import { useLogoStorage } from '../../hooks/useLogoStorage';
+import {useDialog} from '../../hooks/useDialog';
+import {useLogoStorage} from '../../hooks/useLogoStorage';
 import MasterService from '../../services/MasterService';
-import { useTheme } from '../../context/ThemeProvider';
+import {useTheme} from '../../context/ThemeProvider';
 import HeaderComponent from './components/HeaderComponent';
 import Roles from '../../constants/Roles';
 import Colors from '../../constants/Colors';
-import { useTranslation } from 'react-i18next';
+import {useTranslation} from 'react-i18next';
+import Toast from 'react-native-toast-message';
 
 type Props = NativeStackScreenProps<AuthStackParamList, 'OtpScreen'>;
 
-const OtpScreen: React.FC<Props> = ({ navigation, route }) => {
+const OtpScreen: React.FC<Props> = ({navigation, route}) => {
   const [isLoading, setIsLoading] = useState(false);
-  const { storeToken, login, storeUser, storePartnerZone } = useAuth();
+  const [isResendingOtp, setIsResendingOtp] = useState(false);
+  const {storeToken, login, storeUser, storePartnerZone} = useAuth();
   const [OTP, setOtp] = useState('');
-  const { email, logoUrl, location } = route.params;
-  const { showError, hideDialog } = useDialog();
-  const { updateTheme } = useTheme();
+  const {email, logoUrl, location} = route.params;
+  const {showError, hideDialog} = useDialog();
+  const {updateTheme} = useTheme();
   const {t} = useTranslation();
 
   // Partner info state
@@ -49,7 +51,7 @@ const OtpScreen: React.FC<Props> = ({ navigation, route }) => {
   }, [location]);
 
   // Use the enhanced hook
-  const { storeLogoData, extractLogoFromPartnerLocation } = useLogoStorage();
+  const {storeLogoData, extractLogoFromPartnerLocation} = useLogoStorage();
 
   const handleSubmit = useCallback(async () => {
     if (OTP.length !== 6) {
@@ -149,16 +151,44 @@ const OtpScreen: React.FC<Props> = ({ navigation, route }) => {
     storePartnerZone,
   ]);
 
+  const handleResendOtp = useCallback(async () => {
+    try {
+      setIsResendingOtp(true);
+
+      const response = await AuthService.otpVerification(
+        email,
+        undefined,
+        location && location.description
+          ? JSON.parse(location.description).domain
+          : undefined,
+      );
+
+      if (response.success) {
+        Toast.show({
+          type: 'success',
+          text1: t('auth.otp.resendSuccess', 'OTP sent successfully'),
+          visibilityTime: 3000,
+        });
+      } else {
+        showError(
+          response.message || t('auth.otp.resendError', 'Failed to resend OTP'),
+        );
+      }
+    } catch (error) {
+      showError(t('auth.otp.resendError', 'Failed to resend OTP'));
+    } finally {
+      setIsResendingOtp(false);
+    }
+  }, [email, location, showError, t]);
+
   return (
     <SafeAreaView style={styles.container}>
-      {
-        Platform.OS === 'android' && (
-          <HeaderComponent
-            title={t('auth.otp.title')}
-            onBackPress={navigation.goBack}
-          />
-        )
-      }
+      {Platform.OS === 'android' && (
+        <HeaderComponent
+          title={t('auth.otp.title')}
+          onBackPress={navigation.goBack}
+        />
+      )}
 
       <OtpModel
         value={OTP}
@@ -166,6 +196,8 @@ const OtpScreen: React.FC<Props> = ({ navigation, route }) => {
         onPress={handleSubmit}
         isLoading={isLoading}
         themeColor={partnerInfo.colorScheme?.primaryColor}
+        onResendOtp={handleResendOtp}
+        isResendingOtp={isResendingOtp}
       />
     </SafeAreaView>
   );

@@ -3,6 +3,7 @@ import GetIcon from '../../../../components/GetIcon';
 import {convertPaiseToRupees} from '../../../../utils/currency';
 import React from 'react';
 import {Plan} from '../../../../types/payment';
+import {useTranslation} from 'react-i18next';
 
 // Extract PlanItem as a separate memoized component
 const PlanItem = React.memo<{
@@ -12,6 +13,8 @@ const PlanItem = React.memo<{
   onDelete: (plan: Plan) => void;
   fadeAnim: Animated.Value;
 }>(({item, onEdit, onDelete, fadeAnim}) => {
+  const {t} = useTranslation();
+
   return (
     <Animated.View
       style={[
@@ -32,7 +35,7 @@ const PlanItem = React.memo<{
         <View style={styles.cardHeader}>
           <View style={styles.planBadge}>
             <Text style={styles.planBadgeText}>
-              {item.isTrial ? 'TRIAL' : 'PREMIUM'}
+              {item.isTrial ? t('billing.planItem.badge.trial', 'TRIAL') : t('billing.planItem.badge.premium', 'PREMIUM')}
             </Text>
           </View>
           <View style={styles.actionButtons}>
@@ -70,11 +73,11 @@ const PlanItem = React.memo<{
             <View style={styles.planFeatures}>
               <View style={styles.featureItem}>
                 <GetIcon iconName="user" size={16} color="#666" />
-                <Text style={styles.featureText}>{item.maxUsers} users</Text>
+                <Text style={styles.featureText}>{item.maxUsers} {t('billing.planItem.features.users', 'users')}</Text>
               </View>
               <View style={styles.featureItem}>
                 <GetIcon iconName="time" size={16} color="#666" />
-                <Text style={styles.featureText}>{item.durationDays} days</Text>
+                <Text style={styles.featureText}>{item.durationDays} {t('billing.planItem.features.days', 'days')}</Text>
               </View>
             </View>
           </View>
