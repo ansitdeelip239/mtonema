@@ -14,6 +14,7 @@ import {
   Animated,
   Modal,
 } from 'react-native';
+import {useTranslation} from 'react-i18next';
 import {MaterialTextInput} from '../../components/MaterialTextInput';
 import useForm from '../../hooks/useForm';
 import {z} from 'zod';
@@ -39,6 +40,7 @@ const {width} = Dimensions.get('window');
 type Props = NativeStackScreenProps<AuthStackParamList, 'SignUpScreen'>;
 
 const PartnerSignUpScreen: React.FC<Props> = ({navigation}) => {
+  const {t} = useTranslation();
   const [errors, setErrors] = useState<
     Partial<Record<keyof PartnerSignupFormType, string>>
   >({});
@@ -137,7 +139,7 @@ const PartnerSignUpScreen: React.FC<Props> = ({navigation}) => {
           // Check if this is a 409 conflict error
           if (apiError.message && apiError.message.includes('already exists')) {
             showError(
-              'You already have an account. Please try logging in with your email.',
+              t('auth.signUp.partner.errors.accountExists'),
             );
             navigation.navigate('EmailScreen', {
               role: [Roles.PARTNER],
@@ -148,7 +150,7 @@ const PartnerSignUpScreen: React.FC<Props> = ({navigation}) => {
 
           // For other API errors, show the error message from the API
           showError(
-            apiError.message || 'Please check your input and try again',
+            apiError.message || t('auth.signUp.partner.errors.checkInput'),
           );
           return;
         }
@@ -206,7 +208,7 @@ const PartnerSignUpScreen: React.FC<Props> = ({navigation}) => {
           });
           setErrors(newErrors);
         } else {
-          showError('Please check your input and try again');
+          showError(t('auth.signUp.partner.errors.generic'));
         }
       } finally {
         setIsLoading(false);
@@ -241,7 +243,7 @@ const PartnerSignUpScreen: React.FC<Props> = ({navigation}) => {
   return (
     <View style={styles.container}>
       {/* Replace header with HeaderComponent */}
-      <HeaderComponent title={'Sign Up'} onBackPress={navigation.goBack} />
+      <HeaderComponent title={t('auth.signUp.title')} onBackPress={navigation.goBack} />
 
       <KeyboardAvoidingView
         style={styles.keyboardAvoid}
@@ -273,7 +275,7 @@ const PartnerSignUpScreen: React.FC<Props> = ({navigation}) => {
             <View style={styles.formCard}>
               <View style={styles.welcomeSection}>
                 <Text style={styles.welcomeTitle}>
-                  Start working now, Sign up FREE
+                  {t('auth.signUp.partner.welcomeTitle')}
                 </Text>
                 {/* <Text style={styles.welcomeSubtitle}>
                   Please fill in your details to get started
@@ -282,24 +284,24 @@ const PartnerSignUpScreen: React.FC<Props> = ({navigation}) => {
 
               <View style={styles.formContainer}>
                 <MaterialTextInput<PartnerSignupFormType>
-                  label="Name*"
+                  label={t('auth.signUp.partner.nameLabel')}
                   field="name"
                   formInput={formInput}
                   setFormInput={handleFieldChange}
                   mode="outlined"
-                  placeholder="Enter your full name"
+                  placeholder={t('auth.signUp.partner.namePlaceholder')}
                   errorMessage={errors.name}
                 />
 
                 <View style={styles.inputSpacing} />
 
                 <MaterialTextInput<PartnerSignupFormType>
-                  label="Email*"
+                  label={t('auth.signUp.partner.emailLabel')}
                   field="email"
                   formInput={formInput}
                   setFormInput={handleFieldChange}
                   mode="outlined"
-                  placeholder="Enter your email"
+                  placeholder={t('auth.signUp.partner.emailPlaceholder')}
                   keyboardType="email-address"
                   autoCapitalize="none"
                   errorMessage={errors.email}
@@ -308,12 +310,12 @@ const PartnerSignUpScreen: React.FC<Props> = ({navigation}) => {
                 <View style={styles.inputSpacing} />
 
                 <MaterialTextInput<PartnerSignupFormType>
-                  label="Phone*"
+                  label={t('auth.signUp.partner.phoneLabel')}
                   field="phone"
                   formInput={formInput}
                   setFormInput={handleFieldChange}
                   mode="outlined"
-                  placeholder="Enter your phone number"
+                  placeholder={t('auth.signUp.partner.phonePlaceholder')}
                   keyboardType="number-pad"
                   maxLength={10}
                   errorMessage={errors.phone}
@@ -346,8 +348,8 @@ const PartnerSignUpScreen: React.FC<Props> = ({navigation}) => {
                           (isLoading || loading) && styles.disabledButtonText,
                         ]}>
                         {isLoading || loading
-                          ? 'Creating Account...'
-                          : 'Sign Up'}
+                          ? t('auth.signUp.partner.creatingAccount')
+                          : t('auth.signUp.partner.signUpButton')}
                       </Text>
                       {!isLoading && !loading && (
                         <GetIcon
@@ -364,7 +366,7 @@ const PartnerSignUpScreen: React.FC<Props> = ({navigation}) => {
 
             <View style={styles.footer}>
               <Text style={styles.footerText}>
-                Already have an account?{' '}
+                {t('auth.signUp.partner.alreadyHaveAccount')}{' '}
                 <Text
                   style={styles.loginText}
                   onPress={() =>
@@ -373,7 +375,7 @@ const PartnerSignUpScreen: React.FC<Props> = ({navigation}) => {
                       location: null,
                     })
                   }>
-                  Log In
+                  {t('auth.signUp.partner.logIn')}
                 </Text>
               </Text>
             </View>
@@ -390,15 +392,15 @@ const PartnerSignUpScreen: React.FC<Props> = ({navigation}) => {
         <View style={styles.modalOverlay}>
           <View style={styles.modalContainer}>
             <View style={styles.modalContent}>
-              <Text style={styles.modalTitle}>🎉 Welcome!</Text>
+              <Text style={styles.modalTitle}>{t('auth.signUp.partner.trialModal.title')}</Text>
               <Text style={styles.modalMessage}>
-                Welcome! Your trial account is ready—start using the app now.
+                {t('auth.signUp.partner.trialModal.message')}
               </Text>
               <TouchableOpacity
                 style={styles.modalButton}
                 onPress={handleTrialModalContinue}
                 activeOpacity={0.8}>
-                <Text style={styles.modalButtonText}>Continue</Text>
+                <Text style={styles.modalButtonText}>{t('auth.signUp.partner.trialModal.continue')}</Text>
               </TouchableOpacity>
             </View>
           </View>

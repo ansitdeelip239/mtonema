@@ -211,6 +211,33 @@
       "title": "Trocar Conta",
       "confirmMessage": "Tem certeza de que deseja sair e usar uma conta diferente?",
       "logout": "Sair"
+    },
+    "signUp": {
+      "title": "Cadastrar",
+      "partner": {
+        "welcomeTitle": "Comece a trabalhar agora, Cadastre-se GRÁTIS!",
+        "nameLabel": "Nome*",
+        "namePlaceholder": "Digite seu nome completo",
+        "emailLabel": "E-mail*",
+        "emailPlaceholder": "Digite seu e-mail",
+        "phoneLabel": "Telefone*",
+        "phonePlaceholder": "Digite seu número de telefone",
+        "zoneLabel": "Zona*:",
+        "signUpButton": "Cadastrar",
+        "creatingAccount": "Criando conta...",
+        "alreadyHaveAccount": "Já tem uma conta?",
+        "logIn": "Entrar",
+        "trialModal": {
+          "title": "🎉 Bem-vindo!",
+          "message": "Bem-vindo! Sua conta de teste está pronta—comece a usar o app agora.",
+          "continue": "Continuar"
+        },
+        "errors": {
+          "accountExists": "Você já tem uma conta. Por favor tente fazer login com seu e-mail.",
+          "checkInput": "Por favor verifique seus dados e tente novamente",
+          "generic": "Por favor verifique seus dados e tente novamente"
+        }
+      }
     }
   },
   "followUp": {

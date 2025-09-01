@@ -211,6 +211,33 @@
       "title": "Switch Account",
       "confirmMessage": "Are you sure you want to logout and use a different account?",
       "logout": "Logout"
+    },
+    "signUp": {
+      "title": "Sign Up",
+      "partner": {
+        "welcomeTitle": "Start working now, Sign up FREE",
+        "nameLabel": "Name*",
+        "namePlaceholder": "Enter your full name",
+        "emailLabel": "Email*",
+        "emailPlaceholder": "Enter your email",
+        "phoneLabel": "Phone*",
+        "phonePlaceholder": "Enter your phone number",
+        "zoneLabel": "Zone*:",
+        "signUpButton": "Sign Up",
+        "creatingAccount": "Creating Account...",
+        "alreadyHaveAccount": "Already have an account?",
+        "logIn": "Log In",
+        "trialModal": {
+          "title": "🎉 Welcome!",
+          "message": "Welcome! Your trial account is ready—start using the app now.",
+          "continue": "Continue"
+        },
+        "errors": {
+          "accountExists": "You already have an account. Please try logging in with your email.",
+          "checkInput": "Please check your input and try again",
+          "generic": "Please check your input and try again"
+        }
+      }
     }
   },
   "followUp": {

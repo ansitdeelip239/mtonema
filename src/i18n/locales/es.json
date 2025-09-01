@@ -211,6 +211,33 @@
       "title": "Cambiar Cuenta",
       "confirmMessage": "¿Estás seguro de que quieres cerrar sesión y usar una cuenta diferente?",
       "logout": "Cerrar Sesión"
+    },
+    "signUp": {
+      "title": "Registrarse",
+      "partner": {
+        "welcomeTitle": "¡Comienza a trabajar ahora, Regístrate GRATIS!",
+        "nameLabel": "Nombre*",
+        "namePlaceholder": "Ingresa tu nombre completo",
+        "emailLabel": "Correo*",
+        "emailPlaceholder": "Ingresa tu correo",
+        "phoneLabel": "Teléfono*",
+        "phonePlaceholder": "Ingresa tu número de teléfono",
+        "zoneLabel": "Zona*:",
+        "signUpButton": "Registrarse",
+        "creatingAccount": "Creando cuenta...",
+        "alreadyHaveAccount": "¿Ya tienes una cuenta?",
+        "logIn": "Iniciar Sesión",
+        "trialModal": {
+          "title": "🎉 ¡Bienvenido!",
+          "message": "¡Bienvenido! Tu cuenta de prueba está lista—comienza a usar la app ahora.",
+          "continue": "Continuar"
+        },
+        "errors": {
+          "accountExists": "Ya tienes una cuenta. Por favor intenta iniciar sesión con tu correo.",
+          "checkInput": "Por favor verifica tus datos e intenta de nuevo",
+          "generic": "Por favor verifica tus datos e intenta de nuevo"
+        }
+      }
     }
   },
   "followUp": {
