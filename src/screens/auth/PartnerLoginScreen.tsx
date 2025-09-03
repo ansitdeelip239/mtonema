@@ -90,7 +90,7 @@ const PartnerLoginScreen: React.FC<Props> = ({navigation}) => {
           <TouchableOpacity
             style={styles.freeLink}
             onPress={() =>
-              navigation.navigate('SignUpScreen', {role: Roles.PARTNER})
+              navigation.navigate('PartnerSignUpScreen', {role: Roles.PARTNER})
             }
             activeOpacity={0.6}>
             <Text style={styles.freeLinkText}>

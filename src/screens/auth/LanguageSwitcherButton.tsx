@@ -1,7 +1,7 @@
 import React, {useState, useCallback, useMemo} from 'react';
 import {TouchableOpacity, Text, StyleSheet, View} from 'react-native';
 import {useTranslation} from 'react-i18next';
-import { getCurrentLanguage, getSupportedLanguages } from '../../i18n';
+import { getSupportedLanguages } from '../../i18n';
 import { SupportedLanguage } from '../../i18n/types';
 import LanguageSelector from '../../components/LanguageSelector';
 
@@ -15,12 +15,12 @@ const LanguageSwitcherButton: React.FC<LanguageSwitcherButtonProps> = ({
   textColor = '#007AFF',
 }) => {
   // ✅ Call ALL hooks at the top level, in the same order every time
-  const {t} = useTranslation();
+  const {t, i18n} = useTranslation();
   const [showLanguageSelector, setShowLanguageSelector] =
     useState<boolean>(false);
 
-  // ✅ Use useMemo to prevent recalculation and ensure stable values
-  const currentLanguage = useMemo(() => getCurrentLanguage(), []);
+  // ✅ Get current language from i18n instance (this will trigger re-renders when language changes)
+  const currentLanguage = i18n.language;
   const supportedLanguages = useMemo(() => getSupportedLanguages() || [], []); // ✅ Fallback to empty array
 
   // ✅ Use useMemo for finding current language info

@@ -72,13 +72,21 @@ const MainNavigator = () => {
   return (
     <>
       {user?.role === Roles.BUYER ? (
-        <BuyerProvider>
-          <BuyerNavigator />
-        </BuyerProvider>
+        <SubscriptionProvider>
+          <BottomTabProvider>
+            <BuyerProvider>
+              <BuyerNavigator />
+            </BuyerProvider>
+          </BottomTabProvider>
+        </SubscriptionProvider>
       ) : user?.role === Roles.SELLER ? (
-        <PropertyFormProvider>
-          <SellerNavigator />
-        </PropertyFormProvider>
+        <SubscriptionProvider>
+          <BottomTabProvider>
+            <PropertyFormProvider>
+              <SellerNavigator />
+            </PropertyFormProvider>
+          </BottomTabProvider>
+        </SubscriptionProvider>
       ) : user?.role === Roles.PARTNER ||
         user?.role === Roles.TEAM ||
         isAuthorizedAdmin ? (

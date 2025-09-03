@@ -228,6 +228,19 @@
           "generic": "कृपया अपना इनपुट जांचें और पुनः प्रयास करें"
         }
       }
+    },
+    "mainScreen": {
+      "headerTitle": "MT One",
+      "alreadyHaveAccount": "पहले से खाता है?",
+      "logIn": "लॉग इन",
+      "newHere": "नया है? खाता बनाएं!",
+      "signUpAsBuyer": "खरीदार के रूप में साइन अप करें",
+      "wantToListProperty": "अपनी संपत्ति सूचीबद्ध करना चाहते हैं?",
+      "signUpAsSeller": "विक्रेता के रूप में साइन अप करें",
+      "buyerSellerTab": "खरीदार/विक्रेता",
+      "partnerTab": "पार्टनर",
+      "partnerLogin": "पार्टनर के रूप में लॉग इन करें",
+      "partnerSignup": "पार्टनर के रूप में साइन अप करें"
     }
   },
   "followUp": {

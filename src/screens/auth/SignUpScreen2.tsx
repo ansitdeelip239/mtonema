@@ -222,6 +222,7 @@ const SignUpScreen: React.FC<Props> = ({navigation, route}) => {
       {/* Replace header with HeaderComponent */}
       <HeaderComponent
         title={`Sign Up as ${route.params.role}`}
+        showBackButton={true}
         onBackPress={navigation.goBack}
       />
 

@@ -37,7 +37,7 @@ import PartnerSignUpFormSchema, {
 } from '../../schema/PartnerSignUpFormSchema';
 
 const {width} = Dimensions.get('window');
-type Props = NativeStackScreenProps<AuthStackParamList, 'SignUpScreen'>;
+type Props = NativeStackScreenProps<AuthStackParamList, 'PartnerSignUpScreen'>;
 
 const PartnerSignUpScreen: React.FC<Props> = ({navigation}) => {
   const {t} = useTranslation();
@@ -138,9 +138,7 @@ const PartnerSignUpScreen: React.FC<Props> = ({navigation}) => {
 
           // Check if this is a 409 conflict error
           if (apiError.message && apiError.message.includes('already exists')) {
-            showError(
-              t('auth.signUp.partner.errors.accountExists'),
-            );
+            showError(t('auth.signUp.partner.errors.accountExists'));
             navigation.navigate('EmailScreen', {
               role: [Roles.PARTNER],
               location: null,
@@ -243,7 +241,11 @@ const PartnerSignUpScreen: React.FC<Props> = ({navigation}) => {
   return (
     <View style={styles.container}>
       {/* Replace header with HeaderComponent */}
-      <HeaderComponent title={t('auth.signUp.title')} onBackPress={navigation.goBack} />
+      <HeaderComponent
+        title={t('auth.signUp.title')}
+        onBackPress={navigation.goBack}
+        showBackButton={true}
+      />
 
       <KeyboardAvoidingView
         style={styles.keyboardAvoid}
@@ -392,7 +394,9 @@ const PartnerSignUpScreen: React.FC<Props> = ({navigation}) => {
         <View style={styles.modalOverlay}>
           <View style={styles.modalContainer}>
             <View style={styles.modalContent}>
-              <Text style={styles.modalTitle}>{t('auth.signUp.partner.trialModal.title')}</Text>
+              <Text style={styles.modalTitle}>
+                {t('auth.signUp.partner.trialModal.title')}
+              </Text>
               <Text style={styles.modalMessage}>
                 {t('auth.signUp.partner.trialModal.message')}
               </Text>
@@ -400,7 +404,9 @@ const PartnerSignUpScreen: React.FC<Props> = ({navigation}) => {
                 style={styles.modalButton}
                 onPress={handleTrialModalContinue}
                 activeOpacity={0.8}>
-                <Text style={styles.modalButtonText}>{t('auth.signUp.partner.trialModal.continue')}</Text>
+                <Text style={styles.modalButtonText}>
+                  {t('auth.signUp.partner.trialModal.continue')}
+                </Text>
               </TouchableOpacity>
             </View>
           </View>

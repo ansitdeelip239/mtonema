@@ -238,6 +238,19 @@
           "generic": "Please check your input and try again"
         }
       }
+    },
+    "mainScreen": {
+      "headerTitle": "MT One",
+      "alreadyHaveAccount": "Already have an account?",
+      "logIn": "Log In",
+      "newHere": "New here? Create an account!",
+      "signUpAsBuyer": "Sign Up as Buyer",
+      "wantToListProperty": "Want to list your property?",
+      "signUpAsSeller": "Sign Up as Seller",
+      "buyerSellerTab": "Buyer/Seller",
+      "partnerTab": "Partner",
+      "partnerLogin": "Log In as Partner",
+      "partnerSignup": "Sign Up as Partner"
     }
   },
   "followUp": {

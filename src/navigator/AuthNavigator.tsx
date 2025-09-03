@@ -9,6 +9,7 @@ import { MasterDetailModel } from '../types';
 import PartnerLoginScreen from '../screens/auth/PartnerLoginScreen';
 import { Platform } from 'react-native';
 import PartnerSignUpScreen from '../screens/auth/PartnerSignUpScreen';
+import SignUpScreen from '../screens/auth/SignUpScreen2';
 // import UserTypeSelectionScreen from '../screens/auth/UserTypeSelectionScreen';
 // import AsyncStorage from '@react-native-async-storage/async-storage';
 // import storageKeys from '../constants/storageKeys';
@@ -22,6 +23,7 @@ export type AuthStackParamList = {
   PartnerLoginScreen: undefined;
   PartnerZoneScreen: undefined;
   SignUpScreen: { role: string };
+  PartnerSignUpScreen: { role: string };
   MainScreen: undefined;
   // ChangePasswordScreen: undefined;
   PasswordScreen: { email: string };
@@ -84,7 +86,7 @@ export default function AuthNavigator() {
         headerShown: isIOS,
         headerTitleStyle: { color: 'black' },
       }}
-      initialRouteName="PartnerLoginScreen"
+      initialRouteName="MainScreen"
     >
       {/* <Stack.Screen
       name="UserTypeSelectionScreen"
@@ -123,6 +125,13 @@ export default function AuthNavigator() {
       />
       <Stack.Screen
         name="SignUpScreen"
+        component={SignUpScreen}
+        options={{
+          title: isIOS ? 'Sign Up' : '',
+        }}
+      />
+      <Stack.Screen
+        name="PartnerSignUpScreen"
         component={PartnerSignUpScreen}
         options={{
           title: isIOS ? 'Sign Up' : '',

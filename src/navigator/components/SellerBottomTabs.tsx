@@ -8,21 +8,22 @@ import PropertyListScreen from '../../screens/seller/PropertyListScreen';
 // import PropertyListingForm from '../../screens/seller/PostProperty';
 import SellerProfileScreen from '../../screens/seller/SellerProfileScreen';
 import PostPropertyForm from '../../screens/seller/PostProperty/PostPropertyForm';
-import SellerHomeScreen from '../../screens/seller/SellerHomeScreen';
 import {useAuth} from '../../hooks/useAuth';
 import {CustomBottomBar, TabScreen} from './CustomBottomBar';
+import SellerDashboard from '../../screens/seller/SellerDashboard';
+import SellerContactScreen from '../../screens/seller/SellerContactScreen';
 
 const Tab = createBottomTabNavigator<SellerBottomTabParamList>();
 
 const tabScreens: Array<TabScreen<SellerBottomTabParamList>> = [
   {
     name: 'Home',
-    component: PropertyListScreen,
+    component: SellerDashboard,
     icon: 'home',
   },
   {
     name: 'Property',
-    component: SellerHomeScreen,
+    component: PropertyListScreen,
     icon: 'realEstate',
   },
   {
@@ -31,8 +32,8 @@ const tabScreens: Array<TabScreen<SellerBottomTabParamList>> = [
     icon: 'property',
   },
   {
-    name: 'Clients',
-    component: SellerHomeScreen,
+    name: 'Contact',
+    component: SellerContactScreen,
     icon: 'client',
   },
   {

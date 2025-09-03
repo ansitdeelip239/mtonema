@@ -238,6 +238,19 @@
           "generic": "يرجى التحقق من بياناتك وحاول مرة أخرى"
         }
       }
+    },
+    "mainScreen": {
+      "headerTitle": "MT One",
+      "alreadyHaveAccount": "لديك حساب بالفعل؟",
+      "logIn": "تسجيل الدخول",
+      "newHere": "جديد هنا؟ أنشئ حساباً!",
+      "signUpAsBuyer": "إنشاء حساب كمشتري",
+      "wantToListProperty": "تريد إدراج عقارك؟",
+      "signUpAsSeller": "إنشاء حساب كبائع",
+      "buyerSellerTab": "المشتري/البائع",
+      "partnerTab": "الشريك",
+      "partnerLogin": "تسجيل الدخول كشريك",
+      "partnerSignup": "إنشاء حساب كشريك"
     }
   },
   "followUp": {

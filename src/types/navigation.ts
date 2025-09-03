@@ -40,7 +40,7 @@ export type SellerBottomTabParamList = {
   Home: undefined;
   Property: undefined;
   AddProperty: undefined;
-  Clients: undefined;
+  Contact: undefined;
   Profile: undefined;
 };
 

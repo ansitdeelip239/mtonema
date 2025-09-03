@@ -238,6 +238,19 @@
           "generic": "Por favor verifique seus dados e tente novamente"
         }
       }
+    },
+    "mainScreen": {
+      "headerTitle": "MT One",
+      "alreadyHaveAccount": "Já tem uma conta?",
+      "logIn": "Entrar",
+      "newHere": "Novo aqui? Crie uma conta!",
+      "signUpAsBuyer": "Cadastrar como Comprador",
+      "wantToListProperty": "Quer listar sua propriedade?",
+      "signUpAsSeller": "Cadastrar como Vendedor",
+      "buyerSellerTab": "Comprador/Vendedor",
+      "partnerTab": "Parceiro",
+      "partnerLogin": "Entrar como Parceiro",
+      "partnerSignup": "Cadastrar como Parceiro"
     }
   },
   "followUp": {
