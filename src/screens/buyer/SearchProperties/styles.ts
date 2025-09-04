@@ -148,4 +148,24 @@ export const searchPropertiesStyles = StyleSheet.create({
     color: '#666',
     textAlign: 'center',
   },
+  listContainer: {
+    paddingHorizontal: 20,
+  },
+  separator: {
+    height: 15,
+  },
+  propertyCardContainer: {
+    paddingHorizontal: 16,
+  },
+  loadingFooter: {
+    paddingVertical: 60,
+    paddingBottom: 100,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  loadingMoreText: {
+    marginTop: 8,
+    fontSize: 14,
+    color: '#666',
+  },
 });

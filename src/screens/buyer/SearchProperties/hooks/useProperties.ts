@@ -1,47 +1,87 @@
-import {useApiQuery} from '../../../../hooks/useApi';
-import {queryKeys} from '../../../../utils/queryKeys';
 import BuyerService from '../../../../services/BuyerService';
 import {PropertySearchParams} from '../../../../types';
 
 /**
- * React Query hook for searching properties
+ * Function for searching properties
  * @param params - Search parameters for properties
- * @returns Query result with properties data
+ * @returns Promise with properties data
  */
-export const useSearchProperties = (params: PropertySearchParams = {}) => {
-  return useApiQuery(
-    queryKeys.properties.list({
-      page: params.page,
-      limit: params.pageSize,
-      search: params.location || '',
-      category: params.propertyType || '',
-      status: params.propertyFor || '',
-    }),
-    () => BuyerService.searchProperties(params).then(response => response.data),
-    {
-      staleTime: 1000 * 60 * 5, // 5 minutes for search results
-      retry: 3,
-      enabled: true, // Always enabled for search
+export const searchProperties = async (params: PropertySearchParams = {}) => {
+  try {
+    const response = await BuyerService.searchProperties(params);
+
+    // Ensure we always return a valid data structure
+    if (!response || !response.data) {
+      console.warn('API response is empty or invalid:', response);
+      return {
+        properties: [],
+        total: 0,
+        pagination: {
+          currentPage: params.page || 1,
+          totalPages: 1,
+          totalCount: 0,
+          pageSize: params.pageSize || 12,
+          hasNextPage: false,
+          hasPreviousPage: false,
+          firstPage: 1,
+          nextPage: 1,
+          lastPage: 1,
+        },
+      };
     }
-  );
+
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching properties:', error);
+    // Return empty data structure instead of throwing
+    return {
+      properties: [],
+      total: 0,
+      pagination: {
+        currentPage: params.page || 1,
+        totalPages: 1,
+        totalCount: 0,
+        pageSize: params.pageSize || 12,
+        hasNextPage: false,
+        hasPreviousPage: false,
+        firstPage: 1,
+        nextPage: 1,
+        lastPage: 1,
+      },
+    };
+  }
 };
 
 /**
- * React Query hook for fetching recommended properties
+ * Function for fetching recommended properties
  * @param pageNumber - Page number for pagination
  * @param pageSize - Number of items per page
- * @returns Query result with recommended properties data
+ * @returns Promise with recommended properties data
  */
-export const useRecommendedProperties = (pageNumber: number, pageSize: number) => {
-  return useApiQuery(
-    queryKeys.properties.list({
-      page: pageNumber,
-      limit: pageSize,
-    }),
-    () => BuyerService.RecommendedProperty(pageNumber, pageSize).then(response => response.data),
-    {
-      staleTime: 1000 * 60 * 10, // 10 minutes for recommended properties
-      retry: 2,
-    }
-  );
+export const getRecommendedProperties = async (
+  pageNumber: number,
+  pageSize: number,
+) => {
+  try {
+    const response = await BuyerService.RecommendedProperty(pageNumber, pageSize);
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching recommended properties:', error);
+    // Return empty data structure instead of throwing
+    return {
+      properties: [],
+      total: 0,
+      pagination: {
+        currentPage: pageNumber,
+        totalPages: 1,
+        totalCount: 0,
+        pageSize: pageSize,
+        hasNextPage: false,
+        hasPreviousPage: false,
+        firstPage: 1,
+        nextPage: 1,
+        lastPage: 1,
+      },
+    };
+  }
 };

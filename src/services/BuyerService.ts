@@ -34,14 +34,14 @@ class BuyerService {
       if (params.sortBy) {
         queryParams.append('sortBy', params.sortBy);
       }
-      if (params.propertyType) {
-        queryParams.append('propertyType', params.propertyType);
+      if (params.propertyTypes) {
+        queryParams.append('propertyType', params.propertyTypes);
       }
-      if (params.minPrice) {
-        queryParams.append('minPrice', params.minPrice.toString());
+      if (params.minAmount) {
+        queryParams.append('minPrice', params.minAmount.toString());
       }
-      if (params.maxPrice) {
-        queryParams.append('maxPrice', params.maxPrice.toString());
+      if (params.maxAmount) {
+        queryParams.append('maxPrice', params.maxAmount.toString());
       }
       if (params.bhkType) {
         queryParams.append('bhkType', params.bhkType);
@@ -49,11 +49,18 @@ class BuyerService {
       if (params.city) {
         queryParams.append('city', params.city);
       }
+      if (params.searchFilter) {
+        queryParams.append('searchFilter', params.searchFilter);
+      }
 
       const queryString = queryParams.toString();
-      const endpoint = queryString ? `${url.property.search}?${queryString}` : url.property.search;
+      const endpoint = queryString
+        ? `${url.property.search}?${queryString}`
+        : url.property.search;
 
       const response = await api.get<PropertySearchResponse>(endpoint);
+      console.log(response);
+
       return response;
     } catch (error) {
       console.error('Error in searchProperties', error);
@@ -70,8 +77,7 @@ class BuyerService {
       console.log('Error in getplaces', error);
     }
   }
-  static async deleteProperty(id:number)
-  {
+  static async deleteProperty(id: number) {
     try {
       const response = await api.get<any>(
         `${url.seller.property.delete}?id=${id}`,
@@ -83,7 +89,7 @@ class BuyerService {
   }
   static async filterProperties(filterCriteria: {
     Address?: string;
-    place:string[];
+    place: string[];
     City: string;
     Price?: string;
     PropertyType?: string;
@@ -99,7 +105,10 @@ class BuyerService {
     Relevance?: string;
   }) {
     try {
-      const response = await api.post<any>(url.property.filterSearch, filterCriteria);
+      const response = await api.post<any>(
+        url.property.filterSearch,
+        filterCriteria,
+      );
       return response;
     } catch (error) {
       console.error('Error in filterProperties', error);

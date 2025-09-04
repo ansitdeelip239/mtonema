@@ -1,4 +1,4 @@
-import {useQuery, useMutation, useQueryClient, UseQueryOptions, UseMutationOptions} from '@tanstack/react-query';
+import React from 'react';
 import {Response} from '../types';
 
 // Use existing Response type from your API setup
@@ -11,66 +11,99 @@ export interface ApiError {
   code?: string;
 }
 
-// Custom hook for GET requests
-export function useApiQuery<T = any>(
-  key: string[],
-  apiCall: () => Promise<T>,
-  options?: Omit<UseQueryOptions<T, ApiError>, 'queryKey' | 'queryFn'>
-) {
-  return useQuery({
-    queryKey: key,
-    queryFn: apiCall,
-    ...options,
-  });
+// Simple utility function for making API calls
+export async function makeApiCall<T = any>(
+  apiCall: () => Promise<T>
+): Promise<{ data: T | null; error: ApiError | null; isLoading: boolean }> {
+  try {
+    const data = await apiCall();
+    return { data, error: null, isLoading: false };
+  } catch (error: any) {
+    const apiError: ApiError = {
+      message: error.message || 'An error occurred',
+      status: error.status || error.response?.status,
+      code: error.code,
+    };
+    return { data: null, error: apiError, isLoading: false };
+  }
 }
 
-// Custom hook for POST/PUT/DELETE mutations
+// Simple hook for API calls with loading state
+export function useApiCall<T = any>(
+  apiCall: () => Promise<T>
+) {
+  const [data, setData] = React.useState<T | null>(null);
+  const [error, setError] = React.useState<ApiError | null>(null);
+  const [isLoading, setIsLoading] = React.useState(false);
+
+  const execute = React.useCallback(async () => {
+    setIsLoading(true);
+    setError(null);
+
+    try {
+      const result = await apiCall();
+      setData(result);
+      return result;
+    } catch (err: any) {
+      const apiError: ApiError = {
+        message: err.message || 'An error occurred',
+        status: err.status || err.response?.status,
+        code: err.code,
+      };
+      setError(apiError);
+      throw apiError;
+    } finally {
+      setIsLoading(false);
+    }
+  }, [apiCall]);
+
+  return {
+    data,
+    error,
+    isLoading,
+    execute,
+    refetch: execute,
+  };
+}
+
+// Simple mutation hook replacement
 export function useApiMutation<TData = any, TVariables = any>(
-  mutationFn: (variables: TVariables) => Promise<TData>,
-  options?: UseMutationOptions<TData, ApiError, TVariables>
+  mutationFn: (variables: TVariables) => Promise<TData>
 ) {
-  return useMutation({
-    mutationFn,
-    ...options,
-  });
-}
+  const [isLoading, setIsLoading] = React.useState(false);
+  const [error, setError] = React.useState<ApiError | null>(null);
+  const [data, setData] = React.useState<TData | null>(null);
 
-// Hook to invalidate queries
-export function useInvalidateQueries() {
-  const queryClient = useQueryClient();
+  const mutate = React.useCallback(async (variables: TVariables) => {
+    setIsLoading(true);
+    setError(null);
 
-  return (queryKey: string[]) => {
-    queryClient.invalidateQueries({queryKey});
-  };
-}
+    try {
+      const result = await mutationFn(variables);
+      setData(result);
+      return result;
+    } catch (err: any) {
+      const apiError: ApiError = {
+        message: err.message || 'An error occurred',
+        status: err.status || err.response?.status,
+        code: err.code,
+      };
+      setError(apiError);
+      throw apiError;
+    } finally {
+      setIsLoading(false);
+    }
+  }, [mutationFn]);
 
-// Hook to prefetch data
-export function usePrefetchQuery() {
-  const queryClient = useQueryClient();
-
-  return <T = any>(key: string[], apiCall: () => Promise<T>) => {
-    queryClient.prefetchQuery({
-      queryKey: key,
-      queryFn: apiCall,
-      staleTime: 1000 * 60 * 5, // 5 minutes
-    });
-  };
-}
-
-// Hook to manually set query data
-export function useSetQueryData() {
-  const queryClient = useQueryClient();
-
-  return <T = any>(key: string[], data: T) => {
-    queryClient.setQueryData(key, data);
-  };
-}
-
-// Hook to get query data
-export function useGetQueryData() {
-  const queryClient = useQueryClient();
-
-  return <T = any>(key: string[]): T | undefined => {
-    return queryClient.getQueryData(key);
+  return {
+    mutate,
+    data,
+    error,
+    isLoading,
+    reset: () => {
+      setData(null);
+      setError(null);
+      setIsLoading(false);
+    },
   };
 }

@@ -13,7 +13,6 @@ import {DialogProvider} from './src/context/DialogProvider';
 import {MasterProvider} from './src/context/MasterProvider';
 import {ThemeProvider} from './src/context/ThemeProvider';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-import { QueryProvider } from './src/providers/QueryProvider';
 
 const App = () => {
   useEffect(() => {
@@ -55,22 +54,20 @@ const App = () => {
 
   return (
     <SafeAreaProvider>
-      <QueryProvider>
-        <PaperProvider>
-          <ThemeProvider>
-            <LanguageProvider>
-              <DialogProvider>
-                <MasterProvider>
-                  <AuthProvider>
-                    <RootNavigator />
-                    <Toast />
-                  </AuthProvider>
-                </MasterProvider>
-              </DialogProvider>
-            </LanguageProvider>
-          </ThemeProvider>
-        </PaperProvider>
-      </QueryProvider>
+      <PaperProvider>
+        <ThemeProvider>
+          <LanguageProvider>
+            <DialogProvider>
+              <MasterProvider>
+                <AuthProvider>
+                  <RootNavigator />
+                  <Toast />
+                </AuthProvider>
+              </MasterProvider>
+            </DialogProvider>
+          </LanguageProvider>
+        </ThemeProvider>
+      </PaperProvider>
     </SafeAreaProvider>
   );
 };

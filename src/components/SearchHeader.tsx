@@ -65,7 +65,7 @@ const SearchHeader = ({
 const styles = StyleSheet.create({
   container: {
     paddingHorizontal: 10,
-    paddingBottom: 10,
+    paddingVertical: 10,
     backgroundColor: 'transparent',
     width: '100%',
   },

@@ -1,4 +1,4 @@
-import { PropertyForTypes } from '../constants/MasterDetails';
+import { PropertyForTypes, SortByTypes } from '../constants/MasterDetails';
 import {ImageType} from './propertyform';
 
 export interface AuthContextType {
@@ -544,10 +544,16 @@ export interface PropertySearchParams {
   pageSize?: number;
   propertyFor?: PropertyForTypes[keyof PropertyForTypes];
   location?: string;
-  sortBy?: 'Newest' | 'Oldest' | 'PriceLow' | 'PriceHigh' | 'Relevance';
-  propertyType?: string;
-  minPrice?: number;
-  maxPrice?: number;
+  sortBy?: SortByTypes[keyof SortByTypes];
+  propertyTypes?: string;
+  furnishing?: string;
+  minAmount?: number;
+  maxAmount?: number;
   bhkType?: string;
   city?: string;
+  isFeatured?: boolean;
+  readyToMove?: boolean;
+  searchFilter?: string;
+  status?: string;
+  sourceWebsite?: string;
 }

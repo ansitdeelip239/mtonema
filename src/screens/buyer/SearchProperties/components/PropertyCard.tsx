@@ -154,7 +154,7 @@ const styles = {
     textTransform: 'uppercase' as const,
   },
   propertyTypeBadgeSale: {
-    backgroundColor: Colors.primary, // Using the app's primary pink color
+    backgroundColor: '#43a809ff', // Using the app's primary pink color
   },
   propertyTypeBadgeRent: {
     backgroundColor: Colors.MT_PRIMARY_2, // Using the same warm color as selected chips
