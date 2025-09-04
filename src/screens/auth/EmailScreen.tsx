@@ -25,7 +25,6 @@ import {useKeyboard} from '../../hooks/useKeyboard';
 import Roles from '../../constants/Roles';
 import Images from '../../constants/Images';
 import HeaderComponent from './components/HeaderComponent';
-import config from '../../config';
 import {lightenColor} from '../../utils/colorUtils';
 import { useTranslation } from 'react-i18next';
 
@@ -172,13 +171,13 @@ const EmailScreen: React.FC<Props> = ({navigation, route}) => {
     }
   }, [keyboardVisible, logoHeight, logoOpacity]);
 
-  const handleOtpVerification2 = useCallback(async () => {
-    navigation.navigate('OtpScreen', {
-      email: formInput.email,
-      logoUrl: partnerInfo.imageUrl,
-      ...(location ? {location} : {}),
-    });
-  }, [formInput.email, location, navigation, partnerInfo.imageUrl]);
+  // const handleOtpVerification2 = useCallback(async () => {
+  //   navigation.navigate('OtpScreen', {
+  //     email: formInput.email,
+  //     logoUrl: partnerInfo.imageUrl,
+  //     ...(location ? {location} : {}),
+  //   });
+  // }, [formInput.email, location, navigation, partnerInfo.imageUrl]);
 
   const handleOtpVerification = useCallback(
     async (skipEmailCheck = false) => {
@@ -239,12 +238,14 @@ const EmailScreen: React.FC<Props> = ({navigation, route}) => {
   );
 
   const handleContinue = useCallback(() => {
-    if (config.environment === 'development') {
-      handleOtpVerification2();
-    } else {
-      handleOtpVerification();
-    }
-  }, [handleOtpVerification, handleOtpVerification2]);
+    //Bypass otp sending in development mode
+    // if (config.environment === 'development') {
+    //   handleOtpVerification2();
+    // } else {
+    //   handleOtpVerification();
+    // }
+    handleOtpVerification();
+  }, [handleOtpVerification]);
 
   const handleVerifyNow = useCallback(() => {
     handleOtpVerification(true);

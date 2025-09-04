@@ -3,9 +3,10 @@ import React, {memo} from 'react';
 import Colors from '../constants/Colors';
 import CustomDrawerContent from '../components/CustomDrawerContent';
 import ProfileScreen from '../screens/common/ProfileScreen';
-import SellerbottomTabs from './components/SellerBottomTabs';
 import GetIcon from '../components/GetIcon';
 import {StyleSheet, TouchableOpacity} from 'react-native';
+import SellerBottomTabs from './components/SellerBottomTabs';
+
 const Drawer = createDrawerNavigator();
 
 const SellerNavigator = memo(() => {
@@ -13,7 +14,7 @@ const SellerNavigator = memo(() => {
     <Drawer.Navigator
       // eslint-disable-next-line react/no-unstable-nested-components
       drawerContent={props => <CustomDrawerContent {...props} />}
-      initialRouteName="Home."
+      initialRouteName="Home"
       screenOptions={{
         drawerType: 'front',
         drawerActiveTintColor: 'white',
@@ -27,8 +28,8 @@ const SellerNavigator = memo(() => {
         headerTintColor: Colors.SECONDARY_3,
       }}>
       <Drawer.Screen
-        name="Home."
-        component={SellerbottomTabs}
+        name="Home"
+        component={SellerBottomTabs}
         options={{
           headerShown: false,
           // eslint-disable-next-line react/no-unstable-nested-components

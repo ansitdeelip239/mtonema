@@ -2,38 +2,37 @@ import React, {memo} from 'react';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import GetIcon from '../../components/GetIcon';
 import Colors from '../../constants/Colors';
-import {SellerBottomTabParamList} from '../../types/navigation';
-import PropertyListScreen from '../../screens/seller/PropertyListScreen';
+import {BuyerBottomTabParamList} from '../../types/navigation';
 // import PostProperty from '../../screens/seller/PostPropertyScreen';
 // import PropertyListingForm from '../../screens/seller/PostProperty';
 import SellerProfileScreen from '../../screens/seller/SellerProfileScreen';
-import PostPropertyForm from '../../screens/seller/PostProperty/PostPropertyForm';
-import {useAuth} from '../../hooks/useAuth';
 import {CustomBottomBar, TabScreen} from './CustomBottomBar';
-import SellerDashboard from '../../screens/seller/SellerDashboard';
-import SellerContactScreen from '../../screens/seller/SellerContactScreen';
+import BuyerDashboard from '../../screens/buyer/BuyerDashboard';
+import ContactedProperties from '../../screens/buyer/ContactedPropertiesScreen';
+import SearchPropertiesScreen from '../../screens/buyer/SearchPropertiesScreen';
+import ContactUsScreen from '../../screens/buyer/ContactUsScreen';
 
-const Tab = createBottomTabNavigator<SellerBottomTabParamList>();
+const Tab = createBottomTabNavigator<BuyerBottomTabParamList>();
 
-const tabScreens: Array<TabScreen<SellerBottomTabParamList>> = [
+const tabScreens: Array<TabScreen<BuyerBottomTabParamList>> = [
   {
     name: 'Home',
-    component: SellerDashboard,
+    component: BuyerDashboard,
     icon: 'home',
   },
   {
-    name: 'Property',
-    component: PropertyListScreen,
+    name: 'Contacted',
+    component: ContactedProperties,
     icon: 'realEstate',
   },
   {
-    name: 'AddProperty',
-    component: PostPropertyForm,
-    icon: 'property',
+    name: 'Search Property',
+    component: SearchPropertiesScreen,
+    icon: 'search',
   },
   {
-    name: 'Contact',
-    component: SellerContactScreen,
+    name: 'Contact Us',
+    component: ContactUsScreen,
     icon: 'client',
   },
   {
@@ -43,15 +42,14 @@ const tabScreens: Array<TabScreen<SellerBottomTabParamList>> = [
   },
 ] as const;
 
-const SellerBottomTabs = memo(() => {
-  const {navigateToPostProperty} = useAuth();
+const BuyerBottomTabs = memo(() => {
   return (
     <Tab.Navigator
       screenOptions={{
         headerShown: false,
         tabBarHideOnKeyboard: true,
       }}
-      initialRouteName={navigateToPostProperty ? 'AddProperty' : 'Home'}
+      initialRouteName={'Home'}
       // eslint-disable-next-line react/no-unstable-nested-components
       tabBar={props => <CustomBottomBar {...props} tabScreens={tabScreens} />}>
       {tabScreens.map(({name, component, icon}) => (
@@ -72,4 +70,4 @@ const SellerBottomTabs = memo(() => {
   );
 });
 
-export default SellerBottomTabs;
+export default BuyerBottomTabs;

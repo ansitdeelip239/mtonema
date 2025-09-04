@@ -128,6 +128,11 @@
       "agentData": "Agent Data"
     }
   },
+  "logout": {
+    "title": "Logout",
+    "confirm": "Are you sure you want to logout?",
+    "action": "Logout"
+  },
   "teams": {
     "headers": {
       "addMember": "Add Team Member",
@@ -251,7 +256,13 @@
       "partnerTab": "Partner",
       "partnerLogin": "Log In as Partner",
       "partnerSignup": "Sign Up as Partner"
-    }
+    },
+    "accessDenied": "Access Denied",
+    "adminUnauthorized": "Your email {email} is not authorized for admin access.",
+    "contactAdmin": "Please contact the administrator for access.",
+    "buyerAccess": "Buyer Access",
+    "buyerNotSupported": "Buyer features are not yet supported in this version.",
+    "contactSupport": "Please contact support for assistance."
   },
   "followUp": {
     "title": "Follow-Ups",

@@ -128,6 +128,11 @@
       "agentData": "بيانات الوكيل"
     }
   },
+  "logout": {
+    "title": "تسجيل الخروج",
+    "confirm": "هل أنت متأكد من أنك تريد تسجيل الخروج؟",
+    "action": "تسجيل الخروج"
+  },
   "teams": {
     "headers": {
       "addMember": "إضافة عضو الفريق",
@@ -251,7 +256,13 @@
       "partnerTab": "الشريك",
       "partnerLogin": "تسجيل الدخول كشريك",
       "partnerSignup": "إنشاء حساب كشريك"
-    }
+    },
+    "accessDenied": "تم رفض الوصول",
+    "adminUnauthorized": "بريدك الإلكتروني {email} غير مصرح له بالوصول إلى الإدارة.",
+    "contactAdmin": "يرجى الاتصال بالمسؤول للحصول على الوصول.",
+    "buyerAccess": "وصول المشتري",
+    "buyerNotSupported": "ميزات المشتري غير مدعومة بعد في هذا الإصدار.",
+    "contactSupport": "يرجى الاتصال بالدعم."
   },
   "followUp": {
     "title": "المتابعات",

@@ -128,6 +128,11 @@
       "agentData": "Dados do Agente"
     }
   },
+  "logout": {
+    "title": "Sair",
+    "confirm": "Tem certeza de que deseja sair?",
+    "action": "Sair"
+  },
   "teams": {
     "headers": {
       "addMember": "Adicionar Membro da Equipe",
@@ -251,7 +256,13 @@
       "partnerTab": "Parceiro",
       "partnerLogin": "Entrar como Parceiro",
       "partnerSignup": "Cadastrar como Parceiro"
-    }
+    },
+    "accessDenied": "Acesso Negado",
+    "adminUnauthorized": "Seu e-mail {email} não está autorizado para acesso de administrador.",
+    "contactAdmin": "Por favor, entre em contato com o administrador para acesso.",
+    "buyerAccess": "Acesso do Comprador",
+    "buyerNotSupported": "Os recursos do comprador ainda não são suportados nesta versão.",
+    "contactSupport": "Por favor, entre em contato com o suporte."
   },
   "followUp": {
     "title": "Acompanhamentos",

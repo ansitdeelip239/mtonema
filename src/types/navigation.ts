@@ -44,6 +44,14 @@ export type SellerBottomTabParamList = {
   Profile: undefined;
 };
 
+export type BuyerBottomTabParamList = {
+  Home: undefined;
+  'Contact Us': undefined;
+  'Search Property': undefined;
+  Contacted: undefined;
+  Profile: undefined;
+};
+
 export type PartnerDrawerParamList = {
   'Home': NavigatorScreenParams<PartnerBottomTabParamList>;
   'Groups': undefined;

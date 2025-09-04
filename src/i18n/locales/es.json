@@ -128,6 +128,11 @@
       "agentData": "Datos de Agente"
     }
   },
+  "logout": {
+    "title": "Cerrar Sesión",
+    "confirm": "¿Está seguro de que desea cerrar sesión?",
+    "action": "Cerrar Sesión"
+  },
   "teams": {
     "headers": {
       "addMember": "Agregar Miembro del Equipo",
@@ -251,7 +256,13 @@
       "partnerTab": "Socio",
       "partnerLogin": "Iniciar Sesión como Socio",
       "partnerSignup": "Registrarse como Socio"
-    }
+    },
+    "accessDenied": "Acceso Denegado",
+    "adminUnauthorized": "Su correo electrónico {email} no está autorizado para acceso de administrador.",
+    "contactAdmin": "Por favor contacte al administrador para acceso.",
+    "buyerAccess": "Acceso de Comprador",
+    "buyerNotSupported": "Las funciones de comprador aún no están soportadas en esta versión.",
+    "contactSupport": "Por favor contacte al soporte."
   },
   "followUp": {
     "title": "Seguimientos",

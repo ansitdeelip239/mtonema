@@ -8,15 +8,38 @@ import PartnerNavigator from './PartnerNavigator';
 import {PartnerProvider} from '../context/PartnerProvider';
 import {PropertyFormProvider} from '../context/PropertyFormContext';
 import Roles from '../constants/Roles';
-import {BottomTabProvider} from '../context/BottomTabProvider';
 import GetIcon from '../components/GetIcon';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import SubscriptionGuard from '../components/SubscriptionGuard';
-import SubscriptionProvider from '../context/SubscriptionProvider';
 import config from '../config';
+import {useTranslation} from 'react-i18next';
 
 const MainNavigator = () => {
   const {user, logout} = useAuth();
+  const {t} = useTranslation();
+
+  // Translation object with all keys used in this component
+  const translations = React.useMemo(
+    () => ({
+      logout: {
+        title: t('logout.title', 'Logout'),
+        confirm: t('logout.confirm', 'Are you sure you want to logout?'),
+        action: t('logout.action', 'Logout'),
+      },
+      common: {
+        cancel: t('common.cancel', 'Cancel'),
+      },
+      auth: {
+        accessDenied: t('auth.accessDenied', 'Access Denied'),
+        adminUnauthorized: t('auth.adminUnauthorized', 'Your email {email} is not authorized for admin access.'),
+        contactAdmin: t('auth.contactAdmin', 'Please contact the administrator for access.'),
+        buyerAccess: t('auth.buyerAccess', 'Buyer Access'),
+        buyerNotSupported: t('auth.buyerNotSupported', 'Buyer features are not yet supported in this version.'),
+        contactSupport: t('auth.contactSupport', 'Please contact support for assistance.'),
+      },
+    }),
+    [t]
+  );
 
   // Check if user has admin role and email is in the allowed list
   const isAuthorizedAdmin =
@@ -31,17 +54,21 @@ const MainNavigator = () => {
     !config.allowed_admins.includes(user.email);
 
   const handleLogout = () => {
-    Alert.alert('Logout', 'Are you sure you want to logout?', [
-      {
-        text: 'Cancel',
-        style: 'cancel',
-      },
-      {
-        text: 'Logout',
-        onPress: logout,
-        style: 'destructive',
-      },
-    ]);
+    Alert.alert(
+      translations.logout.title,
+      translations.logout.confirm,
+      [
+        {
+          text: translations.common.cancel,
+          style: 'cancel',
+        },
+        {
+          text: translations.logout.action,
+          onPress: logout,
+          style: 'destructive',
+        },
+      ]
+    );
   };
 
   // Handle unauthorized admin access
@@ -50,19 +77,22 @@ const MainNavigator = () => {
       <View style={styles.container}>
         <View style={styles.unauthorizedContainer}>
           <GetIcon iconName="help" size={64} color="#ff6b6b" />
-          <Text style={styles.unauthorizedTitle}>Access Denied</Text>
+          <Text style={styles.unauthorizedTitle}>
+            {translations.auth.accessDenied}
+          </Text>
           <Text style={styles.unauthorizedMessage}>
-            Your admin account ({user.email}) is not authorized to access this
-            application.
+            {translations.auth.adminUnauthorized.replace('{email}', user.email)}
           </Text>
           <Text style={styles.contactMessage}>
-            Please contact the system administrator for access permissions.
+            {translations.auth.contactAdmin}
           </Text>
           <TouchableOpacity
             style={styles.logoutButton}
             onPress={handleLogout}
             activeOpacity={0.8}>
-            <Text style={styles.logoutButtonText}>Logout</Text>
+            <Text style={styles.logoutButtonText}>
+              {translations.logout.action}
+            </Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -72,52 +102,44 @@ const MainNavigator = () => {
   return (
     <>
       {user?.role === Roles.BUYER ? (
-        <SubscriptionProvider>
-          <BottomTabProvider>
-            <BuyerProvider>
-              <BuyerNavigator />
-            </BuyerProvider>
-          </BottomTabProvider>
-        </SubscriptionProvider>
+        <BuyerProvider>
+          <BuyerNavigator />
+        </BuyerProvider>
       ) : user?.role === Roles.SELLER ? (
-        <SubscriptionProvider>
-          <BottomTabProvider>
-            <PropertyFormProvider>
-              <SellerNavigator />
-            </PropertyFormProvider>
-          </BottomTabProvider>
-        </SubscriptionProvider>
+        <PropertyFormProvider>
+          <SellerNavigator />
+        </PropertyFormProvider>
       ) : user?.role === Roles.PARTNER ||
         user?.role === Roles.TEAM ||
         isAuthorizedAdmin ? (
         <SafeAreaView style={styles.safeArea} edges={['bottom']}>
-          <SubscriptionProvider>
-            <SubscriptionGuard>
-              <BottomTabProvider>
-                <PartnerProvider>
-                  <PartnerNavigator />
-                </PartnerProvider>
-              </BottomTabProvider>
-            </SubscriptionGuard>
-          </SubscriptionProvider>
+          <SubscriptionGuard>
+            <PartnerProvider>
+              <PartnerNavigator />
+            </PartnerProvider>
+          </SubscriptionGuard>
         </SafeAreaView>
       ) : (
         // Fallback for any unhandled user roles
         <View style={styles.container}>
           <View style={styles.unauthorizedContainer}>
             <GetIcon iconName="user" size={64} color="#ccc" />
-            <Text style={styles.unauthorizedTitle}>Unknown User Role</Text>
+                        <Text style={styles.unauthorizedTitle}>
+              {translations.auth.buyerAccess}
+            </Text>
             <Text style={styles.unauthorizedMessage}>
-              Your account role is not recognized or supported.
+              {translations.auth.buyerNotSupported}
             </Text>
             <Text style={styles.contactMessage}>
-              Please contact support for assistance.
+              {translations.auth.contactSupport}
             </Text>
             <TouchableOpacity
               style={styles.logoutButton}
               onPress={handleLogout}
               activeOpacity={0.8}>
-              <Text style={styles.logoutButtonText}>Logout</Text>
+              <Text style={styles.logoutButtonText}>
+                {translations.logout.action}
+              </Text>
             </TouchableOpacity>
           </View>
         </View>

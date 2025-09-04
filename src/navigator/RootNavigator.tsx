@@ -11,8 +11,19 @@ import Colors from '../constants/Colors';
 import Images from '../constants/Images';
 import LanguageSelectionScreen from '../screens/language/LanguageSelectionScreen';
 import LanguageDebugger from '../components/LanguageDebugger';
+import {BottomTabProvider} from '../context/BottomTabProvider';
+import SubscriptionProvider from '../context/SubscriptionProvider';
 
 const RootStack = createNativeStackNavigator();
+
+// Wrapper component for MainNavigator with providers
+const MainNavigatorWithProviders = () => (
+  <SubscriptionProvider>
+    <BottomTabProvider>
+      <MainNavigator />
+    </BottomTabProvider>
+  </SubscriptionProvider>
+);
 
 export default function RootNavigator() {
   const {isAuthenticated, isLoading: isAuthLoading} = useAuth();
@@ -43,7 +54,7 @@ export default function RootNavigator() {
       <LanguageDebugger />
       <RootStack.Navigator screenOptions={{headerShown: false}}>
         {isAuthenticated ? (
-          <RootStack.Screen name="Main" component={MainNavigator} />
+          <RootStack.Screen name="Main" component={MainNavigatorWithProviders} />
         ) : (
           <RootStack.Screen name="Auth" component={AuthNavigator} />
         )}
