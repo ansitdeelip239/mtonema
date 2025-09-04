@@ -9,14 +9,14 @@ import SellerProfileScreen from '../../screens/seller/SellerProfileScreen';
 import {CustomBottomBar, TabScreen} from './CustomBottomBar';
 import BuyerDashboard from '../../screens/buyer/BuyerDashboard';
 import ContactedProperties from '../../screens/buyer/ContactedPropertiesScreen';
-import SearchPropertiesScreen from '../../screens/buyer/SearchPropertiesScreen';
+import SearchPropertiesScreen from '../../screens/buyer/SearchProperties/SearchPropertiesScreen';
 import ContactUsScreen from '../../screens/buyer/ContactUsScreen';
 
 const Tab = createBottomTabNavigator<BuyerBottomTabParamList>();
 
 const tabScreens: Array<TabScreen<BuyerBottomTabParamList>> = [
   {
-    name: 'Home',
+    name: 'Dashboard',
     component: BuyerDashboard,
     icon: 'home',
   },
@@ -49,7 +49,7 @@ const BuyerBottomTabs = memo(() => {
         headerShown: false,
         tabBarHideOnKeyboard: true,
       }}
-      initialRouteName={'Home'}
+      initialRouteName={'Dashboard'}
       // eslint-disable-next-line react/no-unstable-nested-components
       tabBar={props => <CustomBottomBar {...props} tabScreens={tabScreens} />}>
       {tabScreens.map(({name, component, icon}) => (

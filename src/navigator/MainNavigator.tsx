@@ -3,7 +3,6 @@ import {View, Text, StyleSheet, TouchableOpacity, Alert} from 'react-native';
 import SellerNavigator from './SellerNavigator';
 import BuyerNavigator from './BuyerNavigator';
 import {useAuth} from '../hooks/useAuth';
-import {BuyerProvider} from '../context/BuyerProvider';
 import PartnerNavigator from './PartnerNavigator';
 import {PartnerProvider} from '../context/PartnerProvider';
 import {PropertyFormProvider} from '../context/PropertyFormContext';
@@ -31,14 +30,26 @@ const MainNavigator = () => {
       },
       auth: {
         accessDenied: t('auth.accessDenied', 'Access Denied'),
-        adminUnauthorized: t('auth.adminUnauthorized', 'Your email {email} is not authorized for admin access.'),
-        contactAdmin: t('auth.contactAdmin', 'Please contact the administrator for access.'),
+        adminUnauthorized: t(
+          'auth.adminUnauthorized',
+          'Your email {email} is not authorized for admin access.',
+        ),
+        contactAdmin: t(
+          'auth.contactAdmin',
+          'Please contact the administrator for access.',
+        ),
         buyerAccess: t('auth.buyerAccess', 'Buyer Access'),
-        buyerNotSupported: t('auth.buyerNotSupported', 'Buyer features are not yet supported in this version.'),
-        contactSupport: t('auth.contactSupport', 'Please contact support for assistance.'),
+        buyerNotSupported: t(
+          'auth.buyerNotSupported',
+          'Buyer features are not yet supported in this version.',
+        ),
+        contactSupport: t(
+          'auth.contactSupport',
+          'Please contact support for assistance.',
+        ),
       },
     }),
-    [t]
+    [t],
   );
 
   // Check if user has admin role and email is in the allowed list
@@ -54,21 +65,17 @@ const MainNavigator = () => {
     !config.allowed_admins.includes(user.email);
 
   const handleLogout = () => {
-    Alert.alert(
-      translations.logout.title,
-      translations.logout.confirm,
-      [
-        {
-          text: translations.common.cancel,
-          style: 'cancel',
-        },
-        {
-          text: translations.logout.action,
-          onPress: logout,
-          style: 'destructive',
-        },
-      ]
-    );
+    Alert.alert(translations.logout.title, translations.logout.confirm, [
+      {
+        text: translations.common.cancel,
+        style: 'cancel',
+      },
+      {
+        text: translations.logout.action,
+        onPress: logout,
+        style: 'destructive',
+      },
+    ]);
   };
 
   // Handle unauthorized admin access
@@ -102,9 +109,7 @@ const MainNavigator = () => {
   return (
     <>
       {user?.role === Roles.BUYER ? (
-        <BuyerProvider>
-          <BuyerNavigator />
-        </BuyerProvider>
+        <BuyerNavigator />
       ) : user?.role === Roles.SELLER ? (
         <PropertyFormProvider>
           <SellerNavigator />
@@ -124,7 +129,7 @@ const MainNavigator = () => {
         <View style={styles.container}>
           <View style={styles.unauthorizedContainer}>
             <GetIcon iconName="user" size={64} color="#ccc" />
-                        <Text style={styles.unauthorizedTitle}>
+            <Text style={styles.unauthorizedTitle}>
               {translations.auth.buyerAccess}
             </Text>
             <Text style={styles.unauthorizedMessage}>

@@ -1,5 +1,6 @@
 import url from '../constants/api';
 import {api} from '../utils/api';
+import {PropertySearchParams, PropertySearchResponse} from '../types';
 
 class BuyerService {
   static async RecommendedProperty(pageNumber: number, pageSize: number) {
@@ -10,6 +11,52 @@ class BuyerService {
       return response;
     } catch (error) {
       console.error('Error in RecommendedProperty', error);
+      throw error;
+    }
+  }
+
+  static async searchProperties(params: PropertySearchParams = {}) {
+    try {
+      const queryParams = new URLSearchParams();
+
+      if (params.page) {
+        queryParams.append('page', params.page.toString());
+      }
+      if (params.pageSize) {
+        queryParams.append('pageSize', params.pageSize.toString());
+      }
+      if (params.propertyFor) {
+        queryParams.append('propertyFor', params.propertyFor);
+      }
+      if (params.location) {
+        queryParams.append('location', params.location);
+      }
+      if (params.sortBy) {
+        queryParams.append('sortBy', params.sortBy);
+      }
+      if (params.propertyType) {
+        queryParams.append('propertyType', params.propertyType);
+      }
+      if (params.minPrice) {
+        queryParams.append('minPrice', params.minPrice.toString());
+      }
+      if (params.maxPrice) {
+        queryParams.append('maxPrice', params.maxPrice.toString());
+      }
+      if (params.bhkType) {
+        queryParams.append('bhkType', params.bhkType);
+      }
+      if (params.city) {
+        queryParams.append('city', params.city);
+      }
+
+      const queryString = queryParams.toString();
+      const endpoint = queryString ? `${url.property.search}?${queryString}` : url.property.search;
+
+      const response = await api.get<PropertySearchResponse>(endpoint);
+      return response;
+    } catch (error) {
+      console.error('Error in searchProperties', error);
       throw error;
     }
   }

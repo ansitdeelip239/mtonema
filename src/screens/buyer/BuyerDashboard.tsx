@@ -17,7 +17,7 @@ import {useDrawer} from '../../hooks/useDrawer';
 
 const {width} = Dimensions.get('window');
 
-type Props = NativeStackScreenProps<BuyerBottomTabParamList, 'Home'>;
+type Props = NativeStackScreenProps<BuyerBottomTabParamList, 'Dashboard'>;
 
 interface PropertyCard {
   id: string;

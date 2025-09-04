@@ -45,7 +45,7 @@ export type SellerBottomTabParamList = {
 };
 
 export type BuyerBottomTabParamList = {
-  Home: undefined;
+  Dashboard: undefined;
   'Contact Us': undefined;
   'Search Property': undefined;
   Contacted: undefined;

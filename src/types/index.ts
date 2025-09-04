@@ -1,3 +1,4 @@
+import { PropertyForTypes } from '../constants/MasterDetails';
 import {ImageType} from './propertyform';
 
 export interface AuthContextType {
@@ -460,4 +461,93 @@ export interface AddTeamMemberResponse {
       totalDays: number;
     };
   };
+}
+
+// Property Search API Types
+export interface PropertyImage {
+  imageUrl: string;
+  type: string;
+  toggle: boolean;
+}
+
+export interface Property {
+  propertyId: number;
+  userId: number;
+  name: string;
+  sellerPhone: string;
+  sellerEmail: string;
+  locationId: number;
+  locationAddress: string;
+  city: string;
+  zipcode: string;
+  propertyName: string;
+  price: number;
+  sellerType: string;
+  propertyType: string;
+  propertyFor: string;
+  imageURL: string; // JSON string containing PropertyImage array
+  videoURL: string;
+  shortDescription: string;
+  longDescription: string;
+  recordStatus: string;
+  propertyDetailsId: number;
+  readyToMove: boolean;
+  propertyForType: string;
+  area: number;
+  lmUnit: string;
+  facing: string;
+  boundaryWall: boolean;
+  constructionDone: boolean;
+  parking: string;
+  lifts: boolean;
+  propertyAge?: string;
+  alarmSystem?: boolean;
+  surveillanceCameras?: boolean;
+  gatedSecurity?: boolean;
+  pantry?: boolean;
+  sourceWebsite: string;
+  createdBy: string;
+  createdOn: string;
+  updatedBy?: string;
+  updatedOn?: string;
+  bhkType?: string;
+  furnishing?: string;
+  floor?: number;
+  isFeatured?: boolean;
+  tags?: string;
+}
+
+export interface PropertyPagination {
+  totalItems: number;
+  itemsPerPage: number;
+  currentPage: number;
+  totalPages: number;
+  startItemNumber: number;
+  endItemNumber: number;
+  hasNextPage: boolean;
+  hasPrevPage: boolean;
+  navigation: {
+    firstPage: number;
+    nextPage: number;
+    lastPage: number;
+  };
+}
+
+export interface PropertySearchResponse {
+  properties: Property[];
+  total: number;
+  pagination: PropertyPagination;
+}
+
+export interface PropertySearchParams {
+  page?: number;
+  pageSize?: number;
+  propertyFor?: PropertyForTypes[keyof PropertyForTypes];
+  location?: string;
+  sortBy?: 'Newest' | 'Oldest' | 'PriceLow' | 'PriceHigh' | 'Relevance';
+  propertyType?: string;
+  minPrice?: number;
+  maxPrice?: number;
+  bhkType?: string;
+  city?: string;
 }
