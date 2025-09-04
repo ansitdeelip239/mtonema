@@ -10,9 +10,10 @@ import {
   Image,
   Modal,
 } from 'react-native';
-import {NativeStackScreenProps} from '@react-navigation/native-stack';
+import {Chip} from 'react-native-paper';
 import GetIcon from '../../components/GetIcon';
 import Colors from '../../constants/Colors';
+import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {BuyerBottomTabParamList} from '../../types/navigation';
 import {useDrawer} from '../../hooks/useDrawer';
 
@@ -29,6 +30,7 @@ interface Property {
   bathrooms: number;
   area: string;
   isVerified?: boolean;
+  propertyFor: 'sale' | 'rent';
 }
 
 interface FilterOptions {
@@ -39,11 +41,16 @@ interface FilterOptions {
   sortBy: string;
 }
 
+const CheckIcon = ({color}: {color?: string}) => (
+  <GetIcon iconName="checkmark" size={16} color={color || 'white'} />
+);
+
 const SearchPropertiesScreen: React.FC<Props> = ({navigation: _navigation}) => {
   const {openDrawer} = useDrawer();
 
   const [searchQuery, setSearchQuery] = useState('');
   const [showFilters, setShowFilters] = useState(false);
+  const [propertyForFilter, setPropertyForFilter] = useState<'sale' | 'rent' | 'all'>('all');
   const [filters, setFilters] = useState<FilterOptions>({
     propertyType: [],
     priceRange: {min: '', max: ''},
@@ -65,6 +72,7 @@ const SearchPropertiesScreen: React.FC<Props> = ({navigation: _navigation}) => {
       bathrooms: 2,
       area: '1,200 sq ft',
       isVerified: true,
+      propertyFor: 'sale',
     },
     {
       id: '2',
@@ -77,6 +85,7 @@ const SearchPropertiesScreen: React.FC<Props> = ({navigation: _navigation}) => {
       bathrooms: 3,
       area: '2,500 sq ft',
       isVerified: true,
+      propertyFor: 'sale',
     },
     {
       id: '3',
@@ -88,6 +97,7 @@ const SearchPropertiesScreen: React.FC<Props> = ({navigation: _navigation}) => {
       bedrooms: 4,
       bathrooms: 4,
       area: '3,200 sq ft',
+      propertyFor: 'sale',
     },
     {
       id: '4',
@@ -100,8 +110,41 @@ const SearchPropertiesScreen: React.FC<Props> = ({navigation: _navigation}) => {
       bathrooms: 2,
       area: '950 sq ft',
       isVerified: true,
+      propertyFor: 'sale',
+    },
+    {
+      id: '5',
+      title: 'Executive 3BHK Apartment',
+      location: 'Lower Parel, Mumbai',
+      price: '₹85,000/month',
+      image: {uri: 'https://picsum.photos/300/200?random=5'},
+      type: 'Apartment',
+      bedrooms: 3,
+      bathrooms: 2,
+      area: '1,100 sq ft',
+      isVerified: true,
+      propertyFor: 'rent',
+    },
+    {
+      id: '6',
+      title: 'Spacious 2BHK with Balcony',
+      location: 'Goregaon East, Mumbai',
+      price: '₹45,000/month',
+      image: {uri: 'https://picsum.photos/300/200?random=6'},
+      type: 'Apartment',
+      bedrooms: 2,
+      bathrooms: 2,
+      area: '850 sq ft',
+      propertyFor: 'rent',
     },
   ]);
+
+  const filteredResults = searchResults.filter(property => {
+    if (propertyForFilter === 'all') {
+      return true;
+    }
+    return property.propertyFor === propertyForFilter;
+  });
 
   const propertyTypes = ['Apartment', 'Villa', 'Penthouse', 'Plot', 'Commercial'];
   const bedroomOptions = ['1', '2', '3', '4', '5+'];
@@ -164,6 +207,11 @@ const SearchPropertiesScreen: React.FC<Props> = ({navigation: _navigation}) => {
             <GetIcon iconName="premium" size={14} color="white" />
           </View>
         )}
+        <View style={[styles.propertyTypeBadge, property.propertyFor === 'sale' ? styles.propertyTypeBadgeSale : styles.propertyTypeBadgeRent]}>
+          <Text style={styles.propertyTypeBadgeText}>
+            {property.propertyFor === 'sale' ? 'For Sale' : 'For Rent'}
+          </Text>
+        </View>
       </View>
 
       <View style={styles.propertyInfo}>
@@ -376,6 +424,55 @@ const SearchPropertiesScreen: React.FC<Props> = ({navigation: _navigation}) => {
         </TouchableOpacity>
       </View>
 
+      {/* Property Type Toggle */}
+      <View style={styles.propertyTypeToggle}>
+        <Chip
+          mode="outlined"
+          selected={propertyForFilter === 'all'}
+          onPress={() => setPropertyForFilter('all')}
+          style={[
+            styles.chip,
+            propertyForFilter === 'all' ? styles.chipSelected : styles.chipUnselected,
+          ]}
+          textStyle={[
+            styles.chipText,
+            propertyForFilter === 'all' ? styles.chipTextSelected : styles.chipTextUnselected,
+          ]}
+          icon={propertyForFilter === 'all' ? CheckIcon : undefined}>
+          All
+        </Chip>
+        <Chip
+          mode="outlined"
+          selected={propertyForFilter === 'sale'}
+          onPress={() => setPropertyForFilter('sale')}
+          style={[
+            styles.chip,
+            propertyForFilter === 'sale' ? styles.chipSelected : styles.chipUnselected,
+          ]}
+          textStyle={[
+            styles.chipText,
+            propertyForFilter === 'sale' ? styles.chipTextSelected : styles.chipTextUnselected,
+          ]}
+          icon={propertyForFilter === 'sale' ? CheckIcon : undefined}>
+          For Sale
+        </Chip>
+        <Chip
+          mode="outlined"
+          selected={propertyForFilter === 'rent'}
+          onPress={() => setPropertyForFilter('rent')}
+          style={[
+            styles.chip,
+            propertyForFilter === 'rent' ? styles.chipSelected : styles.chipUnselected,
+          ]}
+          textStyle={[
+            styles.chipText,
+            propertyForFilter === 'rent' ? styles.chipTextSelected : styles.chipTextUnselected,
+          ]}
+          icon={propertyForFilter === 'rent' ? CheckIcon : undefined}>
+          For Rent
+        </Chip>
+      </View>
+
       {/* Quick Filters */}
       <View style={styles.quickFilters}>
         <ScrollView horizontal showsHorizontalScrollIndicator={false}>
@@ -398,7 +495,7 @@ const SearchPropertiesScreen: React.FC<Props> = ({navigation: _navigation}) => {
       <View style={styles.resultsContainer}>
         <View style={styles.resultsHeader}>
           <Text style={styles.resultsCount}>
-            {searchResults.length} Properties Found
+            {filteredResults.length} Properties Found
           </Text>
           <TouchableOpacity style={styles.sortButton}>
             <Text style={styles.sortButtonText}>Sort</Text>
@@ -407,7 +504,7 @@ const SearchPropertiesScreen: React.FC<Props> = ({navigation: _navigation}) => {
         </View>
 
         <View style={styles.propertiesGrid}>
-          {searchResults.map(property => renderPropertyCard(property))}
+          {filteredResults.map(property => renderPropertyCard(property))}
         </View>
 
         {/* Bottom spacing */}
@@ -758,6 +855,56 @@ const styles = StyleSheet.create({
   },
   bottomSpacing: {
     height: 100,
+  },
+  propertyTypeToggle: {
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    paddingHorizontal: 20,
+    paddingVertical: 8,
+    backgroundColor: 'white',
+    marginTop: 5,
+    gap: 8,
+  },
+  chip: {
+    marginHorizontal: 0,
+  },
+  chipSelected: {
+    backgroundColor: '#127dc2', // Using PRIMARY_2 instead of black MT_PRIMARY_1
+    borderColor: '#127dc2',
+  },
+  chipUnselected: {
+    backgroundColor: 'white',
+    borderColor: '#ddd',
+  },
+  chipText: {
+    fontSize: 14,
+    fontWeight: '500',
+  },
+  chipTextSelected: {
+    color: 'white',
+  },
+  chipTextUnselected: {
+    color: '#666',
+  },
+  propertyTypeBadge: {
+    position: 'absolute',
+    top: 8,
+    left: 8,
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    borderRadius: 12,
+  },
+  propertyTypeBadgeText: {
+    fontSize: 10,
+    fontWeight: 'bold',
+    color: 'white',
+    textTransform: 'uppercase',
+  },
+  propertyTypeBadgeSale: {
+    backgroundColor: '#4CAF50',
+  },
+  propertyTypeBadgeRent: {
+    backgroundColor: '#FF9800',
   },
 });
 

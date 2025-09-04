@@ -16,7 +16,7 @@ const BuyerNavigator = memo(() => {
       drawerContent={props => <CustomDrawerContent {...props} />}
       initialRouteName="Home"
       screenOptions={{
-        drawerType: 'front',
+        drawerType: 'back',
         drawerActiveTintColor: 'white',
         drawerActiveBackgroundColor: Colors.MT_PRIMARY_1,
         headerShown: true,
