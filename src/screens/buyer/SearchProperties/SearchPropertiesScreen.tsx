@@ -27,11 +27,21 @@ import SearchHeader from './components/SearchHeader';
 
 type Props = NativeStackScreenProps<BuyerBottomTabParamList, 'Search Property'>;
 
-const EmptyComponent = () => (
-  <View style={styles.emptyContainer}>
-    <Text style={styles.emptyText}>No properties found</Text>
-  </View>
-);
+const EmptyComponent = ({isLoading}: {isLoading: boolean}) => {
+  if (isLoading) {
+    return (
+      <View style={styles.emptyContainer}>
+        <ActivityIndicator size="large" color={Colors.primary} />
+        <Text style={styles.loadingEmptyText}>Loading properties...</Text>
+      </View>
+    );
+  }
+  return (
+    <View style={styles.emptyContainer}>
+      <Text style={styles.emptyText}>No properties found</Text>
+    </View>
+  );
+};
 
 const FooterComponent = () => <View style={styles.bottomSpacing} />;
 
@@ -66,6 +76,10 @@ const SearchPropertiesScreen: React.FC<Props> = ({navigation: _navigation}) => {
     propertyFor: PropertyFor.SALE,
     sortBy: SortBy.NEWEST,
   });
+  const [currentFilters, setCurrentFilters] = useState<
+    Partial<PropertySearchParams>
+  >({});
+  const [currentPage, setCurrentPage] = useState(1);
 
   // Function to fetch properties
   const fetchProperties = useCallback(
@@ -109,21 +123,18 @@ const SearchPropertiesScreen: React.FC<Props> = ({navigation: _navigation}) => {
 
   // Handle search with loading state
   const handleSearchWithLoading = useCallback(
-    async (text: string) => {
-      // Update search params for UI responsiveness
+    (text: string) => {
       const updatedParams = {
         ...searchParams,
         page: 1,
-        searchFilter: text.trim(), // Trim whitespace
+        location: text.trim() || undefined,
       };
 
-      // Update the params and fetch properties
       setSearchParams(updatedParams);
-      await fetchProperties(updatedParams);
     },
-    [searchParams, fetchProperties],
+    [searchParams],
   );
-  // Initial load and when search params change
+  // Initial load and when search params change (exclude pagination)
   useEffect(() => {
     const finalParams = {
       ...searchParams,
@@ -131,19 +142,40 @@ const SearchPropertiesScreen: React.FC<Props> = ({navigation: _navigation}) => {
     };
 
     fetchProperties(finalParams, false);
+    setCurrentPage(1); // Reset page when search params change
   }, [searchParams, propertyForFilter, fetchProperties]);
 
   // Handle property filter change
-  const applyFilters = () => {
-    setShowFilters(false);
-    // TODO: Implement filter logic with searchParams
-    console.log('Applying filters - TODO: implement');
-  };
+  const applyFilters = useCallback(
+    (filters: Partial<PropertySearchParams>) => {
+      setShowFilters(false);
+      setCurrentFilters(filters);
+      // Update search params with filters
+      const updatedParams = {
+        ...searchParams,
+        ...filters,
+        page: 1,
+      };
+      setSearchParams(updatedParams);
+    },
+    [searchParams],
+  );
 
-  const clearFilters = () => {
-    // TODO: Reset filters
-    console.log('Clearing filters - TODO: implement');
-  };
+  const clearFilters = useCallback(() => {
+    setCurrentFilters({});
+    // Clear all filters from search params
+    const clearedParams = {
+      ...searchParams,
+      propertyTypes: undefined,
+      bhkType: undefined,
+      furnishing: undefined,
+      city: undefined,
+      minAmount: undefined,
+      maxAmount: undefined,
+      page: 1,
+    };
+    setSearchParams(clearedParams);
+  }, [searchParams]);
 
   const handleSortPress = useCallback(() => {
     setShowSortModal(true);
@@ -199,15 +231,18 @@ const SearchPropertiesScreen: React.FC<Props> = ({navigation: _navigation}) => {
   const handleLoadMore = useCallback(() => {
     if (!isLoading && !isLoadingMore && allProperties.length < totalCount) {
       setIsLoadingMore(true);
-      const nextPage = searchParams.page! + 1;
+      const nextPage = currentPage + 1;
       const loadMoreParams = {
         ...searchParams,
         page: nextPage,
         propertyFor:
           propertyForFilter === 'all' ? undefined : propertyForFilter,
       };
-      setSearchParams(prev => ({...prev, page: nextPage}));
-      fetchProperties(loadMoreParams, true);
+
+      // Directly call fetchProperties for pagination
+      fetchProperties(loadMoreParams, true).finally(() => {
+        setCurrentPage(nextPage);
+      });
     }
   }, [
     isLoading,
@@ -217,6 +252,7 @@ const SearchPropertiesScreen: React.FC<Props> = ({navigation: _navigation}) => {
     searchParams,
     propertyForFilter,
     fetchProperties,
+    currentPage,
   ]);
 
   const renderFooter = () => {
@@ -295,6 +331,10 @@ const SearchPropertiesScreen: React.FC<Props> = ({navigation: _navigation}) => {
     </View>
   );
 
+  const renderEmptyComponent = useMemo(() => {
+    return <EmptyComponent isLoading={isLoading} />;
+  }, [isLoading]);
+
   return (
     <>
       <FlatList
@@ -313,7 +353,7 @@ const SearchPropertiesScreen: React.FC<Props> = ({navigation: _navigation}) => {
             colors={[Colors.primary]}
           />
         }
-        ListEmptyComponent={EmptyComponent}
+        ListEmptyComponent={renderEmptyComponent}
         ListFooterComponent={renderFooter}
         removeClippedSubviews={true}
         maxToRenderPerBatch={10}
@@ -324,6 +364,7 @@ const SearchPropertiesScreen: React.FC<Props> = ({navigation: _navigation}) => {
         onClose={() => setShowFilters(false)}
         onApplyFilters={applyFilters}
         onClearFilters={clearFilters}
+        currentFilters={currentFilters}
       />
       <SortModal
         visible={showSortModal}

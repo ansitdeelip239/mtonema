@@ -35,7 +35,7 @@ class BuyerService {
         queryParams.append('sortBy', params.sortBy);
       }
       if (params.propertyTypes) {
-        queryParams.append('propertyType', params.propertyTypes);
+        queryParams.append('propertyTypes', params.propertyTypes);
       }
       if (params.minAmount) {
         queryParams.append('minPrice', params.minAmount.toString());
@@ -49,9 +49,7 @@ class BuyerService {
       if (params.city) {
         queryParams.append('city', params.city);
       }
-      if (params.searchFilter) {
-        queryParams.append('searchFilter', params.searchFilter);
-      }
+      // Note: Using location instead of searchFilter for search functionality
 
       const queryString = queryParams.toString();
       const endpoint = queryString
