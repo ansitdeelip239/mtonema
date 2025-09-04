@@ -157,44 +157,46 @@ export const SubscriptionProvider: React.FC<SubscriptionProviderProps> = ({
   const subscriptionDaysRemaining = subscriptionStatus?.orderDaysLeft || 0;
 
   // Check subscription status
-  const checkSubscriptionStatus = useCallback(async (skipLoading: boolean = false): Promise<boolean> => {
-    if (!user?.id || !isPartnerOrTeam) {
-      setHasActiveSubscription(false);
-      return false;
-    }
-
-    try {
-      if (!skipLoading) {
-        setIsLoadingSubscription(true);
-      }
-      setSubscriptionError(null);
-
-      const response = await PartnerService.getSubscriptionStatus(user.id);
-
-      console.log('Subscription status response:', response);
-      
-
-      if (response.success) {
-        const data = response.data;
-        setSubscriptionStatus(data);
-        setHasActiveSubscription(data.hasActiveAccess);
-        return data.hasActiveAccess; // Return the fresh status
-      } else {
-        setSubscriptionError('Failed to fetch subscription status');
+  const checkSubscriptionStatus = useCallback(
+    async (skipLoading: boolean = false): Promise<boolean> => {
+      if (!user?.id || !isPartnerOrTeam) {
         setHasActiveSubscription(false);
         return false;
       }
-    } catch (error) {
-      console.error('Error checking subscription status:', error);
-      setSubscriptionError('Error checking subscription status');
-      setHasActiveSubscription(false);
-      return false;
-    } finally {
-      if (!skipLoading) {
-        setIsLoadingSubscription(false);
+
+      try {
+        if (!skipLoading) {
+          setIsLoadingSubscription(true);
+        }
+        setSubscriptionError(null);
+
+        const response = await PartnerService.getSubscriptionStatus(user.id);
+
+        console.log('Subscription status response:', response);
+
+        if (response.success) {
+          const data = response.data;
+          setSubscriptionStatus(data);
+          setHasActiveSubscription(data.hasActiveAccess);
+          return data.hasActiveAccess; // Return the fresh status
+        } else {
+          setSubscriptionError('Failed to fetch subscription status');
+          setHasActiveSubscription(false);
+          return false;
+        }
+      } catch (error) {
+        console.error('Error checking subscription status:', error);
+        setSubscriptionError('Error checking subscription status');
+        setHasActiveSubscription(false);
+        return false;
+      } finally {
+        if (!skipLoading) {
+          setIsLoadingSubscription(false);
+        }
       }
-    }
-  }, [user?.id, isPartnerOrTeam]);
+    },
+    [user?.id, isPartnerOrTeam],
+  );
 
   // Fetch payment plans
   const fetchPlans = useCallback(async () => {

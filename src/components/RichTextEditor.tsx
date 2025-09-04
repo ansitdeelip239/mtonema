@@ -55,7 +55,9 @@ const RichTextEditor: React.FC<RichTextEditorProps> = ({
 
   // Generate HTML from current segments and text
   const generateHTML = useCallback(() => {
-    if (!value) return '';
+    if (!value) {
+      return '';
+    }
 
     let html = '';
     let position = 0;
@@ -407,6 +409,7 @@ const RichTextEditor: React.FC<RichTextEditorProps> = ({
       <Text
         style={[
           styles.buttonLabel,
+          // eslint-disable-next-line react-native/no-inline-styles
           {color: button.isActive ? 'white' : '#666'},
         ]}>
         {button.label}

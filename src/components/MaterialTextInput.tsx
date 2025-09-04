@@ -1,4 +1,4 @@
-import React, { useCallback, useRef, useState } from 'react';
+import React, {useCallback, useRef, useState} from 'react';
 import {
   TextInput,
   TextInputProps,
@@ -46,7 +46,7 @@ export const MaterialTextInput = <T,>({
     return (
       <TouchableOpacity
         onPress={() => setFormInput(field, '')}
-        hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}>
+        hitSlop={{top: 10, bottom: 10, left: 10, right: 10}}>
         <Image
           source={require('../assets/Icon/crossicon.png')}
           style={styles.crossIcon}
@@ -99,7 +99,8 @@ export const MaterialTextInput = <T,>({
     styles.outerContainer,
     {
       zIndex: showSuggestions ? 1000 : 100,
-      elevation: Platform.OS === 'android' ? (showSuggestions ? 1000 : 100) : undefined,
+      elevation:
+        Platform.OS === 'android' ? (showSuggestions ? 1000 : 100) : undefined,
     },
   ];
 

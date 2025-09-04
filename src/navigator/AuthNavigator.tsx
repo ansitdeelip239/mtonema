@@ -2,7 +2,6 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import EmailScreen from '../screens/auth/EmailScreen';
 import { MainScreen } from '../screens/auth/MainScreen';
-import PostProperty from '../screens/seller/PostPropertyScreen';
 import OtpScreen from '../screens/auth/OtpScreen';
 import PartnerZoneScreen from '../screens/auth/PartnerZoneScreen';
 import { MasterDetailModel } from '../types';
@@ -33,7 +32,6 @@ export type AuthStackParamList = {
     logoUrl?: string;
     location?: MasterDetailModel;
   };
-  PostProperty: undefined;
   OtpModel: { email: string };
   UserTypeSelectionScreen: undefined;
   // ForgetPassword: undefined;
@@ -142,13 +140,6 @@ export default function AuthNavigator() {
         component={OtpScreen}
         options={{
           title: isIOS ? 'OTP' : '',
-        }}
-      />
-      <Stack.Screen
-        name="PostProperty"
-        component={PostProperty}
-        options={{
-          title: isIOS ? 'Post Property' : '',
         }}
       />
     </Stack.Navigator>
