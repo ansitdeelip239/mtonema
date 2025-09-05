@@ -24,6 +24,7 @@ import {searchProperties} from './hooks/useProperties';
 import {PropertyFor, SortBy} from '../../../constants/MasterDetails';
 import Colors from '../../../constants/Colors';
 import SearchHeader from './components/SearchHeader';
+import BuyerHeader from '../../../components/BuyerHeader';
 
 type Props = NativeStackScreenProps<BuyerBottomTabParamList, 'Search Property'>;
 
@@ -55,7 +56,7 @@ const LoadingFooter = () => (
 );
 
 const SearchPropertiesScreen: React.FC<Props> = ({navigation: _navigation}) => {
-  const {openDrawer} = useDrawer();
+  const { } = useDrawer();
 
   const [showFilters, setShowFilters] = useState(false);
   const [showSortModal, setShowSortModal] = useState(false);
@@ -265,21 +266,15 @@ const SearchPropertiesScreen: React.FC<Props> = ({navigation: _navigation}) => {
   const renderHeader = useMemo(() => {
     return (
       <View>
-        {/* Header */}
-        <View style={styles.header}>
-          <View style={styles.headerTop}>
-            <TouchableOpacity onPress={openDrawer} style={styles.drawerButton}>
-              <GetIcon iconName="hamburgerMenu" size={20} color="#333" />
-            </TouchableOpacity>
-          </View>
-          <View style={styles.headerContent}>
-            <Text style={styles.welcomeText}>Find Your</Text>
-            <Text style={styles.headerTitle}>Dream Property</Text>
-          </View>
-          <TouchableOpacity style={styles.notificationButton}>
-            <GetIcon iconName="settings" size={20} color="#333" />
+        {/* Buyer Header */}
+        <BuyerHeader
+          title="Find Your"
+          subtitle="Dream Property"
+        >
+          <TouchableOpacity onPress={() => setShowFilters(true)}>
+            <GetIcon iconName="filter" size={20} color="#333" />
           </TouchableOpacity>
-        </View>
+        </BuyerHeader>
 
         {/* Search Bar */}
         <SearchHeader
@@ -314,7 +309,6 @@ const SearchPropertiesScreen: React.FC<Props> = ({navigation: _navigation}) => {
       </View>
     );
   }, [
-    openDrawer,
     propertyForFilter,
     isLoading,
     refreshing,

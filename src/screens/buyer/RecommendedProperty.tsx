@@ -18,10 +18,12 @@ import EnquiryButton from '../common/EnquiryButton';
 import Colors from '../../constants/Colors';
 import { DrawerNavigationProp } from '@react-navigation/drawer';
 import { formatCurrency } from '../../utils/currency';
+import BuyerHeader from '../../components/BuyerHeader';
+import GetIcon from '../../components/GetIcon';
 type HomeProps = {
   navigation: DrawerNavigationProp<any>;
 };
-const RecommendedProperty = ({navigation}: HomeProps) => {
+const RecommendedProperty = ({navigation: _navigation}: HomeProps) => {
   const [properties, setProperties] = useState<PropertyModel[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -196,15 +198,14 @@ const RecommendedProperty = ({navigation}: HomeProps) => {
 
   return (
     <SafeAreaView style={styles.container}>
-       <View style={styles.topBar}>
-              <TouchableOpacity onPress={() => navigation.toggleDrawer()}>
-                <Image
-                  source={require('../../assets/Images/menu.png')}
-                  style={styles.menuIcon}
-                />
-              </TouchableOpacity>
-              <Text style={styles.contactText}>Recommended Property</Text>
-            </View>
+      {/* Buyer Header */}
+      <BuyerHeader
+        title="Recommended"
+        subtitle="Property"
+      >
+        <GetIcon iconName="home" size={20} color="#333" />
+      </BuyerHeader>
+
       <FlatList
         data={properties}
         keyExtractor={item => `property-${item.ID}`}

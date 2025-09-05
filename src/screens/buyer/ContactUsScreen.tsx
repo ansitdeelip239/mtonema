@@ -14,12 +14,11 @@ import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import GetIcon, {IconEnum} from '../../components/GetIcon';
 import Colors from '../../constants/Colors';
 import {BuyerBottomTabParamList} from '../../types/navigation';
-import {useDrawer} from '../../hooks/useDrawer';
+import BuyerHeader from '../../components/BuyerHeader';
 
 type Props = NativeStackScreenProps<BuyerBottomTabParamList, 'Contact Us'>;
 
 const ContactUsScreen: React.FC<Props> = ({navigation: _navigation}) => {
-  const {openDrawer} = useDrawer();
 
   const [formData, setFormData] = useState({
     name: '',
@@ -147,23 +146,13 @@ const ContactUsScreen: React.FC<Props> = ({navigation: _navigation}) => {
 
   return (
     <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
-      {/* Header */}
-      <View style={styles.header}>
-        <View style={styles.headerTop}>
-          <TouchableOpacity
-            onPress={openDrawer}
-            style={styles.drawerButton}>
-            <GetIcon iconName="hamburgerMenu" size={20} color="#333" />
-          </TouchableOpacity>
-        </View>
-        <View style={styles.headerContent}>
-          <Text style={styles.welcomeText}>Get In Touch</Text>
-          <Text style={styles.headerTitle}>Contact Us</Text>
-        </View>
-        <TouchableOpacity style={styles.notificationButton}>
-          <GetIcon iconName="threeDots" size={20} color="#333" />
-        </TouchableOpacity>
-      </View>
+      {/* Buyer Header */}
+      <BuyerHeader
+        title="Get In Touch"
+        subtitle="Contact Us"
+      >
+        <GetIcon iconName="threeDots" size={20} color="#333" />
+      </BuyerHeader>
 
       {/* Contact Information */}
       <View style={styles.section}>

@@ -13,7 +13,7 @@ import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import GetIcon, {IconEnum} from '../../components/GetIcon';
 import Colors from '../../constants/Colors';
 import {BuyerBottomTabParamList} from '../../types/navigation';
-import {useDrawer} from '../../hooks/useDrawer';
+import BuyerHeader from '../../components/BuyerHeader';
 
 const {width} = Dimensions.get('window');
 
@@ -39,7 +39,6 @@ interface QuickAction {
 }
 
 const BuyerDashboard: React.FC<Props> = ({navigation: _navigation}) => {
-  const {openDrawer} = useDrawer();
 
   // Mock data for demonstration with placeholder images
   const [recentlyViewed] = useState<PropertyCard[]>([
@@ -193,23 +192,13 @@ const BuyerDashboard: React.FC<Props> = ({navigation: _navigation}) => {
 
   return (
     <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
-      {/* Header */}
-      <View style={styles.header}>
-        <View style={styles.headerTop}>
-          <TouchableOpacity
-            onPress={openDrawer}
-            style={styles.drawerButton}>
-            <GetIcon iconName="hamburgerMenu" size={20} color="#333" />
-          </TouchableOpacity>
-        </View>
-        <View style={styles.headerContent}>
-          <Text style={styles.welcomeText}>Welcome back!</Text>
-          <Text style={styles.headerTitle}>Find Your Dream Home</Text>
-        </View>
-        <TouchableOpacity style={styles.notificationButton}>
-          <GetIcon iconName="settings" size={20} color="#333" />
-        </TouchableOpacity>
-      </View>
+      {/* Buyer Header */}
+      <BuyerHeader
+        title="Welcome back!"
+        subtitle="Find Your Dream Home"
+      >
+        <GetIcon iconName="settings" size={20} color="#333" />
+      </BuyerHeader>
 
       {/* Stats Section */}
       <View style={styles.statsContainer}>

@@ -16,6 +16,8 @@ import {PropertyModel} from '../../types';
 import EnquiryButton from '../common/EnquiryButton';
 import Colors from '../../constants/Colors';
 import { DrawerNavigationProp } from '@react-navigation/drawer';
+import BuyerHeader from '../../components/BuyerHeader';
+import GetIcon from '../../components/GetIcon';
 
 type HomeProps = {
   navigation: DrawerNavigationProp<any>;
@@ -35,7 +37,7 @@ interface Property {
   Rate: {MasterDetailName: string; ID: number};
 }
 
-const SearchProperty =  ({navigation}: HomeProps) => {
+const SearchProperty =  ({navigation: _navigation}: HomeProps) => {
   const [searchText, setSearchText] = useState('');
   const [splitSearchText, setSplitSearchText] = useState<string[]>([]);
   const [selectedLocation, setSelectedLocation] = useState<string | null>(null);
@@ -329,15 +331,14 @@ const SearchProperty =  ({navigation}: HomeProps) => {
 
   return (
     <View style={styles.container}>
-        <View style={styles.topBar}>
-        <TouchableOpacity onPress={() => navigation.toggleDrawer()}>
-          <Image
-            source={require('../../assets/Images/menu.png')}
-            style={styles.menuIcon}
-          />
-        </TouchableOpacity>
-        <Text style={styles.contactText}>Search Property</Text>
-      </View>
+      {/* Buyer Header */}
+      <BuyerHeader
+        title="Search Property"
+        subtitle="Find your dream home"
+      >
+        <GetIcon iconName="search" size={20} color="#333" />
+      </BuyerHeader>
+
       <View style={styles.searchContainer}>
         <View style={styles.inputContainer}>
           <TextInput

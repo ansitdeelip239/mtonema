@@ -5,12 +5,12 @@ import Colors from '../../constants/Colors';
 import {BuyerBottomTabParamList} from '../../types/navigation';
 // import PostProperty from '../../screens/seller/PostPropertyScreen';
 // import PropertyListingForm from '../../screens/seller/PostProperty';
-import SellerProfileScreen from '../../screens/seller/SellerProfileScreen';
 import {CustomBottomBar, TabScreen} from './CustomBottomBar';
 import BuyerDashboard from '../../screens/buyer/BuyerDashboard';
 import ContactedProperties from '../../screens/buyer/ContactedPropertiesScreen';
 import SearchPropertiesScreen from '../../screens/buyer/SearchProperties/SearchPropertiesScreen';
 import ContactUsScreen from '../../screens/buyer/ContactUsScreen';
+import BuyerProfileScreen from '../../screens/buyer/BuyerProfileScreen';
 
 const Tab = createBottomTabNavigator<BuyerBottomTabParamList>();
 
@@ -37,7 +37,7 @@ const tabScreens: Array<TabScreen<BuyerBottomTabParamList>> = [
   },
   {
     name: 'Profile',
-    component: SellerProfileScreen,
+    component: BuyerProfileScreen,
     icon: 'user',
   },
 ] as const;

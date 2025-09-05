@@ -22,8 +22,8 @@ interface MaterialTextInputProps<T> extends TextInputProps {
   setFormInput: (field: keyof T, value: string | boolean) => void;
   rightComponent?: React.ReactNode;
   errorMessage?: string;
-  suggestions?: string[];
-  onSuggestionSelect?: (suggestion: string) => void;
+  suggestions?: string[] | Array<{description: string, placeId: string}>;
+  onSuggestionSelect?: (suggestion: string | {description: string, placeId: string}) => void;
   loading?: boolean;
 }
 
@@ -65,19 +65,21 @@ export const MaterialTextInput = <T,>({
 
   const renderRight = () => {
     if (loading) {
+      // eslint-disable-next-line react/no-unstable-nested-components
       return <TextInput.Icon icon={() => <ActivityIndicator size={20} />} />;
     }
     if (rightComponent) {
       return <TextInput.Affix text={rightComponent as string} />;
     }
     if (formInput[field]) {
+      // eslint-disable-next-line react/no-unstable-nested-components
       return <TextInput.Icon icon={() => <CrossButton />} />;
     }
     return null;
   };
 
   const handleSuggestionPress = useCallback(
-    (suggestion: string) => {
+    (suggestion: string | {description: string, placeId: string}) => {
       if (suggestionTimeoutRef.current) {
         clearTimeout(suggestionTimeoutRef.current);
       }
@@ -154,15 +156,18 @@ export const MaterialTextInput = <T,>({
               keyboardShouldPersistTaps="handled"
               showsVerticalScrollIndicator={true}
               indicatorStyle="black">
-              {suggestions.map((suggestion, index) => (
-                <TouchableOpacity
-                  key={index}
-                  style={styles.suggestionItem}
-                  activeOpacity={0.7}
-                  onPress={() => handleSuggestionPress(suggestion)}>
-                  <Text style={styles.suggestionText}>{suggestion}</Text>
-                </TouchableOpacity>
-              ))}
+              {suggestions.map((suggestion, index) => {
+                const displayText = typeof suggestion === 'string' ? suggestion : suggestion.description;
+                return (
+                  <TouchableOpacity
+                    key={index}
+                    style={styles.suggestionItem}
+                    activeOpacity={0.7}
+                    onPress={() => handleSuggestionPress(suggestion)}>
+                    <Text style={styles.suggestionText}>{displayText}</Text>
+                  </TouchableOpacity>
+                );
+              })}
             </ScrollView>
           </View>
         )}

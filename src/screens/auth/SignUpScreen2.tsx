@@ -12,6 +12,7 @@ import {
   Dimensions,
   TouchableOpacity,
   Animated,
+  Linking,
 } from 'react-native';
 import {MaterialTextInput} from '../../components/MaterialTextInput';
 import useForm from '../../hooks/useForm';
@@ -41,7 +42,9 @@ const SignUpScreen: React.FC<Props> = ({navigation, route}) => {
   const [errors, setErrors] = useState<
     Partial<Record<keyof SignupFormType, string>>
   >({});
-  const [locationSuggestions, setLocationSuggestions] = useState<string[]>([]);
+  const [locationSuggestions, setLocationSuggestions] = useState<
+    Array<{description: string; placeId: string}>
+  >([]);
   const [isLoadingLocations, setIsLoadingLocations] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -90,7 +93,9 @@ const SignUpScreen: React.FC<Props> = ({navigation, route}) => {
     name: '',
     email: '',
     location: '',
+    placeId: '',
     phone: '',
+    acceptTerms: false,
   };
 
   const handleLocationChange = async (
@@ -102,15 +107,21 @@ const SignUpScreen: React.FC<Props> = ({navigation, route}) => {
     }
     handleFieldChange(field, value);
 
+    // Clear placeId when user types manually (not selecting from suggestions)
+    if (field === 'location') {
+      handleFieldChange('placeId', '');
+    }
+
     if (value.length >= 2) {
       setIsLoadingLocations(true);
       try {
         const response = await AuthService.getPlaces(value, 'Noida');
         if (response?.predictions) {
-          // Convert predictions to string array
-          const suggestions = response.predictions.map(
-            (prediction: any) => prediction.description,
-          );
+          // Store full prediction objects with description and placeId
+          const suggestions = response.predictions.map((prediction: any) => ({
+            description: prediction.description,
+            placeId: prediction.place_id,
+          }));
           setLocationSuggestions(suggestions);
         }
       } catch (error) {
@@ -124,8 +135,16 @@ const SignUpScreen: React.FC<Props> = ({navigation, route}) => {
   };
 
   // Add a handler for suggestion selection
-  const handleLocationSelect = (suggestion: string) => {
-    handleFieldChange('location', suggestion);
+  const handleLocationSelect = (
+    suggestion: string | {description: string; placeId: string},
+  ) => {
+    if (typeof suggestion === 'string') {
+      handleFieldChange('location', suggestion);
+      handleFieldChange('placeId', '');
+    } else {
+      handleFieldChange('location', suggestion.description);
+      handleFieldChange('placeId', suggestion.placeId);
+    }
     setLocationSuggestions([]);
   };
 
@@ -205,8 +224,8 @@ const SignUpScreen: React.FC<Props> = ({navigation, route}) => {
   ) => {
     if (typeof value === 'string') {
       validateField(field, value);
-      handleInputChange(field, value);
     }
+    handleInputChange(field, value);
   };
 
   // Get button background color based on state
@@ -314,6 +333,40 @@ const SignUpScreen: React.FC<Props> = ({navigation, route}) => {
                   maxLength={10}
                   errorMessage={errors.phone}
                 />
+
+                {/* Terms and Conditions Checkbox */}
+                <View style={styles.checkboxContainer}>
+                  <TouchableOpacity
+                    style={styles.checkboxWrapper}
+                    onPress={() => handleFieldChange('acceptTerms', !formInput.acceptTerms)}
+                    activeOpacity={0.7}>
+                    <View style={[
+                      styles.checkbox,
+                      formInput.acceptTerms && styles.checkboxChecked,
+                    ]}>
+                      {formInput.acceptTerms && (
+                        <GetIcon
+                          iconName="checkmark"
+                          color="white"
+                          size={16}
+                        />
+                      )}
+                    </View>
+                    <View style={styles.checkboxTextContainer}>
+                      <Text style={styles.checkboxText}>
+                        I agree to the{' '}
+                        <Text
+                          style={styles.linkText}
+                          onPress={() => Linking.openURL('https://mtone.in/terms-conditions')}>
+                          Terms and Conditions
+                        </Text>
+                      </Text>
+                    </View>
+                  </TouchableOpacity>
+                  {errors.acceptTerms && (
+                    <Text style={styles.checkboxError}>{errors.acceptTerms}</Text>
+                  )}
+                </View>
 
                 <View style={styles.actionsSection}>
                   <TouchableOpacity
@@ -471,6 +524,48 @@ const styles = StyleSheet.create({
   loginText: {
     color: Colors.MT_PRIMARY_1,
     fontWeight: 'bold',
+  },
+  checkboxContainer: {
+    marginTop: 16,
+    marginBottom: 8,
+  },
+  checkboxWrapper: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingVertical: 8,
+  },
+  checkboxTextContainer: {
+    flex: 1,
+    marginLeft: 8,
+  },
+  checkbox: {
+    width: 20,
+    height: 20,
+    borderWidth: 2,
+    borderColor: Colors.MT_PRIMARY_1,
+    borderRadius: 4,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: 'transparent',
+  },
+  checkboxChecked: {
+    backgroundColor: Colors.MT_PRIMARY_1,
+  },
+  checkboxText: {
+    flex: 1,
+    fontSize: 14,
+    color: '#555',
+    lineHeight: 20,
+  },
+  linkText: {
+    color: Colors.MT_PRIMARY_1,
+    textDecorationLine: 'underline',
+  },
+  checkboxError: {
+    color: '#FF0000',
+    fontSize: 12,
+    marginTop: 4,
+    marginLeft: 48,
   },
 });
 

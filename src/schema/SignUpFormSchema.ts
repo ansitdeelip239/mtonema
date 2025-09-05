@@ -15,10 +15,12 @@ const SignUpFormSchema = z.object({
     .email('Invalid email address')
     .nonempty('Email is required'),
   location: z.string().nonempty('Location is required'),
+  placeId: z.string().optional(),
   phone: z
     .string()
     .regex(/^\d{10}$/, 'Mobile number must be exactly 10 digits')
     .nonempty('Mobile Number is required'),
+  acceptTerms: z.boolean().refine(val => val === true, 'You must accept the terms and conditions'),
 });
 
 const signupSubmissionSchema = (role: AllowedRoles) =>
