@@ -1,9 +1,9 @@
-import {PropertyFormData} from '../types/propertyform';
+import {PartnerPropertyApiSubmissionType} from '../schema/PartnerPropertyFormSchema';
 import url from '../constants/api';
 import {api} from '../utils/api';
 
 class SellerService {
-  static async addProperty(body: PropertyFormData) {
+  static async addProperty(body: PartnerPropertyApiSubmissionType) {
     try {
       const response = await api.post<null>(`${url.seller.property.add}`, body);
       return response;
@@ -13,7 +13,7 @@ class SellerService {
     }
   }
 
-  static async updateProperty(body: PropertyFormData) {
+  static async updateProperty(body: PartnerPropertyApiSubmissionType) {
     try {
       const response = await api.post<null>(`${url.seller.property.update}`, body);
       return response;

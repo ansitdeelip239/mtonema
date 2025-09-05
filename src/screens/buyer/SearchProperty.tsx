@@ -16,7 +16,7 @@ import {PropertyModel} from '../../types';
 import EnquiryButton from '../common/EnquiryButton';
 import Colors from '../../constants/Colors';
 import { DrawerNavigationProp } from '@react-navigation/drawer';
-import BuyerHeader from '../../components/BuyerHeader';
+import BuyerHeader from '../../components/BuyerSellerHeader';
 import GetIcon from '../../components/GetIcon';
 
 type HomeProps = {

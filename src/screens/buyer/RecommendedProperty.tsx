@@ -18,7 +18,7 @@ import EnquiryButton from '../common/EnquiryButton';
 import Colors from '../../constants/Colors';
 import { DrawerNavigationProp } from '@react-navigation/drawer';
 import { formatCurrency } from '../../utils/currency';
-import BuyerHeader from '../../components/BuyerHeader';
+import BuyerHeader from '../../components/BuyerSellerHeader';
 import GetIcon from '../../components/GetIcon';
 type HomeProps = {
   navigation: DrawerNavigationProp<any>;

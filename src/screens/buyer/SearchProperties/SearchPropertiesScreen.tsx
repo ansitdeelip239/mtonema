@@ -24,7 +24,7 @@ import {searchProperties} from './hooks/useProperties';
 import {PropertyFor, SortBy} from '../../../constants/MasterDetails';
 import Colors from '../../../constants/Colors';
 import SearchHeader from './components/SearchHeader';
-import BuyerHeader from '../../../components/BuyerHeader';
+import BuyerHeader from '../../../components/BuyerSellerHeader';
 
 type Props = NativeStackScreenProps<BuyerBottomTabParamList, 'Search Property'>;
 

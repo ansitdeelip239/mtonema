@@ -10,7 +10,7 @@ import {
   Platform,
   Linking,
 } from 'react-native';
-import Header from '../../components/Header';
+import BuyerHeader from '../../components/BuyerSellerHeader';
 import Colors from '../../constants/Colors';
 import GetIcon from '../../components/GetIcon';
 
@@ -97,7 +97,12 @@ const SellerContactScreen = () => {
 
   return (
     <View style={styles.container}>
-      <Header title="Contact Us" />
+      <BuyerHeader
+        title="Contact Us"
+        subtitle="Get in touch with support"
+      >
+        <GetIcon iconName="phone" size={20} color="#333" />
+      </BuyerHeader>
 
       <ScrollView style={styles.scrollContainer} showsVerticalScrollIndicator={false}>
         {/* Hero Section */}

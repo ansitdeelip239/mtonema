@@ -12,7 +12,7 @@ import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import GetIcon from '../../components/GetIcon';
 import Colors from '../../constants/Colors';
 import {BuyerBottomTabParamList} from '../../types/navigation';
-import BuyerHeader from '../../components/BuyerHeader';
+import BuyerHeader from '../../components/BuyerSellerHeader';
 
 type Props = NativeStackScreenProps<BuyerBottomTabParamList, 'Contacted'>;
 

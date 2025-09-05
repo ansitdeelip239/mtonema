@@ -8,7 +8,7 @@ import {
   Image,
   Platform,
 } from 'react-native';
-import Header from '../../components/Header';
+import BuyerHeader from '../../components/BuyerSellerHeader';
 import {BottomTabScreenProps} from '@react-navigation/bottom-tabs';
 import {SellerBottomTabParamList} from '../../types/navigation';
 import Colors from '../../constants/Colors';
@@ -235,7 +235,12 @@ const PropertyListScreen: React.FC<Props> = () => {
 
   return (
     <View style={styles.container}>
-      <Header title="Listed Properties" />
+      <BuyerHeader
+        title="Listed Properties"
+        subtitle="Manage your listings"
+      >
+        <GetIcon iconName="filter" size={20} color="#333" />
+      </BuyerHeader>
 
       <View style={styles.content}>
         <View style={styles.summaryContainer}>

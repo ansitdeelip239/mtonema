@@ -21,7 +21,7 @@ const url = {
   seller: {
     register: '/Account/registerseller',
     property: {
-      add: '/property/addProperty',
+      add: '/properties',
       get: '/property/getPropertyByUserid',
       update: '/property/updateProperty',
       delete: '/property/removeProperty',

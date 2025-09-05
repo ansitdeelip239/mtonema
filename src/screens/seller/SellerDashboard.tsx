@@ -7,7 +7,7 @@ import {
   TouchableOpacity,
   Platform,
 } from 'react-native';
-import Header from '../../components/Header';
+import BuyerHeader from '../../components/BuyerSellerHeader';
 import GetIcon from '../../components/GetIcon';
 import Colors from '../../constants/Colors';
 import {IconEnum} from '../../components/GetIcon';
@@ -87,7 +87,12 @@ const SellerDashboard = () => {
 
   return (
     <View style={styles.container}>
-      <Header title="Seller Dashboard" />
+      <BuyerHeader
+        title="Seller Dashboard"
+        subtitle="Manage your properties"
+      >
+        <GetIcon iconName="settings" size={20} color="#333" />
+      </BuyerHeader>
 
       <ScrollView
         style={styles.content}

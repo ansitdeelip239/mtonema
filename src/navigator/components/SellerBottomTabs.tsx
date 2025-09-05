@@ -7,17 +7,17 @@ import PropertyListScreen from '../../screens/seller/PropertyListScreen';
 // import PostProperty from '../../screens/seller/PostPropertyScreen';
 // import PropertyListingForm from '../../screens/seller/PostProperty';
 import SellerProfileScreen from '../../screens/seller/SellerProfileScreen';
-import PostPropertyForm from '../../screens/seller/PostProperty/PostPropertyForm';
 import {useAuth} from '../../hooks/useAuth';
 import {CustomBottomBar, TabScreen} from './CustomBottomBar';
 import SellerDashboard from '../../screens/seller/SellerDashboard';
 import SellerContactScreen from '../../screens/seller/SellerContactScreen';
+import PostPropertyScreen from '../../screens/seller/PostPropertyScreen';
 
 const Tab = createBottomTabNavigator<SellerBottomTabParamList>();
 
 const tabScreens: Array<TabScreen<SellerBottomTabParamList>> = [
   {
-    name: 'Home',
+    name: 'Dashboard',
     component: SellerDashboard,
     icon: 'home',
   },
@@ -28,7 +28,7 @@ const tabScreens: Array<TabScreen<SellerBottomTabParamList>> = [
   },
   {
     name: 'AddProperty',
-    component: PostPropertyForm,
+    component: PostPropertyScreen,
     icon: 'property',
   },
   {
@@ -51,7 +51,7 @@ const SellerBottomTabs = memo(() => {
         headerShown: false,
         tabBarHideOnKeyboard: true,
       }}
-      initialRouteName={navigateToPostProperty ? 'AddProperty' : 'Home'}
+      initialRouteName={navigateToPostProperty ? 'AddProperty' : 'Dashboard'}
       // eslint-disable-next-line react/no-unstable-nested-components
       tabBar={props => <CustomBottomBar {...props} tabScreens={tabScreens} />}>
       {tabScreens.map(({name, component, icon}) => (

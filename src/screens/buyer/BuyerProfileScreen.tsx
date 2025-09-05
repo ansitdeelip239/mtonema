@@ -2,7 +2,7 @@ import {StyleSheet, View, Text, ScrollView, TouchableOpacity, Platform} from 're
 import React from 'react';
 import Colors from '../../constants/Colors';
 import GetIcon, { IconEnum } from '../../components/GetIcon';
-import BuyerHeader from '../../components/BuyerHeader';
+import BuyerHeader from '../../components/BuyerSellerHeader';
 
 const BuyerProfileScreen = () => {
   // Dummy user data

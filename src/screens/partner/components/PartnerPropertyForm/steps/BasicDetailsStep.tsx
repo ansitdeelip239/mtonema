@@ -1,19 +1,21 @@
 import React, {useCallback, useState, useEffect, useRef} from 'react';
 import {View, StyleSheet, Text} from 'react-native';
-import { useTranslation } from 'react-i18next';
+import {useTranslation} from 'react-i18next';
 import FormNavigationButtons from '../components/FormNavigationButtons';
 import partnerPropertyFormSchema, {
   PartnerPropertyFormType,
 } from '../../../../../schema/PartnerPropertyFormSchema';
 import {useMaster} from '../../../../../context/MasterProvider';
-import {usePartner} from '../../../../../context/PartnerProvider'; // Added
 import {MaterialTextInput} from '../../../../../components/MaterialTextInput';
 import FilterOption from '../../../../../components/FilterOption';
 import {formatCurrency} from '../../../../../utils/currency';
 import {z} from 'zod';
 import MasterService from '../../../../../services/MasterService';
 import {PlacePrediction} from '../../../../../types/googlePlaces';
-
+import {MasterDetailModel} from '../../../../../types';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useAuth } from '../../../../../hooks/useAuth';
+import Roles from '../../../../../constants/Roles';
 
 interface BasicDetailsStepProps {
   formInput: PartnerPropertyFormType;
@@ -36,12 +38,13 @@ const BasicDetailsStep: React.FC<BasicDetailsStepProps> = ({
   showBackButton = false,
 }) => {
   const { t } = useTranslation();
-  const {masterData} = useMaster();
-  const {cities} = usePartner();
+  const {masterData, fetchMasterDetailsByMasterNameAndXref} = useMaster();
+  const [cities, setCities] = useState<MasterDetailModel[]>([]);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isFormValid, setIsFormValid] = useState(false);
   const [attemptedSubmit, setAttemptedSubmit] = useState(false);
   const [shouldShowErrors, setShouldShowErrors] = useState(false);
+  const {user} = useAuth();
 
   // Add state for location suggestions
   const [locationSuggestions, setLocationSuggestions] = useState<string[]>([]);
@@ -53,6 +56,58 @@ const BasicDetailsStep: React.FC<BasicDetailsStepProps> = ({
 
   // Add a ref to track if location was just selected
   const justSelectedRef = useRef(false);
+
+  // Fetch cities/project locations
+  const fetchProjectLocations = useCallback(async () => {
+    try {
+      if (user?.role === Roles.PARTNER) {
+        const partnerZoneData = await AsyncStorage.getItem('partnerZone');
+        if (partnerZoneData) {
+          const parsedData = JSON.parse(partnerZoneData);
+          const response = await fetchMasterDetailsByMasterNameAndXref(
+            'ProjectLocation',
+            parsedData.masterName,
+          );
+          console.log(
+            'Project locations response from BasicDetailsStep:',
+            response,
+            parsedData,
+          );
+
+          if (response.success) {
+            setCities(response.data);
+          } else {
+            console.error(
+              'Failed to fetch project locations in BasicDetailsStep:',
+              response.message,
+            );
+            setCities([]); // Set to empty array on failure
+          }
+        } else {
+          console.log('No partnerZone data found in AsyncStorage.');
+          setCities([]); // Set to empty array if no zone data
+        }
+      } else if (user?.role === Roles.SELLER || Roles.ADMIN) {
+        const uniqueLocations = masterData?.ProjectLocation?.filter((item, index, self) =>
+          index === self.findIndex(t => t.masterDetailName === item.masterDetailName)
+        ) || [];
+        setCities(uniqueLocations);
+      } else {
+        setCities([]);
+      }
+    } catch (error) {
+      console.error(
+        'Error fetching project locations in BasicDetailsStep:',
+        error,
+      );
+      setCities([]); // Set to empty array on error
+    }
+  }, [fetchMasterDetailsByMasterNameAndXref, user, masterData]);
+
+  // Fetch cities on component mount
+  useEffect(() => {
+    fetchProjectLocations();
+  }, [fetchProjectLocations]);
 
   // Validate and show errors while typing
   const validateField = useCallback(
@@ -183,15 +238,17 @@ const BasicDetailsStep: React.FC<BasicDetailsStepProps> = ({
 
   // Handle suggestion selection
   const handleLocationSuggestionSelect = useCallback(
-    (suggestion: string) => {
+    (suggestion: string | { description: string; placeId: string; }) => {
       // Set the ref to true - we just selected from suggestions
       justSelectedRef.current = true;
 
-      handleInputChange('location', suggestion);
+      const description = typeof suggestion === 'string' ? suggestion : suggestion.description;
+
+      handleInputChange('location', description);
 
       // Find the selected prediction to get additional data if needed
       const selectedPrediction = placePredictions.find(
-        prediction => prediction.description === suggestion,
+        prediction => prediction.description === description,
       );
 
       // You can use additional data from the prediction if needed
