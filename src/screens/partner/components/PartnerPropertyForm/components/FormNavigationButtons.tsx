@@ -49,7 +49,6 @@ const FormNavigationButtons: React.FC<FormNavigationButtonsProps> = ({
         style={[
           styles.button,
           isNextEnabled
-            // eslint-disable-next-line react-native/no-inline-styles
             ? {backgroundColor: theme.primaryColor, marginLeft: 'auto'}
             : styles.disabledButton,
           showBackButton ? {} : styles.fullWidthButton,

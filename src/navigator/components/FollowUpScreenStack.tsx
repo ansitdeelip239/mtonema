@@ -6,10 +6,9 @@ import OverdueFollowUpScreen from '../../screens/partner/FollowUpScreen/OverdueF
 import UpcomingFollowUpScreen from '../../screens/partner/FollowUpScreen/UpcomingFollowUpScreen';
 import SomedayFollowUpScreen from '../../screens/partner/FollowUpScreen/SomedayFollowUpScreen';
 import { useTheme } from '../../context/ThemeProvider';
-import { useNavigation } from '@react-navigation/native';
-import { DrawerNavigationProp } from '@react-navigation/drawer';
 import { PartnerDrawerParamList } from '../../types/navigation';
 import GetIcon from '../../components/GetIcon';
+import { useDrawer } from '../../hooks/useDrawer';
 
 // Define the param list type for this stack
 export type FollowUpStackParamList = {
@@ -21,12 +20,22 @@ export type FollowUpStackParamList = {
 
 const Stack = createNativeStackNavigator<FollowUpStackParamList>();
 
+// Define the drawer toggle button component outside of render
+const DrawerToggleButton = ({ onPress }: { onPress: () => void }) => (
+  <TouchableOpacity
+    onPress={onPress}
+    style={{ marginLeft: 16, padding: 4 }}
+    hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+  >
+    <GetIcon iconName="hamburgerMenu" color="#fff" size={18} />
+  </TouchableOpacity>
+);
+
 const FollowUpScreenStack = () => {
   const { theme } = useTheme();
   const isIOS = Platform.OS === 'ios';
 
-  const drawerNavigation =
-    useNavigation<DrawerNavigationProp<PartnerDrawerParamList>>();
+  const { openDrawer } = useDrawer<PartnerDrawerParamList>();
 
   return (
     <Stack.Navigator
@@ -49,14 +58,9 @@ const FollowUpScreenStack = () => {
           headerBackVisible: false, // Hide back button on initial screen
 
           // Show drawer icon only on the root screen
+          // eslint-disable-next-line react/no-unstable-nested-components
           headerLeft: () => (
-            <TouchableOpacity
-              onPress={() => drawerNavigation.toggleDrawer()}
-              style={{ marginLeft: 16, padding: 4 }}
-              hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
-            >
-              <GetIcon iconName="hamburgerMenu" color="#fff" size={18} />
-            </TouchableOpacity>
+            <DrawerToggleButton onPress={openDrawer} />
           ),
         }}
       />

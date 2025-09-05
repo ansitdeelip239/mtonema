@@ -22,7 +22,6 @@ const BuyerNavigator = memo(() => {
         screenOptions={{
           ...drawerStyles,
           headerShown: true,
-          swipeEnabled: !isIOS,
         }}>
         <Drawer.Screen
           name="Home"

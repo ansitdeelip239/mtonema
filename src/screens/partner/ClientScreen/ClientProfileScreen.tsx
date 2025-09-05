@@ -170,7 +170,6 @@ const ClientProfileScreen: React.FC<Props> = ({ route, navigation }) => {
     navigation.setOptions({
       // eslint-disable-next-line react/no-unstable-nested-components
       headerRight: () => (
-        // eslint-disable-next-line react-native/no-inline-styles
         <View style={{ flexDirection: 'row', marginRight: 10 }}>
           <TouchableOpacity
             onPress={() => {
@@ -179,7 +178,6 @@ const ClientProfileScreen: React.FC<Props> = ({ route, navigation }) => {
                 clientData: client ?? undefined,
               });
             }}
-            // eslint-disable-next-line react-native/no-inline-styles
             style={{ marginHorizontal: 10 }}
           >
             <GetIcon iconName="edit" color="#fff" size={18} />
@@ -189,7 +187,6 @@ const ClientProfileScreen: React.FC<Props> = ({ route, navigation }) => {
             onPress={() => {
               setIsDeleteModalVisible(true);
             }}
-            // eslint-disable-next-line react-native/no-inline-styles
             style={{ marginHorizontal: 10 }}
           >
             <GetIcon iconName="delete" color="#fff" size={18} />

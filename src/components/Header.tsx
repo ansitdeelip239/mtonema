@@ -120,8 +120,8 @@ const styles = StyleSheet.create({
   // Changed from headerGradient to headerContainerWrapper
   // to apply rounded corners on the outer container view
   headerContainerWrapper: {
-    borderBottomLeftRadius: 25,
-    borderBottomRightRadius: 25,
+    borderBottomLeftRadius: 14,
+    borderBottomRightRadius: 14,
   },
   headerContainer: {
     flexDirection: 'row',

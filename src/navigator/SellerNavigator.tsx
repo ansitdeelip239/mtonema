@@ -21,7 +21,6 @@ const SellerNavigator = memo(() => {
         initialRouteName="Home"
         screenOptions={{
           ...drawerStyles,
-          swipeEnabled: !isIOS,
         }}>
         <Drawer.Screen
           name="Home"

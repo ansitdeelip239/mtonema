@@ -53,7 +53,6 @@ export const PaymentLoadingOverlay = React.memo(
                   styles.progressDot,
                   (isCreatingOrder || isPaying || isVerifying) &&
                     styles.activeDot,
-                  // eslint-disable-next-line react-native/no-inline-styles
                   isCreatingOrder && {backgroundColor: '#f59e0b'},
                 ]}
               />
@@ -67,7 +66,6 @@ export const PaymentLoadingOverlay = React.memo(
                 style={[
                   styles.progressDot,
                   (isPaying || isVerifying) && styles.activeDot,
-                  // eslint-disable-next-line react-native/no-inline-styles
                   isPaying && {backgroundColor: '#6366f1'},
                 ]}
               />
@@ -81,7 +79,6 @@ export const PaymentLoadingOverlay = React.memo(
                 style={[
                   styles.progressDot,
                   isVerifying && styles.activeDot,
-                  // eslint-disable-next-line react-native/no-inline-styles
                   isVerifying && {backgroundColor: '#10b981'},
                 ]}
               />

@@ -159,7 +159,6 @@ export const MainScreen: React.FC<Props> = ({navigation}) => {
               <View
                 style={[
                   styles.tabSelector,
-                  // eslint-disable-next-line react-native/no-inline-styles
                   isRTL && {flexDirection: 'row-reverse'},
                 ]}>
                 <Animated.View
@@ -223,7 +222,6 @@ export const MainScreen: React.FC<Props> = ({navigation}) => {
                       <View
                         style={[
                           styles.buttonContentRow,
-                          // eslint-disable-next-line react-native/no-inline-styles
                           isRTL && {flexDirection: 'row-reverse'},
                         ]}>
                         <GetIcon iconName="partner3" color="white" size="20" />
@@ -292,7 +290,6 @@ export const MainScreen: React.FC<Props> = ({navigation}) => {
                       <View
                         style={[
                           styles.buttonContentRow,
-                          // eslint-disable-next-line react-native/no-inline-styles
                           isRTL && {flexDirection: 'row-reverse'},
                         ]}>
                         <Text style={styles.buttonText}>
@@ -313,7 +310,6 @@ export const MainScreen: React.FC<Props> = ({navigation}) => {
                       <View
                         style={[
                           styles.buttonContentRow,
-                          // eslint-disable-next-line react-native/no-inline-styles
                           isRTL && {flexDirection: 'row-reverse'},
                         ]}>
                         <GetIcon

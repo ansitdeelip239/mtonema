@@ -26,7 +26,6 @@ const PartnerNavigator = () => {
       drawerContent={props => <CustomDrawerContent {...props} />}
       screenOptions={{
         ...drawerStyles,
-        swipeEnabled: !isIOS,
       }}
       initialRouteName="Home">
       <Drawer.Screen

@@ -5,10 +5,9 @@ import { useTheme } from '../../context/ThemeProvider';
 import AddAgentPropertyScreen from '../../screens/partner/AgentsPropertyScreen/AddAgentPropertyScreen';
 import AgentDataScreen from '../../screens/partner/AgentsPropertyScreen/AgentsPropertyScreen';
 import { AgentData } from '../../types';
-import { useNavigation } from '@react-navigation/native';
-import { DrawerNavigationProp } from '@react-navigation/drawer';
 import { PartnerDrawerParamList } from '../../types/navigation';
 import GetIcon from '../../components/GetIcon';
+import { useDrawer } from '../../hooks/useDrawer';
 
 // Define the param list type for this stack
 export type AgentDataStackParamList = {
@@ -18,12 +17,32 @@ export type AgentDataStackParamList = {
 
 const Stack = createNativeStackNavigator<AgentDataStackParamList>();
 
+// Define components outside of render to avoid unstable nested components warning
+const DrawerToggleButton = ({ onPress }: { onPress: () => void }) => (
+  <TouchableOpacity
+    onPress={onPress}
+    style={{ marginLeft: 16, padding: 4 }}
+    hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+  >
+    <GetIcon iconName="hamburgerMenu" color="#fff" size={18} />
+  </TouchableOpacity>
+);
+
+const AddButton = ({ onPress }: { onPress: () => void }) => (
+  <TouchableOpacity
+    onPress={onPress}
+    style={{ marginRight: 10 }}
+    hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+  >
+    <Text style={{ color: '#fff', fontWeight: 'bold' }}>Add</Text>
+  </TouchableOpacity>
+);
+
 const AgentDataScreenStack = () => {
   const { theme } = useTheme();
   const isIOS = Platform.OS === 'ios';
 
-  const drawerNavigation =
-    useNavigation<DrawerNavigationProp<PartnerDrawerParamList>>();
+  const { openDrawer } = useDrawer<PartnerDrawerParamList>();
 
   return (
     <Stack.Navigator
@@ -43,30 +62,20 @@ const AgentDataScreenStack = () => {
         options={({ navigation }) => ({
           headerBackVisible: false, // hide back button on the root screen
           title: 'Agent Data',
+          // eslint-disable-next-line react/no-unstable-nested-components
           headerLeft: () => (
-            <TouchableOpacity
-              onPress={() => drawerNavigation.toggleDrawer()}
-              style={{ marginLeft: 16, padding: 4 }}
-              hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
-            >
-              <GetIcon iconName="hamburgerMenu" color="#fff" size={18} />
-            </TouchableOpacity>
+            <DrawerToggleButton onPress={openDrawer} />
           ),
+          // eslint-disable-next-line react/no-unstable-nested-components
           headerRight: () => (
-            <>
-              <TouchableOpacity
-                onPress={() =>
-                  navigation.navigate({
-                    name: 'AddAgentDataScreen',
-                    params: { editMode: false, propertyData: {} as AgentData },
-                  })
-                }
-                style={{ marginRight: 10 }}
-                hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
-              >
-                <Text style={{ color: '#fff', fontWeight: 'bold' }}>Add</Text>
-              </TouchableOpacity>
-            </>
+            <AddButton
+              onPress={() =>
+                navigation.navigate({
+                  name: 'AddAgentDataScreen',
+                  params: { editMode: false, propertyData: {} as AgentData },
+                })
+              }
+            />
           ),
         })}
       />

@@ -8,7 +8,9 @@ export const useDrawerStyles = () => {
   const isIOS = Platform.OS === 'ios';
 
   const drawerStyles: DrawerNavigationOptions = {
-    drawerType: 'back' as const,
+    drawerType: 'slide' as const,
+    swipeEnabled: true,
+    swipeEdgeWidth: 40, // Only detect swipe from first 20px instead of 280px
     drawerActiveTintColor: 'white',
     drawerInactiveTintColor: theme.textColor || 'black',
     drawerActiveBackgroundColor: theme.primaryColor,

@@ -89,7 +89,7 @@ const BasicDetailsStep: React.FC<BasicDetailsStepProps> = ({
         }
       } else if (user?.role === Roles.SELLER || Roles.ADMIN) {
         const uniqueLocations = masterData?.ProjectLocation?.filter((item, index, self) =>
-          index === self.findIndex(t => t.masterDetailName === item.masterDetailName)
+          index === self.findIndex(other => other.masterDetailName === item.masterDetailName)
         ) || [];
         setCities(uniqueLocations);
       } else {

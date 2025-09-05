@@ -120,7 +120,6 @@ export const MaterialTextInput = <T,>({
           error={!!errorMessage}
           onFocus={() => setIsFocused(true)} // Set focus state
           onBlur={() => setIsFocused(false)} // Reset focus state
-          // eslint-disable-next-line react-native/no-inline-styles
           contentStyle={{
             minHeight: props.multiline ? 100 : undefined,
             color: 'black',

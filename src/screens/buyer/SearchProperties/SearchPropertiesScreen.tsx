@@ -11,7 +11,6 @@ import {
 import GetIcon from '../../../components/GetIcon';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {BuyerBottomTabParamList} from '../../../types/navigation';
-import {useDrawer} from '../../../hooks/useDrawer';
 import {Property, PropertySearchParams} from '../../../types';
 import {
   PropertyCard,
@@ -56,7 +55,6 @@ const LoadingFooter = () => (
 );
 
 const SearchPropertiesScreen: React.FC<Props> = ({navigation: _navigation}) => {
-  const { } = useDrawer();
 
   const [showFilters, setShowFilters] = useState(false);
   const [showSortModal, setShowSortModal] = useState(false);
