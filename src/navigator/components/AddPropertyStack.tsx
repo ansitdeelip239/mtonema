@@ -3,10 +3,9 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { Platform, TouchableOpacity } from 'react-native';
 import { useTheme } from '../../context/ThemeProvider';
 import AddPartnerPropertyScreen from '../../screens/partner/AddPartnerPropertyScreen/AddPartnerPropertyScreen';
-import { useNavigation } from '@react-navigation/native';
-import { DrawerNavigationProp } from '@react-navigation/drawer';
 import { PartnerDrawerParamList } from '../../types/navigation';
 import GetIcon from '../../components/GetIcon';
+import { useDrawer } from '../../hooks/useDrawer';
 
 export type AddPropertyStackParamList = {
   AddPartnerProperty: undefined;
@@ -14,12 +13,22 @@ export type AddPropertyStackParamList = {
 
 const Stack = createNativeStackNavigator<AddPropertyStackParamList>();
 
+// Define component outside of render to avoid unstable nested components warning
+const DrawerToggleButton = ({ onPress }: { onPress: () => void }) => (
+  <TouchableOpacity
+    onPress={onPress}
+    style={{ marginLeft: 16, padding: 4 }}
+    hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+  >
+    <GetIcon iconName="hamburgerMenu" color="#fff" size={18} />
+  </TouchableOpacity>
+);
+
 const AddPropertyStack = () => {
   const { theme } = useTheme();
   const isIOS = Platform.OS === 'ios';
 
-  const drawerNavigation =
-    useNavigation<DrawerNavigationProp<PartnerDrawerParamList>>();
+  const { openDrawer } = useDrawer<PartnerDrawerParamList>();
 
   return (
     <Stack.Navigator
@@ -30,14 +39,9 @@ const AddPropertyStack = () => {
         headerTitleAlign: 'center',
         headerBackVisible: true,
         headerBackTitle: 'Back',
+        // eslint-disable-next-line react/no-unstable-nested-components
         headerLeft: () => (
-          <TouchableOpacity
-            onPress={() => drawerNavigation.toggleDrawer()}
-            style={{ marginLeft: 16, padding: 4 }}
-            hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
-          >
-            <GetIcon iconName="hamburgerMenu" color="#fff" size={18} />
-          </TouchableOpacity>
+          <DrawerToggleButton onPress={openDrawer} />
         ),
       }}
       initialRouteName="AddPartnerProperty"

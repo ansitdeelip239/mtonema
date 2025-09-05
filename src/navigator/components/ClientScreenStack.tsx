@@ -15,6 +15,7 @@ import { PartnerDrawerParamList } from '../../types/navigation';
 import GetIcon from '../../components/GetIcon';
 import Roles from '../../constants/Roles';
 import { useAuth } from '../../context/AuthProvider';
+import { useDrawer } from '../../hooks/useDrawer';
 
 // define your param list with 'FilterScreen'
 export type ClientStackParamList = {
@@ -43,9 +44,41 @@ export type ClientStackParamList = {
 
 const Stack = createNativeStackNavigator<ClientStackParamList>();
 
+// Define components outside of render to avoid unstable nested components warning
+const DrawerToggleButton = ({ onPress }: { onPress: () => void }) => (
+  <TouchableOpacity
+    onPress={onPress}
+    style={{ marginLeft: 16, padding: 4 }}
+    hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+  >
+    <GetIcon iconName="hamburgerMenu" color="#fff" size={18} />
+  </TouchableOpacity>
+);
+
+const FilterButton = ({ onPress }: { onPress: () => void }) => (
+  <TouchableOpacity
+    onPress={onPress}
+    style={{ marginRight: 16 }}
+    hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+  >
+    <GetIcon iconName="filterFunnel" color="#fff" size={18} />
+  </TouchableOpacity>
+);
+
+const AddClientButton = ({ onPress }: { onPress: () => void }) => (
+  <TouchableOpacity
+    onPress={onPress}
+    style={{ marginRight: 10 }}
+    hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+  >
+    <Text style={{ color: '#fff', fontWeight: 'bold' }}>Add Client</Text>
+  </TouchableOpacity>
+);
+
 const ClientScreenStack = () => {
   const isIOS = Platform.OS === 'ios';
   const { theme } = useTheme();
+  const { openDrawer } = useDrawer<PartnerDrawerParamList>();
   const drawerNavigation =
     useNavigation<DrawerNavigationProp<PartnerDrawerParamList>>();
   const { user } = useAuth();
@@ -69,33 +102,19 @@ const ClientScreenStack = () => {
           headerBackVisible: false, // no back button on root screen
           title: 'Clients',
           // Show drawer icon only on root screen
+          // eslint-disable-next-line react/no-unstable-nested-components
           headerLeft: () => (
-            <TouchableOpacity
-              onPress={() => drawerNavigation.toggleDrawer()}
-              style={{ marginLeft: 16, padding: 4 }}
-              hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
-            >
-              <GetIcon iconName="hamburgerMenu" color="#fff" size={18} />
-            </TouchableOpacity>
+            <DrawerToggleButton onPress={openDrawer} />
           ),
+          // eslint-disable-next-line react/no-unstable-nested-components
           headerRight: () => (
             <>
               {(user?.role === Roles.ADMIN || user?.role === Roles.TEAM) && (
-                <TouchableOpacity
-                  onPress={() => drawerNavigation.navigate('Filter Partners')}
-                  style={{ marginRight: 16 }}
-                  hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
-                >
-                  <GetIcon iconName="filterFunnel" color="#fff" size={18} />
-                </TouchableOpacity>
+                <FilterButton onPress={() => drawerNavigation.navigate('Filter Partners')} />
               )}
-              <TouchableOpacity
+              <AddClientButton
                 onPress={() => navigation.navigate('AddClientScreen', { editMode: false })}
-                style={{ marginRight: 10 }}
-                hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
-              >
-                <Text style={{ color: '#fff', fontWeight: 'bold' }}>Add Client</Text>
-              </TouchableOpacity>
+              />
             </>
           ),
         })}
