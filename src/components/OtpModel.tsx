@@ -13,13 +13,13 @@ import {
   Dimensions,
 } from 'react-native';
 import {OtpInput} from 'react-native-otp-entry';
-import {useDialog} from '../hooks/useDialog';
 import Colors from '../constants/Colors';
 import Images from '../constants/Images';
 import {useKeyboard} from '../hooks/useKeyboard';
 import {lightenColor} from '../utils/colorUtils';
 import GetIcon from './GetIcon';
 import {useTranslation} from 'react-i18next';
+import { useDialog } from '../context/DialogProvider';
 
 const {width} = Dimensions.get('window');
 

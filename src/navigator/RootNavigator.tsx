@@ -2,9 +2,8 @@ import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import React from 'react';
 import MainNavigator from './MainNavigator';
-import {navigationRef} from './NavigationRef';
+import {navigationRef} from './components/NavigationRef';
 import AuthNavigator from './AuthNavigator';
-import {useAuth} from '../hooks/useAuth';
 import {useLanguage} from '../context/LanguageProvider';
 import {View, ActivityIndicator, StyleSheet, Image} from 'react-native';
 import Colors from '../constants/Colors';
@@ -13,6 +12,7 @@ import LanguageSelectionScreen from '../screens/language/LanguageSelectionScreen
 import LanguageDebugger from '../components/LanguageDebugger';
 import {BottomTabProvider} from '../context/BottomTabProvider';
 import SubscriptionProvider from '../context/SubscriptionProvider';
+import { useAuth } from '../context/AuthProvider';
 
 const RootStack = createNativeStackNavigator();
 

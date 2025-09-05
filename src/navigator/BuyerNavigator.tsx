@@ -1,16 +1,18 @@
 import {createDrawerNavigator} from '@react-navigation/drawer';
 import React, {memo} from 'react';
-import Colors from '../constants/Colors';
 import CustomDrawerContent from '../components/CustomDrawerContent';
-import ProfileScreen from '../screens/common/ProfileScreen';
 import GetIcon from '../components/GetIcon';
-import { StyleSheet, TouchableOpacity } from 'react-native';
+import {StyleSheet} from 'react-native';
 import BuyerBottomTabs from './components/BuyerBottomTabs';
 import {SafeAreaView} from 'react-native-safe-area-context';
+import PartnerProfileScreen from '../screens/partner/ProfileScreen/ProfileScreen';
+import {useDrawerStyles} from '../hooks/useDrawerStyles';
 
 const Drawer = createDrawerNavigator();
 
 const BuyerNavigator = memo(() => {
+  const {drawerStyles, isIOS} = useDrawerStyles();
+
   return (
     <SafeAreaView style={styles.safeArea} edges={['top']}>
       <Drawer.Navigator
@@ -18,17 +20,9 @@ const BuyerNavigator = memo(() => {
         drawerContent={props => <CustomDrawerContent {...props} />}
         initialRouteName="Home"
         screenOptions={{
-          drawerType: 'back',
-          drawerActiveTintColor: 'white',
-          drawerActiveBackgroundColor: Colors.MT_PRIMARY_1,
+          ...drawerStyles,
           headerShown: true,
-          drawerStyle: {
-            width: 240,
-          },
-          headerStyle: {
-            backgroundColor: Colors.MT_PRIMARY_1,
-          },
-          headerTintColor: Colors.SECONDARY_3,
+          swipeEnabled: !isIOS,
         }}>
         <Drawer.Screen
           name="Home"
@@ -43,20 +37,11 @@ const BuyerNavigator = memo(() => {
         />
         <Drawer.Screen
           name="Profile Screen"
-          component={ProfileScreen}
-          options={({navigation}) => ({
+          component={PartnerProfileScreen}
+          options={{
+            headerShown: isIOS,
             drawerItemStyle: {display: 'none'},
-            // eslint-disable-next-line react/no-unstable-nested-components
-            headerRight: () => (
-              <TouchableOpacity
-                onPress={() =>
-                  navigation.navigate('Home', {screen: 'Home'})
-                }
-                style={styles.backButton}>
-                <GetIcon iconName="back" size="24" color={Colors.SECONDARY_3} />
-              </TouchableOpacity>
-            ),
-          })}
+          }}
         />
       </Drawer.Navigator>
     </SafeAreaView>
@@ -65,9 +50,6 @@ const BuyerNavigator = memo(() => {
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
-  },
-  backButton: {
-    marginRight: 16,
   },
 });
 

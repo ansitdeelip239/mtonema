@@ -1,7 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import {useAuth} from '../hooks/useAuth';
 import {useSubscription} from '../context/SubscriptionProvider';
-// import {useLogoStorage} from '../hooks/useLogoStorage';
 import {
   DrawerContentScrollView,
   DrawerItemList,
@@ -19,10 +17,12 @@ import Colors from '../constants/Colors';
 import GetIcon from './GetIcon';
 import Images from '../constants/Images';
 import {useTheme} from '../context/ThemeProvider';
-import {navigationRef} from '../navigator/NavigationRef';
+import {navigationRef} from '../navigator/components/NavigationRef';
 import PaymentScreen from '../screens/partner/PaymentScreen/PaymentScreen';
-import Roles from '../constants/Roles';
 import {useTranslation} from 'react-i18next';
+import {useAuth} from '../context/AuthProvider';
+import Roles from '../constants/Roles';
+import CustomDrawerItem from './CustomDrawerItem';
 
 const CustomDrawerContent = (props: any) => {
   const {user, logout} = useAuth();
@@ -35,6 +35,9 @@ const CustomDrawerContent = (props: any) => {
   const [logoutModalVisible, setLogoutModalVisible] = useState(false); // Logout confirmation modal
   const [loadingModalVisible, setLoadingModalVisible] = useState(false);
   const [premiumModalVisible, setPremiumModalVisible] = useState(false); // Premium upgrade modal
+
+  // Get current route name for active state
+  const currentRoute = props.state?.routes[props.state?.index]?.name;
 
   // const {logoUrl} = useLogoStorage();
 
@@ -83,21 +86,28 @@ const CustomDrawerContent = (props: any) => {
   };
 
   return (
-    <DrawerContentScrollView {...props} contentContainerStyle={styles.flexOne}>
+    <DrawerContentScrollView
+      {...props}
+      style={styles.drawerScrollView}
+      contentContainerStyle={styles.drawerContentContainer}
+      showsVerticalScrollIndicator={true}
+      bounces={false}>
       <TouchableOpacity onPress={navigateToProfile}>
-        <View style={styles.profileContainer}>
-          {/* {logoUrl ? (
-            <Image source={{uri: logoUrl}} style={styles.logo} />
-          ) : ( */}
+        <View
+          style={[
+            styles.profileContainer,
+            {backgroundColor: theme.backgroundColor || '#f5f5f5'},
+          ]}>
           <Image source={Images.MTESTATES_LOGO} style={styles.logo} />
-          {/* )} */}
 
           <View style={styles.nameContainer}>
-            <Text style={styles.name}>{userName}</Text>
+            <Text style={[styles.name, {color: theme.textColor || '#333'}]}>
+              {userName}
+            </Text>
             <TouchableOpacity
               style={styles.editIconContainer}
               onPress={navigateToProfile}>
-              <GetIcon iconName="edit" color={theme.primaryColor} size="20" />
+              <GetIcon iconName="edit" color={theme.textColor} size="20" />
             </TouchableOpacity>
           </View>
         </View>
@@ -111,7 +121,12 @@ const CustomDrawerContent = (props: any) => {
         {/* Buy Premium Button - Only show for trial users */}
         {isPartnerOrTeam && isInTrial && (
           <TouchableOpacity
-            style={styles.premiumDrawerItem}
+            style={[
+              styles.premiumDrawerItem,
+              {
+                shadowColor: theme.primaryColor || '#000',
+              },
+            ]}
             onPress={handlePremiumUpgrade}>
             <View style={styles.iconContainer}>
               <GetIcon iconName="premium" color="white" size="25" />
@@ -122,71 +137,42 @@ const CustomDrawerContent = (props: any) => {
           </TouchableOpacity>
         )}
 
-        {user?.role === Roles.ADMIN && (
-          <TouchableOpacity
-            style={styles.customDrawerItem}
-            onPress={navigateToPayments}>
-            <View style={styles.iconContainer}>
-              <GetIcon iconName="rupee" color="#444" size="25" />
-            </View>
-            <Text style={styles.itemText}>{t('navigation.drawer.payments', 'Payments')}</Text>
-          </TouchableOpacity>
-        )}
+        <CustomDrawerItem
+          iconName="rupee"
+          label={t('navigation.drawer.payments', 'Payments')}
+          onPress={navigateToPayments}
+          isActive={currentRoute === 'Payments'}
+          showForRoles={[Roles.ADMIN, Roles.PARTNER]}
+          userRole={user?.role}
+        />
 
-        <TouchableOpacity
-          style={styles.customDrawerItem}
-          onPress={() => setModalVisible(true)}>
-          <View style={styles.iconContainer}>
-            <GetIcon iconName="about" color="#444" size="25" />
-          </View>
-          <Text style={styles.itemText}>
-            {t('navigation.drawer.helpCenter', 'Help Center')}
-          </Text>
-        </TouchableOpacity>
+        <CustomDrawerItem
+          iconName="about"
+          label={t('navigation.drawer.helpCenter', 'Help Center')}
+          onPress={() => setModalVisible(true)}
+        />
 
-        <TouchableOpacity
-          style={styles.customDrawerItem}
-          onPress={() => setModalVisible(true)}>
-          <View style={styles.iconContainer}>
-            <GetIcon iconName="faq" color="#444" size="25" />
-          </View>
-          <Text style={styles.itemText}>
-            {t('navigation.drawer.chatWithUs', 'Chat With Us')}
-          </Text>
-        </TouchableOpacity>
+        <CustomDrawerItem
+          iconName="faq"
+          label={t('navigation.drawer.chatWithUs', 'Chat With Us')}
+          onPress={() => setModalVisible(true)}
+        />
       </View>
-      {/* Under Development Modal */}
-      <Modal
-        animationType="fade"
-        transparent={true}
-        visible={modalVisible}
-        onRequestClose={() => setModalVisible(false)}>
-        <View style={styles.modalContainer}>
-          <View style={styles.modalContent}>
-            <Text style={styles.modalText}>
-              {t(
-                'navigation.drawer.underDevelopment',
-                'This feature is under development.',
-              )}
-            </Text>
-            <TouchableOpacity
-              style={[
-                styles.modalSingleButton,
-                {backgroundColor: theme.primaryColor},
-              ]}
-              onPress={() => setModalVisible(false)}>
-              <Text style={styles.textWhite}>{t('common.actions.ok', 'OK')}</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-      </Modal>
 
-      {/* Custom Button */}
-      <View style={styles.flexGrow} />
-      <View style={styles.p15}>
+      {/* Spacer to push logout button to bottom */}
+      <View style={styles.spacer} />
+
+      {/* Logout Button */}
+      <View style={styles.logoutContainer}>
         <TouchableOpacity
           onPress={handleCustomButtonPress}
-          style={[styles.logout, {backgroundColor: theme.primaryColor}]}
+          style={[
+            styles.logout,
+            {
+              backgroundColor: theme.primaryColor,
+              shadowColor: theme.primaryColor || '#000',
+            },
+          ]}
           disabled={isLoggingOut}>
           <View style={styles.drawerItem}>
             <GetIcon iconName="logout" color={Colors.white} size="25" />
@@ -261,11 +247,40 @@ const CustomDrawerContent = (props: any) => {
           onClose={() => setPremiumModalVisible(false)}
         />
       </Modal>
+
+      {/* Under Development Modal */}
+      <Modal
+        animationType="fade"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => setModalVisible(false)}>
+        <View style={styles.modalContainer}>
+          <View style={styles.modalContent}>
+            <Text style={styles.modalText}>
+              {t('navigation.drawer.underDevelopment', 'This feature is under development')}
+            </Text>
+            <TouchableOpacity
+              style={[styles.modalSingleButton, {backgroundColor: theme.primaryColor}]}
+              onPress={() => setModalVisible(false)}>
+              <Text style={styles.textWhite}>
+                {t('common.actions.ok', 'OK')}
+              </Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
     </DrawerContentScrollView>
   );
 };
 
 const styles = StyleSheet.create({
+  drawerScrollView: {
+    flex: 1,
+  },
+  drawerContentContainer: {
+    flexGrow: 1,
+    backgroundColor: 'transparent',
+  },
   flexOne: {
     flex: 1,
   },
@@ -276,14 +291,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
   },
   customItemsContainer: {
-    marginTop: 8,
-  },
-  customDrawerItem: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingVertical: 12,
-    paddingHorizontal: 10,
-    marginVertical: 2,
+    marginTop: 0,
   },
   premiumDrawerItem: {
     backgroundColor: '#53a20e',
@@ -291,9 +299,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingVertical: 12,
     paddingHorizontal: 16,
-    marginVertical: 2,
-    borderRadius: 32,
-    marginHorizontal: 8,
+    marginVertical: 5,
+    marginHorizontal: 10,
+    borderRadius: 10,
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
@@ -311,11 +319,6 @@ const styles = StyleSheet.create({
     marginRight: 16,
     marginLeft: 4,
   },
-  itemText: {
-    fontSize: 14,
-    fontWeight: '500',
-    color: 'black',
-  },
   premiumItemText: {
     fontSize: 14,
     fontWeight: 'bold',
@@ -326,6 +329,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     gap: 20,
     marginTop: 20,
+    paddingBottom: 20,
   },
   nameContainer: {
     flexDirection: 'row',
@@ -354,16 +358,19 @@ const styles = StyleSheet.create({
     resizeMode: 'contain',
     alignSelf: 'center',
   },
-  flexGrow: {
+  spacer: {
     flex: 1,
   },
   logout: {
-    padding: 8,
-    paddingVertical: 2,
-    marginLeft: 20,
-    borderRadius: 50,
-    width: '70%',
+    paddingVertical: 4,
+    borderRadius: 40,
+    width: '90%',
     alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: {width: 0, height: 2},
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
   },
   textWhite: {
     color: 'white',
@@ -372,8 +379,12 @@ const styles = StyleSheet.create({
   textBlack: {
     color: 'black',
   },
-  p15: {
-    padding: 16,
+  logoutContainer: {
+    marginTop: 20,
+    width: '100%',
+    display: 'flex',
+    alignItems: 'center',
+    paddingBottom: 20,
   },
   modalContainer: {
     flex: 1,

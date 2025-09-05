@@ -2,16 +2,15 @@ import React from 'react';
 import {View, Text, StyleSheet, TouchableOpacity, Alert} from 'react-native';
 import SellerNavigator from './SellerNavigator';
 import BuyerNavigator from './BuyerNavigator';
-import {useAuth} from '../hooks/useAuth';
 import PartnerNavigator from './PartnerNavigator';
 import {PartnerProvider} from '../context/PartnerProvider';
-import {PropertyFormProvider} from '../context/PropertyFormContext';
 import Roles from '../constants/Roles';
 import GetIcon from '../components/GetIcon';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import SubscriptionGuard from '../components/SubscriptionGuard';
 import config from '../config';
 import {useTranslation} from 'react-i18next';
+import { useAuth } from '../context/AuthProvider';
 
 const MainNavigator = () => {
   const {user, logout} = useAuth();
@@ -111,9 +110,7 @@ const MainNavigator = () => {
       {user?.role === Roles.BUYER ? (
         <BuyerNavigator />
       ) : user?.role === Roles.SELLER ? (
-        <PropertyFormProvider>
-          <SellerNavigator />
-        </PropertyFormProvider>
+        <SellerNavigator />
       ) : user?.role === Roles.PARTNER ||
         user?.role === Roles.TEAM ||
         isAuthorizedAdmin ? (

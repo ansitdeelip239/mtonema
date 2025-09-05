@@ -1,78 +1,69 @@
 import {createDrawerNavigator} from '@react-navigation/drawer';
 import React, {memo} from 'react';
-import Colors from '../constants/Colors';
 import CustomDrawerContent from '../components/CustomDrawerContent';
-import ProfileScreen from '../screens/common/ProfileScreen';
 import GetIcon from '../components/GetIcon';
-import {StyleSheet, TouchableOpacity} from 'react-native';
+import {StyleSheet} from 'react-native';
 import SellerBottomTabs from './components/SellerBottomTabs';
+import PartnerProfileScreen from '../screens/partner/ProfileScreen/ProfileScreen';
+import {SafeAreaView} from 'react-native-safe-area-context';
+import {useDrawerStyles} from '../hooks/useDrawerStyles';
 
 const Drawer = createDrawerNavigator();
 
 const SellerNavigator = memo(() => {
-  return (
-    <Drawer.Navigator
-      // eslint-disable-next-line react/no-unstable-nested-components
-      drawerContent={props => <CustomDrawerContent {...props} />}
-      initialRouteName="Home"
-      screenOptions={{
-        drawerType: 'front',
-        drawerActiveTintColor: 'white',
-        drawerActiveBackgroundColor: Colors.MT_PRIMARY_1,
-        drawerStyle: {
-          width: 240,
-        },
-        headerStyle: {
-          backgroundColor: Colors.MT_PRIMARY_1,
-        },
-        headerTintColor: Colors.SECONDARY_3,
-      }}>
-      <Drawer.Screen
-        name="Home"
-        component={SellerBottomTabs}
-        options={{
-          headerShown: false,
-          // eslint-disable-next-line react/no-unstable-nested-components
-          drawerIcon: ({color}) => (
-            <GetIcon iconName="home" color={color} size="23" /> // Use GetIcon here
-          ),
-        }}
-      />
-      {/* <Drawer.Screen name="Listed Property" component={PropertyListScreen} /> */}
-      {/* <Drawer.Screen name="Post Property" component={PostProperty} /> */}
-      {/* <Drawer.Screen
-        name="Contact Us"
-        component={ContactScreen}
-        options={{
-          headerShown: false,
-          // eslint-disable-next-line react/no-unstable-nested-components
-          drawerIcon: ({color}) => (
-            <GetIcon iconName="contactus" color={color} size="26" /> // Use GetIcon here
-          ),
-        }}
-      /> */}
+  const {drawerStyles, isIOS} = useDrawerStyles();
 
-      <Drawer.Screen
-        name="Profile Screen"
-        component={ProfileScreen}
-        options={({navigation}) => ({
-          drawerItemStyle: {display: 'none'},
-          // eslint-disable-next-line react/no-unstable-nested-components
-          headerRight: () => (
-            <TouchableOpacity
-              onPress={() => navigation.navigate('Home.', {screen: 'Home.'})}
-              style={styles.backButton}>
-              <GetIcon iconName="back" size="24" color={Colors.SECONDARY_3} />
-            </TouchableOpacity>
-          ),
-        })}
-      />
-    </Drawer.Navigator>
+  return (
+    <SafeAreaView style={styles.safeArea} edges={['top']}>
+      <Drawer.Navigator
+        // eslint-disable-next-line react/no-unstable-nested-components
+        drawerContent={props => <CustomDrawerContent {...props} />}
+        initialRouteName="Home"
+        screenOptions={{
+          ...drawerStyles,
+          swipeEnabled: !isIOS,
+        }}>
+        <Drawer.Screen
+          name="Home"
+          component={SellerBottomTabs}
+          options={{
+            headerShown: false,
+            // eslint-disable-next-line react/no-unstable-nested-components
+            drawerIcon: ({color}) => (
+              <GetIcon iconName="home" color={color} size="23" /> // Use GetIcon here
+            ),
+          }}
+        />
+        {/* <Drawer.Screen name="Listed Property" component={PropertyListScreen} /> */}
+        {/* <Drawer.Screen name="Post Property" component={PostProperty} /> */}
+        {/* <Drawer.Screen
+          name="Contact Us"
+          component={ContactScreen}
+          options={{
+            headerShown: false,
+            // eslint-disable-next-line react/no-unstable-nested-components
+            drawerIcon: ({color}) => (
+              <GetIcon iconName="contactus" color={color} size="26" /> // Use GetIcon here
+            ),
+          }}
+        /> */}
+
+        <Drawer.Screen
+          name="Profile Screen"
+          component={PartnerProfileScreen}
+          options={{
+            headerShown: isIOS,
+            drawerItemStyle: {display: 'none'},
+          }}
+        />
+      </Drawer.Navigator>
+    </SafeAreaView>
   );
 });
+
 const styles = StyleSheet.create({
-  backButton: {
-    marginRight: 16,
+  safeArea: {
+    flex: 1,
   },
 });
 

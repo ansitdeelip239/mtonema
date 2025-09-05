@@ -3,10 +3,8 @@ import { View, StyleSheet, SafeAreaView, Platform, I18nManager, TouchableOpacity
 import { useTranslation } from 'react-i18next';
 import Header from '../../../components/Header';
 import { PartnerDrawerParamList } from '../../../types/navigation';
-import { useAuth } from '../../../hooks/useAuth';
 import { ContentTemplate } from '../../../types';
 import PartnerService from '../../../services/PartnerService';
-import { useDialog } from '../../../hooks/useDialog';
 import { useTheme } from '../../../context/ThemeProvider';
 import ContentHeader from './components/ContentHeader';
 import ContentLoadingIndicator from './components/ContentLoadingIndicator';
@@ -15,6 +13,8 @@ import GetIcon from '../../../components/GetIcon';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { ContentTemplateStackParamList } from '../../../navigator/components/ContentTemplateStack';
 import { usePartner } from '../../../context/PartnerProvider';
+import { useAuth } from '../../../context/AuthProvider';
+import { useDialog } from '../../../context/DialogProvider';
 
 type Props = NativeStackScreenProps<
   ContentTemplateStackParamList,

@@ -14,13 +14,13 @@ import { ClientStackParamList } from '../../../navigator/components/ClientScreen
 import Header from '../../../components/Header';
 import PartnerService from '../../../services/PartnerService';
 import { User } from '../../../types';
-import { useAuth } from '../../../hooks/useAuth';
 import GetIcon from '../../../components/GetIcon';
 import Colors from '../../../constants/Colors';
-import { useDialog } from '../../../hooks/useDialog';
 import Toast from 'react-native-toast-message';
 import { usePartner } from '../../../context/PartnerProvider';
 import { useTheme } from '../../../context/ThemeProvider';
+import { useAuth } from '../../../context/AuthProvider';
+import { useDialog } from '../../../context/DialogProvider';
 
 type Props = NativeStackScreenProps<
   ClientStackParamList,

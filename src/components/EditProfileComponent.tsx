@@ -20,12 +20,12 @@ import GetIcon from './GetIcon';
 import Images from '../constants/Images';
 import AuthService from '../services/AuthService';
 import CommonService from '../services/CommonService';
-import {useAuth} from '../hooks/useAuth';
 import Colors from '../constants/Colors';
 import {useKeyboard} from '../hooks/useKeyboard';
 // import {useLogoStorage} from '../hooks/useLogoStorage';
 import {useTheme} from '../context/ThemeProvider';
 import {useSubscription} from '../context/SubscriptionProvider';
+import { useAuth } from '../context/AuthProvider';
 
 const EditProfileComponent = () => {
   const [editingFields, setEditingFields] = useState<

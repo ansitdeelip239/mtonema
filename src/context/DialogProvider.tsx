@@ -1,4 +1,4 @@
-import React, {createContext, useState, useRef, useCallback} from 'react';
+import React, {createContext, useState, useRef, useCallback, useContext} from 'react';
 import {
   Image,
   StyleSheet,
@@ -8,7 +8,7 @@ import {
   Modal as RNModal,
   Dimensions,
 } from 'react-native';
-import { Text, Portal} from 'react-native-paper';
+import {Text, Portal} from 'react-native-paper';
 import Colors from '../constants/Colors';
 
 type DialogContextType = {
@@ -92,6 +92,14 @@ export const DialogProvider = ({children}: {children: React.ReactNode}) => {
       </Portal>
     </DialogContext.Provider>
   );
+};
+
+export const useDialog = () => {
+  const context = useContext(DialogContext);
+  if (!context) {
+    throw new Error('useDialog must be used within a DialogProvider');
+  }
+  return context;
 };
 
 const {width} = Dimensions.get('window');

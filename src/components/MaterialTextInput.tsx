@@ -22,8 +22,10 @@ interface MaterialTextInputProps<T> extends TextInputProps {
   setFormInput: (field: keyof T, value: string | boolean) => void;
   rightComponent?: React.ReactNode;
   errorMessage?: string;
-  suggestions?: string[] | Array<{description: string, placeId: string}>;
-  onSuggestionSelect?: (suggestion: string | {description: string, placeId: string}) => void;
+  suggestions?: string[] | Array<{description: string; placeId: string}>;
+  onSuggestionSelect?: (
+    suggestion: string | {description: string; placeId: string},
+  ) => void;
   loading?: boolean;
 }
 
@@ -79,7 +81,7 @@ export const MaterialTextInput = <T,>({
   };
 
   const handleSuggestionPress = useCallback(
-    (suggestion: string | {description: string, placeId: string}) => {
+    (suggestion: string | {description: string; placeId: string}) => {
       if (suggestionTimeoutRef.current) {
         clearTimeout(suggestionTimeoutRef.current);
       }
@@ -118,6 +120,7 @@ export const MaterialTextInput = <T,>({
           error={!!errorMessage}
           onFocus={() => setIsFocused(true)} // Set focus state
           onBlur={() => setIsFocused(false)} // Reset focus state
+          // eslint-disable-next-line react-native/no-inline-styles
           contentStyle={{
             minHeight: props.multiline ? 100 : undefined,
             color: 'black',
@@ -157,7 +160,10 @@ export const MaterialTextInput = <T,>({
               showsVerticalScrollIndicator={true}
               indicatorStyle="black">
               {suggestions.map((suggestion, index) => {
-                const displayText = typeof suggestion === 'string' ? suggestion : suggestion.description;
+                const displayText =
+                  typeof suggestion === 'string'
+                    ? suggestion
+                    : suggestion.description;
                 return (
                   <TouchableOpacity
                     key={index}

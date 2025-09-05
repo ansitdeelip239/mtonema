@@ -24,7 +24,7 @@ import {searchProperties} from './hooks/useProperties';
 import {PropertyFor, SortBy} from '../../../constants/MasterDetails';
 import Colors from '../../../constants/Colors';
 import SearchHeader from './components/SearchHeader';
-import BuyerHeader from '../../../components/BuyerSellerHeader';
+import BuyerSellerHeader from '../../../components/BuyerSellerHeader';
 
 type Props = NativeStackScreenProps<BuyerBottomTabParamList, 'Search Property'>;
 
@@ -267,14 +267,14 @@ const SearchPropertiesScreen: React.FC<Props> = ({navigation: _navigation}) => {
     return (
       <View>
         {/* Buyer Header */}
-        <BuyerHeader
+        <BuyerSellerHeader
           title="Find Your"
           subtitle="Dream Property"
         >
           <TouchableOpacity onPress={() => setShowFilters(true)}>
             <GetIcon iconName="filter" size={20} color="#333" />
           </TouchableOpacity>
-        </BuyerHeader>
+        </BuyerSellerHeader>
 
         {/* Search Bar */}
         <SearchHeader

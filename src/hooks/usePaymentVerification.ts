@@ -3,7 +3,7 @@ import {Alert} from 'react-native';
 import Toast from 'react-native-toast-message';
 import {verifyPaymentStatus} from '../utils/payment';
 import {useSubscription} from '../context/SubscriptionProvider';
-import {useAuth} from './useAuth';
+import { useAuth } from '../context/AuthProvider';
 
 interface UsePaymentVerificationOptions {
   onSuccess?: () => void;

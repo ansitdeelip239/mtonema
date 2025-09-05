@@ -1,40 +1,24 @@
 import React from 'react';
 import {createDrawerNavigator} from '@react-navigation/drawer';
 import CustomDrawerContent from '../components/CustomDrawerContent';
-import Colors from '../constants/Colors';
 import {PartnerDrawerParamList} from '../types/navigation';
 import PartnerBottomTabs from './components/PartnerBottomTabs';
 import GroupsScreen from '../screens/partner/GroupsScreen/GroupsScreen';
 import GetIcon from '../components/GetIcon';
 import PartnerProfileScreen from '../screens/partner/ProfileScreen/ProfileScreen';
-import {useTheme} from '../context/ThemeProvider';
 import ContentTemplateScreenStack from './components/ContentTemplateStack';
-import {Platform} from 'react-native';
 import FilterPartnerStack from './components/FilterPartnerStack';
 import PaymentBottomTabs from './components/PaymentBottomTabs';
 import TeamStack from './components/TeamStack';
 import SettingsScreen from '../screens/partner/Settings/SettingsScreen';
-import {useTranslation} from 'react-i18next'; // Add this import
+import {useTranslation} from 'react-i18next';
+import {useDrawerStyles} from '../hooks/useDrawerStyles';
 
 const Drawer = createDrawerNavigator<PartnerDrawerParamList>();
 
 const PartnerNavigator = () => {
-  // Get theme from context
-  const {theme} = useTheme();
-  const {t} = useTranslation(); // Add this hook
-
-  const isIOS = Platform.OS === 'ios';
-
-  // Update drawer styles to use theme
-  const drawerStyles = {
-    drawerType: 'front' as const,
-    drawerActiveTintColor: 'white',
-    drawerInactiveTintColor: 'black',
-    drawerActiveBackgroundColor: theme.primaryColor,
-    drawerStyle: {width: 240},
-    headerStyle: {backgroundColor: theme.primaryColor},
-    headerTintColor: Colors.SECONDARY_3,
-  };
+  const {t} = useTranslation();
+  const {drawerStyles, isIOS} = useDrawerStyles();
 
   return (
     <Drawer.Navigator

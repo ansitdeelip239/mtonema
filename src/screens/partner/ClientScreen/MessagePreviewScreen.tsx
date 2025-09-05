@@ -20,8 +20,8 @@ import { useBottomTab } from '../../../context/BottomTabProvider';
 import GetIcon, { IconEnum } from '../../../components/GetIcon';
 import { Menu } from 'react-native-paper';
 import PartnerService from '../../../services/PartnerService';
-import { useAuth } from '../../../hooks/useAuth';
 import { usePartner } from '../../../context/PartnerProvider';
+import { useAuth } from '../../../context/AuthProvider';
 
 type Props = NativeStackScreenProps<
   ClientStackParamList,

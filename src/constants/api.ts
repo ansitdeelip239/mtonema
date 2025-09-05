@@ -25,6 +25,7 @@ const url = {
       get: '/property/getPropertyByUserid',
       update: '/property/updateProperty',
       delete: '/property/removeProperty',
+      listByUserId: (userId: number) => `/users/${userId}/properties`,
     },
     getInTouch: '/contactProperty/GetinTouch',
   },

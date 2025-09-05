@@ -4,7 +4,7 @@ import {SearchIntellisenseResponse} from '../../../../types';
 import {MaterialTextInput} from '../../../../components/MaterialTextInput';
 import {InteractionManager} from 'react-native';
 import {ViewStyle} from 'react-native';
-import { useAuth } from '../../../../hooks/useAuth';
+import { useAuth } from '../../../../context/AuthProvider';
 
 const useDebounce = (callback: Function, delay: number) => {
   const timeoutRef = useRef<NodeJS.Timeout>(null);

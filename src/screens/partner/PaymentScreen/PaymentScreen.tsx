@@ -7,7 +7,6 @@ import {
   Alert,
   ScrollView,
 } from 'react-native';
-import {useAuth} from '../../../hooks/useAuth';
 import {useSubscription} from '../../../context/SubscriptionProvider';
 import GetIcon from '../../../components/GetIcon';
 import SwitchAccountButton from '../../../components/SwitchAccountButton';
@@ -18,6 +17,7 @@ import {PlanCard} from './components/PlanCard';
 import {PaymentSection} from './components/PaymentSection';
 import {NoPlansComponent} from './components/NoPlansComponent';
 import {Plan} from '../../../types/payment';
+import { useAuth } from '../../../context/AuthProvider';
 
 interface PaymentScreenProps {
   onPaymentSuccess?: () => void;

@@ -1,5 +1,4 @@
 import { PropertyForTypes, SortByTypes } from '../constants/MasterDetails';
-import {ImageType} from './propertyform';
 
 export interface AuthContextType {
   isAuthenticated: boolean;
@@ -39,86 +38,6 @@ export interface Response<T> {
   data: T;
   httpStatus: number;
   predictions?: PlacePrediction[];
-}
-
-export interface PropertyModel {
-  ID: number;
-  UserId: number;
-  ImageURL: ImageType[];
-  ImageURLType: any | null;
-  Image: any | null;
-  Tags: any[];
-  Tag: any | null;
-  VideoURL: string | null;
-  VideoUrl: any | null;
-  Video: any | null;
-  Location: string;
-  Price: any;
-  Discription: string;
-  ShortDiscription: string | null;
-  SellerType: {
-    MasterDetailName: string;
-    ID: number;
-  };
-  Country: any | null;
-  State: any | null;
-  PropertyType: {
-    MasterDetailName: string;
-    ID: number;
-  };
-  PropertyFor: {
-    MasterDetailName: string;
-    ID: number;
-  };
-  CreatedOn: string;
-  UpdatedOn: string;
-  CreatedBy: string;
-  UpdatedBy: string;
-  Status: number;
-  BhkType: any | null;
-  Furnishing: any | null;
-  Locality: string;
-  ZipCode: string;
-  Area: number;
-  IsFeatured: boolean;
-  floor: any | null;
-  readyToMove: any | null;
-  SellerName: string;
-  SellerEmail: string;
-  SellerPhone: string;
-  ApprovedBy: string;
-  City: {
-    MasterDetailName: string;
-    ID: number;
-  };
-  Size: {
-    MasterDetailName: string;
-    ID: number;
-  };
-  Rate: {
-    MasterDetailName: string;
-    ID: number;
-  };
-  otherCity: any | null;
-  Facing: {
-    MasterDetailName: string;
-    ID: number;
-  };
-  OpenSide: string;
-  BoundaryWall: string;
-  ConstructionDone: string;
-  Parking: any | null;
-  Lifts: any | null;
-  PropertyForType: string;
-  PropertyAge: any | null;
-  AlarmSystem: any | null;
-  SurveillanceCameras: any | null;
-  GatedSecurity: any | null;
-  CeilingHeight: any | null;
-  Pantry: any | null;
-  ListedBy: string;
-  PropertyLocation?: string;
-  propertyModels?: any[];
 }
 
 export interface PlacePrediction {
@@ -556,4 +475,65 @@ export interface PropertySearchParams {
   searchFilter?: string;
   status?: string;
   sourceWebsite?: string;
+}
+
+// Seller Property Types
+export interface SellerProperty {
+  id: number;
+  userId: number;
+  sellerName: string;
+  sellerEmail: string;
+  sellerType?: string;
+  location: string;
+  city: string;
+  zipcode?: string;
+  propertyName: string;
+  price: number;
+  propertyFor?: string;
+  propertyType?: string;
+  imageURL?: string;
+  videoURL?: string;
+  shortDescription?: string;
+  longDescription?: string;
+  createdOn: string;
+  createdBy: string;
+  propertyDetailId?: number;
+  readyToMove?: boolean;
+  propertyForType?: string;
+  area?: number;
+  featured?: boolean;
+  lmunit?: string;
+  facing?: string;
+  boundaryWall?: boolean;
+  constructionDone?: boolean;
+  parking?: string;
+  lifts?: boolean;
+  propertyAge?: string;
+  alarmSystem?: boolean;
+  surveillanceCameras?: boolean;
+  gatedSecurity?: boolean;
+  pantry?: boolean;
+  recordstatus: string;
+  bhkType?: string;
+  furnishing?: string;
+  floor?: number;
+  openSide?: string;
+  ceilingHeight?: string;
+  tags?: string;
+  updatedOn?: string;
+  updatedBy?: string;
+}
+
+export interface SellerPropertyPagination {
+  currentPage: number;
+  pageSize: number;
+  totalCount: number;
+  totalPage: number;
+  nextPage: boolean;
+  previousPage: boolean;
+}
+
+export interface SellerPropertyResponse {
+  pagination: SellerPropertyPagination;
+  properties: SellerProperty[];
 }

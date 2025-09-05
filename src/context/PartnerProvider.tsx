@@ -1,10 +1,10 @@
 import React, {useState, useEffect, useCallback, createContext} from 'react';
 import PartnerService from '../services/PartnerService';
 import {Group} from '../types';
-import {useAuth} from '../hooks/useAuth';
 import {MasterDetailModel} from '../types';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useMaster} from './MasterProvider';
+import { useAuth } from './AuthProvider';
 
 interface PartnerProviderProps {
   children: React.ReactNode;

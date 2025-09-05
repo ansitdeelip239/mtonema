@@ -5,9 +5,9 @@ import PaymentScreen from '../screens/partner/PaymentScreen/PaymentScreen';
 import BillingScreen from '../screens/partner/BillingScreen/BillingScreen';
 import Images from '../constants/Images';
 import config from '../config';
-import { useAuth } from '../hooks/useAuth';
 import Roles from '../constants/Roles';
 import TeamSubscriptionScreen from '../screens/partner/TeamSubscriptionScreen/TeamSubscriptionScreen';
+import { useAuth } from '../context/AuthProvider';
 
 interface SubscriptionGuardProps {
   children: React.ReactNode;

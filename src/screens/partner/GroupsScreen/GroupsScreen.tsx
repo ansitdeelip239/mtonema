@@ -15,13 +15,13 @@ import { PartnerDrawerParamList } from '../../../types/navigation';
 import Colors from '../../../constants/Colors';
 import { Group2 } from '../../../types';
 import PartnerService from '../../../services/PartnerService';
-import { useAuth } from '../../../hooks/useAuth';
 import { useMaster } from '../../../context/MasterProvider';
 import AddGroupModal from './components/AddGroupModal';
 import Toast from 'react-native-toast-message';
 import { usePartner } from '../../../context/PartnerProvider';
 import { useTheme } from '../../../context/ThemeProvider';
 import { t } from 'i18next';
+import { useAuth } from '../../../context/AuthProvider';
 
 // Updated EmptyList component to use theme and translation
 const EmptyList = memo(

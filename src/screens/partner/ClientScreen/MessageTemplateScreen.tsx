@@ -5,16 +5,16 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { ClientStackParamList } from '../../../navigator/components/ClientScreenStack';
 import Header from '../../../components/Header';
 import { PartnerDrawerParamList } from '../../../types/navigation';
-import { useAuth } from '../../../hooks/useAuth';
 import { ContentTemplate } from '../../../types';
 import PartnerService from '../../../services/PartnerService';
-import { useDialog } from '../../../hooks/useDialog';
 import ContentTemplatesList from '../ContentScreen/components/ContentTemplateList';
 import ContentLoadingIndicator from '../ContentScreen/components/ContentLoadingIndicator';
 import ContentHeader from '../ContentScreen/components/ContentHeader';
 import { useFocusEffect } from '@react-navigation/native';
 import { useBottomTab } from '../../../context/BottomTabProvider';
 import { usePartner } from '../../../context/PartnerProvider';
+import { useAuth } from '../../../context/AuthProvider';
+import { useDialog } from '../../../context/DialogProvider';
 
 type Props = NativeStackScreenProps<
   ClientStackParamList,

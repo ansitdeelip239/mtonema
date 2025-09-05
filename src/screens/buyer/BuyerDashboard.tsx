@@ -13,7 +13,7 @@ import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import GetIcon, {IconEnum} from '../../components/GetIcon';
 import Colors from '../../constants/Colors';
 import {BuyerBottomTabParamList} from '../../types/navigation';
-import BuyerHeader from '../../components/BuyerSellerHeader';
+import BuyerSellerHeader from '../../components/BuyerSellerHeader';
 
 const {width} = Dimensions.get('window');
 
@@ -193,12 +193,12 @@ const BuyerDashboard: React.FC<Props> = ({navigation: _navigation}) => {
   return (
     <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
       {/* Buyer Header */}
-      <BuyerHeader
+      <BuyerSellerHeader
         title="Welcome back!"
         subtitle="Find Your Dream Home"
       >
         <GetIcon iconName="settings" size={20} color="#333" />
-      </BuyerHeader>
+      </BuyerSellerHeader>
 
       {/* Stats Section */}
       <View style={styles.statsContainer}>

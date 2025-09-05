@@ -10,7 +10,6 @@ import {
   Platform,
 } from 'react-native';
 import PartnerService from '../../../services/PartnerService';
-import { useAuth } from '../../../hooks/useAuth';
 import { Property } from './types';
 import PropertyCard from './components/PropertyCard';
 import SearchAndFilter from './components/SearchAndFilter';
@@ -22,6 +21,7 @@ import Swipeable from 'react-native-gesture-handler/Swipeable';
 import { TouchableOpacity } from 'react-native';
 import ConfirmationModal from '../../../components/ConfirmationModal';
 import { useTranslation } from 'react-i18next';
+import { useAuth } from '../../../context/AuthProvider';
 
 const PAGE_SIZE = 10;
 

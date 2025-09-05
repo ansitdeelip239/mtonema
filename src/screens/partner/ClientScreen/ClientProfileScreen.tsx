@@ -16,9 +16,7 @@ import { ClientStackParamList } from '../../../navigator/components/ClientScreen
 import Header from '../../../components/Header';
 import PartnerService from '../../../services/PartnerService';
 import { Client, ClientActivityDataModel, FollowUp } from '../../../types';
-import { useAuth } from '../../../hooks/useAuth';
 import GetIcon from '../../../components/GetIcon';
-import { useDialog } from '../../../hooks/useDialog';
 import Toast from 'react-native-toast-message';
 import { usePartner } from '../../../context/PartnerProvider';
 import { Appbar, Menu } from 'react-native-paper';
@@ -39,6 +37,8 @@ import { useBottomTab } from '../../../context/BottomTabProvider';
 import { formatWhatsappNumber } from '../../../utils/phoneUtils';
 import ContactInfoCard from './components/ContactInfoCard';
 import { useTranslation } from 'react-i18next';
+import { useAuth } from '../../../context/AuthProvider';
+import { useDialog } from '../../../context/DialogProvider';
 
 type Props = NativeStackScreenProps<
   ClientStackParamList,

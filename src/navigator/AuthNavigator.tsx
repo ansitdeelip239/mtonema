@@ -8,7 +8,7 @@ import { MasterDetailModel } from '../types';
 import PartnerLoginScreen from '../screens/auth/PartnerLoginScreen';
 import { Platform } from 'react-native';
 import PartnerSignUpScreen from '../screens/auth/PartnerSignUpScreen';
-import SignUpScreen from '../screens/auth/SignUpScreen2';
+import SignUpScreen from '../screens/auth/SignUpScreen';
 // import UserTypeSelectionScreen from '../screens/auth/UserTypeSelectionScreen';
 // import AsyncStorage from '@react-native-async-storage/async-storage';
 // import storageKeys from '../constants/storageKeys';

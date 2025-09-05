@@ -3,9 +3,7 @@ import {StyleSheet, SafeAreaView, Platform} from 'react-native';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {AuthStackParamList} from '../../navigator/AuthNavigator';
 import AuthService from '../../services/AuthService';
-import {useAuth} from '../../hooks/useAuth';
 import OtpModel from '../../components/OtpModel';
-import {useDialog} from '../../hooks/useDialog';
 import {useLogoStorage} from '../../hooks/useLogoStorage';
 import MasterService from '../../services/MasterService';
 import {useTheme} from '../../context/ThemeProvider';
@@ -14,6 +12,8 @@ import Roles from '../../constants/Roles';
 import Colors from '../../constants/Colors';
 import {useTranslation} from 'react-i18next';
 import Toast from 'react-native-toast-message';
+import { useAuth } from '../../context/AuthProvider';
+import { useDialog } from '../../context/DialogProvider';
 
 type Props = NativeStackScreenProps<AuthStackParamList, 'OtpScreen'>;
 

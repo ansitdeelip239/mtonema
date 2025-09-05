@@ -20,14 +20,14 @@ import useForm from '../../../hooks/useForm';
 import PartnerService from '../../../services/PartnerService';
 import { usePartner } from '../../../context/PartnerProvider';
 import Toast from 'react-native-toast-message';
-import { useAuth } from '../../../hooks/useAuth';
 import { z } from 'zod';
 import clientFormSchema from '../../../schema/ClientFormSchema';
-import { useDialog } from '../../../hooks/useDialog';
 import GroupsToggleComponent from './components/GroupsToggle';
 import { useTheme } from '../../../context/ThemeProvider';
 import { addCountryCode } from '../../../utils/phoneUtils';
 import { stripHtmlTags } from '../../../utils/formUtils';
+import { useAuth } from '../../../context/AuthProvider';
+import { useDialog } from '../../../context/DialogProvider';
 
 type Props = NativeStackScreenProps<ClientStackParamList, 'AddClientScreen'>;
 

@@ -15,7 +15,6 @@ import { useNavigation } from '@react-navigation/native';
 import { DrawerNavigationProp } from '@react-navigation/drawer';
 import { PartnerDrawerParamList } from '../../../types/navigation';
 import GetIcon from '../../../components/GetIcon';
-import { useAuth } from '../../../hooks/useAuth';
 import { useTranslation } from 'react-i18next';
 import Roles from '../../../constants/Roles';
 import PartnerService from '../../../services/PartnerService';
@@ -24,6 +23,7 @@ import { usePartner } from '../../../context/PartnerProvider';
 import Toast from 'react-native-toast-message';
 import { formatLocalizedNumber } from '../../../utils/dateUtils';
 import i18n from '../../../i18n';
+import { useAuth } from '../../../context/AuthProvider';
 
 const FilterPartnerScreen = () => {
   const { theme } = useTheme();

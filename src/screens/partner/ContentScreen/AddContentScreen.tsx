@@ -17,11 +17,11 @@ import { ContentTemplateStackParamList } from '../../../navigator/components/Con
 import Header from '../../../components/Header';
 import { PartnerDrawerParamList } from '../../../types/navigation';
 import { useTheme } from '../../../context/ThemeProvider';
-import { useAuth } from '../../../hooks/useAuth';
-import { useDialog } from '../../../hooks/useDialog';
 import Toast from 'react-native-toast-message';
 import PartnerService from '../../../services/PartnerService';
 import { usePartner } from '../../../context/PartnerProvider';
+import { useAuth } from '../../../context/AuthProvider';
+import { useDialog } from '../../../context/DialogProvider';
 
 type Props = NativeStackScreenProps<
   ContentTemplateStackParamList,

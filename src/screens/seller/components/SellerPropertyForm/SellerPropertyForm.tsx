@@ -9,7 +9,6 @@ import {
 } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { PartnerPropertyApiSubmissionType } from '../../../../schema/PartnerPropertyFormSchema';
-import { useAuth } from '../../../../hooks/useAuth';
 import useForm from '../../../../hooks/useForm';
 import { initialFormState } from '../../../../utils/partner-property-form-initial-state';
 import SellerService from '../../../../services/SellerService';
@@ -31,6 +30,7 @@ import BasicDetailsStep from '../../../partner/components/PartnerPropertyForm/st
 import PropertyDetailsStep from '../../../partner/components/PartnerPropertyForm/steps/PropertyDetailsStep';
 import MediaAndSubmitStep from '../../../partner/components/PartnerPropertyForm/steps/MediaAndSubmitStep';
 import { usePropertyDataMapping } from '../../../partner/components/PartnerPropertyForm/hooks/usePropertyDataMapping';
+import { useAuth } from '../../../../context/AuthProvider';
 
 const { width } = Dimensions.get('window');
 

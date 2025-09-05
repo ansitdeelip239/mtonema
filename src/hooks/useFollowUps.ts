@@ -1,7 +1,7 @@
 import {useState, useCallback, useRef} from 'react';
 import PartnerService from '../services/PartnerService';
 import {FollowUpType, PagingModel} from '../types';
-import {useAuth} from './useAuth';
+import { useAuth } from '../context/AuthProvider';
 
 export const useFollowUps = (
   type: 'today' | 'someday' | 'overdue' | 'upcoming',

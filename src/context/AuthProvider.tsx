@@ -1,9 +1,8 @@
-import React, {useState, useEffect, useCallback, useRef} from 'react';
+import React, {useState, useEffect, useCallback, useRef, createContext, useContext} from 'react';
 import AuthService from '../services/AuthService';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {jwtDecode} from 'jwt-decode';
-import AuthContext from './AuthContext';
-import {MasterDetailModel, User} from '../types';
+import {AuthContextType, MasterDetailModel, User} from '../types';
 import {useLogoStorage} from '../hooks/useLogoStorage';
 
 interface AuthProviderProps {
@@ -14,6 +13,23 @@ interface DecodedToken {
   exp: number;
   [key: string]: any;
 }
+
+const AuthContext = createContext<AuthContextType>({
+  isAuthenticated: false,
+  user: null,
+  setUser: () => {},
+  login: (_token: string) => {},
+  logout: () => {},
+  storeUser: (_user: User) => {},
+  storePartnerZone: (_partnerZone: MasterDetailModel) => {},
+  storeToken: (_token: string) => {},
+  authToken: null,
+  dataUpdated: false,
+  setDataUpdated: () => {},
+  setNavigateToPostProperty: () => {},
+  navigateToPostProperty: false,
+  isLoading: false,
+});
 
 export const AuthProvider: React.FC<AuthProviderProps> = ({children}) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -213,3 +229,15 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({children}) => {
     <AuthContext.Provider value={contextValue}>{children}</AuthContext.Provider>
   );
 };
+
+
+export const useAuth = (): AuthContextType => {
+  const context = useContext(AuthContext);
+
+  if (context === undefined) {
+    throw new Error('useAuth must be used within an AuthProvider');
+  }
+
+  return context;
+};
+

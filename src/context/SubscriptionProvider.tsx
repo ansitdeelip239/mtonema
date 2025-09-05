@@ -5,9 +5,9 @@ import React, {
   useCallback,
   useEffect,
 } from 'react';
-import {useAuth} from '../hooks/useAuth';
 import PartnerService from '../services/PartnerService';
 import Roles from '../constants/Roles';
+import { useAuth } from './AuthProvider';
 
 interface SubscriptionStatus {
   trialStatus: {

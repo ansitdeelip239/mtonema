@@ -19,7 +19,7 @@ import {FollowUpStackParamList} from '../../../navigator/components/FollowUpScre
 import {useFollowUps} from '../../../hooks/useFollowUps';
 import FollowUpListSection from './components/FollowUpListSection';
 import {usePartner} from '../../../context/PartnerProvider';
-import {navigate} from '../../../navigator/NavigationRef';
+import {navigate} from '../../../navigator/components/NavigationRef';
 import {Badge} from 'react-native-paper';
 import {useTheme} from '../../../context/ThemeProvider';
 import SalutationGreeting from './components/Salutation';

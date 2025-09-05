@@ -3,7 +3,6 @@ import {Platform, StyleSheet, FlatList, TouchableOpacity, SafeAreaView} from 're
 import Header from '../../../components/Header';
 import {PartnerDrawerParamList} from '../../../types/navigation';
 import PartnerService from '../../../services/PartnerService';
-import {useAuth} from '../../../hooks/useAuth';
 
 // Import separated components
 import TeamMemberCard from './components/TeamMemberCard';
@@ -17,6 +16,7 @@ import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {TeamStackParamList} from '../../../navigator/components/TeamStack';
 import { usePartner } from '../../../context/PartnerProvider';
 import { useTranslation } from 'react-i18next';
+import { useAuth } from '../../../context/AuthProvider';
 
 const INITIAL_PAGE = 1;
 const PAGE_SIZE = 10;

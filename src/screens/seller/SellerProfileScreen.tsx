@@ -1,6 +1,6 @@
 import {StyleSheet, View, Text, ScrollView, TouchableOpacity, Platform} from 'react-native';
 import React from 'react';
-import BuyerHeader from '../../components/BuyerSellerHeader';
+import BuyerSellerHeader from '../../components/BuyerSellerHeader';
 import Colors from '../../constants/Colors';
 import GetIcon, { IconEnum } from '../../components/GetIcon';
 
@@ -52,12 +52,12 @@ const SellerProfileScreen = () => {
   return (
     <View style={styles.container}>
       <View style={styles.headerContainer}>
-        <BuyerHeader
+        <BuyerSellerHeader
           title="User Profile"
           subtitle="Manage your account"
         >
           <GetIcon iconName="threeDots" size={20} color="#333" />
-        </BuyerHeader>
+        </BuyerSellerHeader>
       </View>
 
       <ScrollView style={styles.scrollContainer} showsVerticalScrollIndicator={false}>

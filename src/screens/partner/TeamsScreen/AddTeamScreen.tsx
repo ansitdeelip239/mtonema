@@ -16,7 +16,6 @@ import {TeamStackParamList} from '../../../navigator/components/TeamStack';
 import {MaterialTextInput} from '../../../components/MaterialTextInput';
 import Header from '../../../components/Header';
 import useForm from '../../../hooks/useForm';
-import {useAuth} from '../../../hooks/useAuth';
 import PartnerService from '../../../services/PartnerService';
 import {
   TeamMemberFormData,
@@ -30,6 +29,7 @@ import {useRazorpayPayment} from '../../../hooks/useRazorpayPayment';
 import { PaymentLoadingOverlay } from '../../../components/PaymentLoading';
 import Roles from '../../../constants/Roles';
 import { useTranslation } from 'react-i18next';
+import { useAuth } from '../../../context/AuthProvider';
 
 type Props = NativeStackScreenProps<TeamStackParamList, 'Add Teams Screen'>;
 

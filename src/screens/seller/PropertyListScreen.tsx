@@ -1,267 +1,175 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect, useCallback} from 'react';
 import {
   StyleSheet,
   View,
   Text,
-  ScrollView,
+  FlatList,
   TouchableOpacity,
-  Image,
   Platform,
+  RefreshControl,
+  ActivityIndicator,
+  ListRenderItem,
 } from 'react-native';
-import BuyerHeader from '../../components/BuyerSellerHeader';
+import BuyerSellerHeader from '../../components/BuyerSellerHeader';
 import {BottomTabScreenProps} from '@react-navigation/bottom-tabs';
 import {SellerBottomTabParamList} from '../../types/navigation';
 import Colors from '../../constants/Colors';
 import GetIcon from '../../components/GetIcon';
+import SellerService from '../../services/SellerService';
+import {SellerProperty} from '../../types';
+import SellerPropertyCard from './components/SellerPropertyCard';
+import { useAuth } from '../../context/AuthProvider';
 
-type Props = BottomTabScreenProps<SellerBottomTabParamList, 'Home'>;
+type Props = BottomTabScreenProps<SellerBottomTabParamList, 'Dashboard'>;
 
-interface Property {
-  id: string;
-  title: string;
-  location: string;
-  price: string;
-  type: string;
-  bedrooms: number;
-  bathrooms: number;
-  area: string;
-  status: 'active' | 'pending' | 'sold';
-  image: string;
-  views: number;
-  inquiries: number;
-}
+const PropertyListScreen: React.FC<Props> = ({navigation}) => {
+  const {user} = useAuth();
+  const [properties, setProperties] = useState<SellerProperty[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isLoadingMore, setIsLoadingMore] = useState(false);
+  const [refreshing, setRefreshing] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalCount, setTotalCount] = useState(0);
+  const [hasMoreData, setHasMoreData] = useState(true);
 
-const PropertyCard: React.FC<{property: Property}> = ({property}) => {
-  const getStatusColor = (status: Property['status']) => {
-    switch (status) {
-      case 'active':
-        return Colors.MT_PRIMARY_1;
-      case 'pending':
-        return '#FFA500';
-      case 'sold':
-        return '#DC143C';
-      default:
-        return Colors.MT_SECONDARY_2;
+  // Function to fetch properties
+  const fetchProperties = useCallback(async (page: number, isLoadMore = false) => {
+    if (!user?.id) {
+      return;
     }
-  };
 
-  const getStatusText = (status: Property['status']) => {
-    switch (status) {
-      case 'active':
-        return 'Active';
-      case 'pending':
-        return 'Pending';
-      case 'sold':
-        return 'Sold';
-      default:
-        return status;
+    try {
+      if (!isLoadMore) {
+        setIsLoading(true);
+        setProperties([]);
+      } else {
+        setIsLoadingMore(true);
+      }
+
+      const response = await SellerService.getPropertiesByUserId(user.id, page, 12);
+
+      if (response.success && response.data) {
+        const propertiesData = response.data.properties;
+
+        if (isLoadMore) {
+          setProperties(prev => [...prev, ...propertiesData]);
+        } else {
+          setProperties(propertiesData);
+        }
+
+        setTotalCount(response.data.pagination.totalCount);
+        setHasMoreData(response.data.pagination.nextPage && propertiesData.length === 12);
+      }
+    } catch (error) {
+      console.error('Error fetching properties:', error);
+    } finally {
+      setIsLoading(false);
+      setIsLoadingMore(false);
+      setRefreshing(false);
     }
-  };
+  }, [user?.id]);
 
-  return (
-    <TouchableOpacity style={styles.propertyCard} activeOpacity={0.8}>
-      <View style={styles.imageContainer}>
-        <Image source={{uri: property.image}} style={styles.propertyImage} />
-        <View
-          style={[
-            styles.statusBadge,
-            {backgroundColor: getStatusColor(property.status)},
-          ]}>
-          <Text style={styles.statusText}>
-            {getStatusText(property.status)}
-          </Text>
-        </View>
-      </View>
+  // Initial load
+  useEffect(() => {
+    if (user?.id) {
+      fetchProperties(1, false);
+      setCurrentPage(1);
+    }
+  }, [user?.id, fetchProperties]);
 
-      <View style={styles.propertyDetails}>
-        <Text style={styles.propertyTitle} numberOfLines={2}>
-          {property.title}
-        </Text>
+  // Handle refresh
+  const handleRefresh = useCallback(() => {
+    setRefreshing(true);
+    setCurrentPage(1);
+    fetchProperties(1, false);
+  }, [fetchProperties]);
 
-        <View style={styles.locationContainer}>
-          <GetIcon
-            iconName="locationPin"
-            color={Colors.MT_SECONDARY_2}
-            size="14"
-          />
-          <Text style={styles.locationText} numberOfLines={1}>
-            {property.location}
-          </Text>
-        </View>
+  // Handle load more
+  const handleLoadMore = useCallback(() => {
+    if (!isLoading && !isLoadingMore && hasMoreData) {
+      const nextPage = currentPage + 1;
+      setCurrentPage(nextPage);
+      fetchProperties(nextPage, true);
+    }
+  }, [isLoading, isLoadingMore, hasMoreData, currentPage, fetchProperties]);
 
-        <Text style={styles.priceText}>{property.price}</Text>
-
-        <View style={styles.propertySpecs}>
-          {property.bedrooms > 0 && (
-            <View style={styles.specItem}>
-              <GetIcon
-                iconName="home"
-                color={Colors.MT_SECONDARY_2}
-                size="16"
-              />
-              <Text style={styles.specText}>{property.bedrooms}B</Text>
-            </View>
-          )}
-
-          <View style={styles.specItem}>
-            <GetIcon
-              iconName="property"
-              color={Colors.MT_SECONDARY_2}
-              size="16"
-            />
-            <Text style={styles.specText}>{property.bathrooms}B</Text>
-          </View>
-
-          <View style={styles.specItem}>
-            <GetIcon
-              iconName="property"
-              color={Colors.MT_SECONDARY_2}
-              size="16"
-            />
-            <Text style={styles.specText}>{property.area}</Text>
-          </View>
-        </View>
-
-        <View style={styles.statsContainer}>
-          <View style={styles.statItem}>
-            <GetIcon iconName="eye" color={Colors.MT_SECONDARY_2} size="14" />
-            <Text style={styles.statText}>{property.views} views</Text>
-          </View>
-
-          <View style={styles.statItem}>
-            <GetIcon
-              iconName="message"
-              color={Colors.MT_SECONDARY_2}
-              size="14"
-            />
-            <Text style={styles.statText}>{property.inquiries} inquiries</Text>
-          </View>
-        </View>
-
-        <View style={styles.actionButtons}>
-          <TouchableOpacity style={styles.editButton} activeOpacity={0.7}>
-            <GetIcon iconName="edit" color={Colors.MT_PRIMARY_1} size="16" />
-            <Text style={styles.editButtonText}>Edit</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity style={styles.deleteButton} activeOpacity={0.7}>
-            <GetIcon iconName="delete" color="#DC143C" size="16" />
-            <Text style={styles.deleteButtonText}>Delete</Text>
-          </TouchableOpacity>
-        </View>
-      </View>
-    </TouchableOpacity>
+  const renderPropertyItem: ListRenderItem<SellerProperty> = ({item}) => (
+    <View style={styles.propertyCardContainer}>
+      <SellerPropertyCard property={item} onPress={(propertyId: string) => console.log('Property pressed:', propertyId)} />
+    </View>
   );
-};
 
-const PropertyListScreen: React.FC<Props> = () => {
-  const [properties] = useState<Property[]>([
-    {
-      id: '1',
-      title: 'Modern 3BHK Apartment',
-      location: 'Andheri West, Mumbai',
-      price: '₹85,00,000',
-      type: 'Apartment',
-      bedrooms: 3,
-      bathrooms: 2,
-      area: '1,250 sq ft',
-      status: 'active',
-      image:
-        'https://images.unsplash.com/photo-1564013799919-ab600027ffc6?w=400',
-      views: 245,
-      inquiries: 12,
-    },
-    {
-      id: '2',
-      title: 'Luxury Villa with Garden',
-      location: 'Thane West',
-      price: '₹2,25,00,000',
-      type: 'Villa',
-      bedrooms: 4,
-      bathrooms: 3,
-      area: '3,500 sq ft',
-      status: 'active',
-      image:
-        'https://images.unsplash.com/photo-1570129477492-45c003edd2be?w=400',
-      views: 189,
-      inquiries: 8,
-    },
-    {
-      id: '3',
-      title: 'Commercial Office Space',
-      location: 'Bandra Kurla Complex',
-      price: '₹45,00,000/month',
-      type: 'Commercial',
-      bedrooms: 0,
-      bathrooms: 2,
-      area: '2,000 sq ft',
-      status: 'pending',
-      image:
-        'https://images.unsplash.com/photo-1497366216548-37526070297c?w=400',
-      views: 156,
-      inquiries: 5,
-    },
-    {
-      id: '4',
-      title: 'Cozy 2BHK Flat',
-      location: 'Powai, Mumbai',
-      price: '₹65,00,000',
-      type: 'Apartment',
-      bedrooms: 2,
-      bathrooms: 2,
-      area: '950 sq ft',
-      status: 'sold',
-      image:
-        'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=400',
-      views: 312,
-      inquiries: 15,
-    },
-    {
-      id: '5',
-      title: 'Penthouse with Sea View',
-      location: 'Marine Drive',
-      price: '₹3,50,00,000',
-      type: 'Penthouse',
-      bedrooms: 3,
-      bathrooms: 3,
-      area: '2,800 sq ft',
-      status: 'active',
-      image:
-        'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=400',
-      views: 98,
-      inquiries: 3,
-    },
-  ]);
+  const renderFooter = () => {
+    if (isLoadingMore) {
+      return (
+        <View style={styles.loadingFooter}>
+          <ActivityIndicator size="small" color={Colors.primary} />
+          <Text style={styles.loadingMoreText}>Loading more properties...</Text>
+        </View>
+      );
+    }
+    return <View style={styles.bottomSpacing} />;
+  };
+
+  const renderEmptyComponent = () => {
+    if (isLoading) {
+      return (
+        <View style={styles.emptyContainer}>
+          <ActivityIndicator size="large" color={Colors.primary} />
+          <Text style={styles.loadingEmptyText}>Loading properties...</Text>
+        </View>
+      );
+    }
+    return (
+      <View style={styles.emptyContainer}>
+        <Text style={styles.emptyText}>No properties found</Text>
+      </View>
+    );
+  };
 
   return (
     <View style={styles.container}>
-      <BuyerHeader
+      <BuyerSellerHeader
         title="Listed Properties"
         subtitle="Manage your listings"
       >
         <GetIcon iconName="filter" size={20} color="#333" />
-      </BuyerHeader>
+      </BuyerSellerHeader>
 
       <View style={styles.content}>
         <View style={styles.summaryContainer}>
           <Text style={styles.summaryText}>
-            Total Properties: {properties.length}
+            Total Properties: {isLoading ? 'Loading...' : totalCount}
           </Text>
           <Text style={styles.summaryText}>
-            Active: {properties.filter(p => p.status === 'active').length}
+            Active: {isLoading ? 'Loading...' : properties.filter(p => p.recordstatus === 'Active').length}
           </Text>
         </View>
 
-        <ScrollView
-          style={styles.propertiesList}
+        <FlatList
+          data={properties}
+          renderItem={renderPropertyItem}
+          keyExtractor={item => item.id.toString()}
           showsVerticalScrollIndicator={false}
-          contentContainerStyle={styles.scrollContent}>
-          {properties.map(property => (
-            <PropertyCard key={property.id} property={property} />
-          ))}
-        </ScrollView>
+          onEndReached={handleLoadMore}
+          onEndReachedThreshold={0.5}
+          refreshControl={
+            <RefreshControl
+              refreshing={refreshing}
+              onRefresh={handleRefresh}
+              colors={[Colors.primary]}
+            />
+          }
+          ListEmptyComponent={renderEmptyComponent}
+          ListFooterComponent={renderFooter}
+          contentContainerStyle={properties.length === 0 ? styles.emptyListContent : undefined}
+        />
 
-        <TouchableOpacity style={styles.addButton} activeOpacity={0.8}>
+        <TouchableOpacity
+          style={styles.addButton}
+          activeOpacity={0.8}
+          onPress={() => navigation.navigate('AddProperty')}
+        >
           <GetIcon iconName="plus" color="white" size="24" />
           <Text style={styles.addButtonText}>Add New Property</Text>
         </TouchableOpacity>
@@ -469,6 +377,41 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '700',
     marginLeft: 8,
+  },
+  propertyCardContainer: {
+    marginBottom: 16,
+  },
+  loadingFooter: {
+    paddingVertical: 20,
+    alignItems: 'center',
+  },
+  loadingMoreText: {
+    marginTop: 8,
+    fontSize: 14,
+    color: Colors.MT_SECONDARY_2,
+  },
+  bottomSpacing: {
+    height: 100,
+  },
+  emptyContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingVertical: 40,
+  },
+  emptyText: {
+    fontSize: 16,
+    color: Colors.MT_SECONDARY_2,
+    textAlign: 'center',
+  },
+  loadingEmptyText: {
+    marginTop: 16,
+    fontSize: 14,
+    color: Colors.MT_SECONDARY_2,
+  },
+  emptyListContent: {
+    flexGrow: 1,
+    justifyContent: 'center',
   },
 });
 

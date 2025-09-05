@@ -14,8 +14,8 @@ import MasterService from '../../../../../services/MasterService';
 import {PlacePrediction} from '../../../../../types/googlePlaces';
 import {MasterDetailModel} from '../../../../../types';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useAuth } from '../../../../../hooks/useAuth';
 import Roles from '../../../../../constants/Roles';
+import { useAuth } from '../../../../../context/AuthProvider';
 
 interface BasicDetailsStepProps {
   formInput: PartnerPropertyFormType;

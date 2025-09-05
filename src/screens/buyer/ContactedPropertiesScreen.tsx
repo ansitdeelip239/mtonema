@@ -12,7 +12,7 @@ import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import GetIcon from '../../components/GetIcon';
 import Colors from '../../constants/Colors';
 import {BuyerBottomTabParamList} from '../../types/navigation';
-import BuyerHeader from '../../components/BuyerSellerHeader';
+import BuyerSellerHeader from '../../components/BuyerSellerHeader';
 
 type Props = NativeStackScreenProps<BuyerBottomTabParamList, 'Contacted'>;
 
@@ -190,12 +190,12 @@ const ContactedProperties: React.FC<Props> = ({navigation: _navigation}) => {
   return (
     <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
       {/* Buyer Header */}
-      <BuyerHeader
+      <BuyerSellerHeader
         title="Your Contacts"
         subtitle="Contacted Properties"
       >
         <GetIcon iconName="settings" size={20} color="#333" />
-      </BuyerHeader>
+      </BuyerSellerHeader>
 
       {/* Stats Section */}
       <View style={styles.statsContainer}>

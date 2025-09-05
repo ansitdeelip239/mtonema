@@ -15,13 +15,13 @@ import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {FeedbackStackParamList} from '../../../navigator/components/FeedbackScreenStack';
 import {CustomerTestimonial, PagingModel} from '../../../types';
 import PartnerService from '../../../services/PartnerService';
-import {useAuth} from '../../../hooks/useAuth';
 import Colors from '../../../constants/Colors';
 import {formatDate} from '../../../utils/dateUtils';
 import GetIcon from '../../../components/GetIcon';
 import YoutubeVideoPlayer from '../../../components/YoutubeVideoPlayer';
 import {getYoutubeVideoId} from '../../../utils/formUtils';
 import { useTheme } from '../../../context/ThemeProvider';
+import { useAuth } from '../../../context/AuthProvider';
 
 const {width} = Dimensions.get('window');
 const PAGE_SIZE = 5;

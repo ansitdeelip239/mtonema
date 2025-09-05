@@ -8,8 +8,8 @@ import Colors from '../../../../constants/Colors';
 import AddGroupModal from '../../GroupsScreen/components/AddGroupModal';
 import PartnerService from '../../../../services/PartnerService';
 import Toast from 'react-native-toast-message';
-import {useAuth} from '../../../../hooks/useAuth';
 import {useTheme} from '../../../../context/ThemeProvider';
+import { useAuth } from '../../../../context/AuthProvider';
 
 interface GroupsToggleComponentProps {
   selectedGroups: number[];

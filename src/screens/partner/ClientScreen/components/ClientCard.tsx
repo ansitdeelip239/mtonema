@@ -6,9 +6,9 @@ import GroupBadges from './GroupBadge';
 import {ClientStackParamList} from '../../../../navigator/components/ClientScreenStack';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import GetIcon from '../../../../components/GetIcon';
-import {getPastelColor} from '../../../../utils/getPastelColor';
 import {formatWhatsappNumber} from '../../../../utils/phoneUtils';
 import { useTranslation } from 'react-i18next';
+import { getPastelColor } from '../../../../utils/colorUtils';
 
 interface ClientCardProps {
   client: Client;

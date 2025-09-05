@@ -23,13 +23,13 @@ import AddActivityModal from './components/AddActivityModal';
 import Toast from 'react-native-toast-message';
 import {usePartner} from '../../../context/PartnerProvider';
 import PartnerService from '../../../services/PartnerService';
-import {useAuth} from '../../../hooks/useAuth';
 import GetIcon from '../../../components/GetIcon';
 import FilterDrawer from './components/FilterDrawer';
 import {useNavigation} from '@react-navigation/native';
 import {DrawerNavigationProp} from '@react-navigation/drawer';
 import Roles from '../../../constants/Roles';
 import {useTranslation} from 'react-i18next';
+import { useAuth } from '../../../context/AuthProvider';
 
 type Props = NativeStackScreenProps<ClientStackParamList, 'ClientScreen'>;
 

@@ -1,8 +1,8 @@
 import {useState, useCallback, useEffect, useRef} from 'react';
 import {Client, PagingModel} from '../types';
-import {useAuth} from './useAuth';
 import PartnerService from '../services/PartnerService';
 import {usePartner} from '../context/PartnerProvider';
+import { useAuth } from '../context/AuthProvider';
 
 export const useClientData = () => {
   const [clients, setClients] = useState<Client[]>([]);

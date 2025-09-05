@@ -14,7 +14,7 @@ import { FollowUpStackParamList } from '../../../navigator/components/FollowUpSc
 import Header from '../../../components/Header';
 import { useFollowUps } from '../../../hooks/useFollowUps';
 import FollowUpListSection from './components/FollowUpListSection';
-import { navigate } from '../../../navigator/NavigationRef';
+import { navigate } from '../../../navigator/components/NavigationRef';
 import { useTheme } from '../../../context/ThemeProvider';
 import { useTranslation } from 'react-i18next';
 

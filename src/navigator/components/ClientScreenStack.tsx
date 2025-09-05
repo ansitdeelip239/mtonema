@@ -13,8 +13,8 @@ import { useNavigation } from '@react-navigation/native';
 import { DrawerNavigationProp } from '@react-navigation/drawer';
 import { PartnerDrawerParamList } from '../../types/navigation';
 import GetIcon from '../../components/GetIcon';
-import { useAuth } from '../../hooks/useAuth';
 import Roles from '../../constants/Roles';
+import { useAuth } from '../../context/AuthProvider';
 
 // define your param list with 'FilterScreen'
 export type ClientStackParamList = {

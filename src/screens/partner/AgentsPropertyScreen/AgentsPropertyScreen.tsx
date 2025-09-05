@@ -10,7 +10,6 @@ import {
   Platform,
 } from 'react-native';
 import PartnerService from '../../../services/PartnerService';
-import { useAuth } from '../../../hooks/useAuth';
 import { AgentData, FilterValues, PagingModel } from '../../../types';
 import renderFooter from './components/RenderFooter';
 import Header from '../../../components/Header';
@@ -22,6 +21,7 @@ import { AgentDataStackParamList } from '../../../navigator/components/AgentData
 import SearchAndFilter from './components/SearchAndFilter';
 import { useTheme } from '../../../context/ThemeProvider';
 import { useTranslation } from 'react-i18next';
+import { useAuth } from '../../../context/AuthProvider';
 
 // type Props = BottomTabScreenProps<PartnerBottomTabParamList, 'Property'>;
 type Props = NativeStackScreenProps<AgentDataStackParamList, 'AgentDataScreen'>;

@@ -14,9 +14,7 @@ import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import Toast from 'react-native-toast-message';
 import {AuthStackParamList} from '../../navigator/AuthNavigator';
 import AuthService from '../../services/AuthService';
-import {useAuth} from '../../hooks/useAuth';
 import Colors from '../../constants/Colors';
-import {useDialog} from '../../hooks/useDialog';
 import {MaterialTextInput} from '../../components/MaterialTextInput';
 import useForm from '../../hooks/useForm';
 import {EmailFormData, emailSchema} from '../../schema/LoginSchema';
@@ -27,6 +25,8 @@ import Images from '../../constants/Images';
 import HeaderComponent from './components/HeaderComponent';
 import {lightenColor} from '../../utils/colorUtils';
 import { useTranslation } from 'react-i18next';
+import { useAuth } from '../../context/AuthProvider';
+import { useDialog } from '../../context/DialogProvider';
 
 const {width} = Dimensions.get('window');
 type Props = NativeStackScreenProps<AuthStackParamList, 'EmailScreen'>;

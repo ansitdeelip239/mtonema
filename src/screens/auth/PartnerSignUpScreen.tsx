@@ -20,7 +20,6 @@ import useForm from '../../hooks/useForm';
 import {z} from 'zod';
 import Colors from '../../constants/Colors';
 import {useKeyboard} from '../../hooks/useKeyboard';
-import {useDialog} from '../../hooks/useDialog';
 import AuthService from '../../services/AuthService';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import Roles from '../../constants/Roles';
@@ -35,6 +34,7 @@ import PartnerSignUpFormSchema, {
   PartnerSignupFormType,
   partnerSignupSubmissionSchema,
 } from '../../schema/PartnerSignUpFormSchema';
+import { useDialog } from '../../context/DialogProvider';
 
 const {width} = Dimensions.get('window');
 type Props = NativeStackScreenProps<AuthStackParamList, 'PartnerSignUpScreen'>;

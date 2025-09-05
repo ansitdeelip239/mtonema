@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { TouchableOpacity, Text, ActivityIndicator, StyleSheet, View, Alert } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import GetIcon from './GetIcon';
-import { useAuth } from '../hooks/useAuth';
+import { useAuth } from '../context/AuthProvider';
 
 const SwitchAccountButton: React.FC = () => {
   const [isLoggingOut, setIsLoggingOut] = useState(false);

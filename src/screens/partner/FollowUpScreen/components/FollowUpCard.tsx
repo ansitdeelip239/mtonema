@@ -5,9 +5,9 @@ import {formatLocalizedDate, formatLocalizedTime} from '../../../../utils/dateUt
 import GetIcon from '../../../../components/GetIcon';
 import {useTheme} from '../../../../context/ThemeProvider';
 import GroupBadges from '../../ClientScreen/components/GroupBadge';
-import {getPastelColor} from '../../../../utils/getPastelColor';
 import {useTranslation} from 'react-i18next';
 import i18n from '../../../../i18n';
+import { getPastelColor } from '../../../../utils/colorUtils';
 
 interface FollowUpCardProps {
   item: FollowUpType;

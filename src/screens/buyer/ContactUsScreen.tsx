@@ -14,7 +14,7 @@ import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import GetIcon, {IconEnum} from '../../components/GetIcon';
 import Colors from '../../constants/Colors';
 import {BuyerBottomTabParamList} from '../../types/navigation';
-import BuyerHeader from '../../components/BuyerSellerHeader';
+import BuyerSellerHeader from '../../components/BuyerSellerHeader';
 
 type Props = NativeStackScreenProps<BuyerBottomTabParamList, 'Contact Us'>;
 
@@ -147,12 +147,12 @@ const ContactUsScreen: React.FC<Props> = ({navigation: _navigation}) => {
   return (
     <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
       {/* Buyer Header */}
-      <BuyerHeader
+      <BuyerSellerHeader
         title="Get In Touch"
         subtitle="Contact Us"
       >
         <GetIcon iconName="threeDots" size={20} color="#333" />
-      </BuyerHeader>
+      </BuyerSellerHeader>
 
       {/* Contact Information */}
       <View style={styles.section}>

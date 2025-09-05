@@ -27,12 +27,12 @@ import { usePartner } from '../../../context/PartnerProvider';
 import Toast from 'react-native-toast-message';
 import { SearchInput } from './components/SearchInput';
 import { useKeyboard } from '../../../hooks/useKeyboard';
-import { useDialog } from '../../../hooks/useDialog';
-import { useAuth } from '../../../hooks/useAuth';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { AgentDataStackParamList } from '../../../navigator/components/AgentDataStack';
 import { useTheme } from '../../../context/ThemeProvider';
 import { useTranslation } from 'react-i18next';
+import { useAuth } from '../../../context/AuthProvider';
+import { useDialog } from '../../../context/DialogProvider';
 
 // type Props = BottomTabScreenProps<PartnerBottomTabParamList, 'AddProperty'>;
 type Props = NativeStackScreenProps<

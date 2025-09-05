@@ -3,14 +3,14 @@ import {StyleSheet, View, Text, TouchableOpacity, Platform} from 'react-native';
 import GetIcon from './GetIcon';
 import {useDrawer} from '../hooks/useDrawer';
 
-interface BuyerHeaderProps {
+interface BuyerSellerHeaderProps {
   title?: string;
   subtitle?: string;
   children?: React.ReactNode;
   onActionPress?: () => void;
 }
 
-const BuyerHeader: React.FC<BuyerHeaderProps> = ({
+const BuyerSellerHeader: React.FC<BuyerSellerHeaderProps> = ({
   title = 'Welcome back',
   subtitle,
   children,
@@ -101,4 +101,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default BuyerHeader;
+export default BuyerSellerHeader;

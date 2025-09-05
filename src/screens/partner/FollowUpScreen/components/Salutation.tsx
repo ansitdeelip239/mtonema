@@ -1,10 +1,10 @@
 import React from 'react';
 import {View, Text, StyleSheet} from 'react-native';
-import {useAuth} from '../../../../hooks/useAuth';
 import {useTheme} from '../../../../context/ThemeProvider';
 import GetIcon from '../../../../components/GetIcon';
 import {getTimeIcon, getFirstName, getGreetingTranslationKey} from '../../../../utils/dateUtils';
 import {useTranslation} from 'react-i18next';
+import { useAuth } from '../../../../context/AuthProvider';
 
 const SalutationGreeting: React.FC = () => {
   const {t} = useTranslation();
