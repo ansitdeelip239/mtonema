@@ -32,7 +32,7 @@ const SellerContactScreen = () => {
       title: 'Phone',
       value: '+91 7303062845',
       icon: 'user' as const,
-      action: () => Linking.openURL('tel:+9118001234567'),
+      action: () => Linking.openURL('tel:+917303062845'),
     },
     {
       id: 'email',
