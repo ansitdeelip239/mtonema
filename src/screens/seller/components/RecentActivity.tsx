@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React from 'react';
 import {View, Text, TouchableOpacity, StyleSheet} from 'react-native';
 import GetIcon from '../../../components/GetIcon';
@@ -48,9 +47,14 @@ export const RecentActivity: React.FC<RecentActivityProps> = ({
                 <Text style={styles.propertyName} numberOfLines={1}>
                   {property.propertyName}
                 </Text>
-                <Text style={styles.propertyDetails} numberOfLines={1}>
-                  {property.location} • {new Date(property.createdOn).toLocaleDateString()}
-                </Text>
+                <View style={styles.propertyDetailsContainer}>
+                  <Text style={styles.propertyLocation} numberOfLines={1}>
+                    {property.location}
+                  </Text>
+                  <Text style={styles.propertyDateTime}>
+                    {new Date(property.createdOn).toLocaleDateString()} {new Date(property.createdOn).toLocaleTimeString()}
+                  </Text>
+                </View>
               </View>
               <Text style={styles.propertyPrice}>
                 {formatCompactPrice(property.price)}
@@ -131,5 +135,17 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: '700',
     color: Colors.MT_PRIMARY_1,
+  },
+  propertyDetailsContainer: {
+    flex: 1,
+  },
+  propertyLocation: {
+    fontSize: 11,
+    color: '#6B7280',
+    marginBottom: 2,
+  },
+  propertyDateTime: {
+    fontSize: 11,
+    color: '#6B7280',
   },
 });

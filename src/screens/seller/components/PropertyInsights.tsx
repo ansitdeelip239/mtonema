@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React from 'react';
 import {View, Text, StyleSheet} from 'react-native';
 import GetIcon from '../../../components/GetIcon';
@@ -20,7 +19,7 @@ export const PropertyInsights: React.FC<PropertyInsightsProps> = ({
   bhkAnalytics,
   properties,
 }) => {
-  const getPropertyTypeColor = (index) => {
+  const getPropertyTypeColor = (index: number): string => {
     return index === 0 ? '#10B981' : index === 1 ? '#F59E0B' : '#8B5CF6';
   };
 
