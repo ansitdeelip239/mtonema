@@ -1,6 +1,7 @@
 import {NavigatorScreenParams} from '@react-navigation/native';
 import {ClientStackParamList} from '../navigator/components/ClientScreenStack';
 import { ListingScreenStackParamList } from '../navigator/components/PropertyListingScreenStack';
+import {PropertyStackParamList} from '../navigator/components/PropertyStack';
 
 export type AgentStackParamList = {
   AgentPropertyList: undefined;
@@ -38,7 +39,7 @@ export type PaymentBottomTabParamList = {
 
 export type SellerBottomTabParamList = {
   'Dashboard': undefined;
-  Property: undefined;
+  Property: NavigatorScreenParams<PropertyStackParamList>;
   AddProperty: undefined;
   Contact: undefined;
   Profile: undefined;

@@ -3,7 +3,7 @@ import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import GetIcon from '../../components/GetIcon';
 import Colors from '../../constants/Colors';
 import {SellerBottomTabParamList} from '../../types/navigation';
-import PropertyListScreen from '../../screens/seller/PropertyListScreen';
+import PropertyStack from './PropertyStack';
 // import PostProperty from '../../screens/seller/PostPropertyScreen';
 // import PropertyListingForm from '../../screens/seller/PostProperty';
 import {CustomBottomBar, TabScreen} from './CustomBottomBar';
@@ -23,7 +23,7 @@ const tabScreens: Array<TabScreen<SellerBottomTabParamList>> = [
   },
   {
     name: 'Property',
-    component: PropertyListScreen,
+    component: PropertyStack,
     icon: 'realEstate',
   },
   {

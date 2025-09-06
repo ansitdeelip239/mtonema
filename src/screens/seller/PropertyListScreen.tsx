@@ -11,15 +11,15 @@ import {
   ListRenderItem,
 } from 'react-native';
 import BuyerSellerHeader from '../../components/BuyerSellerHeader';
-import {BottomTabScreenProps} from '@react-navigation/bottom-tabs';
-import {SellerBottomTabParamList} from '../../types/navigation';
+import {NativeStackScreenProps} from '@react-navigation/native-stack';
+import {PropertyStackParamList} from '../../navigator/components/PropertyStack';
 import Colors from '../../constants/Colors';
 import GetIcon from '../../components/GetIcon';
 import {SellerProperty} from '../../types';
 import SellerPropertyCard from './components/SellerPropertyCard';
 import {usePropertyList} from './hooks/usePropertyList';
 
-type Props = BottomTabScreenProps<SellerBottomTabParamList, 'Dashboard'>;
+type Props = NativeStackScreenProps<PropertyStackParamList, 'PropertyList'>;
 
 const PropertyListScreen: React.FC<Props> = ({navigation}) => {
   const {
@@ -34,7 +34,7 @@ const PropertyListScreen: React.FC<Props> = ({navigation}) => {
 
   const renderPropertyItem: ListRenderItem<SellerProperty> = ({item}) => (
     <View style={styles.propertyCardContainer}>
-      <SellerPropertyCard property={item} onPress={(propertyId: string) => console.log('Property pressed:', propertyId)} />
+      <SellerPropertyCard property={item} onPress={() => navigation.navigate('PropertyDetail', { property: item })} />
     </View>
   );
 
@@ -80,9 +80,6 @@ const PropertyListScreen: React.FC<Props> = ({navigation}) => {
           <Text style={styles.summaryText}>
             Total Properties: {isLoading ? 'Loading...' : totalCount}
           </Text>
-          <Text style={styles.summaryText}>
-            Active: {isLoading ? 'Loading...' : properties.filter((p: SellerProperty) => p.recordstatus === 'Active').length}
-          </Text>
         </View>
       </View>
     </View>
@@ -113,7 +110,7 @@ const PropertyListScreen: React.FC<Props> = ({navigation}) => {
       <TouchableOpacity
         style={styles.addButton}
         activeOpacity={0.8}
-        onPress={() => navigation.navigate('AddProperty')}
+        onPress={() => navigation.getParent()?.navigate('AddProperty')}
       >
         <GetIcon iconName="plus" color="white" size="24" />
         <Text style={styles.addButtonText}>Add New Property</Text>

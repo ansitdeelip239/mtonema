@@ -12,9 +12,15 @@ import {PaperProvider} from 'react-native-paper';
 import {DialogProvider} from './src/context/DialogProvider';
 import {MasterProvider} from './src/context/MasterProvider';
 import {ThemeProvider} from './src/context/ThemeProvider';
-import { SafeAreaProvider } from 'react-native-safe-area-context';
+import {SafeAreaProvider} from 'react-native-safe-area-context';
+import { useNavigationContainerRef } from '@react-navigation/native';
+import { useLogger } from '@react-navigation/devtools';
 
 const App = () => {
+  const navigationRef = useNavigationContainerRef();
+
+  useLogger(navigationRef);
+
   useEffect(() => {
     // ✅ Critical: Verify RTL state on every app start
     const verifyRTLState = async () => {
