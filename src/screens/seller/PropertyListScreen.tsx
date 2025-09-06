@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useCallback} from 'react';
+import React from 'react';
 import {
   StyleSheet,
   View,
@@ -15,83 +15,22 @@ import {BottomTabScreenProps} from '@react-navigation/bottom-tabs';
 import {SellerBottomTabParamList} from '../../types/navigation';
 import Colors from '../../constants/Colors';
 import GetIcon from '../../components/GetIcon';
-import SellerService from '../../services/SellerService';
 import {SellerProperty} from '../../types';
 import SellerPropertyCard from './components/SellerPropertyCard';
-import { useAuth } from '../../context/AuthProvider';
+import {usePropertyList} from './hooks/usePropertyList';
 
 type Props = BottomTabScreenProps<SellerBottomTabParamList, 'Dashboard'>;
 
 const PropertyListScreen: React.FC<Props> = ({navigation}) => {
-  const {user} = useAuth();
-  const [properties, setProperties] = useState<SellerProperty[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const [isLoadingMore, setIsLoadingMore] = useState(false);
-  const [refreshing, setRefreshing] = useState(false);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [totalCount, setTotalCount] = useState(0);
-  const [hasMoreData, setHasMoreData] = useState(true);
-
-  // Function to fetch properties
-  const fetchProperties = useCallback(async (page: number, isLoadMore = false) => {
-    if (!user?.id) {
-      return;
-    }
-
-    try {
-      if (!isLoadMore) {
-        setIsLoading(true);
-        setProperties([]);
-      } else {
-        setIsLoadingMore(true);
-      }
-
-      const response = await SellerService.getPropertiesByUserId(user.id, page, 12);
-
-      if (response.success && response.data) {
-        const propertiesData = response.data.properties;
-
-        if (isLoadMore) {
-          setProperties(prev => [...prev, ...propertiesData]);
-        } else {
-          setProperties(propertiesData);
-        }
-
-        setTotalCount(response.data.pagination.totalCount);
-        setHasMoreData(response.data.pagination.nextPage && propertiesData.length === 12);
-      }
-    } catch (error) {
-      console.error('Error fetching properties:', error);
-    } finally {
-      setIsLoading(false);
-      setIsLoadingMore(false);
-      setRefreshing(false);
-    }
-  }, [user?.id]);
-
-  // Initial load
-  useEffect(() => {
-    if (user?.id) {
-      fetchProperties(1, false);
-      setCurrentPage(1);
-    }
-  }, [user?.id, fetchProperties]);
-
-  // Handle refresh
-  const handleRefresh = useCallback(() => {
-    setRefreshing(true);
-    setCurrentPage(1);
-    fetchProperties(1, false);
-  }, [fetchProperties]);
-
-  // Handle load more
-  const handleLoadMore = useCallback(() => {
-    if (!isLoading && !isLoadingMore && hasMoreData) {
-      const nextPage = currentPage + 1;
-      setCurrentPage(nextPage);
-      fetchProperties(nextPage, true);
-    }
-  }, [isLoading, isLoadingMore, hasMoreData, currentPage, fetchProperties]);
+  const {
+    properties,
+    isLoading,
+    isLoadingMore,
+    refreshing,
+    totalCount,
+    handleRefresh,
+    handleLoadMore,
+  } = usePropertyList(12);
 
   const renderPropertyItem: ListRenderItem<SellerProperty> = ({item}) => (
     <View style={styles.propertyCardContainer}>
@@ -127,8 +66,8 @@ const PropertyListScreen: React.FC<Props> = ({navigation}) => {
     );
   };
 
-  return (
-    <View style={styles.container}>
+  const renderListHeader = () => (
+    <View>
       <BuyerSellerHeader
         title="Listed Properties"
         subtitle="Manage your listings"
@@ -142,38 +81,43 @@ const PropertyListScreen: React.FC<Props> = ({navigation}) => {
             Total Properties: {isLoading ? 'Loading...' : totalCount}
           </Text>
           <Text style={styles.summaryText}>
-            Active: {isLoading ? 'Loading...' : properties.filter(p => p.recordstatus === 'Active').length}
+            Active: {isLoading ? 'Loading...' : properties.filter((p: SellerProperty) => p.recordstatus === 'Active').length}
           </Text>
         </View>
-
-        <FlatList
-          data={properties}
-          renderItem={renderPropertyItem}
-          keyExtractor={item => item.id.toString()}
-          showsVerticalScrollIndicator={false}
-          onEndReached={handleLoadMore}
-          onEndReachedThreshold={0.5}
-          refreshControl={
-            <RefreshControl
-              refreshing={refreshing}
-              onRefresh={handleRefresh}
-              colors={[Colors.primary]}
-            />
-          }
-          ListEmptyComponent={renderEmptyComponent}
-          ListFooterComponent={renderFooter}
-          contentContainerStyle={properties.length === 0 ? styles.emptyListContent : undefined}
-        />
-
-        <TouchableOpacity
-          style={styles.addButton}
-          activeOpacity={0.8}
-          onPress={() => navigation.navigate('AddProperty')}
-        >
-          <GetIcon iconName="plus" color="white" size="24" />
-          <Text style={styles.addButtonText}>Add New Property</Text>
-        </TouchableOpacity>
       </View>
+    </View>
+  );
+
+  return (
+    <View style={styles.container}>
+      <FlatList
+        data={properties}
+        renderItem={renderPropertyItem}
+        keyExtractor={item => item.id.toString()}
+        showsVerticalScrollIndicator={false}
+        onEndReached={handleLoadMore}
+        onEndReachedThreshold={0.5}
+        refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={handleRefresh}
+            colors={[Colors.primary]}
+          />
+        }
+        ListEmptyComponent={renderEmptyComponent}
+        ListFooterComponent={renderFooter}
+        ListHeaderComponent={renderListHeader}
+        contentContainerStyle={properties.length === 0 ? styles.emptyListContent : styles.listContent}
+      />
+
+      <TouchableOpacity
+        style={styles.addButton}
+        activeOpacity={0.8}
+        onPress={() => navigation.navigate('AddProperty')}
+      >
+        <GetIcon iconName="plus" color="white" size="24" />
+        <Text style={styles.addButtonText}>Add New Property</Text>
+      </TouchableOpacity>
     </View>
   );
 };
@@ -380,6 +324,7 @@ const styles = StyleSheet.create({
   },
   propertyCardContainer: {
     marginBottom: 16,
+    marginHorizontal: 16,
   },
   loadingFooter: {
     paddingVertical: 20,
@@ -412,6 +357,9 @@ const styles = StyleSheet.create({
   emptyListContent: {
     flexGrow: 1,
     justifyContent: 'center',
+  },
+  listContent: {
+    paddingBottom: 100,
   },
 });
 

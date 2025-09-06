@@ -20,6 +20,7 @@ interface Theme {
 interface ThemeContextType {
   theme: Theme;
   updateTheme: (theme: Theme) => Promise<void>;
+  resetToDefaultTheme: () => Promise<void>;
 }
 
 // Default theme
@@ -75,9 +76,21 @@ export const ThemeProvider: React.FC<ThemeProviderProps> = ({children}) => {
     }
   };
 
+  // Reset theme to default and persist to AsyncStorage
+  const resetToDefaultTheme = async (): Promise<void> => {
+    try {
+      setTheme(defaultTheme);
+      await AsyncStorage.setItem(THEME_KEY, JSON.stringify(defaultTheme));
+    } catch (err) {
+      console.error('Failed to reset theme', err);
+      throw new Error('Failed to reset theme');
+    }
+  };
+
   const contextValue: ThemeContextType = {
     theme,
     updateTheme,
+    resetToDefaultTheme,
   };
 
   return (
@@ -86,6 +99,8 @@ export const ThemeProvider: React.FC<ThemeProviderProps> = ({children}) => {
     </ThemeContext.Provider>
   );
 };
+
+export { defaultTheme };
 
 export const useTheme = (): ThemeContextType => {
   const context = useContext(ThemeContext);

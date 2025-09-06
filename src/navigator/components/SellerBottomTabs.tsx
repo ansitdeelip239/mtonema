@@ -6,12 +6,12 @@ import {SellerBottomTabParamList} from '../../types/navigation';
 import PropertyListScreen from '../../screens/seller/PropertyListScreen';
 // import PostProperty from '../../screens/seller/PostPropertyScreen';
 // import PropertyListingForm from '../../screens/seller/PostProperty';
-import SellerProfileScreen from '../../screens/seller/SellerProfileScreen';
 import {CustomBottomBar, TabScreen} from './CustomBottomBar';
 import SellerDashboard from '../../screens/seller/SellerDashboard';
 import SellerContactScreen from '../../screens/seller/SellerContactScreen';
 import PostPropertyScreen from '../../screens/seller/PostPropertyScreen';
 import { useAuth } from '../../context/AuthProvider';
+import SellerProfileStack from './SellerProfileStack';
 
 const Tab = createBottomTabNavigator<SellerBottomTabParamList>();
 
@@ -38,7 +38,7 @@ const tabScreens: Array<TabScreen<SellerBottomTabParamList>> = [
   },
   {
     name: 'Profile',
-    component: SellerProfileScreen,
+    component: SellerProfileStack,
     icon: 'user',
   },
 ] as const;

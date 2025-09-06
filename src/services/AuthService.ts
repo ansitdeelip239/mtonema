@@ -115,9 +115,7 @@ class AuthService {
 
   static async getUserByToken(token: string) {
     try {
-      const response = await api.get<User>(`${url.users.list}?token=${token}`, {
-        Authorization: `Bearer ${token}`,
-      });
+      const response = await api.get<User>(`${url.users.list}?token=${token}`);
       return response;
     } catch (error) {
       throw error;

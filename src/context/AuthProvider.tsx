@@ -4,6 +4,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import {jwtDecode} from 'jwt-decode';
 import {AuthContextType, MasterDetailModel, User} from '../types';
 import {useLogoStorage} from '../hooks/useLogoStorage';
+import {useTheme} from './ThemeProvider';
 
 interface AuthProviderProps {
   children: React.ReactNode;
@@ -41,6 +42,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({children}) => {
   const [isLoading, setIsLoading] = useState(true);
 
   const {clearLogoData} = useLogoStorage();
+  const {resetToDefaultTheme} = useTheme();
 
   // Use useRef for timer to prevent memory leaks
   const tokenExpiryTimer = useRef<NodeJS.Timeout | undefined>(undefined);
@@ -50,7 +52,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({children}) => {
       await AuthService.removeUserData();
       await AsyncStorage.removeItem('tokenExpiry');
       await AsyncStorage.removeItem('token');
-      await AsyncStorage.removeItem('APP_THEME');
+      await resetToDefaultTheme();
       await clearLogoData();
       setUser(null);
       setAuthToken(null);
@@ -66,7 +68,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({children}) => {
       setAuthToken(null);
       setIsAuthenticated(false);
     }
-  }, [clearLogoData]);
+  }, [clearLogoData, resetToDefaultTheme]);
 
   const handleTokenExpiry = useCallback(
     (token: string) => {

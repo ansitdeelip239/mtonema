@@ -1,21 +1,92 @@
-import {StyleSheet, View, Text, ScrollView, TouchableOpacity, Platform} from 'react-native';
+import {
+  StyleSheet,
+  View,
+  Text,
+  ScrollView,
+  TouchableOpacity,
+  Platform,
+  RefreshControl,
+} from 'react-native';
 import React from 'react';
 import BuyerSellerHeader from '../../components/BuyerSellerHeader';
 import Colors from '../../constants/Colors';
-import GetIcon, { IconEnum } from '../../components/GetIcon';
+import GetIcon, {IconEnum} from '../../components/GetIcon';
+import { useUserProfile } from './hooks/useUserProfile';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { SellerProfileStackParamList } from '../../navigator/components/SellerProfileStack';
 
-const SellerProfileScreen = () => {
-  // Dummy user data
-  const userData = {
-    name: 'Rajesh Kumar',
-    email: 'rajesh.kumar@email.com',
-    phone: '+91 98765 43210',
-    location: 'Mumbai, Maharashtra',
-    joinDate: 'January 2024',
-    totalProperties: 12,
-    activeListings: 8,
-    totalEarnings: '₹45,230',
+type Props = NativeStackScreenProps<SellerProfileStackParamList, 'SellerProfileScreen'>;
+
+const SellerProfileScreen: React.FC<Props> = ({navigation}) => {
+  const {userData, loading, error, refetch} = useUserProfile();
+  const [refreshing, setRefreshing] = React.useState(false);
+
+  const handleRefresh = async () => {
+    setRefreshing(true);
+    try {
+      await refetch();
+    } finally {
+      setRefreshing(false);
+    }
   };
+
+  const handleOptionPress = (optionId: string) => {
+    switch (optionId) {
+      case 'edit':
+        navigation.navigate('EditSellerProfileScreen');
+        break;
+      case 'properties':
+        // Navigate to Property tab in bottom tabs
+        navigation.getParent()?.navigate('Property');
+        break;
+      case 'settings':
+        // Handle settings navigation
+        break;
+      default:
+        break;
+    }
+  };
+
+  // Show loading state
+  if (loading) {
+    return (
+      <View style={styles.container}>
+        <View style={styles.headerContainer}>
+          <BuyerSellerHeader
+            title="User Profile"
+            subtitle="Manage your account">
+            <GetIcon iconName="threeDots" size={20} color="#333" />
+          </BuyerSellerHeader>
+        </View>
+        <View style={styles.loadingContainer}>
+          <Text style={styles.loadingText}>Loading profile...</Text>
+        </View>
+      </View>
+    );
+  }
+
+  // Show error state if no user data
+  if (!userData && !loading) {
+    return (
+      <View style={styles.container}>
+        <View style={styles.headerContainer}>
+          <BuyerSellerHeader
+            title="User Profile"
+            subtitle="Manage your account">
+            <GetIcon iconName="threeDots" size={20} color="#333" />
+          </BuyerSellerHeader>
+        </View>
+        <View style={styles.errorContainer}>
+          <Text style={styles.errorText}>{error || 'Unable to load profile data'}</Text>
+        </View>
+      </View>
+    );
+  }
+
+  // Don't render main content if no user data
+  if (!userData) {
+    return null;
+  }
 
   const profileOptions: {
     id: string;
@@ -24,8 +95,8 @@ const SellerProfileScreen = () => {
     action: string;
   }[] = [
     {
-      id: 'personal',
-      title: 'Personal Information',
+      id: 'edit',
+      title: 'Edit Profile',
       icon: 'user',
       action: 'Edit Profile',
     },
@@ -34,12 +105,6 @@ const SellerProfileScreen = () => {
       title: 'My Properties',
       icon: 'home',
       action: 'View All',
-    },
-    {
-      id: 'analytics',
-      title: 'Analytics',
-      icon: 'bill',
-      action: 'View Stats',
     },
     {
       id: 'settings',
@@ -51,16 +116,25 @@ const SellerProfileScreen = () => {
 
   return (
     <View style={styles.container}>
-      <View style={styles.headerContainer}>
-        <BuyerSellerHeader
-          title="User Profile"
-          subtitle="Manage your account"
-        >
-          <GetIcon iconName="threeDots" size={20} color="#333" />
-        </BuyerSellerHeader>
-      </View>
-
-      <ScrollView style={styles.scrollContainer} showsVerticalScrollIndicator={false}>
+      <ScrollView
+        style={styles.scrollContainer}
+        showsVerticalScrollIndicator={false}
+        refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={handleRefresh}
+            colors={[Colors.MT_PRIMARY_1]}
+            tintColor={Colors.MT_PRIMARY_1}
+          />
+        }>
+        {/* Header */}
+        <View style={styles.headerContainer}>
+          <BuyerSellerHeader
+            title="User Profile"
+            subtitle="Manage your account">
+            <GetIcon iconName="threeDots" size={20} color="#333" />
+          </BuyerSellerHeader>
+        </View>
         {/* Profile Header */}
         <View style={styles.profileHeader}>
           <View style={styles.avatarContainer}>
@@ -76,41 +150,31 @@ const SellerProfileScreen = () => {
           <Text style={styles.userEmail}>{userData.email}</Text>
           <Text style={styles.userLocation}>{userData.location}</Text>
         </View>
-
-        {/* Stats Section */}
-        <View style={styles.statsSection}>
-          <Text style={styles.sectionTitle}>Account Overview</Text>
-          <View style={styles.statsGrid}>
-            <View style={styles.statCard}>
-              <Text style={styles.statValue}>{userData.totalProperties}</Text>
-              <Text style={styles.statLabel}>Total Properties</Text>
-            </View>
-            <View style={styles.statCard}>
-              <Text style={styles.statValue}>{userData.activeListings}</Text>
-              <Text style={styles.statLabel}>Active Listings</Text>
-            </View>
-            <View style={styles.statCard}>
-              <Text style={styles.statValue}>{userData.totalEarnings}</Text>
-              <Text style={styles.statLabel}>Total Earnings</Text>
-            </View>
-          </View>
-        </View>
-
-        {/* Profile Options */}
         <View style={styles.optionsSection}>
           <Text style={styles.sectionTitle}>Account Settings</Text>
           {profileOptions.map(option => (
-            <TouchableOpacity key={option.id} style={styles.optionCard}>
+            <TouchableOpacity
+              key={option.id}
+              style={styles.optionCard}
+              onPress={() => handleOptionPress(option.id)}
+            >
               <View style={styles.optionLeft}>
                 <View style={styles.optionIcon}>
-                  <GetIcon iconName={option.icon} color={Colors.MT_PRIMARY_1} size="24" />
+                  <GetIcon
+                    iconName={option.icon}
+                    color={Colors.MT_PRIMARY_1}
+                    size="24"
+                  />
                 </View>
                 <View style={styles.optionText}>
                   <Text style={styles.optionTitle}>{option.title}</Text>
-                  <Text style={styles.optionSubtitle}>{option.action}</Text>
                 </View>
               </View>
-              <GetIcon iconName="chevronRight" color={Colors.MT_SECONDARY_2} size="16" />
+              <GetIcon
+                iconName="chevronRight"
+                color={Colors.MT_SECONDARY_2}
+                size="16"
+              />
             </TouchableOpacity>
           ))}
         </View>
@@ -120,15 +184,27 @@ const SellerProfileScreen = () => {
           <Text style={styles.sectionTitle}>Contact Information</Text>
           <View style={styles.contactCard}>
             <View style={styles.contactItem}>
-              <GetIcon iconName="phone" color={Colors.MT_SECONDARY_2} size="20" />
+              <GetIcon
+                iconName="phone"
+                color={Colors.MT_SECONDARY_2}
+                size="20"
+              />
               <Text style={styles.contactText}>{userData.phone}</Text>
             </View>
             <View style={styles.contactItem}>
-              <GetIcon iconName="email" color={Colors.MT_SECONDARY_2} size="20" />
+              <GetIcon
+                iconName="email"
+                color={Colors.MT_SECONDARY_2}
+                size="20"
+              />
               <Text style={styles.contactText}>{userData.email}</Text>
             </View>
             <View style={styles.contactItem}>
-              <GetIcon iconName="locationPin" color={Colors.MT_SECONDARY_2} size="20" />
+              <GetIcon
+                iconName="locationPin"
+                color={Colors.MT_SECONDARY_2}
+                size="20"
+              />
               <Text style={styles.contactText}>{userData.location}</Text>
             </View>
           </View>
@@ -137,7 +213,7 @@ const SellerProfileScreen = () => {
         {/* Member Since */}
         <View style={styles.membershipSection}>
           <Text style={styles.membershipText}>
-            Member since {userData.joinDate}
+            Member since {new Date(userData.createdOn).toLocaleDateString('en-US', { year: 'numeric', month: 'long' })}
           </Text>
         </View>
       </ScrollView>
@@ -370,5 +446,23 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: Colors.MT_SECONDARY_2,
     fontStyle: 'italic',
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  loadingText: {
+    fontSize: 16,
+    color: Colors.MT_SECONDARY_2,
+  },
+  errorContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  errorText: {
+    fontSize: 16,
+    color: '#ff6b6b',
   },
 });

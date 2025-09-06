@@ -35,6 +35,14 @@ export const lightenColor = (color: string, amount: number): string => {
 };
 
 
+export const getGrowthColor = (growth: number): string => {
+  return growth >= 0 ? '#10B981' : '#EF4444';
+};
+
+export const getGrowthBgColor = (growth: number): string => {
+  return growth >= 0 ? '#F0FDF4' : '#FEF2F2';
+};
+
 export const getPastelColor = (str: string) => {
   let hash = 0;
   for (let i = 0; i < str.length; i++) {

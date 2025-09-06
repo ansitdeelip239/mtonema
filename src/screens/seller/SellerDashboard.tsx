@@ -1,189 +1,191 @@
+// @ts-nocheck
 import React from 'react';
 import {
   StyleSheet,
   View,
-  Text,
   ScrollView,
+  RefreshControl,
   TouchableOpacity,
-  Platform,
 } from 'react-native';
 import BuyerSellerHeader from '../../components/BuyerSellerHeader';
 import GetIcon from '../../components/GetIcon';
 import Colors from '../../constants/Colors';
-import {IconEnum} from '../../components/GetIcon';
+import {useAuth} from '../../context/AuthProvider';
+import {useDashboardPropertyList} from './hooks/useDashboardPropertyList';
+import {useDashboardAnalytics} from './hooks/useDashboardAnalytics';
+import {useNavigation} from '@react-navigation/native';
+import {SellerBottomTabParamList} from '../../types/navigation';
+import {BottomTabNavigationProp} from '@react-navigation/bottom-tabs';
 
-interface StatCardProps {
-  title: string;
-  value: number;
-  icon: IconEnum;
+import {PortfolioOverview} from './components/PortfolioOverview';
+import {PriceAnalytics} from './components/PriceAnalytics';
+import {PropertyInsights} from './components/PropertyInsights';
+import {LocationStatus} from './components/LocationStatus';
+import {RecentActivity} from './components/RecentActivity';
+import {FurnishingDistribution} from './components/FurnishingDistribution';
+import {PortfolioOverviewSkeleton} from './components/skeleton/PortfolioOverviewSkeleton';
+import {PriceAnalyticsSkeleton} from './components/skeleton/PriceAnalyticsSkeleton';
+import {PropertyInsightsSkeleton} from './components/skeleton/PropertyInsightsSkeleton';
+import {LocationStatusSkeleton} from './components/skeleton/LocationStatusSkeleton';
+import {RecentActivitySkeleton} from './components/skeleton/RecentActivitySkeleton';
+import {FurnishingDistributionSkeleton} from './components/skeleton/FurnishingDistributionSkeleton';
+
+// Type definitions
+type PropertyTypeAnalytics = [string, number][];
+type BHKAnalytics = [string, number][];
+type FurnishingStats = [string, number][];
+type LocationInsights = [string, number][];
+
+interface PriceAnalyticsData {
+  avgPrice: number;
+  maxPrice: number;
+  minPrice: number;
 }
 
-const StatCard: React.FC<StatCardProps> = ({title, value, icon}) => (
-  <View style={styles.statCardWrapper}>
-    <View style={styles.statCard}>
-      <GetIcon iconName={icon} color={Colors.MT_PRIMARY_1} size="24" />
-      <Text style={styles.statValue}>{value}</Text>
-      <Text style={styles.statTitle}>{title}</Text>
-    </View>
-  </View>
-);
-
-interface QuickActionButtonProps {
-  title: string;
-  icon: IconEnum;
-  color: string;
+interface MonthlyInsightsData {
+  thisMonth: number;
+  lastMonth: number;
+  growth: number;
 }
 
-const QuickActionButton: React.FC<QuickActionButtonProps> = ({
-  title,
-  icon,
-  color,
-}) => (
-  <View style={styles.actionButtonWrapper}>
-    <TouchableOpacity style={[styles.actionButton, {borderColor: color}]}>
-      <GetIcon iconName={icon} color={color} size="20" />
-      <Text style={[styles.actionButtonText, {color}]}>{title}</Text>
-    </TouchableOpacity>
-  </View>
-);
+interface ReadyToMoveStatsData {
+  readyToMove: number;
+  underConstruction: number;
+  readyPercentage: number;
+}
 
-const SellerDashboard = () => {
-  // Dummy data for dashboard stats
-  const stats = {
-    totalProperties: 25,
-    activeProperties: 18,
-    pendingProperties: 4,
-    soldProperties: 3,
-    totalViews: 1250,
-    totalInquiries: 45,
+type NavigationProp = BottomTabNavigationProp<SellerBottomTabParamList>;
+
+const SellerDashboard: React.FC = () => {
+  const {user} = useAuth();
+  const {
+    totalCount,
+    refreshing,
+    handleRefresh,
+    properties,
+    activeProperties,
+    featuredProperties,
+    recentProperties,
+    isLoading,
+  } = useDashboardPropertyList();
+
+  const {
+    priceAnalytics,
+    propertyTypeAnalytics,
+    bhkAnalytics,
+    monthlyInsights,
+    readyToMoveStats,
+    furnishingStats,
+    locationInsights,
+    portfolioValue,
+  }: {
+    priceAnalytics: PriceAnalyticsData | null;
+    propertyTypeAnalytics: PropertyTypeAnalytics | null;
+    bhkAnalytics: BHKAnalytics | null;
+    monthlyInsights: MonthlyInsightsData | null;
+    readyToMoveStats: ReadyToMoveStatsData | null;
+    furnishingStats: FurnishingStats | null;
+    locationInsights: LocationInsights | null;
+    portfolioValue: number;
+  } = useDashboardAnalytics(properties);
+
+  const navigation = useNavigation<NavigationProp>();
+
+  const handlePropertyCardPress = () => {
+    navigation.navigate('Property');
   };
-
-  const quickActions = [
-    {
-      id: 'add',
-      title: 'Add Property',
-      icon: 'plus' as IconEnum,
-      color: Colors.MT_PRIMARY_1,
-    },
-    {
-      id: 'list',
-      title: 'View Listings',
-      icon: 'listproperty' as IconEnum,
-      color: Colors.MT_SECONDARY_1,
-    },
-    {
-      id: 'analytics',
-      title: 'Analytics',
-      icon: 'realEstate' as IconEnum,
-      color: Colors.MT_SECONDARY_2,
-    },
-    {
-      id: 'profile',
-      title: 'Profile',
-      icon: 'user' as IconEnum,
-      color: Colors.MT_PRIMARY_2,
-    },
-  ];
-
   return (
     <View style={styles.container}>
-      <BuyerSellerHeader
-        title="Seller Dashboard"
-        subtitle="Manage your properties"
-      >
-        <GetIcon iconName="settings" size={20} color="#333" />
-      </BuyerSellerHeader>
-
       <ScrollView
         style={styles.content}
         showsVerticalScrollIndicator={false}
-        contentContainerStyle={styles.scrollContent}>
-        {/* Welcome Section */}
-        <View style={styles.welcomeSection}>
-          <Text style={styles.welcomeTitle}>Welcome back!</Text>
-          <Text style={styles.welcomeSubtitle}>
-            Here's what's happening with your properties today.
-          </Text>
+        refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={handleRefresh}
+            colors={[Colors.MT_PRIMARY_1]}
+            tintColor={Colors.MT_PRIMARY_1}
+          />
+        }>
+        {/* Header */}
+        <View style={styles.headerContainer}>
+          <BuyerSellerHeader
+            title={`Welcome back, ${user?.name?.split(' ')[0] || 'User'}!`}
+            subtitle="Dashboard">
+            <TouchableOpacity style={styles.settingsButton}>
+              <GetIcon iconName="settings" size={20} color="#666" />
+            </TouchableOpacity>
+          </BuyerSellerHeader>
         </View>
 
-        {/* Stats Section */}
-        <View style={styles.statsSection}>
-          <Text style={styles.sectionTitle}>Overview</Text>
-          <View style={styles.statsGrid}>
-            <StatCard
-              title="Total Properties"
-              value={stats.totalProperties}
-              icon="home"
-            />
-            <StatCard
-              title="Active"
-              value={stats.activeProperties}
-              icon="checkmark"
-            />
-            <StatCard
-              title="Pending"
-              value={stats.pendingProperties}
-              icon="time"
-            />
-            <StatCard
-              title="Sold"
-              value={stats.soldProperties}
-              icon="property"
-            />
-          </View>
-        </View>
+        {/* Portfolio Overview */}
+        {isLoading ? (
+          <PortfolioOverviewSkeleton />
+        ) : (
+          <PortfolioOverview
+            properties={properties}
+            totalCount={totalCount}
+            activeProperties={activeProperties}
+            featuredProperties={featuredProperties}
+            monthlyInsights={monthlyInsights}
+            portfolioValue={portfolioValue}
+          />
+        )}
 
-        {/* Performance Section */}
-        <View style={styles.performanceSection}>
-          <Text style={styles.sectionTitle}>Performance</Text>
-          <View style={styles.performanceCardWrapper}>
-            <View style={styles.performanceCard}>
-              <View style={styles.performanceItem}>
-                <GetIcon iconName="eye" color={Colors.MT_SECONDARY_2} size="16" />
-                <Text style={styles.performanceText}>
-                  {stats.totalViews} total views this month
-                </Text>
-              </View>
-              <View style={styles.performanceItem}>
-                <GetIcon
-                  iconName="message"
-                  color={Colors.MT_SECONDARY_2}
-                  size="16"
-                />
-                <Text style={styles.performanceText}>
-                  {stats.totalInquiries} inquiries received
-                </Text>
-              </View>
-            </View>
-          </View>
-        </View>
+        {/* Analytics Section */}
+        {properties.length > 0 && (
+          <>
+            {/* Price Analytics */}
+            {isLoading ? (
+              <PriceAnalyticsSkeleton />
+            ) : (
+              <PriceAnalytics priceAnalytics={priceAnalytics} />
+            )}
 
-        {/* Quick Actions Section */}
-        <View style={styles.actionsSection}>
-          <Text style={styles.sectionTitle}>Quick Actions</Text>
-          <View style={styles.actionsGrid}>
-            {quickActions.map(action => (
-              <QuickActionButton
-                key={action.id}
-                title={action.title}
-                icon={action.icon}
-                color={action.color}
+            {/* Property Insights */}
+            {isLoading ? (
+              <PropertyInsightsSkeleton />
+            ) : (
+              <PropertyInsights
+                propertyTypeAnalytics={propertyTypeAnalytics}
+                bhkAnalytics={bhkAnalytics}
+                properties={properties}
               />
-            ))}
-          </View>
-        </View>
+            )}
 
-        {/* Recent Activity Placeholder */}
-        <View style={styles.activitySection}>
-          <Text style={styles.sectionTitle}>Recent Activity</Text>
-          <View style={styles.activityCardWrapper}>
-            <View style={styles.activityCard}>
-              <Text style={styles.activityText}>
-                No recent activity to show. Start by adding your first property!
-              </Text>
-            </View>
-          </View>
-        </View>
+            {/* Location & Status */}
+            {isLoading ? (
+              <LocationStatusSkeleton />
+            ) : (
+              <LocationStatus
+                locationInsights={locationInsights}
+                readyToMoveStats={readyToMoveStats}
+              />
+            )}
+
+            {/* Recent Activity */}
+            {isLoading ? (
+              <RecentActivitySkeleton />
+            ) : (
+              <RecentActivity
+                recentProperties={recentProperties}
+                onPropertyPress={handlePropertyCardPress}
+              />
+            )}
+
+            {/* Furnishing Distribution */}
+            {furnishingStats && furnishingStats.length > 0 && (
+              isLoading ? (
+                <FurnishingDistributionSkeleton />
+              ) : (
+                <FurnishingDistribution
+                  furnishingStats={furnishingStats}
+                  properties={properties}
+                />
+              )
+            )}
+          </>
+        )}
       </ScrollView>
     </View>
   );
@@ -192,173 +194,21 @@ const SellerDashboard = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f5f5f5',
+    backgroundColor: '#F8FAFC',
   },
   content: {
     flex: 1,
   },
-  scrollContent: {
-    paddingHorizontal: 16,
-    paddingTop: 16,
-    paddingBottom: 100,
+  headerContainer: {
+    marginBottom: 15,
   },
-  welcomeSection: {
-    marginBottom: 24,
-  },
-  welcomeTitle: {
-    fontSize: 24,
-    fontWeight: '700',
-    color: '#333',
-    marginBottom: 4,
-  },
-  welcomeSubtitle: {
-    fontSize: 16,
-    color: Colors.MT_SECONDARY_2,
-  },
-  sectionTitle: {
-    fontSize: 18,
-    fontWeight: '600',
-    color: '#333',
-    marginBottom: 16,
-  },
-  statsSection: {
-    marginBottom: 24,
-  },
-  statsGrid: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    justifyContent: 'space-between',
-  },
-  statCard: {
+  settingsButton: {
+    width: 20,
+    height: 20,
+    borderRadius: 20,
     backgroundColor: 'white',
-    borderRadius: 12,
-    padding: 16,
     alignItems: 'center',
-    width: '100%',
-    ...Platform.select({
-      ios: {
-        shadowColor: '#000',
-        shadowOffset: {width: 0, height: 2},
-        shadowOpacity: 0.1,
-        shadowRadius: 4,
-      },
-      android: {
-        elevation: 4,
-      },
-    }),
-  },
-  statCardWrapper: {
-    width: '48%',
-    marginBottom: 16,
-    padding: 4,
-  },
-  statValue: {
-    fontSize: 24,
-    fontWeight: '700',
-    color: Colors.MT_PRIMARY_1,
-    marginTop: 8,
-    marginBottom: 4,
-  },
-  statTitle: {
-    fontSize: 12,
-    color: Colors.MT_SECONDARY_2,
-    textAlign: 'center',
-  },
-  performanceSection: {
-    marginBottom: 24,
-  },
-  performanceCard: {
-    backgroundColor: 'white',
-    borderRadius: 12,
-    padding: 16,
-    ...Platform.select({
-      ios: {
-        shadowColor: '#000',
-        shadowOffset: {width: 0, height: 2},
-        shadowOpacity: 0.1,
-        shadowRadius: 4,
-      },
-      android: {
-        elevation: 2,
-      },
-    }),
-  },
-  performanceCardWrapper: {
-    padding: 4,
-  },
-  performanceItem: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 8,
-  },
-  performanceText: {
-    fontSize: 14,
-    color: '#333',
-    marginLeft: 8,
-  },
-  actionsSection: {
-    marginBottom: 24,
-  },
-  actionsGrid: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    justifyContent: 'space-between',
-  },
-  actionButton: {
-    backgroundColor: 'white',
-    borderRadius: 12,
-    padding: 16,
-    alignItems: 'center',
-    width: '100%',
-    borderWidth: 1,
-    ...Platform.select({
-      ios: {
-        shadowColor: '#000',
-        shadowOffset: {width: 0, height: 2},
-        shadowOpacity: 0.1,
-        shadowRadius: 4,
-      },
-      android: {
-        elevation: 2,
-      },
-    }),
-  },
-  actionButtonWrapper: {
-    width: '48%',
-    marginBottom: 16,
-    padding: 4,
-  },
-  actionButtonText: {
-    fontSize: 12,
-    fontWeight: '600',
-    marginTop: 8,
-  },
-  activitySection: {
-    marginBottom: 24,
-  },
-  activityCard: {
-    backgroundColor: 'white',
-    borderRadius: 12,
-    padding: 16,
-    ...Platform.select({
-      ios: {
-        shadowColor: '#000',
-        shadowOffset: {width: 0, height: 2},
-        shadowOpacity: 0.1,
-        shadowRadius: 4,
-      },
-      android: {
-        elevation: 2,
-      },
-    }),
-  },
-  activityCardWrapper: {
-    padding: 4,
-  },
-  activityText: {
-    fontSize: 14,
-    color: Colors.MT_SECONDARY_2,
-    textAlign: 'center',
+    justifyContent: 'center',
   },
 });
 

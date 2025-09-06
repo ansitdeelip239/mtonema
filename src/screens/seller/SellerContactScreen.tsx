@@ -13,38 +13,42 @@ import {
 import BuyerSellerHeader from '../../components/BuyerSellerHeader';
 import Colors from '../../constants/Colors';
 import GetIcon from '../../components/GetIcon';
+import {useAuth} from '../../context/AuthProvider';
+import AuthService from '../../services/AuthService';
 
 const SellerContactScreen = () => {
+  const {user} = useAuth();
+
   const [contactForm, setContactForm] = useState({
-    name: '',
-    email: '',
     subject: '',
     message: '',
   });
+
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const contactInfo = [
     {
       id: 'phone',
       title: 'Phone',
-      value: '+91 1800-123-4567',
+      value: '+91 7303062845',
       icon: 'user' as const,
       action: () => Linking.openURL('tel:+9118001234567'),
     },
     {
       id: 'email',
       title: 'Email',
-      value: 'support@mtonemobile.com',
+      value: 'info@mtone.in',
       icon: 'message' as const,
-      action: () => Linking.openURL('mailto:support@mtonemobile.com'),
+      action: () => Linking.openURL('mailto:into@mtone.in'),
     },
     {
       id: 'address',
       title: 'Address',
-      value: '123 Business District, Mumbai, Maharashtra 400001',
+      value: 'C-116 GF, OfficeOn, Sector 2, Noida, Uttar Pradesh - 201301',
       icon: 'home' as const,
       action: () => {
         // Open maps
-        const address = '123 Business District, Mumbai, Maharashtra 400001';
+        const address = 'OfficeOn, Sector 2, Noida, Uttar Pradesh - 201301';
         const url = Platform.select({
           ios: `maps:0,0?q=${address}`,
           android: `geo:0,0?q=${address}`,
@@ -83,36 +87,61 @@ const SellerContactScreen = () => {
     },
   ];
 
-  const handleSubmit = () => {
-    if (!contactForm.name || !contactForm.email || !contactForm.message) {
+  const handleSubmit = async () => {
+    if (!contactForm.subject || !contactForm.message) {
       Alert.alert('Error', 'Please fill in all required fields');
       return;
     }
-    Alert.alert(
-      'Message Sent!',
-      'Thank you for contacting us. We will get back to you within 24 hours.',
-      [{text: 'OK', onPress: () => setContactForm({name: '', email: '', subject: '', message: ''})}]
-    );
+
+    if (!user) {
+      Alert.alert('Error', 'User information not available');
+      return;
+    }
+
+    setIsSubmitting(true);
+    try {
+      const response = await AuthService.getInTouch({
+        subject: contactForm.subject,
+        message: contactForm.message,
+        email: user.email,
+        name: user.name,
+        phone: user.phone,
+        domain: 'deccanrealty.com',
+      });
+
+      if (response.success) {
+        Alert.alert(
+          'Message Sent!',
+          'Thank you for contacting us. We will get back to you within 24 hours.',
+          [
+            {
+              text: 'OK',
+              onPress: () => setContactForm({subject: '', message: ''}),
+            },
+          ],
+        );
+      } else {
+        Alert.alert('Error', response.message || 'Failed to send message');
+      }
+    } catch (error) {
+      console.error('Error sending message:', error);
+      Alert.alert('Error', 'Failed to send message. Please try again.');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
     <View style={styles.container}>
       <BuyerSellerHeader
         title="Contact Us"
-        subtitle="Get in touch with support"
-      >
+        subtitle="Get in touch with support">
         <GetIcon iconName="phone" size={20} color="#333" />
       </BuyerSellerHeader>
 
-      <ScrollView style={styles.scrollContainer} showsVerticalScrollIndicator={false}>
-        {/* Hero Section */}
-        <View style={styles.heroSection}>
-          <Text style={styles.heroTitle}>Get in Touch</Text>
-          <Text style={styles.heroSubtitle}>
-            We're here to help you with all your property needs
-          </Text>
-        </View>
-
+      <ScrollView
+        style={styles.scrollContainer}
+        showsVerticalScrollIndicator={false}>
         {/* Contact Information */}
         <View style={styles.contactSection}>
           <Text style={styles.sectionTitle}>Contact Information</Text>
@@ -120,16 +149,23 @@ const SellerContactScreen = () => {
             <TouchableOpacity
               key={info.id}
               style={styles.contactCard}
-              onPress={info.action}
-            >
+              onPress={info.action}>
               <View style={styles.contactIcon}>
-                <GetIcon iconName={info.icon} color={Colors.MT_PRIMARY_1} size="24" />
+                <GetIcon
+                  iconName={info.icon}
+                  color={Colors.MT_PRIMARY_1}
+                  size="24"
+                />
               </View>
               <View style={styles.contactContent}>
                 <Text style={styles.contactTitle}>{info.title}</Text>
                 <Text style={styles.contactValue}>{info.value}</Text>
               </View>
-              <GetIcon iconName="settings" color={Colors.MT_SECONDARY_2} size="16" />
+              <GetIcon
+                iconName="settings"
+                color={Colors.MT_SECONDARY_2}
+                size="16"
+              />
             </TouchableOpacity>
           ))}
         </View>
@@ -159,28 +195,12 @@ const SellerContactScreen = () => {
           <View style={styles.formCard}>
             <TextInput
               style={styles.input}
-              placeholder="Your Name"
-              placeholderTextColor="#888"
-              value={contactForm.name}
-              onChangeText={(text) => setContactForm({...contactForm, name: text})}
-            />
-
-            <TextInput
-              style={styles.input}
-              placeholder="Your Email"
-              placeholderTextColor="#888"
-              value={contactForm.email}
-              onChangeText={(text) => setContactForm({...contactForm, email: text})}
-              keyboardType="email-address"
-              autoCapitalize="none"
-            />
-
-            <TextInput
-              style={styles.input}
               placeholder="Subject"
               placeholderTextColor="#888"
               value={contactForm.subject}
-              onChangeText={(text) => setContactForm({...contactForm, subject: text})}
+              onChangeText={text =>
+                setContactForm({...contactForm, subject: text})
+              }
             />
 
             <TextInput
@@ -188,14 +208,24 @@ const SellerContactScreen = () => {
               placeholder="Your Message"
               placeholderTextColor="#888"
               value={contactForm.message}
-              onChangeText={(text) => setContactForm({...contactForm, message: text})}
+              onChangeText={text =>
+                setContactForm({...contactForm, message: text})
+              }
               multiline
               numberOfLines={4}
               textAlignVertical="top"
             />
 
-            <TouchableOpacity style={styles.submitButton} onPress={handleSubmit}>
-              <Text style={styles.submitButtonText}>Send Message</Text>
+            <TouchableOpacity
+              style={[
+                styles.submitButton,
+                isSubmitting && styles.submitButtonDisabled,
+              ]}
+              onPress={handleSubmit}
+              disabled={isSubmitting}>
+              <Text style={styles.submitButtonText}>
+                {isSubmitting ? 'Sending...' : 'Send Message'}
+              </Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -208,8 +238,12 @@ const SellerContactScreen = () => {
               <TouchableOpacity
                 key={social.id}
                 style={[styles.socialButton, {backgroundColor: social.color}]}
-                onPress={() => Alert.alert('Coming Soon', `${social.name} page will be available soon!`)}
-              >
+                onPress={() =>
+                  Alert.alert(
+                    'Coming Soon',
+                    `${social.name} page will be available soon!`,
+                  )
+                }>
                 <GetIcon iconName={social.icon} color="white" size="20" />
                 <Text style={styles.socialText}>{social.name}</Text>
               </TouchableOpacity>
@@ -224,8 +258,7 @@ const SellerContactScreen = () => {
           </Text>
           <TouchableOpacity
             style={styles.callButton}
-            onPress={() => Linking.openURL('tel:+9118001234567')}
-          >
+            onPress={() => Linking.openURL('tel:+9118001234567')}>
             <GetIcon iconName="phone" color="white" size="20" />
             <Text style={styles.callButtonText}>Call Now</Text>
           </TouchableOpacity>
@@ -265,6 +298,7 @@ const styles = StyleSheet.create({
   contactSection: {
     paddingHorizontal: 20,
     marginBottom: 20,
+    marginTop: 20,
   },
   sectionTitle: {
     fontSize: 18,
@@ -398,6 +432,20 @@ const styles = StyleSheet.create({
       },
       android: {
         elevation: 4,
+      },
+    }),
+  },
+  submitButtonDisabled: {
+    backgroundColor: '#ccc',
+    ...Platform.select({
+      ios: {
+        shadowColor: '#000',
+        shadowOffset: {width: 0, height: 2},
+        shadowOpacity: 0.1,
+        shadowRadius: 4,
+      },
+      android: {
+        elevation: 1,
       },
     }),
   },

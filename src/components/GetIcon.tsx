@@ -72,6 +72,7 @@ export type IconEnum =
   | 'transaction'
   | 'bill'
   | 'settings'
+  | 'growth'
   | 'userPlus';
 
 type IconProps = {
@@ -153,6 +154,7 @@ const GetIcon = ({iconName, color, size}: IconProps) => {
     transaction: require('../assets/Icon/transaction.png'),
     bill: require('../assets/Icon/bill.png'),
     settings: require('../assets/Icon/setting.png'),
+    growth: require('../assets/Icon/growth-chart.png'),
   };
 
   const imageStyle = [
