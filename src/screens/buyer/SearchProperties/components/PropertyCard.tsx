@@ -32,12 +32,22 @@ const PropertyCard: React.FC<PropertyCardProps> = ({property, onPress}) => {
             />
           </View>
         ) : (
-          <Image
-            source={{uri: imageUrl}}
-            style={styles.propertyImage}
-            resizeMode="cover"
-            onError={() => setImageError(true)}
-          />
+          imageUrl && imageUrl.trim() !== '' ? (
+            <Image
+              source={{uri: imageUrl}}
+              style={styles.propertyImage}
+              resizeMode="cover"
+              onError={() => setImageError(true)}
+            />
+          ) : (
+            <View style={styles.placeholderContainer}>
+              <Image
+                source={{uri: Images.MT_ONE_LOGO}}
+                style={styles.placeholderImage}
+                resizeMode="contain"
+              />
+            </View>
+          )
         )}
         {property.isFeatured && (
           <View style={styles.verifiedBadge}>

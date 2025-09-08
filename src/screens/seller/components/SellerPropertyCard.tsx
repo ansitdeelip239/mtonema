@@ -21,7 +21,7 @@ const SellerPropertyCard: React.FC<SellerPropertyCardProps> = ({property, onPres
       onPress={() => onPress(property.id.toString())}>
       <View style={styles.propertyImageContainer}>
         <Image
-          source={{uri: imageUrl}}
+          source={imageUrl && imageUrl.trim() ? {uri: imageUrl} : {uri: 'https://picsum.photos/300/200?random=default'}}
           style={styles.propertyImage}
           resizeMode="cover"
         />

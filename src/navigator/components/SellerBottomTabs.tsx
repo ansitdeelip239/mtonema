@@ -41,7 +41,7 @@ const tabScreens: Array<TabScreen<SellerBottomTabParamList>> = [
     component: SellerProfileStack,
     icon: 'user',
   },
-] as const;
+];
 
 const SellerBottomTabs = memo(() => {
   const {navigateToPostProperty} = useAuth();

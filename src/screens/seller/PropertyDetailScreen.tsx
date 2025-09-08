@@ -283,14 +283,23 @@ const PropertyDetailScreen: React.FC<Props> = ({route, navigation}) => {
                     </TouchableOpacity>
                   )
                 ) : (
-                  <Image
-                    source={{uri: item.image || item.imageUrl}}
-                    style={styles.propertyImage}
-                    resizeMode="cover"
-                    onError={() =>
-                      console.log('Image load error for:', item.image)
-                    }
-                  />
+                  // Validate URI before rendering Image component
+                  (item.image || item.imageUrl) && (item.image || item.imageUrl).trim() !== '' ? (
+                    <Image
+                      source={{uri: item.image || item.imageUrl}}
+                      style={styles.propertyImage}
+                      resizeMode="cover"
+                      onError={() =>
+                        console.log('Image load error for:', item.image)
+                      }
+                    />
+                  ) : (
+                    <Image
+                      source={placeholderImage}
+                      style={styles.propertyImage}
+                      resizeMode="cover"
+                    />
+                  )
                 )}
                 {item.type && (
                   <View style={styles.imageTypeContainer}>

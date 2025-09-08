@@ -80,11 +80,16 @@ const AddClientScreen: React.FC<Props> = ({ navigation, route }) => {
       const schema = clientFormSchema.shape[field];
       schema.parse(value);
       setFieldErrors(prev => ({ ...prev, [field]: '' }));
-    } catch (err) {
+    } catch (err: unknown) {
       if (err instanceof z.ZodError) {
         setFieldErrors(prev => ({
           ...prev,
           [field]: err.errors[0].message,
+        }));
+      } else {
+        setFieldErrors(prev => ({
+          ...prev,
+          [field]: 'Validation error',
         }));
       }
     }
@@ -132,11 +137,18 @@ const AddClientScreen: React.FC<Props> = ({ navigation, route }) => {
         try {
           const nameSchema = clientFormSchema.shape.clientName;
           nameSchema.parse(cleanedData.clientName);
-        } catch (validationError) {
+        } catch (validationError: unknown) {
           if (validationError instanceof z.ZodError) {
             setFieldErrors(prev => ({
               ...prev,
               clientName: validationError.errors[0].message,
+            }));
+            showError(t('addClient.errors.provideValidClientName', 'Please provide a valid Client Name'));
+            return;
+          } else {
+            setFieldErrors(prev => ({
+              ...prev,
+              clientName: 'Client name validation error',
             }));
             showError(t('addClient.errors.provideValidClientName', 'Please provide a valid Client Name'));
             return;

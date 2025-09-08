@@ -50,10 +50,16 @@ const ImagePreviewList: React.FC<ImagePreviewListProps> = ({
         {images.map((image, index) => (
           <View key={index} style={styles.imageContainer}>
             <View style={styles.imageWrapper}>
-              <Image
-                source={{uri: image.localUri || image.imageUrl}}
-                style={styles.imagePreview}
-              />
+              {(image.localUri || image.imageUrl) && (image.localUri || image.imageUrl).trim() !== '' ? (
+                <Image
+                  source={{uri: image.localUri || image.imageUrl}}
+                  style={styles.imagePreview}
+                />
+              ) : (
+                <View style={[styles.imagePreview, { backgroundColor: '#f0f0f0', justifyContent: 'center', alignItems: 'center' }]}>
+                  <Text style={{ color: '#999' }}>No Image</Text>
+                </View>
+              )}
 
               {/* Image counter indicator (top-center) */}
               <View style={styles.counterOverlay}>

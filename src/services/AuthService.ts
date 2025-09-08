@@ -84,7 +84,7 @@ class AuthService {
     domain: string;
   }): Promise<Response<GetInTouchResponse>> {
     try {
-      const response = await api.post<GetInTouchResponse>(url.property.getInTouch, body);
+      const response = await api.post<GetInTouchResponse>(url.seller.getInTouch, body);
       return response;
     } catch (error) {
       throw error;

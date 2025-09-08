@@ -197,13 +197,23 @@ const PropertyDetailModal: React.FC<PropertyDetailModalProps> = ({
                         }
                       }}
                       activeOpacity={0.8}>
-                      <Image
-                        source={{
-                          uri: getYouTubeThumbnailUrl(item.videoUrl),
-                        }}
-                        style={styles.videoThumbnail}
-                        resizeMode="cover"
-                      />
+                      {getYouTubeThumbnailUrl(item.videoUrl) ? (
+                        <Image
+                          source={{
+                            uri: getYouTubeThumbnailUrl(item.videoUrl),
+                          }}
+                          style={styles.videoThumbnail}
+                          resizeMode="cover"
+                        />
+                      ) : (
+                        <View style={[styles.videoThumbnail, styles.placeholderContainer]}>
+                          <Image
+                            source={Images.MTESTATES_LOGO}
+                            style={styles.placeholderImage}
+                            resizeMode="contain"
+                          />
+                        </View>
+                      )}
                       <View style={styles.videoPlayOverlay}>
                         <View style={styles.playButtonContainer}>
                           <GetIcon
@@ -217,14 +227,24 @@ const PropertyDetailModal: React.FC<PropertyDetailModalProps> = ({
                     </TouchableOpacity>
                   )
                 ) : (
-                  <Image
-                    source={{uri: item.image || item.imageUrl}}
-                    style={styles.propertyImage}
-                    resizeMode="cover"
-                    onError={() =>
-                      console.log('Image load error for:', item.image)
-                    }
-                  />
+                  (item.image || item.imageUrl) ? (
+                    <Image
+                      source={{uri: item.image || item.imageUrl}}
+                      style={styles.propertyImage}
+                      resizeMode="cover"
+                      onError={() =>
+                        console.log('Image load error for:', item.image)
+                      }
+                    />
+                  ) : (
+                    <View style={[styles.propertyImage, styles.placeholderContainer]}>
+                      <Image
+                        source={Images.MTESTATES_LOGO}
+                        style={styles.placeholderImage}
+                        resizeMode="contain"
+                      />
+                    </View>
+                  )
                 )}
                 {item.type && (
                   <View style={styles.imageTypeContainer}>

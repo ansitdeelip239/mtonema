@@ -63,7 +63,10 @@ export const getRecommendedProperties = async (
   pageSize: number,
 ) => {
   try {
-    const response = await BuyerService.RecommendedProperty(pageNumber, pageSize);
+    const response = await BuyerService.searchProperties({
+      page: pageNumber,
+      pageSize: pageSize,
+    });
     return response.data;
   } catch (error) {
     console.error('Error fetching recommended properties:', error);

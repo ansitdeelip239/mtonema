@@ -194,7 +194,7 @@ const ContactedProperties: React.FC<Props> = ({navigation: _navigation}) => {
         }}>
         <View style={styles.propertyImageContainer}>
           <Image
-            source={imageUrl ? {uri: imageUrl} : Images.MTESTATES_LOGO}
+            source={imageUrl && imageUrl.trim() ? {uri: imageUrl} : Images.MTESTATES_LOGO}
             style={
               isPlaceholder
                 ? styles.propertyImagePlaceholder

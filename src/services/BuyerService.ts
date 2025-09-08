@@ -3,18 +3,6 @@ import {api} from '../utils/api';
 import {PropertySearchParams, PropertySearchResponse} from '../types';
 
 class BuyerService {
-  static async RecommendedProperty(pageNumber: number, pageSize: number) {
-    try {
-      const response = await api.get<any>(
-        `${url.property.recommended}?pageNumber=${pageNumber}&pageSize=${pageSize}`,
-      );
-      return response;
-    } catch (error) {
-      console.error('Error in RecommendedProperty', error);
-      throw error;
-    }
-  }
-
   static async searchProperties(params: PropertySearchParams = {}) {
     try {
       const queryParams = new URLSearchParams();
@@ -48,6 +36,21 @@ class BuyerService {
       }
       if (params.city) {
         queryParams.append('city', params.city);
+      }
+      if (params.listedBy) {
+        queryParams.append('listedBy', params.listedBy);
+      }
+      if (params.isFeatured) {
+        queryParams.append('isFeatured', params.isFeatured.toString());
+      }
+      if (params.readyToMove) {
+        queryParams.append('readyToMove', params.readyToMove.toString());
+      }
+      if (params.status) {
+        queryParams.append('status', params.status);
+      }
+      if (params.sourceWebsite) {
+        queryParams.append('sourceWebsite', params.sourceWebsite);
       }
       // Note: Using location instead of searchFilter for search functionality
 

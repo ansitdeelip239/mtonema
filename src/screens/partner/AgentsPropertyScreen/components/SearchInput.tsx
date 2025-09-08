@@ -127,19 +127,21 @@ export const SearchInput = <T,>({
   );
 
   const handleSuggestionSelect = useCallback(
-    (suggestion: string) => {
+    (suggestion: string | {description: string; placeId: string}) => {
       isSelectingRef.current = true;
+
+      const suggestionText = typeof suggestion === 'string' ? suggestion : suggestion.description;
 
       InteractionManager.runAfterInteractions(() => {
         if (searchType === 'AgentName' && onAgentSelect) {
           const selectedAgent = searchData.find(
-            item => item.agentName === suggestion,
+            item => item.agentName === suggestionText,
           );
           if (selectedAgent?.agentContactNo) {
-            onAgentSelect(suggestion, selectedAgent.agentContactNo);
+            onAgentSelect(suggestionText, selectedAgent.agentContactNo);
           }
         } else {
-          handleFieldChange(field, suggestion);
+          handleFieldChange(field, suggestionText);
         }
 
         setSuggestions([]);

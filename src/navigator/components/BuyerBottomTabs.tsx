@@ -40,7 +40,7 @@ const tabScreens: Array<TabScreen<BuyerBottomTabParamList>> = [
     component: BuyerProfileScreen,
     icon: 'user',
   },
-] as const;
+];
 
 const BuyerBottomTabs = memo(() => {
   return (

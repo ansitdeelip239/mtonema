@@ -474,6 +474,7 @@ export interface PropertySearchParams {
   readyToMove?: boolean;
   searchFilter?: string;
   status?: string;
+  listedBy?: string;
   sourceWebsite?: string;
 }
 

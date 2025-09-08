@@ -12,11 +12,8 @@ const url = {
   },
   property: {
     filterSearch: '/property/filterProperty',
-    recommended: '/property/getAllProperty',
     search: '/properties', // New endpoint for property search
     contact: '/contactProperty/Contact',
-    getContactedList: '/contactProperty/getAllContactByuserID',
-    getInTouch: '/properties/GetInTouch',
     contacted: '/properties/contacted',
     getContactedProperties: '/properties/contacted',
   },

@@ -69,7 +69,7 @@ const PartnerBottomTabs = () => {
       icon: 'realEstate',
       label: t('navigation.bottomTab.agentData', 'Agent Data'),
     },
-  ] as const;
+  ];
 
   return (
     <Tab.Navigator

@@ -28,7 +28,7 @@ const PaymentBottomTabs = () => {
       icon: 'transaction',
       label: t('navigation.paymentTabs.transactions', 'Transactions'),
     },
-  ] as const;
+  ];
 
   return (
     <Tab.Navigator

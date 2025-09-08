@@ -386,11 +386,20 @@ const ListingDetailScreen: React.FC<Props> = ({ route, navigation }) => {
                           </TouchableOpacity>
                         )
                       ) : (
-                        <Image
-                          source={{ uri: item.imageUrl }}
-                          style={styles.propertyImage}
-                          resizeMode="cover"
-                        />
+                        // Validate URI before rendering Image component
+                        item.imageUrl && item.imageUrl.trim() !== '' ? (
+                          <Image
+                            source={{ uri: item.imageUrl }}
+                            style={styles.propertyImage}
+                            resizeMode="cover"
+                          />
+                        ) : (
+                          <Image
+                            source={placeholderImage}
+                            style={styles.propertyImage}
+                            resizeMode="cover"
+                          />
+                        )
                       )}
                       {item.type && (
                         <View style={styles.imageTypeContainer}>
