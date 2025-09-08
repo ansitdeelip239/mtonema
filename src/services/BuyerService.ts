@@ -85,31 +85,18 @@ class BuyerService {
       console.log('Error in deleteProperty', error);
     }
   }
-  static async filterProperties(filterCriteria: {
-    Address?: string;
-    place: string[];
-    City: string;
-    Price?: string;
-    PropertyType?: string;
-    PropertyFor?: string;
-    SellerType?: string;
-    MinPrice?: number;
-    MaxPrice?: number;
-    BhkType?: string;
-    FurnishType?: string;
-    ZipCode?: string;
-    pageNumber?: number;
-    pageSize?: number;
-    Relevance?: string;
-  }) {
+  static async contactProperty(buyerId: number, propertyId: number) {
     try {
       const response = await api.post<any>(
-        url.property.filterSearch,
-        filterCriteria,
+        url.property.contacted,
+        {
+          buyerId,
+          propertyId,
+        },
       );
       return response;
     } catch (error) {
-      console.error('Error in filterProperties', error);
+      console.error('Error in contactProperty', error);
       throw error;
     }
   }

@@ -2,7 +2,7 @@ import {createDrawerNavigator} from '@react-navigation/drawer';
 import React, {memo} from 'react';
 import CustomDrawerContent from '../components/CustomDrawerContent';
 import GetIcon from '../components/GetIcon';
-import {StyleSheet} from 'react-native';
+import {StatusBar, StyleSheet} from 'react-native';
 import BuyerBottomTabs from './components/BuyerBottomTabs';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import PartnerProfileScreen from '../screens/partner/ProfileScreen/ProfileScreen';
@@ -15,6 +15,7 @@ const BuyerNavigator = memo(() => {
 
   return (
     <SafeAreaView style={styles.safeArea} edges={['top']}>
+      <StatusBar barStyle="dark-content" backgroundColor="#fff" />
       <Drawer.Navigator
         // eslint-disable-next-line react/no-unstable-nested-components
         drawerContent={props => <CustomDrawerContent {...props} />}

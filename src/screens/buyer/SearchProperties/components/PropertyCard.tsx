@@ -1,10 +1,11 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {View, Text, TouchableOpacity, Image, Platform} from 'react-native';
 import GetIcon from '../../../../components/GetIcon';
 import Colors from '../../../../constants/Colors';
 import {Property} from '../../../../types';
 import {formatPrice, parseImageUrl} from '../utils/helpers';
 import { PropertyFor } from '../../../../constants/MasterDetails';
+import Images from '../../../../constants/Images';
 
 interface PropertyCardProps {
   property: Property;
@@ -12,7 +13,9 @@ interface PropertyCardProps {
 }
 
 const PropertyCard: React.FC<PropertyCardProps> = ({property, onPress}) => {
-  const imageUrl = parseImageUrl(property.imageURL) || 'https://picsum.photos/300/200?random=default';
+  const [imageError, setImageError] = useState(false);
+  const imageUrl = parseImageUrl(property.imageURL) || Images.MT_ONE_LOGO;
+  const isFallbackImage = !parseImageUrl(property.imageURL) || imageError;
 
   return (
     <TouchableOpacity
@@ -20,11 +23,22 @@ const PropertyCard: React.FC<PropertyCardProps> = ({property, onPress}) => {
       activeOpacity={0.8}
       onPress={() => onPress(property.propertyId.toString())}>
       <View style={styles.propertyImageContainer}>
-        <Image
-          source={{uri: imageUrl}}
-          style={styles.propertyImage}
-          resizeMode="cover"
-        />
+        {isFallbackImage ? (
+          <View style={styles.placeholderContainer}>
+            <Image
+              source={{uri: Images.MT_ONE_LOGO}}
+              style={styles.placeholderImage}
+              resizeMode="contain"
+            />
+          </View>
+        ) : (
+          <Image
+            source={{uri: imageUrl}}
+            style={styles.propertyImage}
+            resizeMode="cover"
+            onError={() => setImageError(true)}
+          />
+        )}
         {property.isFeatured && (
           <View style={styles.verifiedBadge}>
             <GetIcon iconName="premium" size={14} color="white" />
@@ -101,6 +115,19 @@ const styles = {
     width: '100%' as const,
     height: 120,
     borderRadius: 8,
+  },
+  placeholderContainer: {
+    width: '100%' as const,
+    height: 120,
+    borderRadius: 8,
+    backgroundColor: '#f0f0f0',
+    justifyContent: 'center' as const,
+    alignItems: 'center' as const,
+  },
+  placeholderImage: {
+    width: 60,
+    height: 60,
+    opacity: 0.5,
   },
   verifiedBadge: {
     position: 'absolute' as const,

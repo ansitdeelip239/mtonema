@@ -1,4 +1,4 @@
-import React, {useState, useCallback, useEffect, useMemo} from 'react';
+import React, {useMemo, useCallback} from 'react';
 import {
   View,
   Text,
@@ -11,19 +11,23 @@ import {
 import GetIcon from '../../../components/GetIcon';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {BuyerBottomTabParamList} from '../../../types/navigation';
-import {Property, PropertySearchParams} from '../../../types';
+import {Property} from '../../../types';
 import {
   PropertyCard,
   FilterModal,
   PropertyTypeToggle,
   SortModal,
+  PropertyDetailModal,
 } from './components';
 import {searchPropertiesStyles as styles} from './styles';
-import {searchProperties} from './hooks/useProperties';
-import {PropertyFor, SortBy} from '../../../constants/MasterDetails';
+import {SortBy} from '../../../constants/MasterDetails';
 import Colors from '../../../constants/Colors';
 import SearchHeader from './components/SearchHeader';
 import BuyerSellerHeader from '../../../components/BuyerSellerHeader';
+import {useSearchProperties} from './hooks/useSearchProperties';
+import {useAuth} from '../../../context/AuthProvider';
+import Toast from 'react-native-toast-message';
+import BuyerService from '../../../services/BuyerService';
 
 type Props = NativeStackScreenProps<BuyerBottomTabParamList, 'Search Property'>;
 
@@ -55,205 +59,78 @@ const LoadingFooter = () => (
 );
 
 const SearchPropertiesScreen: React.FC<Props> = ({navigation: _navigation}) => {
+  const {user} = useAuth();
 
-  const [showFilters, setShowFilters] = useState(false);
-  const [showSortModal, setShowSortModal] = useState(false);
-  const [propertyForFilter, setPropertyForFilter] = useState<
-    | typeof PropertyFor.SALE
-    | typeof PropertyFor.RENT
-    | typeof PropertyFor.OTHERS
-    | 'all'
-  >(PropertyFor.SALE);
-  const [refreshing, setRefreshing] = useState(false);
-  const [allProperties, setAllProperties] = useState<Property[]>([]);
-  const [isLoadingMore, setIsLoadingMore] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
-  const [totalCount, setTotalCount] = useState(0);
-  const [searchParams, setSearchParams] = useState<PropertySearchParams>({
-    page: 1,
-    pageSize: 12,
-    propertyFor: PropertyFor.SALE,
-    sortBy: SortBy.NEWEST,
-  });
-  const [currentFilters, setCurrentFilters] = useState<
-    Partial<PropertySearchParams>
-  >({});
-  const [currentPage, setCurrentPage] = useState(1);
-
-  // Function to fetch properties
-  const fetchProperties = useCallback(
-    async (params: PropertySearchParams, isLoadMore = false) => {
-      try {
-        if (!isLoadMore) {
-          setIsLoading(true);
-          // Reset properties for new search/filter
-          setAllProperties([]);
-          setTotalCount(0);
-        }
-
-        console.log('Fetching properties with params:', params);
-        const response = await searchProperties(params);
-
-        if (response) {
-          const properties = response.properties || [];
-          setTotalCount(response.total || 0);
-
-          if (isLoadMore) {
-            // Append for pagination
-            setAllProperties(prev => [...prev, ...properties]);
-          } else {
-            // Replace for new search/filter
-            setAllProperties(properties);
-          }
-        }
-      } catch (error) {
-        console.error('Error fetching properties:', error);
-        if (!isLoadMore) {
-          setAllProperties([]);
-          setTotalCount(0);
-        }
-      } finally {
-        setIsLoading(false);
-        setIsLoadingMore(false);
-      }
-    },
-    [],
-  );
-
-  // Handle search with loading state
-  const handleSearchWithLoading = useCallback(
-    (text: string) => {
-      const updatedParams = {
-        ...searchParams,
-        page: 1,
-        location: text.trim() || undefined,
-      };
-
-      setSearchParams(updatedParams);
-    },
-    [searchParams],
-  );
-  // Initial load and when search params change (exclude pagination)
-  useEffect(() => {
-    const finalParams = {
-      ...searchParams,
-      propertyFor: propertyForFilter === 'all' ? undefined : propertyForFilter,
-    };
-
-    fetchProperties(finalParams, false);
-    setCurrentPage(1); // Reset page when search params change
-  }, [searchParams, propertyForFilter, fetchProperties]);
-
-  // Handle property filter change
-  const applyFilters = useCallback(
-    (filters: Partial<PropertySearchParams>) => {
-      setShowFilters(false);
-      setCurrentFilters(filters);
-      // Update search params with filters
-      const updatedParams = {
-        ...searchParams,
-        ...filters,
-        page: 1,
-      };
-      setSearchParams(updatedParams);
-    },
-    [searchParams],
-  );
-
-  const clearFilters = useCallback(() => {
-    setCurrentFilters({});
-    // Clear all filters from search params
-    const clearedParams = {
-      ...searchParams,
-      propertyTypes: undefined,
-      bhkType: undefined,
-      furnishing: undefined,
-      city: undefined,
-      minAmount: undefined,
-      maxAmount: undefined,
-      page: 1,
-    };
-    setSearchParams(clearedParams);
-  }, [searchParams]);
-
-  const handleSortPress = useCallback(() => {
-    setShowSortModal(true);
-  }, []);
-
-  const handleSortSelect = (sortBy: string) => {
-    setAllProperties([]);
-    setTotalCount(0); // Reset total count to prevent unwanted pagination
-    setSearchParams(prev => ({...prev, page: 1, sortBy: sortBy as any}));
-  };
-
-  const getSortDisplayText = useCallback((sortBy: string) => {
-    switch (sortBy) {
-      case SortBy.NEWEST:
-        return 'Newest';
-      case SortBy.PRICE_LOW_TO_HIGH:
-        return 'Price: Low to High';
-      case SortBy.PRICE_HIGH_TO_LOW:
-        return 'Price: High to Low';
-      case SortBy.AREA_LOW_TO_HIGH:
-        return 'Area: Low to High';
-      case SortBy.AREA_HIGH_TO_LOW:
-        return 'Area: High to Low';
-      default:
-        return 'Sort';
-    }
-  }, []);
-
-  const handlePropertyPress = (propertyId: string) => {
-    // Navigate to property details
-    console.log('Navigate to property:', propertyId);
-  };
-
-  const handleRefresh = async () => {
-    setRefreshing(true);
-    setAllProperties([]);
-    const refreshParams = {
-      ...searchParams,
-      page: 1,
-      propertyFor: propertyForFilter === 'all' ? undefined : propertyForFilter,
-    };
-    setSearchParams(prev => ({...prev, page: 1}));
-
-    try {
-      await fetchProperties(refreshParams, false);
-    } catch (refreshError) {
-      console.error('Error refreshing properties:', refreshError);
-    } finally {
-      setRefreshing(false);
-    }
-  };
-
-  const handleLoadMore = useCallback(() => {
-    if (!isLoading && !isLoadingMore && allProperties.length < totalCount) {
-      setIsLoadingMore(true);
-      const nextPage = currentPage + 1;
-      const loadMoreParams = {
-        ...searchParams,
-        page: nextPage,
-        propertyFor:
-          propertyForFilter === 'all' ? undefined : propertyForFilter,
-      };
-
-      // Directly call fetchProperties for pagination
-      fetchProperties(loadMoreParams, true).finally(() => {
-        setCurrentPage(nextPage);
-      });
-    }
-  }, [
+  const {
+    showFilters,
+    setShowFilters,
+    showSortModal,
+    setShowSortModal,
+    propertyForFilter,
+    setPropertyForFilterAndResetPage,
+    refreshing,
+    allProperties,
     isLoading,
-    isLoadingMore,
-    allProperties.length,
     totalCount,
     searchParams,
-    propertyForFilter,
-    fetchProperties,
-    currentPage,
-  ]);
+    currentFilters,
+    handleSearchWithLoading,
+    applyFilters,
+    clearFilters,
+    handleSortPress,
+    handleSortSelect,
+    getSortDisplayText,
+    handlePropertyPress,
+    handleRefresh,
+    handleLoadMore,
+    isLoadingMore,
+    selectedProperty,
+    showPropertyModal,
+    handleClosePropertyModal,
+  } = useSearchProperties();
 
+  // Handle enquiry for a property
+  const handleEnquiry = useCallback(
+    async (property: Property, setLoading?: (loading: boolean) => void) => {
+      if (!user) {
+        Toast.show({
+          type: 'error',
+          text1: 'Please login to make enquiry',
+        });
+        return;
+      }
+
+      try {
+        setLoading?.(true);
+
+        const response = await BuyerService.contactProperty(
+          user.id,
+          property.propertyId,
+        );
+
+        if (response?.success) {
+          Toast.show({
+            type: 'success',
+            text1: 'Enquiry sent successfully',
+            text2: 'The seller will contact you soon.',
+          });
+          handleClosePropertyModal();
+        } else {
+          throw new Error('Failed to send enquiry');
+        }
+      } catch (error) {
+        console.error('Enquiry error:', error);
+        Toast.show({
+          type: 'error',
+          text1: 'Failed to send enquiry',
+          text2: 'Please try again later.',
+        });
+      } finally {
+        setLoading?.(false);
+      }
+    },
+    [user, handleClosePropertyModal],
+  );
   const renderFooter = () => {
     if (isLoadingMore) {
       return <LoadingFooter />;
@@ -265,10 +142,7 @@ const SearchPropertiesScreen: React.FC<Props> = ({navigation: _navigation}) => {
     return (
       <View>
         {/* Buyer Header */}
-        <BuyerSellerHeader
-          title="Find Your"
-          subtitle="Dream Property"
-        >
+        <BuyerSellerHeader title="Find Your" subtitle="Dream Property">
           <TouchableOpacity onPress={() => setShowFilters(true)}>
             <GetIcon iconName="filter" size={20} color="#333" />
           </TouchableOpacity>
@@ -284,10 +158,7 @@ const SearchPropertiesScreen: React.FC<Props> = ({navigation: _navigation}) => {
         {/* Property Type Toggle */}
         <PropertyTypeToggle
           propertyForFilter={propertyForFilter}
-          onFilterChange={filter => {
-            setPropertyForFilter(filter);
-            setSearchParams(prev => ({...prev, page: 1}));
-          }}
+          onFilterChange={setPropertyForFilterAndResetPage}
         />
 
         {/* Results Header */}
@@ -315,6 +186,8 @@ const SearchPropertiesScreen: React.FC<Props> = ({navigation: _navigation}) => {
     handleSortPress,
     getSortDisplayText,
     handleSearchWithLoading,
+    setPropertyForFilterAndResetPage,
+    setShowFilters,
   ]);
 
   const renderPropertyItem: ListRenderItem<Property> = ({item}) => (
@@ -363,6 +236,12 @@ const SearchPropertiesScreen: React.FC<Props> = ({navigation: _navigation}) => {
         onClose={() => setShowSortModal(false)}
         onSelectSort={handleSortSelect}
         currentSort={searchParams.sortBy || SortBy.NEWEST}
+      />
+      <PropertyDetailModal
+        visible={showPropertyModal}
+        property={selectedProperty}
+        onClose={handleClosePropertyModal}
+        onEnquiry={handleEnquiry}
       />
     </>
   );

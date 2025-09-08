@@ -28,6 +28,7 @@ import ConfirmationModal from '../../../components/ConfirmationModal';
 import { getYouTubeThumbnailUrl } from '../../../utils/formUtils';
 import { useTheme } from '../../../context/ThemeProvider';
 import { useTranslation } from 'react-i18next';
+import Images from '../../../constants/Images';
 
 type Props = NativeStackScreenProps<
   ListingScreenStackParamList,
@@ -35,7 +36,7 @@ type Props = NativeStackScreenProps<
 >;
 
 // Default placeholder image
-const placeholderImage = require('../../../assets/Images/dncr_black_logo.png');
+const placeholderImage = Images.MTESTATES_LOGO;
 
 const ListingDetailScreen: React.FC<Props> = ({ route, navigation }) => {
   // ...existing state variables and handlers...
