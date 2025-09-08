@@ -24,6 +24,7 @@ import {PropertyFor} from '../../constants/MasterDetails';
 import Images from '../../constants/Images';
 import Toast from 'react-native-toast-message';
 import BuyerService from '../../services/BuyerService';
+import {useTranslation} from 'react-i18next';
 
 const {width} = Dimensions.get('window');
 const CARD_WIDTH = width * 0.7;
@@ -88,6 +89,7 @@ const PropertyCard = React.memo<{
     onPress,
     isLoading = false,
   }) => {
+    const {t} = useTranslation();
     const handlePress = useCallback(() => {
       onPress?.(property);
     }, [onPress, property]);
@@ -127,14 +129,16 @@ const PropertyCard = React.memo<{
           {property.isFeatured && (
             <View style={styles.featuredBadge}>
               <GetIcon iconName="premium" size={14} color="white" />
-              <Text style={styles.featuredText}>Featured</Text>
+              <Text style={styles.featuredText}>
+                {t('dashboard.labels.featured')}
+              </Text>
             </View>
           )}
         </View>
 
         <View style={styles.propertyInfo}>
           <Text style={styles.propertyTitle} numberOfLines={1}>
-            {property.propertyName || 'Unnamed Property'}
+            {property.propertyName || t('dashboard.labels.unnamedProperty')}
           </Text>
 
           <View style={styles.propertyLocationContainer}>
@@ -142,7 +146,7 @@ const PropertyCard = React.memo<{
             <Text style={styles.propertyLocation} numberOfLines={1}>
               {property.locationAddress ||
                 property.city ||
-                'Location not specified'}
+                t('dashboard.labels.locationNotSpecified')}
             </Text>
           </View>
 
@@ -153,7 +157,7 @@ const PropertyCard = React.memo<{
                 | typeof PropertyFor.SALE
                 | typeof PropertyFor.RENT
                 | typeof PropertyFor.OTHERS,
-            ) || 'Price not available'}
+            ) || t('dashboard.labels.priceNotAvailable')}
           </Text>
 
           {property.area && (
@@ -173,7 +177,7 @@ const PropertyCard = React.memo<{
               <View style={styles.propertyDetailItem}>
                 <GetIcon iconName="home" size={12} color="#666" />
                 <Text style={styles.propertyDetail}>
-                  {property.propertyType || 'Property'}
+                  {property.propertyType || t('dashboard.labels.property')}
                 </Text>
               </View>
             </View>
@@ -191,7 +195,9 @@ const PropertyCard = React.memo<{
               {isLoading ? (
                 <ActivityIndicator size="small" color="white" />
               ) : (
-                <Text style={styles.enquiryButtonText}>Send Enquiry</Text>
+                <Text style={styles.enquiryButtonText}>
+                  {t('dashboard.actions.sendEnquiry')}
+                </Text>
               )}
             </TouchableOpacity>
           )}
@@ -219,6 +225,7 @@ const PropertySection = React.memo<{
     showEnquiry = false,
     loadingEnquiries = {},
   }) => {
+    const {t} = useTranslation();
     if (properties.length === 0) {
       return null;
     }
@@ -231,7 +238,9 @@ const PropertySection = React.memo<{
         <View style={styles.sectionHeader}>
           <Text style={styles.sectionTitle}>{title}</Text>
           <TouchableOpacity onPress={onSeeAll}>
-            <Text style={styles.seeAllText}>See All</Text>
+            <Text style={styles.seeAllText}>
+              {t('dashboard.actions.seeAll')}
+            </Text>
           </TouchableOpacity>
         </View>
         <ScrollView
@@ -261,43 +270,53 @@ const PropertySection = React.memo<{
   },
 );
 
-const LoadingState = React.memo(() => (
-  <View style={styles.loadingContainer}>
-    <ActivityIndicator size="large" color={Colors.MT_PRIMARY_1} />
-    <Text style={styles.loadingText}>Loading your dashboard...</Text>
-  </View>
-));
+const LoadingState = React.memo(() => {
+  const {t} = useTranslation();
+  return (
+    <View style={styles.loadingContainer}>
+      <ActivityIndicator size="large" color={Colors.MT_PRIMARY_1} />
+      <Text style={styles.loadingText}>{t('dashboard.loading.text')}</Text>
+    </View>
+  );
+});
 
 const ErrorState = React.memo<{error: string; onRetry: () => void}>(
-  ({error, onRetry}) => (
-    <View style={styles.errorContainer}>
-      <Text style={styles.errorText}>{error}</Text>
-      <TouchableOpacity style={styles.retryButton} onPress={onRetry}>
-        <Text style={styles.retryButtonText}>Retry</Text>
-      </TouchableOpacity>
-    </View>
-  ),
+  ({error, onRetry}) => {
+    const {t} = useTranslation();
+    return (
+      <View style={styles.errorContainer}>
+        <Text style={styles.errorText}>{error}</Text>
+        <TouchableOpacity style={styles.retryButton} onPress={onRetry}>
+          <Text style={styles.retryButtonText}>{t('dashboard.error.retry')}</Text>
+        </TouchableOpacity>
+      </View>
+    );
+  },
 );
 
 const EmptyState = React.memo<{onStartSearching: () => void}>(
-  ({onStartSearching}) => (
-    <View style={styles.emptyStateContainer}>
-      <GetIcon iconName="home" size={80} color="#ddd" />
-      <Text style={styles.emptyStateTitle}>Start Your Property Journey</Text>
-      <Text style={styles.emptyStateText}>
-        Search for properties and start building your personalized dashboard
-      </Text>
-      <TouchableOpacity
-        style={styles.emptyStateButton}
-        onPress={onStartSearching}>
-        <Text style={styles.emptyStateButtonText}>Start Searching</Text>
-      </TouchableOpacity>
-    </View>
-  ),
+  ({onStartSearching}) => {
+    const {t} = useTranslation();
+    return (
+      <View style={styles.emptyStateContainer}>
+        <GetIcon iconName="home" size={80} color="#ddd" />
+        <Text style={styles.emptyStateTitle}>{t('dashboard.emptyState.title')}</Text>
+        <Text style={styles.emptyStateText}>
+          {t('dashboard.emptyState.message')}
+        </Text>
+        <TouchableOpacity
+          style={styles.emptyStateButton}
+          onPress={onStartSearching}>
+          <Text style={styles.emptyStateButtonText}>{t('dashboard.actions.startSearching')}</Text>
+        </TouchableOpacity>
+      </View>
+    );
+  },
 );
 
 const BuyerDashboard: React.FC<Props> = ({navigation}) => {
   const {user} = useAuth();
+  const {t} = useTranslation();
   const [loadingEnquiries, setLoadingEnquiries] = useState<{
     [key: string]: boolean;
   }>({});
@@ -320,49 +339,49 @@ const BuyerDashboard: React.FC<Props> = ({navigation}) => {
     () => [
       {
         id: 'search',
-        title: 'Search Properties',
+        title: t('dashboard.quickActions.searchProperties'),
         icon: 'search',
         color: Colors.MT_PRIMARY_1,
         route: 'Search Property',
       },
       {
         id: 'contacted',
-        title: 'My Contacts',
+        title: t('dashboard.quickActions.myContacts'),
         icon: 'phone',
         color: '#FF6B6B',
         route: 'Contacted',
       },
       {
         id: 'contact',
-        title: 'Contact Us',
+        title: t('dashboard.quickActions.contactUs'),
         icon: 'message',
         color: '#4ECDC4',
         route: 'Contact Us',
       },
     ],
-    [],
+    [t],
   );
 
   // Memoized dashboard stats
   const dashboardStats = useMemo<DashboardStat[]>(
     () => [
       {
-        label: 'Contacted Properties',
+        label: t('dashboard.stats.contactedProperties'),
         value: stats.totalContacted.toString(),
         icon: 'phone',
       },
       {
-        label: 'For Sale Properties',
+        label: t('dashboard.stats.forSaleProperties'),
         value: forSaleProperties.length.toString(),
         icon: 'home',
       },
       {
-        label: 'For Rent Properties',
+        label: t('dashboard.stats.forRentProperties'),
         value: forRentProperties.length.toString(),
         icon: 'home',
       },
       {
-        label: 'Featured Properties',
+        label: t('dashboard.stats.featuredProperties'),
         value: featuredProperties.length.toString(),
         icon: 'premium',
       },
@@ -372,6 +391,7 @@ const BuyerDashboard: React.FC<Props> = ({navigation}) => {
       forSaleProperties.length,
       forRentProperties.length,
       featuredProperties.length,
+      t,
     ],
   );
 
@@ -379,9 +399,9 @@ const BuyerDashboard: React.FC<Props> = ({navigation}) => {
   const welcomeMessage = useMemo(
     () =>
       user?.name
-        ? `Welcome back, ${user.name.split(' ')[0]}!`
-        : 'Welcome back!',
-    [user?.name],
+        ? `${t('dashboard.welcome.back')}, ${user.name.split(' ')[0]}!`
+        : t('dashboard.welcome.back'),
+    [user?.name, t],
   );
 
   // Check if dashboard has no content
@@ -497,7 +517,7 @@ const BuyerDashboard: React.FC<Props> = ({navigation}) => {
       {/* Header */}
       <BuyerSellerHeader
         title={welcomeMessage}
-        subtitle="Find Your Dream Home"
+        subtitle={t('dashboard.welcome.subtitle')}
       />
 
       {/* Stats Section */}
@@ -509,7 +529,7 @@ const BuyerDashboard: React.FC<Props> = ({navigation}) => {
 
       {/* Quick Actions */}
       <View style={styles.section}>
-        <Text style={styles.sectionTitle}>Quick Actions</Text>
+        <Text style={styles.sectionTitle}>{t('dashboard.sections.quickActions')}</Text>
         <View style={styles.quickActionsContainer}>
           <View style={styles.quickActionsGrid}>
             {quickActions.map(action => (
@@ -525,7 +545,7 @@ const BuyerDashboard: React.FC<Props> = ({navigation}) => {
 
       {/* Property Sections */}
       <PropertySection
-        title="Properties for Sale"
+        title={t('dashboard.sections.propertiesForSale')}
         properties={forSaleProperties}
         onSeeAll={navigateToSearch}
         onEnquiry={handleEnquiry}
@@ -535,7 +555,7 @@ const BuyerDashboard: React.FC<Props> = ({navigation}) => {
       />
 
       <PropertySection
-        title="Properties for Rent"
+        title={t('dashboard.sections.propertiesForRent')}
         properties={forRentProperties}
         onSeeAll={navigateToSearch}
         onEnquiry={handleEnquiry}
@@ -545,14 +565,14 @@ const BuyerDashboard: React.FC<Props> = ({navigation}) => {
       />
 
       <PropertySection
-        title="Recently Contacted"
+        title={t('dashboard.sections.recentlyContacted')}
         properties={contactedProperties}
         onSeeAll={navigateToContacted}
         onPropertyPress={handlePropertyPress}
       />
 
       <PropertySection
-        title="Featured Properties"
+        title={t('dashboard.sections.featuredProperties')}
         properties={featuredProperties}
         onSeeAll={navigateToSearch}
         onEnquiry={handleEnquiry}

@@ -7,11 +7,15 @@ import BuyerBottomTabs from './components/BuyerBottomTabs';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import PartnerProfileScreen from '../screens/partner/ProfileScreen/ProfileScreen';
 import {useDrawerStyles} from '../hooks/useDrawerStyles';
+import SettingsScreen from '../screens/partner/Settings/SettingsScreen';
+import {useTranslation} from 'react-i18next';
 
 const Drawer = createDrawerNavigator();
 
 const BuyerNavigator = memo(() => {
   const {drawerStyles, isIOS} = useDrawerStyles();
+
+  const {t} = useTranslation();
 
   return (
     <SafeAreaView style={styles.safeArea} edges={['top']}>
@@ -29,9 +33,22 @@ const BuyerNavigator = memo(() => {
           component={BuyerBottomTabs}
           options={{
             headerShown: false,
+            drawerLabel: t('navigation.drawer.home'), // Add localized label
             // eslint-disable-next-line react/no-unstable-nested-components
             drawerIcon: ({color}) => (
               <GetIcon iconName="home" color={color} size="23" /> // Use GetIcon here
+            ),
+          }}
+        />
+        <Drawer.Screen
+          name="Settings"
+          component={SettingsScreen}
+          options={{
+            headerShown: false,
+            drawerLabel: t('navigation.drawer.settings'), // Add localized label
+            // eslint-disable-next-line react/no-unstable-nested-components
+            drawerIcon: ({color}) => (
+              <GetIcon iconName="settings" color={color} size="25" />
             ),
           }}
         />

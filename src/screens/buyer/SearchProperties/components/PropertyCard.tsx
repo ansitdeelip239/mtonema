@@ -6,6 +6,7 @@ import {Property} from '../../../../types';
 import {formatPrice, parseImageUrl} from '../utils/helpers';
 import { PropertyFor } from '../../../../constants/MasterDetails';
 import Images from '../../../../constants/Images';
+import {useTranslation} from 'react-i18next';
 
 interface PropertyCardProps {
   property: Property;
@@ -14,6 +15,7 @@ interface PropertyCardProps {
 
 const PropertyCard: React.FC<PropertyCardProps> = ({property, onPress}) => {
   const [imageError, setImageError] = useState(false);
+  const {t} = useTranslation();
   const imageUrl = parseImageUrl(property.imageURL) || Images.MT_ONE_LOGO;
   const isFallbackImage = !parseImageUrl(property.imageURL) || imageError;
 
@@ -61,9 +63,9 @@ const PropertyCard: React.FC<PropertyCardProps> = ({property, onPress}) => {
           styles.propertyTypeBadgeOthers,
         ]}>
           <Text style={styles.propertyTypeBadgeText}>
-            {property.propertyFor === PropertyFor.SALE ? 'For Sale' :
-             property.propertyFor === PropertyFor.RENT ? 'For Rent' :
-             'Others'}
+            {property.propertyFor === PropertyFor.SALE ? t('propertyCard.propertyType.forSale') :
+             property.propertyFor === PropertyFor.RENT ? t('propertyCard.propertyType.forRent') :
+             t('propertyCard.propertyType.others')}
           </Text>
         </View>
       </View>

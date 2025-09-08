@@ -18,6 +18,7 @@ import {formatPrice, parseImageUrl} from '../utils/helpers';
 import {PropertyFor} from '../../../../constants/MasterDetails';
 import YoutubeVideoPlayer from '../../../../components/YoutubeVideoPlayer';
 import Images from '../../../../constants/Images';
+import {useTranslation} from 'react-i18next';
 
 interface PropertyDetailModalProps {
   visible: boolean;
@@ -55,6 +56,7 @@ const PropertyDetailModal: React.FC<PropertyDetailModalProps> = ({
     [key: number]: boolean;
   }>({});
   const [isEnquiryLoading, setIsEnquiryLoading] = useState(false);
+  const {t} = useTranslation();
 
   // Process property images and video
   const displayImages = useMemo(() => {
@@ -100,12 +102,12 @@ const PropertyDetailModal: React.FC<PropertyDetailModalProps> = ({
       images.push({
         isVideo: true,
         videoUrl: property.videoURL,
-        type: 'Video Tour',
+        type: t('propertyDetailModal.videoTour'),
       });
     }
 
     return images;
-  }, [property?.imageURL, property?.videoURL]);
+  }, [property?.imageURL, property?.videoURL, t]);
 
   // Process tags
   const displayTags = useMemo(() => {
@@ -322,10 +324,10 @@ const PropertyDetailModal: React.FC<PropertyDetailModalProps> = ({
                 ]}>
                 <Text style={styles.propertyTypeBadgeText}>
                   {property.propertyFor === PropertyFor.SALE
-                    ? 'For Sale'
+                    ? t('propertyCard.propertyType.forSale')
                     : property.propertyFor === PropertyFor.RENT
-                    ? 'For Rent'
-                    : 'Others'}
+                    ? t('propertyCard.propertyType.forRent')
+                    : t('propertyCard.propertyType.others')}
                 </Text>
               </View>
               {property.isFeatured && (
@@ -340,7 +342,7 @@ const PropertyDetailModal: React.FC<PropertyDetailModalProps> = ({
           {/* Property Title & Price Section */}
           <View style={styles.section}>
             <Text style={styles.propertyTitle}>
-              {property.propertyName || 'Property Name'}
+              {property.propertyName || t('propertyDetailModal.propertyName')}
             </Text>
 
             <Text style={[styles.propertyPrice, {color: Colors.MT_PRIMARY_1}]}>
@@ -360,7 +362,7 @@ const PropertyDetailModal: React.FC<PropertyDetailModalProps> = ({
                 color={Colors.MT_PRIMARY_1}
               />
               <Text style={styles.infoText}>
-                {property.locationAddress || 'Location not specified'},{' '}
+                {property.locationAddress || t('propertyDetailModal.locationNotSpecified')},{' '}
                 {property.city || ''}
               </Text>
             </View>
@@ -382,7 +384,7 @@ const PropertyDetailModal: React.FC<PropertyDetailModalProps> = ({
                 <View style={styles.overviewTextContainer}>
                   <Text style={styles.overviewLabel}>Type</Text>
                   <Text style={styles.overviewValue}>
-                    {property.propertyType || 'N/A'}
+                    {property.propertyType || t('propertyDetailModal.labels.na')}
                   </Text>
                 </View>
               </View>
@@ -440,7 +442,7 @@ const PropertyDetailModal: React.FC<PropertyDetailModalProps> = ({
           {/* Description */}
           {(property.shortDescription || property.longDescription) && (
             <View style={styles.section}>
-              <Text style={styles.sectionTitle}>Description</Text>
+              <Text style={styles.sectionTitle}>{t('propertyDetailModal.sections.description')}</Text>
 
               {property.shortDescription && (
                 <View style={styles.descriptionContainer}>
@@ -462,7 +464,7 @@ const PropertyDetailModal: React.FC<PropertyDetailModalProps> = ({
 
           {/* Additional Features */}
           <View style={styles.section}>
-            <Text style={styles.sectionTitle}>Features</Text>
+            <Text style={styles.sectionTitle}>{t('propertyDetailModal.sections.features')}</Text>
             <View style={styles.featuresGrid}>
               <View style={styles.featureItem}>
                 <View
@@ -478,7 +480,7 @@ const PropertyDetailModal: React.FC<PropertyDetailModalProps> = ({
                     color={property.parking ? 'white' : '#666'}
                   />
                 </View>
-                <Text style={styles.featureText}>Parking</Text>
+                <Text style={styles.featureText}>{t('propertyDetailModal.features.parking')}</Text>
               </View>
 
               <View style={styles.featureItem}>
@@ -495,7 +497,7 @@ const PropertyDetailModal: React.FC<PropertyDetailModalProps> = ({
                     color={property.lifts ? 'white' : '#666'}
                   />
                 </View>
-                <Text style={styles.featureText}>Lift</Text>
+                <Text style={styles.featureText}>{t('propertyDetailModal.features.lift')}</Text>
               </View>
 
               <View style={styles.featureItem}>
@@ -512,7 +514,7 @@ const PropertyDetailModal: React.FC<PropertyDetailModalProps> = ({
                     color={property.gatedSecurity ? 'white' : '#666'}
                   />
                 </View>
-                <Text style={styles.featureText}>Security</Text>
+                <Text style={styles.featureText}>{t('propertyDetailModal.features.security')}</Text>
               </View>
 
               <View style={styles.featureItem}>
@@ -529,7 +531,7 @@ const PropertyDetailModal: React.FC<PropertyDetailModalProps> = ({
                     color={property.alarmSystem ? 'white' : '#666'}
                   />
                 </View>
-                <Text style={styles.featureText}>Alarm</Text>
+                <Text style={styles.featureText}>{t('propertyDetailModal.features.alarm')}</Text>
               </View>
 
               <View style={styles.featureItem}>
@@ -546,7 +548,7 @@ const PropertyDetailModal: React.FC<PropertyDetailModalProps> = ({
                     color={property.readyToMove ? 'white' : '#666'}
                   />
                 </View>
-                <Text style={styles.featureText}>Ready to Move</Text>
+                <Text style={styles.featureText}>{t('propertyDetailModal.features.readyToMove')}</Text>
               </View>
 
               <View style={styles.featureItem}>
@@ -563,7 +565,7 @@ const PropertyDetailModal: React.FC<PropertyDetailModalProps> = ({
                     color={property.constructionDone ? 'white' : '#666'}
                   />
                 </View>
-                <Text style={styles.featureText}>Construction Done</Text>
+                <Text style={styles.featureText}>{t('propertyDetailModal.features.constructionDone')}</Text>
               </View>
 
               <View style={styles.featureItem}>
@@ -580,7 +582,7 @@ const PropertyDetailModal: React.FC<PropertyDetailModalProps> = ({
                     color={property.boundaryWall ? 'white' : '#666'}
                   />
                 </View>
-                <Text style={styles.featureText}>Boundary Wall</Text>
+                <Text style={styles.featureText}>{t('propertyDetailModal.features.boundaryWall')}</Text>
               </View>
 
               <View style={styles.featureItem}>
@@ -597,33 +599,33 @@ const PropertyDetailModal: React.FC<PropertyDetailModalProps> = ({
                     color={property.surveillanceCameras ? 'white' : '#666'}
                   />
                 </View>
-                <Text style={styles.featureText}>Surveillance</Text>
+                <Text style={styles.featureText}>{t('propertyDetailModal.features.surveillance')}</Text>
               </View>
             </View>
           </View>
 
           {/* Property Specifications */}
           <View style={styles.section}>
-            <Text style={styles.sectionTitle}>Specifications</Text>
+            <Text style={styles.sectionTitle}>{t('propertyDetailModal.sections.specifications')}</Text>
             <View style={styles.specsList}>
               <View style={styles.specItem}>
-                <Text style={styles.specLabel}>Furnishing</Text>
+                <Text style={styles.specLabel}>{t('propertyDetailModal.labels.furnishing')}</Text>
                 <Text style={styles.specValue}>
                   {property.furnishing || 'N/A'}
                 </Text>
               </View>
               <View style={styles.specItem}>
-                <Text style={styles.specLabel}>Floor</Text>
+                <Text style={styles.specLabel}>{t('propertyDetailModal.labels.floor')}</Text>
                 <Text style={styles.specValue}>{property.floor || 'N/A'}</Text>
               </View>
               <View style={styles.specItem}>
-                <Text style={styles.specLabel}>Property Age</Text>
+                <Text style={styles.specLabel}>{t('propertyDetailModal.labels.propertyAge')}</Text>
                 <Text style={styles.specValue}>
                   {property.propertyAge || 'N/A'}
                 </Text>
               </View>
               <View style={styles.specItem}>
-                <Text style={styles.specLabel}>Seller Type</Text>
+                <Text style={styles.specLabel}>{t('propertyDetailModal.labels.sellerType')}</Text>
                 <Text style={styles.specValue}>
                   {property.sellerType || 'N/A'}
                 </Text>
@@ -634,7 +636,7 @@ const PropertyDetailModal: React.FC<PropertyDetailModalProps> = ({
           {/* Tags */}
           {displayTags.length > 0 && (
             <View style={styles.section}>
-              <Text style={styles.sectionTitle}>Tags</Text>
+              <Text style={styles.sectionTitle}>{t('propertyDetailModal.sections.tags')}</Text>
               <View style={styles.tagsContainer}>
                 {displayTags.map((tag: string, index: number) => (
                   <View key={index} style={styles.tag}>
@@ -647,7 +649,7 @@ const PropertyDetailModal: React.FC<PropertyDetailModalProps> = ({
 
           {/* Seller Information */}
           <View style={[styles.section, styles.sellerSection]}>
-            <Text style={styles.sectionTitle}>Seller Information</Text>
+            <Text style={styles.sectionTitle}>{t('propertyDetailModal.sections.sellerInformation')}</Text>
             <View style={styles.sellerCard}>
               <View style={styles.sellerDetails}>
                 <View style={styles.sellerIconContainer}>
@@ -655,13 +657,13 @@ const PropertyDetailModal: React.FC<PropertyDetailModalProps> = ({
                 </View>
                 <View style={styles.sellerInfo}>
                   <Text style={styles.sellerName}>
-                    {property.name || 'Seller Name'}
+                    {property.name || t('propertyDetailModal.labels.sellerName')}
                   </Text>
                   <Text style={styles.sellerType}>
-                    {property.sellerType || 'Individual'}
+                    {property.sellerType || t('propertyDetailModal.labels.individual')}
                   </Text>
                   <Text style={styles.sellerEmail}>
-                    {property.sellerPhone || 'Contact not available'}
+                    {property.sellerPhone || t('propertyDetailModal.labels.contactNotAvailable')}
                   </Text>
                 </View>
               </View>
@@ -686,7 +688,7 @@ const PropertyDetailModal: React.FC<PropertyDetailModalProps> = ({
               {isEnquiryLoading ? (
                 <ActivityIndicator color="#fff" size="small" />
               ) : (
-                <Text style={styles.enquiryButtonText}>Enquiry Now</Text>
+                <Text style={styles.enquiryButtonText}>{t('propertyDetailModal.buttons.enquiryNow')}</Text>
               )}
             </TouchableOpacity>
           </View>

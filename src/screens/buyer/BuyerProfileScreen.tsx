@@ -4,11 +4,13 @@ import {BuyerBottomTabParamList} from '../../types/navigation';
 import ProfileScreen, {ProfileScreenConfig} from '../../components/ProfileScreen';
 import {IconEnum} from '../../components/GetIcon';
 import {useUserProfile} from '../seller/hooks/useUserProfile';
+import {useTranslation} from 'react-i18next';
 
 type Props = NativeStackScreenProps<BuyerBottomTabParamList, 'Profile'>;
 
 const BuyerProfileScreen: React.FC<Props> = ({navigation}) => {
   const {userData, loading, error, refetch} = useUserProfile();
+  const {t} = useTranslation();
 
   const handleRefresh = async () => {
     await refetch();
@@ -40,27 +42,27 @@ const BuyerProfileScreen: React.FC<Props> = ({navigation}) => {
   const profileOptions = [
     {
       id: 'personal',
-      title: 'Personal Information',
+      title: t('buyerProfile.options.personal.title'),
       icon: 'user' as IconEnum,
-      subtitle: 'Edit Profile',
+      subtitle: t('buyerProfile.options.personal.subtitle'),
     },
     {
       id: 'properties',
-      title: 'My Properties',
+      title: t('buyerProfile.options.properties.title'),
       icon: 'home' as IconEnum,
-      subtitle: 'View All',
+      subtitle: t('buyerProfile.options.properties.subtitle'),
     },
     {
       id: 'analytics',
-      title: 'Analytics',
+      title: t('buyerProfile.options.analytics.title'),
       icon: 'bill' as IconEnum,
-      subtitle: 'View Stats',
+      subtitle: t('buyerProfile.options.analytics.subtitle'),
     },
     {
       id: 'settings',
-      title: 'Settings',
+      title: t('buyerProfile.options.settings.title'),
       icon: 'settings' as IconEnum,
-      subtitle: 'Manage',
+      subtitle: t('buyerProfile.options.settings.subtitle'),
     },
   ];
 
@@ -68,17 +70,17 @@ const BuyerProfileScreen: React.FC<Props> = ({navigation}) => {
     {
       id: 'totalProperties',
       value: 12,
-      label: 'Total Properties',
+      label: t('buyerProfile.stats.totalProperties'),
     },
     {
       id: 'activeListings',
       value: 8,
-      label: 'Active Listings',
+      label: t('buyerProfile.stats.activeListings'),
     },
     {
       id: 'totalEarnings',
       value: '₹45,230',
-      label: 'Total Earnings',
+      label: t('buyerProfile.stats.totalEarnings'),
     },
   ];
 
@@ -101,8 +103,8 @@ const BuyerProfileScreen: React.FC<Props> = ({navigation}) => {
   ] : [];
 
   const config: ProfileScreenConfig = {
-    title: 'Welcome back',
-    subtitle: 'User Profile',
+    title: t('buyerProfile.welcome.back'),
+    subtitle: t('buyerProfile.welcome.subtitle'),
     userData: userData || undefined,
     profileOptions,
     contactItems,

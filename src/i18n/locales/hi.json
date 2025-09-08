@@ -125,13 +125,179 @@
       "add": "जोड़ें",
       "listings": "लिस्टिंग्स",
       "groups": "समूह",
-      "agentData": "एजेंट डेटा"
+      "agentData": "एजेंट डेटा",
+      "dashboard": "डैशबोर्ड",
+      "contacted": "संपर्क किए गए",
+      "searchProperty": "खोजें",
+      "contactUs": "हमसे संपर्क करें",
+      "profile": "प्रोफ़ाइल"
     }
   },
   "logout": {
     "title": "लॉग आउट",
     "confirm": "क्या आप वाकई लॉग आउट करना चाहते हैं?",
     "action": "लॉग आउट"
+  },
+  "dashboard": {
+    "welcome": {
+      "back": "वापसी पर स्वागत है",
+      "subtitle": "अपना सपना घर खोजें"
+    },
+    "sections": {
+      "quickActions": "त्वरित कार्य",
+      "propertiesForSale": "बिक्री के लिए संपत्तियां",
+      "propertiesForRent": "किराए के लिए संपत्तियां",
+      "recentlyContacted": "हाल ही में संपर्क किए गए",
+      "featuredProperties": "विशेष संपत्तियां"
+    },
+    "actions": {
+      "seeAll": "सभी देखें",
+      "sendEnquiry": "पूछताछ भेजें",
+      "startSearching": "खोज शुरू करें"
+    },
+    "stats": {
+      "contactedProperties": "संपर्क की गई संपत्तियां",
+      "forSaleProperties": "बिक्री के लिए संपत्तियां",
+      "forRentProperties": "किराए के लिए संपत्तियां",
+      "featuredProperties": "विशेष संपत्तियां"
+    },
+    "quickActions": {
+      "searchProperties": "संपत्तियां खोजें",
+      "myContacts": "मेरे संपर्क",
+      "contactUs": "हमसे संपर्क करें"
+    },
+    "loading": {
+      "text": "आपका डैशबोर्ड लोड हो रहा है..."
+    },
+    "error": {
+      "retry": "पुनः प्रयास करें"
+    },
+    "emptyState": {
+      "title": "अपनी संपत्ति यात्रा शुरू करें",
+      "message": "संपत्तियों की खोज करें और अपनी व्यक्तिगत डैशबोर्ड बनाना शुरू करें"
+    },
+    "labels": {
+      "featured": "विशेष",
+      "unnamedProperty": "अनाम संपत्ति",
+      "locationNotSpecified": "स्थान निर्दिष्ट नहीं",
+      "priceNotAvailable": "मूल्य उपलब्ध नहीं"
+    }
+  },
+  "contactedProperties": {
+    "header": {
+      "title": "आपके संपर्क",
+      "subtitle": "संपर्क की गई संपत्तियां"
+    },
+    "stats": {
+      "totalContacts": "कुल संपर्क",
+      "forSale": "बिक्री के लिए",
+      "forRent": "किराए के लिए"
+    },
+    "sections": {
+      "recentContacts": "हाल के संपर्क"
+    },
+    "labels": {
+      "contacted": "संपर्क किया गया",
+      "contactedOn": "संपर्क किया गया",
+      "loadingMore": "अधिक संपत्तियां लोड हो रही हैं...",
+      "loadingProperties": "संपर्क की गई संपत्तियां लोड हो रही हैं...",
+      "noProperties": "कोई संपर्क की गई संपत्ति नहीं मिली",
+      "failedToLoad": "संपर्क की गई संपत्तियां लोड करने में विफल",
+      "tryAgain": "कृपया बाद में पुनः प्रयास करें।"
+    }
+  },
+  "searchProperties": {
+    "header": {
+      "title": "खोजें अपना",
+      "subtitle": "सपना घर"
+    },
+    "search": {
+      "placeholder": "संपत्तियां खोजें...",
+      "loading": "लोड हो रहा है...",
+      "properties": "संपत्तियां"
+    },
+    "messages": {
+      "loadingProperties": "संपत्तियां लोड हो रही हैं...",
+      "noProperties": "कोई संपत्ति नहीं मिली",
+      "loadingMore": "अधिक संपत्तियां लोड हो रही हैं...",
+      "loginRequired": "पूछताछ करने के लिए कृपया लॉगिन करें",
+      "enquirySuccess": "पूछताछ सफलतापूर्वक भेजी गई",
+      "enquirySuccessSub": "विक्रेता जल्द ही आपसे संपर्क करेगा।",
+      "enquiryError": "पूछताछ भेजने में विफल",
+      "enquiryErrorSub": "कृपया बाद में पुनः प्रयास करें।",
+      "enquiryFailed": "पूछताछ भेजने में विफल",
+      "propertiesCount": "{{count}} संपत्तियां"
+    }
+  },
+  "propertyCard": {
+    "propertyType": {
+      "forSale": "बिक्री के लिए",
+      "forRent": "किराए पर",
+      "others": "अन्य"
+    }
+  },
+  "filterModal": {
+    "labels": {
+      "propertyType": "संपत्ति प्रकार",
+      "bhkType": "BHK प्रकार",
+      "furnishing": "साज-सज्जा",
+      "city": "शहर"
+    },
+    "buttons": {
+      "clearAll": "सभी साफ करें",
+      "applyFilters": "फिल्टर लागू करें"
+    }
+  },
+  "sortModal": {
+    "options": {
+      "newestFirst": "नवीनतम पहले",
+      "priceLowToHigh": "मूल्य: कम से अधिक",
+      "priceHighToLow": "मूल्य: अधिक से कम",
+      "areaLowToHigh": "क्षेत्रफल: कम से अधिक",
+      "areaHighToLow": "क्षेत्रफल: अधिक से कम"
+    }
+  },
+  "propertyTypeToggle": {
+    "all": "सभी",
+    "forSale": "बिक्री के लिए",
+    "forRent": "किराए पर",
+    "others": "अन्य"
+  },
+  "propertyDetailModal": {
+    "videoTour": "वीडियो दौरा",
+    "propertyName": "संपत्ति का नाम",
+    "locationNotSpecified": "स्थान निर्दिष्ट नहीं",
+    "sections": {
+      "description": "विवरण",
+      "features": "विशेषताएं",
+      "specifications": "विनिर्देश",
+      "tags": "टैग",
+      "sellerInformation": "विक्रेता जानकारी"
+    },
+    "labels": {
+      "area": "क्षेत्रफल",
+      "facing": "दिशा",
+      "furnishing": "साज-सज्जा",
+      "floor": "मंजिल",
+      "propertyAge": "संपत्ति की आयु",
+      "sellerType": "विक्रेता प्रकार",
+      "sellerName": "विक्रेता का नाम",
+      "individual": "व्यक्तिगत",
+      "contactNotAvailable": "संपर्क उपलब्ध नहीं"
+    },
+    "features": {
+      "parking": "पार्किंग",
+      "lift": "लिफ्ट",
+      "security": "सुरक्षा",
+      "alarm": "अलार्म",
+      "readyToMove": "स्थानांतरण के लिए तैयार",
+      "constructionDone": "निर्माण पूरा",
+      "boundaryWall": "सीमा दीवार",
+      "surveillance": "निगरानी"
+    },
+    "buttons": {
+      "enquiryNow": "अभी पूछें"
+    }
   },
   "teams": {
     "headers": {
@@ -1203,6 +1369,63 @@
       "card": "कार्ड",
       "netbanking": "नेट बैंकिंग",
       "wallet": "वॉलेट"
+    }
+  },
+  "buyerProfile": {
+    "welcome": {
+      "back": "वापसी पर स्वागत है",
+      "subtitle": "उपयोगकर्ता प्रोफ़ाइल"
+    },
+    "options": {
+      "personal": {
+        "title": "व्यक्तिगत जानकारी",
+        "subtitle": "प्रोफ़ाइल संपादित करें"
+      },
+      "properties": {
+        "title": "मेरी संपत्तियां",
+        "subtitle": "सभी देखें"
+      },
+      "analytics": {
+        "title": "विश्लेषण",
+        "subtitle": "आंकड़े देखें"
+      },
+      "settings": {
+        "title": "सेटिंग्स",
+        "subtitle": "प्रबंधित करें"
+      }
+    },
+    "stats": {
+      "totalProperties": "कुल संपत्तियां",
+      "activeListings": "सक्रिय लिस्टिंग",
+      "totalEarnings": "कुल कमाई"
+    }
+  },
+  "contactUs": {
+    "title": "संपर्क करें",
+    "subtitle": "हमसे संपर्क करें",
+    "contactInfo": {
+      "phone": "फोन",
+      "email": "ईमेल",
+      "address": "पता"
+    },
+    "officeHours": {
+      "mondayFriday": "सोमवार - शुक्रवार",
+      "saturday": "शनिवार",
+      "sunday": "रविवार",
+      "hours": {
+        "weekday": "9:00 AM - 6:00 PM",
+        "saturday": "9:00 AM - 4:00 PM",
+        "sunday": "बंद"
+      }
+    },
+    "socialLinks": {
+      "facebook": "फेसबुक",
+      "instagram": "इंस्टाग्राम",
+      "linkedin": "लिंक्डइन",
+      "twitter": "ट्विटर"
+    },
+    "buttons": {
+      "sendMessage": "संदेश भेजें"
     }
   }
 }

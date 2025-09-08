@@ -11,6 +11,7 @@ import ContactedProperties from '../../screens/buyer/ContactedPropertiesScreen';
 import SearchPropertiesScreen from '../../screens/buyer/SearchProperties/SearchPropertiesScreen';
 import ContactUsScreen from '../../screens/buyer/ContactUsScreen';
 import BuyerProfileScreen from '../../screens/buyer/BuyerProfileScreen';
+import {useTranslation} from 'react-i18next';
 
 const Tab = createBottomTabNavigator<BuyerBottomTabParamList>();
 
@@ -43,6 +44,25 @@ const tabScreens: Array<TabScreen<BuyerBottomTabParamList>> = [
 ];
 
 const BuyerBottomTabs = memo(() => {
+  const {t} = useTranslation();
+
+  const getTabLabel = (tabName: string) => {
+    switch (tabName) {
+      case 'Dashboard':
+        return t('navigation.bottomTab.dashboard');
+      case 'Contacted':
+        return t('navigation.bottomTab.contacted');
+      case 'Search Property':
+        return t('navigation.bottomTab.searchProperty');
+      case 'Contact Us':
+        return t('navigation.bottomTab.contactUs');
+      case 'Profile':
+        return t('navigation.bottomTab.profile');
+      default:
+        return tabName;
+    }
+  };
+
   return (
     <Tab.Navigator
       screenOptions={{
@@ -58,7 +78,7 @@ const BuyerBottomTabs = memo(() => {
           name={name}
           component={component}
           options={{
-            tabBarLabel: name,
+            tabBarLabel: getTabLabel(name),
             // eslint-disable-next-line react/no-unstable-nested-components
             tabBarIcon: ({focused, color}) => (
               <GetIcon iconName={icon} color={focused ? Colors.MT_PRIMARY_1 : color} />

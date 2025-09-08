@@ -26,23 +26,25 @@ import SearchHeader from './components/SearchHeader';
 import BuyerSellerHeader from '../../../components/BuyerSellerHeader';
 import {useSearchProperties} from './hooks/useSearchProperties';
 import {useAuth} from '../../../context/AuthProvider';
-import Toast from 'react-native-toast-message';
 import BuyerService from '../../../services/BuyerService';
+import Toast from 'react-native-toast-message';
+import {useTranslation} from 'react-i18next';
 
 type Props = NativeStackScreenProps<BuyerBottomTabParamList, 'Search Property'>;
 
 const EmptyComponent = ({isLoading}: {isLoading: boolean}) => {
+  const {t} = useTranslation();
   if (isLoading) {
     return (
       <View style={styles.emptyContainer}>
         <ActivityIndicator size="large" color={Colors.primary} />
-        <Text style={styles.loadingEmptyText}>Loading properties...</Text>
+        <Text style={styles.loadingEmptyText}>{t('searchProperties.messages.loadingProperties')}</Text>
       </View>
     );
   }
   return (
     <View style={styles.emptyContainer}>
-      <Text style={styles.emptyText}>No properties found</Text>
+      <Text style={styles.emptyText}>{t('searchProperties.messages.noProperties')}</Text>
     </View>
   );
 };
@@ -51,15 +53,19 @@ const FooterComponent = () => <View style={styles.bottomSpacing} />;
 
 const Separator = () => <View style={styles.separator} />;
 
-const LoadingFooter = () => (
-  <View style={styles.loadingFooter}>
-    <ActivityIndicator size="small" color={Colors.primary} />
-    <Text style={styles.loadingMoreText}>Loading more properties...</Text>
-  </View>
-);
+const LoadingFooter = () => {
+  const {t} = useTranslation();
+  return (
+    <View style={styles.loadingFooter}>
+      <ActivityIndicator size="small" color={Colors.primary} />
+      <Text style={styles.loadingMoreText}>{t('searchProperties.messages.loadingMore')}</Text>
+    </View>
+  );
+};
 
 const SearchPropertiesScreen: React.FC<Props> = ({navigation: _navigation}) => {
   const {user} = useAuth();
+  const {t} = useTranslation();
 
   const {
     showFilters,
@@ -95,7 +101,7 @@ const SearchPropertiesScreen: React.FC<Props> = ({navigation: _navigation}) => {
       if (!user) {
         Toast.show({
           type: 'error',
-          text1: 'Please login to make enquiry',
+          text1: t('searchProperties.messages.loginRequired'),
         });
         return;
       }
@@ -111,25 +117,25 @@ const SearchPropertiesScreen: React.FC<Props> = ({navigation: _navigation}) => {
         if (response?.success) {
           Toast.show({
             type: 'success',
-            text1: 'Enquiry sent successfully',
-            text2: 'The seller will contact you soon.',
+            text1: t('searchProperties.messages.enquirySuccess'),
+            text2: t('searchProperties.messages.enquirySuccessSub'),
           });
           handleClosePropertyModal();
         } else {
-          throw new Error('Failed to send enquiry');
+          throw new Error(t('searchProperties.messages.enquiryFailed'));
         }
       } catch (error) {
         console.error('Enquiry error:', error);
         Toast.show({
           type: 'error',
-          text1: 'Failed to send enquiry',
-          text2: 'Please try again later.',
+          text1: t('searchProperties.messages.enquiryError'),
+          text2: t('searchProperties.messages.enquiryErrorSub'),
         });
       } finally {
         setLoading?.(false);
       }
     },
-    [user, handleClosePropertyModal],
+    [user, handleClosePropertyModal, t],
   );
   const renderFooter = () => {
     if (isLoadingMore) {
@@ -142,11 +148,14 @@ const SearchPropertiesScreen: React.FC<Props> = ({navigation: _navigation}) => {
     return (
       <View>
         {/* Buyer Header */}
-        <BuyerSellerHeader title="Find Your" subtitle="Dream Property" />
+        <BuyerSellerHeader
+          title={t('searchProperties.header.title')}
+          subtitle={t('searchProperties.header.subtitle')}
+        />
 
         {/* Search Bar */}
         <SearchHeader
-          placeholder="Search properties..."
+          placeholder={t('searchProperties.search.placeholder')}
           onSearch={handleSearchWithLoading}
           onFilterPress={() => setShowFilters(true)}
         />
@@ -161,8 +170,8 @@ const SearchPropertiesScreen: React.FC<Props> = ({navigation: _navigation}) => {
         <View style={styles.resultsHeader}>
           <Text style={styles.resultsCount}>
             {isLoading || refreshing
-              ? 'Loading...'
-              : `${totalCount} Properties`}
+              ? t('searchProperties.messages.loadingProperties')
+              : t('searchProperties.messages.propertiesCount', { count: totalCount })}
           </Text>
           <TouchableOpacity style={styles.sortButton} onPress={handleSortPress}>
             <Text style={styles.sortButtonText}>
@@ -184,6 +193,7 @@ const SearchPropertiesScreen: React.FC<Props> = ({navigation: _navigation}) => {
     handleSearchWithLoading,
     setPropertyForFilterAndResetPage,
     setShowFilters,
+    t,
   ]);
 
   const renderPropertyItem: ListRenderItem<Property> = ({item}) => (

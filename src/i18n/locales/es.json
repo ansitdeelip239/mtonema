@@ -125,13 +125,179 @@
       "add": "Agregar",
       "listings": "Propiedades",
       "groups": "Grupos",
-      "agentData": "Datos de Agente"
+      "agentData": "Datos de Agente",
+      "dashboard": "Panel",
+      "contacted": "Contactados",
+      "searchProperty": "Buscar",
+      "contactUs": "Contáctanos",
+      "profile": "Perfil"
     }
   },
   "logout": {
     "title": "Cerrar Sesión",
     "confirm": "¿Está seguro de que desea cerrar sesión?",
     "action": "Cerrar Sesión"
+  },
+  "dashboard": {
+    "welcome": {
+      "back": "Bienvenido de vuelta",
+      "subtitle": "Encuentra Tu Hogar Ideal"
+    },
+    "sections": {
+      "quickActions": "Acciones Rápidas",
+      "propertiesForSale": "Propiedades en Venta",
+      "propertiesForRent": "Propiedades en Alquiler",
+      "recentlyContacted": "Contactados Recientemente",
+      "featuredProperties": "Propiedades Destacadas"
+    },
+    "actions": {
+      "seeAll": "Ver Todo",
+      "sendEnquiry": "Enviar Consulta",
+      "startSearching": "Comenzar Búsqueda"
+    },
+    "stats": {
+      "contactedProperties": "Propiedades Contactadas",
+      "forSaleProperties": "Propiedades en Venta",
+      "forRentProperties": "Propiedades en Alquiler",
+      "featuredProperties": "Propiedades Destacadas"
+    },
+    "quickActions": {
+      "searchProperties": "Buscar Propiedades",
+      "myContacts": "Mis Contactos",
+      "contactUs": "Contáctanos"
+    },
+    "loading": {
+      "text": "Cargando tu panel..."
+    },
+    "error": {
+      "retry": "Reintentar"
+    },
+    "emptyState": {
+      "title": "Comienza Tu Búsqueda de Propiedades",
+      "message": "Busca propiedades y comienza a construir tu panel personalizado"
+    },
+    "labels": {
+      "featured": "Destacado",
+      "unnamedProperty": "Propiedad Sin Nombre",
+      "locationNotSpecified": "Ubicación no especificada",
+      "priceNotAvailable": "Precio no disponible"
+    }
+  },
+  "contactedProperties": {
+    "header": {
+      "title": "Tus Contactos",
+      "subtitle": "Propiedades Contactadas"
+    },
+    "stats": {
+      "totalContacts": "Total de Contactos",
+      "forSale": "En Venta",
+      "forRent": "En Alquiler"
+    },
+    "sections": {
+      "recentContacts": "Contactos Recientes"
+    },
+    "labels": {
+      "contacted": "Contactado",
+      "contactedOn": "Contactado el",
+      "loadingMore": "Cargando más propiedades...",
+      "loadingProperties": "Cargando propiedades contactadas...",
+      "noProperties": "No se encontraron propiedades contactadas",
+      "failedToLoad": "Error al cargar propiedades contactadas",
+      "tryAgain": "Por favor, inténtalo de nuevo más tarde."
+    }
+  },
+  "searchProperties": {
+    "header": {
+      "title": "Encuentra Tu",
+      "subtitle": "Propiedad Ideal"
+    },
+    "search": {
+      "placeholder": "Buscar propiedades...",
+      "loading": "Cargando...",
+      "properties": "Propiedades"
+    },
+    "messages": {
+      "loadingProperties": "Cargando propiedades...",
+      "noProperties": "No se encontraron propiedades",
+      "loadingMore": "Cargando más propiedades...",
+      "loginRequired": "Por favor inicia sesión para hacer una consulta",
+      "enquirySuccess": "Consulta enviada exitosamente",
+      "enquirySuccessSub": "El vendedor se pondrá en contacto pronto.",
+      "enquiryError": "Error al enviar consulta",
+      "enquiryErrorSub": "Por favor, inténtalo de nuevo más tarde.",
+      "enquiryFailed": "Error al enviar consulta",
+      "propertiesCount": "{{count}} Propiedades"
+    }
+  },
+  "propertyCard": {
+    "propertyType": {
+      "forSale": "En Venta",
+      "forRent": "En Alquiler",
+      "others": "Otros"
+    }
+  },
+  "filterModal": {
+    "labels": {
+      "propertyType": "Tipo de Propiedad",
+      "bhkType": "Tipo BHK",
+      "furnishing": "Amueblado",
+      "city": "Ciudad"
+    },
+    "buttons": {
+      "clearAll": "Limpiar Todo",
+      "applyFilters": "Aplicar Filtros"
+    }
+  },
+  "sortModal": {
+    "options": {
+      "newestFirst": "Más Recientes Primero",
+      "priceLowToHigh": "Precio: Menor a Mayor",
+      "priceHighToLow": "Precio: Mayor a Menor",
+      "areaLowToHigh": "Área: Menor a Mayor",
+      "areaHighToLow": "Área: Mayor a Menor"
+    }
+  },
+  "propertyTypeToggle": {
+    "all": "Todo",
+    "forSale": "En Venta",
+    "forRent": "En Alquiler",
+    "others": "Otros"
+  },
+  "propertyDetailModal": {
+    "videoTour": "Tour Virtual",
+    "propertyName": "Nombre de la Propiedad",
+    "locationNotSpecified": "Ubicación no especificada",
+    "sections": {
+      "description": "Descripción",
+      "features": "Características",
+      "specifications": "Especificaciones",
+      "tags": "Etiquetas",
+      "sellerInformation": "Información del Vendedor"
+    },
+    "labels": {
+      "area": "Área",
+      "facing": "Orientación",
+      "furnishing": "Amueblado",
+      "floor": "Piso",
+      "propertyAge": "Antigüedad de la Propiedad",
+      "sellerType": "Tipo de Vendedor",
+      "sellerName": "Nombre del Vendedor",
+      "individual": "Individual",
+      "contactNotAvailable": "Contacto no disponible"
+    },
+    "features": {
+      "parking": "Estacionamiento",
+      "lift": "Ascensor",
+      "security": "Seguridad",
+      "alarm": "Alarma",
+      "readyToMove": "Listo para Mudarse",
+      "constructionDone": "Construcción Terminada",
+      "boundaryWall": "Muro Perimetral",
+      "surveillance": "Vigilancia"
+    },
+    "buttons": {
+      "enquiryNow": "Consultar Ahora"
+    }
   },
   "teams": {
     "headers": {
@@ -1213,6 +1379,63 @@
       "card": "Tarjeta",
       "netbanking": "Banco en línea",
       "wallet": "Billetera"
+    }
+  },
+  "buyerProfile": {
+    "welcome": {
+      "back": "Bienvenido de nuevo",
+      "subtitle": "Perfil de usuario"
+    },
+    "options": {
+      "personal": {
+        "title": "Información personal",
+        "subtitle": "Editar perfil"
+      },
+      "properties": {
+        "title": "Mis propiedades",
+        "subtitle": "Ver todo"
+      },
+      "analytics": {
+        "title": "Analíticas",
+        "subtitle": "Ver estadísticas"
+      },
+      "settings": {
+        "title": "Configuración",
+        "subtitle": "Administrar"
+      }
+    },
+    "stats": {
+      "totalProperties": "Propiedades totales",
+      "activeListings": "Listados activos",
+      "totalEarnings": "Ganancias totales"
+    }
+  },
+  "contactUs": {
+    "title": "Ponte en contacto",
+    "subtitle": "Contáctanos",
+    "contactInfo": {
+      "phone": "Teléfono",
+      "email": "Correo electrónico",
+      "address": "Dirección"
+    },
+    "officeHours": {
+      "mondayFriday": "Lunes - Viernes",
+      "saturday": "Sábado",
+      "sunday": "Domingo",
+      "hours": {
+        "weekday": "9:00 AM - 6:00 PM",
+        "saturday": "9:00 AM - 4:00 PM",
+        "sunday": "Cerrado"
+      }
+    },
+    "socialLinks": {
+      "facebook": "Facebook",
+      "instagram": "Instagram",
+      "linkedin": "LinkedIn",
+      "twitter": "Twitter"
+    },
+    "buttons": {
+      "sendMessage": "Enviar mensaje"
     }
   }
 }

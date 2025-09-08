@@ -19,6 +19,7 @@ import BuyerSellerHeader from '../../components/BuyerSellerHeader';
 import {useAuth} from '../../context/AuthProvider';
 import BuyerService from '../../services/BuyerService';
 import Toast from 'react-native-toast-message';
+import {useTranslation} from 'react-i18next';
 import {
   formatPrice,
   parseImageUrl,
@@ -84,6 +85,7 @@ interface ContactedProperty {
 
 const ContactedProperties: React.FC<Props> = ({navigation: _navigation}) => {
   const {user} = useAuth();
+  const {t} = useTranslation();
   const [contactedProperties, setContactedProperties] = useState<
     ContactedProperty[]
   >([]);
@@ -141,8 +143,8 @@ const ContactedProperties: React.FC<Props> = ({navigation: _navigation}) => {
         console.error('Error fetching contacted properties:', error);
         Toast.show({
           type: 'error',
-          text1: 'Failed to load contacted properties',
-          text2: 'Please try again later.',
+          text1: t('contactedProperties.labels.failedToLoad'),
+          text2: t('contactedProperties.labels.tryAgain'),
         });
         if (pageNum === 1) {
           setContactedProperties([]);
@@ -154,7 +156,7 @@ const ContactedProperties: React.FC<Props> = ({navigation: _navigation}) => {
         setRefreshing(false);
       }
     },
-    [user?.id],
+    [user?.id, t],
   );
 
   // Initial load
@@ -203,7 +205,7 @@ const ContactedProperties: React.FC<Props> = ({navigation: _navigation}) => {
             resizeMode={isPlaceholder ? 'contain' : 'cover'}
           />
           <View style={styles.contactBadge}>
-            <Text style={styles.contactBadgeText}>Contacted</Text>
+            <Text style={styles.contactBadgeText}>{t('contactedProperties.labels.contacted')}</Text>
           </View>
         </View>
 
@@ -244,7 +246,7 @@ const ContactedProperties: React.FC<Props> = ({navigation: _navigation}) => {
 
           <View style={styles.contactInfo}>
             <Text style={styles.contactDate}>
-              Contacted on {new Date(property.createdOn).toLocaleDateString()}
+              {t('contactedProperties.labels.contactedOn')} {new Date(property.createdOn).toLocaleDateString()}
             </Text>
             <Text style={styles.agentInfo}>
               <GetIcon iconName="user" size={12} color="#666" />
@@ -266,8 +268,8 @@ const ContactedProperties: React.FC<Props> = ({navigation: _navigation}) => {
     <>
       {/* Buyer Header */}
       <BuyerSellerHeader
-        title="Your Contacts"
-        subtitle="Contacted Properties"
+        title={t('contactedProperties.header.title')}
+        subtitle={t('contactedProperties.header.subtitle')}
       />
 
       {/* Stats Section */}
@@ -277,7 +279,7 @@ const ContactedProperties: React.FC<Props> = ({navigation: _navigation}) => {
             <GetIcon iconName="phone" size={20} color={Colors.MT_PRIMARY_1} />
           </View>
           <Text style={styles.statValue}>{total}</Text>
-          <Text style={styles.statLabel}>Total Contacts</Text>
+          <Text style={styles.statLabel}>{t('contactedProperties.stats.totalContacts')}</Text>
         </View>
         <View style={styles.statCard}>
           <View style={styles.statIcon}>
@@ -286,7 +288,7 @@ const ContactedProperties: React.FC<Props> = ({navigation: _navigation}) => {
           <Text style={styles.statValue}>
             {contactedProperties.filter(p => p.propertyFor === 'Sale').length}
           </Text>
-          <Text style={styles.statLabel}>For Sale</Text>
+          <Text style={styles.statLabel}>{t('contactedProperties.stats.forSale')}</Text>
         </View>
         <View style={styles.statCard}>
           <View style={styles.statIcon}>
@@ -295,13 +297,13 @@ const ContactedProperties: React.FC<Props> = ({navigation: _navigation}) => {
           <Text style={styles.statValue}>
             {contactedProperties.filter(p => p.propertyFor === 'Rent').length}
           </Text>
-          <Text style={styles.statLabel}>For Rent</Text>
+          <Text style={styles.statLabel}>{t('contactedProperties.stats.forRent')}</Text>
         </View>
       </View>
 
       {/* Section Title */}
       <View style={styles.section}>
-        <Text style={styles.sectionTitle}>Recent Contacts</Text>
+        <Text style={styles.sectionTitle}>{t('contactedProperties.sections.recentContacts')}</Text>
       </View>
     </>
   );
@@ -311,7 +313,7 @@ const ContactedProperties: React.FC<Props> = ({navigation: _navigation}) => {
       return (
         <View style={styles.loadingFooter}>
           <ActivityIndicator size="small" color={Colors.primary} />
-          <Text style={styles.loadingMoreText}>Loading more properties...</Text>
+          <Text style={styles.loadingMoreText}>{t('contactedProperties.labels.loadingMore')}</Text>
         </View>
       );
     }
@@ -324,14 +326,14 @@ const ContactedProperties: React.FC<Props> = ({navigation: _navigation}) => {
         <View style={styles.emptyContainer}>
           <ActivityIndicator size="large" color={Colors.primary} />
           <Text style={styles.loadingEmptyText}>
-            Loading contacted properties...
+            {t('contactedProperties.labels.loadingProperties')}
           </Text>
         </View>
       );
     }
     return (
       <View style={styles.emptyContainer}>
-        <Text style={styles.emptyText}>No contacted properties found</Text>
+        <Text style={styles.emptyText}>{t('contactedProperties.labels.noProperties')}</Text>
       </View>
     );
   };

@@ -125,13 +125,179 @@
       "add": "إضافة",
       "listings": "العقارات",
       "groups": "المجموعات",
-      "agentData": "بيانات الوكيل"
+      "agentData": "بيانات الوكيل",
+      "dashboard": "لوحة التحكم",
+      "contacted": "تم التواصل",
+      "searchProperty": "البحث",
+      "contactUs": "اتصل بنا",
+      "profile": "الملف الشخصي"
     }
   },
   "logout": {
     "title": "تسجيل الخروج",
     "confirm": "هل أنت متأكد من أنك تريد تسجيل الخروج؟",
     "action": "تسجيل الخروج"
+  },
+  "dashboard": {
+    "welcome": {
+      "back": "مرحباً بعودتك",
+      "subtitle": "اعثر على منزل أحلامك"
+    },
+    "sections": {
+      "quickActions": "الإجراءات السريعة",
+      "propertiesForSale": "العقارات للبيع",
+      "propertiesForRent": "العقارات للإيجار",
+      "recentlyContacted": "تم التواصل مؤخراً",
+      "featuredProperties": "العقارات المميزة"
+    },
+    "actions": {
+      "seeAll": "عرض الكل",
+      "sendEnquiry": "إرسال استفسار",
+      "startSearching": "ابدأ البحث"
+    },
+    "stats": {
+      "contactedProperties": "العقارات المتصل بها",
+      "forSaleProperties": "عقارات للبيع",
+      "forRentProperties": "عقارات للإيجار",
+      "featuredProperties": "العقارات المميزة"
+    },
+    "quickActions": {
+      "searchProperties": "البحث عن العقارات",
+      "myContacts": "جهات الاتصال الخاصة بي",
+      "contactUs": "اتصل بنا"
+    },
+    "loading": {
+      "text": "جاري تحميل لوحة التحكم..."
+    },
+    "error": {
+      "retry": "إعادة المحاولة"
+    },
+    "emptyState": {
+      "title": "ابدأ رحلتك في البحث عن العقارات",
+      "message": "ابحث عن العقارات وبدء بناء لوحة التحكم الشخصية الخاصة بك"
+    },
+    "labels": {
+      "featured": "مميز",
+      "unnamedProperty": "عقار بدون اسم",
+      "locationNotSpecified": "الموقع غير محدد",
+      "priceNotAvailable": "السعر غير متوفر"
+    }
+  },
+  "contactedProperties": {
+    "header": {
+      "title": "جهات الاتصال الخاصة بك",
+      "subtitle": "العقارات المتصل بها"
+    },
+    "stats": {
+      "totalContacts": "إجمالي الاتصالات",
+      "forSale": "للبيع",
+      "forRent": "للإيجار"
+    },
+    "sections": {
+      "recentContacts": "الاتصالات الأخيرة"
+    },
+    "labels": {
+      "contacted": "تم التواصل",
+      "contactedOn": "تم التواصل في",
+      "loadingMore": "جاري تحميل المزيد من العقارات...",
+      "loadingProperties": "جاري تحميل العقارات المتصل بها...",
+      "noProperties": "لم يتم العثور على عقارات متصل بها",
+      "failedToLoad": "فشل في تحميل العقارات المتصل بها",
+      "tryAgain": "يرجى المحاولة مرة أخرى لاحقاً."
+    }
+  },
+  "searchProperties": {
+    "header": {
+      "title": "اعثر على",
+      "subtitle": "عقار أحلامك"
+    },
+    "search": {
+      "placeholder": "البحث عن العقارات...",
+      "loading": "جاري التحميل...",
+      "properties": "العقارات"
+    },
+    "messages": {
+      "loadingProperties": "جاري تحميل العقارات...",
+      "noProperties": "لم يتم العثور على عقارات",
+      "loadingMore": "جاري تحميل المزيد من العقارات...",
+      "loginRequired": "يرجى تسجيل الدخول لإرسال استفسار",
+      "enquirySuccess": "تم إرسال الاستفسار بنجاح",
+      "enquirySuccessSub": "سيتصل بك البائع قريباً.",
+      "enquiryError": "فشل في إرسال الاستفسار",
+      "enquiryErrorSub": "يرجى المحاولة مرة أخرى لاحقاً.",
+      "enquiryFailed": "فشل في إرسال الاستفسار",
+      "propertiesCount": "{{count}} عقار"
+    }
+  },
+  "propertyCard": {
+    "propertyType": {
+      "forSale": "للبيع",
+      "forRent": "للإيجار",
+      "others": "أخرى"
+    }
+  },
+  "filterModal": {
+    "labels": {
+      "propertyType": "نوع العقار",
+      "bhkType": "نوع BHK",
+      "furnishing": "التأثيث",
+      "city": "المدينة"
+    },
+    "buttons": {
+      "clearAll": "مسح الكل",
+      "applyFilters": "تطبيق المرشحات"
+    }
+  },
+  "sortModal": {
+    "options": {
+      "newestFirst": "الأحدث أولاً",
+      "priceLowToHigh": "السعر: من الأقل للأعلى",
+      "priceHighToLow": "السعر: من الأعلى للأقل",
+      "areaLowToHigh": "المساحة: من الأقل للأعلى",
+      "areaHighToLow": "المساحة: من الأعلى للأقل"
+    }
+  },
+  "propertyTypeToggle": {
+    "all": "الكل",
+    "forSale": "للبيع",
+    "forRent": "للإيجار",
+    "others": "أخرى"
+  },
+  "propertyDetailModal": {
+    "videoTour": "جولة فيديو",
+    "propertyName": "اسم العقار",
+    "locationNotSpecified": "الموقع غير محدد",
+    "sections": {
+      "description": "الوصف",
+      "features": "المميزات",
+      "specifications": "المواصفات",
+      "tags": "العلامات",
+      "sellerInformation": "معلومات البائع"
+    },
+    "labels": {
+      "area": "المساحة",
+      "facing": "الاتجاه",
+      "furnishing": "التأثيث",
+      "floor": "الطابق",
+      "propertyAge": "عمر العقار",
+      "sellerType": "نوع البائع",
+      "sellerName": "اسم البائع",
+      "individual": "فردي",
+      "contactNotAvailable": "الاتصال غير متوفر"
+    },
+    "features": {
+      "parking": "موقف سيارات",
+      "lift": "مصعد",
+      "security": "أمان",
+      "alarm": "إنذار",
+      "readyToMove": "جاهز للانتقال",
+      "constructionDone": "البناء مكتمل",
+      "boundaryWall": "جدار محيطي",
+      "surveillance": "مراقبة"
+    },
+    "buttons": {
+      "enquiryNow": "استفسر الآن"
+    }
   },
   "teams": {
     "headers": {
@@ -1219,6 +1385,63 @@
       "card": "بطاقة",
       "netbanking": "البنك الإلكتروني",
       "wallet": "المحفظة"
+    }
+  },
+  "buyerProfile": {
+    "welcome": {
+      "back": "مرحباً بعودتك",
+      "subtitle": "الملف الشخصي للمستخدم"
+    },
+    "options": {
+      "personal": {
+        "title": "المعلومات الشخصية",
+        "subtitle": "تحرير الملف الشخصي"
+      },
+      "properties": {
+        "title": "عقاراتي",
+        "subtitle": "عرض الكل"
+      },
+      "analytics": {
+        "title": "التحليلات",
+        "subtitle": "عرض الإحصائيات"
+      },
+      "settings": {
+        "title": "الإعدادات",
+        "subtitle": "إدارة"
+      }
+    },
+    "stats": {
+      "totalProperties": "إجمالي العقارات",
+      "activeListings": "القوائم النشطة",
+      "totalEarnings": "إجمالي الأرباح"
+    }
+  },
+  "contactUs": {
+    "title": "تواصل معنا",
+    "subtitle": "اتصل بنا",
+    "contactInfo": {
+      "phone": "الهاتف",
+      "email": "البريد الإلكتروني",
+      "address": "العنوان"
+    },
+    "officeHours": {
+      "mondayFriday": "الاثنين - الجمعة",
+      "saturday": "السبت",
+      "sunday": "الأحد",
+      "hours": {
+        "weekday": "9:00 ص - 6:00 م",
+        "saturday": "9:00 ص - 4:00 م",
+        "sunday": "مغلق"
+      }
+    },
+    "socialLinks": {
+      "facebook": "فيسبوك",
+      "instagram": "إنستغرام",
+      "linkedin": "لينكد إن",
+      "twitter": "تويتر"
+    },
+    "buttons": {
+      "sendMessage": "إرسال رسالة"
     }
   }
 }

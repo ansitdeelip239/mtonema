@@ -125,13 +125,179 @@
       "add": "Add",
       "listings": "Listings",
       "groups": "Groups",
-      "agentData": "Agent Data"
+      "agentData": "Agent Data",
+      "dashboard": "Dashboard",
+      "contacted": "Contacted",
+      "searchProperty": "Search",
+      "contactUs": "Contact Us",
+      "profile": "Profile"
     }
   },
   "logout": {
     "title": "Logout",
     "confirm": "Are you sure you want to logout?",
     "action": "Logout"
+  },
+  "dashboard": {
+    "welcome": {
+      "back": "Welcome back",
+      "subtitle": "Find Your Dream Home"
+    },
+    "sections": {
+      "quickActions": "Quick Actions",
+      "propertiesForSale": "Properties for Sale",
+      "propertiesForRent": "Properties for Rent",
+      "recentlyContacted": "Recently Contacted",
+      "featuredProperties": "Featured Properties"
+    },
+    "actions": {
+      "seeAll": "See All",
+      "sendEnquiry": "Send Enquiry",
+      "startSearching": "Start Searching"
+    },
+    "stats": {
+      "contactedProperties": "Contacted Properties",
+      "forSaleProperties": "For Sale Properties",
+      "forRentProperties": "For Rent Properties",
+      "featuredProperties": "Featured Properties"
+    },
+    "quickActions": {
+      "searchProperties": "Search Properties",
+      "myContacts": "My Contacts",
+      "contactUs": "Contact Us"
+    },
+    "loading": {
+      "text": "Loading your dashboard..."
+    },
+    "error": {
+      "retry": "Retry"
+    },
+    "emptyState": {
+      "title": "Start Your Property Journey",
+      "message": "Search for properties and start building your personalized dashboard"
+    },
+    "labels": {
+      "featured": "Featured",
+      "unnamedProperty": "Unnamed Property",
+      "locationNotSpecified": "Location not specified",
+      "priceNotAvailable": "Price not available"
+    }
+  },
+  "contactedProperties": {
+    "header": {
+      "title": "Your Contacts",
+      "subtitle": "Contacted Properties"
+    },
+    "stats": {
+      "totalContacts": "Total Contacts",
+      "forSale": "For Sale",
+      "forRent": "For Rent"
+    },
+    "sections": {
+      "recentContacts": "Recent Contacts"
+    },
+    "labels": {
+      "contacted": "Contacted",
+      "contactedOn": "Contacted on",
+      "loadingMore": "Loading more properties...",
+      "loadingProperties": "Loading contacted properties...",
+      "noProperties": "No contacted properties found",
+      "failedToLoad": "Failed to load contacted properties",
+      "tryAgain": "Please try again later."
+    }
+  },
+  "searchProperties": {
+    "header": {
+      "title": "Find Your",
+      "subtitle": "Dream Property"
+    },
+    "search": {
+      "placeholder": "Search properties...",
+      "loading": "Loading...",
+      "properties": "Properties"
+    },
+    "messages": {
+      "loadingProperties": "Loading properties...",
+      "noProperties": "No properties found",
+      "loadingMore": "Loading more properties...",
+      "loginRequired": "Please login to make enquiry",
+      "enquirySuccess": "Enquiry sent successfully",
+      "enquirySuccessSub": "The seller will contact you soon.",
+      "enquiryError": "Failed to send enquiry",
+      "enquiryErrorSub": "Please try again later.",
+      "enquiryFailed": "Failed to send enquiry",
+      "propertiesCount": "{{count}} Properties"
+    }
+  },
+  "propertyCard": {
+    "propertyType": {
+      "forSale": "For Sale",
+      "forRent": "For Rent",
+      "others": "Others"
+    }
+  },
+  "filterModal": {
+    "labels": {
+      "propertyType": "Property Type",
+      "bhkType": "BHK Type",
+      "furnishing": "Furnishing",
+      "city": "City"
+    },
+    "buttons": {
+      "clearAll": "Clear All",
+      "applyFilters": "Apply Filters"
+    }
+  },
+  "sortModal": {
+    "options": {
+      "newestFirst": "Newest First",
+      "priceLowToHigh": "Price: Low to High",
+      "priceHighToLow": "Price: High to Low",
+      "areaLowToHigh": "Area: Low to High",
+      "areaHighToLow": "Area: High to Low"
+    }
+  },
+  "propertyTypeToggle": {
+    "all": "All",
+    "forSale": "For Sale",
+    "forRent": "For Rent",
+    "others": "Others"
+  },
+  "propertyDetailModal": {
+    "videoTour": "Video Tour",
+    "propertyName": "Property Name",
+    "locationNotSpecified": "Location not specified",
+    "sections": {
+      "description": "Description",
+      "features": "Features",
+      "specifications": "Specifications",
+      "tags": "Tags",
+      "sellerInformation": "Seller Information"
+    },
+    "labels": {
+      "area": "Area",
+      "facing": "Facing",
+      "furnishing": "Furnishing",
+      "floor": "Floor",
+      "propertyAge": "Property Age",
+      "sellerType": "Seller Type",
+      "sellerName": "Seller Name",
+      "individual": "Individual",
+      "contactNotAvailable": "Contact not available"
+    },
+    "features": {
+      "parking": "Parking",
+      "lift": "Lift",
+      "security": "Security",
+      "alarm": "Alarm",
+      "readyToMove": "Ready to Move",
+      "constructionDone": "Construction Done",
+      "boundaryWall": "Boundary Wall",
+      "surveillance": "Surveillance"
+    },
+    "buttons": {
+      "enquiryNow": "Enquiry Now"
+    }
   },
   "teams": {
     "headers": {
@@ -1213,6 +1379,63 @@
       "card": "Card",
       "netbanking": "Net Banking",
       "wallet": "Wallet"
+    }
+  },
+  "buyerProfile": {
+    "welcome": {
+      "back": "Welcome back",
+      "subtitle": "User Profile"
+    },
+    "options": {
+      "personal": {
+        "title": "Personal Information",
+        "subtitle": "Edit Profile"
+      },
+      "properties": {
+        "title": "My Properties",
+        "subtitle": "View All"
+      },
+      "analytics": {
+        "title": "Analytics",
+        "subtitle": "View Stats"
+      },
+      "settings": {
+        "title": "Settings",
+        "subtitle": "Manage"
+      }
+    },
+    "stats": {
+      "totalProperties": "Total Properties",
+      "activeListings": "Active Listings",
+      "totalEarnings": "Total Earnings"
+    }
+  },
+  "contactUs": {
+    "title": "Get In Touch",
+    "subtitle": "Contact Us",
+    "contactInfo": {
+      "phone": "Phone",
+      "email": "Email",
+      "address": "Address"
+    },
+    "officeHours": {
+      "mondayFriday": "Monday - Friday",
+      "saturday": "Saturday",
+      "sunday": "Sunday",
+      "hours": {
+        "weekday": "9:00 AM - 6:00 PM",
+        "saturday": "9:00 AM - 4:00 PM",
+        "sunday": "Closed"
+      }
+    },
+    "socialLinks": {
+      "facebook": "Facebook",
+      "instagram": "Instagram",
+      "linkedin": "LinkedIn",
+      "twitter": "Twitter"
+    },
+    "buttons": {
+      "sendMessage": "Send Message"
     }
   }
 }

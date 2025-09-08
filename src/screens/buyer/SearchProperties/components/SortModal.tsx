@@ -2,6 +2,7 @@ import React, {useEffect, useRef} from 'react';
 import {View, Text, TouchableOpacity, Modal, FlatList, Animated} from 'react-native';
 import Colors from '../../../../constants/Colors';
 import {SortBy} from '../../../../constants/MasterDetails';
+import {useTranslation} from 'react-i18next';
 
 interface SortModalProps {
   visible: boolean;
@@ -9,14 +10,6 @@ interface SortModalProps {
   onSelectSort: (sortBy: string) => void;
   currentSort: string;
 }
-
-const sortOptions = [
-  { label: 'Newest First', value: SortBy.NEWEST },
-  { label: 'Price: Low to High', value: SortBy.PRICE_LOW_TO_HIGH },
-  { label: 'Price: High to Low', value: SortBy.PRICE_HIGH_TO_LOW },
-  { label: 'Area: Low to High', value: SortBy.AREA_LOW_TO_HIGH },
-  { label: 'Area: High to Low', value: SortBy.AREA_HIGH_TO_LOW },
-];
 
 const SortModal: React.FC<SortModalProps> = ({
   visible,
@@ -27,6 +20,15 @@ const SortModal: React.FC<SortModalProps> = ({
   const fadeAnim = useRef(new Animated.Value(0)).current;
   const slideAnim = useRef(new Animated.Value(300)).current;
   const [isVisible, setIsVisible] = React.useState(visible);
+  const {t} = useTranslation();
+
+  const sortOptions = [
+    { label: t('sortModal.options.newestFirst'), value: SortBy.NEWEST },
+    { label: t('sortModal.options.priceLowToHigh'), value: SortBy.PRICE_LOW_TO_HIGH },
+    { label: t('sortModal.options.priceHighToLow'), value: SortBy.PRICE_HIGH_TO_LOW },
+    { label: t('sortModal.options.areaLowToHigh'), value: SortBy.AREA_LOW_TO_HIGH },
+    { label: t('sortModal.options.areaHighToLow'), value: SortBy.AREA_HIGH_TO_LOW },
+  ];
 
   useEffect(() => {
     if (visible) {

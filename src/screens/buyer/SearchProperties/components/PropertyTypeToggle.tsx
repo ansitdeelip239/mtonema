@@ -4,6 +4,7 @@ import {Chip} from 'react-native-paper';
 import GetIcon from '../../../../components/GetIcon';
 import {PropertyFor} from '../../../../constants/MasterDetails';
 import Colors from '../../../../constants/Colors';
+import {useTranslation} from 'react-i18next';
 
 interface PropertyTypeToggleProps {
   propertyForFilter:
@@ -28,6 +29,7 @@ const PropertyTypeToggle: React.FC<PropertyTypeToggleProps> = ({
   propertyForFilter,
   onFilterChange,
 }) => {
+  const {t} = useTranslation();
   return (
     <ScrollView
       horizontal
@@ -51,7 +53,7 @@ const PropertyTypeToggle: React.FC<PropertyTypeToggleProps> = ({
             : styles.chipTextUnselected,
         ]}
         icon={propertyForFilter === 'all' ? CheckIcon : undefined}>
-        All
+        {t('propertyTypeToggle.all')}
       </Chip>
       <Chip
         mode="outlined"
@@ -70,7 +72,7 @@ const PropertyTypeToggle: React.FC<PropertyTypeToggleProps> = ({
             : styles.chipTextUnselected,
         ]}
         icon={propertyForFilter === PropertyFor.SALE ? CheckIcon : undefined}>
-        For Sale
+        {t('propertyTypeToggle.forSale')}
       </Chip>
       <Chip
         mode="outlined"
@@ -89,7 +91,7 @@ const PropertyTypeToggle: React.FC<PropertyTypeToggleProps> = ({
             : styles.chipTextUnselected,
         ]}
         icon={propertyForFilter === PropertyFor.RENT ? CheckIcon : undefined}>
-        For Rent
+        {t('propertyTypeToggle.forRent')}
       </Chip>
       <Chip
         mode="outlined"
@@ -108,7 +110,7 @@ const PropertyTypeToggle: React.FC<PropertyTypeToggleProps> = ({
             : styles.chipTextUnselected,
         ]}
         icon={propertyForFilter === PropertyFor.OTHERS ? CheckIcon : undefined}>
-        Others
+        {t('propertyTypeToggle.others')}
       </Chip>
     </ScrollView>
   );

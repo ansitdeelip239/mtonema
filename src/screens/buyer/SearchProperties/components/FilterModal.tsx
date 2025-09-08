@@ -12,6 +12,7 @@ import Colors from '../../../../constants/Colors';
 import {useMaster} from '../../../../context/MasterProvider';
 import FilterOption from '../../../../components/FilterOption';
 import {PropertySearchParams} from '../../../../types';
+import {useTranslation} from 'react-i18next';
 
 interface FilterModalProps {
   visible: boolean;
@@ -32,6 +33,7 @@ const FilterModal: React.FC<FilterModalProps> = ({
     Partial<PropertySearchParams>
   >({});
   const {masterData} = useMaster();
+  const {t} = useTranslation();
 
   const fadeAnim = useRef(new Animated.Value(0)).current;
   const slideAnim = useRef(new Animated.Value(300)).current;
@@ -200,28 +202,28 @@ const FilterModal: React.FC<FilterModalProps> = ({
               <TouchableWithoutFeedback>
                 <View style={styles.filterContent}>
                   <FilterOption
-                    label="Property Type"
+                    label={t('filterModal.labels.propertyType')}
                     options={propertyTypes}
                     selectedValue={filters.propertyTypes}
                     onSelect={value => handleSelect('propertyTypes', value)}
                   />
 
                   <FilterOption
-                    label="BHK Type"
+                    label={t('filterModal.labels.bhkType')}
                     options={bhkTypes}
                     selectedValue={filters.bhkType}
                     onSelect={value => handleSelect('bhkType', value)}
                   />
 
                   <FilterOption
-                    label="Furnishing"
+                    label={t('filterModal.labels.furnishing')}
                     options={furnishTypes}
                     selectedValue={filters.furnishing}
                     onSelect={value => handleSelect('furnishing', value)}
                   />
 
                   <FilterOption
-                    label="City"
+                    label={t('filterModal.labels.city')}
                     options={cities}
                     selectedValue={filters.city}
                     onSelect={value => handleSelect('city', value)}
@@ -235,7 +237,7 @@ const FilterModal: React.FC<FilterModalProps> = ({
                 <TouchableOpacity
                   style={styles.clearButton}
                   onPress={handleClearAllFilters}>
-                  <Text style={styles.clearButtonText}>Clear All</Text>
+                  <Text style={styles.clearButtonText}>{t('filterModal.buttons.clearAll')}</Text>
                 </TouchableOpacity>
               )}
               <TouchableOpacity
@@ -250,7 +252,7 @@ const FilterModal: React.FC<FilterModalProps> = ({
                     styles.applyButtonText,
                     !haveFiltersChanged && styles.disabledButtonText,
                   ]}>
-                  Apply Filters
+                  {t('filterModal.buttons.applyFilters')}
                 </Text>
               </TouchableOpacity>
             </View>
