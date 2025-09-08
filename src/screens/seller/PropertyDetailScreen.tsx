@@ -9,17 +9,20 @@ import {
   Platform,
   useWindowDimensions,
   Image,
+  FlatList,
 } from 'react-native';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {PropertyStackParamList} from '../../navigator/components/PropertyStack';
 import {SellerProperty} from '../../types';
 import Colors from '../../constants/Colors';
 import GetIcon from '../../components/GetIcon';
-import Header from '../../components/Header';
+import InlineHeader from '../../components/InlineHeader';
 import {Menu, Appbar} from 'react-native-paper';
 import ConfirmationModal from '../../components/ConfirmationModal';
 import Toast from 'react-native-toast-message';
+import YoutubeVideoPlayer from '../../components/YoutubeVideoPlayer';
 import {useAuth} from '../../context/AuthProvider';
+import { getYouTubeThumbnailUrl } from '../../utils/formUtils';
 
 type Props = NativeStackScreenProps<PropertyStackParamList, 'PropertyDetail'>;
 
@@ -230,46 +233,94 @@ const PropertyDetailScreen: React.FC<Props> = ({route, navigation}) => {
   const renderImageSlider = () => {
     if (displayImages.length > 0) {
       return (
-        <ScrollView
-          horizontal
-          pagingEnabled
-          showsHorizontalScrollIndicator={false}
-          onScroll={handleImageScroll}
-          scrollEventThrottle={16}>
-          {displayImages.map((item: any, index: number) => (
-            <View key={index} style={[styles.imageSlide, {width}]}>
-              {item.isVideo ? (
-                <View style={styles.videoPlaceholder}>
+        <>
+          <FlatList
+            data={displayImages}
+            keyExtractor={(item, index) => `image-${index}`}
+            renderItem={({ item, index }) => (
+              <View style={[styles.imageSlide, { width }]}>
+                {item.isVideo ? (
+                  // Only render the YouTube player if this is the current slide AND it's active
+                  currentImageIndex === index &&
+                  activeVideoSlides[index] ? (
+                    <YoutubeVideoPlayer
+                      key={`video-${index}-${Math.random()}`} // Force remount with random key
+                      videoId={item.videoUrl}
+                      height={250}
+                      width={width}
+                    />
+                  ) : (
+                    // Show a thumbnail with play button overlay
+                    <TouchableOpacity
+                      style={[styles.propertyImage]}
+                      onPress={() => {
+                        if (currentImageIndex === index) {
+                          // Only activate if this is the current slide
+                          setActiveVideoSlides(prev => ({
+                            ...prev,
+                            [index]: true,
+                          }));
+                        }
+                      }}
+                      activeOpacity={0.8}>
+                      <Image
+                        source={{
+                          uri: getYouTubeThumbnailUrl(item.videoUrl),
+                        }}
+                        style={styles.videoThumbnail}
+                        resizeMode="cover"
+                      />
+                      <View style={styles.videoPlayOverlay}>
+                        <View style={styles.playButtonContainer}>
+                          <GetIcon
+                            iconName="playButton"
+                            size={48}
+                            color="#fff"
+                          />
+                          <Text style={styles.playVideoText}>Play Video</Text>
+                        </View>
+                      </View>
+                    </TouchableOpacity>
+                  )
+                ) : (
                   <Image
-                    source={placeholderImage}
-                    style={styles.placeholderImage}
-                    resizeMode="contain"
+                    source={{uri: item.image || item.imageUrl}}
+                    style={styles.propertyImage}
+                    resizeMode="cover"
+                    onError={() =>
+                      console.log('Image load error for:', item.image)
+                    }
                   />
-                  <View style={styles.videoPlayOverlay}>
-                    <View style={styles.playButtonContainer}>
-                      <GetIcon iconName="playButton" color="#fff" size={40} />
-                      <Text style={styles.playVideoText}>Play Video</Text>
-                    </View>
+                )}
+                {item.type && (
+                  <View style={styles.imageTypeContainer}>
+                    <Text style={styles.imageTypeText}>{item.type}</Text>
                   </View>
-                </View>
-              ) : (
-                <Image
-                  source={{uri: item.image || item.imageUrl}}
-                  style={styles.propertyImage}
-                  resizeMode="cover"
-                  onError={() =>
-                    console.log('Image load error for:', item.image)
-                  }
+                )}
+              </View>
+            )}
+            horizontal
+            pagingEnabled
+            showsHorizontalScrollIndicator={false}
+            onScroll={handleImageScroll}
+            scrollEventThrottle={16}
+          />
+
+          {/* Pagination Indicators */}
+          {displayImages.length > 1 && (
+            <View style={styles.paginationContainer}>
+              {displayImages.map((_, index) => (
+                <View
+                  key={`dot-${index}`}
+                  style={[
+                    styles.paginationDot,
+                    index === currentImageIndex && styles.paginationDotActive,
+                  ]}
                 />
-              )}
-              {item.type && (
-                <View style={styles.imageTypeContainer}>
-                  <Text style={styles.imageTypeText}>{item.type}</Text>
-                </View>
-              )}
+              ))}
             </View>
-          ))}
-        </ScrollView>
+          )}
+        </>
       );
     } else {
       return (
@@ -284,31 +335,10 @@ const PropertyDetailScreen: React.FC<Props> = ({route, navigation}) => {
     }
   };
 
-  // Render pagination dots
-  const renderPaginationDots = () => {
-    if (displayImages.length <= 1) {
-      return null;
-    }
-
-    return (
-      <View style={styles.paginationContainer}>
-        {displayImages.map((_, index) => (
-          <View
-            key={index}
-            style={[
-              styles.paginationDot,
-              index === currentImageIndex && styles.paginationDotActive,
-            ]}
-          />
-        ))}
-      </View>
-    );
-  };
-
   return (
     <View style={styles.container}>
       {Platform.OS === 'android' && (
-        <Header
+        <InlineHeader
           title={property?.propertyName || 'Property Details'}
           backButton={true}
           onBackPress={() => navigation.goBack()}>
@@ -318,7 +348,7 @@ const PropertyDetailScreen: React.FC<Props> = ({route, navigation}) => {
               onDismiss={closeMenu}
               anchor={
                 <Appbar.Action
-                  icon={() => <GetIcon iconName="threeDots" color="white" />}
+                  icon={() => <GetIcon iconName="threeDots" color="black" />}
                   onPress={openMenu}
                   style={styles.threeDotsIcon}
                 />
@@ -344,7 +374,7 @@ const PropertyDetailScreen: React.FC<Props> = ({route, navigation}) => {
               />
             </Menu>
           )}
-        </Header>
+        </InlineHeader>
       )}
 
       {/* Content area */}
@@ -355,7 +385,6 @@ const PropertyDetailScreen: React.FC<Props> = ({route, navigation}) => {
         {/* Property Image Slider */}
         <View style={styles.imageContainer}>
           {renderImageSlider()}
-          {renderPaginationDots()}
 
           <View style={styles.badgeContainer}>
             <View style={[styles.badge, styles.mainBadge]}>

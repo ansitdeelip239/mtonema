@@ -4,10 +4,8 @@ import {
   View,
   ScrollView,
   RefreshControl,
-  TouchableOpacity,
 } from 'react-native';
 import BuyerSellerHeader from '../../components/BuyerSellerHeader';
-import GetIcon from '../../components/GetIcon';
 import Colors from '../../constants/Colors';
 import {useAuth} from '../../context/AuthProvider';
 import {useDashboardPropertyList} from './hooks/useDashboardPropertyList';
@@ -91,8 +89,9 @@ const SellerDashboard: React.FC = () => {
   const navigation = useNavigation<NavigationProp>();
 
   const handlePropertyCardPress = () => {
-    navigation.navigate('Property');
+    navigation.navigate('Property', {screen: 'PropertyList'});
   };
+
   return (
     <View style={styles.container}>
       <ScrollView
@@ -110,11 +109,7 @@ const SellerDashboard: React.FC = () => {
         <View style={styles.headerContainer}>
           <BuyerSellerHeader
             title={`Welcome back, ${user?.name?.split(' ')[0] || 'User'}!`}
-            subtitle="Dashboard">
-            <TouchableOpacity style={styles.settingsButton}>
-              <GetIcon iconName="settings" size={20} color="#666" />
-            </TouchableOpacity>
-          </BuyerSellerHeader>
+            subtitle="Property Dashboard" />
         </View>
 
         {/* Portfolio Overview */}
@@ -173,16 +168,16 @@ const SellerDashboard: React.FC = () => {
             )}
 
             {/* Furnishing Distribution */}
-            {furnishingStats && furnishingStats.length > 0 && (
-              isLoading ? (
+            {furnishingStats &&
+              furnishingStats.length > 0 &&
+              (isLoading ? (
                 <FurnishingDistributionSkeleton />
               ) : (
                 <FurnishingDistribution
                   furnishingStats={furnishingStats}
                   properties={properties}
                 />
-              )
-            )}
+              ))}
           </>
         )}
       </ScrollView>
@@ -202,9 +197,9 @@ const styles = StyleSheet.create({
     marginBottom: 15,
   },
   settingsButton: {
-    width: 20,
-    height: 20,
-    borderRadius: 20,
+    padding: 10,
+    borderRadius: 10,
+    paddingHorizontal: 15,
     backgroundColor: 'white',
     alignItems: 'center',
     justifyContent: 'center',

@@ -131,9 +131,7 @@ const SellerProfileScreen: React.FC<Props> = ({navigation}) => {
         <View style={styles.headerContainer}>
           <BuyerSellerHeader
             title="User Profile"
-            subtitle="Manage your account">
-            <GetIcon iconName="threeDots" size={20} color="#333" />
-          </BuyerSellerHeader>
+            subtitle="Manage your account" />
         </View>
         {/* Profile Header */}
         <View style={styles.profileHeader}>

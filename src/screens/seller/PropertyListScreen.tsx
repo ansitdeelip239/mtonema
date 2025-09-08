@@ -70,10 +70,7 @@ const PropertyListScreen: React.FC<Props> = ({navigation}) => {
     <View>
       <BuyerSellerHeader
         title="Listed Properties"
-        subtitle="Manage your listings"
-      >
-        <GetIcon iconName="filter" size={20} color="#333" />
-      </BuyerSellerHeader>
+        subtitle="Manage your listings" />
 
       <View style={styles.content}>
         <View style={styles.summaryContainer}>

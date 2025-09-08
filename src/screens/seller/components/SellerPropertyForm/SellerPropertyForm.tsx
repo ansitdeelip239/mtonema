@@ -14,8 +14,7 @@ import { initialFormState } from '../../../../utils/partner-property-form-initia
 import SellerService from '../../../../services/SellerService';
 import MasterService from '../../../../services/MasterService';
 import Toast from 'react-native-toast-message';
-import Header from '../../../../components/Header';
-import { SellerBottomTabParamList } from '../../../../types/navigation';
+import InlineHeader from '../../../../components/InlineHeader';
 import FormStepper from '../../../partner/components/PartnerPropertyForm/components/FormStepper';
 import { useTheme } from '../../../../context/ThemeProvider';
 
@@ -103,7 +102,7 @@ const SellerPropertyForm: React.FC<SellerPropertyFormProps> = ({
 
           navigation.reset({
             index: 0,
-            routes: [{ name: 'Property' }],
+            routes: [{ name: 'Property', params: { screen: 'PropertyList' } }],
           });
         }
       } catch (error) {
@@ -211,20 +210,13 @@ const SellerPropertyForm: React.FC<SellerPropertyFormProps> = ({
     <View style={styles.container}>
       {
         Platform.OS === 'android' && (
-          <Header<SellerBottomTabParamList>
-            title={headerTitle}
-            backButton={editMode}
-            onBackPress={() => {
-              navigation.reset({
-                index: 0,
-                routes: [{ name: 'PropertyList' }],
-              });
-            }}>
+          <InlineHeader
+            title={headerTitle}>
             <ClearFormButton
               onPress={completeReset}
               backgroundColor={theme.secondaryColor}
             />
-          </Header>
+          </InlineHeader>
         )
       }
 

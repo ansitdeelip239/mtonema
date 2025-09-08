@@ -133,15 +133,14 @@ const SellerContactScreen = () => {
 
   return (
     <View style={styles.container}>
-      <BuyerSellerHeader
-        title="Contact Us"
-        subtitle="Get in touch with support">
-        <GetIcon iconName="phone" size={20} color="#333" />
-      </BuyerSellerHeader>
-
       <ScrollView
         style={styles.scrollContainer}
         showsVerticalScrollIndicator={false}>
+        <BuyerSellerHeader
+          title="Contact Us"
+          subtitle="Get in touch with support"
+        />
+
         {/* Contact Information */}
         <View style={styles.contactSection}>
           <Text style={styles.sectionTitle}>Contact Information</Text>
@@ -298,7 +297,6 @@ const styles = StyleSheet.create({
   contactSection: {
     paddingHorizontal: 20,
     marginBottom: 20,
-    marginTop: 20,
   },
   sectionTitle: {
     fontSize: 18,
