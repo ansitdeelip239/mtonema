@@ -1,201 +1,274 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect, useCallback} from 'react';
 import {
   View,
   Text,
   StyleSheet,
-  ScrollView,
+  FlatList,
   TouchableOpacity,
   Platform,
   Image,
+  ActivityIndicator,
+  RefreshControl,
+  ListRenderItem,
 } from 'react-native';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import GetIcon from '../../components/GetIcon';
 import Colors from '../../constants/Colors';
 import {BuyerBottomTabParamList} from '../../types/navigation';
 import BuyerSellerHeader from '../../components/BuyerSellerHeader';
+import {useAuth} from '../../context/AuthProvider';
+import BuyerService from '../../services/BuyerService';
+import Toast from 'react-native-toast-message';
+import {
+  formatPrice,
+  parseImageUrl,
+} from '../buyer/SearchProperties/utils/helpers';
+import {PropertyFor} from '../../constants/MasterDetails';
+import Images from '../../constants/Images';
+import PropertyDetailModal from './SearchProperties/components/PropertyDetailModal';
 
 type Props = NativeStackScreenProps<BuyerBottomTabParamList, 'Contacted'>;
 
 interface ContactedProperty {
-  id: string;
-  title: string;
-  location: string;
-  price: string;
-  image: any;
-  type: string;
-  bedrooms: number;
-  bathrooms: number;
-  area: string;
-  contactDate: string;
-  status: 'pending' | 'responded' | 'viewed';
-  agentName: string;
-  agentPhone: string;
+  contactedPropertyId: number;
+  buyerId: number;
+  buyerName: string;
+  buyerLocation: string;
+  sellerId: number;
+  sellerName: string;
+  sellerLocation?: string;
+  propertyId: number;
+  userId: number;
+  name: string;
+  propertyLocation: string;
+  city: string;
+  zipcode: string;
+  propertyName: string;
+  price: number;
+  sellerType: string;
+  propertyType: string;
+  propertyFor: string;
+  imageURL: string;
+  videoURL?: string;
+  shortDescription: string;
+  longDescription: string;
+  recordStatus: string;
+  propertyDetailsId: number;
+  readyToMove: boolean;
+  bhkType?: string;
+  propertyForType: string;
+  area: number;
+  furnishing?: string;
+  floor?: number;
+  lmUnit: string;
+  size?: number;
+  facing?: string;
+  boundaryWall?: boolean;
+  constructionDone?: boolean;
+  parking?: string;
+  lifts?: boolean;
+  propertyAge?: string;
+  alarmSystem?: boolean;
+  surveillanceCameras?: boolean;
+  gatedSecurity?: boolean;
+  pantry?: boolean;
+  createdBy: string;
+  createdOn: string;
+  updatedBy?: string;
+  updatedOn?: string;
+  isFeatured?: boolean;
+  tags?: string;
+  openSide?: string;
+  ceilingHeight?: string;
 }
 
 const ContactedProperties: React.FC<Props> = ({navigation: _navigation}) => {
-  // Mock data for contacted properties
-  const [contactedProperties] = useState<ContactedProperty[]>([
-    {
-      id: '1',
-      title: 'Modern 3BHK Apartment',
-      location: 'Andheri West, Mumbai',
-      price: '₹2.5 Cr',
-      image: {uri: 'https://picsum.photos/300/200?random=1'},
-      type: 'Apartment',
-      bedrooms: 3,
-      bathrooms: 2,
-      area: '1,200 sq ft',
-      contactDate: '2025-09-01',
-      status: 'responded',
-      agentName: 'Rajesh Kumar',
-      agentPhone: '+91 98765 43210',
+  const {user} = useAuth();
+  const [contactedProperties, setContactedProperties] = useState<
+    ContactedProperty[]
+  >([]);
+  const [loading, setLoading] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
+  const [page, setPage] = useState(1);
+  const [hasMore, setHasMore] = useState(true);
+  const [total, setTotal] = useState(0);
+  const [selectedProperty, setSelectedProperty] =
+    useState<ContactedProperty | null>(null);
+  const [modalVisible, setModalVisible] = useState(false);
+  const pageSize = 10;
+
+  // Fetch contacted properties
+  const fetchContactedProperties = useCallback(
+    async (pageNum: number = 1, shouldRefresh: boolean = false) => {
+      if (!user?.id) {
+        return;
+      }
+
+      try {
+        if (shouldRefresh) {
+          setRefreshing(true);
+        } else if (pageNum === 1) {
+          setLoading(true);
+        }
+
+        const response = await BuyerService.getContactedProperties(
+          user.id,
+          pageNum,
+          pageSize,
+        );
+
+        if (response?.success && response?.data?.contactedProperties) {
+          const newProperties = response.data.contactedProperties;
+          const pagination = response.data.pagination;
+
+          if (shouldRefresh || pageNum === 1) {
+            setContactedProperties(newProperties);
+          } else {
+            setContactedProperties(prev => [...prev, ...newProperties]);
+          }
+
+          setTotal(response.data.total || 0);
+          setHasMore(pagination?.hasNextPage || false);
+          setPage(pageNum);
+        } else {
+          if (pageNum === 1) {
+            setContactedProperties([]);
+            setTotal(0);
+          }
+          setHasMore(false);
+        }
+      } catch (error) {
+        console.error('Error fetching contacted properties:', error);
+        Toast.show({
+          type: 'error',
+          text1: 'Failed to load contacted properties',
+          text2: 'Please try again later.',
+        });
+        if (pageNum === 1) {
+          setContactedProperties([]);
+          setTotal(0);
+        }
+        setHasMore(false);
+      } finally {
+        setLoading(false);
+        setRefreshing(false);
+      }
     },
-    {
-      id: '2',
-      title: 'Luxury Villa',
-      location: 'Thane West',
-      price: '₹4.2 Cr',
-      image: {uri: 'https://picsum.photos/300/200?random=2'},
-      type: 'Villa',
-      bedrooms: 4,
-      bathrooms: 3,
-      area: '2,500 sq ft',
-      contactDate: '2025-08-28',
-      status: 'pending',
-      agentName: 'Priya Sharma',
-      agentPhone: '+91 87654 32109',
-    },
-    {
-      id: '3',
-      title: 'Penthouse with Sea View',
-      location: 'Bandra West, Mumbai',
-      price: '₹8.5 Cr',
-      image: {uri: 'https://picsum.photos/300/200?random=3'},
-      type: 'Penthouse',
-      bedrooms: 4,
-      bathrooms: 4,
-      area: '3,200 sq ft',
-      contactDate: '2025-08-25',
-      status: 'viewed',
-      agentName: 'Amit Patel',
-      agentPhone: '+91 76543 21098',
-    },
-  ]);
-
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case 'responded':
-        return '#4CAF50';
-      case 'pending':
-        return '#FF9800';
-      case 'viewed':
-        return '#2196F3';
-      default:
-        return '#666';
-    }
-  };
-
-  const getStatusText = (status: string) => {
-    switch (status) {
-      case 'responded':
-        return 'Agent Responded';
-      case 'pending':
-        return 'Waiting for Response';
-      case 'viewed':
-        return 'Agent Viewed';
-      default:
-        return 'Unknown';
-    }
-  };
-
-  const renderContactedProperty = (property: ContactedProperty) => (
-    <TouchableOpacity
-      key={property.id}
-      style={styles.propertyCard}
-      activeOpacity={0.8}
-      onPress={() => {
-        // Navigate to property details
-        console.log('Navigate to property:', property.id);
-      }}>
-      <View style={styles.propertyImageContainer}>
-        <Image
-          source={property.image}
-          style={styles.propertyImage}
-          resizeMode="cover"
-        />
-        <View style={[styles.statusBadge, {backgroundColor: getStatusColor(property.status)}]}>
-          <Text style={styles.statusText}>{getStatusText(property.status)}</Text>
-        </View>
-      </View>
-
-      <View style={styles.propertyInfo}>
-        <Text style={styles.propertyTitle} numberOfLines={1}>
-          {property.title}
-        </Text>
-        <Text style={styles.propertyLocation} numberOfLines={1}>
-          <GetIcon iconName="locationPin" size={12} color="#666" />
-          {' ' + property.location}
-        </Text>
-        <Text style={styles.propertyPrice}>{property.price}</Text>
-
-        <View style={styles.propertyDetails}>
-          <Text style={styles.propertyDetail}>
-            <GetIcon iconName="doubleBed" size={12} color="#666" />
-            {' ' + property.bedrooms}
-          </Text>
-          <Text style={styles.propertyDetail}>
-            <GetIcon iconName="room" size={12} color="#666" />
-            {' ' + property.bathrooms}
-          </Text>
-          <Text style={styles.propertyDetail}>
-            <GetIcon iconName="area" size={12} color="#666" />
-            {' ' + property.area}
-          </Text>
-        </View>
-
-        <View style={styles.contactInfo}>
-          <Text style={styles.contactDate}>
-            Contacted on {new Date(property.contactDate).toLocaleDateString()}
-          </Text>
-          <Text style={styles.agentInfo}>
-            <GetIcon iconName="user" size={12} color="#666" />
-            {' ' + property.agentName}
-          </Text>
-        </View>
-
-        <View style={styles.actionButtons}>
-          <TouchableOpacity
-            style={[styles.actionButton, styles.callButton]}
-            onPress={() => {
-              // Handle call action
-              console.log('Call agent:', property.agentPhone);
-            }}>
-            <GetIcon iconName="phone" size={16} color="white" />
-            <Text style={styles.actionButtonText}>Call</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={[styles.actionButton, styles.messageButton]}
-            onPress={() => {
-              // Handle message action
-              console.log('Message agent:', property.agentName);
-            }}>
-            <GetIcon iconName="message" size={16} color="white" />
-            <Text style={styles.actionButtonText}>Message</Text>
-          </TouchableOpacity>
-        </View>
-      </View>
-    </TouchableOpacity>
+    [user?.id],
   );
 
-  return (
-    <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
+  // Initial load
+  useEffect(() => {
+    if (user?.id) {
+      fetchContactedProperties(1, true);
+    }
+  }, [user?.id, fetchContactedProperties]);
+
+  // Handle refresh
+  const handleRefresh = useCallback(() => {
+    setPage(1);
+    setHasMore(true);
+    fetchContactedProperties(1, true);
+  }, [fetchContactedProperties]);
+
+  // Handle load more
+  const handleLoadMore = useCallback(() => {
+    if (!loading && hasMore && !refreshing) {
+      const nextPage = page + 1;
+      fetchContactedProperties(nextPage, false);
+    }
+  }, [loading, hasMore, refreshing, page, fetchContactedProperties]);
+
+  const renderContactedProperty = (property: ContactedProperty) => {
+    const imageUrl = parseImageUrl(property.imageURL);
+    const isPlaceholder = !imageUrl;
+
+    return (
+      <TouchableOpacity
+        key={property.contactedPropertyId}
+        style={styles.propertyCard}
+        activeOpacity={0.8}
+        onPress={() => {
+          setSelectedProperty(property);
+          setModalVisible(true);
+        }}>
+        <View style={styles.propertyImageContainer}>
+          <Image
+            source={imageUrl ? {uri: imageUrl} : Images.MTESTATES_LOGO}
+            style={
+              isPlaceholder
+                ? styles.propertyImagePlaceholder
+                : styles.propertyImage
+            }
+            resizeMode={isPlaceholder ? 'contain' : 'cover'}
+          />
+          <View style={styles.contactBadge}>
+            <Text style={styles.contactBadgeText}>Contacted</Text>
+          </View>
+        </View>
+
+        <View style={styles.propertyInfo}>
+          <Text style={styles.propertyTitle} numberOfLines={1}>
+            {property.propertyName}
+          </Text>
+          <Text style={styles.propertyLocation} numberOfLines={1}>
+            <GetIcon iconName="locationPin" size={12} color="#666" />
+            {' ' + property.propertyLocation}
+          </Text>
+          <Text style={styles.propertyPrice}>
+            {formatPrice(
+              property.price,
+              property.propertyFor as
+                | typeof PropertyFor.SALE
+                | typeof PropertyFor.RENT
+                | typeof PropertyFor.OTHERS,
+            )}
+          </Text>
+
+          <View style={styles.propertyDetails}>
+            <Text style={styles.propertyDetail}>
+              <GetIcon iconName="area" size={12} color="#666" />
+              {' ' + property.area} {property.lmUnit}
+            </Text>
+            {property.bhkType && (
+              <Text style={styles.propertyDetail}>
+                <GetIcon iconName="doubleBed" size={12} color="#666" />
+                {' ' + property.bhkType}
+              </Text>
+            )}
+            <Text style={styles.propertyDetail}>
+              <GetIcon iconName="home" size={12} color="#666" />
+              {' ' + property.propertyType}
+            </Text>
+          </View>
+
+          <View style={styles.contactInfo}>
+            <Text style={styles.contactDate}>
+              Contacted on {new Date(property.createdOn).toLocaleDateString()}
+            </Text>
+            <Text style={styles.agentInfo}>
+              <GetIcon iconName="user" size={12} color="#666" />
+              {' ' + property.sellerName}
+            </Text>
+          </View>
+        </View>
+      </TouchableOpacity>
+    );
+  };
+
+  const renderPropertyItem: ListRenderItem<ContactedProperty> = ({item}) => (
+    <View style={styles.propertyCardContainer}>
+      {renderContactedProperty(item)}
+    </View>
+  );
+
+  const renderHeader = () => (
+    <>
       {/* Buyer Header */}
       <BuyerSellerHeader
         title="Your Contacts"
         subtitle="Contacted Properties"
-      >
-        <GetIcon iconName="settings" size={20} color="#333" />
-      </BuyerSellerHeader>
+      />
 
       {/* Stats Section */}
       <View style={styles.statsContainer}>
@@ -203,40 +276,100 @@ const ContactedProperties: React.FC<Props> = ({navigation: _navigation}) => {
           <View style={styles.statIcon}>
             <GetIcon iconName="phone" size={20} color={Colors.MT_PRIMARY_1} />
           </View>
-          <Text style={styles.statValue}>{contactedProperties.length}</Text>
+          <Text style={styles.statValue}>{total}</Text>
           <Text style={styles.statLabel}>Total Contacts</Text>
         </View>
         <View style={styles.statCard}>
           <View style={styles.statIcon}>
-            <GetIcon iconName="message" size={20} color="#4CAF50" />
+            <GetIcon iconName="home" size={20} color="#4CAF50" />
           </View>
           <Text style={styles.statValue}>
-            {contactedProperties.filter(p => p.status === 'responded').length}
+            {contactedProperties.filter(p => p.propertyFor === 'Sale').length}
           </Text>
-          <Text style={styles.statLabel}>Responses</Text>
+          <Text style={styles.statLabel}>For Sale</Text>
         </View>
         <View style={styles.statCard}>
           <View style={styles.statIcon}>
-            <GetIcon iconName="time" size={20} color="#FF9800" />
+            <GetIcon iconName="home" size={20} color="#FF9800" />
           </View>
           <Text style={styles.statValue}>
-            {contactedProperties.filter(p => p.status === 'pending').length}
+            {contactedProperties.filter(p => p.propertyFor === 'Rent').length}
           </Text>
-          <Text style={styles.statLabel}>Pending</Text>
+          <Text style={styles.statLabel}>For Rent</Text>
         </View>
       </View>
 
-      {/* Contacted Properties List */}
+      {/* Section Title */}
       <View style={styles.section}>
         <Text style={styles.sectionTitle}>Recent Contacts</Text>
-        <View style={styles.propertiesList}>
-          {contactedProperties.map(property => renderContactedProperty(property))}
-        </View>
       </View>
+    </>
+  );
 
-      {/* Bottom spacing */}
-      <View style={styles.bottomSpacing} />
-    </ScrollView>
+  const renderFooter = () => {
+    if (loading && contactedProperties.length > 0) {
+      return (
+        <View style={styles.loadingFooter}>
+          <ActivityIndicator size="small" color={Colors.primary} />
+          <Text style={styles.loadingMoreText}>Loading more properties...</Text>
+        </View>
+      );
+    }
+    return <View style={styles.bottomSpacing} />;
+  };
+
+  const renderEmpty = () => {
+    if (loading) {
+      return (
+        <View style={styles.emptyContainer}>
+          <ActivityIndicator size="large" color={Colors.primary} />
+          <Text style={styles.loadingEmptyText}>
+            Loading contacted properties...
+          </Text>
+        </View>
+      );
+    }
+    return (
+      <View style={styles.emptyContainer}>
+        <Text style={styles.emptyText}>No contacted properties found</Text>
+      </View>
+    );
+  };
+
+  return (
+    <>
+      <FlatList
+        data={contactedProperties}
+        renderItem={renderPropertyItem}
+        keyExtractor={item => item.contactedPropertyId.toString()}
+        ListHeaderComponent={renderHeader}
+        ListFooterComponent={renderFooter}
+        ListEmptyComponent={renderEmpty}
+        showsVerticalScrollIndicator={false}
+        onEndReached={handleLoadMore}
+        onEndReachedThreshold={0.5}
+        refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={handleRefresh}
+            colors={[Colors.primary]}
+          />
+        }
+        removeClippedSubviews={true}
+        maxToRenderPerBatch={10}
+        windowSize={10}
+      />
+
+      <PropertyDetailModal
+        visible={modalVisible}
+        property={selectedProperty as any}
+        onClose={() => {
+          setModalVisible(false);
+          setSelectedProperty(null);
+        }}
+        showEnquiryButton={false}
+      />
+    </>
   );
 };
 
@@ -361,6 +494,14 @@ const styles = StyleSheet.create({
     height: 120,
     borderRadius: 8,
   },
+  propertyImagePlaceholder: {
+    width: '100%',
+    height: 120,
+    borderRadius: 8,
+    backgroundColor: '#f5f5f5',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
   statusBadge: {
     position: 'absolute',
     top: 8,
@@ -370,6 +511,20 @@ const styles = StyleSheet.create({
     borderRadius: 12,
   },
   statusText: {
+    color: 'white',
+    fontSize: 10,
+    fontWeight: 'bold',
+  },
+  contactBadge: {
+    position: 'absolute',
+    top: 8,
+    right: 8,
+    backgroundColor: Colors.MT_PRIMARY_1,
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    borderRadius: 12,
+  },
+  contactBadgeText: {
     color: 'white',
     fontSize: 10,
     fontWeight: 'bold',
@@ -416,33 +571,38 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: '#666',
   },
-  actionButtons: {
-    flexDirection: 'row',
-    gap: 10,
-  },
-  actionButton: {
-    flex: 1,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingVertical: 10,
-    paddingHorizontal: 15,
-    borderRadius: 8,
-    gap: 6,
-  },
-  callButton: {
-    backgroundColor: Colors.MT_PRIMARY_1,
-  },
-  messageButton: {
-    backgroundColor: '#4CAF50',
-  },
-  actionButtonText: {
-    color: 'white',
-    fontSize: 14,
-    fontWeight: '600',
-  },
   bottomSpacing: {
     height: 100,
+  },
+  propertyCardContainer: {
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+  },
+  loadingFooter: {
+    paddingVertical: 20,
+    alignItems: 'center' as const,
+  },
+  loadingMoreText: {
+    marginTop: 8,
+    fontSize: 14,
+    color: '#666',
+  },
+  emptyContainer: {
+    flex: 1,
+    justifyContent: 'center' as const,
+    alignItems: 'center' as const,
+    paddingVertical: 50,
+  },
+  loadingEmptyText: {
+    marginTop: 12,
+    fontSize: 16,
+    color: '#555',
+  },
+  emptyText: {
+    fontSize: 18,
+    fontWeight: '600' as const,
+    color: '#555',
+    textAlign: 'center' as const,
   },
 });
 

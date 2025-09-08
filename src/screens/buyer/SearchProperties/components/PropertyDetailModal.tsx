@@ -23,7 +23,8 @@ interface PropertyDetailModalProps {
   visible: boolean;
   property: Property | null;
   onClose: () => void;
-  onEnquiry: (property: Property, isLoading?: (loading: boolean) => void) => void;
+  onEnquiry?: (property: Property, isLoading?: (loading: boolean) => void) => void;
+  showEnquiryButton?: boolean;
 }
 
 // Helper function to get YouTube video ID from URL
@@ -46,6 +47,7 @@ const PropertyDetailModal: React.FC<PropertyDetailModalProps> = ({
   property,
   onClose,
   onEnquiry,
+  showEnquiryButton = true,
 }) => {
   const {width} = useWindowDimensions();
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
@@ -651,22 +653,24 @@ const PropertyDetailModal: React.FC<PropertyDetailModalProps> = ({
         </ScrollView>
 
         {/* Fixed Enquiry Button */}
-        <View style={styles.enquiryButtonContainer}>
-          <TouchableOpacity
-            style={[styles.enquiryButton, isEnquiryLoading && styles.enquiryButtonDisabled]}
-            onPress={() => {
-              if (!isEnquiryLoading && property) {
-                onEnquiry(property, setIsEnquiryLoading);
-              }
-            }}
-            disabled={isEnquiryLoading}>
-            {isEnquiryLoading ? (
-              <ActivityIndicator color="#fff" size="small" />
-            ) : (
-              <Text style={styles.enquiryButtonText}>Enquiry Now</Text>
-            )}
-          </TouchableOpacity>
-        </View>
+        {showEnquiryButton && (
+          <View style={styles.enquiryButtonContainer}>
+            <TouchableOpacity
+              style={[styles.enquiryButton, isEnquiryLoading && styles.enquiryButtonDisabled]}
+              onPress={() => {
+                if (!isEnquiryLoading && property && onEnquiry) {
+                  onEnquiry(property, setIsEnquiryLoading);
+                }
+              }}
+              disabled={isEnquiryLoading}>
+              {isEnquiryLoading ? (
+                <ActivityIndicator color="#fff" size="small" />
+              ) : (
+                <Text style={styles.enquiryButtonText}>Enquiry Now</Text>
+              )}
+            </TouchableOpacity>
+          </View>
+        )}
       </View>
     </Modal>
   );

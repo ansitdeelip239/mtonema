@@ -100,6 +100,18 @@ class BuyerService {
       throw error;
     }
   }
+
+  static async getContactedProperties(buyerId: number, page: number = 1, pageSize: number = 10) {
+    try {
+      const response = await api.get<any>(
+        `${url.property.getContactedProperties}?buyerId=${buyerId}&page=${page}&pageSize=${pageSize}`,
+      );
+      return response;
+    } catch (error) {
+      console.error('Error in getContactedProperties', error);
+      throw error;
+    }
+  }
 }
 
 export default BuyerService;

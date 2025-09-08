@@ -39,7 +39,6 @@ interface QuickAction {
 }
 
 const BuyerDashboard: React.FC<Props> = ({navigation: _navigation}) => {
-
   // Mock data for demonstration with placeholder images
   const [recentlyViewed] = useState<PropertyCard[]>([
     {
@@ -173,14 +172,18 @@ const BuyerDashboard: React.FC<Props> = ({navigation: _navigation}) => {
         // Handle quick action
         console.log('Quick action:', action.id);
       }}>
-      <View style={[styles.quickActionIcon, {backgroundColor: action.color + '20'}]}>
+      <View
+        style={[
+          styles.quickActionIcon,
+          {backgroundColor: action.color + '20'},
+        ]}>
         <GetIcon iconName={action.icon} size={24} color={action.color} />
       </View>
       <Text style={styles.quickActionTitle}>{action.title}</Text>
     </TouchableOpacity>
   );
 
-  const renderStatCard = (stat: typeof stats[0]) => (
+  const renderStatCard = (stat: (typeof stats)[0]) => (
     <View key={stat.label} style={styles.statCard}>
       <View style={styles.statIcon}>
         <GetIcon iconName={stat.icon} size={20} color={Colors.MT_PRIMARY_1} />
@@ -196,14 +199,10 @@ const BuyerDashboard: React.FC<Props> = ({navigation: _navigation}) => {
       <BuyerSellerHeader
         title="Welcome back!"
         subtitle="Find Your Dream Home"
-      >
-        <GetIcon iconName="settings" size={20} color="#333" />
-      </BuyerSellerHeader>
+      />
 
       {/* Stats Section */}
-      <View style={styles.statsContainer}>
-        {stats.map(renderStatCard)}
-      </View>
+      <View style={styles.statsContainer}>{stats.map(renderStatCard)}</View>
 
       {/* Quick Actions */}
       <View style={styles.section}>
@@ -259,7 +258,9 @@ const BuyerDashboard: React.FC<Props> = ({navigation: _navigation}) => {
           horizontal
           showsHorizontalScrollIndicator={false}
           contentContainerStyle={styles.horizontalScroll}>
-          {recentlyViewed.slice(0, 2).map(property => renderPropertyCard(property))}
+          {recentlyViewed
+            .slice(0, 2)
+            .map(property => renderPropertyCard(property))}
         </ScrollView>
       </View>
 

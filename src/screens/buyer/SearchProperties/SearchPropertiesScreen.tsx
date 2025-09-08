@@ -142,11 +142,7 @@ const SearchPropertiesScreen: React.FC<Props> = ({navigation: _navigation}) => {
     return (
       <View>
         {/* Buyer Header */}
-        <BuyerSellerHeader title="Find Your" subtitle="Dream Property">
-          <TouchableOpacity onPress={() => setShowFilters(true)}>
-            <GetIcon iconName="filter" size={20} color="#333" />
-          </TouchableOpacity>
-        </BuyerSellerHeader>
+        <BuyerSellerHeader title="Find Your" subtitle="Dream Property" />
 
         {/* Search Bar */}
         <SearchHeader

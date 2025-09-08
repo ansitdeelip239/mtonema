@@ -18,6 +18,7 @@ const url = {
     getContactedList: '/contactProperty/getAllContactByuserID',
     getInTouch: '/properties/GetInTouch',
     contacted: '/properties/contacted',
+    getContactedProperties: '/properties/contacted',
   },
   seller: {
     register: '/Account/registerseller',
