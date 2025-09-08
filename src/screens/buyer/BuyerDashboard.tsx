@@ -1,4 +1,4 @@
-import React, {useCallback} from 'react';
+import React, {useCallback, useState, useMemo} from 'react';
 import {
   View,
   Text,
@@ -26,6 +26,8 @@ import Toast from 'react-native-toast-message';
 import BuyerService from '../../services/BuyerService';
 
 const {width} = Dimensions.get('window');
+const CARD_WIDTH = width * 0.7;
+const QUICK_ACTION_WIDTH = (width - 50) / 2;
 
 type Props = NativeStackScreenProps<BuyerBottomTabParamList, 'Dashboard'>;
 
@@ -37,8 +39,269 @@ interface QuickAction {
   route?: keyof BuyerBottomTabParamList;
 }
 
+interface DashboardStat {
+  label: string;
+  value: string;
+  icon: IconEnum;
+}
+
+// Memoized components for better performance
+const StatCard = React.memo<{stat: DashboardStat}>(({stat}) => (
+  <View style={styles.statCard}>
+    <View style={styles.statIcon}>
+      <GetIcon iconName={stat.icon} size={20} color={Colors.MT_PRIMARY_1} />
+    </View>
+    <Text style={styles.statValue}>{stat.value}</Text>
+    <Text style={styles.statLabel}>{stat.label}</Text>
+  </View>
+));
+
+const QuickActionCard = React.memo<{
+  action: QuickAction;
+  onPress: (route?: keyof BuyerBottomTabParamList) => void;
+}>(({action, onPress}) => (
+  <TouchableOpacity
+    style={[styles.quickActionCard, {borderLeftColor: action.color}]}
+    activeOpacity={0.8}
+    onPress={() => onPress(action.route)}>
+    <View
+      style={[styles.quickActionIcon, {backgroundColor: action.color + '20'}]}>
+      <GetIcon iconName={action.icon} size={24} color={action.color} />
+    </View>
+    <Text style={styles.quickActionTitle}>{action.title}</Text>
+  </TouchableOpacity>
+));
+
+const PropertyCard = React.memo<{
+  property: Property;
+  isSaved?: boolean;
+  showEnquiry?: boolean;
+  onEnquiry?: (property: Property) => void;
+  onPress?: (property: Property) => void;
+  isLoading?: boolean;
+}>(
+  ({
+    property,
+    isSaved = false,
+    showEnquiry = false,
+    onEnquiry,
+    onPress,
+    isLoading = false,
+  }) => {
+    const handlePress = useCallback(() => {
+      onPress?.(property);
+    }, [onPress, property]);
+
+    const handleEnquiry = useCallback(() => {
+      onEnquiry?.(property);
+    }, [onEnquiry, property]);
+
+    // Early return for invalid property - after hooks
+    if (!property) {
+      return null;
+    }
+
+    const imageUrl = parseImageUrl(property.imageURL || '');
+    const hasValidImage = imageUrl && imageUrl.trim() !== '';
+
+    return (
+      <TouchableOpacity
+        style={styles.propertyCard}
+        activeOpacity={0.8}
+        onPress={handlePress}>
+        <View style={styles.propertyImageContainer}>
+          <Image
+            source={hasValidImage ? {uri: imageUrl} : Images.MTESTATES_LOGO}
+            style={
+              hasValidImage
+                ? styles.propertyImage
+                : styles.propertyImagePlaceholder
+            }
+            resizeMode={hasValidImage ? 'cover' : 'contain'}
+          />
+          {isSaved && (
+            <View style={styles.savedBadge}>
+              <GetIcon iconName="premium" size={16} color="#FF6B6B" />
+            </View>
+          )}
+          {property.isFeatured && (
+            <View style={styles.featuredBadge}>
+              <GetIcon iconName="premium" size={14} color="white" />
+              <Text style={styles.featuredText}>Featured</Text>
+            </View>
+          )}
+        </View>
+
+        <View style={styles.propertyInfo}>
+          <Text style={styles.propertyTitle} numberOfLines={1}>
+            {property.propertyName || 'Unnamed Property'}
+          </Text>
+
+          <View style={styles.propertyLocationContainer}>
+            <GetIcon iconName="locationPin" size={12} color="#666" />
+            <Text style={styles.propertyLocation} numberOfLines={1}>
+              {property.locationAddress ||
+                property.city ||
+                'Location not specified'}
+            </Text>
+          </View>
+
+          <Text style={styles.propertyPrice}>
+            {formatPrice(
+              property.price || 0,
+              (property.propertyFor || PropertyFor.OTHERS) as
+                | typeof PropertyFor.SALE
+                | typeof PropertyFor.RENT
+                | typeof PropertyFor.OTHERS,
+            ) || 'Price not available'}
+          </Text>
+
+          {property.area && (
+            <View style={styles.propertyDetails}>
+              <View style={styles.propertyDetailItem}>
+                <GetIcon iconName="area" size={12} color="#666" />
+                <Text style={styles.propertyDetail}>
+                  {`${property.area} ${property.lmUnit || 'sq ft'}`}
+                </Text>
+              </View>
+              {property.bhkType && (
+                <View style={styles.propertyDetailItem}>
+                  <GetIcon iconName="doubleBed" size={12} color="#666" />
+                  <Text style={styles.propertyDetail}>{property.bhkType}</Text>
+                </View>
+              )}
+              <View style={styles.propertyDetailItem}>
+                <GetIcon iconName="home" size={12} color="#666" />
+                <Text style={styles.propertyDetail}>
+                  {property.propertyType || 'Property'}
+                </Text>
+              </View>
+            </View>
+          )}
+
+          {showEnquiry && (
+            <TouchableOpacity
+              style={[
+                styles.enquiryButton,
+                isLoading && styles.enquiryButtonDisabled,
+              ]}
+              onPress={handleEnquiry}
+              activeOpacity={0.8}
+              disabled={isLoading}>
+              {isLoading ? (
+                <ActivityIndicator size="small" color="white" />
+              ) : (
+                <Text style={styles.enquiryButtonText}>Send Enquiry</Text>
+              )}
+            </TouchableOpacity>
+          )}
+        </View>
+      </TouchableOpacity>
+    );
+  },
+);
+
+const PropertySection = React.memo<{
+  title: string;
+  properties: Property[];
+  onSeeAll: () => void;
+  onEnquiry?: (property: Property) => void;
+  onPropertyPress?: (property: Property) => void;
+  showEnquiry?: boolean;
+  loadingEnquiries?: {[key: string]: boolean};
+}>(
+  ({
+    title,
+    properties,
+    onSeeAll,
+    onEnquiry,
+    onPropertyPress,
+    showEnquiry = false,
+    loadingEnquiries = {},
+  }) => {
+    if (properties.length === 0) {
+      return null;
+    }
+
+    // Create a safe section key for unique identification
+    const sectionKey = title.toLowerCase().replace(/\s+/g, '-');
+
+    return (
+      <View style={styles.section}>
+        <View style={styles.sectionHeader}>
+          <Text style={styles.sectionTitle}>{title}</Text>
+          <TouchableOpacity onPress={onSeeAll}>
+            <Text style={styles.seeAllText}>See All</Text>
+          </TouchableOpacity>
+        </View>
+        <ScrollView
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          contentContainerStyle={styles.horizontalScroll}>
+          {properties.map((property, index) => {
+            // Create absolutely unique key combining section, propertyId, and index
+            const uniqueKey = `${sectionKey}-${
+              property.propertyId || 'no-id'
+            }-${index}`;
+
+            return (
+              <PropertyCard
+                key={uniqueKey}
+                property={property}
+                showEnquiry={showEnquiry}
+                onEnquiry={onEnquiry}
+                onPress={onPropertyPress}
+                isLoading={loadingEnquiries[property.propertyId || 'unknown']}
+              />
+            );
+          })}
+        </ScrollView>
+      </View>
+    );
+  },
+);
+
+const LoadingState = React.memo(() => (
+  <View style={styles.loadingContainer}>
+    <ActivityIndicator size="large" color={Colors.MT_PRIMARY_1} />
+    <Text style={styles.loadingText}>Loading your dashboard...</Text>
+  </View>
+));
+
+const ErrorState = React.memo<{error: string; onRetry: () => void}>(
+  ({error, onRetry}) => (
+    <View style={styles.errorContainer}>
+      <Text style={styles.errorText}>{error}</Text>
+      <TouchableOpacity style={styles.retryButton} onPress={onRetry}>
+        <Text style={styles.retryButtonText}>Retry</Text>
+      </TouchableOpacity>
+    </View>
+  ),
+);
+
+const EmptyState = React.memo<{onStartSearching: () => void}>(
+  ({onStartSearching}) => (
+    <View style={styles.emptyStateContainer}>
+      <GetIcon iconName="home" size={80} color="#ddd" />
+      <Text style={styles.emptyStateTitle}>Start Your Property Journey</Text>
+      <Text style={styles.emptyStateText}>
+        Search for properties and start building your personalized dashboard
+      </Text>
+      <TouchableOpacity
+        style={styles.emptyStateButton}
+        onPress={onStartSearching}>
+        <Text style={styles.emptyStateButtonText}>Start Searching</Text>
+      </TouchableOpacity>
+    </View>
+  ),
+);
+
 const BuyerDashboard: React.FC<Props> = ({navigation}) => {
   const {user} = useAuth();
+  const [loadingEnquiries, setLoadingEnquiries] = useState<{
+    [key: string]: boolean;
+  }>({});
+
   const {
     stats,
     forSaleProperties,
@@ -52,6 +315,90 @@ const BuyerDashboard: React.FC<Props> = ({navigation}) => {
     retryFetch,
   } = useDashboardData();
 
+  // Memoized quick actions
+  const quickActions = useMemo<QuickAction[]>(
+    () => [
+      {
+        id: 'search',
+        title: 'Search Properties',
+        icon: 'search',
+        color: Colors.MT_PRIMARY_1,
+        route: 'Search Property',
+      },
+      {
+        id: 'contacted',
+        title: 'My Contacts',
+        icon: 'phone',
+        color: '#FF6B6B',
+        route: 'Contacted',
+      },
+      {
+        id: 'contact',
+        title: 'Contact Us',
+        icon: 'message',
+        color: '#4ECDC4',
+        route: 'Contact Us',
+      },
+    ],
+    [],
+  );
+
+  // Memoized dashboard stats
+  const dashboardStats = useMemo<DashboardStat[]>(
+    () => [
+      {
+        label: 'Contacted Properties',
+        value: stats.totalContacted.toString(),
+        icon: 'phone',
+      },
+      {
+        label: 'For Sale Properties',
+        value: forSaleProperties.length.toString(),
+        icon: 'home',
+      },
+      {
+        label: 'For Rent Properties',
+        value: forRentProperties.length.toString(),
+        icon: 'home',
+      },
+      {
+        label: 'Featured Properties',
+        value: featuredProperties.length.toString(),
+        icon: 'premium',
+      },
+    ],
+    [
+      stats.totalContacted,
+      forSaleProperties.length,
+      forRentProperties.length,
+      featuredProperties.length,
+    ],
+  );
+
+  // Memoized welcome message
+  const welcomeMessage = useMemo(
+    () =>
+      user?.name
+        ? `Welcome back, ${user.name.split(' ')[0]}!`
+        : 'Welcome back!',
+    [user?.name],
+  );
+
+  // Check if dashboard has no content
+  const hasNoContent = useMemo(
+    () =>
+      forSaleProperties.length === 0 &&
+      forRentProperties.length === 0 &&
+      featuredProperties.length === 0 &&
+      contactedProperties.length === 0,
+    [
+      forSaleProperties.length,
+      forRentProperties.length,
+      featuredProperties.length,
+      contactedProperties.length,
+    ],
+  );
+
   // Handle property contact/enquiry
   const handleEnquiry = useCallback(
     async (property: Property) => {
@@ -62,6 +409,10 @@ const BuyerDashboard: React.FC<Props> = ({navigation}) => {
         });
         return;
       }
+
+      const propertyId = property.propertyId || 'unknown';
+
+      setLoadingEnquiries(prev => ({...prev, [propertyId]: true}));
 
       try {
         const response = await BuyerService.contactProperty(
@@ -85,226 +436,51 @@ const BuyerDashboard: React.FC<Props> = ({navigation}) => {
           text1: 'Failed to send enquiry',
           text2: 'Please try again later.',
         });
+      } finally {
+        setLoadingEnquiries(prev => {
+          const newState = {...prev};
+          delete newState[propertyId];
+          return newState;
+        });
       }
     },
     [user],
   );
 
-  const quickActions: QuickAction[] = [
-    {
-      id: 'search',
-      title: 'Search Properties',
-      icon: 'search',
-      color: Colors.MT_PRIMARY_1,
-      route: 'Search Property',
+  // Handle property press
+  const handlePropertyPress = useCallback((property: Property) => {
+    console.log('Navigate to property:', property.propertyId);
+    // Add navigation logic here
+  }, []);
+
+  // Handle quick action press
+  const handleQuickActionPress = useCallback(
+    (route?: keyof BuyerBottomTabParamList) => {
+      if (route) {
+        navigation.navigate(route);
+      }
     },
-    {
-      id: 'contacted',
-      title: 'My Contacts',
-      icon: 'phone',
-      color: '#FF6B6B',
-      route: 'Contacted',
-    },
-    {
-      id: 'contact',
-      title: 'Contact Us',
-      icon: 'message',
-      color: '#4ECDC4',
-      route: 'Contact Us',
-    },
-  ];
-
-  const dashboardStats: {
-    label: string;
-    value: string;
-    icon: IconEnum;
-  }[] = [
-    {
-      label: 'Contacted Properties',
-      value: stats.totalContacted.toString(),
-      icon: 'phone',
-    },
-    {
-      label: 'For Sale Properties',
-      value: forSaleProperties.length.toString(),
-      icon: 'home',
-    },
-    {
-      label: 'For Rent Properties',
-      value: forRentProperties.length.toString(),
-      icon: 'home',
-    },
-    {
-      label: 'Featured Properties',
-      value: featuredProperties.length.toString(),
-      icon: 'premium',
-    },
-  ];
-
-  const renderPropertyCard = (
-    property: Property,
-    isSaved = false,
-    showEnquiry = false,
-  ) => {
-    // Safety check - if property is undefined or null, don't render
-    if (!property) {
-      return null;
-    }
-
-    const imageUrl = parseImageUrl(property.imageURL || '');
-
-    return (
-      <TouchableOpacity
-        key={property.propertyId || 'unknown'}
-        style={styles.propertyCard}
-        activeOpacity={0.8}
-        onPress={() => {
-          console.log('Navigate to property:', property.propertyId);
-        }}>
-        <View style={styles.propertyImageContainer}>
-          <Image
-            source={
-              imageUrl && imageUrl.trim() !== ''
-                ? {uri: imageUrl}
-                : Images.MTESTATES_LOGO
-            }
-            style={
-              imageUrl && imageUrl.trim() !== ''
-                ? styles.propertyImage
-                : styles.propertyImagePlaceholder
-            }
-            resizeMode={
-              imageUrl && imageUrl.trim() !== '' ? 'cover' : 'contain'
-            }
-          />
-          {Boolean(isSaved) && (
-            <View style={styles.savedBadge}>
-              <GetIcon iconName="premium" size={16} color="#FF6B6B" />
-            </View>
-          )}
-          {Boolean(property.isFeatured) && (
-            <View style={styles.featuredBadge}>
-              <GetIcon iconName="premium" size={14} color="white" />
-              <Text style={styles.featuredText}>Featured</Text>
-            </View>
-          )}
-        </View>
-
-        <View style={styles.propertyInfo}>
-          <Text style={styles.propertyTitle} numberOfLines={1}>
-            {String(property.propertyName || 'Unnamed Property')}
-          </Text>
-          <View style={styles.propertyLocationContainer}>
-            <GetIcon iconName="locationPin" size={12} color="#666" />
-            <Text style={styles.propertyLocation} numberOfLines={1}>
-              {String(
-                property.locationAddress ||
-                  property.city ||
-                  'Location not specified',
-              )}
-            </Text>
-          </View>
-          <Text style={styles.propertyPrice}>
-            {formatPrice(
-              property.price || 0,
-              (property.propertyFor || PropertyFor.OTHERS) as
-                | typeof PropertyFor.SALE
-                | typeof PropertyFor.RENT
-                | typeof PropertyFor.OTHERS,
-            ) || 'Price not available'}
-          </Text>
-
-          {Boolean(property.area) && (
-            <View style={styles.propertyDetails}>
-              <View style={styles.propertyDetailItem}>
-                <GetIcon iconName="area" size={12} color="#666" />
-                <Text style={styles.propertyDetail}>
-                  {`${property.area || ''} ${property.lmUnit || 'sq ft'}`}
-                </Text>
-              </View>
-              {Boolean(property.bhkType) && (
-                <View style={styles.propertyDetailItem}>
-                  <GetIcon iconName="doubleBed" size={12} color="#666" />
-                  <Text style={styles.propertyDetail}>
-                    {String(property.bhkType || '')}
-                  </Text>
-                </View>
-              )}
-              <View style={styles.propertyDetailItem}>
-                <GetIcon iconName="home" size={12} color="#666" />
-                <Text style={styles.propertyDetail}>
-                  {String(property.propertyType || 'Property')}
-                </Text>
-              </View>
-            </View>
-          )}
-
-          {Boolean(showEnquiry) && (
-            <TouchableOpacity
-              style={styles.enquiryButton}
-              onPress={() => handleEnquiry(property)}
-              activeOpacity={0.8}>
-              <Text style={styles.enquiryButtonText}>Send Enquiry</Text>
-            </TouchableOpacity>
-          )}
-        </View>
-      </TouchableOpacity>
-    );
-  };
-
-  const renderQuickAction = (action: QuickAction) => (
-    <TouchableOpacity
-      key={action.id}
-      style={[styles.quickActionCard, {borderLeftColor: action.color}]}
-      activeOpacity={0.8}
-      onPress={() => {
-        if (action.route) {
-          navigation.navigate(action.route);
-        } else {
-          console.log('Quick action:', action.id);
-        }
-      }}>
-      <View
-        style={[
-          styles.quickActionIcon,
-          {backgroundColor: action.color + '20'},
-        ]}>
-        <GetIcon iconName={action.icon} size={24} color={action.color} />
-      </View>
-      <Text style={styles.quickActionTitle}>{action.title}</Text>
-    </TouchableOpacity>
+    [navigation],
   );
 
-  const renderStatCard = (stat: (typeof dashboardStats)[0]) => (
-    <View key={stat.label} style={styles.statCard}>
-      <View style={styles.statIcon}>
-        <GetIcon iconName={stat.icon} size={20} color={Colors.MT_PRIMARY_1} />
-      </View>
-      <Text style={styles.statValue}>{stat.value}</Text>
-      <Text style={styles.statLabel}>{stat.label}</Text>
-    </View>
+  // Handle navigation callbacks
+  const navigateToSearch = useCallback(
+    () => navigation.navigate('Search Property'),
+    [navigation],
+  );
+  const navigateToContacted = useCallback(
+    () => navigation.navigate('Contacted'),
+    [navigation],
   );
 
   // Loading state
   if (loading) {
-    return (
-      <View style={styles.loadingContainer}>
-        <ActivityIndicator size="large" color={Colors.MT_PRIMARY_1} />
-        <Text style={styles.loadingText}>Loading your dashboard...</Text>
-      </View>
-    );
+    return <LoadingState />;
   }
 
   // Error state
   if (error && !refreshing) {
-    return (
-      <View style={styles.errorContainer}>
-        <Text style={styles.errorText}>{error}</Text>
-        <TouchableOpacity style={styles.retryButton} onPress={retryFetch}>
-          <Text style={styles.retryButtonText}>Retry</Text>
-        </TouchableOpacity>
-      </View>
-    );
+    return <ErrorState error={error} onRetry={retryFetch} />;
   }
 
   return (
@@ -318,19 +494,17 @@ const BuyerDashboard: React.FC<Props> = ({navigation}) => {
           colors={[Colors.MT_PRIMARY_1]}
         />
       }>
-      {/* Buyer Header */}
+      {/* Header */}
       <BuyerSellerHeader
-        title={
-          user?.name
-            ? `Welcome back, ${user.name.split(' ')[0]}!`
-            : 'Welcome back!'
-        }
+        title={welcomeMessage}
         subtitle="Find Your Dream Home"
       />
 
       {/* Stats Section */}
       <View style={styles.statsContainer}>
-        {dashboardStats.map(renderStatCard)}
+        {dashboardStats.map(stat => (
+          <StatCard key={stat.label} stat={stat} />
+        ))}
       </View>
 
       {/* Quick Actions */}
@@ -338,115 +512,57 @@ const BuyerDashboard: React.FC<Props> = ({navigation}) => {
         <Text style={styles.sectionTitle}>Quick Actions</Text>
         <View style={styles.quickActionsContainer}>
           <View style={styles.quickActionsGrid}>
-            {quickActions.map(renderQuickAction)}
+            {quickActions.map(action => (
+              <QuickActionCard
+                key={action.id}
+                action={action}
+                onPress={handleQuickActionPress}
+              />
+            ))}
           </View>
         </View>
       </View>
 
-      {/* For Sale Properties */}
-      {forSaleProperties.length > 0 && (
-        <View style={styles.section}>
-          <View style={styles.sectionHeader}>
-            <Text style={styles.sectionTitle}>Properties for Sale</Text>
-            <TouchableOpacity
-              onPress={() => navigation.navigate('Search Property')}>
-              <Text style={styles.seeAllText}>See All</Text>
-            </TouchableOpacity>
-          </View>
-          <ScrollView
-            horizontal
-            showsHorizontalScrollIndicator={false}
-            contentContainerStyle={styles.horizontalScroll}>
-            {forSaleProperties.map(property =>
-              renderPropertyCard(property, false, true),
-            )}
-          </ScrollView>
-        </View>
-      )}
+      {/* Property Sections */}
+      <PropertySection
+        title="Properties for Sale"
+        properties={forSaleProperties}
+        onSeeAll={navigateToSearch}
+        onEnquiry={handleEnquiry}
+        onPropertyPress={handlePropertyPress}
+        showEnquiry={true}
+        loadingEnquiries={loadingEnquiries}
+      />
 
-      {/* For Rent Properties */}
-      {forRentProperties.length > 0 && (
-        <View style={styles.section}>
-          <View style={styles.sectionHeader}>
-            <Text style={styles.sectionTitle}>Properties for Rent</Text>
-            <TouchableOpacity
-              onPress={() => navigation.navigate('Search Property')}>
-              <Text style={styles.seeAllText}>See All</Text>
-            </TouchableOpacity>
-          </View>
-          <ScrollView
-            horizontal
-            showsHorizontalScrollIndicator={false}
-            contentContainerStyle={styles.horizontalScroll}>
-            {forRentProperties.map(property =>
-              renderPropertyCard(property, false, true),
-            )}
-          </ScrollView>
-        </View>
-      )}
+      <PropertySection
+        title="Properties for Rent"
+        properties={forRentProperties}
+        onSeeAll={navigateToSearch}
+        onEnquiry={handleEnquiry}
+        onPropertyPress={handlePropertyPress}
+        showEnquiry={true}
+        loadingEnquiries={loadingEnquiries}
+      />
 
-      {/* Contacted Properties */}
-      {contactedProperties.length > 0 && (
-        <View style={styles.section}>
-          <View style={styles.sectionHeader}>
-            <Text style={styles.sectionTitle}>Recently Contacted</Text>
-            <TouchableOpacity onPress={() => navigation.navigate('Contacted')}>
-              <Text style={styles.seeAllText}>See All</Text>
-            </TouchableOpacity>
-          </View>
-          <ScrollView
-            horizontal
-            showsHorizontalScrollIndicator={false}
-            contentContainerStyle={styles.horizontalScroll}>
-            {contactedProperties.map(property =>
-              renderPropertyCard(property, false, false),
-            )}
-          </ScrollView>
-        </View>
-      )}
+      <PropertySection
+        title="Recently Contacted"
+        properties={contactedProperties}
+        onSeeAll={navigateToContacted}
+        onPropertyPress={handlePropertyPress}
+      />
 
-      {/* Featured Properties */}
-      {featuredProperties.length > 0 && (
-        <View style={styles.section}>
-          <View style={styles.sectionHeader}>
-            <Text style={styles.sectionTitle}>Featured Properties</Text>
-            <TouchableOpacity
-              onPress={() => navigation.navigate('Search Property')}>
-              <Text style={styles.seeAllText}>See All</Text>
-            </TouchableOpacity>
-          </View>
-          <ScrollView
-            horizontal
-            showsHorizontalScrollIndicator={false}
-            contentContainerStyle={styles.horizontalScroll}>
-            {featuredProperties.map(property =>
-              renderPropertyCard(property, false, true),
-            )}
-          </ScrollView>
-        </View>
-      )}
+      <PropertySection
+        title="Featured Properties"
+        properties={featuredProperties}
+        onSeeAll={navigateToSearch}
+        onEnquiry={handleEnquiry}
+        onPropertyPress={handlePropertyPress}
+        showEnquiry={true}
+        loadingEnquiries={loadingEnquiries}
+      />
 
-      {/* Empty state for new users */}
-      {forSaleProperties.length === 0 &&
-        forRentProperties.length === 0 &&
-        featuredProperties.length === 0 &&
-        contactedProperties.length === 0 && (
-          <View style={styles.emptyStateContainer}>
-            <GetIcon iconName="home" size={80} color="#ddd" />
-            <Text style={styles.emptyStateTitle}>
-              Start Your Property Journey
-            </Text>
-            <Text style={styles.emptyStateText}>
-              Search for properties and start building your personalized
-              dashboard
-            </Text>
-            <TouchableOpacity
-              style={styles.emptyStateButton}
-              onPress={() => navigation.navigate('Search Property')}>
-              <Text style={styles.emptyStateButtonText}>Start Searching</Text>
-            </TouchableOpacity>
-          </View>
-        )}
+      {/* Empty State */}
+      {hasNoContent && <EmptyState onStartSearching={navigateToSearch} />}
 
       {/* Bottom spacing */}
       <View style={styles.bottomSpacing} />
@@ -454,6 +570,7 @@ const BuyerDashboard: React.FC<Props> = ({navigation}) => {
   );
 };
 
+// Styles remain the same but with some optimizations
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -557,7 +674,7 @@ const styles = StyleSheet.create({
     marginTop: 15,
   },
   quickActionCard: {
-    width: (width - 50) / 2,
+    width: QUICK_ACTION_WIDTH,
     backgroundColor: 'white',
     borderRadius: 12,
     padding: 15,
@@ -593,7 +710,7 @@ const styles = StyleSheet.create({
     paddingRight: 20,
   },
   propertyCard: {
-    width: width * 0.7,
+    width: CARD_WIDTH,
     backgroundColor: 'white',
     borderRadius: 12,
     padding: 15,
@@ -706,6 +823,9 @@ const styles = StyleSheet.create({
     color: 'white',
     fontSize: 12,
     fontWeight: '600',
+  },
+  enquiryButtonDisabled: {
+    opacity: 0.6,
   },
   emptyStateContainer: {
     alignItems: 'center',
