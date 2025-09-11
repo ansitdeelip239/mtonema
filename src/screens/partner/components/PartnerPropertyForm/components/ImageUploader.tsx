@@ -6,7 +6,7 @@ import {
   ActivityIndicator,
 } from 'react-native';
 import { useTranslation } from 'react-i18next';
-import ImagePicker from 'react-native-image-crop-picker';
+import {launchImageLibrary, ImagePickerResponse, ImageLibraryOptions} from 'react-native-image-picker';
 import Toast from 'react-native-toast-message';
 import {ImageData} from '../../../../../types/image';
 import GetIcon from '../../../../../components/GetIcon';
@@ -31,22 +31,42 @@ const ImageUploader: React.FC<ImageUploaderProps> = ({
       return;
     }
 
-    try {
-      const selectedImages = await ImagePicker.openPicker({
-        multiple: true,
-        mediaType: 'photo',
-        compressImageQuality: 0.8,
-        compressImageMaxWidth: 1280,
-      });
+    const options: ImageLibraryOptions = {
+      mediaType: 'photo',
+      includeBase64: false,
+      maxHeight: 2000,
+      maxWidth: 2000,
+      quality: 0.8,
+      selectionLimit: 0, // 0 means no limit, allows multiple selection
+    };
 
-      // Only proceed if images were selected (user didn't cancel)
-      if (selectedImages && selectedImages.length > 0) {
-        // Process and upload each image
+    launchImageLibrary(options, (response: ImagePickerResponse) => {
+      if (response.didCancel) {
+        // User cancelled, do nothing
+        return;
+      }
+
+      if (response.errorMessage) {
+        console.error('ImagePicker Error: ', response.errorMessage);
+        Toast.show({
+          type: 'error',
+          text1: 'Failed to select images',
+          text2: response.errorMessage,
+        });
+        return;
+      }
+
+      if (response.assets && response.assets.length > 0) {
         setUploading(true);
 
-        const uploadPromises = selectedImages.map(async image => {
+        // Process and upload each image
+        const uploadPromises = response.assets.map(async asset => {
+          if (!asset.uri) {
+            return null;
+          }
+
           const imageData = {
-            localUri: image.path,
+            localUri: asset.uri,
             imageUrl: '',
             type: 'Others', // Default type
             toggle: false,
@@ -54,7 +74,7 @@ const ImageUploader: React.FC<ImageUploaderProps> = ({
 
           // Upload to Cloudinary
           try {
-            const uploadedUrl = await uploadToCloudinary(image.path);
+            const uploadedUrl = await uploadToCloudinary(asset.uri);
             imageData.imageUrl = uploadedUrl;
             return imageData;
           } catch (error) {
@@ -63,39 +83,33 @@ const ImageUploader: React.FC<ImageUploaderProps> = ({
           }
         });
 
-        const uploadedImages = await Promise.all(uploadPromises);
+        Promise.all(uploadPromises)
+          .then(uploadedImages => {
+            // Filter out null values (failed uploads) and add to state
+            const validImages = uploadedImages.filter(Boolean) as ImageData[];
 
-        // Filter out null values (failed uploads) and add to state
-        const validImages = uploadedImages.filter(Boolean) as ImageData[];
+            if (validImages.length > 0) {
+              onImagesSelected(validImages);
 
-        if (validImages.length > 0) {
-          onImagesSelected(validImages);
-
-          Toast.show({
-            type: 'success',
-            text1: 'Images uploaded successfully',
+              Toast.show({
+                type: 'success',
+                text1: 'Images uploaded successfully',
+              });
+            }
+          })
+          .catch(error => {
+            console.error('Error uploading images:', error);
+            Toast.show({
+              type: 'error',
+              text1: 'Failed to upload images',
+              text2: 'Please try again',
+            });
+          })
+          .finally(() => {
+            setUploading(false);
           });
-        }
       }
-    } catch (error) {
-      // Check if the error is due to user cancellation
-      if (
-        error instanceof Error &&
-        'code' in error &&
-        error.code !== 'E_PICKER_CANCELLED'
-      ) {
-        // This is an actual error, not just a cancellation
-        console.error('Error selecting images:', error);
-        Toast.show({
-          type: 'error',
-          text1: 'Failed to select images',
-          text2: 'Please try again',
-        });
-      }
-      // For cancellations, we do nothing - just silently return
-    } finally {
-      setUploading(false);
-    }
+    });
   }, [disabled, onImagesSelected]);
 
   // Upload image to Cloudinary
