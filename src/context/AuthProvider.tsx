@@ -45,7 +45,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({children}) => {
   const {resetToDefaultTheme} = useTheme();
 
   // Use useRef for timer to prevent memory leaks
-  const tokenExpiryTimer = useRef<NodeJS.Timeout | undefined>(undefined);
+  const tokenExpiryTimer = useRef<number | undefined>(undefined);
 
   const logout = useCallback(async () => {
     try {

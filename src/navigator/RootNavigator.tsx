@@ -5,7 +5,7 @@ import MainNavigator from './MainNavigator';
 import {navigationRef} from './components/NavigationRef';
 import AuthNavigator from './AuthNavigator';
 import {useLanguage} from '../context/LanguageProvider';
-import {View, ActivityIndicator, StyleSheet, Image} from 'react-native';
+import {View, ActivityIndicator, StyleSheet, Image, Platform} from 'react-native';
 import Colors from '../constants/Colors';
 import Images from '../constants/Images';
 import LanguageSelectionScreen from '../screens/language/LanguageSelectionScreen';
@@ -13,6 +13,7 @@ import LanguageDebugger from '../components/LanguageDebugger';
 import {BottomTabProvider} from '../context/BottomTabProvider';
 import SubscriptionProvider from '../context/SubscriptionProvider';
 import { useAuth } from '../context/AuthProvider';
+import {SafeAreaView} from 'react-native-safe-area-context';
 
 const RootStack = createNativeStackNavigator();
 
@@ -50,20 +51,25 @@ export default function RootNavigator() {
   }
 
   return (
-    <NavigationContainer ref={navigationRef}>
-      <LanguageDebugger />
-      <RootStack.Navigator screenOptions={{headerShown: false}}>
-        {isAuthenticated ? (
-          <RootStack.Screen name="Main" component={MainNavigatorWithProviders} />
-        ) : (
-          <RootStack.Screen name="Auth" component={AuthNavigator} />
-        )}
-      </RootStack.Navigator>
-    </NavigationContainer>
+    <SafeAreaView style={styles.safeArea} edges={Platform.OS === 'ios' ? [] : ['bottom']}>
+      <NavigationContainer ref={navigationRef}>
+        <LanguageDebugger />
+        <RootStack.Navigator screenOptions={{headerShown: false}}>
+          {isAuthenticated ? (
+            <RootStack.Screen name="Main" component={MainNavigatorWithProviders} />
+          ) : (
+            <RootStack.Screen name="Auth" component={AuthNavigator} />
+          )}
+        </RootStack.Navigator>
+      </NavigationContainer>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
+  safeArea: {
+    flex: 1,
+  },
   container: {
     flex: 1,
     justifyContent: 'center',

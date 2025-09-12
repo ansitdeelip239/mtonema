@@ -9,7 +9,6 @@ import {
   Image,
   ListRenderItem,
 } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import {useTranslation} from 'react-i18next';
 import {useLanguage} from '../../context/LanguageProvider';
 import {getSupportedLanguages, isCurrentLanguageRTL} from '../../i18n';
@@ -112,7 +111,7 @@ const LanguageSelectionScreen: React.FC = () => {
   );
 
   return (
-    <SafeAreaView style={styles.container}>
+    <View style={styles.container}>
       <View style={styles.content}>
         {/* Logo Section */}
         <View style={styles.logoSection}>
@@ -125,46 +124,46 @@ const LanguageSelectionScreen: React.FC = () => {
 
         {/* Title Section */}
         <View style={styles.titleSection}>
-          <Text style={styles.title}>{t('language.selectLanguage')}</Text>
+          <Text style={styles.title}>
+            {t('language.welcome', 'Welcome to MTOneMA')}
+          </Text>
           <Text style={styles.subtitle}>
-            Choose your preferred language for the app
+            {t('language.selectLanguage', 'Please select your preferred language')}
           </Text>
         </View>
 
         {/* Language List */}
-        <View style={styles.languageList}>
+        <View style={styles.languageListContainer}>
           <FlatList
             data={supportedLanguages}
+            keyExtractor={(item: SupportedLanguage) => item.code}
             renderItem={renderLanguageItem}
-            keyExtractor={item => item.code}
             showsVerticalScrollIndicator={false}
-            bounces={false}
+            contentContainerStyle={styles.languageList}
           />
         </View>
 
         {/* Continue Button */}
-        <View style={styles.buttonSection}>
+        <View style={styles.buttonContainer}>
           <TouchableOpacity
             style={[
               styles.continueButton,
-              isSubmitting && styles.disabledButton,
+              (!selectedLanguage || isSubmitting) && styles.disabledButton,
             ]}
             onPress={handleContinue}
-            disabled={isSubmitting}
+            disabled={!selectedLanguage || isSubmitting}
             activeOpacity={0.8}>
             {isSubmitting ? (
-              <ActivityIndicator size="small" color="#ffffff" />
+              <ActivityIndicator size="small" color="white" />
             ) : (
               <Text style={styles.continueButtonText}>
-          {selectedLanguage === currentLanguage
-            ? 'Next'
-            : t('language.selectLanguage')}
+                {t('language.continue', 'Continue')}
               </Text>
             )}
           </TouchableOpacity>
         </View>
       </View>
-    </SafeAreaView>
+    </View>
   );
 };
 
@@ -207,6 +206,10 @@ const styles = StyleSheet.create({
   languageList: {
     flex: 1,
     maxHeight: 400,
+  },
+  languageListContainer: {
+    flex: 1,
+    marginBottom: 20,
   },
   languageItem: {
     borderWidth: 2,
@@ -284,6 +287,10 @@ const styles = StyleSheet.create({
   },
   buttonSection: {
     paddingVertical: 40,
+  },
+  buttonContainer: {
+    paddingTop: 20,
+    paddingBottom: 40,
   },
   continueButton: {
     backgroundColor: Colors.MT_PRIMARY_1,

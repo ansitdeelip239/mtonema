@@ -14,7 +14,7 @@ const SellerNavigator = memo(() => {
   const {drawerStyles, isIOS} = useDrawerStyles();
 
   return (
-    <SafeAreaView style={styles.safeArea} edges={['top']}>
+    <>
       <StatusBar barStyle="dark-content" backgroundColor="#fff" />
       <Drawer.Navigator
         // eslint-disable-next-line react/no-unstable-nested-components
@@ -57,7 +57,7 @@ const SellerNavigator = memo(() => {
           }}
         />
       </Drawer.Navigator>
-    </SafeAreaView>
+    </>
   );
 });
 

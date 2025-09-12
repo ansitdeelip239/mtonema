@@ -1,16 +1,22 @@
 import React from 'react';
-import {View, Text, StyleSheet, TouchableOpacity, Alert} from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  Alert,
+  Platform,
+} from 'react-native';
 import SellerNavigator from './SellerNavigator';
 import BuyerNavigator from './BuyerNavigator';
 import PartnerNavigator from './PartnerNavigator';
 import {PartnerProvider} from '../context/PartnerProvider';
 import Roles from '../constants/Roles';
 import GetIcon from '../components/GetIcon';
-import {SafeAreaView} from 'react-native-safe-area-context';
 import SubscriptionGuard from '../components/SubscriptionGuard';
 import config from '../config';
 import {useTranslation} from 'react-i18next';
-import { useAuth } from '../context/AuthProvider';
+import {useAuth} from '../context/AuthProvider';
 
 const MainNavigator = () => {
   const {user, logout} = useAuth();
@@ -66,7 +72,7 @@ const MainNavigator = () => {
   const handleLogout = () => {
     Alert.alert(translations.logout.title, translations.logout.confirm, [
       {
-        text: translations.common.actions.cancel,
+        text: translations.common.cancel,
         style: 'cancel',
       },
       {
@@ -114,13 +120,11 @@ const MainNavigator = () => {
       ) : user?.role === Roles.PARTNER ||
         user?.role === Roles.TEAM ||
         isAuthorizedAdmin ? (
-        <SafeAreaView style={styles.safeArea} edges={['bottom']}>
-          <SubscriptionGuard>
-            <PartnerProvider>
-              <PartnerNavigator />
-            </PartnerProvider>
-          </SubscriptionGuard>
-        </SafeAreaView>
+        <SubscriptionGuard>
+          <PartnerProvider>
+            <PartnerNavigator />
+          </PartnerProvider>
+        </SubscriptionGuard>
       ) : (
         // Fallback for any unhandled user roles
         <View style={styles.container}>
@@ -151,9 +155,6 @@ const MainNavigator = () => {
 };
 
 const styles = StyleSheet.create({
-  safeArea: {
-    flex: 1,
-  },
   container: {
     flex: 1,
     backgroundColor: '#f8f9fa',

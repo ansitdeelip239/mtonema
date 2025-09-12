@@ -135,7 +135,6 @@ export const MainScreen: React.FC<Props> = ({navigation}) => {
   };
 
   return (
-    <BackgroundWrapper>
       <View style={styles.mainScreen}>
         {!isIOS && (
           <HeaderComponent title={t('app.title')} showBackButton={false} />
@@ -329,7 +328,6 @@ export const MainScreen: React.FC<Props> = ({navigation}) => {
           </View>
         </ScrollView>
       </View>
-    </BackgroundWrapper>
   );
 };
 
