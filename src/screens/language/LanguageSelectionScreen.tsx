@@ -5,11 +5,11 @@ import {
   StyleSheet,
   TouchableOpacity,
   FlatList,
-  SafeAreaView,
   ActivityIndicator,
   Image,
   ListRenderItem,
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import {useTranslation} from 'react-i18next';
 import {useLanguage} from '../../context/LanguageProvider';
 import {getSupportedLanguages, isCurrentLanguageRTL} from '../../i18n';

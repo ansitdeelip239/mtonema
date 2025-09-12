@@ -9,6 +9,7 @@ import {
   ActivityIndicator,
   TouchableOpacity,
   Animated,
+  Platform,
 } from 'react-native';
 import ConfirmationModal from '../../../components/ConfirmationModal';
 import PartnerService from '../../../services/PartnerService';
@@ -36,6 +37,7 @@ const PlansScreen: React.FC<Props> = ({navigation}) => {
     plan: null,
     loading: false,
   });
+  const isIOS = Platform.OS === 'ios';
 
   const fadeAnim = useRef(new Animated.Value(0)).current;
 
@@ -174,7 +176,7 @@ const PlansScreen: React.FC<Props> = ({navigation}) => {
   if (isLoadingPlans) {
     return (
       <View style={styles.container}>
-        {headerComponent}
+        {!isIOS && headerComponent}
         <View style={styles.loadingContainer}>
           <ActivityIndicator size="large" color="#4CAF50" />
           <Text style={styles.loadingText}>{t('billing.loading.plans', 'Loading plans...')}</Text>
@@ -185,7 +187,7 @@ const PlansScreen: React.FC<Props> = ({navigation}) => {
 
   return (
     <View style={styles.container}>
-      {headerComponent}
+      {!isIOS && headerComponent}
 
       <FlatList
         data={plans}

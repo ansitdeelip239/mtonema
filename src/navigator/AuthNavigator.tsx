@@ -9,6 +9,7 @@ import PartnerLoginScreen from '../screens/auth/PartnerLoginScreen';
 import { Platform } from 'react-native';
 import PartnerSignUpScreen from '../screens/auth/PartnerSignUpScreen';
 import SignUpScreen from '../screens/auth/SignUpScreen';
+import { useTranslation } from 'react-i18next';
 // import UserTypeSelectionScreen from '../screens/auth/UserTypeSelectionScreen';
 // import AsyncStorage from '@react-native-async-storage/async-storage';
 // import storageKeys from '../constants/storageKeys';
@@ -76,7 +77,9 @@ export default function AuthNavigator() {
   //     </View>
   //   );
   // }
+  const {t} = useTranslation();
   const isIOS = Platform.OS === 'ios';
+  
 
   return (
     <Stack.Navigator
@@ -97,7 +100,7 @@ export default function AuthNavigator() {
         name="MainScreen"
         component={MainScreen}
         options={{
-          title: isIOS ? 'Main' : '',
+          title: isIOS ? t('app.title', 'MT One: App & CRM') : '',
         }}
       />
       <Stack.Screen

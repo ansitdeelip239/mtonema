@@ -3,13 +3,14 @@ import {
   View,
   Text,
   StyleSheet,
-  SafeAreaView,
   FlatList,
   ActivityIndicator,
   RefreshControl,
   TouchableOpacity,
   Platform,
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { DrawerScreenProps } from '@react-navigation/drawer';
 import Header from '../../../components/Header';
 import { PartnerDrawerParamList } from '../../../types/navigation';
 import Colors from '../../../constants/Colors';
@@ -72,7 +73,9 @@ const GroupItem = memo(
   ),
 );
 
-const GroupsScreen = () => {
+type Props = DrawerScreenProps<PartnerDrawerParamList, 'Groups'>;
+
+const GroupsScreen = ({ navigation }: Props) => {
   // Get theme from context
   const { theme } = useTheme();
 
@@ -294,6 +297,22 @@ const GroupsScreen = () => {
     }
   }, [isSaving, isDeleting]);
 
+  // Set header options for iOS
+  useEffect(() => {
+    if (Platform.OS === 'ios') {
+      navigation.setOptions({
+        headerRight: () => (
+          <TouchableOpacity
+            style={[styles.headerAddButton, { backgroundColor: theme.secondaryColor }]}
+            onPress={toggleModal}
+            disabled={isSaving || isDeleting}>
+            <Text style={styles.headerAddButtonText}>+</Text>
+          </TouchableOpacity>
+        ),
+      });
+    }
+  }, [navigation, toggleModal, theme.secondaryColor, isSaving, isDeleting]);
+
   // Get color by master ID
   const getColorByMasterId = useCallback(
     (colorId?: number) => {
@@ -333,8 +352,10 @@ const GroupsScreen = () => {
     [isLoading, theme.primaryColor],
   );
 
+  const Container = Platform.OS === 'ios' ? View : SafeAreaView;
+
   return (
-    <SafeAreaView style={styles.container}>
+    <Container style={styles.container}>
       {
         Platform.OS === 'android' && (
           <Header<PartnerDrawerParamList>
@@ -394,7 +415,7 @@ const GroupsScreen = () => {
         isDeleting={isDeleting}
         group={selectedGroup}
       />
-    </SafeAreaView>
+    </Container>
   );
 };
 
@@ -478,6 +499,25 @@ const styles = StyleSheet.create({
   addButtonText: {
     color: Colors.white,
     fontWeight: 'bold',
+  },
+  headerAddButton: {
+    width: 36,
+    height: 36,
+    borderRadius: 18,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: 16,
+    shadowColor: '#000',
+    shadowOffset: {width: 0, height: 2},
+    shadowOpacity: 0.2,
+    shadowRadius: 4,
+    elevation: 3,
+  },
+  headerAddButtonText: {
+    color: Colors.white,
+    fontSize: 20,
+    fontWeight: '300',
+    lineHeight: 20,
   },
   modalContainer: {
     flex: 1,

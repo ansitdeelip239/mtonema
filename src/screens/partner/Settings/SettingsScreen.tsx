@@ -4,9 +4,10 @@ import {
   Text,
   View,
   ScrollView,
-  SafeAreaView,
   TouchableOpacity,
+  Platform,
 } from 'react-native';
+import {SafeAreaView} from 'react-native-safe-area-context';
 import {useTranslation} from 'react-i18next';
 import Header from '../../../components/Header';
 import LanguageSelector from '../../../components/LanguageSelector';
@@ -16,6 +17,7 @@ import {getSupportedLanguages} from '../../../i18n';
 const SettingsScreen = () => {
   const {t, i18n} = useTranslation();
   const [showLanguageSelector, setShowLanguageSelector] = useState(false);
+  const isIOS = Platform.OS === 'ios';
 
   // Get current language info
   const supportedLanguages = getSupportedLanguages();
@@ -33,8 +35,7 @@ const SettingsScreen = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Header title={t('settings.title', 'Settings')} />
-
+      {!isIOS && <Header title={t('settings.title', 'Settings')} />}
       <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
         {/* Language Section */}
         <View style={styles.section}>
@@ -101,10 +102,9 @@ const SettingsScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: Colors.MT_SECONDARY_3,
   },
   content: {
-    flex: 1,
+    // flex: 1,
     paddingHorizontal: 20,
   },
   section: {

@@ -23,14 +23,11 @@ const Stack = createNativeStackNavigator<TeamStackParamList>();
 
 const TeamStack = () => {
   const {theme} = useTheme();
-  const isIOS = Platform.OS === 'ios';
-  const drawerNavigation =
-    useNavigation<DrawerNavigationProp<PartnerDrawerParamList>>();
 
   return (
     <Stack.Navigator
       screenOptions={{
-        headerShown: isIOS,
+        headerShown: false,
         headerStyle: {backgroundColor: theme.primaryColor},
         headerTintColor: '#fff',
         headerTitleAlign: 'center',
@@ -44,14 +41,6 @@ const TeamStack = () => {
         options={{
           title: 'Content',
           headerBackVisible: false,
-          headerLeft: () => (
-            <TouchableOpacity
-              onPress={() => drawerNavigation.toggleDrawer()}
-              style={{marginLeft: 16, padding: 4}}
-              hitSlop={{top: 10, bottom: 10, left: 10, right: 10}}>
-              <GetIcon iconName="hamburgerMenu" color="#fff" size={18} />
-            </TouchableOpacity>
-          ),
         }}
       />
       <Stack.Screen

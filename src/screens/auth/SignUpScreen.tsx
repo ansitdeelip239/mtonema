@@ -33,7 +33,7 @@ import {useMaster} from '../../context/MasterProvider';
 import {MasterDetailModel} from '../../types';
 import HeaderComponent from './components/HeaderComponent';
 import {lightenColor} from '../../utils/colorUtils';
-import { useDialog } from '../../context/DialogProvider';
+import {useDialog} from '../../context/DialogProvider';
 
 const {width} = Dimensions.get('window');
 type Props = NativeStackScreenProps<AuthStackParamList, 'SignUpScreen'>;
@@ -51,6 +51,7 @@ const SignUpScreen: React.FC<Props> = ({navigation, route}) => {
   const {keyboardVisible} = useKeyboard();
   const {showError} = useDialog();
   const {masterData} = useMaster();
+  const isIOS = Platform.OS === 'ios';
 
   // Animation values for logo
   const logoHeight = useRef(new Animated.Value(150)).current;
@@ -170,7 +171,7 @@ const SignUpScreen: React.FC<Props> = ({navigation, route}) => {
       return true;
     } catch (error) {
       if (error instanceof z.ZodError) {
-        const fieldError = error.errors[0]?.message || 'Invalid input';
+        const fieldError = error.issues[0]?.message || 'Invalid input';
         setErrors(prev => ({...prev, [field]: fieldError}));
       }
       return false;
@@ -204,7 +205,7 @@ const SignUpScreen: React.FC<Props> = ({navigation, route}) => {
       } catch (error) {
         if (error instanceof z.ZodError) {
           const newErrors: Partial<Record<keyof SignupFormType, string>> = {};
-          error.errors.forEach(err => {
+          error.issues.forEach(err => {
             if (err.path[0]) {
               newErrors[err.path[0] as keyof SignupFormType] = err.message;
             }
@@ -239,11 +240,14 @@ const SignUpScreen: React.FC<Props> = ({navigation, route}) => {
   return (
     <View style={styles.container}>
       {/* Replace header with HeaderComponent */}
-      <HeaderComponent
-        title={`Sign Up as ${route.params.role}`}
-        showBackButton={true}
-        onBackPress={navigation.goBack}
-      />
+
+      {!isIOS && (
+        <HeaderComponent
+          title={`Sign Up as ${route.params.role}`}
+          showBackButton={true}
+          onBackPress={navigation.goBack}
+        />
+      )}
 
       <KeyboardAvoidingView
         style={styles.keyboardAvoid}
@@ -338,18 +342,17 @@ const SignUpScreen: React.FC<Props> = ({navigation, route}) => {
                 <View style={styles.checkboxContainer}>
                   <TouchableOpacity
                     style={styles.checkboxWrapper}
-                    onPress={() => handleFieldChange('acceptTerms', !formInput.acceptTerms)}
+                    onPress={() =>
+                      handleFieldChange('acceptTerms', !formInput.acceptTerms)
+                    }
                     activeOpacity={0.7}>
-                    <View style={[
-                      styles.checkbox,
-                      formInput.acceptTerms && styles.checkboxChecked,
-                    ]}>
+                    <View
+                      style={[
+                        styles.checkbox,
+                        formInput.acceptTerms && styles.checkboxChecked,
+                      ]}>
                       {formInput.acceptTerms && (
-                        <GetIcon
-                          iconName="checkmark"
-                          color="white"
-                          size={16}
-                        />
+                        <GetIcon iconName="checkmark" color="white" size={16} />
                       )}
                     </View>
                     <View style={styles.checkboxTextContainer}>
@@ -357,14 +360,18 @@ const SignUpScreen: React.FC<Props> = ({navigation, route}) => {
                         I agree to the{' '}
                         <Text
                           style={styles.linkText}
-                          onPress={() => Linking.openURL('https://mtone.in/terms-conditions')}>
+                          onPress={() =>
+                            Linking.openURL('https://mtone.in/terms-conditions')
+                          }>
                           Terms and Conditions
                         </Text>
                       </Text>
                     </View>
                   </TouchableOpacity>
                   {errors.acceptTerms && (
-                    <Text style={styles.checkboxError}>{errors.acceptTerms}</Text>
+                    <Text style={styles.checkboxError}>
+                      {errors.acceptTerms}
+                    </Text>
                   )}
                 </View>
 

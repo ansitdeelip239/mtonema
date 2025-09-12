@@ -1,5 +1,5 @@
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
-import {View, StyleSheet, ScrollView, Switch} from 'react-native';
+import {View, StyleSheet, ScrollView, Switch, Platform} from 'react-native';
 import {PlansStackParamList} from '../../../navigator/components/PlansStack';
 import Header from '../../../components/Header';
 import useForm from '../../../hooks/useForm';
@@ -7,11 +7,11 @@ import {MaterialTextInput} from '../../../components/MaterialTextInput';
 import {Button, Text} from 'react-native-paper';
 import FilterOption from '../../../components/FilterOption';
 import {useMaster} from '../../../context/MasterProvider';
-import { useTheme } from '../../../context/ThemeProvider';
+import {useTheme} from '../../../context/ThemeProvider';
 import PlansFormSchema from '../../../schema/PlansFormSchema';
 import PartnerService from '../../../services/PartnerService';
 import Toast from 'react-native-toast-message';
-import { useState } from 'react';
+import {useState} from 'react';
 import {useTranslation} from 'react-i18next';
 
 type Props = NativeStackScreenProps<PlansStackParamList, 'Add Plan Screen'> & {
@@ -24,52 +24,61 @@ type Props = NativeStackScreenProps<PlansStackParamList, 'Add Plan Screen'> & {
 };
 
 interface PlansForm {
-planName: string;
-description: string;
-price: string;
-billingCycle: string;
-durationDays: string;
-maxUsers: string;
-isTrial: boolean;
+  planName: string;
+  description: string;
+  price: string;
+  billingCycle: string;
+  durationDays: string;
+  maxUsers: string;
+  isTrial: boolean;
 }
 
 const AddPlanScreen: React.FC<Props> = ({navigation, route}) => {
   const {masterData} = useMaster();
   const {theme} = useTheme();
   const {t} = useTranslation();
+  const isIOS = Platform.OS === 'ios';
 
   const editMode = route?.params?.editMode;
   const planData = route?.params?.planData;
 
-  const initialState: PlansForm = editMode && planData
-    ? {
-        planName: planData.planName || '',
-        description: planData.description || '',
-        price: planData.price ? String(planData.price / 100) : '',
-        billingCycle: planData.billingCycle || 'Monthly',
-        durationDays: planData.durationDays ? String(planData.durationDays) : '',
-        maxUsers: planData.maxUsers ? String(planData.maxUsers) : '',
-        isTrial: !!planData.isTrial,
-      }
-    : {
-        planName: '',
-        description: '',
-        price: '',
-        billingCycle: 'Monthly',
-        durationDays: '',
-        maxUsers: '',
-        isTrial: false,
-      };
+  const initialState: PlansForm =
+    editMode && planData
+      ? {
+          planName: planData.planName || '',
+          description: planData.description || '',
+          price: planData.price ? String(planData.price / 100) : '',
+          billingCycle: planData.billingCycle || 'Monthly',
+          durationDays: planData.durationDays
+            ? String(planData.durationDays)
+            : '',
+          maxUsers: planData.maxUsers ? String(planData.maxUsers) : '',
+          isTrial: !!planData.isTrial,
+        }
+      : {
+          planName: '',
+          description: '',
+          price: '',
+          billingCycle: 'Monthly',
+          durationDays: '',
+          maxUsers: '',
+          isTrial: false,
+        };
 
   const {formInput, handleInputChange, onSubmit} = useForm<PlansForm>({
     initialState,
     onSubmit: async data => {
       const result = PlansFormSchema.safeParse(data);
       if (!result.success) {
-        const firstError = result.error.errors[0];
+        const firstError = result.error.issues[0];
         Toast.show({
           type: 'error',
-          text1: firstError.message || t('billing.addPlan.messages.error.validation', 'Please check your input'),
+          text1:
+            firstError.message ||
+            t(
+              'billing.addPlan.messages.error.validation',
+              'Please check your input',
+            ),
         });
         return;
       }
@@ -88,26 +97,50 @@ const AddPlanScreen: React.FC<Props> = ({navigation, route}) => {
       try {
         let response;
         if (editMode && planData?.id) {
-          response = await PartnerService.updatePaymentPlan(payload, planData.id);
+          response = await PartnerService.updatePaymentPlan(
+            payload,
+            planData.id,
+          );
         } else {
           response = await PartnerService.addPaymentPlan(payload);
         }
         if (response && response.data) {
           Toast.show({
             type: 'success',
-            text1: editMode ? t('billing.addPlan.messages.success.edit', 'Plan updated successfully') : t('billing.addPlan.messages.success.add', 'Plan added successfully'),
+            text1: editMode
+              ? t(
+                  'billing.addPlan.messages.success.edit',
+                  'Plan updated successfully',
+                )
+              : t(
+                  'billing.addPlan.messages.success.add',
+                  'Plan added successfully',
+                ),
           });
           navigation.goBack();
         } else {
           Toast.show({
             type: 'error',
-            text1: editMode ? t('billing.addPlan.messages.error.edit', 'Failed to update plan') : t('billing.addPlan.messages.error.add', 'Failed to add plan'),
+            text1: editMode
+              ? t(
+                  'billing.addPlan.messages.error.edit',
+                  'Failed to update plan',
+                )
+              : t('billing.addPlan.messages.error.add', 'Failed to add plan'),
           });
         }
       } catch (err) {
         Toast.show({
           type: 'error',
-          text1: editMode ? t('billing.addPlan.messages.error.editGeneric', 'An error occurred while updating the plan') : t('billing.addPlan.messages.error.addGeneric', 'An error occurred while saving the plan'),
+          text1: editMode
+            ? t(
+                'billing.addPlan.messages.error.editGeneric',
+                'An error occurred while updating the plan',
+              )
+            : t(
+                'billing.addPlan.messages.error.addGeneric',
+                'An error occurred while saving the plan',
+              ),
         });
       } finally {
         setLoading(false);
@@ -119,11 +152,17 @@ const AddPlanScreen: React.FC<Props> = ({navigation, route}) => {
 
   return (
     <View style={styles.container}>
-      <Header
-        title={editMode ? t('billing.addPlan.title.edit', 'Edit Plan') : t('billing.addPlan.title.add', 'Add Plan')}
-        backButton
-        onBackPress={() => navigation.goBack()}
-      />
+      {!isIOS && (
+        <Header
+          title={
+            editMode
+              ? t('billing.addPlan.title.edit', 'Edit Plan')
+              : t('billing.addPlan.title.add', 'Add Plan')
+          }
+          backButton
+          onBackPress={() => navigation.goBack()}
+        />
+      )}
       <ScrollView
         contentContainerStyle={styles.scrollContainer}
         keyboardShouldPersistTaps="handled">
@@ -135,7 +174,10 @@ const AddPlanScreen: React.FC<Props> = ({navigation, route}) => {
             formInput={formInput}
             setFormInput={handleInputChange}
             mode="outlined"
-            placeholder={t('billing.addPlan.placeholders.planName', 'Eg. Premium Plan')}
+            placeholder={t(
+              'billing.addPlan.placeholders.planName',
+              'Eg. Premium Plan',
+            )}
           />
           <MaterialTextInput<PlansForm>
             style={styles.input}
@@ -144,7 +186,10 @@ const AddPlanScreen: React.FC<Props> = ({navigation, route}) => {
             formInput={formInput}
             setFormInput={handleInputChange}
             mode="outlined"
-            placeholder={t('billing.addPlan.placeholders.description', 'Describe the plan')}
+            placeholder={t(
+              'billing.addPlan.placeholders.description',
+              'Describe the plan',
+            )}
             multiline
             numberOfLines={3}
           />
@@ -187,15 +232,17 @@ const AddPlanScreen: React.FC<Props> = ({navigation, route}) => {
             placeholder={t('billing.addPlan.placeholders.maxUsers', 'Eg. 5')}
             keyboardType="number-pad"
           />
-            <View style={styles.toggleRow}>
-            <Text style={styles.toggleLabel}>{t('billing.addPlan.form.isTrial', 'Is Trial?')}</Text>
+          <View style={styles.toggleRow}>
+            <Text style={styles.toggleLabel}>
+              {t('billing.addPlan.form.isTrial', 'Is Trial?')}
+            </Text>
             <Switch
               value={formInput.isTrial}
               onValueChange={val => handleInputChange('isTrial', val)}
-              trackColor={{ false: '#767577', true: '#53a20e' }}
+              trackColor={{false: '#767577', true: '#53a20e'}}
               thumbColor={formInput.isTrial ? '#ffffff' : '#f4f3f4'}
             />
-            </View>
+          </View>
         </View>
         <Button
           mode="contained"
@@ -203,8 +250,7 @@ const AddPlanScreen: React.FC<Props> = ({navigation, route}) => {
           buttonColor={theme.primaryColor}
           textColor="white"
           loading={loading}
-          style={styles.submitBtn}
-        >
+          style={styles.submitBtn}>
           {t('common.actions.submit', 'Submit')}
         </Button>
       </ScrollView>

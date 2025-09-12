@@ -25,7 +25,7 @@ const MainNavigator = () => {
         action: t('logout.action', 'Logout'),
       },
       common: {
-        cancel: t('common.cancel', 'Cancel'),
+        cancel: t('common.actions.cancel', 'Cancel'),
       },
       auth: {
         accessDenied: t('auth.accessDenied', 'Access Denied'),
@@ -66,7 +66,7 @@ const MainNavigator = () => {
   const handleLogout = () => {
     Alert.alert(translations.logout.title, translations.logout.confirm, [
       {
-        text: translations.common.cancel,
+        text: translations.common.actions.cancel,
         style: 'cancel',
       },
       {

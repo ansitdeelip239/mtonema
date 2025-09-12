@@ -1,5 +1,6 @@
 import React, {useState, useCallback, useEffect} from 'react';
-import {StyleSheet, SafeAreaView, Platform} from 'react-native';
+import {StyleSheet, Platform} from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {AuthStackParamList} from '../../navigator/AuthNavigator';
 import AuthService from '../../services/AuthService';

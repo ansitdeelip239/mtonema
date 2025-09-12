@@ -49,7 +49,7 @@ const LanguageSwitcherButton: React.FC<LanguageSwitcherButtonProps> = ({
       <TouchableOpacity
         style={[styles.languageButton, style]}
         onPress={openSelector}
-        accessibilityLabel={t('language.changeLanguage')}>
+        accessibilityLabel={t('language.change')}>
         <View style={styles.languageButtonContent}>
           <Text style={[styles.languageIcon, {color: textColor}]}>🌐</Text>
           <Text style={[styles.languageText, {color: textColor}]}>

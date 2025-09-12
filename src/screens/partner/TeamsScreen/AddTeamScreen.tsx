@@ -8,8 +8,8 @@ import {
   Platform,
   TouchableOpacity,
   ActivityIndicator,
-  SafeAreaView,
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {Text, Card} from 'react-native-paper';
 import {TeamStackParamList} from '../../../navigator/components/TeamStack';

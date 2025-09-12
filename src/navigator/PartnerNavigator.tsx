@@ -13,6 +13,7 @@ import TeamStack from './components/TeamStack';
 import SettingsScreen from '../screens/partner/Settings/SettingsScreen';
 import {useTranslation} from 'react-i18next';
 import {useDrawerStyles} from '../hooks/useDrawerStyles';
+import DrawerToggleButton from '../components/DrawerToggleButton';
 
 const Drawer = createDrawerNavigator<PartnerDrawerParamList>();
 
@@ -45,6 +46,7 @@ const PartnerNavigator = () => {
         component={GroupsScreen}
         options={{
           headerShown: isIOS,
+          headerLeft: () => <DrawerToggleButton />,
           drawerLabel: t('navigation.drawer.groups'), // Add localized label
           // eslint-disable-next-line react/no-unstable-nested-components
           drawerIcon: ({color}) => (
@@ -58,6 +60,7 @@ const PartnerNavigator = () => {
         component={TeamStack}
         options={{
           headerShown: isIOS,
+          headerLeft: () => <DrawerToggleButton />,
           drawerLabel: t('navigation.drawer.teams'), // Add localized label
           // eslint-disable-next-line react/no-unstable-nested-components
           drawerIcon: ({color}) => (
@@ -82,7 +85,8 @@ const PartnerNavigator = () => {
         name="Settings"
         component={SettingsScreen}
         options={{
-          headerShown: false,
+          headerShown: isIOS,
+          headerLeft: () => <DrawerToggleButton />,
           drawerLabel: t('navigation.drawer.settings'), // Add localized label
           // eslint-disable-next-line react/no-unstable-nested-components
           drawerIcon: ({color}) => (
@@ -95,6 +99,7 @@ const PartnerNavigator = () => {
         component={PartnerProfileScreen}
         options={{
           headerShown: isIOS,
+          headerLeft: () => <DrawerToggleButton />,
           drawerItemStyle: {display: 'none'},
         }}
       />

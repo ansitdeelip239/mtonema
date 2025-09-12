@@ -860,11 +860,13 @@
       "labels": {
         "videoURL": "رابط الفيديو",
         "images": "الصور",
-        "tags": "العلامات"
+        "tags": "العلامات",
+        "selectCategory": "اختر الفئة"
       },
       "placeholders": {
         "videoURL": "أدخل رابط يوتيوب أو فيميو",
-        "tags": "مثال، #فاخر"
+        "tags": "مثال، #فاخر",
+        "selectCategory": "اختر الفئة"
       },
       "descriptions": {
         "optionalStep": "هذه الخطوة اختيارية. يمكنك المتابعة دون ملء هذه التفاصيل.",

@@ -49,7 +49,7 @@ const BasicDetailsStep: React.FC<BasicDetailsStepProps> = ({
   // Add state for location suggestions
   const [locationSuggestions, setLocationSuggestions] = useState<string[]>([]);
   const [isLoadingSuggestions, setIsLoadingSuggestions] = useState(false);
-  const locationTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const locationTimeoutRef = useRef<number | null>(null);
   const [placePredictions, setPlacePredictions] = useState<PlacePrediction[]>(
     [],
   );
@@ -122,7 +122,8 @@ const BasicDetailsStep: React.FC<BasicDetailsStepProps> = ({
         setErrors(prev => ({...prev, [field]: ''}));
       } catch (error) {
         if (error instanceof z.ZodError) {
-          const fieldError = error.errors.find(err => err.path[0] === field);
+          const zodError = error as z.ZodError;
+          const fieldError = zodError.issues.find(err => err.path[0] === field);
           if (fieldError && shouldShowErrors) {
             setErrors(prev => ({...prev, [field]: fieldError.message}));
           }
@@ -285,7 +286,6 @@ const BasicDetailsStep: React.FC<BasicDetailsStepProps> = ({
       fetchLocationSuggestions(value);
     }
   };
-
   const handleNext = () => {
     setAttemptedSubmit(true);
     setShouldShowErrors(true);
@@ -312,8 +312,9 @@ const BasicDetailsStep: React.FC<BasicDetailsStepProps> = ({
       onNext();
     } catch (error) {
       if (error instanceof z.ZodError) {
+        const zodError = error as z.ZodError;
         const newErrors: Record<string, string> = {};
-        error.errors.forEach(err => {
+        zodError.issues.forEach(err => {
           const field = err.path[0] as string;
           newErrors[field] = err.message;
         });

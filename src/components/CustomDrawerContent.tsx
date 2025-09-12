@@ -137,14 +137,17 @@ const CustomDrawerContent = (props: any) => {
           </TouchableOpacity>
         )}
 
-        <CustomDrawerItem
-          iconName="rupee"
-          label={t('navigation.drawer.payments', 'Payments')}
-          onPress={navigateToPayments}
-          isActive={currentRoute === 'Payments'}
-          showForRoles={[Roles.ADMIN, Roles.PARTNER]}
-          userRole={user?.role}
-        />
+        {
+          user?.role === Roles.ADMIN &&
+          <CustomDrawerItem
+            iconName="rupee"
+            label={t('navigation.drawer.payments', 'Payments')}
+            onPress={navigateToPayments}
+            isActive={currentRoute === 'Payments'}
+            showForRoles={[Roles.ADMIN, Roles.PARTNER]}
+            userRole={user?.role}
+          />
+        }
 
         <CustomDrawerItem
           iconName="about"
@@ -257,10 +260,16 @@ const CustomDrawerContent = (props: any) => {
         <View style={styles.modalContainer}>
           <View style={styles.modalContent}>
             <Text style={styles.modalText}>
-              {t('navigation.drawer.underDevelopment', 'This feature is under development')}
+              {t(
+                'navigation.drawer.underDevelopment',
+                'This feature is under development',
+              )}
             </Text>
             <TouchableOpacity
-              style={[styles.modalSingleButton, {backgroundColor: theme.primaryColor}]}
+              style={[
+                styles.modalSingleButton,
+                {backgroundColor: theme.primaryColor},
+              ]}
               onPress={() => setModalVisible(false)}>
               <Text style={styles.textWhite}>
                 {t('common.actions.ok', 'OK')}

@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { View, StyleSheet, SafeAreaView, Platform, I18nManager, TouchableOpacity, Text } from 'react-native';
+import { View, StyleSheet, Platform, I18nManager, TouchableOpacity, Text } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { useTranslation } from 'react-i18next';
 import Header from '../../../components/Header';
 import { PartnerDrawerParamList } from '../../../types/navigation';

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {
   View,
   Text,
@@ -6,6 +6,8 @@ import {
   TouchableOpacity,
   Image,
   ScrollView,
+  Modal,
+  Platform,
 } from 'react-native';
 import {Picker} from '@react-native-picker/picker';
 import { useTranslation } from 'react-i18next';
@@ -34,9 +36,73 @@ const ImagePreviewList: React.FC<ImagePreviewListProps> = ({
   const {theme} = useTheme();
   const { t } = useTranslation();
 
+  // State for iOS picker modal
+  const [pickerModalVisible, setPickerModalVisible] = useState(false);
+  const [selectedImageIndex, setSelectedImageIndex] = useState<number | null>(null);
+
   if (images.length === 0) {
     return null;
   }
+
+  const openPickerModal = (index: number) => {
+    setSelectedImageIndex(index);
+    setPickerModalVisible(true);
+  };
+
+  const closePickerModal = () => {
+    setPickerModalVisible(false);
+    setSelectedImageIndex(null);
+  };
+
+  const handlePickerValueChange = (value: string) => {
+    if (selectedImageIndex !== null) {
+      onCategoryChange(selectedImageIndex, value);
+    }
+    closePickerModal();
+  };
+
+  const renderCategoryPicker = (image: ImageData, index: number) => {
+    if (Platform.OS === 'ios') {
+      return (
+        <View style={styles.categoryPickerContainer}>
+          <TouchableOpacity
+            style={styles.iosPickerButton}
+            onPress={() => openPickerModal(index)}>
+            <Text style={styles.iosPickerText}>
+              {image.type || t('partnerPropertyForm.mediaAndSubmit.placeholders.selectCategory', 'Select Category')}
+            </Text>
+            <GetIcon iconName="chevronRight" size={16} color={theme.primaryColor} />
+          </TouchableOpacity>
+        </View>
+      );
+    }
+
+    // Android: Keep the original picker
+    return (
+      <View style={styles.categoryPickerContainer}>
+        <Picker
+          selectedValue={image.type || ''}
+          style={styles.categoryPicker}
+          onValueChange={value => onCategoryChange(index, value)}
+          dropdownIconColor={theme.primaryColor}>
+          {/* Add placeholder as first item */}
+          <Picker.Item
+            label={t('partnerPropertyForm.mediaAndSubmit.placeholders.selectCategory', 'Select Category')}
+            value=""
+            style={styles.pickerItem}
+          />
+          {imageTypes.map(type => (
+            <Picker.Item
+              key={type.id}
+              label={type.masterDetailName}
+              value={type.masterDetailName}
+              style={styles.pickerItem}
+            />
+          ))}
+        </Picker>
+      </View>
+    );
+  };
 
   return (
     <View style={styles.imageSection}>
@@ -90,32 +156,49 @@ const ImagePreviewList: React.FC<ImagePreviewListProps> = ({
             </View>
 
             {/* Category picker */}
-            <View style={styles.categoryPickerContainer}>
-              <Picker
-                selectedValue={image.type || ''}
-                style={styles.categoryPicker}
-                onValueChange={value => onCategoryChange(index, value)}
-                dropdownIconColor={theme.primaryColor}>
-                {/* Add placeholder as first item */}
-                <Picker.Item
-                  label="Select Category"
-                  value=""
-                  style={styles.placeholderPickerItem}
-                  enabled={false}
-                />
-                {imageTypes.map(type => (
-                  <Picker.Item
-                    key={type.id}
-                    label={type.masterDetailName}
-                    value={type.masterDetailName}
-                    style={styles.pickerItem}
-                  />
-                ))}
-              </Picker>
-            </View>
+            {renderCategoryPicker(image, index)}
           </View>
         ))}
       </ScrollView>
+
+      {/* iOS Picker Modal */}
+      <Modal
+        visible={pickerModalVisible}
+        animationType="slide"
+        presentationStyle="pageSheet"
+        onRequestClose={closePickerModal}>
+        <View style={styles.modalContainer}>
+          <View style={styles.modalHeader}>
+            <TouchableOpacity onPress={closePickerModal} style={styles.modalCloseButton}>
+              <Text style={styles.modalCloseText}>
+                {t('common.actions.cancel', 'Cancel')}
+              </Text>
+            </TouchableOpacity>
+            <Text style={styles.modalTitle}>
+              {t('partnerPropertyForm.mediaAndSubmit.labels.selectCategory', 'Select Category')}
+            </Text>
+            <View style={styles.modalSpacer} />
+          </View>
+          <Picker
+            selectedValue={selectedImageIndex !== null ? images[selectedImageIndex]?.type || '' : ''}
+            style={styles.modalPicker}
+            onValueChange={handlePickerValueChange}>
+            <Picker.Item
+              label={t('partnerPropertyForm.mediaAndSubmit.placeholders.selectCategory', 'Select Category')}
+              value=""
+              style={styles.pickerItem}
+            />
+            {imageTypes.map(type => (
+              <Picker.Item
+                key={type.id}
+                label={type.masterDetailName}
+                value={type.masterDetailName}
+                style={styles.pickerItem}
+              />
+            ))}
+          </Picker>
+        </View>
+      </Modal>
     </View>
   );
 };
@@ -216,6 +299,56 @@ const styles = StyleSheet.create({
   placeholderPickerItem: {
     fontSize: 12,
     color: '#888',
+  },
+  iosPickerButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+    backgroundColor: '#f9f9f9',
+    borderRadius: 4,
+    borderWidth: 1,
+    borderColor: '#ddd',
+  },
+  iosPickerText: {
+    fontSize: 12,
+    color: 'black',
+    flex: 1,
+  },
+  modalContainer: {
+    flex: 1,
+    backgroundColor: '#ffffff',
+  },
+  modalHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: 20,
+    paddingVertical: 15,
+    borderBottomWidth: 1,
+    borderBottomColor: '#e0e0e0',
+  },
+  modalCloseButton: {
+    paddingHorizontal: 15,
+    paddingVertical: 8,
+  },
+  modalCloseText: {
+    fontSize: 16,
+    color: '#007AFF',
+    fontWeight: '600',
+  },
+  modalTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: '#333',
+  },
+  modalSpacer: {
+    width: 60,
+  },
+  modalPicker: {
+    flex: 1,
+    backgroundColor: '#ffffff',
   },
 });
 

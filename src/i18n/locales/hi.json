@@ -785,11 +785,13 @@
       "labels": {
         "videoURL": "वीडियो URL",
         "images": "छवियाँ",
-        "tags": "टैग"
+        "tags": "टैग",
+        "selectCategory": "श्रेणी चुनें"
       },
       "placeholders": {
         "videoURL": "यूट्यूब या विमियो लिंक दर्ज करें",
-        "tags": "उदा., #लक्जरी"
+        "tags": "उदा., #लक्जरी",
+        "selectCategory": "श्रेणी चुनें"
       },
       "descriptions": {
         "optionalStep": "यह कदम वैकल्पिक है। आप इन विवरणों को भरने के बिना आगे बढ़ सकते हैं।",

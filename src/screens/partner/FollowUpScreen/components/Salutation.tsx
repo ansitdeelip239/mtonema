@@ -6,7 +6,7 @@ import {getTimeIcon, getFirstName, getGreetingTranslationKey} from '../../../../
 import {useTranslation} from 'react-i18next';
 import { useAuth } from '../../../../context/AuthProvider';
 
-const SalutationGreeting: React.FC = () => {
+const SalutationGreeting = () => {
   const {t} = useTranslation();
   const {user} = useAuth();
   const {theme} = useTheme();

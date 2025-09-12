@@ -795,11 +795,13 @@
       "labels": {
         "videoURL": "URL del Video",
         "images": "Imágenes",
-        "tags": "Etiquetas"
+        "tags": "Etiquetas",
+        "selectCategory": "Seleccionar Categoría"
       },
       "placeholders": {
         "videoURL": "Ingrese URL de YouTube o Vimeo",
-        "tags": "Ej., #lujo"
+        "tags": "Ej., #lujo",
+        "selectCategory": "Seleccionar Categoría"
       },
       "descriptions": {
         "optionalStep": "Este paso es opcional. Puede continuar sin completar estos detalles.",

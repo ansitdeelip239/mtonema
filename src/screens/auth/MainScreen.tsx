@@ -36,6 +36,7 @@ export const MainScreen: React.FC<Props> = ({navigation}) => {
   );
   const slideAnimation = useRef(new Animated.Value(0)).current;
   const isRTL = isCurrentLanguageRTL();
+  const isIOS = Platform.OS === 'ios';
 
   const onBuyerSellerLogin = () => {
     const individualLocation = masterData?.PartnerLocation?.find(
@@ -136,10 +137,9 @@ export const MainScreen: React.FC<Props> = ({navigation}) => {
   return (
     <BackgroundWrapper>
       <View style={styles.mainScreen}>
-        <HeaderComponent
-          title={t('app.title')}
-          showBackButton={false}
-        />
+        {!isIOS && (
+          <HeaderComponent title={t('app.title')} showBackButton={false} />
+        )}
         <View style={styles.languageSwitcherContainer}>
           <LanguageSwitcherButton textColor={Colors.MT_PRIMARY_1} />
         </View>
