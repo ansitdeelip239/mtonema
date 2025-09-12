@@ -49,24 +49,50 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({children}) => {
 
   const logout = useCallback(async () => {
     try {
-      await AuthService.removeUserData();
-      await AsyncStorage.removeItem('tokenExpiry');
-      await AsyncStorage.removeItem('token');
-      await resetToDefaultTheme();
-      await clearLogoData();
-      setUser(null);
-      setAuthToken(null);
-      setIsAuthenticated(false);
-      // Clear token expiry timer
+      // Clear token expiry timer first
       if (tokenExpiryTimer.current) {
         clearTimeout(tokenExpiryTimer.current);
+        tokenExpiryTimer.current = undefined;
       }
+
+      // Set loading state immediately to prevent UI interactions
+      setIsLoading(true);
+
+      // Clear auth state first to trigger navigation change
+      setIsAuthenticated(false);
+      setUser(null);
+      setAuthToken(null);
+
+      // Use InteractionManager to defer heavy operations until after UI update
+      const InteractionManager = require('react-native').InteractionManager;
+      
+      InteractionManager.runAfterInteractions(async () => {
+        try {
+          // Perform cleanup operations
+          await Promise.all([
+            AuthService.removeUserData(),
+            AsyncStorage.removeItem('tokenExpiry'),
+            AsyncStorage.removeItem('token'),
+          ]);
+
+          // Reset theme and logo data with error handling
+          await Promise.allSettled([
+            resetToDefaultTheme(),
+            clearLogoData(),
+          ]);
+        } catch (error) {
+          console.error('Logout cleanup failed:', error);
+        } finally {
+          setIsLoading(false);
+        }
+      });
     } catch (error) {
       console.error('Logout failed:', error);
-      // Still reset state even if storage clear fails
+      // Still reset state even if cleanup fails
       setUser(null);
       setAuthToken(null);
       setIsAuthenticated(false);
+      setIsLoading(false);
     }
   }, [clearLogoData, resetToDefaultTheme]);
 

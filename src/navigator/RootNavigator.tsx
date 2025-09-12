@@ -52,7 +52,21 @@ export default function RootNavigator() {
 
   return (
     <SafeAreaView style={styles.safeArea} edges={Platform.OS === 'ios' ? [] : ['bottom']}>
-      <NavigationContainer ref={navigationRef}>
+      <NavigationContainer 
+        ref={navigationRef}
+        onReady={() => {
+          // Reset navigation state when switching between auth states on iOS
+          if (Platform.OS === 'ios' && navigationRef.current) {
+            const InteractionManager = require('react-native').InteractionManager;
+            InteractionManager.runAfterInteractions(() => {
+              // Small delay to ensure UI is ready
+              setTimeout(() => {
+                console.log('Navigation ready for', isAuthenticated ? 'authenticated' : 'unauthenticated', 'user');
+              }, 100);
+            });
+          }
+        }}
+      >
         <LanguageDebugger />
         <RootStack.Navigator screenOptions={{headerShown: false}}>
           {isAuthenticated ? (

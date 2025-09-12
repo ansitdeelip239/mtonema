@@ -83,7 +83,9 @@ export const ThemeProvider: React.FC<ThemeProviderProps> = ({children}) => {
       await AsyncStorage.setItem(THEME_KEY, JSON.stringify(defaultTheme));
     } catch (err) {
       console.error('Failed to reset theme', err);
-      throw new Error('Failed to reset theme');
+      // Still set theme to default even if storage fails
+      setTheme(defaultTheme);
+      // Don't throw error to prevent logout from failing
     }
   };
 

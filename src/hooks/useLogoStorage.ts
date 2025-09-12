@@ -58,10 +58,14 @@ export const useLogoStorage = () => {
       setPartnerDomain(null);
     } catch (clearError) {
       console.error('Failed to clear logo data:', clearError);
+      // Set state to null anyway to prevent UI issues
+      setLogoUrl(null);
+      setPartnerName(null);
+      setPartnerDomain(null);
       setError(
         clearError instanceof Error ? clearError : new Error('Failed to clear logo data'),
       );
-      throw clearError;
+      // Don't throw error to prevent logout from failing
     }
   }, []);
 
