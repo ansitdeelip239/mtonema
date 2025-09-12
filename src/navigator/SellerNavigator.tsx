@@ -15,7 +15,7 @@ const SellerNavigator = memo(() => {
 
   return (
     <>
-      <StatusBar barStyle="dark-content" backgroundColor="#fff" />
+      <StatusBar barStyle="light-content" backgroundColor="#fff" translucent={false} />
       <Drawer.Navigator
         // eslint-disable-next-line react/no-unstable-nested-components
         drawerContent={props => <CustomDrawerContent {...props} />}

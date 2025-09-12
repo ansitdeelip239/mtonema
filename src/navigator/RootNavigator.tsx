@@ -13,7 +13,8 @@ import LanguageDebugger from '../components/LanguageDebugger';
 import {BottomTabProvider} from '../context/BottomTabProvider';
 import SubscriptionProvider from '../context/SubscriptionProvider';
 import { useAuth } from '../context/AuthProvider';
-import {SafeAreaView} from 'react-native-safe-area-context';
+import {SafeAreaView, Edge} from 'react-native-safe-area-context';
+import Roles from '../constants/Roles';
 
 const RootStack = createNativeStackNavigator();
 
@@ -27,7 +28,7 @@ const MainNavigatorWithProviders = () => (
 );
 
 export default function RootNavigator() {
-  const {isAuthenticated, isLoading: isAuthLoading} = useAuth();
+  const {isAuthenticated, isLoading: isAuthLoading, user} = useAuth();
   const {isLanguageSet, isLoading: isLanguageLoading} = useLanguage();
 
   const isLoading = isAuthLoading || isLanguageLoading;
@@ -50,8 +51,22 @@ export default function RootNavigator() {
     return <LanguageSelectionScreen />;
   }
 
+  // Determine safe area edges based on platform and user role
+  const getSafeAreaEdges = (): Edge[] => {
+    if (Platform.OS === 'ios') {
+      return [];
+    }
+    
+    // On Android, protect top and bottom only for authenticated buyer/seller users, only bottom for others
+    if (isAuthenticated && (user?.role === Roles.BUYER || user?.role === Roles.SELLER)) {
+      return ['top', 'bottom'];
+    }
+    
+    return ['bottom'];
+  };
+
   return (
-    <SafeAreaView style={styles.safeArea} edges={Platform.OS === 'ios' ? [] : ['bottom']}>
+    <SafeAreaView style={styles.safeArea} edges={getSafeAreaEdges()}>
       <NavigationContainer 
         ref={navigationRef}
         onReady={() => {
