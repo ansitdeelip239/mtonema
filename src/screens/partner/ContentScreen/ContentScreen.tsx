@@ -1,21 +1,27 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import { View, StyleSheet, Platform, I18nManager, TouchableOpacity, Text } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { useTranslation } from 'react-i18next';
+import React, {useState, useEffect, useCallback} from 'react';
+import {
+  View,
+  StyleSheet,
+  Platform,
+  I18nManager,
+  TouchableOpacity,
+  Text,
+} from 'react-native';
+import {useTranslation} from 'react-i18next';
 import Header from '../../../components/Header';
-import { PartnerDrawerParamList } from '../../../types/navigation';
-import { ContentTemplate } from '../../../types';
+import {PartnerDrawerParamList} from '../../../types/navigation';
+import {ContentTemplate} from '../../../types';
 import PartnerService from '../../../services/PartnerService';
-import { useTheme } from '../../../context/ThemeProvider';
+import {useTheme} from '../../../context/ThemeProvider';
 import ContentHeader from './components/ContentHeader';
 import ContentLoadingIndicator from './components/ContentLoadingIndicator';
 import ContentTemplatesList from './components/ContentTemplateList';
 import GetIcon from '../../../components/GetIcon';
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { ContentTemplateStackParamList } from '../../../navigator/components/ContentTemplateStack';
-import { usePartner } from '../../../context/PartnerProvider';
-import { useAuth } from '../../../context/AuthProvider';
-import { useDialog } from '../../../context/DialogProvider';
+import {NativeStackScreenProps} from '@react-navigation/native-stack';
+import {ContentTemplateStackParamList} from '../../../navigator/components/ContentTemplateStack';
+import {usePartner} from '../../../context/PartnerProvider';
+import {useAuth} from '../../../context/AuthProvider';
+import {useDialog} from '../../../context/DialogProvider';
 
 type Props = NativeStackScreenProps<
   ContentTemplateStackParamList,
@@ -24,12 +30,12 @@ type Props = NativeStackScreenProps<
 
 const PAGE_SIZE = 20;
 
-const ContentScreen: React.FC<Props> = ({ navigation }) => {
-  const { user } = useAuth();
-  const { showError } = useDialog();
-  const { theme } = useTheme();
-  const { messageTemplateUpdated } = usePartner();
-  const { t } = useTranslation();
+const ContentScreen: React.FC<Props> = ({navigation}) => {
+  const {user} = useAuth();
+  const {showError} = useDialog();
+  const {theme} = useTheme();
+  const {messageTemplateUpdated} = usePartner();
+  const {t} = useTranslation();
 
   // State management
   const [contentTemplates, setContentTemplates] = useState<ContentTemplate[]>(
@@ -63,7 +69,7 @@ const ContentScreen: React.FC<Props> = ({ navigation }) => {
         );
 
         if (response.success) {
-          const { contentTemplates: newTemplates, responsePagingModel } =
+          const {contentTemplates: newTemplates, responsePagingModel} =
             response.data;
 
           if (pageNumber === 1) {
@@ -76,11 +82,21 @@ const ContentScreen: React.FC<Props> = ({ navigation }) => {
           setHasNextPage(responsePagingModel.nextPage);
           setCurrentPage(pageNumber);
         } else {
-          showError(t('contentScreen.errors.fetchFailed', 'Failed to fetch content templates'));
+          showError(
+            t(
+              'contentScreen.errors.fetchFailed',
+              'Failed to fetch content templates',
+            ),
+          );
         }
       } catch (error) {
         console.error('Error fetching content templates:', error);
-        showError(t('contentScreen.errors.loadingError', 'Error loading content templates'));
+        showError(
+          t(
+            'contentScreen.errors.loadingError',
+            'Error loading content templates',
+          ),
+        );
       } finally {
         setLoading(false);
         setRefreshing(false);
@@ -119,12 +135,15 @@ const ContentScreen: React.FC<Props> = ({ navigation }) => {
     console.log('View template:', item.name);
   }, []);
 
-  const handleTemplateEdit = useCallback((item: ContentTemplate) => {
-    navigation.navigate('AddContentTempleteScreen', {
-      editMode: true,
-      templateData: item,
-    });
-  }, [navigation]);
+  const handleTemplateEdit = useCallback(
+    (item: ContentTemplate) => {
+      navigation.navigate('AddContentTempleteScreen', {
+        editMode: true,
+        templateData: item,
+      });
+    },
+    [navigation],
+  );
 
   // Handle FAB press
   const handleAddContent = useCallback(() => {
@@ -136,20 +155,30 @@ const ContentScreen: React.FC<Props> = ({ navigation }) => {
   // Main loading state
   if (loading && contentTemplates.length === 0) {
     return (
-      <SafeAreaView style={styles.container}>
-        <Header<PartnerDrawerParamList> title={t('contentScreen.headers.contentTemplates', 'Content Templates')} />
+      <View style={styles.container}>
+        {Platform.OS === 'android' && (
+          <Header<PartnerDrawerParamList>
+            title={t(
+              'contentScreen.headers.contentTemplates',
+              'Content Templates',
+            )}
+          />
+        )}
         <ContentLoadingIndicator type="initial" />
-      </SafeAreaView>
+      </View>
     );
   }
 
   return (
-    <SafeAreaView style={styles.container}>
-      {
-        Platform.OS === 'android' && (
-          <Header<PartnerDrawerParamList> title={t('contentScreen.headers.messageTemplates', 'Message Templates')} />
-        )
-      }
+    <View style={styles.container}>
+      {Platform.OS === 'android' && (
+        <Header<PartnerDrawerParamList>
+          title={t(
+            'contentScreen.headers.contentTemplates',
+            'Content Templates',
+          )}
+        />
+      )}
 
       <View style={styles.content}>
         <ContentHeader totalCount={totalCount} />
@@ -168,10 +197,9 @@ const ContentScreen: React.FC<Props> = ({ navigation }) => {
 
         {/* Simple FAB with fixed text */}
         <TouchableOpacity
-          style={[styles.fab, { backgroundColor: theme.primaryColor }]}
+          style={[styles.fab, {backgroundColor: theme.primaryColor}]}
           onPress={handleAddContent}
-          activeOpacity={0.8}
-        >
+          activeOpacity={0.8}>
           <View style={styles.fabContent}>
             <GetIcon iconName="plus" color="white" size={24} />
             <Text style={styles.fabText}>
@@ -180,7 +208,7 @@ const ContentScreen: React.FC<Props> = ({ navigation }) => {
           </View>
         </TouchableOpacity>
       </View>
-    </SafeAreaView>
+    </View>
   );
 };
 

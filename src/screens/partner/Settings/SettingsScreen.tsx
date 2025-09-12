@@ -7,7 +7,6 @@ import {
   TouchableOpacity,
   Platform,
 } from 'react-native';
-import {SafeAreaView} from 'react-native-safe-area-context';
 import {useTranslation} from 'react-i18next';
 import Header from '../../../components/Header';
 import LanguageSelector from '../../../components/LanguageSelector';
@@ -34,7 +33,7 @@ const SettingsScreen = () => {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
+    <View style={styles.container}>
       {!isIOS && <Header title={t('settings.title', 'Settings')} />}
       <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
         {/* Language Section */}
@@ -95,7 +94,7 @@ const SettingsScreen = () => {
         visible={showLanguageSelector}
         onClose={handleLanguageSelectorClose}
       />
-    </SafeAreaView>
+    </View>
   );
 };
 

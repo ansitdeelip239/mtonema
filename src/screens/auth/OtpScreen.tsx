@@ -1,6 +1,5 @@
 import React, {useState, useCallback, useEffect} from 'react';
-import {StyleSheet, Platform} from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import {StyleSheet, Platform, View} from 'react-native';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {AuthStackParamList} from '../../navigator/AuthNavigator';
 import AuthService from '../../services/AuthService';
@@ -183,7 +182,7 @@ const OtpScreen: React.FC<Props> = ({navigation, route}) => {
   }, [email, location, showError, t]);
 
   return (
-    <SafeAreaView style={styles.container}>
+    <View style={styles.container}>
       {Platform.OS === 'android' && (
         <HeaderComponent
           title={t('auth.otp.title')}
@@ -200,7 +199,7 @@ const OtpScreen: React.FC<Props> = ({navigation, route}) => {
         onResendOtp={handleResendOtp}
         isResendingOtp={isResendingOtp}
       />
-    </SafeAreaView>
+    </View>
   );
 };
 

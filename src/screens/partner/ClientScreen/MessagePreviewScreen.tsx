@@ -9,7 +9,6 @@ import {
   Alert,
   Platform,
 } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { useTranslation } from 'react-i18next';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { ClientStackParamList } from '../../../navigator/components/ClientScreenStack';
@@ -218,7 +217,7 @@ const MessagePreviewScreen: React.FC<Props> = ({ route, navigation }) => {
   );
 
   return (
-    <SafeAreaView style={styles.container}>
+    <View style={styles.container}>
       {
         Platform.OS === 'android' && (
           <Header<PartnerDrawerParamList>
@@ -331,7 +330,7 @@ const MessagePreviewScreen: React.FC<Props> = ({ route, navigation }) => {
           </Menu>
         )}
       </View>
-    </SafeAreaView>
+    </View>
   );
 };
 

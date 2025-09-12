@@ -9,7 +9,6 @@ import {
   TouchableOpacity,
   Platform,
 } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { DrawerScreenProps } from '@react-navigation/drawer';
 import Header from '../../../components/Header';
 import { PartnerDrawerParamList } from '../../../types/navigation';
@@ -352,10 +351,8 @@ const GroupsScreen = ({ navigation }: Props) => {
     [isLoading, theme.primaryColor],
   );
 
-  const Container = Platform.OS === 'ios' ? View : SafeAreaView;
-
   return (
-    <Container style={styles.container}>
+    <View style={styles.container}>
       {
         Platform.OS === 'android' && (
           <Header<PartnerDrawerParamList>
@@ -415,7 +412,7 @@ const GroupsScreen = ({ navigation }: Props) => {
         isDeleting={isDeleting}
         group={selectedGroup}
       />
-    </Container>
+    </View>
   );
 };
 
@@ -501,8 +498,8 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   headerAddButton: {
-    width: 36,
-    height: 36,
+    width: 30,
+    height: 30,
     borderRadius: 18,
     justifyContent: 'center',
     alignItems: 'center',

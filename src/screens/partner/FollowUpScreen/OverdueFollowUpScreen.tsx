@@ -8,7 +8,6 @@ import {
   NativeSyntheticEvent,
   Platform,
 } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {FollowUpStackParamList} from '../../../navigator/components/FollowUpScreenStack';
 import Header from '../../../components/Header';
@@ -63,7 +62,7 @@ const OverdueFollowUpScreen: React.FC<Props> = ({navigation}) => {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
+    <View style={styles.container}>
       {Platform.OS === 'android' && (
         <Header
           title={t('followUp.overdue.title', 'Overdue Follow-Ups')}
@@ -100,7 +99,7 @@ const OverdueFollowUpScreen: React.FC<Props> = ({navigation}) => {
 
         <View style={styles.bottomPadding} />
       </ScrollView>
-    </SafeAreaView>
+    </View>
   );
 };
 

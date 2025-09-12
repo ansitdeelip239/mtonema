@@ -1,6 +1,5 @@
 import React, {useCallback, useEffect, useMemo, useState} from 'react';
-import {Platform, StyleSheet, FlatList, TouchableOpacity} from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import {Platform, StyleSheet, FlatList, TouchableOpacity, View} from 'react-native';
 import Header from '../../../components/Header';
 import {PartnerDrawerParamList} from '../../../types/navigation';
 import PartnerService from '../../../services/PartnerService';
@@ -140,7 +139,7 @@ const TeamsScreen: React.FC<Props> = ({navigation}) => {
   );
 
   return (
-    <SafeAreaView style={styles.container}>
+    <View style={styles.container}>
       {Platform.OS === 'android' && (
         <Header<PartnerDrawerParamList> title={t('navigation.drawer.teams', 'Teams')}>
           <TouchableOpacity
@@ -182,7 +181,7 @@ const TeamsScreen: React.FC<Props> = ({navigation}) => {
           windowSize={10}
         />
       )}
-    </SafeAreaView>
+    </View>
   );
 };
 

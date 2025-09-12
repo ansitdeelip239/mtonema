@@ -9,7 +9,6 @@ import {
   TouchableOpacity,
   ActivityIndicator,
 } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {Text, Card} from 'react-native-paper';
 import {TeamStackParamList} from '../../../navigator/components/TeamStack';
@@ -248,7 +247,7 @@ const AddTeamScreen: React.FC<Props> = ({navigation, route}) => {
   const isProcessing = loading || isPaying || isVerifying;
 
   return (
-    <SafeAreaView style={styles.container}>
+    <View style={styles.container}>
       {Platform.OS === 'android' && (
         <Header
           title={editMode ? t('teams.headers.editMember', 'Edit Team Member') : t('teams.headers.addMember', 'Add Team Member')}
@@ -404,7 +403,7 @@ const AddTeamScreen: React.FC<Props> = ({navigation, route}) => {
           isVerifying={isVerifying}
         />
       )}
-    </SafeAreaView>
+    </View>
   );
 };
 

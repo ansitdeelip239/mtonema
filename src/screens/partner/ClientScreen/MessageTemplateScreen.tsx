@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { View, StyleSheet, Platform } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { useTranslation } from 'react-i18next';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { ClientStackParamList } from '../../../navigator/components/ClientScreenStack';
@@ -200,7 +199,7 @@ const MessageTemplateScreen: React.FC<Props> = ({ route, navigation }) => {
   // Main loading state
   if (loading && contentTemplates.length === 0) {
     return (
-      <SafeAreaView style={styles.container}>
+      <View style={styles.container}>
         {
           Platform.OS === 'android' && (
             <Header<PartnerDrawerParamList>
@@ -211,12 +210,12 @@ const MessageTemplateScreen: React.FC<Props> = ({ route, navigation }) => {
           )
         }
         <ContentLoadingIndicator type="initial" />
-      </SafeAreaView>
+      </View>
     );
   }
 
   return (
-    <SafeAreaView style={styles.container}>
+    <View style={styles.container}>
       {
         Platform.OS === 'android' && (
           <Header<PartnerDrawerParamList>
@@ -240,7 +239,7 @@ const MessageTemplateScreen: React.FC<Props> = ({ route, navigation }) => {
           onTemplatePress={handleTemplatePress}
         />
       </View>
-    </SafeAreaView>
+    </View>
   );
 };
 
