@@ -33,6 +33,7 @@ const FilterPartnerStack = () => {
         component={FilterPartnerScreen}
         options={({ navigation }) => ({
           title: t('partnerFilter.title.partners'),
+          // eslint-disable-next-line react/no-unstable-nested-components
           headerLeft: () => (
             <TouchableOpacity
               onPress={() => navigation.goBack()}

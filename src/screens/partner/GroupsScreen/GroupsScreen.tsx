@@ -300,6 +300,7 @@ const GroupsScreen = ({ navigation }: Props) => {
   useEffect(() => {
     if (Platform.OS === 'ios') {
       navigation.setOptions({
+        // eslint-disable-next-line react/no-unstable-nested-components
         headerRight: () => (
           <TouchableOpacity
             style={[styles.headerAddButton, { backgroundColor: theme.secondaryColor }]}

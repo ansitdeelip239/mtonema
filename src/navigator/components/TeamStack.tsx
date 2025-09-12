@@ -1,13 +1,7 @@
-/* eslint-disable react/no-unstable-nested-components */
 import React from 'react';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import {Platform, TouchableOpacity} from 'react-native';
 import {TeamMember} from '../../types';
 import {useTheme} from '../../context/ThemeProvider';
-import {useNavigation} from '@react-navigation/native';
-import {DrawerNavigationProp} from '@react-navigation/drawer';
-import {PartnerDrawerParamList} from '../../types/navigation';
-import GetIcon from '../../components/GetIcon';
 import TeamsScreen from '../../screens/partner/TeamsScreen/TeamsScreen';
 import AddTeamScreen from '../../screens/partner/TeamsScreen/AddTeamScreen';
 

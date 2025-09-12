@@ -5,7 +5,6 @@ import {
   StyleSheet,
   TouchableOpacity,
   Alert,
-  Platform,
 } from 'react-native';
 import SellerNavigator from './SellerNavigator';
 import BuyerNavigator from './BuyerNavigator';

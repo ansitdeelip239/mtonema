@@ -15,7 +15,6 @@ import {AuthStackParamList} from '../../navigator/AuthNavigator';
 import GetIcon from '../../components/GetIcon';
 import Roles from '../../constants/Roles';
 import Images from '../../constants/Images';
-import {BackgroundWrapper} from '../../components/BackgroundWrapper';
 import Colors from '../../constants/Colors';
 import {useMaster} from '../../context/MasterProvider';
 import {MasterDetailModel} from '../../types';

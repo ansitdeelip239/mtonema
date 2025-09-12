@@ -2,10 +2,9 @@ import {createDrawerNavigator} from '@react-navigation/drawer';
 import React, {memo} from 'react';
 import CustomDrawerContent from '../components/CustomDrawerContent';
 import GetIcon from '../components/GetIcon';
-import {StatusBar, StyleSheet} from 'react-native';
+import {StatusBar} from 'react-native';
 import SellerBottomTabs from './components/SellerBottomTabs';
 import PartnerProfileScreen from '../screens/partner/ProfileScreen/ProfileScreen';
-import {SafeAreaView} from 'react-native-safe-area-context';
 import {useDrawerStyles} from '../hooks/useDrawerStyles';
 
 const Drawer = createDrawerNavigator();

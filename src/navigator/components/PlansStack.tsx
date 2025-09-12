@@ -8,7 +8,6 @@ import {PartnerDrawerParamList} from '../../types/navigation';
 import GetIcon from '../../components/GetIcon';
 import PlansScreen from '../../screens/partner/Plans/PlansScreen';
 import AddPlanScreen from '../../screens/partner/Plans/AddPlanScreen';
-import Colors from '../../constants/Colors';
 import {Plan} from '../../types/payment';
 
 export type PlansStackParamList = {

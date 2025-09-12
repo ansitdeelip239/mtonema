@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unstable-nested-components */
 import React from 'react';
 import {createDrawerNavigator} from '@react-navigation/drawer';
 import {TouchableOpacity} from 'react-native';
@@ -24,7 +25,6 @@ const PartnerNavigator = () => {
 
   return (
     <Drawer.Navigator
-      // eslint-disable-next-line react/no-unstable-nested-components
       drawerContent={props => <CustomDrawerContent {...props} />}
       screenOptions={{
         ...drawerStyles,
@@ -36,7 +36,6 @@ const PartnerNavigator = () => {
         options={{
           headerShown: false,
           drawerLabel: t('navigation.drawer.home'), // Add localized label
-          // eslint-disable-next-line react/no-unstable-nested-components
           drawerIcon: ({color}) => (
             <GetIcon iconName="home" color={color} size="25" />
           ),
@@ -49,7 +48,6 @@ const PartnerNavigator = () => {
           headerShown: isIOS,
           headerLeft: () => <DrawerToggleButton />,
           drawerLabel: t('navigation.drawer.groups'), // Add localized label
-          // eslint-disable-next-line react/no-unstable-nested-components
           drawerIcon: ({color}) => (
             <GetIcon iconName="group" color={color} size="25" />
           ),
@@ -81,7 +79,6 @@ const PartnerNavigator = () => {
             </TouchableOpacity>
           ) : undefined,
           drawerLabel: t('navigation.drawer.teams'), // Add localized label
-          // eslint-disable-next-line react/no-unstable-nested-components
           drawerIcon: ({color}) => (
             <GetIcon iconName="partner" color={color} size="25" />
           ),
@@ -94,7 +91,6 @@ const PartnerNavigator = () => {
         options={{
           headerShown: false,
           drawerLabel: t('navigation.drawer.content'), // Add localized label
-          // eslint-disable-next-line react/no-unstable-nested-components
           drawerIcon: ({color}) => (
             <GetIcon iconName="notes" color={color} size="25" />
           ),
@@ -107,7 +103,6 @@ const PartnerNavigator = () => {
           headerShown: isIOS,
           headerLeft: () => <DrawerToggleButton />,
           drawerLabel: t('navigation.drawer.settings'), // Add localized label
-          // eslint-disable-next-line react/no-unstable-nested-components
           drawerIcon: ({color}) => (
             <GetIcon iconName="settings" color={color} size="25" />
           ),
