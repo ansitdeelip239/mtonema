@@ -61,10 +61,4 @@ const SellerNavigator = memo(() => {
   );
 });
 
-const styles = StyleSheet.create({
-  safeArea: {
-    flex: 1,
-  },
-});
-
 export default SellerNavigator;

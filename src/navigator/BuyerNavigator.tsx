@@ -18,7 +18,7 @@ const BuyerNavigator = memo(() => {
   const {t} = useTranslation();
 
   return (
-    <SafeAreaView style={styles.safeArea} edges={['top']}>
+    <>
       <StatusBar barStyle="dark-content" backgroundColor="#fff" />
       <Drawer.Navigator
         // eslint-disable-next-line react/no-unstable-nested-components
@@ -61,13 +61,8 @@ const BuyerNavigator = memo(() => {
           }}
         />
       </Drawer.Navigator>
-    </SafeAreaView>
+    </>
   );
-});
-const styles = StyleSheet.create({
-  safeArea: {
-    flex: 1,
-  },
 });
 
 export default BuyerNavigator;
