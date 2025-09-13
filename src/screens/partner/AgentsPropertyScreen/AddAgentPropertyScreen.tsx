@@ -98,7 +98,7 @@ const AddAgentPropertyScreen: React.FC<Props> = ({ navigation, route }) => {
         return true;
       } catch (error) {
         if (error instanceof z.ZodError) {
-          const fieldError = error.errors[0]?.message || 'Invalid input';
+          const fieldError = error.issues[0]?.message || 'Invalid input';
           setErrors(prev => ({ ...prev, [field]: fieldError }));
         }
         return false;
@@ -173,7 +173,7 @@ const AddAgentPropertyScreen: React.FC<Props> = ({ navigation, route }) => {
           const newErrors: Partial<
             Record<keyof AgentPropertyFormType, string>
           > = {};
-          error.errors.forEach(err => {
+          error.issues.forEach(err => {
             if (err.path[0]) {
               newErrors[err.path[0] as keyof AgentPropertyFormType] =
                 err.message;
