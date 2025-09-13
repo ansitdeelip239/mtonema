@@ -179,7 +179,14 @@ function analyzeLocaleIssues() {
 
   // Save detailed report
   const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
-  const reportPath = path.join(__dirname, `locale-issues-detailed-${timestamp}.json`);
+  const logsDir = path.join(__dirname, 'logs');
+  
+  // Ensure logs directory exists
+  if (!fs.existsSync(logsDir)) {
+    fs.mkdirSync(logsDir, { recursive: true });
+  }
+  
+  const reportPath = path.join(logsDir, `locale-issues-detailed-${timestamp}.json`);
 
   const hiComparison = getDetailedDifferences(enTranslations, JSON.parse(fs.readFileSync(hiPath, 'utf8')), 'hi');
   const arComparison = getDetailedDifferences(enTranslations, JSON.parse(fs.readFileSync(arPath, 'utf8')), 'ar');

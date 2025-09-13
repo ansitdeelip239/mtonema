@@ -169,9 +169,15 @@ function analyzeTranslationUsage() {
 
     // Save detailed results to files
     const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
+    const logsDir = path.join(__dirname, 'logs');
+    
+    // Ensure logs directory exists
+    if (!fs.existsSync(logsDir)) {
+      fs.mkdirSync(logsDir, { recursive: true });
+    }
     
     // Save unused keys list
-    const unusedKeysFile = path.join(__dirname, `unused-translations-${timestamp}.json`);
+    const unusedKeysFile = path.join(logsDir, `unused-translations-${timestamp}.json`);
     fs.writeFileSync(unusedKeysFile, JSON.stringify({
       summary: {
         totalKeys: allKeys.length,
@@ -185,7 +191,7 @@ function analyzeTranslationUsage() {
     }, null, 2));
 
     // Save used keys with file references
-    const usedKeysFile = path.join(__dirname, `used-translations-${timestamp}.json`);
+    const usedKeysFile = path.join(logsDir, `used-translations-${timestamp}.json`);
     fs.writeFileSync(usedKeysFile, JSON.stringify({
       summary: {
         totalUsedKeys: usedKeys.length,

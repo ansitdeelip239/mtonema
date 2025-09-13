@@ -1,6 +1,27 @@
 # Translation Tools 📝
 
-This folder contains scripts for managing and debugging translation files in the MT One project.
+This folder contains scripts for managing and debugging translation files in the MT O    └── locale-issues-detailed-*.json
+```
+
+## 📊 Report Files Location
+
+All report files are now automatically saved to the `logs/` folder with timestamps:
+- `logs/unused-translations-*.json` - Keys that can be safely removed
+- `logs/used-translations-*.json` - Keys currently being used
+- `logs/translation-verification-*.json` - Completeness verification results
+- `logs/locale-issues-detailed-*.json` - Detailed issue analysis
+
+**View recent reports:**
+```bash
+ls -la logs/
+# Shows all generated report files with timestamps
+```
+
+**Clean old reports:**
+```bash
+# Remove reports older than 30 days
+find logs/ -name "*.json" -mtime +30 -delete
+```roject.
 
 ## 📋 Available Scripts
 
@@ -102,7 +123,12 @@ translation-tools/
 ├── find-unused-translations.js # Find unused keys
 ├── verify-translations.js      # Verify completeness
 ├── analyze-locale-issues.js    # Detailed issue analysis
-└── remove-unused-translations.js # Remove unused keys
+├── remove-unused-translations.js # Remove unused keys
+└── logs/                       # 📁 All report files stored here
+    ├── unused-translations-*.json
+    ├── used-translations-*.json
+    ├── translation-verification-*.json
+    └── locale-issues-detailed-*.json
 ```
 
 ## � Common Workflows

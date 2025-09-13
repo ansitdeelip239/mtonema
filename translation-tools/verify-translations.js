@@ -211,7 +211,14 @@ function verifyTranslationCompleteness() {
 
   // Save detailed report
   const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
-  const reportPath = path.join(__dirname, `translation-verification-${timestamp}.json`);
+  const logsDir = path.join(__dirname, 'logs');
+  
+  // Ensure logs directory exists
+  if (!fs.existsSync(logsDir)) {
+    fs.mkdirSync(logsDir, { recursive: true });
+  }
+  
+  const reportPath = path.join(logsDir, `translation-verification-${timestamp}.json`);
 
   const report = {
     summary: {
