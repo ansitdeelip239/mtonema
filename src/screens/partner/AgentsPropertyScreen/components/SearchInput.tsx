@@ -7,7 +7,7 @@ import {ViewStyle} from 'react-native';
 import { useAuth } from '../../../../context/AuthProvider';
 
 const useDebounce = (callback: Function, delay: number) => {
-  const timeoutRef = useRef<NodeJS.Timeout>(null);
+  const timeoutRef = useRef<number>(null);
   useEffect(() => {
     return () => {
       if (timeoutRef.current) {

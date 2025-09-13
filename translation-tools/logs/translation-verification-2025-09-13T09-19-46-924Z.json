@@ -1,0 +1,21 @@
+{
+  "summary": {
+    "enKeys": 883,
+    "amKeys": 883,
+    "coverage": "100%",
+    "missingKeys": 0,
+    "extraKeys": 0,
+    "emptyTranslations": 0,
+    "enIssues": 0,
+    "amIssues": 0,
+    "isComplete": true,
+    "verificationDate": "2025-09-13T09:19:46.927Z"
+  },
+  "details": {
+    "missingKeys": [],
+    "extraKeys": [],
+    "emptyTranslations": [],
+    "enIssues": [],
+    "amIssues": []
+  }
+}

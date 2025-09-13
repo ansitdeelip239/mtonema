@@ -184,7 +184,7 @@ const EmailScreen: React.FC<Props> = ({navigation, route}) => {
       const validationResult = emailSchema.safeParse(formInput);
       if (!validationResult.success) {
         setEmailError({
-          message: validationResult.error.errors[0].message,
+          message: validationResult.error.issues[0].message,
           isClickable: false,
         });
         return;

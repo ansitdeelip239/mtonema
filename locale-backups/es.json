@@ -6,21 +6,32 @@
       "save": "Guardar",
       "delete": "Eliminar",
       "edit": "Editar",
+      "add": "Agregar",
       "addActivity": "Agregar Actividad",
       "back": "Atrás",
       "next": "Continuar",
       "search": "Buscar",
       "filter": "Filtrar",
+      "sort": "Ordenar",
+      "refresh": "Actualizar",
+      "retry": "Reintentar",
+      "close": "Cerrar",
+      "confirm": "Confirmar",
       "ok": "Aceptar",
+      "yes": "Sí",
+      "no": "No",
       "call": "Llamar"
     },
     "states": {
       "loading": "Cargando...",
       "loadingMore": "Cargando más...",
+      "searching": "Buscando...",
       "verifying": "Verificando...",
       "sending": "Enviando...",
       "success": "Éxito",
       "error": "Error",
+      "empty": "No hay datos disponibles",
+      "refreshToLoad": "Desliza hacia abajo para actualizar",
       "assigned": "Asignado",
       "unassigned": "Sin asignar",
       "loadingAssignments": "Cargando asignaciones..."
@@ -49,6 +60,9 @@
   },
   "errors": {
     "network": "Error de conexión de red",
+    "validation": "Por favor revisa tu entrada",
+    "unauthorized": "Sesión expirada. Inicia sesión nuevamente",
+    "generic": "Algo salió mal. Inténtalo de nuevo",
     "emailVerificationFailed": "Error en la verificación del correo",
     "emailNotFound": "Correo no encontrado",
     "unexpectedError": "Ocurrió un error inesperado",
@@ -56,7 +70,10 @@
     "refreshError": "Error al actualizar datos"
   },
   "validation": {
-    "invalidOtp": "Ingresa un OTP válido de 6 dígitos"
+    "required": "Este campo es obligatorio",
+    "invalidEmail": "Ingresa un correo válido",
+    "invalidOtp": "Ingresa un OTP válido de 6 dígitos",
+    "minLength": "Se requieren mínimo {{count}} caracteres"
   },
   "time": {
     "today": "Hoy",
@@ -68,9 +85,11 @@
     "oneDay": "1 día",
     "multipleDays": "{{days}} días",
     "am": "a.m.",
-    "pm": "p.m."
+    "pm": "p.m.",
+    "timeFormat": "h:mm a"
   },
   "greetings": {
+    "welcome": "Bienvenido",
     "welcomeBack": "Bienvenido de nuevo",
     "welcomePartner": "Bienvenido Socio",
     "hi": "Hola",
@@ -194,6 +213,7 @@
     },
     "search": {
       "placeholder": "Buscar propiedades...",
+      "loading": "Cargando...",
       "properties": "Propiedades"
     },
     "messages": {
@@ -338,11 +358,15 @@
       "partner": "Inicio de Sesión de Socio",
       "buyerSeller": "Inicio de Sesión Comprador/Vendedor",
       "dashboard": "Inicia sesión para acceder a tu panel",
+      "account": "Inicia sesión en tu cuenta",
+      "toAccess": "Inicia sesión para acceder a tu {{resource}}",
       "continueToLogin": "Continuar al Inicio de Sesión",
       "getStartedFree": "Comenzar GRATIS",
-      "securePartnerAccess": "Acceso Seguro de Agente"
+      "securePartnerAccess": "Acceso Seguro de Agente",
+      "prompt": "Inicia sesión para continuar"
     },
     "email": {
+      "enterEmailMessage": "Ingresa tu correo para continuar",
       "placeholder": "Ingresa tu dirección de correo",
       "enterToContinue": "Ingresa tu correo para continuar"
     },
@@ -387,6 +411,7 @@
       }
     },
     "mainScreen": {
+      "headerTitle": "MT One",
       "alreadyHaveAccount": "¿Ya tienes una cuenta?",
       "logIn": "Iniciar Sesión",
       "newHere": "¿Nuevo aquí? ¡Crea una cuenta!",
@@ -394,7 +419,9 @@
       "wantToListProperty": "¿Quieres listar tu propiedad?",
       "signUpAsSeller": "Registrarse como Vendedor",
       "buyerSellerTab": "Comprador/Vendedor",
-      "partnerTab": "Agente"
+      "partnerTab": "Agente",
+      "partnerLogin": "Iniciar Sesión como Socio",
+      "partnerSignup": "Registrarse como Socio"
     },
     "accessDenied": "Acceso Denegado",
     "adminUnauthorized": "Su correo electrónico {email} no está autorizado para acceso de administrador.",
@@ -405,6 +432,7 @@
   },
   "followUp": {
     "title": "Seguimientos",
+    "loadingFollowUp": "Cargando seguimiento...",
     "toBeScheduledLater": "Por programar más tarde",
     "noDateSet": "Sin fecha establecida",
     "status": {
@@ -434,7 +462,8 @@
     },
     "someday": {
       "title": "Seguimientos Futuros",
-      "subtitle": "Seguimientos programados para fechas posteriores"
+      "subtitle": "Seguimientos programados para fechas posteriores",
+      "empty": "No hay seguimientos futuros programados"
     }
   },
   "clients": {
@@ -474,6 +503,8 @@
   },
   "language": {
     "selectLanguage": "Seleccionar Idioma",
+    "choosePreferred": "Elige tu idioma preferido para la aplicación",
+    "current": "Idioma Actual",
     "change": "Cambiar Idioma",
     "switchTo": "¿Cambiar a {{languageName}}?",
     "rtlWarning": "Esto cambiará la dirección del diseño de la aplicación y se reiniciará."
@@ -483,8 +514,16 @@
     "restart": "Reiniciar Aplicación"
   },
   "plurals": {
-    "client": {},
-    "followUp": {}
+    "client": {
+      "zero": "Sin clientes",
+      "one": "{{count}} cliente",
+      "other": "{{count}} clientes"
+    },
+    "followUp": {
+      "zero": "Sin seguimientos",
+      "one": "{{count}} seguimiento",
+      "other": "{{count}} seguimientos"
+    }
   },
   "addActivityModal": {
     "addActivity": "Agregar Actividad",
@@ -529,6 +568,7 @@
     "assignTeamMembers": "Asignar Miembros del Equipo",
     "selectTeamMembers": "Seleccionar miembros del equipo para asignar a este cliente",
     "usersSelected": "{{count}} usuario seleccionado",
+    "usersSelected_plural": "{{count}} usuarios seleccionados",
     "noTeamMembersFound": "No se encontraron miembros del equipo",
     "loadingTeamMembers": "Cargando miembros del equipo...",
     "userEmailNotAvailable": "El correo electrónico del usuario no está disponible",
@@ -538,7 +578,8 @@
     "assignUsersFailed": "Error al asignar usuarios",
     "errorAssigningUsers": "Error al asignar usuarios",
     "assigning": "Asignando...",
-    "assignUsers": "Asignar {{count}} Usuario"
+    "assignUsers": "Asignar {{count}} Usuario",
+    "assignUsers_plural": "Asignar {{count}} Usuarios"
   },
   "addClient": {
     "headers": {
@@ -663,7 +704,8 @@
       "filterCleared": "Filtro Limpiado",
       "filterClearedMessage": "Mostrando clientes solo para tu cuenta.",
       "filterApplied": "Filtro Aplicado",
-      "filterAppliedMessage": "Mostrando clientes para {{formattedCount}} agente seleccionado"
+      "filterAppliedMessage": "Mostrando clientes para {{formattedCount}} agente seleccionado",
+      "filterAppliedMessage_plural": "Mostrando clientes para {{formattedCount}} agentes seleccionados"
     },
     "errors": {
       "fetchFailed": "Error al obtener {{type}}. Por favor, inténtalo de nuevo.",
@@ -700,7 +742,8 @@
       "subtitle": "Aún no has creado ninguna plantilla de contenido."
     },
     "header": {
-      "templatesFound": "{{count}} plantilla encontrada"
+      "templatesFound": "{{count}} plantilla encontrada",
+      "templatesFound_plural": "{{count}} plantillas encontradas"
     },
     "loading": {
       "loadingTemplates": "Cargando plantillas de contenido...",
@@ -709,7 +752,8 @@
   },
   "contentScreen": {
     "headers": {
-      "contentTemplates": "Plantillas de Contenido"
+      "contentTemplates": "Plantillas de Contenido",
+      "messageTemplates": "Plantillas de Mensajes"
     },
     "buttons": {
       "addTemplate": "Agregar Plantilla"
@@ -883,6 +927,7 @@
       "deleteConfirmation": "¿Estás seguro de que quieres eliminar esta propiedad?",
       "propertyDeleted": "Propiedad eliminada exitosamente",
       "deleteFailed": "Error al eliminar propiedad",
+      "fetchFailed": "Error al obtener propiedades",
       "emptyState": "Aún no has agregado propiedades. Comienza agregando tu primera propiedad.",
       "loadingDetails": "Cargando detalles de la propiedad...",
       "loadFailed": "Error al cargar detalles de la propiedad",
@@ -1178,7 +1223,8 @@
       "selectPlan": "Seleccionar plan {{planName}}",
       "submitChange": "Enviar cambio de plan",
       "maxUsers": "Máx. Usuarios:",
-      "trialPlan": "Plan de Prueba"
+      "trialPlan": "Plan de Prueba",
+      "perMonth": "/mes"
     },
     "paymentLoading": {
       "creatingOrder": "Creando orden de pago...",

@@ -21,12 +21,12 @@ export async function verifyPaymentStatus(
 
 			// If not the last attempt, wait before trying again
 			if (attempt < maxAttempts) {
-				await new Promise(resolve => setTimeout(resolve, 2000)); // Wait 2 seconds
+				await new Promise(resolve => setTimeout(() => resolve, 2000)); // Wait 2 seconds
 			}
 		} catch (error) {
 			// If not the last attempt, wait before trying again
 			if (attempt < maxAttempts) {
-				await new Promise(resolve => setTimeout(resolve, 2000)); // Wait 2 seconds
+				await new Promise(resolve => setTimeout(() => resolve, 2000)); // Wait 2 seconds
 			}
 		}
 	}

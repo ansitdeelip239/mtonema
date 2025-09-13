@@ -6,21 +6,32 @@
       "save": "Save",
       "delete": "Delete",
       "edit": "Edit",
+      "add": "Add",
       "addActivity": "Add Activity",
       "back": "Back",
       "next": "Continue",
       "search": "Search",
       "filter": "Filter",
+      "sort": "Sort",
+      "refresh": "Refresh",
+      "retry": "Retry",
+      "close": "Close",
+      "confirm": "Confirm",
       "ok": "OK",
+      "yes": "Yes",
+      "no": "No",
       "call": "Call"
     },
     "states": {
       "loading": "Loading...",
       "loadingMore": "Loading more...",
+      "searching": "Searching...",
       "verifying": "Verifying...",
       "sending": "Sending...",
       "success": "Success",
       "error": "Error",
+      "empty": "No data available",
+      "refreshToLoad": "Pull down to refresh",
       "assigned": "Assigned",
       "unassigned": "Unassigned",
       "loadingAssignments": "Loading assignments..."
@@ -49,6 +60,9 @@
   },
   "errors": {
     "network": "Network connection error",
+    "validation": "Please check your input",
+    "unauthorized": "Session expired. Please login again",
+    "generic": "Something went wrong. Please try again",
     "emailVerificationFailed": "Email verification failed",
     "emailNotFound": "Email not found",
     "unexpectedError": "An unexpected error occurred",
@@ -56,7 +70,10 @@
     "refreshError": "Error refreshing data"
   },
   "validation": {
-    "invalidOtp": "Please enter a valid 6-digit OTP"
+    "required": "This field is required",
+    "invalidEmail": "Please enter a valid email address",
+    "invalidOtp": "Please enter a valid 6-digit OTP",
+    "minLength": "Minimum {{count}} characters required"
   },
   "time": {
     "today": "Today",
@@ -68,9 +85,11 @@
     "oneDay": "1 day",
     "multipleDays": "{{days}} days",
     "am": "AM",
-    "pm": "PM"
+    "pm": "PM",
+    "timeFormat": "h:mm a"
   },
   "greetings": {
+    "welcome": "Welcome",
     "welcomeBack": "Welcome Back",
     "welcomePartner": "Welcome Partner",
     "hi": "Hi",
@@ -194,6 +213,7 @@
     },
     "search": {
       "placeholder": "Search properties...",
+      "loading": "Loading...",
       "properties": "Properties"
     },
     "messages": {
@@ -338,11 +358,15 @@
       "partner": "Partner Sign In",
       "buyerSeller": "Buyer/Seller Sign In",
       "dashboard": "Sign in to access your dashboard",
+      "account": "Sign in to your account",
+      "toAccess": "Sign in to access your {{resource}}",
       "continueToLogin": "Continue to Login",
       "getStartedFree": "Get started for FREE",
-      "securePartnerAccess": "Secure Agent Access"
+      "securePartnerAccess": "Secure Agent Access",
+      "prompt": "Please sign in to continue"
     },
     "email": {
+      "enterEmailMessage": "Please enter your email address to continue",
       "placeholder": "Enter your email address",
       "enterToContinue": "Please enter your email address to continue"
     },
@@ -387,6 +411,7 @@
       }
     },
     "mainScreen": {
+      "headerTitle": "MT One",
       "alreadyHaveAccount": "Already have an account?",
       "logIn": "Log In",
       "newHere": "New here? Create an account!",
@@ -394,7 +419,9 @@
       "wantToListProperty": "Want to list your property?",
       "signUpAsSeller": "Sign Up as Seller",
       "buyerSellerTab": "Buyer/Seller",
-      "partnerTab": "Agent"
+      "partnerTab": "Agent",
+      "partnerLogin": "Log In as Partner",
+      "partnerSignup": "Sign Up as Partner"
     },
     "accessDenied": "Access Denied",
     "adminUnauthorized": "Your email {email} is not authorized for admin access.",
@@ -405,6 +432,7 @@
   },
   "followUp": {
     "title": "Follow-Ups",
+    "loadingFollowUp": "Loading follow-up...",
     "toBeScheduledLater": "To be scheduled later",
     "noDateSet": "No date set",
     "status": {
@@ -434,7 +462,8 @@
     },
     "someday": {
       "title": "Someday Follow-ups",
-      "subtitle": "Follow-ups scheduled for later dates"
+      "subtitle": "Follow-ups scheduled for later dates",
+      "empty": "No someday follow-ups scheduled"
     }
   },
   "clients": {
@@ -474,6 +503,8 @@
   },
   "language": {
     "selectLanguage": "Select Language",
+    "choosePreferred": "Choose your preferred language for the app",
+    "current": "Current Language",
     "change": "Change Language",
     "switchTo": "Switch to {{languageName}}?",
     "rtlWarning": "This will change the app layout direction and the app will restart."
@@ -483,8 +514,16 @@
     "restart": "Restart App"
   },
   "plurals": {
-    "client": {},
-    "followUp": {}
+    "client": {
+      "zero": "No clients",
+      "one": "{{count}} client",
+      "other": "{{count}} clients"
+    },
+    "followUp": {
+      "zero": "No follow-ups",
+      "one": "{{count}} follow-up",
+      "other": "{{count}} follow-ups"
+    }
   },
   "addActivityModal": {
     "addActivity": "Add Activity",
@@ -529,6 +568,7 @@
     "assignTeamMembers": "Assign Team Members",
     "selectTeamMembers": "Select team members to assign to this client",
     "usersSelected": "{{count}} user selected",
+    "usersSelected_plural": "{{count}} users selected",
     "noTeamMembersFound": "No team members found",
     "loadingTeamMembers": "Loading team members...",
     "userEmailNotAvailable": "User email is not available",
@@ -538,7 +578,8 @@
     "assignUsersFailed": "Failed to assign users",
     "errorAssigningUsers": "Error assigning users",
     "assigning": "Assigning...",
-    "assignUsers": "Assign {{count}} User"
+    "assignUsers": "Assign {{count}} User",
+    "assignUsers_plural": "Assign {{count}} Users"
   },
   "addClient": {
     "headers": {
@@ -663,7 +704,8 @@
       "filterCleared": "Filter Cleared",
       "filterClearedMessage": "Showing clients for your account only.",
       "filterApplied": "Filter Applied",
-      "filterAppliedMessage": "Showing clients for {{formattedCount}} selected agent"
+      "filterAppliedMessage": "Showing clients for {{formattedCount}} selected agent",
+      "filterAppliedMessage_plural": "Showing clients for {{formattedCount}} selected agents"
     },
     "errors": {
       "fetchFailed": "Failed to fetch {{type}}. Please try again.",
@@ -700,7 +742,8 @@
       "subtitle": "You haven't created any content templates yet."
     },
     "header": {
-      "templatesFound": "{{count}} template found"
+      "templatesFound": "{{count}} template found",
+      "templatesFound_plural": "{{count}} templates found"
     },
     "loading": {
       "loadingTemplates": "Loading content templates...",
@@ -709,7 +752,8 @@
   },
   "contentScreen": {
     "headers": {
-      "contentTemplates": "Content Templates"
+      "contentTemplates": "Content Templates",
+      "messageTemplates": "Message Templates"
     },
     "buttons": {
       "addTemplate": "Add Template"
@@ -883,6 +927,7 @@
       "deleteConfirmation": "Are you sure you want to delete this property?",
       "propertyDeleted": "Property deleted successfully",
       "deleteFailed": "Failed to delete property",
+      "fetchFailed": "Failed to fetch properties",
       "emptyState": "You haven't added any properties yet. Get started by adding your first property.",
       "loadingDetails": "Loading property details...",
       "loadFailed": "Failed to load property details",
@@ -1178,7 +1223,8 @@
       "selectPlan": "Select {{planName}} plan",
       "submitChange": "Submit plan change",
       "maxUsers": "Max Users:",
-      "trialPlan": "Trial Plan"
+      "trialPlan": "Trial Plan",
+      "perMonth": "/mo"
     },
     "paymentLoading": {
       "creatingOrder": "Creating payment order...",

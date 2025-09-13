@@ -1,0 +1,1397 @@
+{
+  "common": {
+    "actions": {
+      "submit": "አስገባ",
+      "cancel": "ሰርዝ",
+      "save": "አስቀምጥ",
+      "delete": "አጥፋ",
+      "edit": "አርትዕ",
+      "addActivity": "ተግባር አክል",
+      "back": "ተመለስ",
+      "next": "ቀጥል",
+      "search": "ፈልግ",
+      "filter": "አጣራ",
+      "ok": "እሺ",
+      "call": "ደውል"
+    },
+    "states": {
+      "loading": "በመጫን ላይ...",
+      "loadingMore": "ተጨማሪ በመጫን ላይ...",
+      "verifying": "በመረጋገጥ ላይ...",
+      "sending": "በመላክ ላይ...",
+      "success": "ተሳኗል",
+      "error": "ስህተት",
+      "assigned": "ተመድቧል",
+      "unassigned": "አልተመድበም",
+      "loadingAssignments": "ተመድባዎች በመጫን ላይ..."
+    },
+    "success": {
+      "title": "ተሳኗል"
+    },
+    "errors": {
+      "error": "ስህተት"
+    },
+    "labels": {
+      "email": "ኢሜይል",
+      "name": "ስም",
+      "phone": "ስልክ",
+      "mobile": "ሞባይል",
+      "whatsapp": "ዋትስአፕ",
+      "address": "አድራሻ",
+      "description": "መግለጫ",
+      "groups": "ቡድኖች",
+      "notes": "ማስታወሻዎች",
+      "showMore": "ተጨማሪ አሳይ",
+      "showLess": "ያነሰ አሳይ",
+      "by": "በ",
+      "at": "በ"
+    }
+  },
+  "errors": {
+    "network": "የአውታረ መረብ ስህተት",
+    "emailVerificationFailed": "የኢሜይል ማረጋገጫ አልተሳካም",
+    "emailNotFound": "ኢሜይል አልተገኘም",
+    "unexpectedError": "ያልተለመደ ስህተት ተከሰተ",
+    "failedToSendOtp": "OTP መላክ አልተሳካም። እባክዎ እንደገና ይሞክሩ",
+    "refreshError": "የውሂብ ማደስ ስህተት"
+  },
+  "validation": {
+    "invalidOtp": "እባክዎ ትክክለኛ 6-አሃዝ የሆነ OTP ያስገቡ"
+  },
+  "time": {
+    "today": "ዛሬ",
+    "overdue": "ተራቁ",
+    "upcoming": "ቀርቦ የሚመጣ",
+    "someday": "አንድ ቀን",
+    "hoursLeft": "{{hours}} ሰዓታት",
+    "minutesLeft": "{{minutes}} ደቂቃዎች",
+    "oneDay": "1 ቀን",
+    "multipleDays": "{{days}} ቀናት",
+    "am": "እኩለ ቀን",
+    "pm": "እኩለ ሌሊት"
+  },
+  "greetings": {
+    "welcomeBack": "እንደገና እንኳን ደህና መጡ",
+    "welcomePartner": "እንኳን ደህና መጡ አጋር",
+    "hi": "ሰላም",
+    "goodMorning": "እንደምን አበባ",
+    "goodAfternoon": "እንደምን ዋለ",
+    "goodEvening": "እንደምን ማታ",
+    "goodNight": "እንደምን ሌሊት"
+  },
+  "navigation": {
+    "groups": "ቡድኖች",
+    "drawer": {
+      "home": "ቤት",
+      "groups": "ቡድኖች",
+      "teams": "ቡድኖች",
+      "content": "ይዘት",
+      "settings": "ቅንብሮች",
+      "buyPremium": "ፕሪሚየም ይግዙ",
+      "payments": "ክፍያዎች",
+      "helpCenter": "የእርዳታ ማእከል",
+      "chatWithUs": "ከእኛ ጋር ያልቅ",
+      "logout": "ውጣ",
+      "logoutConfirmation": "እርግጠኛ ነዎት መውጣት ይፈልጋሉ?",
+      "loggingOut": "በመውጣት ላይ...",
+      "underDevelopment": "ይህ ባህሪ በልምዱ ላይ ነው"
+    },
+    "paymentTabs": {
+      "plans": "እቅዶች",
+      "transactions": "ገራገሮች"
+    },
+    "bottomTab": {
+      "followUp": "የተከታታይ ተግባራት",
+      "clients": "የያዥ ሰዎች",
+      "add": "አክል",
+      "listings": "ዝርዝሮች",
+      "groups": "ቡድኖች",
+      "agentData": "የያዥ ውሂብ",
+      "dashboard": "ዳሽቦርድ",
+      "contacted": "ተገናኙ",
+      "searchProperty": "ፈልግ",
+      "contactUs": "ከእኛ ጋር ያልቅ",
+      "profile": "መገለጫ"
+    }
+  },
+  "logout": {
+    "title": "ውጣ",
+    "confirm": "እርግጠኛ ነዎት መውጣት ይፈልጋሉ?",
+    "action": "ውጣ"
+  },
+  "dashboard": {
+    "welcome": {
+      "back": "እንደገና እንኳን ደህና መጡ",
+      "subtitle": "የራሱ የሆነ ቤት ያግኙ"
+    },
+    "sections": {
+      "quickActions": "ፈጣን ተግባራት",
+      "propertiesForSale": "ለሽያጭ ንጥሎች",
+      "propertiesForRent": "ለኪራይ ንጥሎች",
+      "recentlyContacted": "በቅርቡ ተገናኙ",
+      "featuredProperties": "የተለዩ ንጥሎች"
+    },
+    "actions": {
+      "seeAll": "ሁሉንም እይ",
+      "sendEnquiry": "ጥያቄ ላክ",
+      "startSearching": "ፍለጋ ጀምር"
+    },
+    "stats": {
+      "contactedProperties": "ተገናኙ ንጥሎች",
+      "forSaleProperties": "ለሽያጭ ንጥሎች",
+      "forRentProperties": "ለኪራይ ንጥሎች",
+      "featuredProperties": "የተለዩ ንጥሎች"
+    },
+    "quickActions": {
+      "searchProperties": "ንጥሎች ፈልግ",
+      "myContacts": "የእኔ ተገናኞች",
+      "contactUs": "ከእኛ ጋር ያልቅ"
+    },
+    "loading": {
+      "text": "ዳሽቦርድዎን በመጫን ላይ..."
+    },
+    "error": {
+      "retry": "እንደገና ሞክር"
+    },
+    "emptyState": {
+      "title": "የንጥል ጉዞዎን ጀምር",
+      "message": "ንጥሎች ፈልግ እና የራሱ የሆነ ዳሽቦርድ ይስሩ"
+    },
+    "labels": {
+      "featured": "የተለየ",
+      "unnamedProperty": "ያልተሰማ ንጥል",
+      "locationNotSpecified": "አድራሻ አልተለየም",
+      "priceNotAvailable": "ዋጋ አልተለየም"
+    }
+  },
+  "contactedProperties": {
+    "header": {
+      "title": "የእርስዎ ተገናኞች",
+      "subtitle": "ተገናኙ ንጥሎች"
+    },
+    "stats": {
+      "totalContacts": "ጠቅላላ ተገናኞች",
+      "forSale": "ለሽያጭ",
+      "forRent": "ለኪራይ"
+    },
+    "sections": {
+      "recentContacts": "የቅርቡ ተገናኞች"
+    },
+    "labels": {
+      "contacted": "ተገናኙ",
+      "contactedOn": "ተገናኙ በ",
+      "loadingMore": "ተጨማሪ ንጥሎች በመጫን ላይ...",
+      "loadingProperties": "ተገናኙ ንጥሎች በመጫን ላይ...",
+      "noProperties": "ተገናኙ ንጥሎች አልተገኙም",
+      "failedToLoad": "ተገናኙ ንጥሎች መጫን አልተሳካም",
+      "tryAgain": "እባክዎ እንደገና ይሞክሩ።"
+    }
+  },
+  "searchProperties": {
+    "header": {
+      "title": "የእርስዎን ያግኙ",
+      "subtitle": "የህልም ንጥል"
+    },
+    "search": {
+      "placeholder": "ንጥሎች ፈልግ...",
+      "properties": "ንጥሎች"
+    },
+    "messages": {
+      "loadingProperties": "ንጥሎች በመጫን ላይ...",
+      "noProperties": "ንጥሎች አልተገኙም",
+      "loadingMore": "ተጨማሪ ንጥሎች በመጫን ላይ...",
+      "loginRequired": "ጥያቄ ለማስተላለፍ እባክዎ ይለግቡ",
+      "enquirySuccess": "ጥያቄ ተልኳል",
+      "enquirySuccessSub": "ሻጩ በቅርቡ ያገኛልዎታል።",
+      "enquiryError": "ጥያቄ መላክ አልተሳካም",
+      "enquiryErrorSub": "እባክዎ እንደገና ይሞክሩ።",
+      "enquiryFailed": "ጥያቄ መላክ አልተሳካም",
+      "propertiesCount": "{{count}} ንጥሎች"
+    }
+  },
+  "propertyCard": {
+    "propertyType": {
+      "forSale": "ለሽያጭ",
+      "forRent": "ለኪራይ",
+      "others": "ሌሎች"
+    }
+  },
+  "filterModal": {
+    "labels": {
+      "propertyType": "የንጥል አይነት",
+      "bhkType": "የቤት አይነት",
+      "furnishing": "የእቃዎች አቅርቦት",
+      "city": "ከተማ"
+    },
+    "buttons": {
+      "clearAll": "ሁሉንም አጥፋ",
+      "applyFilters": "አጣራዎችን ተግባር"
+    }
+  },
+  "sortModal": {
+    "options": {
+      "newestFirst": "አዲሱ በመጀመሪያ",
+      "priceLowToHigh": "ዋጋ: ከትንሹ ወደ ከፍተኛ",
+      "priceHighToLow": "ዋጋ: ከከፍተኛ ወደ ትንሹ",
+      "areaLowToHigh": "አካባቢ: ከትንሹ ወደ ከፍተኛ",
+      "areaHighToLow": "አካባቢ: ከከፍተኛ ወደ ትንሹ"
+    }
+  },
+  "propertyTypeToggle": {
+    "all": "ሁሉም",
+    "forSale": "ለሽያጭ",
+    "forRent": "ለኪራይ",
+    "others": "ሌሎች"
+  },
+  "propertyDetailModal": {
+    "videoTour": "የቪዲዮ ጉዞ",
+    "propertyName": "የንጥል ስም",
+    "locationNotSpecified": "አድራሻ አልተለየም",
+    "sections": {
+      "description": "መግለጫ",
+      "features": "ባህሪያት",
+      "specifications": "የተወሰኑ ዝርዝሮች",
+      "tags": "መለያዎች",
+      "sellerInformation": "የሻጩ መረጃ"
+    },
+    "labels": {
+      "area": "አካባቢ",
+      "facing": "መቅበል",
+      "furnishing": "የእቃዎች አቅርቦት",
+      "floor": "ወለል",
+      "propertyAge": "የንጥል እድሜ",
+      "sellerType": "የሻጩ አይነት",
+      "sellerName": "የሻጩ ስም",
+      "individual": "ግለሰብ",
+      "contactNotAvailable": "ተገናኝ አልተለየም"
+    },
+    "features": {
+      "parking": "ፓርኪንግ",
+      "lift": "ሊፍት",
+      "security": "ደህንነት",
+      "alarm": "አላርም",
+      "readyToMove": "ለማለስ የሆነ",
+      "constructionDone": "ግንባታ ተጠናቀቀ",
+      "boundaryWall": "የውስጥ ግድብ",
+      "surveillance": "ተመልክቻ"
+    },
+    "buttons": {
+      "enquiryNow": "አሁን ጥያቄ ላክ"
+    }
+  },
+  "teams": {
+    "headers": {
+      "addMember": "የቡድን አባል አክል",
+      "editMember": "የቡድን አባል አርትዕ"
+    },
+    "labels": {
+      "member": "አባል",
+      "members": "አባሎች",
+      "email": "ኢሜይል",
+      "phone": "ስልክ",
+      "role": "ሚና",
+      "location": "አድራሻ",
+      "fullName": "ሙሉ ስም *",
+      "fullNameEdit": "ሙሉ ስም * (አርትዕ)",
+      "emailEdit": "የኢሜይል አድራሻ * (አርትዕ)",
+      "phoneEdit": "የስልክ ቁጥር * (አርትዕ)",
+      "locationEdit": "አድራሻ * (አርትዕ)"
+    },
+    "placeholders": {
+      "fullName": "የቡድን አባል ሙሉ ስም ያስገቡ",
+      "editFullName": "የቡድን አባል ሙሉ ስም አርትዕ",
+      "email": "የኢሜይል አድራሻ ያስገቡ",
+      "editEmail": "የኢሜይል አድራሻ አርትዕ",
+      "phone": "10-አሃዝ የስልክ ቁጥር ያስገቡ",
+      "editPhone": "10-አሃዝ የስልክ ቁጥር አርትዕ",
+      "location": "አድራሻ ያስገቡ (ከተማ፣ ክልል፣ አገር)",
+      "editLocation": "አድራሻ አርትዕ (ከተማ፣ ክልል፣ አገር)"
+    },
+    "status": {
+      "active": "ንቁ",
+      "inactive": "እንቅስቃሴ የሌለበት"
+    },
+    "messages": {
+      "noMembersFound": "የቡድን አባሎች አልተገኙም።",
+      "memberAdded": "የቡድን አባል ተከላከለ!",
+      "memberUpdated": "የቡድን አባል ተሻሻለ!"
+    },
+    "states": {
+      "loadingMembers": "የቡድን አባሎች በመጫን ላይ..."
+    },
+    "errors": {
+      "userIdNotAvailable": "የተጠቃሚ መታወቂያ አልተለየም",
+      "fetchFailed": "የቡድን አባሎችን መጫን አልተሳካም",
+      "userIdRequired": "የተጠቃሚ መታወቂያ አልተለየም። እባክዎ እንደገና ይለግቡ።",
+      "updateFailed": "የቡድን አባል ማሻሻል አልተሳካም። እባክዎ እንደገና ይሞክሩ።",
+      "addFailed": "የቡድን አባል መጨመር አልተሳካም። እባክዎ እንደገና ይሞክሩ።"
+    },
+    "modals": {
+      "deleteMember": {
+        "title": "የቡድን አባል አጥፋ",
+        "message": "እርግጠኛ ነዎት {{name}} መሰረዝ ይፈልጋሉ? ይህ ተግባር መቀልበስ አይችልም።"
+      }
+    }
+  },
+  "auth": {
+    "signIn": {
+      "partner": "የአጋር መለጠፍ",
+      "buyerSeller": "የገዢ/ሻጭ መለጠፍ",
+      "dashboard": "ዳሽቦርድዎን ለመለጠፍ ይለግቡ",
+      "continueToLogin": "መለጠፍ ይቀጥሉ",
+      "getStartedFree": "በነጻ ይጀምሩ",
+      "securePartnerAccess": "የአጋር ያልተለየ መለጠፍ"
+    },
+    "email": {
+      "placeholder": "የኢሜይል አድራሻዎን ያስገቡ",
+      "enterToContinue": "እባክዎ የኢሜይል አድራሻዎን ያስገቡ እና ይቀጥሉ"
+    },
+    "otp": {
+      "title": "OTP ያረጋግጡ",
+      "enter": "OTP ያስገቡ",
+      "sentMessage": "6-አሃዝ ኮድ ወደ የተመዘገበ ኢሜይል አድራሻዎ ላክን",
+      "verify": "OTP ያረጋግጡ",
+      "didntReceive": "ኮዱን አልተለገሱም?",
+      "resend": "እንደገና ላክ"
+    },
+    "switchAccount": {
+      "title": "መለያ ቀይር",
+      "confirmMessage": "እርግጠኛ ነዎት መውጣት እና ሌላ መለያ መጠቀም ይፈልጋሉ?",
+      "logout": "ውጣ"
+    },
+    "signUp": {
+      "title": "መመዝገብ",
+      "partner": {
+        "welcomeTitle": "አሁን መስራት ይጀምሩ፣ በነጻ ይመዝገቡ",
+        "nameLabel": "ስም*",
+        "namePlaceholder": "ሙሉ ስምዎን ያስገቡ",
+        "emailLabel": "ኢሜይል*",
+        "emailPlaceholder": "ኢሜይልዎን ያስገቡ",
+        "phoneLabel": "ስልክ*",
+        "phonePlaceholder": "የስልክ ቁጥርዎን ያስገቡ",
+        "zoneLabel": "አካባቢ*:",
+        "signUpButton": "መመዝገብ",
+        "creatingAccount": "መለያ በመፍጨት ላይ...",
+        "alreadyHaveAccount": "መለያ አለዎት?",
+        "logIn": "መለጠፍ",
+        "trialModal": {
+          "title": "🎉 እንኳን ደህና መጡ!",
+          "message": "እንኳን ደህና መጡ! የሙከራ መለያዎ የሆነ ነው—አሁን መተግበሪያውን ይጀምሩ።",
+          "continue": "ይቀጥሉ"
+        },
+        "errors": {
+          "accountExists": "መለያ አለዎት። እባክዎ በኢሜይልዎ መለጠፍ ይሞክሩ።",
+          "checkInput": "እባክዎ ግቤትዎን ያረጋግጡ እና እንደገና ይሞክሩ",
+          "generic": "እባክዎ ግቤትዎን ያረጋግጡ እና እንደገና ይሞክሩ"
+        }
+      }
+    },
+    "mainScreen": {
+      "alreadyHaveAccount": "መለያ አለዎት?",
+      "logIn": "መለጠፍ",
+      "newHere": "አዲስ ነዎት? መለያ ፍጠር!",
+      "signUpAsBuyer": "እንደ ገዢ መመዝገብ",
+      "wantToListProperty": "ንጥልዎን መዝግብ ይፈልጋሉ?",
+      "signUpAsSeller": "እንደ ሻጭ መመዝገብ",
+      "buyerSellerTab": "ገዢ/ሻጭ",
+      "partnerTab": "ያዥ"
+    },
+    "accessDenied": "መለጠፍ አልተለየም",
+    "adminUnauthorized": "ኢሜይልዎ {email} ለአድሚን መለጠፍ አልተለየም።",
+    "contactAdmin": "መለጠፍ ለማግኘት እባክዎ አድሚንስትሬተርን ያልቅ።",
+    "buyerAccess": "የገዢ መለጠፍ",
+    "buyerNotSupported": "የገዢ ባህሪያት በዚህ ስሪት አልተለየም።",
+    "contactSupport": "እርዳታ ለማግኘት እባክዎ ድጋፍን ያልቅ።"
+  },
+  "followUp": {
+    "title": "የተከታታይ ተግባራት",
+    "toBeScheduledLater": "በኋላ ለመያዝ",
+    "noDateSet": "ቀን አልተለየም",
+    "status": {
+      "overdue": "የተከታታይ ተግባር ተራቁ",
+      "today": "የተከታታይ ተግባር ዛሬ",
+      "in": "የተከታታይ ተግባር በ{{timeLeft}}",
+      "someday": "የተከታታይ ተግባር: አንድ ቀን",
+      "noScheduled": "የተከታታይ ተግባር አልተያዘም"
+    },
+    "card": {
+      "followUp": "የተከታታይ ተግባር",
+      "assigned": "ተመድቧል:"
+    },
+    "overdue": {
+      "title": "ያለፉት የተከታታይ ተግባራት",
+      "subtitle": "የተከታታይ ተግባራት ያለፉት ቀናት",
+      "empty": "ያለፉት የተከታታይ ተግባራት አልተገኙም"
+    },
+    "upcoming": {
+      "title": "ቀርቦ የሚመጡ የተከታታይ ተግባራት",
+      "subtitle": "ለሚቀጥሉት 7 ቀናት የተያዙ የተከታታይ ተግባራት",
+      "empty": "ቀርቦ የሚመጡ የተከታታይ ተግባራት አልተገኙም"
+    },
+    "today": {
+      "title": "የዛሬ የተከታታይ ተግባራት",
+      "empty": "ለዛሬ የተያዙ የተከታታይ ተግባራት አልተገኙም"
+    },
+    "someday": {
+      "title": "አንድ ቀን የተከታታይ ተግባራት",
+      "subtitle": "ለቀጣይ ቀናት የተያዙ የተከታታይ ተግባራት"
+    }
+  },
+  "clients": {
+    "title": "የያዥ ሰዎች",
+    "add": "የያዥ ሰው አክል",
+    "search": "የያዥ ሰዎች ፈልግ...",
+    "noClientsFound": "የያዥ ሰዎች አልተገኙም",
+    "showingFrom": "የያዥ ሰዎች ከ",
+    "selected": "ተመረጡ",
+    "partner": "ያዥ",
+    "teamMember": "የቡድን አባል",
+    "activityAddedSuccess": "ተግባር ተከላከለ",
+    "failedToAddActivity": "ተግባር መጨመር አልተሳካም",
+    "loading": "የያዥ ሰዎች በመጫን ላይ...",
+    "searching": "የያዥ ሰዎች በመፈለግ ላይ...",
+    "plural": "ዎች",
+    "edit": "አርትዕ",
+    "pullToRefresh": "ለማደስ ወደ ታች ሳቅ",
+    "loadingMoreClients": "ተጨማሪ የያዥ ሰዎች በመጫን ላይ..."
+  },
+  "clientCard": {
+    "new": "አዲስ",
+    "assigned": "ተመድቧል:"
+  },
+  "filterDrawer": {
+    "title": "አዘውትር እና አጣራ",
+    "sortDirection": "የመለያ አቅጣጫ",
+    "sortBy": "አዘውትር በ",
+    "ascending": "ከትንሹ ወደ ከፍተኛ",
+    "descending": "ከከፍተኛ ወደ ትንሹ",
+    "createdDate": "የተፈጠረ ቀን",
+    "createdDateDescription": "የያዥ ሰው በሚታከልበት ጊዜ አዘውትር",
+    "lastActivityDate": "የመጨረሻ ተግባር ቀን",
+    "lastActivityDateDescription": "በቅርቡ የሆነ ተግባር አዘውትር",
+    "cancel": "ሰርዝ",
+    "apply": "ተግባር"
+  },
+  "language": {
+    "selectLanguage": "ቋንቋ ምረጥ",
+    "change": "ቋንቋ ቀይር",
+    "switchTo": "{{languageName}} ወደ ቀይር?",
+    "rtlWarning": "ይህ የመተግበሪያ አቀማመጥ አቅጣጫ ያሻሽላል እና መተግበሪያው እንደገና ያስጀምራል።"
+  },
+  "app": {
+    "title": "MT One: መተግበሪያ እና CRM",
+    "restart": "መተግበሪያ እንደገና ጀምር"
+  },
+  "plurals": {
+    "client": {},
+    "followUp": {}
+  },
+  "addActivityModal": {
+    "addActivity": "ተግባር አክል",
+    "editActivity": "ተግባር አርትዕ",
+    "selectActivityType": "የተግባር አይነት ምረጥ",
+    "deleteActivity": "ተግባር አጥፋ",
+    "deleteActivityConfirm": "እርግጠኛ ነዎት ይህን ተግባር መሰረዝ ይፈልጋሉ?"
+  },
+  "clientProfile": {
+    "title": "የያዥ ሰው መገለጫ",
+    "edit": "አርትዕ",
+    "delete": "አጥፋ",
+    "sendQuickResponse": "ፈጣን ምላሽ ላክ",
+    "duplicateClientFound": "የተባዛ የያዥ ሰው ተገኘ",
+    "deleteClient": "የያዥ ሰው አጥፋ",
+    "deleteClientConfirm": "እርግጠኛ ነዎት ይህን የያዥ ሰው መሰረዝ ይፈልጋሉ?",
+    "activityDeleted": "ተግባር ተሳኗል ተወገደ",
+    "clientDeleted": "የያዥ ሰው ተሳኗል ተወገደ",
+    "activityAddedRescheduled": "ተግባር ተከላከለ እና የተከታታይ ተግባር ለ1 ቀናት በኋላ እንደገና ተያዘ",
+    "activityAddedRescheduleFailed": "ተግባር ተከላከለ ነገር ግን የተከታታይ ተግባር እንደገና መያዝ አልተሳካም",
+    "activityAddedCompleted": "ተግባር ተከላከለ እና የተከታታይ ተግባር እንደ ተጠናቀቀ ተለየ",
+    "activityAddedUpdateFailed": "ተግባር ተከላከለ ነገር ግን የተከታታይ ተግባር ሁኔታ መሻሻል አልተሳካም",
+    "activityUpdated": "ተግባር ተሳኗል ተሻሻለ",
+    "activityAdded": "ተግባር ተሳኗል ተከላከለ",
+    "followUpScheduled": "የተከታታይ ተግባር ተሳኗል ተያዘ",
+    "followUpRemoved": "የተከታታይ ተግባር ተሳኗል ተወገደ",
+    "fetchClientFailed": "የያዥ ሰው ውሂብ መጫን አልተሳካም",
+    "fetchFollowUpFailed": "የተከታታይ ተግባር ቀን መጫን አልተሳካም",
+    "fetchAssignedUsersFailed": "የተመደቡ ተጠቃሚዎች መጫን አልተሳካም",
+    "deleteActivityFailed": "ተግባር መሰረዝ አልተሳካም",
+    "deleteClientFailed": "የያዥ ሰው መሰረዝ አልተሳካም",
+    "scheduleFollowUpFailed": "የተከታታይ ተግባር መያዝ አልተሳካም",
+    "removeFollowUpFailed": "የተከታታይ ተግባር መያዝ አልተሳካም",
+    "assignedTo": "ተመድቧል ለ",
+    "noUsersAssigned": "ምንም ተጠቃሚዎች አልተመደቡም",
+    "contactInformation": "የተገናኝ መረጃ",
+    "recentActivities": "የቅርቡ ተግባራት",
+    "noActivitiesYet": "እስካሁን ምንም ተግባራት የሉም"
+  },
+  "clientAssignment": {
+    "title": "የያዥ ሰው ምደባ",
+    "assignTeamMembers": "የቡድን አባሎችን መድብ",
+    "selectTeamMembers": "ለዚህ ያዥ ሰው የሚመደቡበት የቡድን አባሎችን ምረጥ",
+    "usersSelected": "{{count}} ተጠቃሚ ተመረጠ",
+    "noTeamMembersFound": "የቡድን አባሎች አልተገኙም",
+    "loadingTeamMembers": "የቡድን አባሎች በመጫን ላይ...",
+    "userEmailNotAvailable": "የተጠቃሚ ኢሜይል አልተለየም",
+    "fetchTeamMembersFailed": "የቡድን አባሎችን መጫን አልተሳካም",
+    "errorLoadingTeamMembers": "የቡድን አባሎች መጫን ስህተት",
+    "usersAssignedSuccessfully": "ተጠቃሚዎች ተሳኗል ተመደቡ",
+    "assignUsersFailed": "ተጠቃሚዎችን መመደብ አልተሳካም",
+    "errorAssigningUsers": "ተጠቃሚዎችን መመደብ ስህተት",
+    "assigning": "በመመደብ ላይ...",
+    "assignUsers": "{{count}} ተጠቃሚ መድብ"
+  },
+  "addClient": {
+    "headers": {
+      "addClient": "ያዥ ሰው አክል",
+      "editClient": "ያዥ ሰው አርትዕ"
+    },
+    "labels": {
+      "clientName": "የያዥ ሰው ስም*",
+      "displayName": "የማሳያ ስም",
+      "mobileNumber": "የሞባይል ቁጥር",
+      "whatsappNumber": "የዋትስአፕ ቁጥር",
+      "email": "ኢሜይል",
+      "notes": "ማስታወሻዎች"
+    },
+    "placeholders": {
+      "clientName": "ለምሳሌ፣ ዮሃንስ ዶይ",
+      "displayName": "ለምሳሌ፣ ዮሃንስ ዶይ",
+      "mobileNumber": "ለምሳሌ፣ 1234567890",
+      "whatsappNumber": "ለምሳሌ፣ 1234567890",
+      "email": "ለምሳሌ፣ email@example.com",
+      "notes": "ተጨማሪ ማስታወሻዎች አክል"
+    },
+    "buttons": {
+      "submit": "አስገባ"
+    },
+    "errors": {
+      "clientNameRequired": "የያዥ ሰው ስም አልተለየም",
+      "provideValidClientName": "እባክዎ ትክክለኛ የያዥ ሰው ስም ያስገቡ",
+      "addError": "ያዥ ሰው መጨመር ስህተት",
+      "updateError": "ያዥ ሰው ማሻሻል ስህተት",
+      "unexpectedError": "ያልተለመደ ስህተት ተከሰተ"
+    },
+    "success": {
+      "clientAdded": "ያዥ ሰው ተሳኗል ተከላከለ",
+      "clientUpdated": "ያዥ ሰው ተሳኗል ተሻሻለ"
+    }
+  },
+  "groupsToggle": {
+    "labels": {
+      "selectGroups": "ቡድኖችን ምረጥ"
+    },
+    "placeholders": {
+      "searchGroups": "ቡድኖችን ፈልግ..."
+    },
+    "buttons": {
+      "addGroup": "ቡድን አክል",
+      "more": "ተጨማሪ",
+      "showLess": "ያነሰ አሳይ"
+    },
+    "errors": {
+      "groupNameRequired": "የቡድን ስም አልተለየም",
+      "addGroupFailed": "ቡድን መጨመር አልተሳካም",
+      "tryAgain": "እባክዎ እንደገና ይሞክሩ",
+      "unexpectedError": "ያልተለመደ ስህተት ተከሰተ"
+    },
+    "success": {
+      "groupAdded": "ቡድን ተሳኗል ተከላከለ"
+    }
+  },
+  "messagePreview": {
+    "headers": {
+      "messagePreview": "የመልክ ቅድመ እይታ"
+    },
+    "labels": {
+      "messagePreview": "የመልክ ቅድመ እይታ",
+      "sendingTo": "በመላክ ላይ ለ",
+      "template": "አብነት",
+      "messageContent": "የመልክ ይዘት",
+      "recipientInformation": "የተላላፊ መረጃ",
+      "whatsapp": "ዋትስአፕ",
+      "email": "ኢሜይል",
+      "phone": "ስልክ"
+    },
+    "options": {
+      "sendViaWhatsapp": "በዋትስአፕ ላክ",
+      "sendViaEmail": "በኢሜይል ላክ",
+      "sendViaSms": "በኤስኤምኤስ ላክ"
+    },
+    "errors": {
+      "error": "ስህተት",
+      "whatsappNotAvailable": "የዋትስአፕ ቁጥር ለዚህ ያዥ ሰው አልተለየም።",
+      "whatsappOpenFailed": "ዋትስአፕ መክፈት አልተሳካም። እባክዎ ዋትስአፕ መተገበሩን ያረጋግጡ።",
+      "emailNotAvailable": "የኢሜይል አድራሻ ለዚህ ያዥ ሰው አልተለየም።",
+      "emailOpenFailed": "የኢሜይል መተግበሪያ መክፈት አልተሳካም።",
+      "phoneNotAvailable": "የስልክ ቁጥር ለዚህ ያዥ ሰው አልተለየም።",
+      "smsOpenFailed": "የኤስኤምኤስ መተግበሪያ መክፈት አልተሳካም።",
+      "noWhatsappNumber": "የዋትስአፕ ቁጥር አልተለየም",
+      "noEmailAddress": "የኢሜይል አድራሻ አልተለየም",
+      "noPhoneNumber": "የስልክ ቁጥር አልተለየም"
+    },
+    "emailSubject": "ከያዥ መልክ"
+  },
+  "partnerFilter": {
+    "title": {
+      "partners": "ያዥ ሰዎችን አጣራ",
+      "teamMembers": "የቡድን አባሎችን አጣራ"
+    },
+    "accessDenied": {
+      "title": "መለጠፍ አልተለየም",
+      "message": "ወደዚህ ገጽ መለጠፍ ፈቃድ አልተለየልም።"
+    },
+    "buttons": {
+      "goBack": "ተመለስ",
+      "selectAll": "ሁሉንም ምረጥ",
+      "deselectAll": "ሁሉንም አትምረጥ",
+      "applyFilter": "አጣራዎችን ተግባር"
+    },
+    "loading": {
+      "partners": "ያዥ ሰዎች በመጫን ላይ...",
+      "teamMembers": "የቡድን አባሎች በመጫን ላይ..."
+    },
+    "selection": {
+      "partners": "ያዥ ሰዎች",
+      "teamMembers": "የቡድን አባሎች",
+      "selected": "ተመረጡ"
+    },
+    "empty": {
+      "partners": "ያዥ ሰዎች አልተገኙም",
+      "teamMembers": "የቡድን አባሎች አልተገኙም"
+    },
+    "toast": {
+      "filterCleared": "አጣራ ተራቁ",
+      "filterClearedMessage": "ለመለያዎ ብቻ ያዥ ሰዎችን በማሳየት ላይ።",
+      "filterApplied": "አጣራ ተግባራል",
+      "filterAppliedMessage": "{{formattedCount}} ተመረጠ ያዥ ያዥ ሰዎችን በማሳየት ላይ"
+    },
+    "errors": {
+      "fetchFailed": "{{type}} መጫን አልተሳካም። እባክዎ እንደገና ይሞክሩ።",
+      "applyFailed": "አጣራዎችን መተግበር አልተሳካም። እባክዎ እንደገና ይሞክሩ።"
+    },
+    "labels": {
+      "role": "ሚና"
+    }
+  },
+  "messageTemplate": {
+    "headers": {
+      "selectTemplate": "የመልክ አብነት ምረጥ"
+    },
+    "errors": {
+      "fetchFailed": "የይዘት አብነቶችን መጫን አልተሳካም",
+      "loadingError": "የይዘት አብነቶችን መጫን ስህተት"
+    }
+  },
+  "contentTemplate": {
+    "labels": {
+      "by": "በ",
+      "created": "ተፈጠረ"
+    },
+    "status": {
+      "active": "ንቁ",
+      "inactive": "እንቅስቃሴ የሌለበት",
+      "deleted": "ተሰረዘ"
+    },
+    "errors": {
+      "invalidDate": "እባክዎ ትክክለኛ ቀን ያስገቡ"
+    },
+    "emptyState": {
+      "title": "የይዘት አብነቶች አልተገኙም",
+      "subtitle": "እስካሁን ምንም የይዘት አብነቶች አልፈጠሩም።"
+    },
+    "header": {
+      "templatesFound": "{{count}} አብነት ተገኘ"
+    },
+    "loading": {
+      "loadingTemplates": "የይዘት አብነቶች በመጫን ላይ...",
+      "loadingMore": "ተጨማሪ በመጫን ላይ..."
+    }
+  },
+  "contentScreen": {
+    "headers": {
+      "contentTemplates": "የይዘት አብነቶች"
+    },
+    "buttons": {
+      "addTemplate": "አብነት አክል"
+    },
+    "errors": {
+      "fetchFailed": "የይዘት አብነቶችን መጫን አልተሳካም",
+      "loadingError": "የይዘት አብነቶችን መጫን ስህተት"
+    }
+  },
+  "partnerPropertyForm": {
+    "titles": {
+      "addProperty": "ንጥል አክል"
+    },
+    "steps": {
+      "basicInfo": "መሠረታዊ መረጃ",
+      "propertyDetails": "የንጥል ዝርዝሮች",
+      "mediaAndSubmit": "ሚዲያ እና አስገባ"
+    },
+    "buttons": {
+      "clear": "አጥፋ"
+    },
+    "basicDetails": {
+      "labels": {
+        "propertyName": "የንጥል ስም*",
+        "sellerType": "የሻጩ አይነት*",
+        "city": "ከተማ*",
+        "propertyFor": "ንጥል ለ*",
+        "propertyType": "የንጥል አይነት*",
+        "location": "አድራሻ*",
+        "price": "ዋጋ*"
+      },
+      "placeholders": {
+        "propertyName": "የንጥል ስም ያስገቡ",
+        "location": "የአድራሻ ዝርዝሮች ያስገቡ",
+        "price": "የንጥል ዋጋ ያስገቡ"
+      }
+    },
+    "mediaAndSubmit": {
+      "labels": {
+        "videoURL": "የቪዲዮ ዩአርኤል",
+        "images": "ምስሎች",
+        "tags": "መለያዎች",
+        "selectCategory": "ክፍል ምረጥ"
+      },
+      "placeholders": {
+        "videoURL": "የዩትዩብ ወይም የቪሜዮ ዩአርኤል ያስገቡ",
+        "tags": "ለምሳሌ፣ #ያልተለመደ",
+        "selectCategory": "ክፍል ምረጥ"
+      },
+      "descriptions": {
+        "optionalStep": "ይህ እርምጃ አልተለመደም። እነዚህን ዝርዝሮች ሳያስገቡ መራመድ ይችላሉ።",
+        "imagesDescription": "የንጥልዎን ምስሎች ይስቀሉ። አንድ ምስል እንደ ነባሪ ማሳያ ምስል ይምረጡ።",
+        "submitDescription": "የንጥል ዝርዝርዎን ከማስገባት ቀድሞ ሁሉንም ዝርዝሮች በጥሩ ሁኔታ ያረጋግጡ።",
+        "selectedImages": "የተመረጡ ምስሎች ({{count}})"
+      },
+      "buttons": {
+        "selectImages": "ምስሎች ምረጥ",
+        "addTag": "አክል"
+      }
+    },
+    "navigation": {
+      "next": "ቀጥል",
+      "back": "ተመለስ"
+    },
+    "propertyDetails": {
+      "optionalStepText": "ይህ እርምጃ አልተለመደም። እነዚህን ዝርዝሮች ሳያስገቡ መራመድ ይችላሉ።",
+      "noSelectionText": "እባክዎ ቀድሞ እርምጃ ውስጥ የንጥል አይነት ይምረጡ።",
+      "goBack": "ተመለስ",
+      "fields": {
+        "propertyForType": {
+          "label": "የንጥል ክፍል"
+        },
+        "readyToMove": {
+          "label": "ለማለስ የሆነ"
+        },
+        "lifts": {
+          "label": "ሊፍት አለ"
+        },
+        "pantry": {
+          "label": "ፓንትሪ"
+        },
+        "floor": {
+          "label": "ወለል",
+          "placeholder": "የወለል ቁጥር ያስገቡ"
+        },
+        "furnishing": {
+          "label": "የእቃዎች አይነት"
+        },
+        "parking": {
+          "label": "የመኪና ፓርኪንግ"
+        },
+        "facing": {
+          "label": "የመቅበል አቅጣጫ"
+        },
+        "location": {
+          "label": "አድራሻ",
+          "placeholder": "የንጥል አድራሻ ያስገቡ"
+        },
+        "zipCode": {
+          "label": "ዚፕ ኮድ",
+          "placeholder": "ዚፕ ኮድ ያስገቡ"
+        },
+        "price": {
+          "label": "ዋጋ",
+          "placeholder": "የንጥል ዋጋ ያስገቡ"
+        },
+        "area": {
+          "label": "የንጥል አካባቢ",
+          "placeholder": "የንጥል አካባቢ ያስገቡ"
+        },
+        "lmUnit": {
+          "label": "የአካባቢ አሃዝ"
+        },
+        "propertyAge": {
+          "label": "የንጥል እድሜ"
+        },
+        "gatedSecurity": {
+          "label": "የተያዘ ማህበረሰብ ደህንነት"
+        },
+        "surveillanceCameras": {
+          "label": "ተመልክቻ"
+        },
+        "alarmSystem": {
+          "label": "የአላርም ስርዓት"
+        },
+        "shortDescription": {
+          "label": "አጭር መግለጫ",
+          "placeholder": "አጭር መግለጫ ያስገቡ"
+        },
+        "longDescription": {
+          "label": "ረጅም መግለጫ",
+          "placeholder": "ዝርዝር መግለጫ ያስገቡ"
+        },
+        "bhkType": {
+          "label": "የተያዘ አይነት"
+        },
+        "ceilingHeight": {
+          "label": "የሳቅ ቁመት",
+          "placeholder": "የሳቅ ቁመት ያስገቡ"
+        },
+        "constructionDone": {
+          "label": "ማንኛውም ግንባታ"
+        },
+        "boundaryWall": {
+          "label": "ውስጥ ግድብ"
+        },
+        "openSide": {
+          "label": "የክፍት ገጽ ቁጥር"
+        }
+      }
+    },
+    "success": {
+      "propertyUpdated": "ንጥል ተሳኗል ተሻሻለ",
+      "propertyAdded": "ንጥል ተሳኗል ተከላከለ"
+    },
+    "errors": {
+      "updateFailed": "ንጥል ማሻሻል አልተሳካም",
+      "addFailed": "ንጥል መጨመር አልተሳካም"
+    }
+  },
+  "listings": {
+    "titles": {
+      "propertyListings": "የንጥሎች ዝርዝሮች",
+      "filterProperties": "ንጥሎችን አጣራ",
+      "deleteProperty": "ንጥል አጥፋ",
+      "noPropertiesFound": "ንጥሎች አልተገኙም"
+    },
+    "messages": {
+      "loadingMore": "ተጨማሪ ንጥሎች በመጫን ላይ...",
+      "noProperties": "ንጥሎች አልተገኙም።",
+      "deleteConfirmation": "እርግጠኛ ነዎት ይህን ንጥል መሰረዝ ይፈልጋሉ?",
+      "propertyDeleted": "ንጥል ተሳኗል ተሰረዘ",
+      "deleteFailed": "ንጥል መሰረዝ አልተሳካም",
+      "emptyState": "እስካሁን ምንም ንጥሎች አልተከላከሉም። የመጀመሪያ ንጥልዎን በመጨመር ይጀምሩ።",
+      "loadingDetails": "የንጥል ዝርዝሮች በመጫን ላይ...",
+      "loadFailed": "የንጥል ዝርዝሮች መጫን አልተሳካም",
+      "errorLoading": "የንጥል ዝርዝሮች መጫን ስህተት",
+      "propertyNotFound": "ንጥል አልተገኘም"
+    },
+    "placeholders": {
+      "searchByName": "በስም ፈልግ..."
+    },
+    "labels": {
+      "propertyFor": "ንጥል ለ",
+      "status": "ሁኔታ",
+      "city": "ከተማ",
+      "featured": "የተለየ",
+      "notFeatured": "አልተለየም",
+      "deleted": "ተሰረዘ",
+      "unnamedProperty": "ያልተሰማ ንጥል",
+      "locationNotSpecified": "አድራሻ አልተለየም",
+      "priceOnRequest": "ዋጋ በጥያቄ ላይ",
+      "forSale": "ለሽያጭ",
+      "for": "ለ",
+      "sale": "ሽያጭ",
+      "type": "አይነት",
+      "category": "ክፍል",
+      "notSpecified": "አልተለየም",
+      "zipCode": "ዚፕ ኮድ",
+      "sellerType": "የሻጩ አይነት",
+      "configuration": "ውቅር",
+      "area": "አካባቢ",
+      "furnishing": "የእቃዎች አቅርቦት",
+      "facing": "መቅበል",
+      "seller": "ሻጭ",
+      "playVideo": "ቪዲዮ ስጥ",
+      "videoTour": "የቪዲዮ ጉዞ"
+    },
+    "buttons": {
+      "edit": "አርትዕ",
+      "delete": "አጥፋ",
+      "cancel": "ሰርዝ",
+      "applyFilters": "አጣራዎችን ተግባር",
+      "clearAll": "ሁሉንም አጥፋ",
+      "addProperty": "ንጥል አክል"
+    },
+    "accessibility": {
+      "propertyImage": "የ{{propertyName}} ምስል",
+      "propertyPlaceholder": "የንጥል ቦታ ያዢ ምስል"
+    },
+    "sections": {
+      "propertyDetails": "የንጥል ዝርዝሮች",
+      "overview": "አጠቃላይ እይታ",
+      "description": "መግለጫ",
+      "features": "ባህሪያት",
+      "specifications": "የተወሰኑ ዝርዝሮች",
+      "tags": "መለያዎች",
+      "contactInformation": "የተገናኝ መረጃ"
+    },
+    "features": {
+      "readyToMove": "ለማለስ የሆነ",
+      "constructionDone": "ግንባታ ተጠናቀቀ",
+      "boundaryWall": "የውስጥ ግድብ",
+      "elevators": "ሊፍቶች",
+      "alarmSystem": "የአላርም ስርዓት",
+      "securityCameras": "የደህንነት ካሜራዎች",
+      "gatedSecurity": "የተያዘ ማህበረሰብ ደህንነት",
+      "pantry": "ፓንትሪ"
+    },
+    "specs": {
+      "floor": "ወለል",
+      "parking": "ፓርኪንግ",
+      "openSide": "የክፍት ገጽ",
+      "propertyAge": "የንጥል እድሜ",
+      "ceilingHeight": "የሳቅ ቁመት",
+      "listedOn": "ተያዘ በ"
+    },
+    "modals": {
+      "deleteProperty": {
+        "title": "ንጥል አጥፋ",
+        "message": "እርግጠኛ ነዎት ይህን ንጥል መሰረዝ ይፈልጋሉ?"
+      }
+    }
+  },
+  "addContent": {
+    "headers": {
+      "newTemplate": "አዲስ አብነት",
+      "editTemplate": "አብነት አርትዕ"
+    },
+    "labels": {
+      "templateName": "የአብነት ስም",
+      "messageContent": "የመልክ ይዘት",
+      "availableVariables": "የሚገኙ ተለዋዋጮች",
+      "preview": "ቅድመ እይታ"
+    },
+    "placeholders": {
+      "templateName": "የአብነት ስም ያስገቡ",
+      "messageContent": "የመልክ አብነትዎን እዚህ ይተይቡ...\n\nመልክዎን ለማስተካከል ተለዋዋጮች እንደ {name}, {phone}, {email} መጠቀም ይችላሉ።",
+      "preview": "የመልክ ቅድመ እይታዎ እዚህ ያሳያል..."
+    },
+    "helpers": {
+      "templateName": "ለአብነትዎ መግለጫ ስም ይስጡ",
+      "variablesInfo": "በመልክ ላይ በሚላኩበት ጊዜ ተለዋዋጮች በቀስት ቦታዎች ውስጥ እንደ ትክክለኛ እሴቶች ያልቀሳሉ።",
+      "variablesDescription": "መልክዎ ለመጨመር ከታች ያለውን ማንኛውም ተለዋዋጭ ያዘጋጁ",
+      "variablesAutoReplace": "እነዚህ ተለዋዋጮች በመልክ ላይ በሚላኩበት ጊዜ በራሱ ያልቀሳሉ"
+    },
+    "variables": {
+      "name": "የያዥ ሰው ስም",
+      "phone": "የስልክ ቁጥር",
+      "whatsapp": "የዋትስአፕ ቁጥር",
+      "email": "የኢሜይል አድራሻ",
+      "senderName": "የእርስዎ ስም",
+      "senderEmail": "የእርስዎ ኢሜይል",
+      "senderAddress": "የእርስዎ አድራሻ",
+      "senderPhone": "የእርስዎ ስልክ"
+    },
+    "buttons": {
+      "cancel": "ሰርዝ",
+      "saveTemplate": "አብነት አስቀምጥ",
+      "updateTemplate": "አብነት አሻሽል",
+      "saving": "በመያዝ ላይ...",
+      "updating": "በማሻሻል ላይ..."
+    },
+    "errors": {
+      "templateNameRequired": "እባክዎ የአብነት ስም ያስገቡ",
+      "contentRequired": "እባክዎ የአብነት ይዘት ያስገቡ",
+      "userNotFound": "ተጠቃሚ አልተገኘም",
+      "createFailed": "አብነት መፍጨት አልተሳካም",
+      "updateFailed": "አብነት ማሻሻል አልተሳካም"
+    },
+    "success": {
+      "templateCreated": "አብነት ተፈጠረ",
+      "templateUpdated": "አብነት ተሻሻለ",
+      "createMessage": "የመልክ አብነትዎ በተሳካ ሁኔታ ተያዘ።",
+      "updateMessage": "የመልክ አብነትዎ በተሳካ ሁኔታ ተሻሻለ።"
+    },
+    "alerts": {
+      "discardTitle": "ለውጦችን አስወግድ",
+      "discardMessage": "እርግጠኛ ነዎት ለውጦችዎን መስወገድ ይፈልጋሉ?",
+      "continueEditing": "አርትዖን ይቀጥሉ",
+      "discard": "አስወግድ"
+    }
+  },
+  "groups": {
+    "messages": {
+      "noGroupsAvailable": "ቡድኖች አልተለየም። ቡድኖች በሚፈጠሩበት ጊዜ እዚህ ያሳያሉ።",
+      "loadFailed": "ቡድኖችን መጫን አልተሳካም",
+      "tryAgainLater": "እባክዎ በኋላ እንደገና ይሞክሩ",
+      "groupCreated": "ቡድን በተሳካ ሁኔታ ተፈጠረ",
+      "groupUpdated": "ቡድን በተሳካ ሁኔታ ተሻሻለ",
+      "groupDeleted": "ቡድን በተሳካ ሁኔታ ተሰረዘ",
+      "saveFailed": "ቡድን መያዝ አልተሳካም",
+      "saveError": "ቡድን በመያዝ ላይ ስህተት",
+      "deleteFailed": "ቡድን መሰረዝ አልተሳካም",
+      "deleteError": "ቡድን በመሰረዝ ላይ ስህተት",
+      "noColorsAvailable": "ቀለሞች አልተለየም"
+    },
+    "placeholders": {
+      "groupName": "የቡድን ስም"
+    },
+    "labels": {
+      "selectColor": "ቀለም ምረጥ"
+    },
+    "buttons": {
+      "addGroup": "+ ቡድን አክል"
+    },
+    "modals": {
+      "addGroup": "አዲስ ቡድን አክል",
+      "editGroup": "ቡድን አርትዕ",
+      "deleteGroup": {
+        "title": "ቡድን አጥፋ",
+        "message": "እርግጠኛ ነዎት ይህን ቡድን መሰረዝ ይፈልጋሉ?"
+      }
+    }
+  },
+  "agentProperty": {
+    "titles": {
+      "addAgentProperty": "የያዥ ንጥል አክል",
+      "editAgentProperty": "የያዥ ንጥል አርትዕ",
+      "agentProperty": "የያዥ ንጥል",
+      "deleteProperty": "ንጥል አጥፋ"
+    },
+    "labels": {
+      "agentName": "የያዥ ስም*",
+      "agentContactNo": "የያዥ የተገናኝ ቁጥር*",
+      "propertyLocation": "የንጥል አድራሻ*",
+      "propertyType": "የንጥል አይነት",
+      "bhkType": "የቤት አይነት",
+      "demandPrice": "የሚፈለገው ዋጋ",
+      "securityDepositAmount": "የደህንነት ተብሎ",
+      "negotiable": "የሚተባበል",
+      "fixedPrice": "የተለየ ዋጋ",
+      "propertyNotes": "የንጥል ማስታወሻዎች",
+      "location": "አድራሻ",
+      "contactNo": "የተገናኝ ቁጥር",
+      "dateAdded": "የተከላከለበት ቀን",
+      "notes": "ማስታወሻዎች"
+    },
+    "placeholders": {
+      "agentName": "ለምሳሌ፣ ዮሃንስ ዶይ",
+      "agentContactNo": "ለምሳሌ፣ 1234567890",
+      "propertyLocation": "ለምሳሌ፣ ናቪ ሙምባይ፣ ታኔ፣ ያሉ ቦታዎች",
+      "demandPrice": "መጠን ያስገቡ",
+      "securityDepositAmount": "የተብሎ መጠን ያስገቡ",
+      "propertyNotes": "ተጨማሪ ዝርዝሮች ያክሉ",
+      "searchByName": "በስም ፈልግ..."
+    },
+    "messages": {
+      "propertyAdded": "ንጥል በተሳካ ሁኔታ ተከላከለ",
+      "propertyUpdated": "ንጥል በተሳካ ሁኔታ ተሻሻለ",
+      "updateFailed": "ንጥል ማሻሻል አልተሳካም",
+      "validationError": "እባክዎ የማረጋገጫ ስህተቶችን ያስተካክሉ",
+      "noProperties": "ንጥሎች አልተገኙም",
+      "deleteSuccess": "ንጥል በተሳካ ሁኔታ ተሰረዘ",
+      "deleteError": "ንጥል በመሰረዝ ላይ ስህተት",
+      "notSpecified": "አልተለየም",
+      "na": "አልተለየም",
+      "deleteConfirmation": "ይህ ተግባር መቀልበስ አይችልም። እርግጠኛ ነዎት ይህን ንጥል መሰረዝ ይፈልጋሉ?"
+    },
+    "buttons": {
+      "add": "አክል",
+      "submit": "አስገባ",
+      "cancel": "ሰርዝ",
+      "applyFilters": "አጣራዎችን ተግባር",
+      "filterProperties": "ንጥሎችን አጣራ",
+      "clearAll": "ሁሉንም አጥፋ"
+    }
+  },
+  "billing": {
+    "title": "ክፍያዎች እና ክፍያዎች",
+    "subtitle": "የእርስዎን ምዝገባ እና የክፍያ ታሪክ ያስተያዩ",
+    "plans": {
+      "title": "የክፍያ እቅዶች"
+    },
+    "switchPlanButton": "የክፍያ እቅድ ቀይር",
+    "success": {
+      "title": "ክፍያ ተሳኗል",
+      "subtitle": "የእርስዎ ምዝገባ በተሳካ ሁኔታ ተነቃለች!"
+    },
+    "errors": {
+      "loadFailed": "የክፍያ መረጃ መጫን አልተሳካም።",
+      "paymentFailed": "ክፍያ አልተሳካም",
+      "generic": "አንድ ስህተት ተከሰተ",
+      "loadPlansFailed": "የክፍያ እቅዶች መጫን አልተሳካም።"
+    },
+    "empty": {
+      "title": "እቅዶች አልተለየም",
+      "message": "ለመጀመር የመጀመሪያ የክፍያ እቅድ ይስሩ",
+      "createButton": "እቅድ ፍጠር"
+    },
+    "delete": {
+      "title": "እቅድ አጥፋ",
+      "confirmMessage": "እርግጠኛ ነዎት እቅድ \"{{planName}}\" መሰረዝ ይፈልጋሉ?"
+    },
+    "nextBill": {
+      "title": "ቀጣይ ክፍያ",
+      "billingCycle": "የክፍያ ዑደት",
+      "duration": "ቆይታ",
+      "days": "ቀናት",
+      "billingPeriod": "የክፍያ ጊዜ",
+      "payNow": "አሁን ይክፈሉ",
+      "billingCycleValues": {
+        "Monthly": "ወርሃዊ",
+        "Yearly": "አመታዊ"
+      }
+    },
+    "paymentHistory": {
+      "title": "የክፍያ ታሪክ",
+      "status": {
+        "success": "ተሳኗል",
+        "failed": "አልተሳካም"
+      }
+    },
+    "paymentModal": {
+      "title": "የክፍያ ዝርዝሮች",
+      "subtitle": "የክፍያ ዝርዝሮችዎን ያረጋግጡ እና ያረጋግጡ",
+      "paymentSummary": "የክፍያ ማጠቃለያ",
+      "totalAmount": "ጠቅላላ መጠን",
+      "servicePeriod": "የአገልግሎት ጊዜ",
+      "confirmAndPay": "ያረጋግጡ እና ይክፈሉ",
+      "securityText": "በባንክ ደረጃ ምስጠራ ተለያለች"
+    },
+    "loading": {
+      "billingInfo": "የክፍያ መረጃ በመጫን ላይ...",
+      "plans": "እቅዶች በመጫን ላይ..."
+    },
+    "retry": {
+      "tryAgain": "እንደገና ይሞክሩ"
+    },
+    "planSwitcher": {
+      "title": "የክፍያ እቅድ ቀይር",
+      "switchPlan": "እቅድ ቀይር",
+      "planSwitched": "እቅድ ተለወጠ!",
+      "planUpdated": "የእርስዎ የክፍያ እቅድ ተሻሻለ።",
+      "switchFailed": "እቅድ መለወጥ አልተሳካም።",
+      "selectPlan": "{{planName}} እቅድ ምረጥ",
+      "submitChange": "የእቅድ ለውጥ አስገባ",
+      "maxUsers": "ከፍተኛ ተጠቃሚዎች:",
+      "trialPlan": "የሙከራ እቅድ"
+    },
+    "paymentLoading": {
+      "creatingOrder": "የክፍያ ትዕዛዝ በመፍጨት ላይ...",
+      "processingPayment": "ክፍያ በማስተካከል ላይ...",
+      "verifyingPayment": "ክፍያ በማረጋገጥ ላይ...",
+      "loading": "በመጫን ላይ...",
+      "steps": {
+        "order": "ትዕዛዝ",
+        "payment": "ክፍያ",
+        "verify": "ያረጋግጡ"
+      }
+    },
+    "planItem": {
+      "badge": {
+        "trial": "ሙከራ",
+        "premium": "ፕሪሚየም"
+      },
+      "features": {
+        "users": "ተጠቃሚዎች",
+        "days": "ቀናት"
+      }
+    },
+    "addPlan": {
+      "title": {
+        "add": "እቅድ አክል",
+        "edit": "እቅድ አርትዕ"
+      },
+      "form": {
+        "planName": "የእቅድ ስም*",
+        "description": "መግለጫ",
+        "price": "ዋጋ (₹)",
+        "billingCycle": "የክፍያ ዑደት",
+        "duration": "ቆይታ (ቀናት)",
+        "maxUsers": "ከፍተኛ ተጠቃሚዎች",
+        "isTrial": "ሙከራ ነው?"
+      },
+      "placeholders": {
+        "planName": "ለምሳሌ፣ ፕሪሚየም እቅድ",
+        "description": "እቅድ ያብራሩ",
+        "price": "ለምሳሌ፣ 999",
+        "duration": "ለምሳሌ፣ 30",
+        "maxUsers": "ለምሳሌ፣ 5"
+      },
+      "messages": {
+        "success": {
+          "add": "እቅድ በተሳካ ሁኔታ ተከላከለ",
+          "edit": "እቅድ በተሳካ ሁኔታ ተሻሻለ"
+        },
+        "error": {
+          "add": "እቅድ መጨመር አልተሳካም",
+          "edit": "እቅድ ማሻሻል አልተሳካም",
+          "addGeneric": "እቅድ በማስቀመጥ ላይ ስህተት ተከሰተ",
+          "editGeneric": "እቅድ በማሻሻል ላይ ስህተት ተከሰተ",
+          "validation": "እባክዎ ግቤትዎን ያረጋግጡ"
+        }
+      }
+    }
+  },
+  "settings": {
+    "title": "ቅንብሮች",
+    "language": {
+      "title": "ቋንቋ",
+      "current": "የአሁኑ ቋንቋ"
+    },
+    "about": {
+      "title": "ስለ"
+    },
+    "version": {
+      "title": "የመተግበሪያ ስሪት"
+    },
+    "help": {
+      "title": "እርዳታ እና ድጋፍ"
+    }
+  },
+  "activity": {
+    "createdBy": "በ {{name}}"
+  },
+  "subscription": {
+    "expired": {
+      "title": "የየተባበለው ጊዜ አልቋል",
+      "subtitle": "የቡድንዎ የየተባበለው ጊዜ አልቋል እና በአጋርዎ መራዘም አለበት።",
+      "accessRestricted": "መለጠፍ ተገድቧል",
+      "accessRestrictedText": "እንደ ቡድን አባል የየተባበለው ጊዜ በቀጥታ መግዛት ወይም መራዘም አይችሉም። እባክዎ መለጠፍ ለማቋቋም አጋርዎን ያልቅ።",
+      "whatHappensNext": "ቀጣይ ምን ያለ?",
+      "steps": {
+        "contactPartner": "ከላይ ያለውን መረጃ በመጠቀም አጋርዎን ያልቅ",
+        "requestRenewal": "ለቡድን መለጠፍ የየተባበለው ጊዜ መራዘም ይጠይቁ",
+        "waitForRenewal": "አጋር የመራዘም ሂደት እስኪጨርስ ይጠብቁ",
+        "refreshStatus": "የመለጠፍ ሁኔታዎን ለማረጋገጥ ይህን ገጽ እንደገና ያደሱ"
+      },
+      "checkStatus": "ሁኔታ እንደገና ያረጋግጡ"
+    }
+  },
+  "transactions": {
+    "title": "ገራገሮች",
+    "loading": "ገራገሮች በመጫን ላይ...",
+    "loadingMore": "ተጨማሪ በመጫን ላይ...",
+    "noInternetConnection": "የኢንተርኔት ግንኙነት የለም",
+    "connectionLost": "ግንኙነት ተራቁ",
+    "connectionLostMessage": "እባክዎ የኢንተርኔት ግንኙነትዎን ያረጋግጡ",
+    "noInternetLoadMessage": "እባክዎ የኢንተርኔት ግንኙነትዎን ያረጋግጡ እና ለማደስ ወደ ታች ያሳብቡ።",
+    "noInternetFilterMessage": "የኢንተርኔት ግንኙነት ሳያልቀ ተጨማሪ ውሂብ መጫን አይችልም።",
+    "noInternetApplyFiltersMessage": "አጣራዎችን ለመተግበር እባክዎ የኢንተርኔት ግንኙነትዎን ያረጋግጡ።",
+    "failedToLoad": "መጫን አልተሳካም",
+    "failedToLoadMessage": "ገራገሮችን መጫን አልተሳካም። እባክዎ እንደገና ይሞክሩ።",
+    "connectionError": "የግንኙነት ስህተት",
+    "connectionErrorMessage": "ከሰርቨር ጋር መለጠፍ አልተሳካም። እባክዎ የኢንተርኔት ግንኙነትዎን ያረጋግጡ።",
+    "error": "ስህተት",
+    "errorMessage": "ገራገሮችን መጫን አልተሳካም። እባክዎ እንደገና ይሞክሩ።",
+    "loadMoreFailed": "ተጨማሪ መጫን አልተሳካም",
+    "loadMoreFailedMessage": "ተጨማሪ ገራገሮችን መጫን አልተሳካም።",
+    "dataRefreshed": "ገራገሮች ተሻሻሉ",
+    "dataRefreshedMessage": "ውሂብ በተሳካ ሁኔታ ተሻሻለ።",
+    "filtersApplied": "አጣራዎች ተግባራል",
+    "filtersAppliedMessage": "ገራገሮች በተሳካ ሁኔታ ተአጣሩ።",
+    "filtersReset": "አጣራዎች ተራቁ",
+    "filtersResetMessage": "ሁሉም አጣራዎች ወደ ነባሪ ተራቁ።",
+    "noTransactionsFound": "ገራገሮች አልተገኙም",
+    "noTransactionsFoundMessage": "ተጠቃሚዎች ክፍያ እንደሚሉ ገራገሮች እዚህ ያሳያሉ",
+    "adjustFiltersMessage": "ተጨማሪ ውጤቶች ለማየት አጣራዎችዎን ለማስተካከል ይሞክሩ",
+    "summary": {
+      "title": "የገራገር ማጠቃለያ",
+      "total": "ጠቅላላ",
+      "successful": "ተሳኗል",
+      "failed": "አልተሳካም",
+      "totalAmount": "ጠቅላላ መጠን"
+    },
+    "filters": {
+      "title": "ገራገሮችን አጣራ",
+      "reset": "እንደገና አስጀምር",
+      "apply": "አጣራዎችን ተግባር",
+      "search": "ፈልግ",
+      "searchPlaceholder": "በስም፣ ኢሜይል ወይም የገራገር መታወቂያ ፈልግ",
+      "status": "ሁኔታ",
+      "paymentMethod": "የክፍያ መንገድ",
+      "sortBy": "አዘውትር በ",
+      "sortOrder": "የመለያ ቅደም ተከተል",
+      "all": "ሁሉም",
+      "date": "ቀን",
+      "amount": "መጠን",
+      "newestFirst": "አዲሱ በመጀመሪያ",
+      "oldestFirst": "እንግዳ በመጀመሪያ"
+    },
+    "status": {
+      "captured": "ተያዘ",
+      "completed": "ተጠናቀቀ",
+      "failed": "አልተሳካም",
+      "cancelled": "ተሰረዘ",
+      "pending": "በመጠባበቅ ላይ",
+      "authorized": "ተለየ"
+    },
+    "paymentMethods": {
+      "upi": "UPI",
+      "card": "ካርድ",
+      "netbanking": "የአውታረ መረብ ባንክንግ",
+      "wallet": "ዋሌት"
+    }
+  },
+  "buyerProfile": {
+    "welcome": {
+      "back": "እንደገና እንኳን ደህና መጡ",
+      "subtitle": "የተጠቃሚ መገለጫ"
+    },
+    "options": {
+      "personal": {
+        "title": "የግል መረጃ",
+        "subtitle": "መገለጫ አርትዕ"
+      },
+      "properties": {
+        "title": "የእኔ ንጥሎች",
+        "subtitle": "ሁሉንም እይ"
+      },
+      "analytics": {
+        "title": "ትንታኔ",
+        "subtitle": "ቁጥቋጦች እይ"
+      },
+      "settings": {
+        "title": "ቅንብሮች",
+        "subtitle": "አስተያየት"
+      }
+    },
+    "stats": {
+      "totalProperties": "ጠቅላላ ንጥሎች",
+      "activeListings": "ንቁ ዝርዝሮች",
+      "totalEarnings": "ጠቅላላ ገቢ"
+    }
+  },
+  "contactUs": {
+    "title": "ከእኛ ጋር ያልቅ",
+    "subtitle": "ከእኛ ጋር ያልቅ",
+    "contactInfo": {
+      "phone": "ስልክ",
+      "email": "ኢሜይል",
+      "address": "አድራሻ"
+    },
+    "officeHours": {
+      "mondayFriday": "ሰኞ - እሁድ",
+      "saturday": "ቅዳሜ",
+      "sunday": "እሑድ",
+      "hours": {
+        "weekday": "እኩለ ቀን 9:00 - እኩለ ሌሊት 6:00",
+        "saturday": "እኩለ ቀን 9:00 - እኩለ ሌሊት 4:00",
+        "sunday": "ተያዘ"
+      }
+    },
+    "socialLinks": {
+      "facebook": "ፌስቡክ",
+      "instagram": "ኢንስታግራም",
+      "linkedin": "ሊንክድ ኢን",
+      "twitter": "ትዊተር"
+    },
+    "buttons": {
+      "sendMessage": "መልክ ላክ"
+    }
+  }
+}

@@ -14,7 +14,7 @@ const SearchHeader = ({
   debounceTime?: number;
 }) => {
   const [searchText, setSearchText] = useState('');
-  const debounceTimerRef = useRef<NodeJS.Timeout | null>(null);
+  const debounceTimerRef = useRef<number | null>(null);
 
   useEffect(() => {
     return () => {

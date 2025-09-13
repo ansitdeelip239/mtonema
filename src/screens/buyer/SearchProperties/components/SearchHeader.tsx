@@ -13,7 +13,7 @@ const SearchHeader = ({
   onFilterPress?: () => void;
 }) => {
   const [searchText, setSearchText] = useState('');
-  const debounceTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const debounceTimeoutRef = useRef<number | null>(null);
 
   // Clear timeout on unmount to prevent memory leaks
   useEffect(() => {

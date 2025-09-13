@@ -40,7 +40,7 @@ export const MaterialTextInput = <T,>({
   loading,
   ...props
 }: MaterialTextInputProps<T>) => {
-  const suggestionTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const suggestionTimeoutRef = useRef<number | null>(null);
   const inputRef = useRef<View>(null);
   const [isFocused, setIsFocused] = useState(false); // Add focus state
 
