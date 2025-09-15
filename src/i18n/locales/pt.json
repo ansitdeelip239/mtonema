@@ -6,32 +6,21 @@
       "save": "Salvar",
       "delete": "Excluir",
       "edit": "Editar",
-      "add": "Adicionar",
       "addActivity": "Adicionar Atividade",
       "back": "Voltar",
       "next": "Continuar",
       "search": "Pesquisar",
       "filter": "Filtrar",
-      "sort": "Ordenar",
-      "refresh": "Atualizar",
-      "retry": "Tentar novamente",
-      "close": "Fechar",
-      "confirm": "Confirmar",
       "ok": "OK",
-      "yes": "Sim",
-      "no": "Não",
       "call": "Ligar"
     },
     "states": {
       "loading": "Carregando...",
       "loadingMore": "Carregando mais...",
-      "searching": "Pesquisando...",
       "verifying": "Verificando...",
       "sending": "Enviando...",
       "success": "Sucesso",
       "error": "Erro",
-      "empty": "Nenhum dado disponível",
-      "refreshToLoad": "Puxe para baixo para atualizar",
       "assigned": "Atribuído",
       "unassigned": "Não atribuído",
       "loadingAssignments": "Carregando atribuições..."
@@ -60,9 +49,6 @@
   },
   "errors": {
     "network": "Erro de conexão de rede",
-    "validation": "Verifique sua entrada",
-    "unauthorized": "Sessão expirada. Faça login novamente",
-    "generic": "Algo deu errado. Tente novamente",
     "emailVerificationFailed": "Falha na verificação do e-mail",
     "emailNotFound": "E-mail não encontrado",
     "unexpectedError": "Ocorreu um erro inesperado",
@@ -70,10 +56,7 @@
     "refreshError": "Erro ao atualizar dados"
   },
   "validation": {
-    "required": "Este campo é obrigatório",
-    "invalidEmail": "Digite um e-mail válido",
-    "invalidOtp": "Digite um OTP válido de 6 dígitos",
-    "minLength": "Mínimo de {{count}} caracteres necessários"
+    "invalidOtp": "Digite um OTP válido de 6 dígitos"
   },
   "time": {
     "today": "Hoje",
@@ -85,11 +68,9 @@
     "oneDay": "1 dia",
     "multipleDays": "{{days}} dias",
     "am": "AM",
-    "pm": "PM",
-    "timeFormat": "h:mm a"
+    "pm": "PM"
   },
   "greetings": {
-    "welcome": "Bem-vindo",
     "welcomeBack": "Bem-vindo de volta",
     "welcomePartner": "Bem-vindo Parceiro",
     "hi": "Oi",
@@ -213,7 +194,6 @@
     },
     "search": {
       "placeholder": "Buscar propriedades...",
-      "loading": "Carregando...",
       "properties": "Propriedades"
     },
     "messages": {
@@ -358,15 +338,11 @@
       "partner": "Login do Parceiro",
       "buyerSeller": "Login Comprador/Vendedor",
       "dashboard": "Faça login para acessar seu painel",
-      "account": "Faça login em sua conta",
-      "toAccess": "Faça login para acessar seu {{resource}}",
       "continueToLogin": "Continuar para Login",
       "getStartedFree": "Comece GRATUITAMENTE",
-      "securePartnerAccess": "Acesso Seguro do Parceiro",
-      "prompt": "Faça login para continuar"
+      "securePartnerAccess": "Acesso Seguro do Agente"
     },
     "email": {
-      "enterEmailMessage": "Digite seu e-mail para continuar",
       "placeholder": "Digite seu endereço de e-mail",
       "enterToContinue": "Digite seu e-mail para continuar"
     },
@@ -411,7 +387,6 @@
       }
     },
     "mainScreen": {
-      "headerTitle": "MT One",
       "alreadyHaveAccount": "Já tem uma conta?",
       "logIn": "Entrar",
       "newHere": "Novo aqui? Crie uma conta!",
@@ -419,9 +394,7 @@
       "wantToListProperty": "Quer listar sua propriedade?",
       "signUpAsSeller": "Cadastrar como Vendedor",
       "buyerSellerTab": "Comprador/Vendedor",
-      "partnerTab": "Parceiro",
-      "partnerLogin": "Entrar como Parceiro",
-      "partnerSignup": "Cadastrar como Parceiro"
+      "partnerTab": "Agente"
     },
     "accessDenied": "Acesso Negado",
     "adminUnauthorized": "Seu e-mail {email} não está autorizado para acesso de administrador.",
@@ -432,7 +405,6 @@
   },
   "followUp": {
     "title": "Acompanhamentos",
-    "loadingFollowUp": "Carregando acompanhamento...",
     "toBeScheduledLater": "A ser agendado mais tarde",
     "noDateSet": "Nenhuma data definida",
     "status": {
@@ -462,8 +434,7 @@
     },
     "someday": {
       "title": "Acompanhamentos Futuros",
-      "subtitle": "Acompanhamentos agendados para datas posteriores",
-      "empty": "Nenhum acompanhamento futuro agendado"
+      "subtitle": "Acompanhamentos agendados para datas posteriores"
     }
   },
   "clients": {
@@ -473,7 +444,7 @@
     "noClientsFound": "Nenhum Cliente Encontrado",
     "showingFrom": "Mostrando clientes de",
     "selected": "selecionado",
-    "partner": "parceiro",
+    "partner": "agente",
     "teamMember": "membro da equipe",
     "activityAddedSuccess": "Atividade adicionada com sucesso",
     "failedToAddActivity": "Falha ao adicionar atividade",
@@ -503,8 +474,6 @@
   },
   "language": {
     "selectLanguage": "Selecionar Idioma",
-    "choosePreferred": "Escolha seu idioma preferido para o app",
-    "current": "Idioma Atual",
     "change": "Alterar Idioma",
     "switchTo": "Mudar para {{languageName}}?",
     "rtlWarning": "Isso mudará a direção do layout do app e o app será reiniciado."
@@ -514,16 +483,8 @@
     "restart": "Reiniciar App"
   },
   "plurals": {
-    "client": {
-      "zero": "Nenhum cliente",
-      "one": "{{count}} cliente",
-      "other": "{{count}} clientes"
-    },
-    "followUp": {
-      "zero": "Nenhum acompanhamento",
-      "one": "{{count}} acompanhamento",
-      "other": "{{count}} acompanhamentos"
-    }
+    "client": {},
+    "followUp": {}
   },
   "addActivityModal": {
     "addActivity": "Adicionar Atividade",
@@ -568,7 +529,6 @@
     "assignTeamMembers": "Atribuir Membros da Equipe",
     "selectTeamMembers": "Selecionar membros da equipe para atribuir a este cliente",
     "usersSelected": "{{count}} usuário selecionado",
-    "usersSelected_plural": "{{count}} usuários selecionados",
     "noTeamMembersFound": "Nenhum membro da equipe encontrado",
     "loadingTeamMembers": "Carregando membros da equipe...",
     "userEmailNotAvailable": "E-mail do usuário não disponível",
@@ -578,8 +538,7 @@
     "assignUsersFailed": "Falha ao atribuir usuários",
     "errorAssigningUsers": "Erro ao atribuir usuários",
     "assigning": "Atribuindo...",
-    "assignUsers": "Atribuir {{count}} Usuário",
-    "assignUsers_plural": "Atribuir {{count}} Usuários"
+    "assignUsers": "Atribuir {{count}} Usuário"
   },
   "addClient": {
     "headers": {
@@ -674,7 +633,7 @@
   },
   "partnerFilter": {
     "title": {
-      "partners": "Filtrar Parceiros",
+      "partners": "Filtrar Agentes",
       "teamMembers": "Filtrar Membros da Equipe"
     },
     "accessDenied": {
@@ -688,24 +647,23 @@
       "applyFilter": "Aplicar Filtro"
     },
     "loading": {
-      "partners": "Carregando parceiros...",
+      "partners": "Carregando agentes...",
       "teamMembers": "Carregando membros da equipe..."
     },
     "selection": {
-      "partners": "parceiros",
+      "partners": "agentes",
       "teamMembers": "membros da equipe",
       "selected": "selecionados"
     },
     "empty": {
-      "partners": "Nenhum parceiro encontrado",
+      "partners": "Nenhum agente encontrado",
       "teamMembers": "Nenhum membro da equipe encontrado"
     },
     "toast": {
       "filterCleared": "Filtro Limpo",
       "filterClearedMessage": "Mostrando clientes apenas para sua conta.",
       "filterApplied": "Filtro Aplicado",
-      "filterAppliedMessage": "Mostrando clientes para {{formattedCount}} parceiro selecionado",
-      "filterAppliedMessage_plural": "Mostrando clientes para {{formattedCount}} parceiros selecionados"
+      "filterAppliedMessage": "Mostrando clientes para {{formattedCount}} agente selecionado"
     },
     "errors": {
       "fetchFailed": "Falha ao buscar {{type}}. Tente novamente.",
@@ -742,8 +700,7 @@
       "subtitle": "Você ainda não criou nenhum modelo de conteúdo."
     },
     "header": {
-      "templatesFound": "{{count}} modelo encontrado",
-      "templatesFound_plural": "{{count}} modelos encontrados"
+      "templatesFound": "{{count}} modelo encontrado"
     },
     "loading": {
       "loadingTemplates": "Carregando modelos de conteúdo...",
@@ -752,8 +709,7 @@
   },
   "contentScreen": {
     "headers": {
-      "contentTemplates": "Modelos de Conteúdo",
-      "messageTemplates": "Modelos de Mensagens"
+      "contentTemplates": "Modelos de Conteúdo"
     },
     "buttons": {
       "addTemplate": "Adicionar Modelo"
@@ -927,7 +883,6 @@
       "deleteConfirmation": "Tem certeza de que deseja excluir esta propriedade?",
       "propertyDeleted": "Propriedade excluída com sucesso",
       "deleteFailed": "Erro ao excluir propriedade",
-      "fetchFailed": "Erro ao buscar propriedades",
       "emptyState": "Você ainda não adicionou propriedades. Comece adicionando sua primeira propriedade.",
       "loadingDetails": "Carregando detalhes da propriedade...",
       "loadFailed": "Erro ao carregar detalhes da propriedade",
@@ -1223,8 +1178,7 @@
       "selectPlan": "Selecionar plano {{planName}}",
       "submitChange": "Enviar alteração de plano",
       "maxUsers": "Máx. Usuários:",
-      "trialPlan": "Plano de Teste",
-      "perMonth": "/mês"
+      "trialPlan": "Plano de Teste"
     },
     "paymentLoading": {
       "creatingOrder": "Criando pedido de pagamento...",

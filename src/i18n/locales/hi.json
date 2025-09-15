@@ -6,32 +6,21 @@
       "save": "सेव करें",
       "delete": "डिलीट करें",
       "edit": "संपादित करें",
-      "add": "जोड़ें",
       "addActivity": "गतिविधि जोड़ें",
       "back": "वापस",
       "next": "जारी रखें",
       "search": "खोजें",
       "filter": "फिल्टर करें",
-      "sort": "क्रमबद्ध करें",
-      "refresh": "रिफ्रेश करें",
-      "retry": "पुनः प्रयास करें",
-      "close": "बंद करें",
-      "confirm": "पुष्टि करें",
       "ok": "ठीक है",
-      "yes": "हाँ",
-      "no": "नहीं",
       "call": "कॉल करें"
     },
     "states": {
       "loading": "लोड हो रहा है...",
       "loadingMore": "और लोड हो रहा है...",
-      "searching": "खोज रहे हैं...",
       "verifying": "सत्यापित कर रहे हैं...",
       "sending": "भेज रहे हैं...",
       "success": "सफलता",
       "error": "त्रुटि",
-      "empty": "कोई डेटा उपलब्ध नहीं",
-      "refreshToLoad": "अपडेट के लिए नीचे खींचें",
       "assigned": "सौंपा गया",
       "unassigned": "असौंपित",
       "loadingAssignments": "असाइनमेंट लोड हो रहे हैं..."
@@ -60,9 +49,6 @@
   },
   "errors": {
     "network": "नेटवर्क कनेक्शन त्रुटि",
-    "validation": "कृपया अपना इनपुट जांचें",
-    "unauthorized": "सेशन समाप्त हो गया। कृपया पुनः लॉगिन करें",
-    "generic": "कुछ गलत हुआ। कृपया पुनः प्रयास करें",
     "emailVerificationFailed": "ईमेल सत्यापन असफल",
     "emailNotFound": "ईमेल नहीं मिला",
     "unexpectedError": "एक अप्रत्याशित त्रुटि हुई",
@@ -70,10 +56,7 @@
     "refreshError": "डेटा रिफ्रेश करने में त्रुटि"
   },
   "validation": {
-    "required": "यह फील्ड आवश्यक है",
-    "invalidEmail": "कृपया एक वैध ईमेल पता दर्ज करें",
-    "invalidOtp": "कृपया एक वैध 6-अंकीय OTP दर्ज करें",
-    "minLength": "न्यूनतम {{count}} अक्षर आवश्यक हैं"
+    "invalidOtp": "कृपया एक वैध 6-अंकीय OTP दर्ज करें"
   },
   "time": {
     "today": "आज",
@@ -85,11 +68,9 @@
     "oneDay": "1 दिन",
     "multipleDays": "{{days}} दिन",
     "am": "पूर्वाह्न",
-    "pm": "अपराह्न",
-    "timeFormat": "h:mm a"
+    "pm": "अपराह्न"
   },
   "greetings": {
-    "welcome": "स्वागत है",
     "welcomeBack": "वापस स्वागत है",
     "welcomePartner": "पार्टनर का स्वागत है",
     "hi": "नमस्ते",
@@ -213,7 +194,6 @@
     },
     "search": {
       "placeholder": "संपत्तियां खोजें...",
-      "loading": "लोड हो रहा है...",
       "properties": "संपत्तियां"
     },
     "messages": {
@@ -317,6 +297,16 @@
       "phoneEdit": "फोन नंबर * (संपादित करें)",
       "locationEdit": "स्थान * (संपादित करें)"
     },
+    "placeholders": {
+      "fullName": "टीम सदस्य का पूरा नाम दर्ज करें",
+      "editFullName": "टीम सदस्य का पूरा नाम संपादित करें",
+      "email": "ईमेल पता दर्ज करें",
+      "editEmail": "ईमेल पता संपादित करें",
+      "phone": "10-अंकीय फोन नंबर दर्ज करें",
+      "editPhone": "10-अंकीय फोन नंबर संपादित करें",
+      "location": "स्थान दर्ज करें (शहर, राज्य, देश)",
+      "editLocation": "स्थान संपादित करें (शहर, राज्य, देश)"
+    },
     "status": {
       "active": "सक्रिय",
       "inactive": "निष्क्रिय"
@@ -348,15 +338,11 @@
       "partner": "पार्टनर साइन इन",
       "buyerSeller": "खरीदार/विक्रेता साइन इन",
       "dashboard": "अपने डैशबोर्ड तक पहुंचने के लिए साइन इन करें",
-      "account": "अपने खाते में साइन इन करें",
-      "toAccess": "अपने {{resource}} तक पहुंचने के लिए साइन इन करें",
       "continueToLogin": "लॉगिन पर जारी रखें",
       "getStartedFree": "मुफ्त में शुरू करें",
-      "securePartnerAccess": "सुरक्षित पार्टनर एक्सेस",
-      "prompt": "जारी रखने के लिए साइन इन करें"
+      "securePartnerAccess": "सुरक्षित एजेंट एक्सेस"
     },
     "email": {
-      "enterEmailMessage": "जारी रखने के लिए अपना ईमेल पता दर्ज करें",
       "placeholder": "अपना ईमेल पता दर्ज करें",
       "enterToContinue": "जारी रखने के लिए अपना ईमेल पता दर्ज करें"
     },
@@ -401,7 +387,6 @@
       }
     },
     "mainScreen": {
-      "headerTitle": "MT One",
       "alreadyHaveAccount": "पहले से खाता है?",
       "logIn": "लॉग इन",
       "newHere": "नया है? खाता बनाएं!",
@@ -409,9 +394,7 @@
       "wantToListProperty": "अपनी संपत्ति सूचीबद्ध करना चाहते हैं?",
       "signUpAsSeller": "विक्रेता के रूप में साइन अप करें",
       "buyerSellerTab": "खरीदार/विक्रेता",
-      "partnerTab": "पार्टनर",
-      "partnerLogin": "पार्टनर के रूप में लॉग इन करें",
-      "partnerSignup": "पार्टनर के रूप में साइन अप करें"
+      "partnerTab": "एजेंट"
     },
     "accessDenied": "पहुंच अस्वीकृत",
     "adminUnauthorized": "आपका ईमेल {email} व्यवस्थापक पहुंच के लिए अधिकृत नहीं है।",
@@ -422,7 +405,6 @@
   },
   "followUp": {
     "title": "फॉलो-अप्स",
-    "loadingFollowUp": "फॉलो-अप लोड हो रहा है...",
     "toBeScheduledLater": "बाद में निर्धारित किया जाएगा",
     "noDateSet": "कोई तारीख निर्धारित नहीं",
     "status": {
@@ -452,8 +434,7 @@
     },
     "someday": {
       "title": "भविष्य के फॉलो-अप्स",
-      "subtitle": "बाद की तारीखों के लिए निर्धारित फॉलो-अप्स",
-      "empty": "कोई भविष्य के फॉलो-अप्स निर्धारित नहीं हैं"
+      "subtitle": "बाद की तारीखों के लिए निर्धारित फॉलो-अप्स"
     }
   },
   "clients": {
@@ -463,7 +444,7 @@
     "noClientsFound": "कोई ग्राहक नहीं मिले",
     "showingFrom": "यहाँ से ग्राहक दिखाए जा रहे हैं",
     "selected": "चयनित",
-    "partner": "साझीदार",
+    "partner": "एजेंट",
     "teamMember": "टीम सदस्य",
     "activityAddedSuccess": "गतिविधि सफलतापूर्वक जोड़ी गई",
     "failedToAddActivity": "गतिविधि जोड़ने में असफल",
@@ -493,8 +474,6 @@
   },
   "language": {
     "selectLanguage": "भाषा चुनें",
-    "choosePreferred": "ऐप के लिए अपनी पसंदीदा भाषा चुनें",
-    "current": "वर्तमान भाषा",
     "change": "भाषा बदलें",
     "switchTo": "{{languageName}} में बदलें?",
     "rtlWarning": "इससे ऐप लेआउट दिशा बदल जाएगी और ऐप रीस्टार्ट होगा।"
@@ -504,16 +483,8 @@
     "restart": "ऐप को रीस्टार्ट करें"
   },
   "plurals": {
-    "client": {
-      "zero": "कोई ग्राहक नहीं",
-      "one": "{{count}} ग्राहक",
-      "other": "{{count}} ग्राहक"
-    },
-    "followUp": {
-      "zero": "कोई फॉलो-अप्स नहीं",
-      "one": "{{count}} फॉलो-अप",
-      "other": "{{count}} फॉलो-अप्स"
-    }
+    "client": {},
+    "followUp": {}
   },
   "addActivityModal": {
     "addActivity": "गतिविधि जोड़ें",
@@ -558,7 +529,6 @@
     "assignTeamMembers": "टीम सदस्यों को असाइन करें",
     "selectTeamMembers": "इस क्लाइंट को असाइन करने के लिए टीम सदस्यों का चयन करें",
     "usersSelected": "{{count}} उपयोगकर्ता चयनित",
-    "usersSelected_plural": "{{count}} उपयोगकर्ता चयनित",
     "noTeamMembersFound": "कोई टीम सदस्य नहीं मिला",
     "loadingTeamMembers": "टीम सदस्य लोड हो रहे हैं...",
     "userEmailNotAvailable": "उपयोगकर्ता ईमेल उपलब्ध नहीं है",
@@ -568,8 +538,7 @@
     "assignUsersFailed": "उपयोगकर्ताओं को असाइन करने में विफल",
     "errorAssigningUsers": "उपयोगकर्ताओं को असाइन करने में त्रुटि",
     "assigning": "असाइन किया जा रहा है...",
-    "assignUsers": "{{count}} उपयोगकर्ता असाइन करें",
-    "assignUsers_plural": "{{count}} उपयोगकर्ता असाइन करें"
+    "assignUsers": "{{count}} उपयोगकर्ता असाइन करें"
   },
   "addClient": {
     "headers": {
@@ -689,8 +658,7 @@
       "subtitle": "आपने अभी तक कोई सामग्री टेम्प्लेट नहीं बनाया है।"
     },
     "header": {
-      "templatesFound": "{{count}} टेम्प्लेट मिला",
-      "templatesFound_plural": "{{count}} टेम्प्लेट मिले"
+      "templatesFound": "{{count}} टेम्प्लेट मिला"
     },
     "loading": {
       "loadingTemplates": "सामग्री टेम्प्लेट लोड हो रहे हैं...",
@@ -699,8 +667,7 @@
   },
   "contentScreen": {
     "headers": {
-      "contentTemplates": "सामग्री टेम्प्लेट",
-      "messageTemplates": "संदेश टेम्प्लेट"
+      "contentTemplates": "सामग्री टेम्प्लेट"
     },
     "buttons": {
       "addTemplate": "टेम्प्लेट जोड़ें"
@@ -712,7 +679,7 @@
   },
   "partnerFilter": {
     "title": {
-      "partners": "पार्टनर फ़िल्टर करें",
+      "partners": "एजेंट फ़िल्टर करें",
       "teamMembers": "टीम सदस्य फ़िल्टर करें"
     },
     "accessDenied": {
@@ -726,24 +693,23 @@
       "applyFilter": "फ़िल्टर लागू करें"
     },
     "loading": {
-      "partners": "पार्टनर लोड हो रहे हैं...",
+      "partners": "एजेंट लोड हो रहे हैं...",
       "teamMembers": "टीम सदस्य लोड हो रहे हैं..."
     },
     "selection": {
-      "partners": "पार्टनर",
+      "partners": "एजेंट",
       "teamMembers": "टीम सदस्य",
       "selected": "चयनित"
     },
     "empty": {
-      "partners": "कोई पार्टनर नहीं मिला",
+      "partners": "कोई एजेंट नहीं मिला",
       "teamMembers": "कोई टीम सदस्य नहीं मिला"
     },
     "toast": {
       "filterCleared": "फ़िल्टर साफ़ किया गया",
       "filterClearedMessage": "केवल आपके खाते के लिए ग्राहक दिखा रहा है।",
       "filterApplied": "फ़िल्टर लागू किया गया",
-      "filterAppliedMessage": "{{formattedCount}} चयनित पार्टनर के लिए ग्राहक दिखा रहा है",
-      "filterAppliedMessage_plural": "{{formattedCount}} चयनित पार्टनर के लिए ग्राहक दिखा रहा है"
+      "filterAppliedMessage": "{{formattedCount}} चयनित एजेंट के लिए ग्राहक दिखा रहा है"
     },
     "errors": {
       "fetchFailed": "{{type}} प्राप्त करने में विफल। कृपया पुनः प्रयास करें।",
@@ -917,7 +883,6 @@
       "deleteConfirmation": "क्या आप वाकई इस संपत्ति को हटाना चाहते हैं?",
       "propertyDeleted": "संपत्ति सफलतापूर्वक हटा दी गई",
       "deleteFailed": "संपत्ति हटाने में विफल",
-      "fetchFailed": "संपत्तियाँ प्राप्त करने में विफल",
       "emptyState": "आपने अभी तक कोई संपत्तियाँ नहीं जोड़ी हैं। अपनी पहली संपत्ति जोड़कर शुरू करें।",
       "loadingDetails": "संपत्ति विवरण लोड हो रहा है...",
       "loadFailed": "संपत्ति विवरण लोड करने में विफल",
@@ -1213,8 +1178,7 @@
       "selectPlan": "{{planName}} प्लान चुनें",
       "submitChange": "प्लान बदलाव सबमिट करें",
       "maxUsers": "अधिकतम उपयोगकर्ता:",
-      "trialPlan": "ट्रायल प्लान",
-      "perMonth": "/माह"
+      "trialPlan": "ट्रायल प्लान"
     },
     "paymentLoading": {
       "creatingOrder": "भुगतान आदेश बनाया जा रहा है...",

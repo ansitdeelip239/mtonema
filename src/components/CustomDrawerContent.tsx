@@ -23,6 +23,7 @@ import {useTranslation} from 'react-i18next';
 import {useAuth} from '../context/AuthProvider';
 import Roles from '../constants/Roles';
 import CustomDrawerItem from './CustomDrawerItem';
+import {SafeAreaView} from 'react-native-safe-area-context';
 
 const CustomDrawerContent = (props: any) => {
   const {user, logout} = useAuth();
@@ -137,8 +138,7 @@ const CustomDrawerContent = (props: any) => {
           </TouchableOpacity>
         )}
 
-        {
-          user?.role === Roles.ADMIN &&
+        {user?.role === Roles.ADMIN && (
           <CustomDrawerItem
             iconName="rupee"
             label={t('navigation.drawer.payments', 'Payments')}
@@ -147,7 +147,7 @@ const CustomDrawerContent = (props: any) => {
             showForRoles={[Roles.ADMIN, Roles.PARTNER]}
             userRole={user?.role}
           />
-        }
+        )}
 
         <CustomDrawerItem
           iconName="about"
@@ -244,11 +244,13 @@ const CustomDrawerContent = (props: any) => {
         transparent={false}
         visible={premiumModalVisible}
         onRequestClose={() => setPremiumModalVisible(false)}>
-        <PaymentScreen
-          onPaymentSuccess={handlePremiumSuccess}
-          isUpgrade={true}
-          onClose={() => setPremiumModalVisible(false)}
-        />
+        <SafeAreaView style={{flex: 1}}>
+          <PaymentScreen
+            onPaymentSuccess={handlePremiumSuccess}
+            isUpgrade={true}
+            onClose={() => setPremiumModalVisible(false)}
+          />
+        </SafeAreaView>
       </Modal>
 
       {/* Under Development Modal */}

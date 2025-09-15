@@ -45,8 +45,8 @@ const YoutubeVideoPlayer: React.FC<YoutubeVideoPlayerProps> = ({
 
     // Handle youtube.com/watch?v= format
     if (url.includes('youtube.com/watch')) {
-      const urlParams = new URLSearchParams(url.split('?')[1]);
-      return urlParams.get('v') || '';
+      const match = url.match(/[?&]v=([^&#]+)/);
+      return match ? match[1] : '';
     }
 
     // Handle youtube.com/embed/ format

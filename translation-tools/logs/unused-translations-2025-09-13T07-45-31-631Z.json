@@ -1,0 +1,133 @@
+{
+  "summary": {
+    "totalKeys": 927,
+    "usedKeys": 883,
+    "unusedKeys": 44,
+    "usageRate": "95%",
+    "analysisDate": "2025-09-13T07:45:31.635Z"
+  },
+  "unusedKeys": [
+    "common.actions.add",
+    "common.actions.sort",
+    "common.actions.refresh",
+    "common.actions.retry",
+    "common.actions.close",
+    "common.actions.confirm",
+    "common.actions.yes",
+    "common.actions.no",
+    "common.states.searching",
+    "common.states.empty",
+    "common.states.refreshToLoad",
+    "errors.validation",
+    "errors.unauthorized",
+    "errors.generic",
+    "validation.required",
+    "validation.invalidEmail",
+    "validation.minLength",
+    "time.timeFormat",
+    "greetings.welcome",
+    "searchProperties.search.loading",
+    "auth.signIn.account",
+    "auth.signIn.toAccess",
+    "auth.signIn.prompt",
+    "auth.email.enterEmailMessage",
+    "auth.mainScreen.headerTitle",
+    "auth.mainScreen.partnerLogin",
+    "auth.mainScreen.partnerSignup",
+    "followUp.loadingFollowUp",
+    "followUp.someday.empty",
+    "language.choosePreferred",
+    "language.current",
+    "plurals.client.zero",
+    "plurals.client.one",
+    "plurals.client.other",
+    "plurals.followUp.zero",
+    "plurals.followUp.one",
+    "plurals.followUp.other",
+    "clientAssignment.usersSelected_plural",
+    "clientAssignment.assignUsers_plural",
+    "partnerFilter.toast.filterAppliedMessage_plural",
+    "contentTemplate.header.templatesFound_plural",
+    "contentScreen.headers.messageTemplates",
+    "listings.messages.fetchFailed",
+    "billing.planSwitcher.perMonth"
+  ],
+  "groupedByCategory": {
+    "common": [
+      "common.actions.add",
+      "common.actions.sort",
+      "common.actions.refresh",
+      "common.actions.retry",
+      "common.actions.close",
+      "common.actions.confirm",
+      "common.actions.yes",
+      "common.actions.no",
+      "common.states.searching",
+      "common.states.empty",
+      "common.states.refreshToLoad"
+    ],
+    "errors": [
+      "errors.validation",
+      "errors.unauthorized",
+      "errors.generic"
+    ],
+    "validation": [
+      "validation.required",
+      "validation.invalidEmail",
+      "validation.minLength"
+    ],
+    "time": [
+      "time.timeFormat"
+    ],
+    "greetings": [
+      "greetings.welcome"
+    ],
+    "searchProperties": [
+      "searchProperties.search.loading"
+    ],
+    "auth": [
+      "auth.signIn.account",
+      "auth.signIn.toAccess",
+      "auth.signIn.prompt",
+      "auth.email.enterEmailMessage",
+      "auth.mainScreen.headerTitle",
+      "auth.mainScreen.partnerLogin",
+      "auth.mainScreen.partnerSignup"
+    ],
+    "followUp": [
+      "followUp.loadingFollowUp",
+      "followUp.someday.empty"
+    ],
+    "language": [
+      "language.choosePreferred",
+      "language.current"
+    ],
+    "plurals": [
+      "plurals.client.zero",
+      "plurals.client.one",
+      "plurals.client.other",
+      "plurals.followUp.zero",
+      "plurals.followUp.one",
+      "plurals.followUp.other"
+    ],
+    "clientAssignment": [
+      "clientAssignment.usersSelected_plural",
+      "clientAssignment.assignUsers_plural"
+    ],
+    "partnerFilter": [
+      "partnerFilter.toast.filterAppliedMessage_plural"
+    ],
+    "contentTemplate": [
+      "contentTemplate.header.templatesFound_plural"
+    ],
+    "contentScreen": [
+      "contentScreen.headers.messageTemplates"
+    ],
+    "listings": [
+      "listings.messages.fetchFailed"
+    ],
+    "billing": [
+      "billing.planSwitcher.perMonth"
+    ]
+  }
+}

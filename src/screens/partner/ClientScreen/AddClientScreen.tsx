@@ -84,7 +84,7 @@ const AddClientScreen: React.FC<Props> = ({ navigation, route }) => {
       if (err instanceof z.ZodError) {
         setFieldErrors(prev => ({
           ...prev,
-          [field]: err.errors[0].message,
+          [field]: err.issues[0].message,
         }));
       } else {
         setFieldErrors(prev => ({
@@ -141,7 +141,7 @@ const AddClientScreen: React.FC<Props> = ({ navigation, route }) => {
           if (validationError instanceof z.ZodError) {
             setFieldErrors(prev => ({
               ...prev,
-              clientName: validationError.errors[0].message,
+              clientName: validationError.issues[0].message,
             }));
             showError(t('addClient.errors.provideValidClientName', 'Please provide a valid Client Name'));
             return;

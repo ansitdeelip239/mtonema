@@ -34,7 +34,7 @@ import PartnerSignUpFormSchema, {
   PartnerSignupFormType,
   partnerSignupSubmissionSchema,
 } from '../../schema/PartnerSignUpFormSchema';
-import { useDialog } from '../../context/DialogProvider';
+import {useDialog} from '../../context/DialogProvider';
 
 const {width} = Dimensions.get('window');
 type Props = NativeStackScreenProps<AuthStackParamList, 'PartnerSignUpScreen'>;
@@ -55,6 +55,8 @@ const PartnerSignUpScreen: React.FC<Props> = ({navigation}) => {
   // Animation values for logo
   const logoHeight = useRef(new Animated.Value(150)).current;
   const logoOpacity = useRef(new Animated.Value(1)).current;
+
+  const isIOS = Platform.OS === 'ios';
 
   // Animate logo on keyboard visibility change
   useEffect(() => {
@@ -106,7 +108,7 @@ const PartnerSignUpScreen: React.FC<Props> = ({navigation}) => {
       return true;
     } catch (error) {
       if (error instanceof z.ZodError) {
-        const fieldError = error.errors[0]?.message || 'Invalid input';
+        const fieldError = error.issues[0]?.message || 'Invalid input';
         setErrors(prev => ({...prev, [field]: fieldError}));
       }
       return false;
@@ -198,7 +200,7 @@ const PartnerSignUpScreen: React.FC<Props> = ({navigation}) => {
           const newErrors: Partial<
             Record<keyof PartnerSignupFormType, string>
           > = {};
-          error.errors.forEach(err => {
+          error.issues.forEach(err => {
             if (err.path[0]) {
               newErrors[err.path[0] as keyof PartnerSignupFormType] =
                 err.message;
@@ -240,12 +242,13 @@ const PartnerSignUpScreen: React.FC<Props> = ({navigation}) => {
 
   return (
     <View style={styles.container}>
-      {/* Replace header with HeaderComponent */}
-      <HeaderComponent
-        title={t('auth.signUp.title')}
-        onBackPress={navigation.goBack}
-        showBackButton={true}
-      />
+      {!isIOS && (
+        <HeaderComponent
+          title={t('auth.signUp.title')}
+          onBackPress={navigation.goBack}
+          showBackButton={true}
+        />
+      )}
 
       <KeyboardAvoidingView
         style={styles.keyboardAvoid}

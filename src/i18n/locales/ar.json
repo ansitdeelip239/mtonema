@@ -6,32 +6,21 @@
       "save": "حفظ",
       "delete": "حذف",
       "edit": "تحرير",
-      "add": "إضافة",
       "addActivity": "إضافة نشاط",
       "back": "رجوع",
       "next": "متابعة",
       "search": "بحث",
       "filter": "تصفية",
-      "sort": "ترتيب",
-      "refresh": "تحديث",
-      "retry": "إعادة المحاولة",
-      "close": "إغلاق",
-      "confirm": "تأكيد",
       "ok": "موافق",
-      "yes": "نعم",
-      "no": "لا",
       "call": "اتصال"
     },
     "states": {
       "loading": "جاري التحميل...",
       "loadingMore": "تحميل المزيد...",
-      "searching": "جاري البحث...",
       "verifying": "جاري التحقق...",
       "sending": "جاري الإرسال...",
       "success": "نجح",
       "error": "خطأ",
-      "empty": "لا توجد بيانات متاحة",
-      "refreshToLoad": "اسحب لأسفل للتحديث",
       "assigned": "مُعيّن",
       "unassigned": "غير مُعيّن",
       "loadingAssignments": "جاري تحميل التعيينات..."
@@ -60,9 +49,6 @@
   },
   "errors": {
     "network": "خطأ في اتصال الشبكة",
-    "validation": "يرجى التحقق من المدخلات",
-    "unauthorized": "انتهت الجلسة. سجل الدخول مرة أخرى",
-    "generic": "حدث خطأ ما. يرجى المحاولة مرة أخرى",
     "emailVerificationFailed": "فشل في التحقق من البريد الإلكتروني",
     "emailNotFound": "البريد الإلكتروني غير موجود",
     "unexpectedError": "حدث خطأ غير متوقع",
@@ -70,10 +56,7 @@
     "refreshError": "خطأ في تحديث البيانات"
   },
   "validation": {
-    "required": "هذا الحقل مطلوب",
-    "invalidEmail": "يرجى إدخال بريد إلكتروني صحيح",
-    "invalidOtp": "يرجى إدخال رمز تحقق صحيح من 6 أرقام",
-    "minLength": "مطلوب على الأقل {{count}} أحرف"
+    "invalidOtp": "يرجى إدخال رمز تحقق صحيح من 6 أرقام"
   },
   "time": {
     "today": "اليوم",
@@ -85,11 +68,9 @@
     "oneDay": "يوم واحد",
     "multipleDays": "{{days}} أيام",
     "am": "ص",
-    "pm": "م",
-    "timeFormat": "h:mm a"
+    "pm": "م"
   },
   "greetings": {
-    "welcome": "مرحباً",
     "welcomeBack": "مرحباً بعودتك",
     "welcomePartner": "مرحباً بالشريك",
     "hi": "مرحباً",
@@ -213,7 +194,6 @@
     },
     "search": {
       "placeholder": "البحث عن العقارات...",
-      "loading": "جاري التحميل...",
       "properties": "العقارات"
     },
     "messages": {
@@ -358,15 +338,11 @@
       "partner": "تسجيل دخول الشريك",
       "buyerSeller": "تسجيل دخول المشتري/البائع",
       "dashboard": "سجل الدخول للوصول إلى لوحة التحكم",
-      "account": "سجل الدخول إلى حسابك",
-      "toAccess": "سجل الدخول للوصول إلى {{resource}}",
       "continueToLogin": "المتابعة إلى تسجيل الدخول",
       "getStartedFree": "ابدأ مجاناً",
-      "securePartnerAccess": "وصول آمن للشريك",
-      "prompt": "سجل الدخول للمتابعة"
+      "securePartnerAccess": "وصول آمن للوكيل"
     },
     "email": {
-      "enterEmailMessage": "أدخل بريدك الإلكتروني للمتابعة",
       "placeholder": "أدخل عنوان بريدك الإلكتروني",
       "enterToContinue": "أدخل بريدك الإلكتروني للمتابعة"
     },
@@ -411,7 +387,6 @@
       }
     },
     "mainScreen": {
-      "headerTitle": "MT One",
       "alreadyHaveAccount": "لديك حساب بالفعل؟",
       "logIn": "تسجيل الدخول",
       "newHere": "جديد هنا؟ أنشئ حساباً!",
@@ -419,9 +394,7 @@
       "wantToListProperty": "تريد إدراج عقارك؟",
       "signUpAsSeller": "إنشاء حساب كبائع",
       "buyerSellerTab": "المشتري/البائع",
-      "partnerTab": "الشريك",
-      "partnerLogin": "تسجيل الدخول كشريك",
-      "partnerSignup": "إنشاء حساب كشريك"
+      "partnerTab": "الوكيل"
     },
     "accessDenied": "تم رفض الوصول",
     "adminUnauthorized": "بريدك الإلكتروني {email} غير مصرح له بالوصول إلى الإدارة.",
@@ -432,7 +405,6 @@
   },
   "followUp": {
     "title": "المتابعات",
-    "loadingFollowUp": "جاري تحميل المتابعة...",
     "toBeScheduledLater": "سيتم جدولتها لاحقاً",
     "noDateSet": "لم يتم تحديد تاريخ",
     "status": {
@@ -462,8 +434,7 @@
     },
     "someday": {
       "title": "المتابعات المستقبلية",
-      "subtitle": "المتابعات المجدولة لتواريخ لاحقة",
-      "empty": "لا توجد متابعات مستقبلية مجدولة"
+      "subtitle": "المتابعات المجدولة لتواريخ لاحقة"
     }
   },
   "clients": {
@@ -473,7 +444,7 @@
     "noClientsFound": "لم يتم العثور على عملاء",
     "showingFrom": "عرض العملاء من",
     "selected": "محدد",
-    "partner": "شريك",
+    "partner": "الوكيل",
     "teamMember": "عضو الفريق",
     "activityAddedSuccess": "تم إضافة النشاط بنجاح",
     "failedToAddActivity": "فشل في إضافة النشاط",
@@ -503,8 +474,6 @@
   },
   "language": {
     "selectLanguage": "اختيار اللغة",
-    "choosePreferred": "اختر لغتك المفضلة للتطبيق",
-    "current": "اللغة الحالية",
     "change": "تغيير اللغة",
     "switchTo": "التبديل إلى {{languageName}}؟",
     "rtlWarning": "هذا سيغير اتجاه تخطيط التطبيق وسيتم إعادة تشغيل التطبيق."
@@ -515,20 +484,14 @@
   },
   "plurals": {
     "client": {
-      "zero": "لا يوجد عملاء",
-      "one": "عميل واحد",
       "two": "عميلان",
       "few": "{{count}} عملاء",
-      "many": "{{count}} عميلاً",
-      "other": "{{count}} عميل"
+      "many": "{{count}} عميلاً"
     },
     "followUp": {
-      "zero": "لا توجد متابعات",
-      "one": "متابعة واحدة",
       "two": "متابعتان",
       "few": "{{count}} متابعات",
-      "many": "{{count}} متابعة",
-      "other": "{{count}} متابعة"
+      "many": "{{count}} متابعة"
     }
   },
   "addActivityModal": {
@@ -574,7 +537,6 @@
     "assignTeamMembers": "تعيين أعضاء الفريق",
     "selectTeamMembers": "اختر أعضاء الفريق لتعيينهم لهذا العميل",
     "usersSelected": "{{count}} مستخدم محدد",
-    "usersSelected_plural": "{{count}} مستخدمين محددين",
     "noTeamMembersFound": "لم يتم العثور على أعضاء الفريق",
     "loadingTeamMembers": "جاري تحميل أعضاء الفريق...",
     "userEmailNotAvailable": "البريد الإلكتروني للمستخدم غير متوفر",
@@ -584,8 +546,7 @@
     "assignUsersFailed": "فشل في تعيين المستخدمين",
     "errorAssigningUsers": "خطأ في تعيين المستخدمين",
     "assigning": "جاري التعيين...",
-    "assignUsers": "تعيين {{count}} مستخدم",
-    "assignUsers_plural": "تعيين {{count}} مستخدمين"
+    "assignUsers": "تعيين {{count}} مستخدم"
   },
   "addClient": {
     "headers": {
@@ -705,8 +666,7 @@
       "subtitle": "لم تقم بإنشاء أي قوالب محتوى بعد."
     },
     "header": {
-      "templatesFound": "{{count}} قالب تم العثور عليه",
-      "templatesFound_plural": "{{count}} قوالب تم العثور عليها"
+      "templatesFound": "{{count}} قالب تم العثور عليه"
     },
     "loading": {
       "loadingTemplates": "جاري تحميل قوالب المحتوى...",
@@ -715,8 +675,7 @@
   },
   "contentScreen": {
     "headers": {
-      "contentTemplates": "قوالب المحتوى",
-      "messageTemplates": "قوالب الرسائل"
+      "contentTemplates": "قوالب المحتوى"
     },
     "buttons": {
       "addTemplate": "إضافة قالب"
@@ -787,7 +746,7 @@
   },
   "partnerFilter": {
     "title": {
-      "partners": "تصفية الشركاء",
+      "partners": "تصفية الوكلاء",
       "teamMembers": "تصفية أعضاء الفريق"
     },
     "accessDenied": {
@@ -801,24 +760,23 @@
       "applyFilter": "تطبيق المرشح"
     },
     "loading": {
-      "partners": "جاري تحميل الشركاء...",
+      "partners": "جاري تحميل الوكلاء...",
       "teamMembers": "جاري تحميل أعضاء الفريق..."
     },
     "selection": {
-      "partners": "شركاء",
+      "partners": "وكلاء",
       "teamMembers": "أعضاء الفريق",
       "selected": "محدد"
     },
     "empty": {
-      "partners": "لم يتم العثور على شركاء",
+      "partners": "لم يتم العثور على وكلاء",
       "teamMembers": "لم يتم العثور على أعضاء فريق"
     },
     "toast": {
       "filterCleared": "تم مسح المرشح",
       "filterClearedMessage": "عرض العملاء لحسابك فقط.",
       "filterApplied": "تم تطبيق المرشح",
-      "filterAppliedMessage": "عرض العملاء للشريك المحدد {{formattedCount}}",
-      "filterAppliedMessage_plural": "عرض العملاء للشركاء المحددين {{formattedCount}}"
+      "filterAppliedMessage": "عرض العملاء للوكيل المحدد {{formattedCount}}"
     },
     "errors": {
       "fetchFailed": "فشل في جلب {{type}}. يرجى المحاولة مرة أخرى.",
@@ -992,7 +950,6 @@
       "deleteConfirmation": "هل أنت متأكد من أنك تريد حذف هذا العقار؟",
       "propertyDeleted": "تم حذف العقار بنجاح",
       "deleteFailed": "فشل في حذف العقار",
-      "fetchFailed": "فشل في جلب العقارات",
       "emptyState": "لم تقم بإضافة أي عقارات بعد. ابدأ بإضافة عقارك الأول.",
       "loadingDetails": "جارٍ تحميل تفاصيل العقار...",
       "loadFailed": "فشل في تحميل تفاصيل العقار",
@@ -1229,8 +1186,7 @@
       "selectPlan": "اختر خطة {{planName}}",
       "submitChange": "إرسال تغيير الخطة",
       "maxUsers": "الحد الأقصى للمستخدمين:",
-      "trialPlan": "خطة تجريبية",
-      "perMonth": "/شهر"
+      "trialPlan": "خطة تجريبية"
     },
     "paymentLoading": {
       "creatingOrder": "إنشاء طلب الدفع...",

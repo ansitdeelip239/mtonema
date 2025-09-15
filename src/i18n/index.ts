@@ -10,6 +10,7 @@ import es from './locales/es.json';
 import pt from './locales/pt.json';
 import ar from './locales/ar.json';
 import hi from './locales/hi.json';
+import am from './locales/am.json';
 
 import {SupportedLanguageCode, SUPPORTED_LANGUAGES} from './types';
 import config from '../config';
@@ -22,6 +23,7 @@ const resources = {
   en: {translation: en},
   es: {translation: es},
   pt: {translation: pt},
+  am: {translation: am},
   ar: {translation: ar},
   hi: {translation: hi},
 } as const;
@@ -97,7 +99,7 @@ export const changeLanguage = async (
       I18nManager.forceRTL(shouldBeRTL);
 
       // Wait a bit to ensure AsyncStorage write is complete
-      await new Promise(resolve => setTimeout(resolve, 500));
+      await new Promise<void>((resolve) => setTimeout(() => resolve(), 500));
 
       console.log('Restarting app for RTL change...');
       RNRestart.Restart();
@@ -119,7 +121,7 @@ export const getCurrentLanguage = (): SupportedLanguageCode => {
 };
 
 // Helper function to get supported languages
-export const getSupportedLanguages = () => SUPPORTED_LANGUAGES;
+export const getSupportedLanguages = () => SUPPORTED_LANGUAGES.filter(lang => !lang.isHidden);
 
 // Helper function to check if current language is RTL
 export const isCurrentLanguageRTL = (): boolean => {

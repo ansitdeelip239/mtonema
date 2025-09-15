@@ -1,0 +1,30 @@
+{
+  "hindi": {
+    "missingKeys": [
+      "teams.placeholders.fullName",
+      "teams.placeholders.editFullName",
+      "teams.placeholders.email",
+      "teams.placeholders.editEmail",
+      "teams.placeholders.phone",
+      "teams.placeholders.editPhone",
+      "teams.placeholders.location",
+      "teams.placeholders.editLocation"
+    ],
+    "emptyTranslations": [
+      "clients.plural"
+    ],
+    "coverage": "99%"
+  },
+  "arabic": {
+    "extraKeys": [
+      "plurals.client.two",
+      "plurals.client.few",
+      "plurals.client.many",
+      "plurals.followUp.two",
+      "plurals.followUp.few",
+      "plurals.followUp.many"
+    ],
+    "coverage": "101%"
+  },
+  "generatedAt": "2025-09-13T09:21:08.507Z"
+}

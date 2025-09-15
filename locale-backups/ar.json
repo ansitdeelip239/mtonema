@@ -1,0 +1,1449 @@
+{
+  "common": {
+    "actions": {
+      "submit": "إرسال",
+      "cancel": "إلغاء",
+      "save": "حفظ",
+      "delete": "حذف",
+      "edit": "تحرير",
+      "add": "إضافة",
+      "addActivity": "إضافة نشاط",
+      "back": "رجوع",
+      "next": "متابعة",
+      "search": "بحث",
+      "filter": "تصفية",
+      "sort": "ترتيب",
+      "refresh": "تحديث",
+      "retry": "إعادة المحاولة",
+      "close": "إغلاق",
+      "confirm": "تأكيد",
+      "ok": "موافق",
+      "yes": "نعم",
+      "no": "لا",
+      "call": "اتصال"
+    },
+    "states": {
+      "loading": "جاري التحميل...",
+      "loadingMore": "تحميل المزيد...",
+      "searching": "جاري البحث...",
+      "verifying": "جاري التحقق...",
+      "sending": "جاري الإرسال...",
+      "success": "نجح",
+      "error": "خطأ",
+      "empty": "لا توجد بيانات متاحة",
+      "refreshToLoad": "اسحب لأسفل للتحديث",
+      "assigned": "مُعيّن",
+      "unassigned": "غير مُعيّن",
+      "loadingAssignments": "جاري تحميل التعيينات..."
+    },
+    "success": {
+      "title": "نجح"
+    },
+    "errors": {
+      "error": "خطأ"
+    },
+    "labels": {
+      "email": "البريد الإلكتروني",
+      "name": "الاسم",
+      "phone": "الهاتف",
+      "mobile": "الجوال",
+      "whatsapp": "واتساب",
+      "address": "العنوان",
+      "description": "الوصف",
+      "groups": "المجموعات",
+      "notes": "الملاحظات",
+      "showMore": "عرض المزيد",
+      "showLess": "عرض أقل",
+      "by": "بواسطة",
+      "at": "في"
+    }
+  },
+  "errors": {
+    "network": "خطأ في اتصال الشبكة",
+    "validation": "يرجى التحقق من المدخلات",
+    "unauthorized": "انتهت الجلسة. سجل الدخول مرة أخرى",
+    "generic": "حدث خطأ ما. يرجى المحاولة مرة أخرى",
+    "emailVerificationFailed": "فشل في التحقق من البريد الإلكتروني",
+    "emailNotFound": "البريد الإلكتروني غير موجود",
+    "unexpectedError": "حدث خطأ غير متوقع",
+    "failedToSendOtp": "فشل في إرسال رمز التحقق. يرجى المحاولة مرة أخرى",
+    "refreshError": "خطأ في تحديث البيانات"
+  },
+  "validation": {
+    "required": "هذا الحقل مطلوب",
+    "invalidEmail": "يرجى إدخال بريد إلكتروني صحيح",
+    "invalidOtp": "يرجى إدخال رمز تحقق صحيح من 6 أرقام",
+    "minLength": "مطلوب على الأقل {{count}} أحرف"
+  },
+  "time": {
+    "today": "اليوم",
+    "overdue": "متأخر",
+    "upcoming": "قادم",
+    "someday": "يوماً ما",
+    "hoursLeft": "{{hours}} ساعات",
+    "minutesLeft": "{{minutes}} دقائق",
+    "oneDay": "يوم واحد",
+    "multipleDays": "{{days}} أيام",
+    "am": "ص",
+    "pm": "م",
+    "timeFormat": "h:mm a"
+  },
+  "greetings": {
+    "welcome": "مرحباً",
+    "welcomeBack": "مرحباً بعودتك",
+    "welcomePartner": "مرحباً بالشريك",
+    "hi": "مرحباً",
+    "goodMorning": "صباح الخير",
+    "goodAfternoon": "مساء الخير",
+    "goodEvening": "مساء الخير",
+    "goodNight": "تصبح على خير"
+  },
+  "navigation": {
+    "groups": "المجموعات",
+    "drawer": {
+      "home": "الرئيسية",
+      "groups": "المجموعات",
+      "teams": "الفرق",
+      "content": "المحتوى",
+      "settings": "الإعدادات",
+      "buyPremium": "شراء النسخة المميزة",
+      "payments": "المدفوعات",
+      "helpCenter": "مركز المساعدة",
+      "chatWithUs": "تحدث معنا",
+      "logout": "تسجيل الخروج",
+      "logoutConfirmation": "هل أنت متأكد من تسجيل الخروج؟",
+      "loggingOut": "جاري تسجيل الخروج...",
+      "underDevelopment": "هذه الميزة قيد التطوير"
+    },
+    "paymentTabs": {
+      "plans": "الخطط",
+      "transactions": "المعاملات"
+    },
+    "bottomTab": {
+      "followUp": "المتابعات",
+      "clients": "العملاء",
+      "add": "إضافة",
+      "listings": "العقارات",
+      "groups": "المجموعات",
+      "agentData": "بيانات الوكيل",
+      "dashboard": "لوحة التحكم",
+      "contacted": "تم التواصل",
+      "searchProperty": "البحث",
+      "contactUs": "اتصل بنا",
+      "profile": "الملف الشخصي"
+    }
+  },
+  "logout": {
+    "title": "تسجيل الخروج",
+    "confirm": "هل أنت متأكد من أنك تريد تسجيل الخروج؟",
+    "action": "تسجيل الخروج"
+  },
+  "dashboard": {
+    "welcome": {
+      "back": "مرحباً بعودتك",
+      "subtitle": "اعثر على منزل أحلامك"
+    },
+    "sections": {
+      "quickActions": "الإجراءات السريعة",
+      "propertiesForSale": "العقارات للبيع",
+      "propertiesForRent": "العقارات للإيجار",
+      "recentlyContacted": "تم التواصل مؤخراً",
+      "featuredProperties": "العقارات المميزة"
+    },
+    "actions": {
+      "seeAll": "عرض الكل",
+      "sendEnquiry": "إرسال استفسار",
+      "startSearching": "ابدأ البحث"
+    },
+    "stats": {
+      "contactedProperties": "العقارات المتصل بها",
+      "forSaleProperties": "عقارات للبيع",
+      "forRentProperties": "عقارات للإيجار",
+      "featuredProperties": "العقارات المميزة"
+    },
+    "quickActions": {
+      "searchProperties": "البحث عن العقارات",
+      "myContacts": "جهات الاتصال الخاصة بي",
+      "contactUs": "اتصل بنا"
+    },
+    "loading": {
+      "text": "جاري تحميل لوحة التحكم..."
+    },
+    "error": {
+      "retry": "إعادة المحاولة"
+    },
+    "emptyState": {
+      "title": "ابدأ رحلتك في البحث عن العقارات",
+      "message": "ابحث عن العقارات وبدء بناء لوحة التحكم الشخصية الخاصة بك"
+    },
+    "labels": {
+      "featured": "مميز",
+      "unnamedProperty": "عقار بدون اسم",
+      "locationNotSpecified": "الموقع غير محدد",
+      "priceNotAvailable": "السعر غير متوفر"
+    }
+  },
+  "contactedProperties": {
+    "header": {
+      "title": "جهات الاتصال الخاصة بك",
+      "subtitle": "العقارات المتصل بها"
+    },
+    "stats": {
+      "totalContacts": "إجمالي الاتصالات",
+      "forSale": "للبيع",
+      "forRent": "للإيجار"
+    },
+    "sections": {
+      "recentContacts": "الاتصالات الأخيرة"
+    },
+    "labels": {
+      "contacted": "تم التواصل",
+      "contactedOn": "تم التواصل في",
+      "loadingMore": "جاري تحميل المزيد من العقارات...",
+      "loadingProperties": "جاري تحميل العقارات المتصل بها...",
+      "noProperties": "لم يتم العثور على عقارات متصل بها",
+      "failedToLoad": "فشل في تحميل العقارات المتصل بها",
+      "tryAgain": "يرجى المحاولة مرة أخرى لاحقاً."
+    }
+  },
+  "searchProperties": {
+    "header": {
+      "title": "اعثر على",
+      "subtitle": "عقار أحلامك"
+    },
+    "search": {
+      "placeholder": "البحث عن العقارات...",
+      "loading": "جاري التحميل...",
+      "properties": "العقارات"
+    },
+    "messages": {
+      "loadingProperties": "جاري تحميل العقارات...",
+      "noProperties": "لم يتم العثور على عقارات",
+      "loadingMore": "جاري تحميل المزيد من العقارات...",
+      "loginRequired": "يرجى تسجيل الدخول لإرسال استفسار",
+      "enquirySuccess": "تم إرسال الاستفسار بنجاح",
+      "enquirySuccessSub": "سيتصل بك البائع قريباً.",
+      "enquiryError": "فشل في إرسال الاستفسار",
+      "enquiryErrorSub": "يرجى المحاولة مرة أخرى لاحقاً.",
+      "enquiryFailed": "فشل في إرسال الاستفسار",
+      "propertiesCount": "{{count}} عقار"
+    }
+  },
+  "propertyCard": {
+    "propertyType": {
+      "forSale": "للبيع",
+      "forRent": "للإيجار",
+      "others": "أخرى"
+    }
+  },
+  "filterModal": {
+    "labels": {
+      "propertyType": "نوع العقار",
+      "bhkType": "نوع BHK",
+      "furnishing": "التأثيث",
+      "city": "المدينة"
+    },
+    "buttons": {
+      "clearAll": "مسح الكل",
+      "applyFilters": "تطبيق المرشحات"
+    }
+  },
+  "sortModal": {
+    "options": {
+      "newestFirst": "الأحدث أولاً",
+      "priceLowToHigh": "السعر: من الأقل للأعلى",
+      "priceHighToLow": "السعر: من الأعلى للأقل",
+      "areaLowToHigh": "المساحة: من الأقل للأعلى",
+      "areaHighToLow": "المساحة: من الأعلى للأقل"
+    }
+  },
+  "propertyTypeToggle": {
+    "all": "الكل",
+    "forSale": "للبيع",
+    "forRent": "للإيجار",
+    "others": "أخرى"
+  },
+  "propertyDetailModal": {
+    "videoTour": "جولة فيديو",
+    "propertyName": "اسم العقار",
+    "locationNotSpecified": "الموقع غير محدد",
+    "sections": {
+      "description": "الوصف",
+      "features": "المميزات",
+      "specifications": "المواصفات",
+      "tags": "العلامات",
+      "sellerInformation": "معلومات البائع"
+    },
+    "labels": {
+      "area": "المساحة",
+      "facing": "الاتجاه",
+      "furnishing": "التأثيث",
+      "floor": "الطابق",
+      "propertyAge": "عمر العقار",
+      "sellerType": "نوع البائع",
+      "sellerName": "اسم البائع",
+      "individual": "فردي",
+      "contactNotAvailable": "الاتصال غير متوفر"
+    },
+    "features": {
+      "parking": "موقف سيارات",
+      "lift": "مصعد",
+      "security": "أمان",
+      "alarm": "إنذار",
+      "readyToMove": "جاهز للانتقال",
+      "constructionDone": "البناء مكتمل",
+      "boundaryWall": "جدار محيطي",
+      "surveillance": "مراقبة"
+    },
+    "buttons": {
+      "enquiryNow": "استفسر الآن"
+    }
+  },
+  "teams": {
+    "headers": {
+      "addMember": "إضافة عضو الفريق",
+      "editMember": "تحرير عضو الفريق"
+    },
+    "labels": {
+      "member": "عضو",
+      "members": "أعضاء",
+      "email": "البريد الإلكتروني",
+      "phone": "الهاتف",
+      "role": "الدور",
+      "location": "الموقع",
+      "fullName": "الاسم الكامل *",
+      "fullNameEdit": "الاسم الكامل * (تحرير)",
+      "emailEdit": "عنوان البريد الإلكتروني * (تحرير)",
+      "phoneEdit": "رقم الهاتف * (تحرير)",
+      "locationEdit": "الموقع * (تحرير)"
+    },
+    "placeholders": {
+      "fullName": "أدخل الاسم الكامل لعضو الفريق",
+      "editFullName": "تحرير الاسم الكامل لعضو الفريق",
+      "email": "أدخل عنوان البريد الإلكتروني",
+      "editEmail": "تحرير عنوان البريد الإلكتروني",
+      "phone": "أدخل رقم الهاتف المكون من 10 أرقام",
+      "editPhone": "تحرير رقم الهاتف المكون من 10 أرقام",
+      "location": "أدخل الموقع (المدينة، الولاية، البلد)",
+      "editLocation": "تحرير الموقع (المدينة، الولاية، البلد)"
+    },
+    "status": {
+      "active": "نشط",
+      "inactive": "غير نشط"
+    },
+    "messages": {
+      "noMembersFound": "لم يتم العثور على أعضاء الفريق.",
+      "memberAdded": "تم إضافة عضو الفريق بنجاح!",
+      "memberUpdated": "تم تحديث عضو الفريق بنجاح!"
+    },
+    "states": {
+      "loadingMembers": "جاري تحميل أعضاء الفريق..."
+    },
+    "errors": {
+      "userIdNotAvailable": "معرف المستخدم غير متوفر",
+      "fetchFailed": "فشل في جلب أعضاء الفريق",
+      "userIdRequired": "معرف المستخدم غير متوفر. يرجى تسجيل الدخول مرة أخرى.",
+      "updateFailed": "فشل في تحديث عضو الفريق. يرجى المحاولة مرة أخرى.",
+      "addFailed": "فشل في إضافة عضو الفريق. يرجى المحاولة مرة أخرى."
+    },
+    "modals": {
+      "deleteMember": {
+        "title": "حذف عضو الفريق",
+        "message": "هل أنت متأكد من أنك تريد حذف {{name}}؟ لا يمكن التراجع عن هذا الإجراء."
+      }
+    }
+  },
+  "auth": {
+    "signIn": {
+      "partner": "تسجيل دخول الشريك",
+      "buyerSeller": "تسجيل دخول المشتري/البائع",
+      "dashboard": "سجل الدخول للوصول إلى لوحة التحكم",
+      "account": "سجل الدخول إلى حسابك",
+      "toAccess": "سجل الدخول للوصول إلى {{resource}}",
+      "continueToLogin": "المتابعة إلى تسجيل الدخول",
+      "getStartedFree": "ابدأ مجاناً",
+      "securePartnerAccess": "وصول آمن للوكيل",
+      "prompt": "سجل الدخول للمتابعة"
+    },
+    "email": {
+      "enterEmailMessage": "أدخل بريدك الإلكتروني للمتابعة",
+      "placeholder": "أدخل عنوان بريدك الإلكتروني",
+      "enterToContinue": "أدخل بريدك الإلكتروني للمتابعة"
+    },
+    "otp": {
+      "title": "تحقق من رمز التحقق",
+      "enter": "أدخل رمز التحقق",
+      "sentMessage": "أرسلنا رمز من 6 أرقام إلى بريدك المسجل",
+      "verify": "تحقق من رمز التحقق",
+      "didntReceive": "لم تستلم الرمز؟",
+      "resend": "إعادة إرسال رمز التحقق"
+    },
+    "switchAccount": {
+      "title": "تبديل الحساب",
+      "confirmMessage": "هل أنت متأكد من أنك تريد تسجيل الخروج واستخدام حساب مختلف؟",
+      "logout": "تسجيل الخروج"
+    },
+    "signUp": {
+      "title": "إنشاء حساب",
+      "partner": {
+        "welcomeTitle": "ابدأ العمل الآن، سجل مجاناً!",
+        "nameLabel": "الاسم*",
+        "namePlaceholder": "أدخل اسمك الكامل",
+        "emailLabel": "البريد الإلكتروني*",
+        "emailPlaceholder": "أدخل بريدك الإلكتروني",
+        "phoneLabel": "الهاتف*",
+        "phonePlaceholder": "أدخل رقم هاتفك",
+        "zoneLabel": "المنطقة*:",
+        "signUpButton": "إنشاء حساب",
+        "creatingAccount": "جاري إنشاء الحساب...",
+        "alreadyHaveAccount": "لديك حساب بالفعل؟",
+        "logIn": "تسجيل الدخول",
+        "trialModal": {
+          "title": "🎉 مرحباً!",
+          "message": "مرحباً! حسابك التجريبي جاهز—ابدأ استخدام التطبيق الآن.",
+          "continue": "متابعة"
+        },
+        "errors": {
+          "accountExists": "لديك حساب بالفعل. يرجى محاولة تسجيل الدخول ببريدك الإلكتروني.",
+          "checkInput": "يرجى التحقق من بياناتك وحاول مرة أخرى",
+          "generic": "يرجى التحقق من بياناتك وحاول مرة أخرى"
+        }
+      }
+    },
+    "mainScreen": {
+      "headerTitle": "MT One",
+      "alreadyHaveAccount": "لديك حساب بالفعل؟",
+      "logIn": "تسجيل الدخول",
+      "newHere": "جديد هنا؟ أنشئ حساباً!",
+      "signUpAsBuyer": "إنشاء حساب كمشتري",
+      "wantToListProperty": "تريد إدراج عقارك؟",
+      "signUpAsSeller": "إنشاء حساب كبائع",
+      "buyerSellerTab": "المشتري/البائع",
+      "partnerTab": "الوكيل",
+      "partnerLogin": "تسجيل الدخول كشريك",
+      "partnerSignup": "إنشاء حساب كشريك"
+    },
+    "accessDenied": "تم رفض الوصول",
+    "adminUnauthorized": "بريدك الإلكتروني {email} غير مصرح له بالوصول إلى الإدارة.",
+    "contactAdmin": "يرجى الاتصال بالمسؤول للحصول على الوصول.",
+    "buyerAccess": "وصول المشتري",
+    "buyerNotSupported": "ميزات المشتري غير مدعومة بعد في هذا الإصدار.",
+    "contactSupport": "يرجى الاتصال بالدعم."
+  },
+  "followUp": {
+    "title": "المتابعات",
+    "loadingFollowUp": "جاري تحميل المتابعة...",
+    "toBeScheduledLater": "سيتم جدولتها لاحقاً",
+    "noDateSet": "لم يتم تحديد تاريخ",
+    "status": {
+      "overdue": "متابعة متأخرة",
+      "today": "متابعة اليوم",
+      "in": "متابعة خلال {{timeLeft}}",
+      "someday": "متابعة: يوماً ما",
+      "noScheduled": "لا توجد متابعة مجدولة"
+    },
+    "card": {
+      "followUp": "متابعة",
+      "assigned": "مُسند إلى:"
+    },
+    "overdue": {
+      "title": "المتابعات المتأخرة",
+      "subtitle": "المتابعات التي تجاوزت تاريخ استحقاقها",
+      "empty": "لا توجد متابعات متأخرة"
+    },
+    "upcoming": {
+      "title": "المتابعات القادمة",
+      "subtitle": "المتابعات المجدولة للأيام السبعة القادمة",
+      "empty": "لا توجد متابعات قادمة"
+    },
+    "today": {
+      "title": "متابعات اليوم",
+      "empty": "لا توجد متابعات مجدولة لليوم"
+    },
+    "someday": {
+      "title": "المتابعات المستقبلية",
+      "subtitle": "المتابعات المجدولة لتواريخ لاحقة",
+      "empty": "لا توجد متابعات مستقبلية مجدولة"
+    }
+  },
+  "clients": {
+    "title": "العملاء",
+    "add": "إضافة عميل",
+    "search": "البحث عن العملاء...",
+    "noClientsFound": "لم يتم العثور على عملاء",
+    "showingFrom": "عرض العملاء من",
+    "selected": "محدد",
+    "partner": "الوكيل",
+    "teamMember": "عضو الفريق",
+    "activityAddedSuccess": "تم إضافة النشاط بنجاح",
+    "failedToAddActivity": "فشل في إضافة النشاط",
+    "loading": "جاري تحميل العملاء...",
+    "searching": "جاري البحث عن العملاء...",
+    "plural": "ين",
+    "edit": "تحرير",
+    "pullToRefresh": "اسحب لأسفل للتحديث",
+    "loadingMoreClients": "جاري تحميل المزيد من العملاء..."
+  },
+  "clientCard": {
+    "new": "جديد",
+    "assigned": "مُسند إلى:"
+  },
+  "filterDrawer": {
+    "title": "الترتيب والتصفية",
+    "sortDirection": "اتجاه الترتيب",
+    "sortBy": "الترتيب حسب",
+    "ascending": "تصاعدي",
+    "descending": "تنازلي",
+    "createdDate": "تاريخ الإنشاء",
+    "createdDateDescription": "الترتيب حسب وقت إضافة العميل",
+    "lastActivityDate": "تاريخ آخر نشاط",
+    "lastActivityDateDescription": "الترتيب حسب النشاط الأحدث",
+    "cancel": "إلغاء",
+    "apply": "تطبيق"
+  },
+  "language": {
+    "selectLanguage": "اختيار اللغة",
+    "choosePreferred": "اختر لغتك المفضلة للتطبيق",
+    "current": "اللغة الحالية",
+    "change": "تغيير اللغة",
+    "switchTo": "التبديل إلى {{languageName}}؟",
+    "rtlWarning": "هذا سيغير اتجاه تخطيط التطبيق وسيتم إعادة تشغيل التطبيق."
+  },
+  "app": {
+    "title": "MT One: تطبيق ونظام إدارة العلاقات",
+    "restart": "إعادة تشغيل التطبيق"
+  },
+  "plurals": {
+    "client": {
+      "zero": "لا يوجد عملاء",
+      "one": "عميل واحد",
+      "two": "عميلان",
+      "few": "{{count}} عملاء",
+      "many": "{{count}} عميلاً",
+      "other": "{{count}} عميل"
+    },
+    "followUp": {
+      "zero": "لا توجد متابعات",
+      "one": "متابعة واحدة",
+      "two": "متابعتان",
+      "few": "{{count}} متابعات",
+      "many": "{{count}} متابعة",
+      "other": "{{count}} متابعة"
+    }
+  },
+  "addActivityModal": {
+    "addActivity": "إضافة نشاط",
+    "editActivity": "تحرير النشاط",
+    "selectActivityType": "اختيار نوع النشاط",
+    "deleteActivity": "حذف النشاط",
+    "deleteActivityConfirm": "هل أنت متأكد من أنك تريد حذف هذا النشاط؟"
+  },
+  "clientProfile": {
+    "title": "ملف العميل",
+    "edit": "تحرير",
+    "delete": "حذف",
+    "sendQuickResponse": "إرسال رد سريع",
+    "duplicateClientFound": "تم العثور على عميل مكرر",
+    "deleteClient": "حذف العميل",
+    "deleteClientConfirm": "هل أنت متأكد من أنك تريد حذف هذا العميل؟",
+    "activityDeleted": "تم حذف النشاط بنجاح",
+    "clientDeleted": "تم حذف العميل بنجاح",
+    "activityAddedRescheduled": "تمت إضافة النشاط وإعادة جدولة المتابعة ليوم واحد لاحقاً",
+    "activityAddedRescheduleFailed": "تمت إضافة النشاط لكن لم يتمكن من إعادة جدولة المتابعة",
+    "activityAddedCompleted": "تمت إضافة النشاط وتم وضع علامة مكتملة على المتابعة",
+    "activityAddedUpdateFailed": "تمت إضافة النشاط لكن لم يتمكن من تحديث حالة المتابعة",
+    "activityUpdated": "تم تحديث النشاط بنجاح",
+    "activityAdded": "تمت إضافة النشاط بنجاح",
+    "followUpScheduled": "تم جدولة المتابعة بنجاح",
+    "followUpRemoved": "تم إزالة المتابعة بنجاح",
+    "fetchClientFailed": "فشل في جلب بيانات العميل",
+    "fetchFollowUpFailed": "فشل في جلب تاريخ المتابعة",
+    "fetchAssignedUsersFailed": "فشل في جلب المستخدمين المعينين",
+    "deleteActivityFailed": "فشل في حذف النشاط",
+    "deleteClientFailed": "فشل في حذف العميل",
+    "scheduleFollowUpFailed": "فشل في جدولة المتابعة",
+    "removeFollowUpFailed": "فشل في إزالة المتابعة",
+    "assignedTo": "مُعيّن إلى",
+    "noUsersAssigned": "لا يوجد مستخدمون مُعيّنون",
+    "contactInformation": "معلومات الاتصال",
+    "recentActivities": "الأنشطة الأخيرة",
+    "noActivitiesYet": "لا توجد أنشطة بعد"
+  },
+  "clientAssignment": {
+    "title": "تعيين العميل",
+    "assignTeamMembers": "تعيين أعضاء الفريق",
+    "selectTeamMembers": "اختر أعضاء الفريق لتعيينهم لهذا العميل",
+    "usersSelected": "{{count}} مستخدم محدد",
+    "usersSelected_plural": "{{count}} مستخدمين محددين",
+    "noTeamMembersFound": "لم يتم العثور على أعضاء الفريق",
+    "loadingTeamMembers": "جاري تحميل أعضاء الفريق...",
+    "userEmailNotAvailable": "البريد الإلكتروني للمستخدم غير متوفر",
+    "fetchTeamMembersFailed": "فشل في جلب أعضاء الفريق",
+    "errorLoadingTeamMembers": "خطأ في تحميل أعضاء الفريق",
+    "usersAssignedSuccessfully": "تم تعيين المستخدمين بنجاح",
+    "assignUsersFailed": "فشل في تعيين المستخدمين",
+    "errorAssigningUsers": "خطأ في تعيين المستخدمين",
+    "assigning": "جاري التعيين...",
+    "assignUsers": "تعيين {{count}} مستخدم",
+    "assignUsers_plural": "تعيين {{count}} مستخدمين"
+  },
+  "addClient": {
+    "headers": {
+      "addClient": "إضافة عميل",
+      "editClient": "تحرير العميل"
+    },
+    "labels": {
+      "clientName": "اسم العميل*",
+      "displayName": "الاسم المعروض",
+      "mobileNumber": "رقم الهاتف المحمول",
+      "whatsappNumber": "رقم الواتساب",
+      "email": "البريد الإلكتروني",
+      "notes": "الملاحظات"
+    },
+    "placeholders": {
+      "clientName": "مثال: محمد أحمد",
+      "displayName": "مثال: محمد أحمد",
+      "mobileNumber": "مثال: 1234567890",
+      "whatsappNumber": "مثال: 1234567890",
+      "email": "مثال: email@example.com",
+      "notes": "إضافة ملاحظات إضافية"
+    },
+    "buttons": {
+      "submit": "إرسال"
+    },
+    "errors": {
+      "clientNameRequired": "اسم العميل مطلوب",
+      "provideValidClientName": "يرجى تقديم اسم عميل صحيح",
+      "addError": "خطأ في إضافة العميل",
+      "updateError": "خطأ في تحديث العميل",
+      "unexpectedError": "حدث خطأ غير متوقع"
+    },
+    "success": {
+      "clientAdded": "تم إضافة العميل بنجاح",
+      "clientUpdated": "تم تحديث العميل بنجاح"
+    }
+  },
+  "groupsToggle": {
+    "labels": {
+      "selectGroups": "تحديد المجموعات"
+    },
+    "placeholders": {
+      "searchGroups": "البحث في المجموعات..."
+    },
+    "buttons": {
+      "addGroup": "إضافة مجموعة",
+      "more": "المزيد",
+      "showLess": "عرض أقل"
+    },
+    "errors": {
+      "groupNameRequired": "اسم المجموعة مطلوب",
+      "addGroupFailed": "فشل في إضافة المجموعة",
+      "tryAgain": "يرجى المحاولة مرة أخرى",
+      "unexpectedError": "حدث خطأ غير متوقع"
+    },
+    "success": {
+      "groupAdded": "تم إضافة المجموعة بنجاح"
+    }
+  },
+  "messagePreview": {
+    "headers": {
+      "messagePreview": "معاينة الرسالة"
+    },
+    "labels": {
+      "messagePreview": "معاينة الرسالة",
+      "sendingTo": "إرسال إلى",
+      "template": "القالب",
+      "messageContent": "محتوى الرسالة",
+      "recipientInformation": "معلومات المستلم",
+      "whatsapp": "واتساب",
+      "email": "البريد الإلكتروني",
+      "phone": "الهاتف"
+    },
+    "options": {
+      "sendViaWhatsapp": "إرسال عبر واتساب",
+      "sendViaEmail": "إرسال عبر البريد الإلكتروني",
+      "sendViaSms": "إرسال عبر الرسائل النصية"
+    },
+    "errors": {
+      "error": "خطأ",
+      "whatsappNotAvailable": "رقم واتساب غير متوفر لهذا العميل.",
+      "whatsappOpenFailed": "فشل في فتح واتساب. يرجى التأكد من تثبيت واتساب.",
+      "emailNotAvailable": "عنوان البريد الإلكتروني غير متوفر لهذا العميل.",
+      "emailOpenFailed": "فشل في فتح تطبيق البريد الإلكتروني.",
+      "phoneNotAvailable": "رقم الهاتف غير متوفر لهذا العميل.",
+      "smsOpenFailed": "فشل في فتح تطبيق الرسائل النصية.",
+      "noWhatsappNumber": "لا يوجد رقم واتساب متاح",
+      "noEmailAddress": "لا يوجد عنوان بريد إلكتروني متاح",
+      "noPhoneNumber": "لا يوجد رقم هاتف متاح"
+    },
+    "emailSubject": "رسالة من الوكيل"
+  },
+  "messageTemplate": {
+    "headers": {
+      "selectTemplate": "تحديد قالب الرسالة"
+    },
+    "errors": {
+      "fetchFailed": "فشل في جلب قوالب المحتوى",
+      "loadingError": "خطأ في تحميل قوالب المحتوى"
+    }
+  },
+  "contentTemplate": {
+    "labels": {
+      "by": "بواسطة",
+      "created": "تم الإنشاء"
+    },
+    "status": {
+      "active": "نشط",
+      "inactive": "غير نشط",
+      "deleted": "محذوف"
+    },
+    "errors": {
+      "invalidDate": "تاريخ غير صحيح"
+    },
+    "emptyState": {
+      "title": "لا توجد قوالب محتوى",
+      "subtitle": "لم تقم بإنشاء أي قوالب محتوى بعد."
+    },
+    "header": {
+      "templatesFound": "{{count}} قالب تم العثور عليه",
+      "templatesFound_plural": "{{count}} قوالب تم العثور عليها"
+    },
+    "loading": {
+      "loadingTemplates": "جاري تحميل قوالب المحتوى...",
+      "loadingMore": "جاري تحميل المزيد..."
+    }
+  },
+  "contentScreen": {
+    "headers": {
+      "contentTemplates": "قوالب المحتوى",
+      "messageTemplates": "قوالب الرسائل"
+    },
+    "buttons": {
+      "addTemplate": "إضافة قالب"
+    },
+    "errors": {
+      "fetchFailed": "فشل في جلب قوالب المحتوى",
+      "loadingError": "خطأ في تحميل قوالب المحتوى"
+    }
+  },
+  "addContent": {
+    "headers": {
+      "newTemplate": "قالب جديد",
+      "editTemplate": "تحرير القالب"
+    },
+    "labels": {
+      "templateName": "اسم القالب",
+      "messageContent": "محتوى الرسالة",
+      "availableVariables": "المتغيرات المتاحة",
+      "preview": "المعاينة"
+    },
+    "placeholders": {
+      "templateName": "أدخل اسم القالب",
+      "messageContent": "اكتب قالب رسالتك هنا...\n\nيمكنك استخدام متغيرات مثل {name}، {phone}، {email} لتخصيص الرسائل.",
+      "preview": "ستظهر معاينة رسالتك هنا..."
+    },
+    "helpers": {
+      "templateName": "أعطِ قالبك اسماً وصفياً",
+      "variablesInfo": "سيتم استبدال المتغيرات بين الأقواس المتعرجة بالقيم الفعلية عند إرسال الرسائل.",
+      "variablesDescription": "اضغط على أي متغير أدناه لإضافته إلى رسالتك",
+      "variablesAutoReplace": "سيتم استبدال هذه المتغيرات تلقائياً عند إرسال الرسائل"
+    },
+    "variables": {
+      "name": "اسم العميل",
+      "phone": "رقم الهاتف",
+      "whatsapp": "رقم الواتساب",
+      "email": "عنوان البريد الإلكتروني",
+      "senderName": "اسمك",
+      "senderEmail": "بريدك الإلكتروني",
+      "senderAddress": "عنوانك",
+      "senderPhone": "هاتفك"
+    },
+    "buttons": {
+      "cancel": "إلغاء",
+      "saveTemplate": "حفظ القالب",
+      "updateTemplate": "تحديث القالب",
+      "saving": "جاري الحفظ...",
+      "updating": "جاري التحديث..."
+    },
+    "errors": {
+      "templateNameRequired": "يرجى إدخال اسم القالب",
+      "contentRequired": "يرجى إدخال محتوى القالب",
+      "userNotFound": "المستخدم غير موجود",
+      "createFailed": "فشل في إنشاء القالب",
+      "updateFailed": "فشل في تحديث القالب"
+    },
+    "success": {
+      "templateCreated": "تم إنشاء القالب",
+      "templateUpdated": "تم تحديث القالب",
+      "createMessage": "تم حفظ قالب رسالتك بنجاح.",
+      "updateMessage": "تم تحديث قالب رسالتك بنجاح."
+    },
+    "alerts": {
+      "discardTitle": "تجاهل التغييرات",
+      "discardMessage": "هل أنت متأكد من أنك تريد تجاهل تغييراتك؟",
+      "continueEditing": "متابعة التحرير",
+      "discard": "تجاهل"
+    }
+  },
+  "partnerFilter": {
+    "title": {
+      "partners": "تصفية الوكلاء",
+      "teamMembers": "تصفية أعضاء الفريق"
+    },
+    "accessDenied": {
+      "title": "تم رفض الوصول",
+      "message": "ليس لديك صلاحية للوصول إلى هذه الصفحة."
+    },
+    "buttons": {
+      "goBack": "العودة",
+      "selectAll": "تحديد الكل",
+      "deselectAll": "إلغاء تحديد الكل",
+      "applyFilter": "تطبيق المرشح"
+    },
+    "loading": {
+      "partners": "جاري تحميل الوكلاء...",
+      "teamMembers": "جاري تحميل أعضاء الفريق..."
+    },
+    "selection": {
+      "partners": "وكلاء",
+      "teamMembers": "أعضاء الفريق",
+      "selected": "محدد"
+    },
+    "empty": {
+      "partners": "لم يتم العثور على وكلاء",
+      "teamMembers": "لم يتم العثور على أعضاء فريق"
+    },
+    "toast": {
+      "filterCleared": "تم مسح المرشح",
+      "filterClearedMessage": "عرض العملاء لحسابك فقط.",
+      "filterApplied": "تم تطبيق المرشح",
+      "filterAppliedMessage": "عرض العملاء للوكيل المحدد {{formattedCount}}",
+      "filterAppliedMessage_plural": "عرض العملاء للوكلاء المحددين {{formattedCount}}"
+    },
+    "errors": {
+      "fetchFailed": "فشل في جلب {{type}}. يرجى المحاولة مرة أخرى.",
+      "applyFailed": "فشل في تطبيق المرشحات. يرجى المحاولة مرة أخرى."
+    },
+    "labels": {
+      "role": "الدور"
+    }
+  },
+  "partnerPropertyForm": {
+    "titles": {
+      "addProperty": "إضافة عقار"
+    },
+    "steps": {
+      "basicInfo": "المعلومات الأساسية",
+      "propertyDetails": "تفاصيل العقار",
+      "mediaAndSubmit": "الوسائط والإرسال"
+    },
+    "buttons": {
+      "clear": "مسح"
+    },
+    "basicDetails": {
+      "labels": {
+        "propertyName": "اسم العقار*",
+        "sellerType": "نوع البائع*",
+        "city": "المدينة*",
+        "propertyFor": "العقار لـ*",
+        "propertyType": "نوع العقار*",
+        "location": "الموقع*",
+        "price": "السعر*"
+      },
+      "placeholders": {
+        "propertyName": "أدخل اسم العقار",
+        "location": "أدخل تفاصيل الموقع",
+        "price": "أدخل سعر العقار"
+      }
+    },
+    "mediaAndSubmit": {
+      "labels": {
+        "videoURL": "رابط الفيديو",
+        "images": "الصور",
+        "tags": "العلامات",
+        "selectCategory": "اختر الفئة"
+      },
+      "placeholders": {
+        "videoURL": "أدخل رابط يوتيوب أو فيميو",
+        "tags": "مثال، #فاخر",
+        "selectCategory": "اختر الفئة"
+      },
+      "descriptions": {
+        "optionalStep": "هذه الخطوة اختيارية. يمكنك المتابعة دون ملء هذه التفاصيل.",
+        "imagesDescription": "قم بتحميل صور عقارك. حدد صورة واحدة كصورة العرض الافتراضية.",
+        "submitDescription": "راجع جميع التفاصيل بعناية قبل إرسال إعلان عقارك.",
+        "selectedImages": "الصور المحددة ({{count}})"
+      },
+      "buttons": {
+        "selectImages": "تحديد الصور",
+        "addTag": "إضافة"
+      }
+    },
+    "navigation": {
+      "next": "التالي",
+      "back": "العودة"
+    },
+    "propertyDetails": {
+      "optionalStepText": "هذه الخطوة اختيارية. يمكنك المتابعة دون ملء هذه التفاصيل.",
+      "noSelectionText": "يرجى تحديد نوع العقار في الخطوة السابقة.",
+      "goBack": "العودة",
+      "fields": {
+        "propertyForType": {
+          "label": "فئة العقار"
+        },
+        "readyToMove": {
+          "label": "جاهز للانتقال"
+        },
+        "lifts": {
+          "label": "مصعد متاح"
+        },
+        "pantry": {
+          "label": "مطبخ"
+        },
+        "floor": {
+          "label": "الطابق",
+          "placeholder": "أدخل رقم الطابق"
+        },
+        "furnishing": {
+          "label": "نوع التأثيث"
+        },
+        "parking": {
+          "label": "موقف سيارات"
+        },
+        "facing": {
+          "label": "اتجاه الواجهة"
+        },
+        "location": {
+          "label": "الموقع",
+          "placeholder": "أدخل موقع العقار"
+        },
+        "zipCode": {
+          "label": "الرمز البريدي",
+          "placeholder": "أدخل الرمز البريدي"
+        },
+        "price": {
+          "label": "السعر",
+          "placeholder": "أدخل سعر العقار"
+        },
+        "area": {
+          "label": "مساحة العقار",
+          "placeholder": "أدخل مساحة العقار"
+        },
+        "lmUnit": {
+          "label": "وحدة المساحة"
+        },
+        "propertyAge": {
+          "label": "عمر العقار"
+        },
+        "gatedSecurity": {
+          "label": "أمن المجتمع المغلق"
+        },
+        "surveillanceCameras": {
+          "label": "المراقبة"
+        },
+        "alarmSystem": {
+          "label": "نظام الإنذار"
+        },
+        "shortDescription": {
+          "label": "وصف قصير",
+          "placeholder": "أدخل وصف قصير"
+        },
+        "longDescription": {
+          "label": "وصف طويل",
+          "placeholder": "أدخل وصف مفصل"
+        },
+        "bhkType": {
+          "label": "التكوين"
+        },
+        "ceilingHeight": {
+          "label": "ارتفاع السقف",
+          "placeholder": "أدخل ارتفاع السقف"
+        },
+        "constructionDone": {
+          "label": "أي بناء"
+        },
+        "boundaryWall": {
+          "label": "الحدود"
+        },
+        "openSide": {
+          "label": "عدد الجانب المفتوح"
+        }
+      }
+    },
+    "success": {
+      "propertyUpdated": "تم تحديث العقار بنجاح",
+      "propertyAdded": "تم إضافة العقار بنجاح"
+    },
+    "errors": {
+      "updateFailed": "فشل في تحديث العقار",
+      "addFailed": "فشل في إضافة العقار"
+    }
+  },
+  "listings": {
+    "titles": {
+      "propertyListings": "قائمة العقارات",
+      "filterProperties": "تصفية العقارات",
+      "deleteProperty": "حذف العقار",
+      "noPropertiesFound": "لم يتم العثور على عقارات"
+    },
+    "messages": {
+      "loadingMore": "جارٍ تحميل المزيد من العقارات...",
+      "noProperties": "لم يتم العثور على عقارات.",
+      "deleteConfirmation": "هل أنت متأكد من أنك تريد حذف هذا العقار؟",
+      "propertyDeleted": "تم حذف العقار بنجاح",
+      "deleteFailed": "فشل في حذف العقار",
+      "fetchFailed": "فشل في جلب العقارات",
+      "emptyState": "لم تقم بإضافة أي عقارات بعد. ابدأ بإضافة عقارك الأول.",
+      "loadingDetails": "جارٍ تحميل تفاصيل العقار...",
+      "loadFailed": "فشل في تحميل تفاصيل العقار",
+      "errorLoading": "خطأ في تحميل تفاصيل العقار",
+      "propertyNotFound": "العقار غير موجود"
+    },
+    "placeholders": {
+      "searchByName": "البحث بالاسم..."
+    },
+    "labels": {
+      "propertyFor": "العقار لـ",
+      "status": "الحالة",
+      "city": "المدينة",
+      "featured": "مميز",
+      "notFeatured": "غير مميز",
+      "deleted": "محذوف",
+      "unnamedProperty": "عقار بدون اسم",
+      "locationNotSpecified": "الموقع غير محدد",
+      "priceOnRequest": "السعر عند الطلب",
+      "forSale": "للبيع",
+      "for": "لـ",
+      "sale": "بيع",
+      "type": "النوع",
+      "category": "الفئة",
+      "notSpecified": "غير محدد",
+      "zipCode": "الرمز البريدي",
+      "sellerType": "نوع البائع",
+      "configuration": "التكوين",
+      "area": "المساحة",
+      "furnishing": "التأثيث",
+      "facing": "الاتجاه",
+      "seller": "البائع",
+      "playVideo": "تشغيل الفيديو",
+      "videoTour": "جولة فيديو"
+    },
+    "buttons": {
+      "edit": "تعديل",
+      "delete": "حذف",
+      "cancel": "إلغاء",
+      "applyFilters": "تطبيق المرشحات",
+      "clearAll": "مسح الكل",
+      "addProperty": "إضافة عقار"
+    },
+    "accessibility": {
+      "propertyImage": "صورة {{propertyName}}",
+      "propertyPlaceholder": "صورة العقار النائبة"
+    },
+    "sections": {
+      "propertyDetails": "تفاصيل العقار",
+      "overview": "نظرة عامة",
+      "description": "الوصف",
+      "features": "المميزات",
+      "specifications": "المواصفات",
+      "tags": "العلامات",
+      "contactInformation": "معلومات الاتصال"
+    },
+    "features": {
+      "readyToMove": "جاهز للانتقال",
+      "constructionDone": "الإنشاء مكتمل",
+      "boundaryWall": "جدار المحدود",
+      "elevators": "المصاعد",
+      "alarmSystem": "نظام الإنذار",
+      "securityCameras": "كاميرات الأمان",
+      "gatedSecurity": "أمان البوابة",
+      "pantry": "المطبخ"
+    },
+    "specs": {
+      "floor": "الطابق",
+      "parking": "موقف السيارات",
+      "openSide": "الجانب المفتوح",
+      "propertyAge": "عمر العقار",
+      "ceilingHeight": "ارتفاع السقف",
+      "listedOn": "مُدرج في"
+    },
+    "modals": {
+      "deleteProperty": {
+        "title": "حذف العقار",
+        "message": "هل أنت متأكد من أنك تريد حذف هذا العقار؟"
+      }
+    }
+  },
+  "groups": {
+    "messages": {
+      "noGroupsAvailable": "لا توجد مجموعات متاحة. ستظهر المجموعات هنا عند إنشائها.",
+      "loadFailed": "فشل في تحميل المجموعات",
+      "tryAgainLater": "يرجى المحاولة مرة أخرى لاحقاً",
+      "groupCreated": "تم إنشاء المجموعة بنجاح",
+      "groupUpdated": "تم تحديث المجموعة بنجاح",
+      "groupDeleted": "تم حذف المجموعة بنجاح",
+      "saveFailed": "فشل في حفظ المجموعة",
+      "saveError": "خطأ في حفظ المجموعة",
+      "deleteFailed": "فشل في حذف المجموعة",
+      "deleteError": "خطأ في حذف المجموعة",
+      "noColorsAvailable": "لا توجد ألوان متاحة"
+    },
+    "placeholders": {
+      "groupName": "اسم المجموعة"
+    },
+    "labels": {
+      "selectColor": "اختر اللون"
+    },
+    "buttons": {
+      "addGroup": "+ إضافة مجموعة"
+    },
+    "modals": {
+      "addGroup": "إضافة مجموعة جديدة",
+      "editGroup": "تعديل المجموعة",
+      "deleteGroup": {
+        "title": "حذف المجموعة",
+        "message": "هل أنت متأكد من أنك تريد حذف هذه المجموعة؟"
+      }
+    }
+  },
+  "agentProperty": {
+    "titles": {
+      "addAgentProperty": "إضافة عقار الوكيل",
+      "editAgentProperty": "تعديل عقار الوكيل",
+      "agentProperty": "عقار الوكيل",
+      "deleteProperty": "حذف العقار"
+    },
+    "labels": {
+      "agentName": "اسم الوكيل*",
+      "agentContactNo": "رقم الاتصال بالوكيل*",
+      "propertyLocation": "موقع العقار*",
+      "propertyType": "نوع العقار",
+      "bhkType": "نوع BHK",
+      "demandPrice": "السعر المطلوب",
+      "securityDepositAmount": "مبلغ الضمان",
+      "negotiable": "قابل للتفاوض",
+      "fixedPrice": "سعر ثابت",
+      "propertyNotes": "ملاحظات العقار",
+      "location": "الموقع",
+      "contactNo": "رقم الاتصال",
+      "dateAdded": "تاريخ الإضافة",
+      "notes": "ملاحظات"
+    },
+    "placeholders": {
+      "agentName": "مثال: محمد أحمد",
+      "agentContactNo": "مثال: 1234567890",
+      "propertyLocation": "مثال: نيفي مومباي، تانه، إلخ.",
+      "demandPrice": "أدخل المبلغ",
+      "securityDepositAmount": "أدخل مبلغ الضمان",
+      "propertyNotes": "إضافة تفاصيل إضافية",
+      "searchByName": "البحث بالاسم..."
+    },
+    "messages": {
+      "propertyUpdated": "تم تحديث العقار بنجاح",
+      "propertyAdded": "تم إضافة العقار بنجاح",
+      "updateFailed": "فشل في تحديث عقار الوكيل",
+      "validationError": "يرجى التحقق من إدخالك وحاول مرة أخرى",
+      "noProperties": "لا توجد عقارات متاحة",
+      "deleteSuccess": "تم حذف العقار بنجاح",
+      "deleteError": "خطأ في حذف العقار",
+      "notSpecified": "غير محدد",
+      "na": "غير متوفر",
+      "deleteConfirmation": "لا يمكن التراجع عن هذا الإجراء. هل أنت متأكد من أنك تريد حذف هذا العقار؟"
+    },
+    "buttons": {
+      "add": "إضافة",
+      "submit": "إرسال",
+      "filterProperties": "تصفية العقارات",
+      "clearAll": "مسح الكل",
+      "cancel": "إلغاء",
+      "applyFilters": "تطبيق المرشحات"
+    }
+  },
+  "billing": {
+    "title": "الفوترة والمدفوعات",
+    "subtitle": "إدارة اشتراكك وتاريخ المدفوعات",
+    "plans": {
+      "title": "خطط الدفع"
+    },
+    "switchPlanButton": "تبديل خطة الفوترة",
+    "success": {
+      "title": "نجح الدفع",
+      "subtitle": "تم تفعيل اشتراكك بنجاح!"
+    },
+    "errors": {
+      "loadFailed": "فشل في تحميل معلومات الفوترة.",
+      "paymentFailed": "فشل الدفع",
+      "generic": "حدث خطأ ما",
+      "loadPlansFailed": "فشل في تحميل خطط الفوترة."
+    },
+    "empty": {
+      "title": "لا توجد خطط بعد",
+      "message": "أنشئ خطة الدفع الأولى للبدء",
+      "createButton": "إنشاء خطة"
+    },
+    "delete": {
+      "title": "حذف الخطة",
+      "confirmMessage": "هل أنت متأكد من أنك تريد حذف الخطة \"{{planName}}\"؟"
+    },
+    "nextBill": {
+      "title": "الفاتورة التالية",
+      "billingCycle": "دورة الفوترة",
+      "duration": "المدة",
+      "days": "أيام",
+      "billingPeriod": "فترة الفوترة",
+      "payNow": "ادفع الآن",
+      "billingCycleValues": {
+        "Monthly": "شهري",
+        "Yearly": "سنوي"
+      }
+    },
+    "paymentHistory": {
+      "title": "تاريخ المدفوعات",
+      "status": {
+        "success": "نجح",
+        "failed": "فشل"
+      }
+    },
+    "paymentModal": {
+      "title": "تفاصيل الدفع",
+      "subtitle": "راجع وأكد تفاصيل الدفع الخاصة بك",
+      "paymentSummary": "ملخص الدفع",
+      "totalAmount": "المبلغ الإجمالي",
+      "servicePeriod": "فترة الخدمة",
+      "confirmAndPay": "تأكيد والدفع",
+      "securityText": "محمي بتشفير مستوى البنك"
+    },
+    "loading": {
+      "billingInfo": "جاري تحميل معلومات الفوترة...",
+      "plans": "جاري تحميل الخطط..."
+    },
+    "retry": {
+      "tryAgain": "حاول مرة أخرى"
+    },
+    "planSwitcher": {
+      "title": "تبديل خطة الفوترة",
+      "switchPlan": "تبديل الخطة",
+      "planSwitched": "تم تبديل الخطة!",
+      "planUpdated": "تم تحديث خطة الفوترة الخاصة بك.",
+      "switchFailed": "فشل في تبديل الخطة.",
+      "selectPlan": "اختر خطة {{planName}}",
+      "submitChange": "إرسال تغيير الخطة",
+      "maxUsers": "الحد الأقصى للمستخدمين:",
+      "trialPlan": "خطة تجريبية",
+      "perMonth": "/شهر"
+    },
+    "paymentLoading": {
+      "creatingOrder": "إنشاء طلب الدفع...",
+      "processingPayment": "معالجة الدفع...",
+      "verifyingPayment": "التحقق من الدفع...",
+      "loading": "جاري التحميل...",
+      "steps": {
+        "order": "الطلب",
+        "payment": "الدفع",
+        "verify": "التحقق"
+      }
+    },
+    "planItem": {
+      "badge": {
+        "trial": "تجريبي",
+        "premium": "مميز"
+      },
+      "features": {
+        "users": "مستخدمين",
+        "days": "أيام"
+      }
+    },
+    "addPlan": {
+      "title": {
+        "add": "إضافة خطة",
+        "edit": "تعديل الخطة"
+      },
+      "form": {
+        "planName": "اسم الخطة*",
+        "description": "الوصف",
+        "price": "السعر (₹)",
+        "billingCycle": "دورة الفوترة",
+        "duration": "المدة (أيام)",
+        "maxUsers": "الحد الأقصى للمستخدمين",
+        "isTrial": "هل هو تجريبي؟"
+      },
+      "placeholders": {
+        "planName": "مثال: خطة مميزة",
+        "description": "وصف الخطة",
+        "price": "مثال: 999",
+        "duration": "مثال: 30",
+        "maxUsers": "مثال: 5"
+      },
+      "messages": {
+        "success": {
+          "add": "تمت إضافة الخطة بنجاح",
+          "edit": "تم تحديث الخطة بنجاح"
+        },
+        "error": {
+          "add": "فشل في إضافة الخطة",
+          "edit": "فشل في تحديث الخطة",
+          "addGeneric": "حدث خطأ أثناء حفظ الخطة",
+          "editGeneric": "حدث خطأ أثناء تحديث الخطة",
+          "validation": "يرجى التحقق من إدخالك"
+        }
+      }
+    }
+  },
+  "settings": {
+    "title": "الإعدادات",
+    "language": {
+      "title": "اللغة",
+      "current": "اللغة الحالية"
+    },
+    "about": {
+      "title": "حول"
+    },
+    "version": {
+      "title": "إصدار التطبيق"
+    },
+    "help": {
+      "title": "المساعدة والدعم"
+    }
+  },
+  "activity": {
+    "createdBy": "بواسطة {{name}}"
+  },
+  "subscription": {
+    "expired": {
+      "title": "انتهت صلاحية الاشتراك",
+      "subtitle": "انتهت صلاحية اشتراك فريقك ويحتاج إلى التجديد من قبل شريكك.",
+      "accessRestricted": "الوصول مقيد",
+      "accessRestrictedText": "كعضو في الفريق، لا يمكنك شراء أو تجديد الاشتراكات مباشرة. يرجى الاتصال بشريكك لاستعادة الوصول.",
+      "whatHappensNext": "ماذا يحدث بعد ذلك؟",
+      "steps": {
+        "contactPartner": "اتصل بشريكك باستخدام المعلومات أعلاه",
+        "requestRenewal": "اطلب تجديد الاشتراك للوصول إلى الفريق",
+        "waitForRenewal": "انتظر حتى يقوم الشريك بإتمام عملية التجديد",
+        "refreshStatus": "قم بتحديث هذه الصفحة للتحقق من حالة وصولك"
+      },
+      "checkStatus": "التحقق من الحالة مرة أخرى"
+    }
+  },
+  "transactions": {
+    "title": "المعاملات",
+    "loading": "جارٍ تحميل المعاملات...",
+    "loadingMore": "جارٍ تحميل المزيد...",
+    "noInternetConnection": "لا يوجد اتصال بالإنترنت",
+    "connectionLost": "انقطع الاتصال",
+    "connectionLostMessage": "يرجى التحقق من اتصالك بالإنترنت",
+    "noInternetLoadMessage": "يرجى التحقق من اتصالك بالإنترنت واسحب لأسفل للتحديث.",
+    "noInternetFilterMessage": "لا يمكن تحميل المزيد من البيانات بدون اتصال بالإنترنت.",
+    "noInternetApplyFiltersMessage": "يرجى التحقق من اتصالك بالإنترنت لتطبيق المرشحات.",
+    "failedToLoad": "فشل في التحميل",
+    "failedToLoadMessage": "تعذر تحميل المعاملات. يرجى المحاولة مرة أخرى.",
+    "connectionError": "خطأ في الاتصال",
+    "connectionErrorMessage": "تعذر الاتصال بالخادم. يرجى التحقق من اتصالك بالإنترنت.",
+    "error": "خطأ",
+    "errorMessage": "خطأ في تحميل المعاملات. يرجى المحاولة مرة أخرى.",
+    "loadMoreFailed": "فشل في تحميل المزيد",
+    "loadMoreFailedMessage": "تعذر تحميل المزيد من المعاملات.",
+    "dataRefreshed": "تم تحديث المعاملات",
+    "dataRefreshedMessage": "تم تحديث البيانات بنجاح.",
+    "filtersApplied": "تم تطبيق المرشحات",
+    "filtersAppliedMessage": "تم تصفية المعاملات بنجاح.",
+    "filtersReset": "تم إعادة تعيين المرشحات",
+    "filtersResetMessage": "تم إعادة تعيين جميع المرشحات إلى القيم الافتراضية.",
+    "noTransactionsFound": "لم يتم العثور على معاملات",
+    "noTransactionsFoundMessage": "ستظهر المعاملات هنا بمجرد قيام المستخدمين بالدفع",
+    "adjustFiltersMessage": "حاول تعديل مرشحاتك لرؤية المزيد من النتائج",
+    "summary": {
+      "title": "ملخص المعاملات",
+      "total": "المجموع",
+      "successful": "ناجحة",
+      "failed": "فاشلة",
+      "totalAmount": "المبلغ الإجمالي"
+    },
+    "filters": {
+      "title": "تصفية المعاملات",
+      "reset": "إعادة تعيين",
+      "apply": "تطبيق المرشحات",
+      "search": "بحث",
+      "searchPlaceholder": "البحث بالاسم أو البريد الإلكتروني أو معرف المعاملة",
+      "status": "الحالة",
+      "paymentMethod": "طريقة الدفع",
+      "sortBy": "ترتيب حسب",
+      "sortOrder": "ترتيب الفرز",
+      "all": "الكل",
+      "date": "التاريخ",
+      "amount": "المبلغ",
+      "newestFirst": "الأحدث أولاً",
+      "oldestFirst": "الأقدم أولاً"
+    },
+    "status": {
+      "captured": "تم التقاطه",
+      "completed": "مكتمل",
+      "failed": "فشل",
+      "cancelled": "ملغي",
+      "pending": "معلق",
+      "authorized": "مصرح"
+    },
+    "paymentMethods": {
+      "upi": "UPI",
+      "card": "بطاقة",
+      "netbanking": "البنك الإلكتروني",
+      "wallet": "المحفظة"
+    }
+  },
+  "buyerProfile": {
+    "welcome": {
+      "back": "مرحباً بعودتك",
+      "subtitle": "الملف الشخصي للمستخدم"
+    },
+    "options": {
+      "personal": {
+        "title": "المعلومات الشخصية",
+        "subtitle": "تحرير الملف الشخصي"
+      },
+      "properties": {
+        "title": "عقاراتي",
+        "subtitle": "عرض الكل"
+      },
+      "analytics": {
+        "title": "التحليلات",
+        "subtitle": "عرض الإحصائيات"
+      },
+      "settings": {
+        "title": "الإعدادات",
+        "subtitle": "إدارة"
+      }
+    },
+    "stats": {
+      "totalProperties": "إجمالي العقارات",
+      "activeListings": "القوائم النشطة",
+      "totalEarnings": "إجمالي الأرباح"
+    }
+  },
+  "contactUs": {
+    "title": "تواصل معنا",
+    "subtitle": "اتصل بنا",
+    "contactInfo": {
+      "phone": "الهاتف",
+      "email": "البريد الإلكتروني",
+      "address": "العنوان"
+    },
+    "officeHours": {
+      "mondayFriday": "الاثنين - الجمعة",
+      "saturday": "السبت",
+      "sunday": "الأحد",
+      "hours": {
+        "weekday": "9:00 ص - 6:00 م",
+        "saturday": "9:00 ص - 4:00 م",
+        "sunday": "مغلق"
+      }
+    },
+    "socialLinks": {
+      "facebook": "فيسبوك",
+      "instagram": "إنستغرام",
+      "linkedin": "لينكد إن",
+      "twitter": "تويتر"
+    },
+    "buttons": {
+      "sendMessage": "إرسال رسالة"
+    }
+  }
+}

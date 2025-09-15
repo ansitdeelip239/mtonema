@@ -1,0 +1,1443 @@
+{
+  "common": {
+    "actions": {
+      "submit": "Enviar",
+      "cancel": "Cancelar",
+      "save": "Guardar",
+      "delete": "Eliminar",
+      "edit": "Editar",
+      "add": "Agregar",
+      "addActivity": "Agregar Actividad",
+      "back": "Atrás",
+      "next": "Continuar",
+      "search": "Buscar",
+      "filter": "Filtrar",
+      "sort": "Ordenar",
+      "refresh": "Actualizar",
+      "retry": "Reintentar",
+      "close": "Cerrar",
+      "confirm": "Confirmar",
+      "ok": "Aceptar",
+      "yes": "Sí",
+      "no": "No",
+      "call": "Llamar"
+    },
+    "states": {
+      "loading": "Cargando...",
+      "loadingMore": "Cargando más...",
+      "searching": "Buscando...",
+      "verifying": "Verificando...",
+      "sending": "Enviando...",
+      "success": "Éxito",
+      "error": "Error",
+      "empty": "No hay datos disponibles",
+      "refreshToLoad": "Desliza hacia abajo para actualizar",
+      "assigned": "Asignado",
+      "unassigned": "Sin asignar",
+      "loadingAssignments": "Cargando asignaciones..."
+    },
+    "success": {
+      "title": "Éxito"
+    },
+    "errors": {
+      "error": "Error"
+    },
+    "labels": {
+      "email": "Correo electrónico",
+      "name": "Nombre",
+      "phone": "Teléfono",
+      "mobile": "Móvil",
+      "whatsapp": "WhatsApp",
+      "address": "Dirección",
+      "description": "Descripción",
+      "groups": "Grupos",
+      "notes": "Notas",
+      "showMore": "Mostrar más",
+      "showLess": "Mostrar menos",
+      "by": "por",
+      "at": "a las"
+    }
+  },
+  "errors": {
+    "network": "Error de conexión de red",
+    "validation": "Por favor revisa tu entrada",
+    "unauthorized": "Sesión expirada. Inicia sesión nuevamente",
+    "generic": "Algo salió mal. Inténtalo de nuevo",
+    "emailVerificationFailed": "Error en la verificación del correo",
+    "emailNotFound": "Correo no encontrado",
+    "unexpectedError": "Ocurrió un error inesperado",
+    "failedToSendOtp": "Error al enviar OTP. Inténtalo de nuevo",
+    "refreshError": "Error al actualizar datos"
+  },
+  "validation": {
+    "required": "Este campo es obligatorio",
+    "invalidEmail": "Ingresa un correo válido",
+    "invalidOtp": "Ingresa un OTP válido de 6 dígitos",
+    "minLength": "Se requieren mínimo {{count}} caracteres"
+  },
+  "time": {
+    "today": "Hoy",
+    "overdue": "Vencido",
+    "upcoming": "Próximo",
+    "someday": "Algún día",
+    "hoursLeft": "{{hours}} hrs",
+    "minutesLeft": "{{minutes}} mins",
+    "oneDay": "1 día",
+    "multipleDays": "{{days}} días",
+    "am": "a.m.",
+    "pm": "p.m.",
+    "timeFormat": "h:mm a"
+  },
+  "greetings": {
+    "welcome": "Bienvenido",
+    "welcomeBack": "Bienvenido de nuevo",
+    "welcomePartner": "Bienvenido Socio",
+    "hi": "Hola",
+    "goodMorning": "Buenos días",
+    "goodAfternoon": "Buenas tardes",
+    "goodEvening": "Buenas tardes",
+    "goodNight": "Buenas noches"
+  },
+  "navigation": {
+    "groups": "Grupos",
+    "drawer": {
+      "home": "Inicio",
+      "groups": "Grupos",
+      "teams": "Equipos",
+      "content": "Contenido",
+      "settings": "Configuración",
+      "buyPremium": "Comprar Premium",
+      "payments": "Pagos",
+      "helpCenter": "Centro de Ayuda",
+      "chatWithUs": "Chatea con Nosotros",
+      "logout": "Cerrar Sesión",
+      "logoutConfirmation": "¿Estás seguro de que quieres cerrar sesión?",
+      "loggingOut": "Cerrando sesión...",
+      "underDevelopment": "Esta función está en desarrollo"
+    },
+    "paymentTabs": {
+      "plans": "Planes",
+      "transactions": "Transacciones"
+    },
+    "bottomTab": {
+      "followUp": "Seguimientos",
+      "clients": "Clientes",
+      "add": "Agregar",
+      "listings": "Propiedades",
+      "groups": "Grupos",
+      "agentData": "Datos de Agente",
+      "dashboard": "Panel",
+      "contacted": "Contactados",
+      "searchProperty": "Buscar",
+      "contactUs": "Contáctanos",
+      "profile": "Perfil"
+    }
+  },
+  "logout": {
+    "title": "Cerrar Sesión",
+    "confirm": "¿Está seguro de que desea cerrar sesión?",
+    "action": "Cerrar Sesión"
+  },
+  "dashboard": {
+    "welcome": {
+      "back": "Bienvenido de vuelta",
+      "subtitle": "Encuentra Tu Hogar Ideal"
+    },
+    "sections": {
+      "quickActions": "Acciones Rápidas",
+      "propertiesForSale": "Propiedades en Venta",
+      "propertiesForRent": "Propiedades en Alquiler",
+      "recentlyContacted": "Contactados Recientemente",
+      "featuredProperties": "Propiedades Destacadas"
+    },
+    "actions": {
+      "seeAll": "Ver Todo",
+      "sendEnquiry": "Enviar Consulta",
+      "startSearching": "Comenzar Búsqueda"
+    },
+    "stats": {
+      "contactedProperties": "Propiedades Contactadas",
+      "forSaleProperties": "Propiedades en Venta",
+      "forRentProperties": "Propiedades en Alquiler",
+      "featuredProperties": "Propiedades Destacadas"
+    },
+    "quickActions": {
+      "searchProperties": "Buscar Propiedades",
+      "myContacts": "Mis Contactos",
+      "contactUs": "Contáctanos"
+    },
+    "loading": {
+      "text": "Cargando tu panel..."
+    },
+    "error": {
+      "retry": "Reintentar"
+    },
+    "emptyState": {
+      "title": "Comienza Tu Búsqueda de Propiedades",
+      "message": "Busca propiedades y comienza a construir tu panel personalizado"
+    },
+    "labels": {
+      "featured": "Destacado",
+      "unnamedProperty": "Propiedad Sin Nombre",
+      "locationNotSpecified": "Ubicación no especificada",
+      "priceNotAvailable": "Precio no disponible"
+    }
+  },
+  "contactedProperties": {
+    "header": {
+      "title": "Tus Contactos",
+      "subtitle": "Propiedades Contactadas"
+    },
+    "stats": {
+      "totalContacts": "Total de Contactos",
+      "forSale": "En Venta",
+      "forRent": "En Alquiler"
+    },
+    "sections": {
+      "recentContacts": "Contactos Recientes"
+    },
+    "labels": {
+      "contacted": "Contactado",
+      "contactedOn": "Contactado el",
+      "loadingMore": "Cargando más propiedades...",
+      "loadingProperties": "Cargando propiedades contactadas...",
+      "noProperties": "No se encontraron propiedades contactadas",
+      "failedToLoad": "Error al cargar propiedades contactadas",
+      "tryAgain": "Por favor, inténtalo de nuevo más tarde."
+    }
+  },
+  "searchProperties": {
+    "header": {
+      "title": "Encuentra Tu",
+      "subtitle": "Propiedad Ideal"
+    },
+    "search": {
+      "placeholder": "Buscar propiedades...",
+      "loading": "Cargando...",
+      "properties": "Propiedades"
+    },
+    "messages": {
+      "loadingProperties": "Cargando propiedades...",
+      "noProperties": "No se encontraron propiedades",
+      "loadingMore": "Cargando más propiedades...",
+      "loginRequired": "Por favor inicia sesión para hacer una consulta",
+      "enquirySuccess": "Consulta enviada exitosamente",
+      "enquirySuccessSub": "El vendedor se pondrá en contacto pronto.",
+      "enquiryError": "Error al enviar consulta",
+      "enquiryErrorSub": "Por favor, inténtalo de nuevo más tarde.",
+      "enquiryFailed": "Error al enviar consulta",
+      "propertiesCount": "{{count}} Propiedades"
+    }
+  },
+  "propertyCard": {
+    "propertyType": {
+      "forSale": "En Venta",
+      "forRent": "En Alquiler",
+      "others": "Otros"
+    }
+  },
+  "filterModal": {
+    "labels": {
+      "propertyType": "Tipo de Propiedad",
+      "bhkType": "Tipo BHK",
+      "furnishing": "Amueblado",
+      "city": "Ciudad"
+    },
+    "buttons": {
+      "clearAll": "Limpiar Todo",
+      "applyFilters": "Aplicar Filtros"
+    }
+  },
+  "sortModal": {
+    "options": {
+      "newestFirst": "Más Recientes Primero",
+      "priceLowToHigh": "Precio: Menor a Mayor",
+      "priceHighToLow": "Precio: Mayor a Menor",
+      "areaLowToHigh": "Área: Menor a Mayor",
+      "areaHighToLow": "Área: Mayor a Menor"
+    }
+  },
+  "propertyTypeToggle": {
+    "all": "Todo",
+    "forSale": "En Venta",
+    "forRent": "En Alquiler",
+    "others": "Otros"
+  },
+  "propertyDetailModal": {
+    "videoTour": "Tour Virtual",
+    "propertyName": "Nombre de la Propiedad",
+    "locationNotSpecified": "Ubicación no especificada",
+    "sections": {
+      "description": "Descripción",
+      "features": "Características",
+      "specifications": "Especificaciones",
+      "tags": "Etiquetas",
+      "sellerInformation": "Información del Vendedor"
+    },
+    "labels": {
+      "area": "Área",
+      "facing": "Orientación",
+      "furnishing": "Amueblado",
+      "floor": "Piso",
+      "propertyAge": "Antigüedad de la Propiedad",
+      "sellerType": "Tipo de Vendedor",
+      "sellerName": "Nombre del Vendedor",
+      "individual": "Individual",
+      "contactNotAvailable": "Contacto no disponible"
+    },
+    "features": {
+      "parking": "Estacionamiento",
+      "lift": "Ascensor",
+      "security": "Seguridad",
+      "alarm": "Alarma",
+      "readyToMove": "Listo para Mudarse",
+      "constructionDone": "Construcción Terminada",
+      "boundaryWall": "Muro Perimetral",
+      "surveillance": "Vigilancia"
+    },
+    "buttons": {
+      "enquiryNow": "Consultar Ahora"
+    }
+  },
+  "teams": {
+    "headers": {
+      "addMember": "Agregar Miembro del Equipo",
+      "editMember": "Editar Miembro del Equipo"
+    },
+    "labels": {
+      "member": "miembro",
+      "members": "miembros",
+      "email": "Correo electrónico",
+      "phone": "Teléfono",
+      "role": "Rol",
+      "location": "Ubicación",
+      "fullName": "Nombre completo *",
+      "fullNameEdit": "Nombre completo * (Editar)",
+      "emailEdit": "Dirección de correo electrónico * (Editar)",
+      "phoneEdit": "Número de teléfono * (Editar)",
+      "locationEdit": "Ubicación * (Editar)"
+    },
+    "placeholders": {
+      "fullName": "Ingrese el nombre completo del miembro del equipo",
+      "editFullName": "Editar el nombre completo del miembro del equipo",
+      "email": "Ingrese la dirección de correo electrónico",
+      "editEmail": "Editar la dirección de correo electrónico",
+      "phone": "Ingrese el número de teléfono de 10 dígitos",
+      "editPhone": "Editar el número de teléfono de 10 dígitos",
+      "location": "Ingrese la ubicación (Ciudad, Estado, País)",
+      "editLocation": "Editar la ubicación (Ciudad, Estado, País)"
+    },
+    "status": {
+      "active": "Activo",
+      "inactive": "Inactivo"
+    },
+    "messages": {
+      "noMembersFound": "No se encontraron miembros del equipo.",
+      "memberAdded": "¡Miembro del equipo agregado exitosamente!",
+      "memberUpdated": "¡Miembro del equipo actualizado exitosamente!"
+    },
+    "states": {
+      "loadingMembers": "Cargando miembros del equipo..."
+    },
+    "errors": {
+      "userIdNotAvailable": "ID de usuario no disponible",
+      "fetchFailed": "Error al obtener miembros del equipo",
+      "userIdRequired": "ID de usuario no disponible. Por favor, inicia sesión nuevamente.",
+      "updateFailed": "Error al actualizar miembro del equipo. Por favor, inténtalo de nuevo.",
+      "addFailed": "Error al agregar miembro del equipo. Por favor, inténtalo de nuevo."
+    },
+    "modals": {
+      "deleteMember": {
+        "title": "Eliminar Miembro del Equipo",
+        "message": "¿Estás seguro de que quieres eliminar a {{name}}? Esta acción no se puede deshacer."
+      }
+    }
+  },
+  "auth": {
+    "signIn": {
+      "partner": "Inicio de Sesión de Socio",
+      "buyerSeller": "Inicio de Sesión Comprador/Vendedor",
+      "dashboard": "Inicia sesión para acceder a tu panel",
+      "account": "Inicia sesión en tu cuenta",
+      "toAccess": "Inicia sesión para acceder a tu {{resource}}",
+      "continueToLogin": "Continuar al Inicio de Sesión",
+      "getStartedFree": "Comenzar GRATIS",
+      "securePartnerAccess": "Acceso Seguro de Agente",
+      "prompt": "Inicia sesión para continuar"
+    },
+    "email": {
+      "enterEmailMessage": "Ingresa tu correo para continuar",
+      "placeholder": "Ingresa tu dirección de correo",
+      "enterToContinue": "Ingresa tu correo para continuar"
+    },
+    "otp": {
+      "title": "Verificar OTP",
+      "enter": "Ingresar OTP",
+      "sentMessage": "Enviamos un código de 6 dígitos a tu correo registrado",
+      "verify": "Verificar OTP",
+      "didntReceive": "¿No recibiste el código?",
+      "resend": "Reenviar OTP"
+    },
+    "switchAccount": {
+      "title": "Cambiar Cuenta",
+      "confirmMessage": "¿Estás seguro de que quieres cerrar sesión y usar una cuenta diferente?",
+      "logout": "Cerrar Sesión"
+    },
+    "signUp": {
+      "title": "Registrarse",
+      "partner": {
+        "welcomeTitle": "¡Comienza a trabajar ahora, Regístrate GRATIS!",
+        "nameLabel": "Nombre*",
+        "namePlaceholder": "Ingresa tu nombre completo",
+        "emailLabel": "Correo*",
+        "emailPlaceholder": "Ingresa tu correo",
+        "phoneLabel": "Teléfono*",
+        "phonePlaceholder": "Ingresa tu número de teléfono",
+        "zoneLabel": "Zona*:",
+        "signUpButton": "Registrarse",
+        "creatingAccount": "Creando cuenta...",
+        "alreadyHaveAccount": "¿Ya tienes una cuenta?",
+        "logIn": "Iniciar Sesión",
+        "trialModal": {
+          "title": "🎉 ¡Bienvenido!",
+          "message": "¡Bienvenido! Tu cuenta de prueba está lista—comienza a usar la app ahora.",
+          "continue": "Continuar"
+        },
+        "errors": {
+          "accountExists": "Ya tienes una cuenta. Por favor intenta iniciar sesión con tu correo.",
+          "checkInput": "Por favor verifica tus datos e intenta de nuevo",
+          "generic": "Por favor verifica tus datos e intenta de nuevo"
+        }
+      }
+    },
+    "mainScreen": {
+      "headerTitle": "MT One",
+      "alreadyHaveAccount": "¿Ya tienes una cuenta?",
+      "logIn": "Iniciar Sesión",
+      "newHere": "¿Nuevo aquí? ¡Crea una cuenta!",
+      "signUpAsBuyer": "Registrarse como Comprador",
+      "wantToListProperty": "¿Quieres listar tu propiedad?",
+      "signUpAsSeller": "Registrarse como Vendedor",
+      "buyerSellerTab": "Comprador/Vendedor",
+      "partnerTab": "Agente",
+      "partnerLogin": "Iniciar Sesión como Socio",
+      "partnerSignup": "Registrarse como Socio"
+    },
+    "accessDenied": "Acceso Denegado",
+    "adminUnauthorized": "Su correo electrónico {email} no está autorizado para acceso de administrador.",
+    "contactAdmin": "Por favor contacte al administrador para acceso.",
+    "buyerAccess": "Acceso de Comprador",
+    "buyerNotSupported": "Las funciones de comprador aún no están soportadas en esta versión.",
+    "contactSupport": "Por favor contacte al soporte."
+  },
+  "followUp": {
+    "title": "Seguimientos",
+    "loadingFollowUp": "Cargando seguimiento...",
+    "toBeScheduledLater": "Por programar más tarde",
+    "noDateSet": "Sin fecha establecida",
+    "status": {
+      "overdue": "Seguimiento Atrasado",
+      "today": "Seguimiento Hoy",
+      "in": "Seguimiento en {{timeLeft}}",
+      "someday": "Seguimiento: Algún día",
+      "noScheduled": "Sin Seguimiento Programado"
+    },
+    "card": {
+      "followUp": "Seguimiento",
+      "assigned": "Asignado:"
+    },
+    "overdue": {
+      "title": "Seguimientos Atrasados",
+      "subtitle": "Seguimientos que pasaron su fecha límite",
+      "empty": "No hay seguimientos atrasados"
+    },
+    "upcoming": {
+      "title": "Próximos Seguimientos",
+      "subtitle": "Seguimientos programados para los próximos 7 días",
+      "empty": "No hay próximos seguimientos"
+    },
+    "today": {
+      "title": "Seguimientos de Hoy",
+      "empty": "No hay seguimientos programados para hoy"
+    },
+    "someday": {
+      "title": "Seguimientos Futuros",
+      "subtitle": "Seguimientos programados para fechas posteriores",
+      "empty": "No hay seguimientos futuros programados"
+    }
+  },
+  "clients": {
+    "title": "Clientes",
+    "add": "Agregar Cliente",
+    "search": "Buscar Clientes...",
+    "noClientsFound": "No se Encontraron Clientes",
+    "showingFrom": "Mostrando clientes de",
+    "selected": "seleccionado",
+    "partner": "agente",
+    "teamMember": "miembro del equipo",
+    "activityAddedSuccess": "Actividad agregada exitosamente",
+    "failedToAddActivity": "Error al agregar actividad",
+    "loading": "Cargando clientes...",
+    "searching": "Buscando clientes...",
+    "plural": "s",
+    "edit": "Editar",
+    "pullToRefresh": "Desliza hacia abajo para actualizar",
+    "loadingMoreClients": "Cargando más clientes..."
+  },
+  "clientCard": {
+    "new": "Nuevo",
+    "assigned": "Asignado:"
+  },
+  "filterDrawer": {
+    "title": "Ordenar y Filtrar",
+    "sortDirection": "Dirección de Orden",
+    "sortBy": "Ordenar Por",
+    "ascending": "Ascendente",
+    "descending": "Descendente",
+    "createdDate": "Fecha de Creación",
+    "createdDateDescription": "Ordenar por cuándo se agregó el cliente",
+    "lastActivityDate": "Última Fecha de Actividad",
+    "lastActivityDateDescription": "Ordenar por actividad más reciente",
+    "cancel": "Cancelar",
+    "apply": "Aplicar"
+  },
+  "language": {
+    "selectLanguage": "Seleccionar Idioma",
+    "choosePreferred": "Elige tu idioma preferido para la aplicación",
+    "current": "Idioma Actual",
+    "change": "Cambiar Idioma",
+    "switchTo": "¿Cambiar a {{languageName}}?",
+    "rtlWarning": "Esto cambiará la dirección del diseño de la aplicación y se reiniciará."
+  },
+  "app": {
+    "title": "MT One: App y CRM",
+    "restart": "Reiniciar Aplicación"
+  },
+  "plurals": {
+    "client": {
+      "zero": "Sin clientes",
+      "one": "{{count}} cliente",
+      "other": "{{count}} clientes"
+    },
+    "followUp": {
+      "zero": "Sin seguimientos",
+      "one": "{{count}} seguimiento",
+      "other": "{{count}} seguimientos"
+    }
+  },
+  "addActivityModal": {
+    "addActivity": "Agregar Actividad",
+    "editActivity": "Editar Actividad",
+    "selectActivityType": "Seleccionar Tipo de Actividad",
+    "deleteActivity": "Eliminar Actividad",
+    "deleteActivityConfirm": "¿Estás seguro de que quieres eliminar esta actividad?"
+  },
+  "clientProfile": {
+    "title": "Perfil del Cliente",
+    "edit": "Editar",
+    "delete": "Eliminar",
+    "sendQuickResponse": "Enviar Respuesta Rápida",
+    "duplicateClientFound": "Cliente Duplicado Encontrado",
+    "deleteClient": "Eliminar Cliente",
+    "deleteClientConfirm": "¿Estás seguro de que quieres eliminar este cliente?",
+    "activityDeleted": "Actividad eliminada exitosamente",
+    "clientDeleted": "Cliente eliminado exitosamente",
+    "activityAddedRescheduled": "Actividad agregada y seguimiento reprogramado para 1 día después",
+    "activityAddedRescheduleFailed": "Actividad agregada pero no se pudo reprogramar el seguimiento",
+    "activityAddedCompleted": "Actividad agregada y seguimiento marcado como completado",
+    "activityAddedUpdateFailed": "Actividad agregada pero no se pudo actualizar el estado del seguimiento",
+    "activityUpdated": "Actividad actualizada exitosamente",
+    "activityAdded": "Actividad agregada exitosamente",
+    "followUpScheduled": "Seguimiento programado exitosamente",
+    "followUpRemoved": "Seguimiento eliminado exitosamente",
+    "fetchClientFailed": "Error al obtener datos del cliente",
+    "fetchFollowUpFailed": "Error al obtener fecha de seguimiento",
+    "fetchAssignedUsersFailed": "Error al obtener usuarios asignados",
+    "deleteActivityFailed": "Error al eliminar actividad",
+    "deleteClientFailed": "Error al eliminar cliente",
+    "scheduleFollowUpFailed": "Error al programar seguimiento",
+    "removeFollowUpFailed": "Error al eliminar seguimiento",
+    "assignedTo": "Asignado a",
+    "noUsersAssigned": "No hay usuarios asignados",
+    "contactInformation": "Información de Contacto",
+    "recentActivities": "Actividades Recientes",
+    "noActivitiesYet": "No hay actividades aún"
+  },
+  "clientAssignment": {
+    "title": "Asignación de Cliente",
+    "assignTeamMembers": "Asignar Miembros del Equipo",
+    "selectTeamMembers": "Seleccionar miembros del equipo para asignar a este cliente",
+    "usersSelected": "{{count}} usuario seleccionado",
+    "usersSelected_plural": "{{count}} usuarios seleccionados",
+    "noTeamMembersFound": "No se encontraron miembros del equipo",
+    "loadingTeamMembers": "Cargando miembros del equipo...",
+    "userEmailNotAvailable": "El correo electrónico del usuario no está disponible",
+    "fetchTeamMembersFailed": "Error al obtener miembros del equipo",
+    "errorLoadingTeamMembers": "Error al cargar miembros del equipo",
+    "usersAssignedSuccessfully": "Usuarios asignados exitosamente",
+    "assignUsersFailed": "Error al asignar usuarios",
+    "errorAssigningUsers": "Error al asignar usuarios",
+    "assigning": "Asignando...",
+    "assignUsers": "Asignar {{count}} Usuario",
+    "assignUsers_plural": "Asignar {{count}} Usuarios"
+  },
+  "addClient": {
+    "headers": {
+      "addClient": "Agregar Cliente",
+      "editClient": "Editar Cliente"
+    },
+    "labels": {
+      "clientName": "Nombre del Cliente*",
+      "displayName": "Nombre para Mostrar",
+      "mobileNumber": "Número de Móvil",
+      "whatsappNumber": "Número de WhatsApp",
+      "email": "Correo Electrónico",
+      "notes": "Notas"
+    },
+    "placeholders": {
+      "clientName": "Ej. Juan Pérez",
+      "displayName": "Ej. Juan Pérez",
+      "mobileNumber": "Ej. 1234567890",
+      "whatsappNumber": "Ej. 1234567890",
+      "email": "Ej. correo@ejemplo.com",
+      "notes": "Agregar notas adicionales"
+    },
+    "buttons": {
+      "submit": "Enviar"
+    },
+    "errors": {
+      "clientNameRequired": "El nombre del cliente es obligatorio",
+      "provideValidClientName": "Por favor proporcione un nombre de cliente válido",
+      "addError": "Error al agregar cliente",
+      "updateError": "Error al actualizar cliente",
+      "unexpectedError": "Ocurrió un error inesperado"
+    },
+    "success": {
+      "clientAdded": "Cliente agregado exitosamente",
+      "clientUpdated": "Cliente actualizado exitosamente"
+    }
+  },
+  "groupsToggle": {
+    "labels": {
+      "selectGroups": "Seleccionar Grupos"
+    },
+    "placeholders": {
+      "searchGroups": "Buscar grupos..."
+    },
+    "buttons": {
+      "addGroup": "Agregar Grupo",
+      "more": "Más",
+      "showLess": "Mostrar Menos"
+    },
+    "errors": {
+      "groupNameRequired": "El nombre del grupo es obligatorio",
+      "addGroupFailed": "Error al agregar grupo",
+      "tryAgain": "Por favor inténtelo de nuevo",
+      "unexpectedError": "Ocurrió un error inesperado"
+    },
+    "success": {
+      "groupAdded": "Grupo agregado exitosamente"
+    }
+  },
+  "messagePreview": {
+    "headers": {
+      "messagePreview": "Vista Previa del Mensaje"
+    },
+    "labels": {
+      "messagePreview": "Vista Previa del Mensaje",
+      "sendingTo": "Enviando a",
+      "template": "Plantilla",
+      "messageContent": "Contenido del Mensaje",
+      "recipientInformation": "Información del Destinatario",
+      "whatsapp": "WhatsApp",
+      "email": "Correo Electrónico",
+      "phone": "Teléfono"
+    },
+    "options": {
+      "sendViaWhatsapp": "Enviar por WhatsApp",
+      "sendViaEmail": "Enviar por Correo",
+      "sendViaSms": "Enviar por SMS"
+    },
+    "errors": {
+      "error": "Error",
+      "whatsappNotAvailable": "Número de WhatsApp no disponible para este cliente.",
+      "whatsappOpenFailed": "Error al abrir WhatsApp. Por favor asegúrese de que WhatsApp esté instalado.",
+      "emailNotAvailable": "Dirección de correo no disponible para este cliente.",
+      "emailOpenFailed": "Error al abrir la aplicación de correo.",
+      "phoneNotAvailable": "Número de teléfono no disponible para este cliente.",
+      "smsOpenFailed": "Error al abrir la aplicación de SMS.",
+      "noWhatsappNumber": "No hay número de WhatsApp disponible",
+      "noEmailAddress": "No hay dirección de correo disponible",
+      "noPhoneNumber": "No hay número de teléfono disponible"
+    },
+    "emailSubject": "Mensaje del Agente"
+  },
+  "partnerFilter": {
+    "title": {
+      "partners": "Filtrar Agentes",
+      "teamMembers": "Filtrar Miembros del Equipo"
+    },
+    "accessDenied": {
+      "title": "Acceso Denegado",
+      "message": "No tienes permisos para acceder a esta página."
+    },
+    "buttons": {
+      "goBack": "Volver",
+      "selectAll": "Seleccionar Todo",
+      "deselectAll": "Deseleccionar Todo",
+      "applyFilter": "Aplicar Filtro"
+    },
+    "loading": {
+      "partners": "Cargando agentes...",
+      "teamMembers": "Cargando miembros del equipo..."
+    },
+    "selection": {
+      "partners": "agentes",
+      "teamMembers": "miembros del equipo",
+      "selected": "seleccionados"
+    },
+    "empty": {
+      "partners": "No se encontraron agentes",
+      "teamMembers": "No se encontraron miembros del equipo"
+    },
+    "toast": {
+      "filterCleared": "Filtro Limpiado",
+      "filterClearedMessage": "Mostrando clientes solo para tu cuenta.",
+      "filterApplied": "Filtro Aplicado",
+      "filterAppliedMessage": "Mostrando clientes para {{formattedCount}} agente seleccionado",
+      "filterAppliedMessage_plural": "Mostrando clientes para {{formattedCount}} agentes seleccionados"
+    },
+    "errors": {
+      "fetchFailed": "Error al obtener {{type}}. Por favor, inténtalo de nuevo.",
+      "applyFailed": "Error al aplicar filtros. Por favor, inténtalo de nuevo."
+    },
+    "labels": {
+      "role": "Rol"
+    }
+  },
+  "messageTemplate": {
+    "headers": {
+      "selectTemplate": "Seleccionar Plantilla de Mensaje"
+    },
+    "errors": {
+      "fetchFailed": "Error al obtener plantillas de contenido",
+      "loadingError": "Error al cargar plantillas de contenido"
+    }
+  },
+  "contentTemplate": {
+    "labels": {
+      "by": "por",
+      "created": "Creado"
+    },
+    "status": {
+      "active": "Activo",
+      "inactive": "Inactivo",
+      "deleted": "Eliminado"
+    },
+    "errors": {
+      "invalidDate": "Fecha inválida"
+    },
+    "emptyState": {
+      "title": "No hay Plantillas de Contenido",
+      "subtitle": "Aún no has creado ninguna plantilla de contenido."
+    },
+    "header": {
+      "templatesFound": "{{count}} plantilla encontrada",
+      "templatesFound_plural": "{{count}} plantillas encontradas"
+    },
+    "loading": {
+      "loadingTemplates": "Cargando plantillas de contenido...",
+      "loadingMore": "Cargando más..."
+    }
+  },
+  "contentScreen": {
+    "headers": {
+      "contentTemplates": "Plantillas de Contenido",
+      "messageTemplates": "Plantillas de Mensajes"
+    },
+    "buttons": {
+      "addTemplate": "Agregar Plantilla"
+    },
+    "errors": {
+      "fetchFailed": "Error al obtener plantillas de contenido",
+      "loadingError": "Error al cargar plantillas de contenido"
+    }
+  },
+  "partnerPropertyForm": {
+    "titles": {
+      "addProperty": "Agregar Propiedad"
+    },
+    "steps": {
+      "basicInfo": "Información Básica",
+      "propertyDetails": "Detalles de la Propiedad",
+      "mediaAndSubmit": "Medios y Enviar"
+    },
+    "buttons": {
+      "clear": "Limpiar"
+    },
+    "basicDetails": {
+      "labels": {
+        "propertyName": "Nombre de la Propiedad*",
+        "sellerType": "Tipo de Vendedor*",
+        "city": "Ciudad*",
+        "propertyFor": "Propiedad Para*",
+        "propertyType": "Tipo de Propiedad*",
+        "location": "Ubicación*",
+        "price": "Precio*"
+      },
+      "placeholders": {
+        "propertyName": "Ingrese un nombre de propiedad",
+        "location": "Ingrese detalles de ubicación",
+        "price": "Ingrese precio de la propiedad"
+      }
+    },
+    "mediaAndSubmit": {
+      "labels": {
+        "videoURL": "URL del Video",
+        "images": "Imágenes",
+        "tags": "Etiquetas",
+        "selectCategory": "Seleccionar Categoría"
+      },
+      "placeholders": {
+        "videoURL": "Ingrese URL de YouTube o Vimeo",
+        "tags": "Ej., #lujo",
+        "selectCategory": "Seleccionar Categoría"
+      },
+      "descriptions": {
+        "optionalStep": "Este paso es opcional. Puede continuar sin completar estos detalles.",
+        "imagesDescription": "Suba imágenes de su propiedad. Seleccione una imagen como imagen de visualización predeterminada.",
+        "submitDescription": "Revise todos los detalles cuidadosamente antes de enviar el listado de su propiedad.",
+        "selectedImages": "Imágenes Seleccionadas ({{count}})"
+      },
+      "buttons": {
+        "selectImages": "Seleccionar Imágenes",
+        "addTag": "Agregar"
+      }
+    },
+    "navigation": {
+      "next": "Siguiente",
+      "back": "Atrás"
+    },
+    "propertyDetails": {
+      "optionalStepText": "Este paso es opcional. Puede continuar sin completar estos detalles.",
+      "noSelectionText": "Por favor seleccione un Tipo de Propiedad en el paso anterior.",
+      "goBack": "Volver",
+      "fields": {
+        "propertyForType": {
+          "label": "Categoría de Propiedad"
+        },
+        "readyToMove": {
+          "label": "Listo para Mudarse"
+        },
+        "lifts": {
+          "label": "Ascensor Disponible"
+        },
+        "pantry": {
+          "label": "Despensa"
+        },
+        "floor": {
+          "label": "Piso",
+          "placeholder": "Ingrese el número de piso"
+        },
+        "furnishing": {
+          "label": "Tipo de Mobiliario"
+        },
+        "parking": {
+          "label": "Estacionamiento de Autos"
+        },
+        "facing": {
+          "label": "Dirección de Orientación"
+        },
+        "location": {
+          "label": "Ubicación",
+          "placeholder": "Ingrese la ubicación de la propiedad"
+        },
+        "zipCode": {
+          "label": "Código Postal",
+          "placeholder": "Ingrese el código postal"
+        },
+        "price": {
+          "label": "Precio",
+          "placeholder": "Ingrese el precio de la propiedad"
+        },
+        "area": {
+          "label": "Área de Propiedad",
+          "placeholder": "Ingrese el área de la propiedad"
+        },
+        "lmUnit": {
+          "label": "Unidad de Área"
+        },
+        "propertyAge": {
+          "label": "Edad de la Propiedad"
+        },
+        "gatedSecurity": {
+          "label": "Seguridad de Comunidad Cerrada"
+        },
+        "surveillanceCameras": {
+          "label": "Vigilancia"
+        },
+        "alarmSystem": {
+          "label": "Sistema de Alarma"
+        },
+        "shortDescription": {
+          "label": "Descripción Corta",
+          "placeholder": "Ingrese una descripción corta"
+        },
+        "longDescription": {
+          "label": "Descripción Larga",
+          "placeholder": "Ingrese una descripción detallada"
+        },
+        "bhkType": {
+          "label": "Configuración"
+        },
+        "ceilingHeight": {
+          "label": "Altura del Techo",
+          "placeholder": "Ingrese la altura del techo"
+        },
+        "constructionDone": {
+          "label": "Alguna Construcción"
+        },
+        "boundaryWall": {
+          "label": "Límite"
+        },
+        "openSide": {
+          "label": "Núm. de Lado Abierto"
+        }
+      }
+    },
+    "success": {
+      "propertyUpdated": "Propiedad actualizada exitosamente",
+      "propertyAdded": "Propiedad agregada exitosamente"
+    },
+    "errors": {
+      "updateFailed": "Error al actualizar propiedad",
+      "addFailed": "Error al agregar propiedad"
+    }
+  },
+  "listings": {
+    "titles": {
+      "propertyListings": "Listado de Propiedades",
+      "filterProperties": "Filtrar Propiedades",
+      "deleteProperty": "Eliminar Propiedad",
+      "noPropertiesFound": "No se Encontraron Propiedades"
+    },
+    "messages": {
+      "loadingMore": "Cargando más propiedades...",
+      "noProperties": "No se encontraron propiedades.",
+      "deleteConfirmation": "¿Estás seguro de que quieres eliminar esta propiedad?",
+      "propertyDeleted": "Propiedad eliminada exitosamente",
+      "deleteFailed": "Error al eliminar propiedad",
+      "fetchFailed": "Error al obtener propiedades",
+      "emptyState": "Aún no has agregado propiedades. Comienza agregando tu primera propiedad.",
+      "loadingDetails": "Cargando detalles de la propiedad...",
+      "loadFailed": "Error al cargar detalles de la propiedad",
+      "errorLoading": "Error al cargar detalles de la propiedad",
+      "propertyNotFound": "Propiedad no encontrada"
+    },
+    "placeholders": {
+      "searchByName": "Buscar por nombre..."
+    },
+    "labels": {
+      "propertyFor": "Propiedad Para",
+      "status": "Estado",
+      "city": "Ciudad",
+      "featured": "Destacado",
+      "notFeatured": "No Destacado",
+      "deleted": "Eliminado",
+      "unnamedProperty": "Propiedad Sin Nombre",
+      "locationNotSpecified": "Ubicación no especificada",
+      "priceOnRequest": "Precio a consultar",
+      "forSale": "En Venta",
+      "for": "Para",
+      "sale": "Venta",
+      "type": "Tipo",
+      "category": "Categoría",
+      "notSpecified": "No especificado",
+      "zipCode": "Código Postal",
+      "sellerType": "Tipo de Vendedor",
+      "configuration": "Configuración",
+      "area": "Área",
+      "furnishing": "Amueblado",
+      "facing": "Orientación",
+      "seller": "Vendedor",
+      "playVideo": "Reproducir Video",
+      "videoTour": "Tour Virtual"
+    },
+    "buttons": {
+      "edit": "Editar",
+      "delete": "Eliminar",
+      "cancel": "Cancelar",
+      "applyFilters": "Aplicar Filtros",
+      "clearAll": "Limpiar Todo",
+      "addProperty": "Agregar Propiedad"
+    },
+    "accessibility": {
+      "propertyImage": "Imagen de {{propertyName}}",
+      "propertyPlaceholder": "Imagen de marcador de propiedad"
+    },
+    "sections": {
+      "propertyDetails": "Detalles de la Propiedad",
+      "overview": "Resumen",
+      "description": "Descripción",
+      "features": "Características",
+      "specifications": "Especificaciones",
+      "tags": "Etiquetas",
+      "contactInformation": "Información de Contacto"
+    },
+    "features": {
+      "readyToMove": "Listo para Mudarse",
+      "constructionDone": "Construcción Terminada",
+      "boundaryWall": "Muro Perimetral",
+      "elevators": "Ascensores",
+      "alarmSystem": "Sistema de Alarma",
+      "securityCameras": "Cámaras de Seguridad",
+      "gatedSecurity": "Seguridad Puerta",
+      "pantry": "Despensa"
+    },
+    "specs": {
+      "floor": "Piso",
+      "parking": "Estacionamiento",
+      "openSide": "Lado Abierto",
+      "propertyAge": "Antigüedad de la Propiedad",
+      "ceilingHeight": "Altura del Techo",
+      "listedOn": "Publicado el"
+    },
+    "modals": {
+      "deleteProperty": {
+        "title": "Eliminar Propiedad",
+        "message": "¿Estás seguro de que quieres eliminar esta propiedad?"
+      }
+    }
+  },
+  "addContent": {
+    "headers": {
+      "newTemplate": "Nueva Plantilla",
+      "editTemplate": "Editar Plantilla"
+    },
+    "labels": {
+      "templateName": "Nombre de Plantilla",
+      "messageContent": "Contenido del Mensaje",
+      "availableVariables": "Variables Disponibles",
+      "preview": "Vista Previa"
+    },
+    "placeholders": {
+      "templateName": "Ingrese nombre de plantilla",
+      "messageContent": "Escriba su plantilla de mensaje aquí...\n\nPuede usar variables como {name}, {phone}, {email} para personalizar mensajes.",
+      "preview": "La vista previa de su mensaje aparecerá aquí..."
+    },
+    "helpers": {
+      "templateName": "Dé un nombre descriptivo a su plantilla",
+      "variablesInfo": "Las variables entre llaves serán reemplazadas con valores reales al enviar mensajes.",
+      "variablesDescription": "Toque cualquier variable a continuación para agregarla a su mensaje",
+      "variablesAutoReplace": "Estas variables serán reemplazadas automáticamente al enviar mensajes"
+    },
+    "variables": {
+      "name": "Nombre del cliente",
+      "phone": "Número de teléfono",
+      "whatsapp": "Número de Whatsapp",
+      "email": "Dirección de correo electrónico",
+      "senderName": "Su nombre",
+      "senderEmail": "Su correo electrónico",
+      "senderAddress": "Su dirección",
+      "senderPhone": "Su teléfono"
+    },
+    "buttons": {
+      "cancel": "Cancelar",
+      "saveTemplate": "Guardar Plantilla",
+      "updateTemplate": "Actualizar Plantilla",
+      "saving": "Guardando...",
+      "updating": "Actualizando..."
+    },
+    "errors": {
+      "templateNameRequired": "Por favor ingrese un nombre de plantilla",
+      "contentRequired": "Por favor ingrese contenido de plantilla",
+      "userNotFound": "Usuario no encontrado",
+      "createFailed": "Error al crear plantilla",
+      "updateFailed": "Error al actualizar plantilla"
+    },
+    "success": {
+      "templateCreated": "Plantilla Creada",
+      "templateUpdated": "Plantilla Actualizada",
+      "createMessage": "Su plantilla de mensaje ha sido guardada exitosamente.",
+      "updateMessage": "Su plantilla de mensaje ha sido actualizada exitosamente."
+    },
+    "alerts": {
+      "discardTitle": "Descartar Cambios",
+      "discardMessage": "¿Está seguro de que desea descartar sus cambios?",
+      "continueEditing": "Continuar Editando",
+      "discard": "Descartar"
+    }
+  },
+  "groups": {
+    "messages": {
+      "noGroupsAvailable": "No hay grupos disponibles. Los grupos aparecerán aquí cuando se creen.",
+      "loadFailed": "Error al cargar grupos",
+      "tryAgainLater": "Por favor, inténtalo de nuevo más tarde",
+      "groupCreated": "Grupo creado exitosamente",
+      "groupUpdated": "Grupo actualizado exitosamente",
+      "groupDeleted": "Grupo eliminado exitosamente",
+      "saveFailed": "Error al guardar grupo",
+      "saveError": "Error al guardar grupo",
+      "deleteFailed": "Error al eliminar grupo",
+      "deleteError": "Error al eliminar grupo",
+      "noColorsAvailable": "No hay colores disponibles"
+    },
+    "placeholders": {
+      "groupName": "Nombre del Grupo"
+    },
+    "labels": {
+      "selectColor": "Seleccionar Color"
+    },
+    "buttons": {
+      "addGroup": "+ Agregar Grupo"
+    },
+    "modals": {
+      "addGroup": "Agregar Nuevo Grupo",
+      "editGroup": "Editar Grupo",
+      "deleteGroup": {
+        "title": "Eliminar Grupo",
+        "message": "¿Estás seguro de que quieres eliminar este grupo?"
+      }
+    }
+  },
+  "agentProperty": {
+    "titles": {
+      "addAgentProperty": "Agregar Propiedad del Agente",
+      "editAgentProperty": "Editar Propiedad del Agente",
+      "agentProperty": "Propiedad del Agente",
+      "deleteProperty": "Eliminar Propiedad"
+    },
+    "labels": {
+      "agentName": "Nombre del Agente*",
+      "agentContactNo": "Número de Contacto del Agente*",
+      "propertyLocation": "Ubicación de la Propiedad*",
+      "propertyType": "Tipo de Propiedad",
+      "bhkType": "Tipo BHK",
+      "demandPrice": "Precio Demandado",
+      "securityDepositAmount": "Monto del Depósito de Seguridad",
+      "negotiable": "Negociable",
+      "fixedPrice": "Precio Fijo",
+      "propertyNotes": "Notas de la Propiedad",
+      "location": "Ubicación",
+      "contactNo": "Número de Contacto",
+      "dateAdded": "Fecha Agregada",
+      "notes": "Notas"
+    },
+    "placeholders": {
+      "agentName": "Ej. Juan Pérez",
+      "agentContactNo": "Ej. 1234567890",
+      "propertyLocation": "Ej. Navi Mumbai, Thane, etc.",
+      "demandPrice": "Ingrese el monto",
+      "securityDepositAmount": "Ingrese el monto del depósito",
+      "propertyNotes": "Agregar detalles adicionales",
+      "searchByName": "Buscar por nombre..."
+    },
+    "messages": {
+      "propertyUpdated": "Propiedad actualizada exitosamente",
+      "propertyAdded": "Propiedad agregada exitosamente",
+      "updateFailed": "Error al actualizar propiedad del agente",
+      "validationError": "Por favor revise su entrada e intente nuevamente",
+      "noProperties": "No hay propiedades disponibles",
+      "deleteSuccess": "Propiedad eliminada exitosamente",
+      "deleteError": "Error al eliminar la propiedad",
+      "notSpecified": "No Especificado",
+      "na": "N/A",
+      "deleteConfirmation": "Esta acción no se puede deshacer. ¿Está seguro de que desea eliminar esta propiedad?"
+    },
+    "buttons": {
+      "add": "Agregar",
+      "submit": "Enviar",
+      "filterProperties": "Filtrar Propiedades",
+      "clearAll": "Limpiar Todo",
+      "cancel": "Cancelar",
+      "applyFilters": "Aplicar Filtros"
+    }
+  },
+  "billing": {
+    "title": "Facturación y Pagos",
+    "subtitle": "Gestiona tu suscripción e historial de pagos",
+    "plans": {
+      "title": "Planes de Pago"
+    },
+    "switchPlanButton": "Cambiar Plan de Facturación",
+    "success": {
+      "title": "Pago Exitoso",
+      "subtitle": "¡Tu suscripción ha sido activada exitosamente!"
+    },
+    "errors": {
+      "loadFailed": "Error al cargar la información de facturación.",
+      "paymentFailed": "Pago Fallido",
+      "generic": "Algo salió mal",
+      "loadPlansFailed": "Error al cargar los planes de facturación."
+    },
+    "empty": {
+      "title": "Aún No Hay Planes",
+      "message": "Crea tu primer plan de pago para comenzar",
+      "createButton": "Crear Plan"
+    },
+    "delete": {
+      "title": "Eliminar Plan",
+      "confirmMessage": "¿Estás seguro de que quieres eliminar el plan \"{{planName}}\"?"
+    },
+    "nextBill": {
+      "title": "Próxima Factura",
+      "billingCycle": "Ciclo de Facturación",
+      "duration": "Duración",
+      "days": "días",
+      "billingPeriod": "Período de Facturación",
+      "payNow": "Pagar Ahora",
+      "billingCycleValues": {
+        "Monthly": "Mensual",
+        "Yearly": "Anual"
+      }
+    },
+    "paymentHistory": {
+      "title": "Historial de Pagos",
+      "status": {
+        "success": "Éxito",
+        "failed": "Fallido"
+      }
+    },
+    "paymentModal": {
+      "title": "Detalles del Pago",
+      "subtitle": "Revisa y confirma los detalles de tu pago",
+      "paymentSummary": "Resumen del Pago",
+      "totalAmount": "Monto Total",
+      "servicePeriod": "Período de Servicio",
+      "confirmAndPay": "Confirmar y Pagar",
+      "securityText": "Protegido con encriptación de nivel bancario"
+    },
+    "loading": {
+      "billingInfo": "Cargando información de facturación...",
+      "plans": "Cargando planes..."
+    },
+    "retry": {
+      "tryAgain": "Intentar de Nuevo"
+    },
+    "planSwitcher": {
+      "title": "Cambiar Plan de Facturación",
+      "switchPlan": "Cambiar Plan",
+      "planSwitched": "¡Plan cambiado!",
+      "planUpdated": "Tu plan de facturación ha sido actualizado.",
+      "switchFailed": "Error al cambiar el plan.",
+      "selectPlan": "Seleccionar plan {{planName}}",
+      "submitChange": "Enviar cambio de plan",
+      "maxUsers": "Máx. Usuarios:",
+      "trialPlan": "Plan de Prueba",
+      "perMonth": "/mes"
+    },
+    "paymentLoading": {
+      "creatingOrder": "Creando orden de pago...",
+      "processingPayment": "Procesando pago...",
+      "verifyingPayment": "Verificando pago...",
+      "loading": "Cargando...",
+      "steps": {
+        "order": "Orden",
+        "payment": "Pago",
+        "verify": "Verificar"
+      }
+    },
+    "planItem": {
+      "badge": {
+        "trial": "PRUEBA",
+        "premium": "PREMIUM"
+      },
+      "features": {
+        "users": "usuarios",
+        "days": "días"
+      }
+    },
+    "addPlan": {
+      "title": {
+        "add": "Agregar Plan",
+        "edit": "Editar Plan"
+      },
+      "form": {
+        "planName": "Nombre del Plan*",
+        "description": "Descripción",
+        "price": "Precio (₹)",
+        "billingCycle": "Ciclo de Facturación",
+        "duration": "Duración (Días)",
+        "maxUsers": "Máximo de Usuarios",
+        "isTrial": "¿Es de Prueba?"
+      },
+      "placeholders": {
+        "planName": "Ej. Plan Premium",
+        "description": "Describe el plan",
+        "price": "Ej. 999",
+        "duration": "Ej. 30",
+        "maxUsers": "Ej. 5"
+      },
+      "messages": {
+        "success": {
+          "add": "Plan agregado exitosamente",
+          "edit": "Plan actualizado exitosamente"
+        },
+        "error": {
+          "add": "Error al agregar plan",
+          "edit": "Error al actualizar plan",
+          "addGeneric": "Ocurrió un error al guardar el plan",
+          "editGeneric": "Ocurrió un error al actualizar el plan",
+          "validation": "Por favor verifica tu entrada"
+        }
+      }
+    }
+  },
+  "settings": {
+    "title": "Configuración",
+    "language": {
+      "title": "Idioma",
+      "current": "Idioma Actual"
+    },
+    "about": {
+      "title": "Acerca de"
+    },
+    "version": {
+      "title": "Versión de la App"
+    },
+    "help": {
+      "title": "Ayuda y Soporte"
+    }
+  },
+  "activity": {
+    "createdBy": "por {{name}}"
+  },
+  "subscription": {
+    "expired": {
+      "title": "Suscripción Expirada",
+      "subtitle": "La suscripción de tu equipo ha expirado y necesita ser renovada por tu socio.",
+      "accessRestricted": "Acceso Restringido",
+      "accessRestrictedText": "Como miembro del equipo, no puedes comprar o renovar suscripciones directamente. Por favor contacta a tu socio para restaurar el acceso.",
+      "whatHappensNext": "¿Qué sucede después?",
+      "steps": {
+        "contactPartner": "Contacta a tu socio usando la información de arriba",
+        "requestRenewal": "Solicita la renovación de la suscripción para acceso del equipo",
+        "waitForRenewal": "Espera a que el socio complete el proceso de renovación",
+        "refreshStatus": "Actualiza esta página para verificar tu estado de acceso"
+      },
+      "checkStatus": "Verificar Estado Nuevamente"
+    }
+  },
+  "transactions": {
+    "title": "Transacciones",
+    "loading": "Cargando transacciones...",
+    "loadingMore": "Cargando más...",
+    "noInternetConnection": "Sin conexión a internet",
+    "connectionLost": "Conexión perdida",
+    "connectionLostMessage": "Por favor verifica tu conexión a internet",
+    "noInternetLoadMessage": "Por favor verifica tu conexión a internet y desliza hacia abajo para actualizar.",
+    "noInternetFilterMessage": "No se puede cargar más datos sin conexión a internet.",
+    "noInternetApplyFiltersMessage": "Por favor verifica tu conexión a internet para aplicar filtros.",
+    "failedToLoad": "Error al cargar",
+    "failedToLoadMessage": "No se pudieron cargar las transacciones. Por favor intenta de nuevo.",
+    "connectionError": "Error de conexión",
+    "connectionErrorMessage": "No se puede conectar al servidor. Por favor verifica tu conexión a internet.",
+    "error": "Error",
+    "errorMessage": "Error al cargar transacciones. Por favor intenta de nuevo.",
+    "loadMoreFailed": "Error al cargar más",
+    "loadMoreFailedMessage": "No se pudieron cargar más transacciones.",
+    "dataRefreshed": "Transacciones actualizadas",
+    "dataRefreshedMessage": "Los datos han sido actualizados exitosamente.",
+    "filtersApplied": "Filtros aplicados",
+    "filtersAppliedMessage": "Transacciones filtradas exitosamente.",
+    "filtersReset": "Filtros restablecidos",
+    "filtersResetMessage": "Todos los filtros han sido restablecidos a los valores predeterminados.",
+    "noTransactionsFound": "No se encontraron transacciones",
+    "noTransactionsFoundMessage": "Las transacciones aparecerán aquí una vez que los usuarios realicen pagos",
+    "adjustFiltersMessage": "Intenta ajustar tus filtros para ver más resultados",
+    "summary": {
+      "title": "Resumen de transacciones",
+      "total": "Total",
+      "successful": "Exitosas",
+      "failed": "Fallidas",
+      "totalAmount": "Monto total"
+    },
+    "filters": {
+      "title": "Filtrar transacciones",
+      "reset": "Restablecer",
+      "apply": "Aplicar filtros",
+      "search": "Buscar",
+      "searchPlaceholder": "Buscar por nombre, correo electrónico o ID de transacción",
+      "status": "Estado",
+      "paymentMethod": "Método de pago",
+      "sortBy": "Ordenar por",
+      "sortOrder": "Orden de clasificación",
+      "all": "Todos",
+      "date": "Fecha",
+      "amount": "Monto",
+      "newestFirst": "Más recientes primero",
+      "oldestFirst": "Más antiguos primero"
+    },
+    "status": {
+      "captured": "Capturado",
+      "completed": "Completado",
+      "failed": "Fallido",
+      "cancelled": "Cancelado",
+      "pending": "Pendiente",
+      "authorized": "Autorizado"
+    },
+    "paymentMethods": {
+      "upi": "UPI",
+      "card": "Tarjeta",
+      "netbanking": "Banco en línea",
+      "wallet": "Billetera"
+    }
+  },
+  "buyerProfile": {
+    "welcome": {
+      "back": "Bienvenido de nuevo",
+      "subtitle": "Perfil de usuario"
+    },
+    "options": {
+      "personal": {
+        "title": "Información personal",
+        "subtitle": "Editar perfil"
+      },
+      "properties": {
+        "title": "Mis propiedades",
+        "subtitle": "Ver todo"
+      },
+      "analytics": {
+        "title": "Analíticas",
+        "subtitle": "Ver estadísticas"
+      },
+      "settings": {
+        "title": "Configuración",
+        "subtitle": "Administrar"
+      }
+    },
+    "stats": {
+      "totalProperties": "Propiedades totales",
+      "activeListings": "Listados activos",
+      "totalEarnings": "Ganancias totales"
+    }
+  },
+  "contactUs": {
+    "title": "Ponte en contacto",
+    "subtitle": "Contáctanos",
+    "contactInfo": {
+      "phone": "Teléfono",
+      "email": "Correo electrónico",
+      "address": "Dirección"
+    },
+    "officeHours": {
+      "mondayFriday": "Lunes - Viernes",
+      "saturday": "Sábado",
+      "sunday": "Domingo",
+      "hours": {
+        "weekday": "9:00 AM - 6:00 PM",
+        "saturday": "9:00 AM - 4:00 PM",
+        "sunday": "Cerrado"
+      }
+    },
+    "socialLinks": {
+      "facebook": "Facebook",
+      "instagram": "Instagram",
+      "linkedin": "LinkedIn",
+      "twitter": "Twitter"
+    },
+    "buttons": {
+      "sendMessage": "Enviar mensaje"
+    }
+  }
+}

@@ -1,0 +1,4423 @@
+{
+  "summary": {
+    "totalUsedKeys": 883,
+    "analysisDate": "2025-09-13T07:45:31.636Z"
+  },
+  "usedKeys": [
+    {
+      "key": "common.actions.submit",
+      "foundInFile": "src/screens/partner/AddPartnerPropertyScreen/AddPartnerPropertyScreen.tsx",
+      "matchPattern": "t('common.actions.submit')"
+    },
+    {
+      "key": "common.actions.cancel",
+      "foundInFile": "src/components/CustomDrawerContent.tsx",
+      "matchPattern": "'common.actions.cancel'"
+    },
+    {
+      "key": "common.actions.save",
+      "foundInFile": "src/screens/partner/GroupsScreen/components/AddGroupModal.tsx",
+      "matchPattern": "'common.actions.save'"
+    },
+    {
+      "key": "common.actions.delete",
+      "foundInFile": "src/components/GetIcon.tsx",
+      "matchPattern": "partial: delete"
+    },
+    {
+      "key": "common.actions.edit",
+      "foundInFile": "src/components/CustomDrawerContent.tsx",
+      "matchPattern": "partial: edit"
+    },
+    {
+      "key": "common.actions.addActivity",
+      "foundInFile": "src/screens/partner/ClientScreen/components/RecentActivitiesCard.tsx",
+      "matchPattern": "'common.actions.addActivity'"
+    },
+    {
+      "key": "common.actions.back",
+      "foundInFile": "src/components/GetIcon.tsx",
+      "matchPattern": "partial: back"
+    },
+    {
+      "key": "common.actions.next",
+      "foundInFile": "src/screens/auth/EmailScreen.tsx",
+      "matchPattern": "t('common.actions.next')"
+    },
+    {
+      "key": "common.actions.search",
+      "foundInFile": "src/components/GetIcon.tsx",
+      "matchPattern": "partial: search"
+    },
+    {
+      "key": "common.actions.filter",
+      "foundInFile": "src/components/GetIcon.tsx",
+      "matchPattern": "partial: filter"
+    },
+    {
+      "key": "common.actions.ok",
+      "foundInFile": "src/components/CustomDrawerContent.tsx",
+      "matchPattern": "'common.actions.ok'"
+    },
+    {
+      "key": "common.actions.call",
+      "foundInFile": "src/screens/partner/ClientScreen/components/ContactButtons.tsx",
+      "matchPattern": "'common.actions.call'"
+    },
+    {
+      "key": "common.states.loading",
+      "foundInFile": "src/screens/partner/ClientScreen/components/FollowUpCard.tsx",
+      "matchPattern": "'common.states.loading'"
+    },
+    {
+      "key": "common.states.loadingMore",
+      "foundInFile": "src/screens/partner/GroupsScreen/GroupsScreen.tsx",
+      "matchPattern": "'common.states.loadingMore'"
+    },
+    {
+      "key": "common.states.verifying",
+      "foundInFile": "src/components/OtpModel.tsx",
+      "matchPattern": "t('common.states.verifying')"
+    },
+    {
+      "key": "common.states.sending",
+      "foundInFile": "src/screens/auth/EmailScreen.tsx",
+      "matchPattern": "t('common.states.sending')"
+    },
+    {
+      "key": "common.states.success",
+      "foundInFile": "src/hooks/usePaymentVerification.ts",
+      "matchPattern": "partial: success"
+    },
+    {
+      "key": "common.states.error",
+      "foundInFile": "src/components/FilterOption.tsx",
+      "matchPattern": "partial: error"
+    },
+    {
+      "key": "common.states.assigned",
+      "foundInFile": "src/screens/partner/ClientScreen/components/ActivityTimeline.tsx",
+      "matchPattern": "partial: assigned"
+    },
+    {
+      "key": "common.states.unassigned",
+      "foundInFile": "src/screens/partner/ClientScreen/components/AssignedUsersCard.tsx",
+      "matchPattern": "t('common.states.unassigned')"
+    },
+    {
+      "key": "common.states.loadingAssignments",
+      "foundInFile": "src/screens/partner/ClientScreen/components/AssignedUsersCard.tsx",
+      "matchPattern": "t('common.states.loadingAssignments')"
+    },
+    {
+      "key": "common.success.title",
+      "foundInFile": "src/screens/partner/TeamsScreen/AddTeamScreen.tsx",
+      "matchPattern": "'common.success.title'"
+    },
+    {
+      "key": "common.errors.error",
+      "foundInFile": "src/components/FilterOption.tsx",
+      "matchPattern": "partial: error"
+    },
+    {
+      "key": "common.labels.email",
+      "foundInFile": "src/components/ContactScreen.tsx",
+      "matchPattern": "partial: email"
+    },
+    {
+      "key": "common.labels.name",
+      "foundInFile": "src/components/ContactScreen.tsx",
+      "matchPattern": "partial: name"
+    },
+    {
+      "key": "common.labels.phone",
+      "foundInFile": "src/components/ContactScreen.tsx",
+      "matchPattern": "partial: phone"
+    },
+    {
+      "key": "common.labels.mobile",
+      "foundInFile": "src/screens/partner/ClientScreen/components/ContactInfoCard.tsx",
+      "matchPattern": "t('common.labels.mobile')"
+    },
+    {
+      "key": "common.labels.whatsapp",
+      "foundInFile": "src/components/GetIcon.tsx",
+      "matchPattern": "partial: whatsapp"
+    },
+    {
+      "key": "common.labels.address",
+      "foundInFile": "src/screens/buyer/ContactUsScreen.tsx",
+      "matchPattern": "partial: address"
+    },
+    {
+      "key": "common.labels.description",
+      "foundInFile": "src/screens/partner/BillingScreen/BillingScreen.tsx",
+      "matchPattern": "partial: description"
+    },
+    {
+      "key": "common.labels.groups",
+      "foundInFile": "src/screens/partner/ClientScreen/AddClientScreen.tsx",
+      "matchPattern": "partial: groups"
+    },
+    {
+      "key": "common.labels.notes",
+      "foundInFile": "src/components/GetIcon.tsx",
+      "matchPattern": "partial: notes"
+    },
+    {
+      "key": "common.labels.showMore",
+      "foundInFile": "src/screens/partner/ClientScreen/components/ActivityTimeline.tsx",
+      "matchPattern": "'common.labels.showMore'"
+    },
+    {
+      "key": "common.labels.showLess",
+      "foundInFile": "src/screens/partner/ClientScreen/components/ActivityTimeline.tsx",
+      "matchPattern": "'common.labels.showLess'"
+    },
+    {
+      "key": "common.labels.by",
+      "foundInFile": "src/screens/partner/ContentScreen/components/ContentTemplateCard.tsx",
+      "matchPattern": "partial: by"
+    },
+    {
+      "key": "common.labels.at",
+      "foundInFile": "src/screens/partner/ClientScreen/components/ClientCard.tsx",
+      "matchPattern": "'common.labels.at'"
+    },
+    {
+      "key": "errors.network",
+      "foundInFile": "src/screens/partner/TransactionsScreen/TransactionsScreen.tsx",
+      "matchPattern": "partial: network"
+    },
+    {
+      "key": "errors.emailVerificationFailed",
+      "foundInFile": "src/screens/auth/EmailScreen.tsx",
+      "matchPattern": "t('errors.emailVerificationFailed')"
+    },
+    {
+      "key": "errors.emailNotFound",
+      "foundInFile": "src/screens/auth/EmailScreen.tsx",
+      "matchPattern": "t('errors.emailNotFound')"
+    },
+    {
+      "key": "errors.unexpectedError",
+      "foundInFile": "src/screens/auth/EmailScreen.tsx",
+      "matchPattern": "t('errors.unexpectedError')"
+    },
+    {
+      "key": "errors.failedToSendOtp",
+      "foundInFile": "src/screens/auth/EmailScreen.tsx",
+      "matchPattern": "t('errors.failedToSendOtp')"
+    },
+    {
+      "key": "errors.refreshError",
+      "foundInFile": "src/screens/partner/FollowUpScreen/FollowUpScreen.tsx",
+      "matchPattern": "t('errors.refreshError')"
+    },
+    {
+      "key": "validation.invalidOtp",
+      "foundInFile": "src/components/OtpModel.tsx",
+      "matchPattern": "t('validation.invalidOtp')"
+    },
+    {
+      "key": "time.today",
+      "foundInFile": "src/hooks/useFollowUps.ts",
+      "matchPattern": "partial: today"
+    },
+    {
+      "key": "time.overdue",
+      "foundInFile": "src/hooks/useFollowUps.ts",
+      "matchPattern": "partial: overdue"
+    },
+    {
+      "key": "time.upcoming",
+      "foundInFile": "src/hooks/useFollowUps.ts",
+      "matchPattern": "partial: upcoming"
+    },
+    {
+      "key": "time.someday",
+      "foundInFile": "src/hooks/useFollowUps.ts",
+      "matchPattern": "partial: someday"
+    },
+    {
+      "key": "time.hoursLeft",
+      "foundInFile": "src/screens/partner/ClientScreen/components/FollowUpCard.tsx",
+      "matchPattern": "'time.hoursLeft'"
+    },
+    {
+      "key": "time.minutesLeft",
+      "foundInFile": "src/screens/partner/ClientScreen/components/FollowUpCard.tsx",
+      "matchPattern": "'time.minutesLeft'"
+    },
+    {
+      "key": "time.oneDay",
+      "foundInFile": "src/screens/partner/ClientScreen/components/FollowUpCard.tsx",
+      "matchPattern": "'time.oneDay'"
+    },
+    {
+      "key": "time.multipleDays",
+      "foundInFile": "src/screens/partner/ClientScreen/components/FollowUpCard.tsx",
+      "matchPattern": "'time.multipleDays'"
+    },
+    {
+      "key": "time.am",
+      "foundInFile": "src/i18n/types.ts",
+      "matchPattern": "partial: am"
+    },
+    {
+      "key": "time.pm",
+      "foundInFile": "src/utils/dateUtils.ts",
+      "matchPattern": "t('time.pm')"
+    },
+    {
+      "key": "greetings.welcomeBack",
+      "foundInFile": "src/screens/auth/EmailScreen.tsx",
+      "matchPattern": "t('greetings.welcomeBack')"
+    },
+    {
+      "key": "greetings.welcomePartner",
+      "foundInFile": "src/screens/auth/PartnerLoginScreen.tsx",
+      "matchPattern": "t('greetings.welcomePartner')"
+    },
+    {
+      "key": "greetings.hi",
+      "foundInFile": "src/i18n/types.ts",
+      "matchPattern": "partial: hi"
+    },
+    {
+      "key": "greetings.goodMorning",
+      "foundInFile": "src/utils/dateUtils.ts",
+      "matchPattern": "'greetings.goodMorning'"
+    },
+    {
+      "key": "greetings.goodAfternoon",
+      "foundInFile": "src/utils/dateUtils.ts",
+      "matchPattern": "'greetings.goodAfternoon'"
+    },
+    {
+      "key": "greetings.goodEvening",
+      "foundInFile": "src/utils/dateUtils.ts",
+      "matchPattern": "'greetings.goodEvening'"
+    },
+    {
+      "key": "greetings.goodNight",
+      "foundInFile": "src/utils/dateUtils.ts",
+      "matchPattern": "'greetings.goodNight'"
+    },
+    {
+      "key": "navigation.groups",
+      "foundInFile": "src/screens/partner/ClientScreen/AddClientScreen.tsx",
+      "matchPattern": "partial: groups"
+    },
+    {
+      "key": "navigation.drawer.home",
+      "foundInFile": "src/components/GetIcon.tsx",
+      "matchPattern": "partial: home"
+    },
+    {
+      "key": "navigation.drawer.groups",
+      "foundInFile": "src/navigator/PartnerNavigator.tsx",
+      "matchPattern": "t('navigation.drawer.groups')"
+    },
+    {
+      "key": "navigation.drawer.teams",
+      "foundInFile": "src/navigator/PartnerNavigator.tsx",
+      "matchPattern": "t('navigation.drawer.teams')"
+    },
+    {
+      "key": "navigation.drawer.content",
+      "foundInFile": "src/navigator/PartnerNavigator.tsx",
+      "matchPattern": "t('navigation.drawer.content')"
+    },
+    {
+      "key": "navigation.drawer.settings",
+      "foundInFile": "src/components/GetIcon.tsx",
+      "matchPattern": "partial: settings"
+    },
+    {
+      "key": "navigation.drawer.buyPremium",
+      "foundInFile": "src/components/CustomDrawerContent.tsx",
+      "matchPattern": "'navigation.drawer.buyPremium'"
+    },
+    {
+      "key": "navigation.drawer.payments",
+      "foundInFile": "src/components/CustomDrawerContent.tsx",
+      "matchPattern": "'navigation.drawer.payments'"
+    },
+    {
+      "key": "navigation.drawer.helpCenter",
+      "foundInFile": "src/components/CustomDrawerContent.tsx",
+      "matchPattern": "'navigation.drawer.helpCenter'"
+    },
+    {
+      "key": "navigation.drawer.chatWithUs",
+      "foundInFile": "src/components/CustomDrawerContent.tsx",
+      "matchPattern": "'navigation.drawer.chatWithUs'"
+    },
+    {
+      "key": "navigation.drawer.logout",
+      "foundInFile": "src/components/CustomDrawerContent.tsx",
+      "matchPattern": "'navigation.drawer.logout'"
+    },
+    {
+      "key": "navigation.drawer.logoutConfirmation",
+      "foundInFile": "src/components/CustomDrawerContent.tsx",
+      "matchPattern": "'navigation.drawer.logoutConfirmation'"
+    },
+    {
+      "key": "navigation.drawer.loggingOut",
+      "foundInFile": "src/components/CustomDrawerContent.tsx",
+      "matchPattern": "'navigation.drawer.loggingOut'"
+    },
+    {
+      "key": "navigation.drawer.underDevelopment",
+      "foundInFile": "src/components/CustomDrawerContent.tsx",
+      "matchPattern": "'navigation.drawer.underDevelopment'"
+    },
+    {
+      "key": "navigation.paymentTabs.plans",
+      "foundInFile": "src/navigator/components/PaymentBottomTabs.tsx",
+      "matchPattern": "'navigation.paymentTabs.plans'"
+    },
+    {
+      "key": "navigation.paymentTabs.transactions",
+      "foundInFile": "src/navigator/components/PaymentBottomTabs.tsx",
+      "matchPattern": "'navigation.paymentTabs.transactions'"
+    },
+    {
+      "key": "navigation.bottomTab.followUp",
+      "foundInFile": "src/navigator/components/PartnerBottomTabs.tsx",
+      "matchPattern": "'navigation.bottomTab.followUp'"
+    },
+    {
+      "key": "navigation.bottomTab.clients",
+      "foundInFile": "src/navigator/components/PartnerBottomTabs.tsx",
+      "matchPattern": "'navigation.bottomTab.clients'"
+    },
+    {
+      "key": "navigation.bottomTab.add",
+      "foundInFile": "src/navigator/components/PartnerBottomTabs.tsx",
+      "matchPattern": "'navigation.bottomTab.add'"
+    },
+    {
+      "key": "navigation.bottomTab.listings",
+      "foundInFile": "src/navigator/components/PartnerBottomTabs.tsx",
+      "matchPattern": "'navigation.bottomTab.listings'"
+    },
+    {
+      "key": "navigation.bottomTab.groups",
+      "foundInFile": "src/screens/partner/ClientScreen/AddClientScreen.tsx",
+      "matchPattern": "partial: groups"
+    },
+    {
+      "key": "navigation.bottomTab.agentData",
+      "foundInFile": "src/navigator/components/PartnerBottomTabs.tsx",
+      "matchPattern": "'navigation.bottomTab.agentData'"
+    },
+    {
+      "key": "navigation.bottomTab.dashboard",
+      "foundInFile": "src/navigator/components/BuyerBottomTabs.tsx",
+      "matchPattern": "t('navigation.bottomTab.dashboard')"
+    },
+    {
+      "key": "navigation.bottomTab.contacted",
+      "foundInFile": "src/navigator/components/BuyerBottomTabs.tsx",
+      "matchPattern": "t('navigation.bottomTab.contacted')"
+    },
+    {
+      "key": "navigation.bottomTab.searchProperty",
+      "foundInFile": "src/navigator/components/BuyerBottomTabs.tsx",
+      "matchPattern": "t('navigation.bottomTab.searchProperty')"
+    },
+    {
+      "key": "navigation.bottomTab.contactUs",
+      "foundInFile": "src/navigator/components/BuyerBottomTabs.tsx",
+      "matchPattern": "t('navigation.bottomTab.contactUs')"
+    },
+    {
+      "key": "navigation.bottomTab.profile",
+      "foundInFile": "src/navigator/components/BuyerBottomTabs.tsx",
+      "matchPattern": "t('navigation.bottomTab.profile')"
+    },
+    {
+      "key": "logout.title",
+      "foundInFile": "src/navigator/MainNavigator.tsx",
+      "matchPattern": "'logout.title'"
+    },
+    {
+      "key": "logout.confirm",
+      "foundInFile": "src/navigator/MainNavigator.tsx",
+      "matchPattern": "'logout.confirm'"
+    },
+    {
+      "key": "logout.action",
+      "foundInFile": "src/navigator/MainNavigator.tsx",
+      "matchPattern": "'logout.action'"
+    },
+    {
+      "key": "dashboard.welcome.back",
+      "foundInFile": "src/components/GetIcon.tsx",
+      "matchPattern": "partial: back"
+    },
+    {
+      "key": "dashboard.welcome.subtitle",
+      "foundInFile": "src/screens/buyer/BuyerDashboard.tsx",
+      "matchPattern": "t('dashboard.welcome.subtitle')"
+    },
+    {
+      "key": "dashboard.sections.quickActions",
+      "foundInFile": "src/screens/buyer/BuyerDashboard.tsx",
+      "matchPattern": "t('dashboard.sections.quickActions')"
+    },
+    {
+      "key": "dashboard.sections.propertiesForSale",
+      "foundInFile": "src/screens/buyer/BuyerDashboard.tsx",
+      "matchPattern": "t('dashboard.sections.propertiesForSale')"
+    },
+    {
+      "key": "dashboard.sections.propertiesForRent",
+      "foundInFile": "src/screens/buyer/BuyerDashboard.tsx",
+      "matchPattern": "t('dashboard.sections.propertiesForRent')"
+    },
+    {
+      "key": "dashboard.sections.recentlyContacted",
+      "foundInFile": "src/screens/buyer/BuyerDashboard.tsx",
+      "matchPattern": "t('dashboard.sections.recentlyContacted')"
+    },
+    {
+      "key": "dashboard.sections.featuredProperties",
+      "foundInFile": "src/screens/buyer/BuyerDashboard.tsx",
+      "matchPattern": "t('dashboard.sections.featuredProperties')"
+    },
+    {
+      "key": "dashboard.actions.seeAll",
+      "foundInFile": "src/screens/buyer/BuyerDashboard.tsx",
+      "matchPattern": "t('dashboard.actions.seeAll')"
+    },
+    {
+      "key": "dashboard.actions.sendEnquiry",
+      "foundInFile": "src/screens/buyer/BuyerDashboard.tsx",
+      "matchPattern": "t('dashboard.actions.sendEnquiry')"
+    },
+    {
+      "key": "dashboard.actions.startSearching",
+      "foundInFile": "src/screens/buyer/BuyerDashboard.tsx",
+      "matchPattern": "t('dashboard.actions.startSearching')"
+    },
+    {
+      "key": "dashboard.stats.contactedProperties",
+      "foundInFile": "src/screens/buyer/BuyerDashboard.tsx",
+      "matchPattern": "t('dashboard.stats.contactedProperties')"
+    },
+    {
+      "key": "dashboard.stats.forSaleProperties",
+      "foundInFile": "src/screens/buyer/BuyerDashboard.tsx",
+      "matchPattern": "t('dashboard.stats.forSaleProperties')"
+    },
+    {
+      "key": "dashboard.stats.forRentProperties",
+      "foundInFile": "src/screens/buyer/BuyerDashboard.tsx",
+      "matchPattern": "t('dashboard.stats.forRentProperties')"
+    },
+    {
+      "key": "dashboard.stats.featuredProperties",
+      "foundInFile": "src/screens/buyer/BuyerDashboard.tsx",
+      "matchPattern": "t('dashboard.stats.featuredProperties')"
+    },
+    {
+      "key": "dashboard.quickActions.searchProperties",
+      "foundInFile": "src/screens/buyer/BuyerDashboard.tsx",
+      "matchPattern": "t('dashboard.quickActions.searchProperties')"
+    },
+    {
+      "key": "dashboard.quickActions.myContacts",
+      "foundInFile": "src/screens/buyer/BuyerDashboard.tsx",
+      "matchPattern": "t('dashboard.quickActions.myContacts')"
+    },
+    {
+      "key": "dashboard.quickActions.contactUs",
+      "foundInFile": "src/screens/buyer/BuyerDashboard.tsx",
+      "matchPattern": "t('dashboard.quickActions.contactUs')"
+    },
+    {
+      "key": "dashboard.loading.text",
+      "foundInFile": "src/screens/buyer/BuyerDashboard.tsx",
+      "matchPattern": "t('dashboard.loading.text')"
+    },
+    {
+      "key": "dashboard.error.retry",
+      "foundInFile": "src/screens/buyer/BuyerDashboard.tsx",
+      "matchPattern": "t('dashboard.error.retry')"
+    },
+    {
+      "key": "dashboard.emptyState.title",
+      "foundInFile": "src/screens/buyer/BuyerDashboard.tsx",
+      "matchPattern": "t('dashboard.emptyState.title')"
+    },
+    {
+      "key": "dashboard.emptyState.message",
+      "foundInFile": "src/components/ContactScreen.tsx",
+      "matchPattern": "partial: message"
+    },
+    {
+      "key": "dashboard.labels.featured",
+      "foundInFile": "src/screens/buyer/BuyerDashboard.tsx",
+      "matchPattern": "t('dashboard.labels.featured')"
+    },
+    {
+      "key": "dashboard.labels.unnamedProperty",
+      "foundInFile": "src/screens/buyer/BuyerDashboard.tsx",
+      "matchPattern": "t('dashboard.labels.unnamedProperty')"
+    },
+    {
+      "key": "dashboard.labels.locationNotSpecified",
+      "foundInFile": "src/screens/buyer/BuyerDashboard.tsx",
+      "matchPattern": "t('dashboard.labels.locationNotSpecified')"
+    },
+    {
+      "key": "dashboard.labels.priceNotAvailable",
+      "foundInFile": "src/screens/buyer/BuyerDashboard.tsx",
+      "matchPattern": "t('dashboard.labels.priceNotAvailable')"
+    },
+    {
+      "key": "contactedProperties.header.title",
+      "foundInFile": "src/screens/buyer/ContactedPropertiesScreen.tsx",
+      "matchPattern": "t('contactedProperties.header.title')"
+    },
+    {
+      "key": "contactedProperties.header.subtitle",
+      "foundInFile": "src/screens/buyer/ContactedPropertiesScreen.tsx",
+      "matchPattern": "t('contactedProperties.header.subtitle')"
+    },
+    {
+      "key": "contactedProperties.stats.totalContacts",
+      "foundInFile": "src/screens/buyer/ContactedPropertiesScreen.tsx",
+      "matchPattern": "t('contactedProperties.stats.totalContacts')"
+    },
+    {
+      "key": "contactedProperties.stats.forSale",
+      "foundInFile": "src/screens/buyer/ContactedPropertiesScreen.tsx",
+      "matchPattern": "t('contactedProperties.stats.forSale')"
+    },
+    {
+      "key": "contactedProperties.stats.forRent",
+      "foundInFile": "src/screens/buyer/ContactedPropertiesScreen.tsx",
+      "matchPattern": "t('contactedProperties.stats.forRent')"
+    },
+    {
+      "key": "contactedProperties.sections.recentContacts",
+      "foundInFile": "src/screens/buyer/ContactedPropertiesScreen.tsx",
+      "matchPattern": "t('contactedProperties.sections.recentContacts')"
+    },
+    {
+      "key": "contactedProperties.labels.contacted",
+      "foundInFile": "src/screens/buyer/BuyerDashboard.tsx",
+      "matchPattern": "partial: contacted"
+    },
+    {
+      "key": "contactedProperties.labels.contactedOn",
+      "foundInFile": "src/screens/buyer/ContactedPropertiesScreen.tsx",
+      "matchPattern": "t('contactedProperties.labels.contactedOn')"
+    },
+    {
+      "key": "contactedProperties.labels.loadingMore",
+      "foundInFile": "src/screens/buyer/ContactedPropertiesScreen.tsx",
+      "matchPattern": "t('contactedProperties.labels.loadingMore')"
+    },
+    {
+      "key": "contactedProperties.labels.loadingProperties",
+      "foundInFile": "src/screens/buyer/ContactedPropertiesScreen.tsx",
+      "matchPattern": "t('contactedProperties.labels.loadingProperties')"
+    },
+    {
+      "key": "contactedProperties.labels.noProperties",
+      "foundInFile": "src/screens/buyer/ContactedPropertiesScreen.tsx",
+      "matchPattern": "t('contactedProperties.labels.noProperties')"
+    },
+    {
+      "key": "contactedProperties.labels.failedToLoad",
+      "foundInFile": "src/screens/buyer/ContactedPropertiesScreen.tsx",
+      "matchPattern": "t('contactedProperties.labels.failedToLoad')"
+    },
+    {
+      "key": "contactedProperties.labels.tryAgain",
+      "foundInFile": "src/screens/buyer/ContactedPropertiesScreen.tsx",
+      "matchPattern": "t('contactedProperties.labels.tryAgain')"
+    },
+    {
+      "key": "searchProperties.header.title",
+      "foundInFile": "src/screens/buyer/SearchProperties/SearchPropertiesScreen.tsx",
+      "matchPattern": "t('searchProperties.header.title')"
+    },
+    {
+      "key": "searchProperties.header.subtitle",
+      "foundInFile": "src/screens/buyer/SearchProperties/SearchPropertiesScreen.tsx",
+      "matchPattern": "t('searchProperties.header.subtitle')"
+    },
+    {
+      "key": "searchProperties.search.placeholder",
+      "foundInFile": "src/screens/buyer/SearchProperties/SearchPropertiesScreen.tsx",
+      "matchPattern": "t('searchProperties.search.placeholder')"
+    },
+    {
+      "key": "searchProperties.search.properties",
+      "foundInFile": "src/screens/buyer/BuyerProfileScreen.tsx",
+      "matchPattern": "partial: properties"
+    },
+    {
+      "key": "searchProperties.messages.loadingProperties",
+      "foundInFile": "src/screens/buyer/SearchProperties/SearchPropertiesScreen.tsx",
+      "matchPattern": "t('searchProperties.messages.loadingProperties')"
+    },
+    {
+      "key": "searchProperties.messages.noProperties",
+      "foundInFile": "src/screens/buyer/SearchProperties/SearchPropertiesScreen.tsx",
+      "matchPattern": "t('searchProperties.messages.noProperties')"
+    },
+    {
+      "key": "searchProperties.messages.loadingMore",
+      "foundInFile": "src/screens/buyer/SearchProperties/SearchPropertiesScreen.tsx",
+      "matchPattern": "t('searchProperties.messages.loadingMore')"
+    },
+    {
+      "key": "searchProperties.messages.loginRequired",
+      "foundInFile": "src/screens/buyer/SearchProperties/SearchPropertiesScreen.tsx",
+      "matchPattern": "t('searchProperties.messages.loginRequired')"
+    },
+    {
+      "key": "searchProperties.messages.enquirySuccess",
+      "foundInFile": "src/screens/buyer/SearchProperties/SearchPropertiesScreen.tsx",
+      "matchPattern": "t('searchProperties.messages.enquirySuccess')"
+    },
+    {
+      "key": "searchProperties.messages.enquirySuccessSub",
+      "foundInFile": "src/screens/buyer/SearchProperties/SearchPropertiesScreen.tsx",
+      "matchPattern": "t('searchProperties.messages.enquirySuccessSub')"
+    },
+    {
+      "key": "searchProperties.messages.enquiryError",
+      "foundInFile": "src/screens/buyer/SearchProperties/SearchPropertiesScreen.tsx",
+      "matchPattern": "t('searchProperties.messages.enquiryError')"
+    },
+    {
+      "key": "searchProperties.messages.enquiryErrorSub",
+      "foundInFile": "src/screens/buyer/SearchProperties/SearchPropertiesScreen.tsx",
+      "matchPattern": "t('searchProperties.messages.enquiryErrorSub')"
+    },
+    {
+      "key": "searchProperties.messages.enquiryFailed",
+      "foundInFile": "src/screens/buyer/SearchProperties/SearchPropertiesScreen.tsx",
+      "matchPattern": "t('searchProperties.messages.enquiryFailed')"
+    },
+    {
+      "key": "searchProperties.messages.propertiesCount",
+      "foundInFile": "src/screens/buyer/SearchProperties/SearchPropertiesScreen.tsx",
+      "matchPattern": "'searchProperties.messages.propertiesCount'"
+    },
+    {
+      "key": "propertyCard.propertyType.forSale",
+      "foundInFile": "src/screens/buyer/SearchProperties/components/PropertyCard.tsx",
+      "matchPattern": "t('propertyCard.propertyType.forSale')"
+    },
+    {
+      "key": "propertyCard.propertyType.forRent",
+      "foundInFile": "src/screens/buyer/SearchProperties/components/PropertyCard.tsx",
+      "matchPattern": "t('propertyCard.propertyType.forRent')"
+    },
+    {
+      "key": "propertyCard.propertyType.others",
+      "foundInFile": "src/screens/buyer/SearchProperties/components/PropertyCard.tsx",
+      "matchPattern": "t('propertyCard.propertyType.others')"
+    },
+    {
+      "key": "filterModal.labels.propertyType",
+      "foundInFile": "src/screens/buyer/SearchProperties/components/FilterModal.tsx",
+      "matchPattern": "t('filterModal.labels.propertyType')"
+    },
+    {
+      "key": "filterModal.labels.bhkType",
+      "foundInFile": "src/screens/buyer/SearchProperties/components/FilterModal.tsx",
+      "matchPattern": "t('filterModal.labels.bhkType')"
+    },
+    {
+      "key": "filterModal.labels.furnishing",
+      "foundInFile": "src/screens/buyer/SearchProperties/components/FilterModal.tsx",
+      "matchPattern": "t('filterModal.labels.furnishing')"
+    },
+    {
+      "key": "filterModal.labels.city",
+      "foundInFile": "src/screens/buyer/SearchProperties/components/FilterModal.tsx",
+      "matchPattern": "t('filterModal.labels.city')"
+    },
+    {
+      "key": "filterModal.buttons.clearAll",
+      "foundInFile": "src/screens/buyer/SearchProperties/components/FilterModal.tsx",
+      "matchPattern": "t('filterModal.buttons.clearAll')"
+    },
+    {
+      "key": "filterModal.buttons.applyFilters",
+      "foundInFile": "src/screens/buyer/SearchProperties/components/FilterModal.tsx",
+      "matchPattern": "t('filterModal.buttons.applyFilters')"
+    },
+    {
+      "key": "sortModal.options.newestFirst",
+      "foundInFile": "src/screens/buyer/SearchProperties/components/SortModal.tsx",
+      "matchPattern": "t('sortModal.options.newestFirst')"
+    },
+    {
+      "key": "sortModal.options.priceLowToHigh",
+      "foundInFile": "src/screens/buyer/SearchProperties/components/SortModal.tsx",
+      "matchPattern": "t('sortModal.options.priceLowToHigh')"
+    },
+    {
+      "key": "sortModal.options.priceHighToLow",
+      "foundInFile": "src/screens/buyer/SearchProperties/components/SortModal.tsx",
+      "matchPattern": "t('sortModal.options.priceHighToLow')"
+    },
+    {
+      "key": "sortModal.options.areaLowToHigh",
+      "foundInFile": "src/screens/buyer/SearchProperties/components/SortModal.tsx",
+      "matchPattern": "t('sortModal.options.areaLowToHigh')"
+    },
+    {
+      "key": "sortModal.options.areaHighToLow",
+      "foundInFile": "src/screens/buyer/SearchProperties/components/SortModal.tsx",
+      "matchPattern": "t('sortModal.options.areaHighToLow')"
+    },
+    {
+      "key": "propertyTypeToggle.all",
+      "foundInFile": "src/screens/buyer/SearchProperties/components/PropertyTypeToggle.tsx",
+      "matchPattern": "t('propertyTypeToggle.all')"
+    },
+    {
+      "key": "propertyTypeToggle.forSale",
+      "foundInFile": "src/screens/buyer/SearchProperties/components/PropertyTypeToggle.tsx",
+      "matchPattern": "t('propertyTypeToggle.forSale')"
+    },
+    {
+      "key": "propertyTypeToggle.forRent",
+      "foundInFile": "src/screens/buyer/SearchProperties/components/PropertyTypeToggle.tsx",
+      "matchPattern": "t('propertyTypeToggle.forRent')"
+    },
+    {
+      "key": "propertyTypeToggle.others",
+      "foundInFile": "src/screens/buyer/SearchProperties/components/PropertyTypeToggle.tsx",
+      "matchPattern": "t('propertyTypeToggle.others')"
+    },
+    {
+      "key": "propertyDetailModal.videoTour",
+      "foundInFile": "src/screens/buyer/SearchProperties/components/PropertyDetailModal.tsx",
+      "matchPattern": "t('propertyDetailModal.videoTour')"
+    },
+    {
+      "key": "propertyDetailModal.propertyName",
+      "foundInFile": "src/screens/buyer/SearchProperties/components/PropertyDetailModal.tsx",
+      "matchPattern": "t('propertyDetailModal.propertyName')"
+    },
+    {
+      "key": "propertyDetailModal.locationNotSpecified",
+      "foundInFile": "src/screens/buyer/SearchProperties/components/PropertyDetailModal.tsx",
+      "matchPattern": "t('propertyDetailModal.locationNotSpecified')"
+    },
+    {
+      "key": "propertyDetailModal.sections.description",
+      "foundInFile": "src/screens/buyer/SearchProperties/components/PropertyDetailModal.tsx",
+      "matchPattern": "t('propertyDetailModal.sections.description')"
+    },
+    {
+      "key": "propertyDetailModal.sections.features",
+      "foundInFile": "src/screens/buyer/SearchProperties/components/PropertyDetailModal.tsx",
+      "matchPattern": "t('propertyDetailModal.sections.features')"
+    },
+    {
+      "key": "propertyDetailModal.sections.specifications",
+      "foundInFile": "src/screens/buyer/SearchProperties/components/PropertyDetailModal.tsx",
+      "matchPattern": "t('propertyDetailModal.sections.specifications')"
+    },
+    {
+      "key": "propertyDetailModal.sections.tags",
+      "foundInFile": "src/screens/buyer/SearchProperties/components/PropertyDetailModal.tsx",
+      "matchPattern": "t('propertyDetailModal.sections.tags')"
+    },
+    {
+      "key": "propertyDetailModal.sections.sellerInformation",
+      "foundInFile": "src/screens/buyer/SearchProperties/components/PropertyDetailModal.tsx",
+      "matchPattern": "t('propertyDetailModal.sections.sellerInformation')"
+    },
+    {
+      "key": "propertyDetailModal.labels.area",
+      "foundInFile": "src/components/GetIcon.tsx",
+      "matchPattern": "partial: area"
+    },
+    {
+      "key": "propertyDetailModal.labels.facing",
+      "foundInFile": "src/screens/partner/components/PartnerPropertyForm/components/PropertyFieldRenderer.tsx",
+      "matchPattern": "partial: facing"
+    },
+    {
+      "key": "propertyDetailModal.labels.furnishing",
+      "foundInFile": "src/screens/buyer/SearchProperties/components/FilterModal.tsx",
+      "matchPattern": "partial: furnishing"
+    },
+    {
+      "key": "propertyDetailModal.labels.floor",
+      "foundInFile": "src/screens/buyer/SearchProperties/components/PropertyDetailModal.tsx",
+      "matchPattern": "t('propertyDetailModal.labels.floor')"
+    },
+    {
+      "key": "propertyDetailModal.labels.propertyAge",
+      "foundInFile": "src/screens/buyer/SearchProperties/components/PropertyDetailModal.tsx",
+      "matchPattern": "t('propertyDetailModal.labels.propertyAge')"
+    },
+    {
+      "key": "propertyDetailModal.labels.sellerType",
+      "foundInFile": "src/screens/buyer/SearchProperties/components/PropertyDetailModal.tsx",
+      "matchPattern": "t('propertyDetailModal.labels.sellerType')"
+    },
+    {
+      "key": "propertyDetailModal.labels.sellerName",
+      "foundInFile": "src/screens/buyer/SearchProperties/components/PropertyDetailModal.tsx",
+      "matchPattern": "t('propertyDetailModal.labels.sellerName')"
+    },
+    {
+      "key": "propertyDetailModal.labels.individual",
+      "foundInFile": "src/screens/buyer/SearchProperties/components/PropertyDetailModal.tsx",
+      "matchPattern": "t('propertyDetailModal.labels.individual')"
+    },
+    {
+      "key": "propertyDetailModal.labels.contactNotAvailable",
+      "foundInFile": "src/screens/buyer/SearchProperties/components/PropertyDetailModal.tsx",
+      "matchPattern": "t('propertyDetailModal.labels.contactNotAvailable')"
+    },
+    {
+      "key": "propertyDetailModal.features.parking",
+      "foundInFile": "src/screens/buyer/SearchProperties/components/PropertyDetailModal.tsx",
+      "matchPattern": "t('propertyDetailModal.features.parking')"
+    },
+    {
+      "key": "propertyDetailModal.features.lift",
+      "foundInFile": "src/screens/buyer/SearchProperties/components/PropertyDetailModal.tsx",
+      "matchPattern": "t('propertyDetailModal.features.lift')"
+    },
+    {
+      "key": "propertyDetailModal.features.security",
+      "foundInFile": "src/screens/buyer/SearchProperties/components/PropertyDetailModal.tsx",
+      "matchPattern": "t('propertyDetailModal.features.security')"
+    },
+    {
+      "key": "propertyDetailModal.features.alarm",
+      "foundInFile": "src/screens/buyer/SearchProperties/components/PropertyDetailModal.tsx",
+      "matchPattern": "t('propertyDetailModal.features.alarm')"
+    },
+    {
+      "key": "propertyDetailModal.features.readyToMove",
+      "foundInFile": "src/screens/buyer/SearchProperties/components/PropertyDetailModal.tsx",
+      "matchPattern": "t('propertyDetailModal.features.readyToMove')"
+    },
+    {
+      "key": "propertyDetailModal.features.constructionDone",
+      "foundInFile": "src/screens/buyer/SearchProperties/components/PropertyDetailModal.tsx",
+      "matchPattern": "t('propertyDetailModal.features.constructionDone')"
+    },
+    {
+      "key": "propertyDetailModal.features.boundaryWall",
+      "foundInFile": "src/screens/buyer/SearchProperties/components/PropertyDetailModal.tsx",
+      "matchPattern": "t('propertyDetailModal.features.boundaryWall')"
+    },
+    {
+      "key": "propertyDetailModal.features.surveillance",
+      "foundInFile": "src/screens/buyer/SearchProperties/components/PropertyDetailModal.tsx",
+      "matchPattern": "t('propertyDetailModal.features.surveillance')"
+    },
+    {
+      "key": "propertyDetailModal.buttons.enquiryNow",
+      "foundInFile": "src/screens/buyer/SearchProperties/components/PropertyDetailModal.tsx",
+      "matchPattern": "t('propertyDetailModal.buttons.enquiryNow')"
+    },
+    {
+      "key": "teams.headers.addMember",
+      "foundInFile": "src/screens/partner/TeamsScreen/AddTeamScreen.tsx",
+      "matchPattern": "'teams.headers.addMember'"
+    },
+    {
+      "key": "teams.headers.editMember",
+      "foundInFile": "src/screens/partner/TeamsScreen/AddTeamScreen.tsx",
+      "matchPattern": "'teams.headers.editMember'"
+    },
+    {
+      "key": "teams.labels.member",
+      "foundInFile": "src/screens/partner/TeamsScreen/components/TeamHeader.tsx",
+      "matchPattern": "'teams.labels.member'"
+    },
+    {
+      "key": "teams.labels.members",
+      "foundInFile": "src/screens/partner/TeamsScreen/components/TeamHeader.tsx",
+      "matchPattern": "'teams.labels.members'"
+    },
+    {
+      "key": "teams.labels.email",
+      "foundInFile": "src/components/ContactScreen.tsx",
+      "matchPattern": "partial: email"
+    },
+    {
+      "key": "teams.labels.phone",
+      "foundInFile": "src/components/ContactScreen.tsx",
+      "matchPattern": "partial: phone"
+    },
+    {
+      "key": "teams.labels.role",
+      "foundInFile": "src/screens/partner/TeamsScreen/components/TeamMemberCard.tsx",
+      "matchPattern": "'teams.labels.role'"
+    },
+    {
+      "key": "teams.labels.location",
+      "foundInFile": "src/components/EditProfileComponent.tsx",
+      "matchPattern": "partial: location"
+    },
+    {
+      "key": "teams.labels.fullName",
+      "foundInFile": "src/screens/partner/TeamsScreen/AddTeamScreen.tsx",
+      "matchPattern": "'teams.labels.fullName'"
+    },
+    {
+      "key": "teams.labels.fullNameEdit",
+      "foundInFile": "src/screens/partner/TeamsScreen/AddTeamScreen.tsx",
+      "matchPattern": "'teams.labels.fullNameEdit'"
+    },
+    {
+      "key": "teams.labels.emailEdit",
+      "foundInFile": "src/screens/partner/TeamsScreen/AddTeamScreen.tsx",
+      "matchPattern": "'teams.labels.emailEdit'"
+    },
+    {
+      "key": "teams.labels.phoneEdit",
+      "foundInFile": "src/screens/partner/TeamsScreen/AddTeamScreen.tsx",
+      "matchPattern": "'teams.labels.phoneEdit'"
+    },
+    {
+      "key": "teams.labels.locationEdit",
+      "foundInFile": "src/screens/partner/TeamsScreen/AddTeamScreen.tsx",
+      "matchPattern": "'teams.labels.locationEdit'"
+    },
+    {
+      "key": "teams.placeholders.fullName",
+      "foundInFile": "src/screens/partner/TeamsScreen/AddTeamScreen.tsx",
+      "matchPattern": "'teams.placeholders.fullName'"
+    },
+    {
+      "key": "teams.placeholders.editFullName",
+      "foundInFile": "src/screens/partner/TeamsScreen/AddTeamScreen.tsx",
+      "matchPattern": "'teams.placeholders.editFullName'"
+    },
+    {
+      "key": "teams.placeholders.email",
+      "foundInFile": "src/components/ContactScreen.tsx",
+      "matchPattern": "partial: email"
+    },
+    {
+      "key": "teams.placeholders.editEmail",
+      "foundInFile": "src/screens/partner/TeamsScreen/AddTeamScreen.tsx",
+      "matchPattern": "'teams.placeholders.editEmail'"
+    },
+    {
+      "key": "teams.placeholders.phone",
+      "foundInFile": "src/components/ContactScreen.tsx",
+      "matchPattern": "partial: phone"
+    },
+    {
+      "key": "teams.placeholders.editPhone",
+      "foundInFile": "src/screens/partner/TeamsScreen/AddTeamScreen.tsx",
+      "matchPattern": "'teams.placeholders.editPhone'"
+    },
+    {
+      "key": "teams.placeholders.location",
+      "foundInFile": "src/components/EditProfileComponent.tsx",
+      "matchPattern": "partial: location"
+    },
+    {
+      "key": "teams.placeholders.editLocation",
+      "foundInFile": "src/screens/partner/TeamsScreen/AddTeamScreen.tsx",
+      "matchPattern": "'teams.placeholders.editLocation'"
+    },
+    {
+      "key": "teams.status.active",
+      "foundInFile": "src/components/EditProfileComponent.tsx",
+      "matchPattern": "partial: active"
+    },
+    {
+      "key": "teams.status.inactive",
+      "foundInFile": "src/screens/partner/TeamsScreen/components/TeamMemberCard.tsx",
+      "matchPattern": "'teams.status.inactive'"
+    },
+    {
+      "key": "teams.messages.noMembersFound",
+      "foundInFile": "src/screens/partner/TeamsScreen/TeamsScreen.tsx",
+      "matchPattern": "'teams.messages.noMembersFound'"
+    },
+    {
+      "key": "teams.messages.memberAdded",
+      "foundInFile": "src/screens/partner/TeamsScreen/AddTeamScreen.tsx",
+      "matchPattern": "'teams.messages.memberAdded'"
+    },
+    {
+      "key": "teams.messages.memberUpdated",
+      "foundInFile": "src/screens/partner/TeamsScreen/AddTeamScreen.tsx",
+      "matchPattern": "'teams.messages.memberUpdated'"
+    },
+    {
+      "key": "teams.states.loadingMembers",
+      "foundInFile": "src/screens/partner/TeamsScreen/TeamsScreen.tsx",
+      "matchPattern": "'teams.states.loadingMembers'"
+    },
+    {
+      "key": "teams.errors.userIdNotAvailable",
+      "foundInFile": "src/screens/partner/TeamsScreen/TeamsScreen.tsx",
+      "matchPattern": "'teams.errors.userIdNotAvailable'"
+    },
+    {
+      "key": "teams.errors.fetchFailed",
+      "foundInFile": "src/screens/partner/TeamsScreen/TeamsScreen.tsx",
+      "matchPattern": "'teams.errors.fetchFailed'"
+    },
+    {
+      "key": "teams.errors.userIdRequired",
+      "foundInFile": "src/screens/partner/TeamsScreen/AddTeamScreen.tsx",
+      "matchPattern": "'teams.errors.userIdRequired'"
+    },
+    {
+      "key": "teams.errors.updateFailed",
+      "foundInFile": "src/screens/partner/TeamsScreen/AddTeamScreen.tsx",
+      "matchPattern": "'teams.errors.updateFailed'"
+    },
+    {
+      "key": "teams.errors.addFailed",
+      "foundInFile": "src/screens/partner/TeamsScreen/AddTeamScreen.tsx",
+      "matchPattern": "'teams.errors.addFailed'"
+    },
+    {
+      "key": "teams.modals.deleteMember.title",
+      "foundInFile": "src/screens/partner/TeamsScreen/components/TeamMemberCard.tsx",
+      "matchPattern": "'teams.modals.deleteMember.title'"
+    },
+    {
+      "key": "teams.modals.deleteMember.message",
+      "foundInFile": "src/components/ContactScreen.tsx",
+      "matchPattern": "partial: message"
+    },
+    {
+      "key": "auth.signIn.partner",
+      "foundInFile": "src/components/GetIcon.tsx",
+      "matchPattern": "partial: partner"
+    },
+    {
+      "key": "auth.signIn.buyerSeller",
+      "foundInFile": "src/screens/auth/EmailScreen.tsx",
+      "matchPattern": "t('auth.signIn.buyerSeller')"
+    },
+    {
+      "key": "auth.signIn.dashboard",
+      "foundInFile": "src/screens/auth/PartnerLoginScreen.tsx",
+      "matchPattern": "t('auth.signIn.dashboard')"
+    },
+    {
+      "key": "auth.signIn.continueToLogin",
+      "foundInFile": "src/screens/auth/MainScreen.tsx",
+      "matchPattern": "t('auth.signIn.continueToLogin')"
+    },
+    {
+      "key": "auth.signIn.getStartedFree",
+      "foundInFile": "src/screens/auth/MainScreen.tsx",
+      "matchPattern": "t('auth.signIn.getStartedFree')"
+    },
+    {
+      "key": "auth.signIn.securePartnerAccess",
+      "foundInFile": "src/screens/auth/MainScreen.tsx",
+      "matchPattern": "t('auth.signIn.securePartnerAccess')"
+    },
+    {
+      "key": "auth.email.placeholder",
+      "foundInFile": "src/screens/auth/EmailScreen.tsx",
+      "matchPattern": "t('auth.email.placeholder')"
+    },
+    {
+      "key": "auth.email.enterToContinue",
+      "foundInFile": "src/screens/auth/EmailScreen.tsx",
+      "matchPattern": "t('auth.email.enterToContinue')"
+    },
+    {
+      "key": "auth.otp.title",
+      "foundInFile": "src/screens/auth/OtpScreen.tsx",
+      "matchPattern": "t('auth.otp.title')"
+    },
+    {
+      "key": "auth.otp.enter",
+      "foundInFile": "src/components/OtpModel.tsx",
+      "matchPattern": "t('auth.otp.enter')"
+    },
+    {
+      "key": "auth.otp.sentMessage",
+      "foundInFile": "src/components/OtpModel.tsx",
+      "matchPattern": "t('auth.otp.sentMessage')"
+    },
+    {
+      "key": "auth.otp.verify",
+      "foundInFile": "src/components/OtpModel.tsx",
+      "matchPattern": "t('auth.otp.verify')"
+    },
+    {
+      "key": "auth.otp.didntReceive",
+      "foundInFile": "src/components/OtpModel.tsx",
+      "matchPattern": "t('auth.otp.didntReceive')"
+    },
+    {
+      "key": "auth.otp.resend",
+      "foundInFile": "src/components/OtpModel.tsx",
+      "matchPattern": "t('auth.otp.resend')"
+    },
+    {
+      "key": "auth.switchAccount.title",
+      "foundInFile": "src/components/SwitchAccountButton.tsx",
+      "matchPattern": "'auth.switchAccount.title'"
+    },
+    {
+      "key": "auth.switchAccount.confirmMessage",
+      "foundInFile": "src/components/SwitchAccountButton.tsx",
+      "matchPattern": "'auth.switchAccount.confirmMessage'"
+    },
+    {
+      "key": "auth.switchAccount.logout",
+      "foundInFile": "src/components/CustomDrawerContent.tsx",
+      "matchPattern": "partial: logout"
+    },
+    {
+      "key": "auth.signUp.title",
+      "foundInFile": "src/screens/auth/PartnerSignUpScreen.tsx",
+      "matchPattern": "t('auth.signUp.title')"
+    },
+    {
+      "key": "auth.signUp.partner.welcomeTitle",
+      "foundInFile": "src/screens/auth/PartnerSignUpScreen.tsx",
+      "matchPattern": "t('auth.signUp.partner.welcomeTitle')"
+    },
+    {
+      "key": "auth.signUp.partner.nameLabel",
+      "foundInFile": "src/screens/auth/PartnerSignUpScreen.tsx",
+      "matchPattern": "t('auth.signUp.partner.nameLabel')"
+    },
+    {
+      "key": "auth.signUp.partner.namePlaceholder",
+      "foundInFile": "src/screens/auth/PartnerSignUpScreen.tsx",
+      "matchPattern": "t('auth.signUp.partner.namePlaceholder')"
+    },
+    {
+      "key": "auth.signUp.partner.emailLabel",
+      "foundInFile": "src/screens/auth/PartnerSignUpScreen.tsx",
+      "matchPattern": "t('auth.signUp.partner.emailLabel')"
+    },
+    {
+      "key": "auth.signUp.partner.emailPlaceholder",
+      "foundInFile": "src/screens/auth/PartnerSignUpScreen.tsx",
+      "matchPattern": "t('auth.signUp.partner.emailPlaceholder')"
+    },
+    {
+      "key": "auth.signUp.partner.phoneLabel",
+      "foundInFile": "src/screens/auth/PartnerSignUpScreen.tsx",
+      "matchPattern": "t('auth.signUp.partner.phoneLabel')"
+    },
+    {
+      "key": "auth.signUp.partner.phonePlaceholder",
+      "foundInFile": "src/screens/auth/PartnerSignUpScreen.tsx",
+      "matchPattern": "t('auth.signUp.partner.phonePlaceholder')"
+    },
+    {
+      "key": "auth.signUp.partner.zoneLabel",
+      "foundInFile": "src/components/PartnerZoneSelector.tsx",
+      "matchPattern": "t('auth.signUp.partner.zoneLabel')"
+    },
+    {
+      "key": "auth.signUp.partner.signUpButton",
+      "foundInFile": "src/screens/auth/PartnerSignUpScreen.tsx",
+      "matchPattern": "t('auth.signUp.partner.signUpButton')"
+    },
+    {
+      "key": "auth.signUp.partner.creatingAccount",
+      "foundInFile": "src/screens/auth/PartnerSignUpScreen.tsx",
+      "matchPattern": "t('auth.signUp.partner.creatingAccount')"
+    },
+    {
+      "key": "auth.signUp.partner.alreadyHaveAccount",
+      "foundInFile": "src/screens/auth/PartnerSignUpScreen.tsx",
+      "matchPattern": "t('auth.signUp.partner.alreadyHaveAccount')"
+    },
+    {
+      "key": "auth.signUp.partner.logIn",
+      "foundInFile": "src/screens/auth/PartnerSignUpScreen.tsx",
+      "matchPattern": "t('auth.signUp.partner.logIn')"
+    },
+    {
+      "key": "auth.signUp.partner.trialModal.title",
+      "foundInFile": "src/screens/auth/PartnerSignUpScreen.tsx",
+      "matchPattern": "t('auth.signUp.partner.trialModal.title')"
+    },
+    {
+      "key": "auth.signUp.partner.trialModal.message",
+      "foundInFile": "src/components/ContactScreen.tsx",
+      "matchPattern": "partial: message"
+    },
+    {
+      "key": "auth.signUp.partner.trialModal.continue",
+      "foundInFile": "src/screens/auth/PartnerSignUpScreen.tsx",
+      "matchPattern": "t('auth.signUp.partner.trialModal.continue')"
+    },
+    {
+      "key": "auth.signUp.partner.errors.accountExists",
+      "foundInFile": "src/screens/auth/PartnerSignUpScreen.tsx",
+      "matchPattern": "t('auth.signUp.partner.errors.accountExists')"
+    },
+    {
+      "key": "auth.signUp.partner.errors.checkInput",
+      "foundInFile": "src/screens/auth/PartnerSignUpScreen.tsx",
+      "matchPattern": "t('auth.signUp.partner.errors.checkInput')"
+    },
+    {
+      "key": "auth.signUp.partner.errors.generic",
+      "foundInFile": "src/screens/auth/PartnerSignUpScreen.tsx",
+      "matchPattern": "t('auth.signUp.partner.errors.generic')"
+    },
+    {
+      "key": "auth.mainScreen.alreadyHaveAccount",
+      "foundInFile": "src/screens/auth/MainScreen.tsx",
+      "matchPattern": "t('auth.mainScreen.alreadyHaveAccount')"
+    },
+    {
+      "key": "auth.mainScreen.logIn",
+      "foundInFile": "src/screens/auth/MainScreen.tsx",
+      "matchPattern": "t('auth.mainScreen.logIn')"
+    },
+    {
+      "key": "auth.mainScreen.newHere",
+      "foundInFile": "src/screens/auth/MainScreen.tsx",
+      "matchPattern": "t('auth.mainScreen.newHere')"
+    },
+    {
+      "key": "auth.mainScreen.signUpAsBuyer",
+      "foundInFile": "src/screens/auth/MainScreen.tsx",
+      "matchPattern": "t('auth.mainScreen.signUpAsBuyer')"
+    },
+    {
+      "key": "auth.mainScreen.wantToListProperty",
+      "foundInFile": "src/screens/auth/MainScreen.tsx",
+      "matchPattern": "t('auth.mainScreen.wantToListProperty')"
+    },
+    {
+      "key": "auth.mainScreen.signUpAsSeller",
+      "foundInFile": "src/screens/auth/MainScreen.tsx",
+      "matchPattern": "t('auth.mainScreen.signUpAsSeller')"
+    },
+    {
+      "key": "auth.mainScreen.buyerSellerTab",
+      "foundInFile": "src/screens/auth/MainScreen.tsx",
+      "matchPattern": "t('auth.mainScreen.buyerSellerTab')"
+    },
+    {
+      "key": "auth.mainScreen.partnerTab",
+      "foundInFile": "src/screens/auth/MainScreen.tsx",
+      "matchPattern": "t('auth.mainScreen.partnerTab')"
+    },
+    {
+      "key": "auth.accessDenied",
+      "foundInFile": "src/navigator/MainNavigator.tsx",
+      "matchPattern": "'auth.accessDenied'"
+    },
+    {
+      "key": "auth.adminUnauthorized",
+      "foundInFile": "src/navigator/MainNavigator.tsx",
+      "matchPattern": "'auth.adminUnauthorized'"
+    },
+    {
+      "key": "auth.contactAdmin",
+      "foundInFile": "src/navigator/MainNavigator.tsx",
+      "matchPattern": "'auth.contactAdmin'"
+    },
+    {
+      "key": "auth.buyerAccess",
+      "foundInFile": "src/navigator/MainNavigator.tsx",
+      "matchPattern": "'auth.buyerAccess'"
+    },
+    {
+      "key": "auth.buyerNotSupported",
+      "foundInFile": "src/navigator/MainNavigator.tsx",
+      "matchPattern": "'auth.buyerNotSupported'"
+    },
+    {
+      "key": "auth.contactSupport",
+      "foundInFile": "src/navigator/MainNavigator.tsx",
+      "matchPattern": "'auth.contactSupport'"
+    },
+    {
+      "key": "followUp.title",
+      "foundInFile": "src/screens/partner/FollowUpScreen/FollowUpScreen.tsx",
+      "matchPattern": "t('followUp.title')"
+    },
+    {
+      "key": "followUp.toBeScheduledLater",
+      "foundInFile": "src/screens/partner/ClientScreen/components/FollowUpCard.tsx",
+      "matchPattern": "'followUp.toBeScheduledLater'"
+    },
+    {
+      "key": "followUp.noDateSet",
+      "foundInFile": "src/screens/partner/ClientScreen/components/FollowUpCard.tsx",
+      "matchPattern": "'followUp.noDateSet'"
+    },
+    {
+      "key": "followUp.status.overdue",
+      "foundInFile": "src/hooks/useFollowUps.ts",
+      "matchPattern": "partial: overdue"
+    },
+    {
+      "key": "followUp.status.today",
+      "foundInFile": "src/hooks/useFollowUps.ts",
+      "matchPattern": "partial: today"
+    },
+    {
+      "key": "followUp.status.in",
+      "foundInFile": "src/screens/partner/ClientScreen/components/FollowUpCard.tsx",
+      "matchPattern": "'followUp.status.in'"
+    },
+    {
+      "key": "followUp.status.someday",
+      "foundInFile": "src/hooks/useFollowUps.ts",
+      "matchPattern": "partial: someday"
+    },
+    {
+      "key": "followUp.status.noScheduled",
+      "foundInFile": "src/screens/partner/ClientScreen/components/FollowUpCard.tsx",
+      "matchPattern": "'followUp.status.noScheduled'"
+    },
+    {
+      "key": "followUp.card.followUp",
+      "foundInFile": "src/screens/partner/FollowUpScreen/components/FollowUpCard.tsx",
+      "matchPattern": "'followUp.card.followUp'"
+    },
+    {
+      "key": "followUp.card.assigned",
+      "foundInFile": "src/screens/partner/ClientScreen/components/ActivityTimeline.tsx",
+      "matchPattern": "partial: assigned"
+    },
+    {
+      "key": "followUp.overdue.title",
+      "foundInFile": "src/screens/partner/FollowUpScreen/FollowUpScreen.tsx",
+      "matchPattern": "t('followUp.overdue.title')"
+    },
+    {
+      "key": "followUp.overdue.subtitle",
+      "foundInFile": "src/screens/partner/FollowUpScreen/FollowUpScreen.tsx",
+      "matchPattern": "t('followUp.overdue.subtitle')"
+    },
+    {
+      "key": "followUp.overdue.empty",
+      "foundInFile": "src/screens/partner/FollowUpScreen/OverdueFollowUpScreen.tsx",
+      "matchPattern": "'followUp.overdue.empty'"
+    },
+    {
+      "key": "followUp.upcoming.title",
+      "foundInFile": "src/screens/partner/FollowUpScreen/FollowUpScreen.tsx",
+      "matchPattern": "t('followUp.upcoming.title')"
+    },
+    {
+      "key": "followUp.upcoming.subtitle",
+      "foundInFile": "src/screens/partner/FollowUpScreen/FollowUpScreen.tsx",
+      "matchPattern": "t('followUp.upcoming.subtitle')"
+    },
+    {
+      "key": "followUp.upcoming.empty",
+      "foundInFile": "src/screens/partner/FollowUpScreen/UpcomingFollowUpScreen.tsx",
+      "matchPattern": "'followUp.upcoming.empty'"
+    },
+    {
+      "key": "followUp.today.title",
+      "foundInFile": "src/screens/partner/FollowUpScreen/FollowUpScreen.tsx",
+      "matchPattern": "t('followUp.today.title')"
+    },
+    {
+      "key": "followUp.today.empty",
+      "foundInFile": "src/screens/partner/FollowUpScreen/FollowUpScreen.tsx",
+      "matchPattern": "t('followUp.today.empty')"
+    },
+    {
+      "key": "followUp.someday.title",
+      "foundInFile": "src/screens/partner/FollowUpScreen/FollowUpScreen.tsx",
+      "matchPattern": "t('followUp.someday.title')"
+    },
+    {
+      "key": "followUp.someday.subtitle",
+      "foundInFile": "src/screens/partner/FollowUpScreen/FollowUpScreen.tsx",
+      "matchPattern": "t('followUp.someday.subtitle')"
+    },
+    {
+      "key": "clients.title",
+      "foundInFile": "src/screens/partner/ClientScreen/ClientScreen.tsx",
+      "matchPattern": "'clients.title'"
+    },
+    {
+      "key": "clients.add",
+      "foundInFile": "src/screens/partner/ClientScreen/ClientScreen.tsx",
+      "matchPattern": "'clients.add'"
+    },
+    {
+      "key": "clients.search",
+      "foundInFile": "src/components/GetIcon.tsx",
+      "matchPattern": "partial: search"
+    },
+    {
+      "key": "clients.noClientsFound",
+      "foundInFile": "src/screens/partner/ClientScreen/ClientScreen.tsx",
+      "matchPattern": "'clients.noClientsFound'"
+    },
+    {
+      "key": "clients.showingFrom",
+      "foundInFile": "src/screens/partner/ClientScreen/ClientScreen.tsx",
+      "matchPattern": "'clients.showingFrom'"
+    },
+    {
+      "key": "clients.selected",
+      "foundInFile": "src/screens/partner/ClientScreen/ClientScreen.tsx",
+      "matchPattern": "'clients.selected'"
+    },
+    {
+      "key": "clients.partner",
+      "foundInFile": "src/components/GetIcon.tsx",
+      "matchPattern": "partial: partner"
+    },
+    {
+      "key": "clients.teamMember",
+      "foundInFile": "src/screens/partner/ClientScreen/ClientScreen.tsx",
+      "matchPattern": "'clients.teamMember'"
+    },
+    {
+      "key": "clients.activityAddedSuccess",
+      "foundInFile": "src/screens/partner/ClientScreen/ClientScreen.tsx",
+      "matchPattern": "'clients.activityAddedSuccess'"
+    },
+    {
+      "key": "clients.failedToAddActivity",
+      "foundInFile": "src/screens/partner/ClientScreen/ClientScreen.tsx",
+      "matchPattern": "'clients.failedToAddActivity'"
+    },
+    {
+      "key": "clients.loading",
+      "foundInFile": "src/screens/partner/ClientScreen/ClientScreen.tsx",
+      "matchPattern": "'clients.loading'"
+    },
+    {
+      "key": "clients.searching",
+      "foundInFile": "src/screens/partner/ClientScreen/ClientScreen.tsx",
+      "matchPattern": "'clients.searching'"
+    },
+    {
+      "key": "clients.plural",
+      "foundInFile": "src/screens/partner/ClientScreen/ClientScreen.tsx",
+      "matchPattern": "'clients.plural'"
+    },
+    {
+      "key": "clients.edit",
+      "foundInFile": "src/components/CustomDrawerContent.tsx",
+      "matchPattern": "partial: edit"
+    },
+    {
+      "key": "clients.pullToRefresh",
+      "foundInFile": "src/screens/partner/ClientScreen/ClientScreen.tsx",
+      "matchPattern": "'clients.pullToRefresh'"
+    },
+    {
+      "key": "clients.loadingMoreClients",
+      "foundInFile": "src/screens/partner/ClientScreen/ClientScreen.tsx",
+      "matchPattern": "'clients.loadingMoreClients'"
+    },
+    {
+      "key": "clientCard.new",
+      "foundInFile": "src/screens/partner/ClientScreen/components/ClientCard.tsx",
+      "matchPattern": "t('clientCard.new')"
+    },
+    {
+      "key": "clientCard.assigned",
+      "foundInFile": "src/screens/partner/ClientScreen/components/ActivityTimeline.tsx",
+      "matchPattern": "partial: assigned"
+    },
+    {
+      "key": "filterDrawer.title",
+      "foundInFile": "src/screens/partner/ClientScreen/components/FilterDrawer.tsx",
+      "matchPattern": "t('filterDrawer.title')"
+    },
+    {
+      "key": "filterDrawer.sortDirection",
+      "foundInFile": "src/screens/partner/ClientScreen/components/FilterDrawer.tsx",
+      "matchPattern": "t('filterDrawer.sortDirection')"
+    },
+    {
+      "key": "filterDrawer.sortBy",
+      "foundInFile": "src/screens/buyer/SearchProperties/hooks/useSearchProperties.ts",
+      "matchPattern": "partial: sortBy"
+    },
+    {
+      "key": "filterDrawer.ascending",
+      "foundInFile": "src/components/GetIcon.tsx",
+      "matchPattern": "partial: ascending"
+    },
+    {
+      "key": "filterDrawer.descending",
+      "foundInFile": "src/components/GetIcon.tsx",
+      "matchPattern": "partial: descending"
+    },
+    {
+      "key": "filterDrawer.createdDate",
+      "foundInFile": "src/screens/partner/ClientScreen/components/FilterDrawer.tsx",
+      "matchPattern": "t('filterDrawer.createdDate')"
+    },
+    {
+      "key": "filterDrawer.createdDateDescription",
+      "foundInFile": "src/screens/partner/ClientScreen/components/FilterDrawer.tsx",
+      "matchPattern": "t('filterDrawer.createdDateDescription')"
+    },
+    {
+      "key": "filterDrawer.lastActivityDate",
+      "foundInFile": "src/screens/partner/ClientScreen/components/FilterDrawer.tsx",
+      "matchPattern": "t('filterDrawer.lastActivityDate')"
+    },
+    {
+      "key": "filterDrawer.lastActivityDateDescription",
+      "foundInFile": "src/screens/partner/ClientScreen/components/FilterDrawer.tsx",
+      "matchPattern": "t('filterDrawer.lastActivityDateDescription')"
+    },
+    {
+      "key": "filterDrawer.cancel",
+      "foundInFile": "src/components/LanguageChangeAlert.tsx",
+      "matchPattern": "partial: cancel"
+    },
+    {
+      "key": "filterDrawer.apply",
+      "foundInFile": "src/screens/partner/ClientScreen/components/FilterDrawer.tsx",
+      "matchPattern": "t('filterDrawer.apply')"
+    },
+    {
+      "key": "language.selectLanguage",
+      "foundInFile": "src/components/LanguageSelector.tsx",
+      "matchPattern": "t('language.selectLanguage')"
+    },
+    {
+      "key": "language.change",
+      "foundInFile": "src/components/LanguageChangeAlert.tsx",
+      "matchPattern": "'language.change'"
+    },
+    {
+      "key": "language.switchTo",
+      "foundInFile": "src/components/LanguageChangeAlert.tsx",
+      "matchPattern": "'language.switchTo'"
+    },
+    {
+      "key": "language.rtlWarning",
+      "foundInFile": "src/components/LanguageChangeAlert.tsx",
+      "matchPattern": "'language.rtlWarning'"
+    },
+    {
+      "key": "app.title",
+      "foundInFile": "src/navigator/AuthNavigator.tsx",
+      "matchPattern": "'app.title'"
+    },
+    {
+      "key": "app.restart",
+      "foundInFile": "src/components/LanguageChangeAlert.tsx",
+      "matchPattern": "t('app.restart')"
+    },
+    {
+      "key": "addActivityModal.addActivity",
+      "foundInFile": "src/screens/partner/ClientScreen/components/AddActivityModal.tsx",
+      "matchPattern": "t('addActivityModal.addActivity')"
+    },
+    {
+      "key": "addActivityModal.editActivity",
+      "foundInFile": "src/screens/partner/ClientScreen/components/AddActivityModal.tsx",
+      "matchPattern": "t('addActivityModal.editActivity')"
+    },
+    {
+      "key": "addActivityModal.selectActivityType",
+      "foundInFile": "src/screens/partner/ClientScreen/components/AddActivityModal.tsx",
+      "matchPattern": "t('addActivityModal.selectActivityType')"
+    },
+    {
+      "key": "addActivityModal.deleteActivity",
+      "foundInFile": "src/screens/partner/ClientScreen/components/AddActivityModal.tsx",
+      "matchPattern": "t('addActivityModal.deleteActivity')"
+    },
+    {
+      "key": "addActivityModal.deleteActivityConfirm",
+      "foundInFile": "src/screens/partner/ClientScreen/components/AddActivityModal.tsx",
+      "matchPattern": "t('addActivityModal.deleteActivityConfirm')"
+    },
+    {
+      "key": "clientProfile.title",
+      "foundInFile": "src/screens/partner/ClientScreen/ClientProfileScreen.tsx",
+      "matchPattern": "'clientProfile.title'"
+    },
+    {
+      "key": "clientProfile.edit",
+      "foundInFile": "src/components/CustomDrawerContent.tsx",
+      "matchPattern": "partial: edit"
+    },
+    {
+      "key": "clientProfile.delete",
+      "foundInFile": "src/components/GetIcon.tsx",
+      "matchPattern": "partial: delete"
+    },
+    {
+      "key": "clientProfile.sendQuickResponse",
+      "foundInFile": "src/screens/partner/ClientScreen/ClientProfileScreen.tsx",
+      "matchPattern": "'clientProfile.sendQuickResponse'"
+    },
+    {
+      "key": "clientProfile.duplicateClientFound",
+      "foundInFile": "src/screens/partner/ClientScreen/ClientProfileScreen.tsx",
+      "matchPattern": "'clientProfile.duplicateClientFound'"
+    },
+    {
+      "key": "clientProfile.deleteClient",
+      "foundInFile": "src/screens/partner/ClientScreen/ClientProfileScreen.tsx",
+      "matchPattern": "'clientProfile.deleteClient'"
+    },
+    {
+      "key": "clientProfile.deleteClientConfirm",
+      "foundInFile": "src/screens/partner/ClientScreen/ClientProfileScreen.tsx",
+      "matchPattern": "'clientProfile.deleteClientConfirm'"
+    },
+    {
+      "key": "clientProfile.activityDeleted",
+      "foundInFile": "src/screens/partner/ClientScreen/ClientProfileScreen.tsx",
+      "matchPattern": "'clientProfile.activityDeleted'"
+    },
+    {
+      "key": "clientProfile.clientDeleted",
+      "foundInFile": "src/screens/partner/ClientScreen/ClientProfileScreen.tsx",
+      "matchPattern": "'clientProfile.clientDeleted'"
+    },
+    {
+      "key": "clientProfile.activityAddedRescheduled",
+      "foundInFile": "src/screens/partner/ClientScreen/ClientProfileScreen.tsx",
+      "matchPattern": "'clientProfile.activityAddedRescheduled'"
+    },
+    {
+      "key": "clientProfile.activityAddedRescheduleFailed",
+      "foundInFile": "src/screens/partner/ClientScreen/ClientProfileScreen.tsx",
+      "matchPattern": "t('clientProfile.activityAddedRescheduleFailed')"
+    },
+    {
+      "key": "clientProfile.activityAddedCompleted",
+      "foundInFile": "src/screens/partner/ClientScreen/ClientProfileScreen.tsx",
+      "matchPattern": "'clientProfile.activityAddedCompleted'"
+    },
+    {
+      "key": "clientProfile.activityAddedUpdateFailed",
+      "foundInFile": "src/screens/partner/ClientScreen/ClientProfileScreen.tsx",
+      "matchPattern": "t('clientProfile.activityAddedUpdateFailed')"
+    },
+    {
+      "key": "clientProfile.activityUpdated",
+      "foundInFile": "src/screens/partner/ClientScreen/ClientProfileScreen.tsx",
+      "matchPattern": "'clientProfile.activityUpdated'"
+    },
+    {
+      "key": "clientProfile.activityAdded",
+      "foundInFile": "src/screens/partner/ClientScreen/ClientProfileScreen.tsx",
+      "matchPattern": "'clientProfile.activityAdded'"
+    },
+    {
+      "key": "clientProfile.followUpScheduled",
+      "foundInFile": "src/screens/partner/ClientScreen/ClientProfileScreen.tsx",
+      "matchPattern": "'clientProfile.followUpScheduled'"
+    },
+    {
+      "key": "clientProfile.followUpRemoved",
+      "foundInFile": "src/screens/partner/ClientScreen/ClientProfileScreen.tsx",
+      "matchPattern": "'clientProfile.followUpRemoved'"
+    },
+    {
+      "key": "clientProfile.fetchClientFailed",
+      "foundInFile": "src/screens/partner/ClientScreen/ClientProfileScreen.tsx",
+      "matchPattern": "'clientProfile.fetchClientFailed'"
+    },
+    {
+      "key": "clientProfile.fetchFollowUpFailed",
+      "foundInFile": "src/screens/partner/ClientScreen/ClientProfileScreen.tsx",
+      "matchPattern": "'clientProfile.fetchFollowUpFailed'"
+    },
+    {
+      "key": "clientProfile.fetchAssignedUsersFailed",
+      "foundInFile": "src/screens/partner/ClientScreen/ClientProfileScreen.tsx",
+      "matchPattern": "'clientProfile.fetchAssignedUsersFailed'"
+    },
+    {
+      "key": "clientProfile.deleteActivityFailed",
+      "foundInFile": "src/screens/partner/ClientScreen/ClientProfileScreen.tsx",
+      "matchPattern": "'clientProfile.deleteActivityFailed'"
+    },
+    {
+      "key": "clientProfile.deleteClientFailed",
+      "foundInFile": "src/screens/partner/ClientScreen/ClientProfileScreen.tsx",
+      "matchPattern": "t('clientProfile.deleteClientFailed')"
+    },
+    {
+      "key": "clientProfile.scheduleFollowUpFailed",
+      "foundInFile": "src/screens/partner/ClientScreen/ClientProfileScreen.tsx",
+      "matchPattern": "'clientProfile.scheduleFollowUpFailed'"
+    },
+    {
+      "key": "clientProfile.removeFollowUpFailed",
+      "foundInFile": "src/screens/partner/ClientScreen/ClientProfileScreen.tsx",
+      "matchPattern": "'clientProfile.removeFollowUpFailed'"
+    },
+    {
+      "key": "clientProfile.assignedTo",
+      "foundInFile": "src/screens/partner/ClientScreen/components/AssignedUsersCard.tsx",
+      "matchPattern": "t('clientProfile.assignedTo')"
+    },
+    {
+      "key": "clientProfile.noUsersAssigned",
+      "foundInFile": "src/screens/partner/ClientScreen/components/AssignedUsersCard.tsx",
+      "matchPattern": "t('clientProfile.noUsersAssigned')"
+    },
+    {
+      "key": "clientProfile.contactInformation",
+      "foundInFile": "src/screens/partner/ClientScreen/components/ContactInfoCard.tsx",
+      "matchPattern": "t('clientProfile.contactInformation')"
+    },
+    {
+      "key": "clientProfile.recentActivities",
+      "foundInFile": "src/screens/partner/ClientScreen/components/RecentActivitiesCard.tsx",
+      "matchPattern": "'clientProfile.recentActivities'"
+    },
+    {
+      "key": "clientProfile.noActivitiesYet",
+      "foundInFile": "src/screens/partner/ClientScreen/components/RecentActivitiesCard.tsx",
+      "matchPattern": "'clientProfile.noActivitiesYet'"
+    },
+    {
+      "key": "clientAssignment.title",
+      "foundInFile": "src/screens/partner/ClientScreen/ClientAssignmentScreen.tsx",
+      "matchPattern": "'clientAssignment.title'"
+    },
+    {
+      "key": "clientAssignment.assignTeamMembers",
+      "foundInFile": "src/screens/partner/ClientScreen/ClientAssignmentScreen.tsx",
+      "matchPattern": "'clientAssignment.assignTeamMembers'"
+    },
+    {
+      "key": "clientAssignment.selectTeamMembers",
+      "foundInFile": "src/screens/partner/ClientScreen/ClientAssignmentScreen.tsx",
+      "matchPattern": "'clientAssignment.selectTeamMembers'"
+    },
+    {
+      "key": "clientAssignment.usersSelected",
+      "foundInFile": "src/screens/partner/ClientScreen/ClientAssignmentScreen.tsx",
+      "matchPattern": "'clientAssignment.usersSelected'"
+    },
+    {
+      "key": "clientAssignment.noTeamMembersFound",
+      "foundInFile": "src/screens/partner/ClientScreen/ClientAssignmentScreen.tsx",
+      "matchPattern": "'clientAssignment.noTeamMembersFound'"
+    },
+    {
+      "key": "clientAssignment.loadingTeamMembers",
+      "foundInFile": "src/screens/partner/ClientScreen/ClientAssignmentScreen.tsx",
+      "matchPattern": "'clientAssignment.loadingTeamMembers'"
+    },
+    {
+      "key": "clientAssignment.userEmailNotAvailable",
+      "foundInFile": "src/screens/partner/ClientScreen/ClientAssignmentScreen.tsx",
+      "matchPattern": "'clientAssignment.userEmailNotAvailable'"
+    },
+    {
+      "key": "clientAssignment.fetchTeamMembersFailed",
+      "foundInFile": "src/screens/partner/ClientScreen/ClientAssignmentScreen.tsx",
+      "matchPattern": "'clientAssignment.fetchTeamMembersFailed'"
+    },
+    {
+      "key": "clientAssignment.errorLoadingTeamMembers",
+      "foundInFile": "src/screens/partner/ClientScreen/ClientAssignmentScreen.tsx",
+      "matchPattern": "'clientAssignment.errorLoadingTeamMembers'"
+    },
+    {
+      "key": "clientAssignment.usersAssignedSuccessfully",
+      "foundInFile": "src/screens/partner/ClientScreen/ClientAssignmentScreen.tsx",
+      "matchPattern": "'clientAssignment.usersAssignedSuccessfully'"
+    },
+    {
+      "key": "clientAssignment.assignUsersFailed",
+      "foundInFile": "src/screens/partner/ClientScreen/ClientAssignmentScreen.tsx",
+      "matchPattern": "'clientAssignment.assignUsersFailed'"
+    },
+    {
+      "key": "clientAssignment.errorAssigningUsers",
+      "foundInFile": "src/screens/partner/ClientScreen/ClientAssignmentScreen.tsx",
+      "matchPattern": "'clientAssignment.errorAssigningUsers'"
+    },
+    {
+      "key": "clientAssignment.assigning",
+      "foundInFile": "src/screens/partner/ClientScreen/ClientAssignmentScreen.tsx",
+      "matchPattern": "'clientAssignment.assigning'"
+    },
+    {
+      "key": "clientAssignment.assignUsers",
+      "foundInFile": "src/screens/partner/ClientScreen/ClientAssignmentScreen.tsx",
+      "matchPattern": "'clientAssignment.assignUsers'"
+    },
+    {
+      "key": "addClient.headers.addClient",
+      "foundInFile": "src/screens/partner/ClientScreen/AddClientScreen.tsx",
+      "matchPattern": "'addClient.headers.addClient'"
+    },
+    {
+      "key": "addClient.headers.editClient",
+      "foundInFile": "src/screens/partner/ClientScreen/AddClientScreen.tsx",
+      "matchPattern": "'addClient.headers.editClient'"
+    },
+    {
+      "key": "addClient.labels.clientName",
+      "foundInFile": "src/screens/partner/ClientScreen/AddClientScreen.tsx",
+      "matchPattern": "'addClient.labels.clientName'"
+    },
+    {
+      "key": "addClient.labels.displayName",
+      "foundInFile": "src/screens/partner/ClientScreen/AddClientScreen.tsx",
+      "matchPattern": "'addClient.labels.displayName'"
+    },
+    {
+      "key": "addClient.labels.mobileNumber",
+      "foundInFile": "src/screens/partner/ClientScreen/AddClientScreen.tsx",
+      "matchPattern": "'addClient.labels.mobileNumber'"
+    },
+    {
+      "key": "addClient.labels.whatsappNumber",
+      "foundInFile": "src/screens/partner/ClientScreen/AddClientScreen.tsx",
+      "matchPattern": "'addClient.labels.whatsappNumber'"
+    },
+    {
+      "key": "addClient.labels.email",
+      "foundInFile": "src/components/ContactScreen.tsx",
+      "matchPattern": "partial: email"
+    },
+    {
+      "key": "addClient.labels.notes",
+      "foundInFile": "src/components/GetIcon.tsx",
+      "matchPattern": "partial: notes"
+    },
+    {
+      "key": "addClient.placeholders.clientName",
+      "foundInFile": "src/screens/partner/ClientScreen/AddClientScreen.tsx",
+      "matchPattern": "'addClient.placeholders.clientName'"
+    },
+    {
+      "key": "addClient.placeholders.displayName",
+      "foundInFile": "src/screens/partner/ClientScreen/AddClientScreen.tsx",
+      "matchPattern": "'addClient.placeholders.displayName'"
+    },
+    {
+      "key": "addClient.placeholders.mobileNumber",
+      "foundInFile": "src/screens/partner/ClientScreen/AddClientScreen.tsx",
+      "matchPattern": "'addClient.placeholders.mobileNumber'"
+    },
+    {
+      "key": "addClient.placeholders.whatsappNumber",
+      "foundInFile": "src/screens/partner/ClientScreen/AddClientScreen.tsx",
+      "matchPattern": "'addClient.placeholders.whatsappNumber'"
+    },
+    {
+      "key": "addClient.placeholders.email",
+      "foundInFile": "src/components/ContactScreen.tsx",
+      "matchPattern": "partial: email"
+    },
+    {
+      "key": "addClient.placeholders.notes",
+      "foundInFile": "src/components/GetIcon.tsx",
+      "matchPattern": "partial: notes"
+    },
+    {
+      "key": "addClient.buttons.submit",
+      "foundInFile": "src/screens/partner/ClientScreen/AddClientScreen.tsx",
+      "matchPattern": "'addClient.buttons.submit'"
+    },
+    {
+      "key": "addClient.errors.clientNameRequired",
+      "foundInFile": "src/screens/partner/ClientScreen/AddClientScreen.tsx",
+      "matchPattern": "'addClient.errors.clientNameRequired'"
+    },
+    {
+      "key": "addClient.errors.provideValidClientName",
+      "foundInFile": "src/screens/partner/ClientScreen/AddClientScreen.tsx",
+      "matchPattern": "'addClient.errors.provideValidClientName'"
+    },
+    {
+      "key": "addClient.errors.addError",
+      "foundInFile": "src/screens/partner/ClientScreen/AddClientScreen.tsx",
+      "matchPattern": "'addClient.errors.addError'"
+    },
+    {
+      "key": "addClient.errors.updateError",
+      "foundInFile": "src/screens/partner/ClientScreen/AddClientScreen.tsx",
+      "matchPattern": "'addClient.errors.updateError'"
+    },
+    {
+      "key": "addClient.errors.unexpectedError",
+      "foundInFile": "src/screens/auth/EmailScreen.tsx",
+      "matchPattern": "partial: errors.unexpectedError"
+    },
+    {
+      "key": "addClient.success.clientAdded",
+      "foundInFile": "src/screens/partner/ClientScreen/AddClientScreen.tsx",
+      "matchPattern": "'addClient.success.clientAdded'"
+    },
+    {
+      "key": "addClient.success.clientUpdated",
+      "foundInFile": "src/screens/partner/ClientScreen/AddClientScreen.tsx",
+      "matchPattern": "'addClient.success.clientUpdated'"
+    },
+    {
+      "key": "groupsToggle.labels.selectGroups",
+      "foundInFile": "src/screens/partner/ClientScreen/components/GroupsToggle.tsx",
+      "matchPattern": "'groupsToggle.labels.selectGroups'"
+    },
+    {
+      "key": "groupsToggle.placeholders.searchGroups",
+      "foundInFile": "src/screens/partner/ClientScreen/components/GroupsToggle.tsx",
+      "matchPattern": "'groupsToggle.placeholders.searchGroups'"
+    },
+    {
+      "key": "groupsToggle.buttons.addGroup",
+      "foundInFile": "src/screens/partner/ClientScreen/components/GroupsToggle.tsx",
+      "matchPattern": "'groupsToggle.buttons.addGroup'"
+    },
+    {
+      "key": "groupsToggle.buttons.more",
+      "foundInFile": "src/screens/partner/ClientScreen/components/GroupBadge.tsx",
+      "matchPattern": "partial: more"
+    },
+    {
+      "key": "groupsToggle.buttons.showLess",
+      "foundInFile": "src/screens/partner/ClientScreen/components/GroupsToggle.tsx",
+      "matchPattern": "'groupsToggle.buttons.showLess'"
+    },
+    {
+      "key": "groupsToggle.errors.groupNameRequired",
+      "foundInFile": "src/screens/partner/ClientScreen/components/GroupsToggle.tsx",
+      "matchPattern": "'groupsToggle.errors.groupNameRequired'"
+    },
+    {
+      "key": "groupsToggle.errors.addGroupFailed",
+      "foundInFile": "src/screens/partner/ClientScreen/components/GroupsToggle.tsx",
+      "matchPattern": "'groupsToggle.errors.addGroupFailed'"
+    },
+    {
+      "key": "groupsToggle.errors.tryAgain",
+      "foundInFile": "src/screens/partner/ClientScreen/components/GroupsToggle.tsx",
+      "matchPattern": "'groupsToggle.errors.tryAgain'"
+    },
+    {
+      "key": "groupsToggle.errors.unexpectedError",
+      "foundInFile": "src/screens/auth/EmailScreen.tsx",
+      "matchPattern": "partial: errors.unexpectedError"
+    },
+    {
+      "key": "groupsToggle.success.groupAdded",
+      "foundInFile": "src/screens/partner/ClientScreen/components/GroupsToggle.tsx",
+      "matchPattern": "'groupsToggle.success.groupAdded'"
+    },
+    {
+      "key": "messagePreview.headers.messagePreview",
+      "foundInFile": "src/screens/partner/ClientScreen/MessagePreviewScreen.tsx",
+      "matchPattern": "'messagePreview.headers.messagePreview'"
+    },
+    {
+      "key": "messagePreview.labels.messagePreview",
+      "foundInFile": "src/screens/partner/ClientScreen/MessagePreviewScreen.tsx",
+      "matchPattern": "'messagePreview.labels.messagePreview'"
+    },
+    {
+      "key": "messagePreview.labels.sendingTo",
+      "foundInFile": "src/screens/partner/ClientScreen/MessagePreviewScreen.tsx",
+      "matchPattern": "'messagePreview.labels.sendingTo'"
+    },
+    {
+      "key": "messagePreview.labels.template",
+      "foundInFile": "src/screens/partner/ClientScreen/MessagePreviewScreen.tsx",
+      "matchPattern": "'messagePreview.labels.template'"
+    },
+    {
+      "key": "messagePreview.labels.messageContent",
+      "foundInFile": "src/screens/partner/ClientScreen/MessagePreviewScreen.tsx",
+      "matchPattern": "'messagePreview.labels.messageContent'"
+    },
+    {
+      "key": "messagePreview.labels.recipientInformation",
+      "foundInFile": "src/screens/partner/ClientScreen/MessagePreviewScreen.tsx",
+      "matchPattern": "'messagePreview.labels.recipientInformation'"
+    },
+    {
+      "key": "messagePreview.labels.whatsapp",
+      "foundInFile": "src/components/GetIcon.tsx",
+      "matchPattern": "partial: whatsapp"
+    },
+    {
+      "key": "messagePreview.labels.email",
+      "foundInFile": "src/components/ContactScreen.tsx",
+      "matchPattern": "partial: email"
+    },
+    {
+      "key": "messagePreview.labels.phone",
+      "foundInFile": "src/components/ContactScreen.tsx",
+      "matchPattern": "partial: phone"
+    },
+    {
+      "key": "messagePreview.options.sendViaWhatsapp",
+      "foundInFile": "src/screens/partner/ClientScreen/MessagePreviewScreen.tsx",
+      "matchPattern": "'messagePreview.options.sendViaWhatsapp'"
+    },
+    {
+      "key": "messagePreview.options.sendViaEmail",
+      "foundInFile": "src/screens/partner/ClientScreen/MessagePreviewScreen.tsx",
+      "matchPattern": "'messagePreview.options.sendViaEmail'"
+    },
+    {
+      "key": "messagePreview.options.sendViaSms",
+      "foundInFile": "src/screens/partner/ClientScreen/MessagePreviewScreen.tsx",
+      "matchPattern": "'messagePreview.options.sendViaSms'"
+    },
+    {
+      "key": "messagePreview.errors.error",
+      "foundInFile": "src/components/FilterOption.tsx",
+      "matchPattern": "partial: error"
+    },
+    {
+      "key": "messagePreview.errors.whatsappNotAvailable",
+      "foundInFile": "src/screens/partner/ClientScreen/MessagePreviewScreen.tsx",
+      "matchPattern": "'messagePreview.errors.whatsappNotAvailable'"
+    },
+    {
+      "key": "messagePreview.errors.whatsappOpenFailed",
+      "foundInFile": "src/screens/partner/ClientScreen/MessagePreviewScreen.tsx",
+      "matchPattern": "'messagePreview.errors.whatsappOpenFailed'"
+    },
+    {
+      "key": "messagePreview.errors.emailNotAvailable",
+      "foundInFile": "src/screens/partner/ClientScreen/MessagePreviewScreen.tsx",
+      "matchPattern": "'messagePreview.errors.emailNotAvailable'"
+    },
+    {
+      "key": "messagePreview.errors.emailOpenFailed",
+      "foundInFile": "src/screens/partner/ClientScreen/MessagePreviewScreen.tsx",
+      "matchPattern": "'messagePreview.errors.emailOpenFailed'"
+    },
+    {
+      "key": "messagePreview.errors.phoneNotAvailable",
+      "foundInFile": "src/screens/partner/ClientScreen/MessagePreviewScreen.tsx",
+      "matchPattern": "'messagePreview.errors.phoneNotAvailable'"
+    },
+    {
+      "key": "messagePreview.errors.smsOpenFailed",
+      "foundInFile": "src/screens/partner/ClientScreen/MessagePreviewScreen.tsx",
+      "matchPattern": "'messagePreview.errors.smsOpenFailed'"
+    },
+    {
+      "key": "messagePreview.errors.noWhatsappNumber",
+      "foundInFile": "src/screens/partner/ClientScreen/MessagePreviewScreen.tsx",
+      "matchPattern": "'messagePreview.errors.noWhatsappNumber'"
+    },
+    {
+      "key": "messagePreview.errors.noEmailAddress",
+      "foundInFile": "src/screens/partner/ClientScreen/MessagePreviewScreen.tsx",
+      "matchPattern": "'messagePreview.errors.noEmailAddress'"
+    },
+    {
+      "key": "messagePreview.errors.noPhoneNumber",
+      "foundInFile": "src/screens/partner/ClientScreen/MessagePreviewScreen.tsx",
+      "matchPattern": "'messagePreview.errors.noPhoneNumber'"
+    },
+    {
+      "key": "messagePreview.emailSubject",
+      "foundInFile": "src/screens/partner/ClientScreen/MessagePreviewScreen.tsx",
+      "matchPattern": "'messagePreview.emailSubject'"
+    },
+    {
+      "key": "partnerFilter.title.partners",
+      "foundInFile": "src/navigator/components/FilterPartnerStack.tsx",
+      "matchPattern": "t('partnerFilter.title.partners')"
+    },
+    {
+      "key": "partnerFilter.title.teamMembers",
+      "foundInFile": "src/screens/partner/FilterPartnerScreen/FilterPartnerScreen.tsx",
+      "matchPattern": "t('partnerFilter.title.teamMembers')"
+    },
+    {
+      "key": "partnerFilter.accessDenied.title",
+      "foundInFile": "src/screens/partner/FilterPartnerScreen/FilterPartnerScreen.tsx",
+      "matchPattern": "t('partnerFilter.accessDenied.title')"
+    },
+    {
+      "key": "partnerFilter.accessDenied.message",
+      "foundInFile": "src/components/ContactScreen.tsx",
+      "matchPattern": "partial: message"
+    },
+    {
+      "key": "partnerFilter.buttons.goBack",
+      "foundInFile": "src/screens/partner/FilterPartnerScreen/FilterPartnerScreen.tsx",
+      "matchPattern": "t('partnerFilter.buttons.goBack')"
+    },
+    {
+      "key": "partnerFilter.buttons.selectAll",
+      "foundInFile": "src/screens/partner/FilterPartnerScreen/FilterPartnerScreen.tsx",
+      "matchPattern": "t('partnerFilter.buttons.selectAll')"
+    },
+    {
+      "key": "partnerFilter.buttons.deselectAll",
+      "foundInFile": "src/screens/partner/FilterPartnerScreen/FilterPartnerScreen.tsx",
+      "matchPattern": "t('partnerFilter.buttons.deselectAll')"
+    },
+    {
+      "key": "partnerFilter.buttons.applyFilter",
+      "foundInFile": "src/screens/partner/FilterPartnerScreen/FilterPartnerScreen.tsx",
+      "matchPattern": "t('partnerFilter.buttons.applyFilter')"
+    },
+    {
+      "key": "partnerFilter.loading.partners",
+      "foundInFile": "src/screens/partner/FilterPartnerScreen/FilterPartnerScreen.tsx",
+      "matchPattern": "t('partnerFilter.loading.partners')"
+    },
+    {
+      "key": "partnerFilter.loading.teamMembers",
+      "foundInFile": "src/screens/partner/FilterPartnerScreen/FilterPartnerScreen.tsx",
+      "matchPattern": "t('partnerFilter.loading.teamMembers')"
+    },
+    {
+      "key": "partnerFilter.selection.partners",
+      "foundInFile": "src/screens/partner/FilterPartnerScreen/FilterPartnerScreen.tsx",
+      "matchPattern": "t('partnerFilter.selection.partners')"
+    },
+    {
+      "key": "partnerFilter.selection.teamMembers",
+      "foundInFile": "src/screens/partner/FilterPartnerScreen/FilterPartnerScreen.tsx",
+      "matchPattern": "t('partnerFilter.selection.teamMembers')"
+    },
+    {
+      "key": "partnerFilter.selection.selected",
+      "foundInFile": "src/screens/partner/ClientScreen/ClientScreen.tsx",
+      "matchPattern": "partial: selected"
+    },
+    {
+      "key": "partnerFilter.empty.partners",
+      "foundInFile": "src/screens/partner/FilterPartnerScreen/FilterPartnerScreen.tsx",
+      "matchPattern": "t('partnerFilter.empty.partners')"
+    },
+    {
+      "key": "partnerFilter.empty.teamMembers",
+      "foundInFile": "src/screens/partner/FilterPartnerScreen/FilterPartnerScreen.tsx",
+      "matchPattern": "t('partnerFilter.empty.teamMembers')"
+    },
+    {
+      "key": "partnerFilter.toast.filterCleared",
+      "foundInFile": "src/screens/partner/FilterPartnerScreen/FilterPartnerScreen.tsx",
+      "matchPattern": "t('partnerFilter.toast.filterCleared')"
+    },
+    {
+      "key": "partnerFilter.toast.filterClearedMessage",
+      "foundInFile": "src/screens/partner/FilterPartnerScreen/FilterPartnerScreen.tsx",
+      "matchPattern": "t('partnerFilter.toast.filterClearedMessage')"
+    },
+    {
+      "key": "partnerFilter.toast.filterApplied",
+      "foundInFile": "src/screens/partner/FilterPartnerScreen/FilterPartnerScreen.tsx",
+      "matchPattern": "t('partnerFilter.toast.filterApplied')"
+    },
+    {
+      "key": "partnerFilter.toast.filterAppliedMessage",
+      "foundInFile": "src/screens/partner/FilterPartnerScreen/FilterPartnerScreen.tsx",
+      "matchPattern": "'partnerFilter.toast.filterAppliedMessage'"
+    },
+    {
+      "key": "partnerFilter.errors.fetchFailed",
+      "foundInFile": "src/screens/partner/FilterPartnerScreen/FilterPartnerScreen.tsx",
+      "matchPattern": "'partnerFilter.errors.fetchFailed'"
+    },
+    {
+      "key": "partnerFilter.errors.applyFailed",
+      "foundInFile": "src/screens/partner/FilterPartnerScreen/FilterPartnerScreen.tsx",
+      "matchPattern": "t('partnerFilter.errors.applyFailed')"
+    },
+    {
+      "key": "partnerFilter.labels.role",
+      "foundInFile": "src/screens/partner/FilterPartnerScreen/FilterPartnerScreen.tsx",
+      "matchPattern": "t('partnerFilter.labels.role')"
+    },
+    {
+      "key": "messageTemplate.headers.selectTemplate",
+      "foundInFile": "src/screens/partner/ClientScreen/MessageTemplateScreen.tsx",
+      "matchPattern": "'messageTemplate.headers.selectTemplate'"
+    },
+    {
+      "key": "messageTemplate.errors.fetchFailed",
+      "foundInFile": "src/screens/partner/ClientScreen/MessageTemplateScreen.tsx",
+      "matchPattern": "'messageTemplate.errors.fetchFailed'"
+    },
+    {
+      "key": "messageTemplate.errors.loadingError",
+      "foundInFile": "src/screens/partner/ClientScreen/MessageTemplateScreen.tsx",
+      "matchPattern": "'messageTemplate.errors.loadingError'"
+    },
+    {
+      "key": "contentTemplate.labels.by",
+      "foundInFile": "src/screens/partner/ContentScreen/components/ContentTemplateCard.tsx",
+      "matchPattern": "'contentTemplate.labels.by'"
+    },
+    {
+      "key": "contentTemplate.labels.created",
+      "foundInFile": "src/screens/partner/ContentScreen/components/ContentTemplateCard.tsx",
+      "matchPattern": "'contentTemplate.labels.created'"
+    },
+    {
+      "key": "contentTemplate.status.active",
+      "foundInFile": "src/components/EditProfileComponent.tsx",
+      "matchPattern": "partial: active"
+    },
+    {
+      "key": "contentTemplate.status.inactive",
+      "foundInFile": "src/screens/partner/ContentScreen/components/ContentTemplateCard.tsx",
+      "matchPattern": "'contentTemplate.status.inactive'"
+    },
+    {
+      "key": "contentTemplate.status.deleted",
+      "foundInFile": "src/screens/partner/ContentScreen/components/ContentTemplateCard.tsx",
+      "matchPattern": "'contentTemplate.status.deleted'"
+    },
+    {
+      "key": "contentTemplate.errors.invalidDate",
+      "foundInFile": "src/screens/partner/ContentScreen/components/ContentTemplateCard.tsx",
+      "matchPattern": "'contentTemplate.errors.invalidDate'"
+    },
+    {
+      "key": "contentTemplate.emptyState.title",
+      "foundInFile": "src/screens/partner/ContentScreen/components/ContentEmptyState.tsx",
+      "matchPattern": "'contentTemplate.emptyState.title'"
+    },
+    {
+      "key": "contentTemplate.emptyState.subtitle",
+      "foundInFile": "src/screens/partner/ContentScreen/components/ContentEmptyState.tsx",
+      "matchPattern": "'contentTemplate.emptyState.subtitle'"
+    },
+    {
+      "key": "contentTemplate.header.templatesFound",
+      "foundInFile": "src/screens/partner/ContentScreen/components/ContentHeader.tsx",
+      "matchPattern": "'contentTemplate.header.templatesFound'"
+    },
+    {
+      "key": "contentTemplate.loading.loadingTemplates",
+      "foundInFile": "src/screens/partner/ContentScreen/components/ContentLoadingIndicator.tsx",
+      "matchPattern": "'contentTemplate.loading.loadingTemplates'"
+    },
+    {
+      "key": "contentTemplate.loading.loadingMore",
+      "foundInFile": "src/screens/partner/ContentScreen/components/ContentLoadingIndicator.tsx",
+      "matchPattern": "'contentTemplate.loading.loadingMore'"
+    },
+    {
+      "key": "contentScreen.headers.contentTemplates",
+      "foundInFile": "src/screens/partner/ContentScreen/ContentScreen.tsx",
+      "matchPattern": "'contentScreen.headers.contentTemplates'"
+    },
+    {
+      "key": "contentScreen.buttons.addTemplate",
+      "foundInFile": "src/screens/partner/ContentScreen/ContentScreen.tsx",
+      "matchPattern": "'contentScreen.buttons.addTemplate'"
+    },
+    {
+      "key": "contentScreen.errors.fetchFailed",
+      "foundInFile": "src/screens/partner/ContentScreen/ContentScreen.tsx",
+      "matchPattern": "'contentScreen.errors.fetchFailed'"
+    },
+    {
+      "key": "contentScreen.errors.loadingError",
+      "foundInFile": "src/screens/partner/ContentScreen/ContentScreen.tsx",
+      "matchPattern": "'contentScreen.errors.loadingError'"
+    },
+    {
+      "key": "partnerPropertyForm.titles.addProperty",
+      "foundInFile": "src/screens/partner/AddPartnerPropertyScreen/AddPartnerPropertyScreen.tsx",
+      "matchPattern": "t('partnerPropertyForm.titles.addProperty')"
+    },
+    {
+      "key": "partnerPropertyForm.steps.basicInfo",
+      "foundInFile": "src/screens/partner/components/PartnerPropertyForm/PartnerPropertyForm.tsx",
+      "matchPattern": "'partnerPropertyForm.steps.basicInfo'"
+    },
+    {
+      "key": "partnerPropertyForm.steps.propertyDetails",
+      "foundInFile": "src/screens/partner/components/PartnerPropertyForm/PartnerPropertyForm.tsx",
+      "matchPattern": "'partnerPropertyForm.steps.propertyDetails'"
+    },
+    {
+      "key": "partnerPropertyForm.steps.mediaAndSubmit",
+      "foundInFile": "src/screens/partner/components/PartnerPropertyForm/PartnerPropertyForm.tsx",
+      "matchPattern": "'partnerPropertyForm.steps.mediaAndSubmit'"
+    },
+    {
+      "key": "partnerPropertyForm.buttons.clear",
+      "foundInFile": "src/components/EditProfileComponent.tsx",
+      "matchPattern": "partial: clear"
+    },
+    {
+      "key": "partnerPropertyForm.basicDetails.labels.propertyName",
+      "foundInFile": "src/screens/partner/components/PartnerPropertyForm/steps/BasicDetailsStep.tsx",
+      "matchPattern": "'partnerPropertyForm.basicDetails.labels.propertyName'"
+    },
+    {
+      "key": "partnerPropertyForm.basicDetails.labels.sellerType",
+      "foundInFile": "src/screens/partner/components/PartnerPropertyForm/steps/BasicDetailsStep.tsx",
+      "matchPattern": "'partnerPropertyForm.basicDetails.labels.sellerType'"
+    },
+    {
+      "key": "partnerPropertyForm.basicDetails.labels.city",
+      "foundInFile": "src/screens/buyer/SearchProperties/components/FilterModal.tsx",
+      "matchPattern": "partial: city"
+    },
+    {
+      "key": "partnerPropertyForm.basicDetails.labels.propertyFor",
+      "foundInFile": "src/screens/partner/ListingsScreen/components/FilterModal.tsx",
+      "matchPattern": "partial: propertyFor"
+    },
+    {
+      "key": "partnerPropertyForm.basicDetails.labels.propertyType",
+      "foundInFile": "src/screens/partner/AgentsPropertyScreen/AddAgentPropertyScreen.tsx",
+      "matchPattern": "partial: propertyType"
+    },
+    {
+      "key": "partnerPropertyForm.basicDetails.labels.location",
+      "foundInFile": "src/components/EditProfileComponent.tsx",
+      "matchPattern": "partial: location"
+    },
+    {
+      "key": "partnerPropertyForm.basicDetails.labels.price",
+      "foundInFile": "src/screens/partner/Plans/AddPlanScreen.tsx",
+      "matchPattern": "partial: price"
+    },
+    {
+      "key": "partnerPropertyForm.basicDetails.placeholders.propertyName",
+      "foundInFile": "src/screens/partner/components/PartnerPropertyForm/steps/BasicDetailsStep.tsx",
+      "matchPattern": "'partnerPropertyForm.basicDetails.placeholders.propertyName'"
+    },
+    {
+      "key": "partnerPropertyForm.basicDetails.placeholders.location",
+      "foundInFile": "src/components/EditProfileComponent.tsx",
+      "matchPattern": "partial: location"
+    },
+    {
+      "key": "partnerPropertyForm.basicDetails.placeholders.price",
+      "foundInFile": "src/screens/partner/Plans/AddPlanScreen.tsx",
+      "matchPattern": "partial: price"
+    },
+    {
+      "key": "partnerPropertyForm.mediaAndSubmit.labels.videoURL",
+      "foundInFile": "src/screens/partner/components/PartnerPropertyForm/steps/MediaAndSubmitStep.tsx",
+      "matchPattern": "'partnerPropertyForm.mediaAndSubmit.labels.videoURL'"
+    },
+    {
+      "key": "partnerPropertyForm.mediaAndSubmit.labels.images",
+      "foundInFile": "src/screens/partner/components/PartnerPropertyForm/steps/MediaAndSubmitStep.tsx",
+      "matchPattern": "'partnerPropertyForm.mediaAndSubmit.labels.images'"
+    },
+    {
+      "key": "partnerPropertyForm.mediaAndSubmit.labels.tags",
+      "foundInFile": "src/screens/partner/components/PartnerPropertyForm/components/TagsInput.tsx",
+      "matchPattern": "'partnerPropertyForm.mediaAndSubmit.labels.tags'"
+    },
+    {
+      "key": "partnerPropertyForm.mediaAndSubmit.labels.selectCategory",
+      "foundInFile": "src/screens/partner/components/PartnerPropertyForm/components/ImagePreviewList.tsx",
+      "matchPattern": "'partnerPropertyForm.mediaAndSubmit.labels.selectCategory'"
+    },
+    {
+      "key": "partnerPropertyForm.mediaAndSubmit.placeholders.videoURL",
+      "foundInFile": "src/screens/partner/components/PartnerPropertyForm/steps/MediaAndSubmitStep.tsx",
+      "matchPattern": "'partnerPropertyForm.mediaAndSubmit.placeholders.videoURL'"
+    },
+    {
+      "key": "partnerPropertyForm.mediaAndSubmit.placeholders.tags",
+      "foundInFile": "src/screens/partner/components/PartnerPropertyForm/components/TagsInput.tsx",
+      "matchPattern": "'partnerPropertyForm.mediaAndSubmit.placeholders.tags'"
+    },
+    {
+      "key": "partnerPropertyForm.mediaAndSubmit.placeholders.selectCategory",
+      "foundInFile": "src/screens/partner/components/PartnerPropertyForm/components/ImagePreviewList.tsx",
+      "matchPattern": "'partnerPropertyForm.mediaAndSubmit.placeholders.selectCategory'"
+    },
+    {
+      "key": "partnerPropertyForm.mediaAndSubmit.descriptions.optionalStep",
+      "foundInFile": "src/screens/partner/components/PartnerPropertyForm/steps/MediaAndSubmitStep.tsx",
+      "matchPattern": "'partnerPropertyForm.mediaAndSubmit.descriptions.optionalStep'"
+    },
+    {
+      "key": "partnerPropertyForm.mediaAndSubmit.descriptions.imagesDescription",
+      "foundInFile": "src/screens/partner/components/PartnerPropertyForm/steps/MediaAndSubmitStep.tsx",
+      "matchPattern": "'partnerPropertyForm.mediaAndSubmit.descriptions.imagesDescription'"
+    },
+    {
+      "key": "partnerPropertyForm.mediaAndSubmit.descriptions.submitDescription",
+      "foundInFile": "src/screens/partner/components/PartnerPropertyForm/steps/MediaAndSubmitStep.tsx",
+      "matchPattern": "'partnerPropertyForm.mediaAndSubmit.descriptions.submitDescription'"
+    },
+    {
+      "key": "partnerPropertyForm.mediaAndSubmit.descriptions.selectedImages",
+      "foundInFile": "src/screens/partner/components/PartnerPropertyForm/components/ImagePreviewList.tsx",
+      "matchPattern": "'partnerPropertyForm.mediaAndSubmit.descriptions.selectedImages'"
+    },
+    {
+      "key": "partnerPropertyForm.mediaAndSubmit.buttons.selectImages",
+      "foundInFile": "src/screens/partner/components/PartnerPropertyForm/components/ImageUploader.tsx",
+      "matchPattern": "'partnerPropertyForm.mediaAndSubmit.buttons.selectImages'"
+    },
+    {
+      "key": "partnerPropertyForm.mediaAndSubmit.buttons.addTag",
+      "foundInFile": "src/screens/partner/components/PartnerPropertyForm/components/TagsInput.tsx",
+      "matchPattern": "'partnerPropertyForm.mediaAndSubmit.buttons.addTag'"
+    },
+    {
+      "key": "partnerPropertyForm.navigation.next",
+      "foundInFile": "src/screens/partner/components/PartnerPropertyForm/components/FormNavigationButtons.tsx",
+      "matchPattern": "'partnerPropertyForm.navigation.next'"
+    },
+    {
+      "key": "partnerPropertyForm.navigation.back",
+      "foundInFile": "src/components/GetIcon.tsx",
+      "matchPattern": "partial: back"
+    },
+    {
+      "key": "partnerPropertyForm.propertyDetails.optionalStepText",
+      "foundInFile": "src/screens/partner/components/PartnerPropertyForm/steps/PropertyDetailsStep.tsx",
+      "matchPattern": "'partnerPropertyForm.propertyDetails.optionalStepText'"
+    },
+    {
+      "key": "partnerPropertyForm.propertyDetails.noSelectionText",
+      "foundInFile": "src/screens/partner/components/PartnerPropertyForm/steps/PropertyDetailsStep.tsx",
+      "matchPattern": "'partnerPropertyForm.propertyDetails.noSelectionText'"
+    },
+    {
+      "key": "partnerPropertyForm.propertyDetails.goBack",
+      "foundInFile": "src/screens/partner/components/PartnerPropertyForm/steps/PropertyDetailsStep.tsx",
+      "matchPattern": "'partnerPropertyForm.propertyDetails.goBack'"
+    },
+    {
+      "key": "partnerPropertyForm.propertyDetails.fields.propertyForType.label",
+      "foundInFile": "src/screens/partner/components/PartnerPropertyForm/components/PropertyFieldRenderer.tsx",
+      "matchPattern": "'partnerPropertyForm.propertyDetails.fields.propertyForType.label'"
+    },
+    {
+      "key": "partnerPropertyForm.propertyDetails.fields.readyToMove.label",
+      "foundInFile": "src/screens/partner/components/PartnerPropertyForm/components/PropertyFieldRenderer.tsx",
+      "matchPattern": "'partnerPropertyForm.propertyDetails.fields.readyToMove.label'"
+    },
+    {
+      "key": "partnerPropertyForm.propertyDetails.fields.lifts.label",
+      "foundInFile": "src/screens/partner/components/PartnerPropertyForm/components/PropertyFieldRenderer.tsx",
+      "matchPattern": "'partnerPropertyForm.propertyDetails.fields.lifts.label'"
+    },
+    {
+      "key": "partnerPropertyForm.propertyDetails.fields.pantry.label",
+      "foundInFile": "src/screens/partner/components/PartnerPropertyForm/components/PropertyFieldRenderer.tsx",
+      "matchPattern": "'partnerPropertyForm.propertyDetails.fields.pantry.label'"
+    },
+    {
+      "key": "partnerPropertyForm.propertyDetails.fields.floor.label",
+      "foundInFile": "src/screens/partner/components/PartnerPropertyForm/components/PropertyFieldRenderer.tsx",
+      "matchPattern": "'partnerPropertyForm.propertyDetails.fields.floor.label'"
+    },
+    {
+      "key": "partnerPropertyForm.propertyDetails.fields.floor.placeholder",
+      "foundInFile": "src/screens/partner/components/PartnerPropertyForm/components/PropertyFieldRenderer.tsx",
+      "matchPattern": "'partnerPropertyForm.propertyDetails.fields.floor.placeholder'"
+    },
+    {
+      "key": "partnerPropertyForm.propertyDetails.fields.furnishing.label",
+      "foundInFile": "src/screens/partner/components/PartnerPropertyForm/components/PropertyFieldRenderer.tsx",
+      "matchPattern": "'partnerPropertyForm.propertyDetails.fields.furnishing.label'"
+    },
+    {
+      "key": "partnerPropertyForm.propertyDetails.fields.parking.label",
+      "foundInFile": "src/screens/partner/components/PartnerPropertyForm/components/PropertyFieldRenderer.tsx",
+      "matchPattern": "'partnerPropertyForm.propertyDetails.fields.parking.label'"
+    },
+    {
+      "key": "partnerPropertyForm.propertyDetails.fields.facing.label",
+      "foundInFile": "src/screens/partner/components/PartnerPropertyForm/components/PropertyFieldRenderer.tsx",
+      "matchPattern": "'partnerPropertyForm.propertyDetails.fields.facing.label'"
+    },
+    {
+      "key": "partnerPropertyForm.propertyDetails.fields.location.label",
+      "foundInFile": "src/screens/partner/components/PartnerPropertyForm/components/PropertyFieldRenderer.tsx",
+      "matchPattern": "'partnerPropertyForm.propertyDetails.fields.location.label'"
+    },
+    {
+      "key": "partnerPropertyForm.propertyDetails.fields.location.placeholder",
+      "foundInFile": "src/screens/partner/components/PartnerPropertyForm/components/PropertyFieldRenderer.tsx",
+      "matchPattern": "'partnerPropertyForm.propertyDetails.fields.location.placeholder'"
+    },
+    {
+      "key": "partnerPropertyForm.propertyDetails.fields.zipCode.label",
+      "foundInFile": "src/screens/partner/components/PartnerPropertyForm/components/PropertyFieldRenderer.tsx",
+      "matchPattern": "'partnerPropertyForm.propertyDetails.fields.zipCode.label'"
+    },
+    {
+      "key": "partnerPropertyForm.propertyDetails.fields.zipCode.placeholder",
+      "foundInFile": "src/screens/partner/components/PartnerPropertyForm/components/PropertyFieldRenderer.tsx",
+      "matchPattern": "'partnerPropertyForm.propertyDetails.fields.zipCode.placeholder'"
+    },
+    {
+      "key": "partnerPropertyForm.propertyDetails.fields.price.label",
+      "foundInFile": "src/screens/partner/components/PartnerPropertyForm/components/PropertyFieldRenderer.tsx",
+      "matchPattern": "'partnerPropertyForm.propertyDetails.fields.price.label'"
+    },
+    {
+      "key": "partnerPropertyForm.propertyDetails.fields.price.placeholder",
+      "foundInFile": "src/screens/partner/components/PartnerPropertyForm/components/PropertyFieldRenderer.tsx",
+      "matchPattern": "'partnerPropertyForm.propertyDetails.fields.price.placeholder'"
+    },
+    {
+      "key": "partnerPropertyForm.propertyDetails.fields.area.label",
+      "foundInFile": "src/screens/partner/components/PartnerPropertyForm/components/PropertyFieldRenderer.tsx",
+      "matchPattern": "'partnerPropertyForm.propertyDetails.fields.area.label'"
+    },
+    {
+      "key": "partnerPropertyForm.propertyDetails.fields.area.placeholder",
+      "foundInFile": "src/screens/partner/components/PartnerPropertyForm/components/PropertyFieldRenderer.tsx",
+      "matchPattern": "'partnerPropertyForm.propertyDetails.fields.area.placeholder'"
+    },
+    {
+      "key": "partnerPropertyForm.propertyDetails.fields.lmUnit.label",
+      "foundInFile": "src/screens/partner/components/PartnerPropertyForm/components/PropertyFieldRenderer.tsx",
+      "matchPattern": "'partnerPropertyForm.propertyDetails.fields.lmUnit.label'"
+    },
+    {
+      "key": "partnerPropertyForm.propertyDetails.fields.propertyAge.label",
+      "foundInFile": "src/screens/partner/components/PartnerPropertyForm/components/PropertyFieldRenderer.tsx",
+      "matchPattern": "'partnerPropertyForm.propertyDetails.fields.propertyAge.label'"
+    },
+    {
+      "key": "partnerPropertyForm.propertyDetails.fields.gatedSecurity.label",
+      "foundInFile": "src/screens/partner/components/PartnerPropertyForm/components/PropertyFieldRenderer.tsx",
+      "matchPattern": "'partnerPropertyForm.propertyDetails.fields.gatedSecurity.label'"
+    },
+    {
+      "key": "partnerPropertyForm.propertyDetails.fields.surveillanceCameras.label",
+      "foundInFile": "src/screens/partner/components/PartnerPropertyForm/components/PropertyFieldRenderer.tsx",
+      "matchPattern": "'partnerPropertyForm.propertyDetails.fields.surveillanceCameras.label'"
+    },
+    {
+      "key": "partnerPropertyForm.propertyDetails.fields.alarmSystem.label",
+      "foundInFile": "src/screens/partner/components/PartnerPropertyForm/components/PropertyFieldRenderer.tsx",
+      "matchPattern": "'partnerPropertyForm.propertyDetails.fields.alarmSystem.label'"
+    },
+    {
+      "key": "partnerPropertyForm.propertyDetails.fields.shortDescription.label",
+      "foundInFile": "src/screens/partner/components/PartnerPropertyForm/components/PropertyFieldRenderer.tsx",
+      "matchPattern": "'partnerPropertyForm.propertyDetails.fields.shortDescription.label'"
+    },
+    {
+      "key": "partnerPropertyForm.propertyDetails.fields.shortDescription.placeholder",
+      "foundInFile": "src/screens/partner/components/PartnerPropertyForm/components/PropertyFieldRenderer.tsx",
+      "matchPattern": "'partnerPropertyForm.propertyDetails.fields.shortDescription.placeholder'"
+    },
+    {
+      "key": "partnerPropertyForm.propertyDetails.fields.longDescription.label",
+      "foundInFile": "src/screens/partner/components/PartnerPropertyForm/components/PropertyFieldRenderer.tsx",
+      "matchPattern": "'partnerPropertyForm.propertyDetails.fields.longDescription.label'"
+    },
+    {
+      "key": "partnerPropertyForm.propertyDetails.fields.longDescription.placeholder",
+      "foundInFile": "src/screens/partner/components/PartnerPropertyForm/components/PropertyFieldRenderer.tsx",
+      "matchPattern": "'partnerPropertyForm.propertyDetails.fields.longDescription.placeholder'"
+    },
+    {
+      "key": "partnerPropertyForm.propertyDetails.fields.bhkType.label",
+      "foundInFile": "src/screens/partner/components/PartnerPropertyForm/components/PropertyFieldRenderer.tsx",
+      "matchPattern": "'partnerPropertyForm.propertyDetails.fields.bhkType.label'"
+    },
+    {
+      "key": "partnerPropertyForm.propertyDetails.fields.ceilingHeight.label",
+      "foundInFile": "src/screens/partner/components/PartnerPropertyForm/components/PropertyFieldRenderer.tsx",
+      "matchPattern": "'partnerPropertyForm.propertyDetails.fields.ceilingHeight.label'"
+    },
+    {
+      "key": "partnerPropertyForm.propertyDetails.fields.ceilingHeight.placeholder",
+      "foundInFile": "src/screens/partner/components/PartnerPropertyForm/components/PropertyFieldRenderer.tsx",
+      "matchPattern": "'partnerPropertyForm.propertyDetails.fields.ceilingHeight.placeholder'"
+    },
+    {
+      "key": "partnerPropertyForm.propertyDetails.fields.constructionDone.label",
+      "foundInFile": "src/screens/partner/components/PartnerPropertyForm/components/PropertyFieldRenderer.tsx",
+      "matchPattern": "'partnerPropertyForm.propertyDetails.fields.constructionDone.label'"
+    },
+    {
+      "key": "partnerPropertyForm.propertyDetails.fields.boundaryWall.label",
+      "foundInFile": "src/screens/partner/components/PartnerPropertyForm/components/PropertyFieldRenderer.tsx",
+      "matchPattern": "'partnerPropertyForm.propertyDetails.fields.boundaryWall.label'"
+    },
+    {
+      "key": "partnerPropertyForm.propertyDetails.fields.openSide.label",
+      "foundInFile": "src/screens/partner/components/PartnerPropertyForm/components/PropertyFieldRenderer.tsx",
+      "matchPattern": "'partnerPropertyForm.propertyDetails.fields.openSide.label'"
+    },
+    {
+      "key": "partnerPropertyForm.success.propertyUpdated",
+      "foundInFile": "src/screens/partner/components/PartnerPropertyForm/PartnerPropertyForm.tsx",
+      "matchPattern": "'partnerPropertyForm.success.propertyUpdated'"
+    },
+    {
+      "key": "partnerPropertyForm.success.propertyAdded",
+      "foundInFile": "src/screens/partner/components/PartnerPropertyForm/PartnerPropertyForm.tsx",
+      "matchPattern": "'partnerPropertyForm.success.propertyAdded'"
+    },
+    {
+      "key": "partnerPropertyForm.errors.updateFailed",
+      "foundInFile": "src/screens/partner/components/PartnerPropertyForm/PartnerPropertyForm.tsx",
+      "matchPattern": "'partnerPropertyForm.errors.updateFailed'"
+    },
+    {
+      "key": "partnerPropertyForm.errors.addFailed",
+      "foundInFile": "src/screens/partner/components/PartnerPropertyForm/PartnerPropertyForm.tsx",
+      "matchPattern": "'partnerPropertyForm.errors.addFailed'"
+    },
+    {
+      "key": "listings.titles.propertyListings",
+      "foundInFile": "src/screens/partner/ListingsScreen/ListingsScreen.tsx",
+      "matchPattern": "t('listings.titles.propertyListings')"
+    },
+    {
+      "key": "listings.titles.filterProperties",
+      "foundInFile": "src/screens/partner/ListingsScreen/components/FilterModal.tsx",
+      "matchPattern": "t('listings.titles.filterProperties')"
+    },
+    {
+      "key": "listings.titles.deleteProperty",
+      "foundInFile": "src/screens/partner/ListingsScreen/ListingsScreen.tsx",
+      "matchPattern": "t('listings.titles.deleteProperty')"
+    },
+    {
+      "key": "listings.titles.noPropertiesFound",
+      "foundInFile": "src/screens/partner/ListingsScreen/components/EmptyListPlaceholder.tsx",
+      "matchPattern": "t('listings.titles.noPropertiesFound')"
+    },
+    {
+      "key": "listings.messages.loadingMore",
+      "foundInFile": "src/screens/partner/ListingsScreen/ListingsScreen.tsx",
+      "matchPattern": "t('listings.messages.loadingMore')"
+    },
+    {
+      "key": "listings.messages.noProperties",
+      "foundInFile": "src/screens/partner/ListingsScreen/ListingsScreen.tsx",
+      "matchPattern": "t('listings.messages.noProperties')"
+    },
+    {
+      "key": "listings.messages.deleteConfirmation",
+      "foundInFile": "src/screens/partner/ListingsScreen/ListingsScreen.tsx",
+      "matchPattern": "t('listings.messages.deleteConfirmation')"
+    },
+    {
+      "key": "listings.messages.propertyDeleted",
+      "foundInFile": "src/screens/partner/ListingsScreen/ListingDetailScreen.tsx",
+      "matchPattern": "t('listings.messages.propertyDeleted')"
+    },
+    {
+      "key": "listings.messages.deleteFailed",
+      "foundInFile": "src/screens/partner/ListingsScreen/ListingDetailScreen.tsx",
+      "matchPattern": "t('listings.messages.deleteFailed')"
+    },
+    {
+      "key": "listings.messages.emptyState",
+      "foundInFile": "src/screens/partner/ListingsScreen/components/EmptyListPlaceholder.tsx",
+      "matchPattern": "t('listings.messages.emptyState')"
+    },
+    {
+      "key": "listings.messages.loadingDetails",
+      "foundInFile": "src/screens/partner/ListingsScreen/ListingDetailScreen.tsx",
+      "matchPattern": "t('listings.messages.loadingDetails')"
+    },
+    {
+      "key": "listings.messages.loadFailed",
+      "foundInFile": "src/screens/partner/ListingsScreen/ListingDetailScreen.tsx",
+      "matchPattern": "t('listings.messages.loadFailed')"
+    },
+    {
+      "key": "listings.messages.errorLoading",
+      "foundInFile": "src/screens/partner/ListingsScreen/ListingDetailScreen.tsx",
+      "matchPattern": "t('listings.messages.errorLoading')"
+    },
+    {
+      "key": "listings.messages.propertyNotFound",
+      "foundInFile": "src/screens/partner/ListingsScreen/ListingDetailScreen.tsx",
+      "matchPattern": "t('listings.messages.propertyNotFound')"
+    },
+    {
+      "key": "listings.placeholders.searchByName",
+      "foundInFile": "src/screens/partner/ListingsScreen/components/SearchAndFilter.tsx",
+      "matchPattern": "t('listings.placeholders.searchByName')"
+    },
+    {
+      "key": "listings.labels.propertyFor",
+      "foundInFile": "src/screens/partner/ListingsScreen/components/FilterModal.tsx",
+      "matchPattern": "t('listings.labels.propertyFor')"
+    },
+    {
+      "key": "listings.labels.status",
+      "foundInFile": "src/screens/partner/ListingsScreen/components/FilterModal.tsx",
+      "matchPattern": "t('listings.labels.status')"
+    },
+    {
+      "key": "listings.labels.city",
+      "foundInFile": "src/screens/buyer/SearchProperties/components/FilterModal.tsx",
+      "matchPattern": "partial: city"
+    },
+    {
+      "key": "listings.labels.featured",
+      "foundInFile": "src/screens/partner/ListingsScreen/ListingDetailScreen.tsx",
+      "matchPattern": "t('listings.labels.featured')"
+    },
+    {
+      "key": "listings.labels.notFeatured",
+      "foundInFile": "src/screens/partner/ListingsScreen/ListingDetailScreen.tsx",
+      "matchPattern": "t('listings.labels.notFeatured')"
+    },
+    {
+      "key": "listings.labels.deleted",
+      "foundInFile": "src/screens/partner/ListingsScreen/components/PropertyCard.tsx",
+      "matchPattern": "t('listings.labels.deleted')"
+    },
+    {
+      "key": "listings.labels.unnamedProperty",
+      "foundInFile": "src/screens/partner/ListingsScreen/ListingDetailScreen.tsx",
+      "matchPattern": "t('listings.labels.unnamedProperty')"
+    },
+    {
+      "key": "listings.labels.locationNotSpecified",
+      "foundInFile": "src/screens/partner/ListingsScreen/components/PropertyCard.tsx",
+      "matchPattern": "t('listings.labels.locationNotSpecified')"
+    },
+    {
+      "key": "listings.labels.priceOnRequest",
+      "foundInFile": "src/screens/partner/ListingsScreen/ListingDetailScreen.tsx",
+      "matchPattern": "t('listings.labels.priceOnRequest')"
+    },
+    {
+      "key": "listings.labels.forSale",
+      "foundInFile": "src/screens/partner/ListingsScreen/components/PropertyCard.tsx",
+      "matchPattern": "t('listings.labels.forSale')"
+    },
+    {
+      "key": "listings.labels.for",
+      "foundInFile": "src/screens/partner/ListingsScreen/ListingDetailScreen.tsx",
+      "matchPattern": "t('listings.labels.for')"
+    },
+    {
+      "key": "listings.labels.sale",
+      "foundInFile": "src/screens/partner/ListingsScreen/ListingDetailScreen.tsx",
+      "matchPattern": "t('listings.labels.sale')"
+    },
+    {
+      "key": "listings.labels.type",
+      "foundInFile": "src/screens/partner/ListingsScreen/ListingDetailScreen.tsx",
+      "matchPattern": "t('listings.labels.type')"
+    },
+    {
+      "key": "listings.labels.category",
+      "foundInFile": "src/screens/partner/ListingsScreen/ListingDetailScreen.tsx",
+      "matchPattern": "t('listings.labels.category')"
+    },
+    {
+      "key": "listings.labels.notSpecified",
+      "foundInFile": "src/screens/partner/ListingsScreen/ListingDetailScreen.tsx",
+      "matchPattern": "t('listings.labels.notSpecified')"
+    },
+    {
+      "key": "listings.labels.zipCode",
+      "foundInFile": "src/screens/partner/ListingsScreen/ListingDetailScreen.tsx",
+      "matchPattern": "t('listings.labels.zipCode')"
+    },
+    {
+      "key": "listings.labels.sellerType",
+      "foundInFile": "src/screens/partner/ListingsScreen/ListingDetailScreen.tsx",
+      "matchPattern": "t('listings.labels.sellerType')"
+    },
+    {
+      "key": "listings.labels.configuration",
+      "foundInFile": "src/screens/partner/ListingsScreen/ListingDetailScreen.tsx",
+      "matchPattern": "t('listings.labels.configuration')"
+    },
+    {
+      "key": "listings.labels.area",
+      "foundInFile": "src/components/GetIcon.tsx",
+      "matchPattern": "partial: area"
+    },
+    {
+      "key": "listings.labels.furnishing",
+      "foundInFile": "src/screens/buyer/SearchProperties/components/FilterModal.tsx",
+      "matchPattern": "partial: furnishing"
+    },
+    {
+      "key": "listings.labels.facing",
+      "foundInFile": "src/screens/partner/ListingsScreen/ListingDetailScreen.tsx",
+      "matchPattern": "t('listings.labels.facing')"
+    },
+    {
+      "key": "listings.labels.seller",
+      "foundInFile": "src/screens/partner/ListingsScreen/ListingDetailScreen.tsx",
+      "matchPattern": "t('listings.labels.seller')"
+    },
+    {
+      "key": "listings.labels.playVideo",
+      "foundInFile": "src/screens/partner/ListingsScreen/ListingDetailScreen.tsx",
+      "matchPattern": "t('listings.labels.playVideo')"
+    },
+    {
+      "key": "listings.labels.videoTour",
+      "foundInFile": "src/screens/partner/ListingsScreen/ListingDetailScreen.tsx",
+      "matchPattern": "t('listings.labels.videoTour')"
+    },
+    {
+      "key": "listings.buttons.edit",
+      "foundInFile": "src/components/CustomDrawerContent.tsx",
+      "matchPattern": "partial: edit"
+    },
+    {
+      "key": "listings.buttons.delete",
+      "foundInFile": "src/components/GetIcon.tsx",
+      "matchPattern": "partial: delete"
+    },
+    {
+      "key": "listings.buttons.cancel",
+      "foundInFile": "src/components/LanguageChangeAlert.tsx",
+      "matchPattern": "partial: cancel"
+    },
+    {
+      "key": "listings.buttons.applyFilters",
+      "foundInFile": "src/screens/partner/ListingsScreen/components/FilterModal.tsx",
+      "matchPattern": "t('listings.buttons.applyFilters')"
+    },
+    {
+      "key": "listings.buttons.clearAll",
+      "foundInFile": "src/screens/partner/ListingsScreen/components/FilterModal.tsx",
+      "matchPattern": "t('listings.buttons.clearAll')"
+    },
+    {
+      "key": "listings.buttons.addProperty",
+      "foundInFile": "src/screens/partner/ListingsScreen/components/EmptyListPlaceholder.tsx",
+      "matchPattern": "t('listings.buttons.addProperty')"
+    },
+    {
+      "key": "listings.accessibility.propertyImage",
+      "foundInFile": "src/screens/partner/ListingsScreen/components/PropertyCard.tsx",
+      "matchPattern": "'listings.accessibility.propertyImage'"
+    },
+    {
+      "key": "listings.accessibility.propertyPlaceholder",
+      "foundInFile": "src/screens/partner/ListingsScreen/components/PropertyCard.tsx",
+      "matchPattern": "t('listings.accessibility.propertyPlaceholder')"
+    },
+    {
+      "key": "listings.sections.propertyDetails",
+      "foundInFile": "src/screens/partner/ListingsScreen/ListingDetailScreen.tsx",
+      "matchPattern": "t('listings.sections.propertyDetails')"
+    },
+    {
+      "key": "listings.sections.overview",
+      "foundInFile": "src/screens/partner/ListingsScreen/ListingDetailScreen.tsx",
+      "matchPattern": "t('listings.sections.overview')"
+    },
+    {
+      "key": "listings.sections.description",
+      "foundInFile": "src/screens/partner/BillingScreen/BillingScreen.tsx",
+      "matchPattern": "partial: description"
+    },
+    {
+      "key": "listings.sections.features",
+      "foundInFile": "src/screens/partner/ListingsScreen/ListingDetailScreen.tsx",
+      "matchPattern": "t('listings.sections.features')"
+    },
+    {
+      "key": "listings.sections.specifications",
+      "foundInFile": "src/screens/partner/ListingsScreen/ListingDetailScreen.tsx",
+      "matchPattern": "t('listings.sections.specifications')"
+    },
+    {
+      "key": "listings.sections.tags",
+      "foundInFile": "src/screens/partner/ListingsScreen/ListingDetailScreen.tsx",
+      "matchPattern": "t('listings.sections.tags')"
+    },
+    {
+      "key": "listings.sections.contactInformation",
+      "foundInFile": "src/screens/partner/ListingsScreen/ListingDetailScreen.tsx",
+      "matchPattern": "t('listings.sections.contactInformation')"
+    },
+    {
+      "key": "listings.features.readyToMove",
+      "foundInFile": "src/screens/partner/ListingsScreen/ListingDetailScreen.tsx",
+      "matchPattern": "t('listings.features.readyToMove')"
+    },
+    {
+      "key": "listings.features.constructionDone",
+      "foundInFile": "src/screens/partner/ListingsScreen/ListingDetailScreen.tsx",
+      "matchPattern": "t('listings.features.constructionDone')"
+    },
+    {
+      "key": "listings.features.boundaryWall",
+      "foundInFile": "src/screens/partner/ListingsScreen/ListingDetailScreen.tsx",
+      "matchPattern": "t('listings.features.boundaryWall')"
+    },
+    {
+      "key": "listings.features.elevators",
+      "foundInFile": "src/screens/partner/ListingsScreen/ListingDetailScreen.tsx",
+      "matchPattern": "t('listings.features.elevators')"
+    },
+    {
+      "key": "listings.features.alarmSystem",
+      "foundInFile": "src/screens/partner/ListingsScreen/ListingDetailScreen.tsx",
+      "matchPattern": "t('listings.features.alarmSystem')"
+    },
+    {
+      "key": "listings.features.securityCameras",
+      "foundInFile": "src/screens/partner/ListingsScreen/ListingDetailScreen.tsx",
+      "matchPattern": "t('listings.features.securityCameras')"
+    },
+    {
+      "key": "listings.features.gatedSecurity",
+      "foundInFile": "src/screens/partner/ListingsScreen/ListingDetailScreen.tsx",
+      "matchPattern": "t('listings.features.gatedSecurity')"
+    },
+    {
+      "key": "listings.features.pantry",
+      "foundInFile": "src/screens/partner/ListingsScreen/ListingDetailScreen.tsx",
+      "matchPattern": "t('listings.features.pantry')"
+    },
+    {
+      "key": "listings.specs.floor",
+      "foundInFile": "src/screens/partner/ListingsScreen/ListingDetailScreen.tsx",
+      "matchPattern": "t('listings.specs.floor')"
+    },
+    {
+      "key": "listings.specs.parking",
+      "foundInFile": "src/screens/partner/ListingsScreen/ListingDetailScreen.tsx",
+      "matchPattern": "t('listings.specs.parking')"
+    },
+    {
+      "key": "listings.specs.openSide",
+      "foundInFile": "src/screens/partner/ListingsScreen/ListingDetailScreen.tsx",
+      "matchPattern": "t('listings.specs.openSide')"
+    },
+    {
+      "key": "listings.specs.propertyAge",
+      "foundInFile": "src/screens/partner/ListingsScreen/ListingDetailScreen.tsx",
+      "matchPattern": "t('listings.specs.propertyAge')"
+    },
+    {
+      "key": "listings.specs.ceilingHeight",
+      "foundInFile": "src/screens/partner/ListingsScreen/ListingDetailScreen.tsx",
+      "matchPattern": "t('listings.specs.ceilingHeight')"
+    },
+    {
+      "key": "listings.specs.listedOn",
+      "foundInFile": "src/screens/partner/ListingsScreen/ListingDetailScreen.tsx",
+      "matchPattern": "t('listings.specs.listedOn')"
+    },
+    {
+      "key": "listings.modals.deleteProperty.title",
+      "foundInFile": "src/screens/partner/ListingsScreen/ListingDetailScreen.tsx",
+      "matchPattern": "t('listings.modals.deleteProperty.title')"
+    },
+    {
+      "key": "listings.modals.deleteProperty.message",
+      "foundInFile": "src/components/ContactScreen.tsx",
+      "matchPattern": "partial: message"
+    },
+    {
+      "key": "addContent.headers.newTemplate",
+      "foundInFile": "src/screens/partner/ContentScreen/AddContentScreen.tsx",
+      "matchPattern": "'addContent.headers.newTemplate'"
+    },
+    {
+      "key": "addContent.headers.editTemplate",
+      "foundInFile": "src/screens/partner/ContentScreen/AddContentScreen.tsx",
+      "matchPattern": "'addContent.headers.editTemplate'"
+    },
+    {
+      "key": "addContent.labels.templateName",
+      "foundInFile": "src/screens/partner/ContentScreen/AddContentScreen.tsx",
+      "matchPattern": "'addContent.labels.templateName'"
+    },
+    {
+      "key": "addContent.labels.messageContent",
+      "foundInFile": "src/screens/partner/ContentScreen/AddContentScreen.tsx",
+      "matchPattern": "'addContent.labels.messageContent'"
+    },
+    {
+      "key": "addContent.labels.availableVariables",
+      "foundInFile": "src/screens/partner/ContentScreen/AddContentScreen.tsx",
+      "matchPattern": "'addContent.labels.availableVariables'"
+    },
+    {
+      "key": "addContent.labels.preview",
+      "foundInFile": "src/screens/partner/ContentScreen/AddContentScreen.tsx",
+      "matchPattern": "'addContent.labels.preview'"
+    },
+    {
+      "key": "addContent.placeholders.templateName",
+      "foundInFile": "src/screens/partner/ContentScreen/AddContentScreen.tsx",
+      "matchPattern": "'addContent.placeholders.templateName'"
+    },
+    {
+      "key": "addContent.placeholders.messageContent",
+      "foundInFile": "src/screens/partner/ContentScreen/AddContentScreen.tsx",
+      "matchPattern": "'addContent.placeholders.messageContent'"
+    },
+    {
+      "key": "addContent.placeholders.preview",
+      "foundInFile": "src/screens/partner/ContentScreen/AddContentScreen.tsx",
+      "matchPattern": "'addContent.placeholders.preview'"
+    },
+    {
+      "key": "addContent.helpers.templateName",
+      "foundInFile": "src/screens/partner/ContentScreen/AddContentScreen.tsx",
+      "matchPattern": "'addContent.helpers.templateName'"
+    },
+    {
+      "key": "addContent.helpers.variablesInfo",
+      "foundInFile": "src/screens/partner/ContentScreen/AddContentScreen.tsx",
+      "matchPattern": "'addContent.helpers.variablesInfo'"
+    },
+    {
+      "key": "addContent.helpers.variablesDescription",
+      "foundInFile": "src/screens/partner/ContentScreen/AddContentScreen.tsx",
+      "matchPattern": "'addContent.helpers.variablesDescription'"
+    },
+    {
+      "key": "addContent.helpers.variablesAutoReplace",
+      "foundInFile": "src/screens/partner/ContentScreen/AddContentScreen.tsx",
+      "matchPattern": "'addContent.helpers.variablesAutoReplace'"
+    },
+    {
+      "key": "addContent.variables.name",
+      "foundInFile": "src/components/ContactScreen.tsx",
+      "matchPattern": "partial: name"
+    },
+    {
+      "key": "addContent.variables.phone",
+      "foundInFile": "src/components/ContactScreen.tsx",
+      "matchPattern": "partial: phone"
+    },
+    {
+      "key": "addContent.variables.whatsapp",
+      "foundInFile": "src/components/GetIcon.tsx",
+      "matchPattern": "partial: whatsapp"
+    },
+    {
+      "key": "addContent.variables.email",
+      "foundInFile": "src/components/ContactScreen.tsx",
+      "matchPattern": "partial: email"
+    },
+    {
+      "key": "addContent.variables.senderName",
+      "foundInFile": "src/screens/partner/ContentScreen/AddContentScreen.tsx",
+      "matchPattern": "'addContent.variables.senderName'"
+    },
+    {
+      "key": "addContent.variables.senderEmail",
+      "foundInFile": "src/screens/partner/ContentScreen/AddContentScreen.tsx",
+      "matchPattern": "'addContent.variables.senderEmail'"
+    },
+    {
+      "key": "addContent.variables.senderAddress",
+      "foundInFile": "src/screens/partner/ContentScreen/AddContentScreen.tsx",
+      "matchPattern": "'addContent.variables.senderAddress'"
+    },
+    {
+      "key": "addContent.variables.senderPhone",
+      "foundInFile": "src/screens/partner/ContentScreen/AddContentScreen.tsx",
+      "matchPattern": "'addContent.variables.senderPhone'"
+    },
+    {
+      "key": "addContent.buttons.cancel",
+      "foundInFile": "src/components/LanguageChangeAlert.tsx",
+      "matchPattern": "partial: cancel"
+    },
+    {
+      "key": "addContent.buttons.saveTemplate",
+      "foundInFile": "src/screens/partner/ContentScreen/AddContentScreen.tsx",
+      "matchPattern": "'addContent.buttons.saveTemplate'"
+    },
+    {
+      "key": "addContent.buttons.updateTemplate",
+      "foundInFile": "src/screens/partner/ContentScreen/AddContentScreen.tsx",
+      "matchPattern": "'addContent.buttons.updateTemplate'"
+    },
+    {
+      "key": "addContent.buttons.saving",
+      "foundInFile": "src/screens/partner/ContentScreen/AddContentScreen.tsx",
+      "matchPattern": "'addContent.buttons.saving'"
+    },
+    {
+      "key": "addContent.buttons.updating",
+      "foundInFile": "src/screens/partner/ContentScreen/AddContentScreen.tsx",
+      "matchPattern": "'addContent.buttons.updating'"
+    },
+    {
+      "key": "addContent.errors.templateNameRequired",
+      "foundInFile": "src/screens/partner/ContentScreen/AddContentScreen.tsx",
+      "matchPattern": "'addContent.errors.templateNameRequired'"
+    },
+    {
+      "key": "addContent.errors.contentRequired",
+      "foundInFile": "src/screens/partner/ContentScreen/AddContentScreen.tsx",
+      "matchPattern": "'addContent.errors.contentRequired'"
+    },
+    {
+      "key": "addContent.errors.userNotFound",
+      "foundInFile": "src/screens/partner/ContentScreen/AddContentScreen.tsx",
+      "matchPattern": "'addContent.errors.userNotFound'"
+    },
+    {
+      "key": "addContent.errors.createFailed",
+      "foundInFile": "src/screens/partner/ContentScreen/AddContentScreen.tsx",
+      "matchPattern": "'addContent.errors.createFailed'"
+    },
+    {
+      "key": "addContent.errors.updateFailed",
+      "foundInFile": "src/screens/partner/ContentScreen/AddContentScreen.tsx",
+      "matchPattern": "'addContent.errors.updateFailed'"
+    },
+    {
+      "key": "addContent.success.templateCreated",
+      "foundInFile": "src/screens/partner/ContentScreen/AddContentScreen.tsx",
+      "matchPattern": "'addContent.success.templateCreated'"
+    },
+    {
+      "key": "addContent.success.templateUpdated",
+      "foundInFile": "src/screens/partner/ContentScreen/AddContentScreen.tsx",
+      "matchPattern": "'addContent.success.templateUpdated'"
+    },
+    {
+      "key": "addContent.success.createMessage",
+      "foundInFile": "src/screens/partner/ContentScreen/AddContentScreen.tsx",
+      "matchPattern": "'addContent.success.createMessage'"
+    },
+    {
+      "key": "addContent.success.updateMessage",
+      "foundInFile": "src/screens/partner/ContentScreen/AddContentScreen.tsx",
+      "matchPattern": "'addContent.success.updateMessage'"
+    },
+    {
+      "key": "addContent.alerts.discardTitle",
+      "foundInFile": "src/screens/partner/ContentScreen/AddContentScreen.tsx",
+      "matchPattern": "'addContent.alerts.discardTitle'"
+    },
+    {
+      "key": "addContent.alerts.discardMessage",
+      "foundInFile": "src/screens/partner/ContentScreen/AddContentScreen.tsx",
+      "matchPattern": "'addContent.alerts.discardMessage'"
+    },
+    {
+      "key": "addContent.alerts.continueEditing",
+      "foundInFile": "src/screens/partner/ContentScreen/AddContentScreen.tsx",
+      "matchPattern": "'addContent.alerts.continueEditing'"
+    },
+    {
+      "key": "addContent.alerts.discard",
+      "foundInFile": "src/screens/partner/ContentScreen/AddContentScreen.tsx",
+      "matchPattern": "'addContent.alerts.discard'"
+    },
+    {
+      "key": "groups.messages.noGroupsAvailable",
+      "foundInFile": "src/screens/partner/GroupsScreen/GroupsScreen.tsx",
+      "matchPattern": "'groups.messages.noGroupsAvailable'"
+    },
+    {
+      "key": "groups.messages.loadFailed",
+      "foundInFile": "src/screens/partner/GroupsScreen/GroupsScreen.tsx",
+      "matchPattern": "'groups.messages.loadFailed'"
+    },
+    {
+      "key": "groups.messages.tryAgainLater",
+      "foundInFile": "src/screens/partner/GroupsScreen/GroupsScreen.tsx",
+      "matchPattern": "'groups.messages.tryAgainLater'"
+    },
+    {
+      "key": "groups.messages.groupCreated",
+      "foundInFile": "src/screens/partner/GroupsScreen/GroupsScreen.tsx",
+      "matchPattern": "'groups.messages.groupCreated'"
+    },
+    {
+      "key": "groups.messages.groupUpdated",
+      "foundInFile": "src/screens/partner/GroupsScreen/GroupsScreen.tsx",
+      "matchPattern": "'groups.messages.groupUpdated'"
+    },
+    {
+      "key": "groups.messages.groupDeleted",
+      "foundInFile": "src/screens/partner/GroupsScreen/GroupsScreen.tsx",
+      "matchPattern": "'groups.messages.groupDeleted'"
+    },
+    {
+      "key": "groups.messages.saveFailed",
+      "foundInFile": "src/screens/partner/GroupsScreen/GroupsScreen.tsx",
+      "matchPattern": "'groups.messages.saveFailed'"
+    },
+    {
+      "key": "groups.messages.saveError",
+      "foundInFile": "src/screens/partner/GroupsScreen/GroupsScreen.tsx",
+      "matchPattern": "'groups.messages.saveError'"
+    },
+    {
+      "key": "groups.messages.deleteFailed",
+      "foundInFile": "src/screens/partner/GroupsScreen/GroupsScreen.tsx",
+      "matchPattern": "'groups.messages.deleteFailed'"
+    },
+    {
+      "key": "groups.messages.deleteError",
+      "foundInFile": "src/screens/partner/GroupsScreen/GroupsScreen.tsx",
+      "matchPattern": "'groups.messages.deleteError'"
+    },
+    {
+      "key": "groups.messages.noColorsAvailable",
+      "foundInFile": "src/screens/partner/GroupsScreen/components/AddGroupModal.tsx",
+      "matchPattern": "'groups.messages.noColorsAvailable'"
+    },
+    {
+      "key": "groups.placeholders.groupName",
+      "foundInFile": "src/screens/partner/GroupsScreen/components/AddGroupModal.tsx",
+      "matchPattern": "'groups.placeholders.groupName'"
+    },
+    {
+      "key": "groups.labels.selectColor",
+      "foundInFile": "src/screens/partner/GroupsScreen/components/AddGroupModal.tsx",
+      "matchPattern": "'groups.labels.selectColor'"
+    },
+    {
+      "key": "groups.buttons.addGroup",
+      "foundInFile": "src/screens/partner/GroupsScreen/GroupsScreen.tsx",
+      "matchPattern": "'groups.buttons.addGroup'"
+    },
+    {
+      "key": "groups.modals.addGroup",
+      "foundInFile": "src/screens/partner/GroupsScreen/components/AddGroupModal.tsx",
+      "matchPattern": "'groups.modals.addGroup'"
+    },
+    {
+      "key": "groups.modals.editGroup",
+      "foundInFile": "src/screens/partner/GroupsScreen/components/AddGroupModal.tsx",
+      "matchPattern": "'groups.modals.editGroup'"
+    },
+    {
+      "key": "groups.modals.deleteGroup.title",
+      "foundInFile": "src/screens/partner/GroupsScreen/components/AddGroupModal.tsx",
+      "matchPattern": "'groups.modals.deleteGroup.title'"
+    },
+    {
+      "key": "groups.modals.deleteGroup.message",
+      "foundInFile": "src/components/ContactScreen.tsx",
+      "matchPattern": "partial: message"
+    },
+    {
+      "key": "agentProperty.titles.addAgentProperty",
+      "foundInFile": "src/screens/partner/AgentsPropertyScreen/AddAgentPropertyScreen.tsx",
+      "matchPattern": "t('agentProperty.titles.addAgentProperty')"
+    },
+    {
+      "key": "agentProperty.titles.editAgentProperty",
+      "foundInFile": "src/screens/partner/AgentsPropertyScreen/AddAgentPropertyScreen.tsx",
+      "matchPattern": "t('agentProperty.titles.editAgentProperty')"
+    },
+    {
+      "key": "agentProperty.titles.agentProperty",
+      "foundInFile": "src/screens/partner/AgentsPropertyScreen/AgentsPropertyScreen.tsx",
+      "matchPattern": "t('agentProperty.titles.agentProperty')"
+    },
+    {
+      "key": "agentProperty.titles.deleteProperty",
+      "foundInFile": "src/screens/partner/AgentsPropertyScreen/components/RenderItem.tsx",
+      "matchPattern": "t('agentProperty.titles.deleteProperty')"
+    },
+    {
+      "key": "agentProperty.labels.agentName",
+      "foundInFile": "src/screens/partner/AgentsPropertyScreen/AddAgentPropertyScreen.tsx",
+      "matchPattern": "t('agentProperty.labels.agentName')"
+    },
+    {
+      "key": "agentProperty.labels.agentContactNo",
+      "foundInFile": "src/screens/partner/AgentsPropertyScreen/AddAgentPropertyScreen.tsx",
+      "matchPattern": "t('agentProperty.labels.agentContactNo')"
+    },
+    {
+      "key": "agentProperty.labels.propertyLocation",
+      "foundInFile": "src/screens/partner/AgentsPropertyScreen/AddAgentPropertyScreen.tsx",
+      "matchPattern": "t('agentProperty.labels.propertyLocation')"
+    },
+    {
+      "key": "agentProperty.labels.propertyType",
+      "foundInFile": "src/screens/partner/AgentsPropertyScreen/AddAgentPropertyScreen.tsx",
+      "matchPattern": "t('agentProperty.labels.propertyType')"
+    },
+    {
+      "key": "agentProperty.labels.bhkType",
+      "foundInFile": "src/screens/buyer/SearchProperties/components/FilterModal.tsx",
+      "matchPattern": "partial: bhkType"
+    },
+    {
+      "key": "agentProperty.labels.demandPrice",
+      "foundInFile": "src/screens/partner/AgentsPropertyScreen/AddAgentPropertyScreen.tsx",
+      "matchPattern": "t('agentProperty.labels.demandPrice')"
+    },
+    {
+      "key": "agentProperty.labels.securityDepositAmount",
+      "foundInFile": "src/screens/partner/AgentsPropertyScreen/AddAgentPropertyScreen.tsx",
+      "matchPattern": "t('agentProperty.labels.securityDepositAmount')"
+    },
+    {
+      "key": "agentProperty.labels.negotiable",
+      "foundInFile": "src/screens/partner/AgentsPropertyScreen/AddAgentPropertyScreen.tsx",
+      "matchPattern": "t('agentProperty.labels.negotiable')"
+    },
+    {
+      "key": "agentProperty.labels.fixedPrice",
+      "foundInFile": "src/screens/partner/AgentsPropertyScreen/components/RenderItem.tsx",
+      "matchPattern": "t('agentProperty.labels.fixedPrice')"
+    },
+    {
+      "key": "agentProperty.labels.propertyNotes",
+      "foundInFile": "src/screens/partner/AgentsPropertyScreen/AddAgentPropertyScreen.tsx",
+      "matchPattern": "t('agentProperty.labels.propertyNotes')"
+    },
+    {
+      "key": "agentProperty.labels.location",
+      "foundInFile": "src/components/EditProfileComponent.tsx",
+      "matchPattern": "partial: location"
+    },
+    {
+      "key": "agentProperty.labels.contactNo",
+      "foundInFile": "src/screens/partner/AgentsPropertyScreen/components/RenderItem.tsx",
+      "matchPattern": "t('agentProperty.labels.contactNo')"
+    },
+    {
+      "key": "agentProperty.labels.dateAdded",
+      "foundInFile": "src/screens/partner/AgentsPropertyScreen/components/RenderItem.tsx",
+      "matchPattern": "t('agentProperty.labels.dateAdded')"
+    },
+    {
+      "key": "agentProperty.labels.notes",
+      "foundInFile": "src/components/GetIcon.tsx",
+      "matchPattern": "partial: notes"
+    },
+    {
+      "key": "agentProperty.placeholders.agentName",
+      "foundInFile": "src/screens/partner/AgentsPropertyScreen/AddAgentPropertyScreen.tsx",
+      "matchPattern": "t('agentProperty.placeholders.agentName')"
+    },
+    {
+      "key": "agentProperty.placeholders.agentContactNo",
+      "foundInFile": "src/screens/partner/AgentsPropertyScreen/AddAgentPropertyScreen.tsx",
+      "matchPattern": "t('agentProperty.placeholders.agentContactNo')"
+    },
+    {
+      "key": "agentProperty.placeholders.propertyLocation",
+      "foundInFile": "src/screens/partner/AgentsPropertyScreen/AddAgentPropertyScreen.tsx",
+      "matchPattern": "t('agentProperty.placeholders.propertyLocation')"
+    },
+    {
+      "key": "agentProperty.placeholders.demandPrice",
+      "foundInFile": "src/screens/partner/AgentsPropertyScreen/AddAgentPropertyScreen.tsx",
+      "matchPattern": "t('agentProperty.placeholders.demandPrice')"
+    },
+    {
+      "key": "agentProperty.placeholders.securityDepositAmount",
+      "foundInFile": "src/screens/partner/AgentsPropertyScreen/AddAgentPropertyScreen.tsx",
+      "matchPattern": "t('agentProperty.placeholders.securityDepositAmount')"
+    },
+    {
+      "key": "agentProperty.placeholders.propertyNotes",
+      "foundInFile": "src/screens/partner/AgentsPropertyScreen/AddAgentPropertyScreen.tsx",
+      "matchPattern": "t('agentProperty.placeholders.propertyNotes')"
+    },
+    {
+      "key": "agentProperty.placeholders.searchByName",
+      "foundInFile": "src/screens/partner/AgentsPropertyScreen/components/SearchAndFilter.tsx",
+      "matchPattern": "t('agentProperty.placeholders.searchByName')"
+    },
+    {
+      "key": "agentProperty.messages.propertyAdded",
+      "foundInFile": "src/screens/partner/AgentsPropertyScreen/AddAgentPropertyScreen.tsx",
+      "matchPattern": "t('agentProperty.messages.propertyAdded')"
+    },
+    {
+      "key": "agentProperty.messages.propertyUpdated",
+      "foundInFile": "src/screens/partner/AgentsPropertyScreen/AddAgentPropertyScreen.tsx",
+      "matchPattern": "t('agentProperty.messages.propertyUpdated')"
+    },
+    {
+      "key": "agentProperty.messages.updateFailed",
+      "foundInFile": "src/screens/partner/AgentsPropertyScreen/AddAgentPropertyScreen.tsx",
+      "matchPattern": "t('agentProperty.messages.updateFailed')"
+    },
+    {
+      "key": "agentProperty.messages.validationError",
+      "foundInFile": "src/screens/partner/AgentsPropertyScreen/AddAgentPropertyScreen.tsx",
+      "matchPattern": "t('agentProperty.messages.validationError')"
+    },
+    {
+      "key": "agentProperty.messages.noProperties",
+      "foundInFile": "src/screens/partner/AgentsPropertyScreen/AgentsPropertyScreen.tsx",
+      "matchPattern": "t('agentProperty.messages.noProperties')"
+    },
+    {
+      "key": "agentProperty.messages.deleteSuccess",
+      "foundInFile": "src/screens/partner/AgentsPropertyScreen/components/RenderItem.tsx",
+      "matchPattern": "t('agentProperty.messages.deleteSuccess')"
+    },
+    {
+      "key": "agentProperty.messages.deleteError",
+      "foundInFile": "src/screens/partner/AgentsPropertyScreen/components/RenderItem.tsx",
+      "matchPattern": "t('agentProperty.messages.deleteError')"
+    },
+    {
+      "key": "agentProperty.messages.notSpecified",
+      "foundInFile": "src/screens/partner/AgentsPropertyScreen/components/RenderItem.tsx",
+      "matchPattern": "t('agentProperty.messages.notSpecified')"
+    },
+    {
+      "key": "agentProperty.messages.na",
+      "foundInFile": "src/screens/partner/AgentsPropertyScreen/components/RenderItem.tsx",
+      "matchPattern": "t('agentProperty.messages.na')"
+    },
+    {
+      "key": "agentProperty.messages.deleteConfirmation",
+      "foundInFile": "src/screens/partner/AgentsPropertyScreen/components/RenderItem.tsx",
+      "matchPattern": "t('agentProperty.messages.deleteConfirmation')"
+    },
+    {
+      "key": "agentProperty.buttons.add",
+      "foundInFile": "src/screens/partner/AgentsPropertyScreen/AgentsPropertyScreen.tsx",
+      "matchPattern": "t('agentProperty.buttons.add')"
+    },
+    {
+      "key": "agentProperty.buttons.submit",
+      "foundInFile": "src/screens/partner/AgentsPropertyScreen/AddAgentPropertyScreen.tsx",
+      "matchPattern": "t('agentProperty.buttons.submit')"
+    },
+    {
+      "key": "agentProperty.buttons.cancel",
+      "foundInFile": "src/components/LanguageChangeAlert.tsx",
+      "matchPattern": "partial: cancel"
+    },
+    {
+      "key": "agentProperty.buttons.applyFilters",
+      "foundInFile": "src/screens/partner/AgentsPropertyScreen/components/FilterModal.tsx",
+      "matchPattern": "t('agentProperty.buttons.applyFilters')"
+    },
+    {
+      "key": "agentProperty.buttons.filterProperties",
+      "foundInFile": "src/screens/partner/AgentsPropertyScreen/components/FilterModal.tsx",
+      "matchPattern": "t('agentProperty.buttons.filterProperties')"
+    },
+    {
+      "key": "agentProperty.buttons.clearAll",
+      "foundInFile": "src/screens/partner/AgentsPropertyScreen/components/FilterModal.tsx",
+      "matchPattern": "t('agentProperty.buttons.clearAll')"
+    },
+    {
+      "key": "billing.title",
+      "foundInFile": "src/screens/partner/BillingScreen/BillingScreen.tsx",
+      "matchPattern": "'billing.title'"
+    },
+    {
+      "key": "billing.subtitle",
+      "foundInFile": "src/screens/partner/BillingScreen/BillingScreen.tsx",
+      "matchPattern": "'billing.subtitle'"
+    },
+    {
+      "key": "billing.plans.title",
+      "foundInFile": "src/screens/partner/Plans/PlansScreen.tsx",
+      "matchPattern": "'billing.plans.title'"
+    },
+    {
+      "key": "billing.switchPlanButton",
+      "foundInFile": "src/screens/partner/BillingScreen/BillingScreen.tsx",
+      "matchPattern": "'billing.switchPlanButton'"
+    },
+    {
+      "key": "billing.success.title",
+      "foundInFile": "src/screens/partner/BillingScreen/BillingScreen.tsx",
+      "matchPattern": "'billing.success.title'"
+    },
+    {
+      "key": "billing.success.subtitle",
+      "foundInFile": "src/screens/partner/BillingScreen/BillingScreen.tsx",
+      "matchPattern": "'billing.success.subtitle'"
+    },
+    {
+      "key": "billing.errors.loadFailed",
+      "foundInFile": "src/screens/partner/BillingScreen/BillingScreen.tsx",
+      "matchPattern": "'billing.errors.loadFailed'"
+    },
+    {
+      "key": "billing.errors.paymentFailed",
+      "foundInFile": "src/screens/partner/BillingScreen/BillingScreen.tsx",
+      "matchPattern": "'billing.errors.paymentFailed'"
+    },
+    {
+      "key": "billing.errors.generic",
+      "foundInFile": "src/screens/partner/BillingScreen/BillingScreen.tsx",
+      "matchPattern": "'billing.errors.generic'"
+    },
+    {
+      "key": "billing.errors.loadPlansFailed",
+      "foundInFile": "src/screens/partner/BillingScreen/components/BillingPlanSwitcherModal.tsx",
+      "matchPattern": "'billing.errors.loadPlansFailed'"
+    },
+    {
+      "key": "billing.empty.title",
+      "foundInFile": "src/screens/partner/Plans/PlansScreen.tsx",
+      "matchPattern": "'billing.empty.title'"
+    },
+    {
+      "key": "billing.empty.message",
+      "foundInFile": "src/components/ContactScreen.tsx",
+      "matchPattern": "partial: message"
+    },
+    {
+      "key": "billing.empty.createButton",
+      "foundInFile": "src/screens/partner/Plans/PlansScreen.tsx",
+      "matchPattern": "'billing.empty.createButton'"
+    },
+    {
+      "key": "billing.delete.title",
+      "foundInFile": "src/screens/partner/Plans/PlansScreen.tsx",
+      "matchPattern": "'billing.delete.title'"
+    },
+    {
+      "key": "billing.delete.confirmMessage",
+      "foundInFile": "src/screens/partner/Plans/PlansScreen.tsx",
+      "matchPattern": "'billing.delete.confirmMessage'"
+    },
+    {
+      "key": "billing.nextBill.title",
+      "foundInFile": "src/screens/partner/BillingScreen/components/NextBillCard.tsx",
+      "matchPattern": "'billing.nextBill.title'"
+    },
+    {
+      "key": "billing.nextBill.billingCycle",
+      "foundInFile": "src/screens/partner/BillingScreen/components/BillingPlanSwitcherModal.tsx",
+      "matchPattern": "'billing.nextBill.billingCycle'"
+    },
+    {
+      "key": "billing.nextBill.duration",
+      "foundInFile": "src/screens/partner/BillingScreen/components/BillingPlanSwitcherModal.tsx",
+      "matchPattern": "'billing.nextBill.duration'"
+    },
+    {
+      "key": "billing.nextBill.days",
+      "foundInFile": "src/screens/partner/BillingScreen/components/BillingPlanSwitcherModal.tsx",
+      "matchPattern": "'billing.nextBill.days'"
+    },
+    {
+      "key": "billing.nextBill.billingPeriod",
+      "foundInFile": "src/screens/partner/BillingScreen/components/NextBillCard.tsx",
+      "matchPattern": "'billing.nextBill.billingPeriod'"
+    },
+    {
+      "key": "billing.nextBill.payNow",
+      "foundInFile": "src/screens/partner/BillingScreen/components/NextBillCard.tsx",
+      "matchPattern": "'billing.nextBill.payNow'"
+    },
+    {
+      "key": "billing.nextBill.billingCycleValues.Monthly",
+      "foundInFile": "src/constants/BillingCycle.ts",
+      "matchPattern": "partial: Monthly"
+    },
+    {
+      "key": "billing.nextBill.billingCycleValues.Yearly",
+      "foundInFile": "src/constants/BillingCycle.ts",
+      "matchPattern": "partial: Yearly"
+    },
+    {
+      "key": "billing.paymentHistory.title",
+      "foundInFile": "src/screens/partner/BillingScreen/components/PaymentHistory.tsx",
+      "matchPattern": "'billing.paymentHistory.title'"
+    },
+    {
+      "key": "billing.paymentHistory.status.success",
+      "foundInFile": "src/hooks/usePaymentVerification.ts",
+      "matchPattern": "partial: success"
+    },
+    {
+      "key": "billing.paymentHistory.status.failed",
+      "foundInFile": "src/screens/partner/BillingScreen/components/PaymentHistory.tsx",
+      "matchPattern": "'billing.paymentHistory.status.failed'"
+    },
+    {
+      "key": "billing.paymentModal.title",
+      "foundInFile": "src/screens/partner/BillingScreen/components/PaymentModal.tsx",
+      "matchPattern": "'billing.paymentModal.title'"
+    },
+    {
+      "key": "billing.paymentModal.subtitle",
+      "foundInFile": "src/screens/partner/BillingScreen/components/PaymentModal.tsx",
+      "matchPattern": "'billing.paymentModal.subtitle'"
+    },
+    {
+      "key": "billing.paymentModal.paymentSummary",
+      "foundInFile": "src/screens/partner/BillingScreen/components/PaymentModal.tsx",
+      "matchPattern": "'billing.paymentModal.paymentSummary'"
+    },
+    {
+      "key": "billing.paymentModal.totalAmount",
+      "foundInFile": "src/screens/partner/BillingScreen/components/PaymentModal.tsx",
+      "matchPattern": "'billing.paymentModal.totalAmount'"
+    },
+    {
+      "key": "billing.paymentModal.servicePeriod",
+      "foundInFile": "src/screens/partner/BillingScreen/components/PaymentModal.tsx",
+      "matchPattern": "'billing.paymentModal.servicePeriod'"
+    },
+    {
+      "key": "billing.paymentModal.confirmAndPay",
+      "foundInFile": "src/screens/partner/BillingScreen/components/PaymentModal.tsx",
+      "matchPattern": "'billing.paymentModal.confirmAndPay'"
+    },
+    {
+      "key": "billing.paymentModal.securityText",
+      "foundInFile": "src/screens/partner/BillingScreen/components/PaymentModal.tsx",
+      "matchPattern": "'billing.paymentModal.securityText'"
+    },
+    {
+      "key": "billing.loading.billingInfo",
+      "foundInFile": "src/screens/partner/BillingScreen/components/LoadingComponent.tsx",
+      "matchPattern": "'billing.loading.billingInfo'"
+    },
+    {
+      "key": "billing.loading.plans",
+      "foundInFile": "src/screens/partner/Plans/PlansScreen.tsx",
+      "matchPattern": "'billing.loading.plans'"
+    },
+    {
+      "key": "billing.retry.tryAgain",
+      "foundInFile": "src/screens/partner/BillingScreen/components/ErrorComponent.tsx",
+      "matchPattern": "'billing.retry.tryAgain'"
+    },
+    {
+      "key": "billing.planSwitcher.title",
+      "foundInFile": "src/screens/partner/BillingScreen/components/BillingPlanSwitcherModal.tsx",
+      "matchPattern": "'billing.planSwitcher.title'"
+    },
+    {
+      "key": "billing.planSwitcher.switchPlan",
+      "foundInFile": "src/screens/partner/BillingScreen/components/BillingPlanSwitcherModal.tsx",
+      "matchPattern": "'billing.planSwitcher.switchPlan'"
+    },
+    {
+      "key": "billing.planSwitcher.planSwitched",
+      "foundInFile": "src/screens/partner/BillingScreen/components/BillingPlanSwitcherModal.tsx",
+      "matchPattern": "'billing.planSwitcher.planSwitched'"
+    },
+    {
+      "key": "billing.planSwitcher.planUpdated",
+      "foundInFile": "src/screens/partner/BillingScreen/components/BillingPlanSwitcherModal.tsx",
+      "matchPattern": "'billing.planSwitcher.planUpdated'"
+    },
+    {
+      "key": "billing.planSwitcher.switchFailed",
+      "foundInFile": "src/screens/partner/BillingScreen/components/BillingPlanSwitcherModal.tsx",
+      "matchPattern": "'billing.planSwitcher.switchFailed'"
+    },
+    {
+      "key": "billing.planSwitcher.selectPlan",
+      "foundInFile": "src/screens/partner/BillingScreen/components/BillingPlanSwitcherModal.tsx",
+      "matchPattern": "'billing.planSwitcher.selectPlan'"
+    },
+    {
+      "key": "billing.planSwitcher.submitChange",
+      "foundInFile": "src/screens/partner/BillingScreen/components/BillingPlanSwitcherModal.tsx",
+      "matchPattern": "'billing.planSwitcher.submitChange'"
+    },
+    {
+      "key": "billing.planSwitcher.maxUsers",
+      "foundInFile": "src/screens/partner/BillingScreen/components/BillingPlanSwitcherModal.tsx",
+      "matchPattern": "'billing.planSwitcher.maxUsers'"
+    },
+    {
+      "key": "billing.planSwitcher.trialPlan",
+      "foundInFile": "src/screens/partner/BillingScreen/components/BillingPlanSwitcherModal.tsx",
+      "matchPattern": "'billing.planSwitcher.trialPlan'"
+    },
+    {
+      "key": "billing.paymentLoading.creatingOrder",
+      "foundInFile": "src/components/PaymentLoading.tsx",
+      "matchPattern": "'billing.paymentLoading.creatingOrder'"
+    },
+    {
+      "key": "billing.paymentLoading.processingPayment",
+      "foundInFile": "src/components/PaymentLoading.tsx",
+      "matchPattern": "'billing.paymentLoading.processingPayment'"
+    },
+    {
+      "key": "billing.paymentLoading.verifyingPayment",
+      "foundInFile": "src/components/PaymentLoading.tsx",
+      "matchPattern": "'billing.paymentLoading.verifyingPayment'"
+    },
+    {
+      "key": "billing.paymentLoading.loading",
+      "foundInFile": "src/components/PaymentLoading.tsx",
+      "matchPattern": "'billing.paymentLoading.loading'"
+    },
+    {
+      "key": "billing.paymentLoading.steps.order",
+      "foundInFile": "src/components/PaymentLoading.tsx",
+      "matchPattern": "'billing.paymentLoading.steps.order'"
+    },
+    {
+      "key": "billing.paymentLoading.steps.payment",
+      "foundInFile": "src/components/PaymentLoading.tsx",
+      "matchPattern": "'billing.paymentLoading.steps.payment'"
+    },
+    {
+      "key": "billing.paymentLoading.steps.verify",
+      "foundInFile": "src/components/PaymentLoading.tsx",
+      "matchPattern": "'billing.paymentLoading.steps.verify'"
+    },
+    {
+      "key": "billing.planItem.badge.trial",
+      "foundInFile": "src/screens/partner/Plans/components/PlanItem.tsx",
+      "matchPattern": "'billing.planItem.badge.trial'"
+    },
+    {
+      "key": "billing.planItem.badge.premium",
+      "foundInFile": "src/components/CustomDrawerContent.tsx",
+      "matchPattern": "partial: premium"
+    },
+    {
+      "key": "billing.planItem.features.users",
+      "foundInFile": "src/screens/partner/Plans/components/PlanItem.tsx",
+      "matchPattern": "'billing.planItem.features.users'"
+    },
+    {
+      "key": "billing.planItem.features.days",
+      "foundInFile": "src/screens/partner/BillingScreen/components/BillingPlanSwitcherModal.tsx",
+      "matchPattern": "partial: days"
+    },
+    {
+      "key": "billing.addPlan.title.add",
+      "foundInFile": "src/screens/partner/Plans/AddPlanScreen.tsx",
+      "matchPattern": "'billing.addPlan.title.add'"
+    },
+    {
+      "key": "billing.addPlan.title.edit",
+      "foundInFile": "src/components/CustomDrawerContent.tsx",
+      "matchPattern": "partial: edit"
+    },
+    {
+      "key": "billing.addPlan.form.planName",
+      "foundInFile": "src/screens/partner/Plans/AddPlanScreen.tsx",
+      "matchPattern": "'billing.addPlan.form.planName'"
+    },
+    {
+      "key": "billing.addPlan.form.description",
+      "foundInFile": "src/screens/partner/BillingScreen/BillingScreen.tsx",
+      "matchPattern": "partial: description"
+    },
+    {
+      "key": "billing.addPlan.form.price",
+      "foundInFile": "src/screens/partner/Plans/AddPlanScreen.tsx",
+      "matchPattern": "'billing.addPlan.form.price'"
+    },
+    {
+      "key": "billing.addPlan.form.billingCycle",
+      "foundInFile": "src/screens/partner/Plans/AddPlanScreen.tsx",
+      "matchPattern": "'billing.addPlan.form.billingCycle'"
+    },
+    {
+      "key": "billing.addPlan.form.duration",
+      "foundInFile": "src/screens/partner/Plans/AddPlanScreen.tsx",
+      "matchPattern": "'billing.addPlan.form.duration'"
+    },
+    {
+      "key": "billing.addPlan.form.maxUsers",
+      "foundInFile": "src/screens/partner/Plans/AddPlanScreen.tsx",
+      "matchPattern": "'billing.addPlan.form.maxUsers'"
+    },
+    {
+      "key": "billing.addPlan.form.isTrial",
+      "foundInFile": "src/screens/partner/Plans/AddPlanScreen.tsx",
+      "matchPattern": "'billing.addPlan.form.isTrial'"
+    },
+    {
+      "key": "billing.addPlan.placeholders.planName",
+      "foundInFile": "src/screens/partner/Plans/AddPlanScreen.tsx",
+      "matchPattern": "'billing.addPlan.placeholders.planName'"
+    },
+    {
+      "key": "billing.addPlan.placeholders.description",
+      "foundInFile": "src/screens/partner/BillingScreen/BillingScreen.tsx",
+      "matchPattern": "partial: description"
+    },
+    {
+      "key": "billing.addPlan.placeholders.price",
+      "foundInFile": "src/screens/partner/Plans/AddPlanScreen.tsx",
+      "matchPattern": "'billing.addPlan.placeholders.price'"
+    },
+    {
+      "key": "billing.addPlan.placeholders.duration",
+      "foundInFile": "src/screens/partner/Plans/AddPlanScreen.tsx",
+      "matchPattern": "'billing.addPlan.placeholders.duration'"
+    },
+    {
+      "key": "billing.addPlan.placeholders.maxUsers",
+      "foundInFile": "src/screens/partner/Plans/AddPlanScreen.tsx",
+      "matchPattern": "'billing.addPlan.placeholders.maxUsers'"
+    },
+    {
+      "key": "billing.addPlan.messages.success.add",
+      "foundInFile": "src/screens/partner/Plans/AddPlanScreen.tsx",
+      "matchPattern": "'billing.addPlan.messages.success.add'"
+    },
+    {
+      "key": "billing.addPlan.messages.success.edit",
+      "foundInFile": "src/components/CustomDrawerContent.tsx",
+      "matchPattern": "partial: edit"
+    },
+    {
+      "key": "billing.addPlan.messages.error.add",
+      "foundInFile": "src/screens/partner/Plans/AddPlanScreen.tsx",
+      "matchPattern": "'billing.addPlan.messages.error.add'"
+    },
+    {
+      "key": "billing.addPlan.messages.error.edit",
+      "foundInFile": "src/components/CustomDrawerContent.tsx",
+      "matchPattern": "partial: edit"
+    },
+    {
+      "key": "billing.addPlan.messages.error.addGeneric",
+      "foundInFile": "src/screens/partner/Plans/AddPlanScreen.tsx",
+      "matchPattern": "'billing.addPlan.messages.error.addGeneric'"
+    },
+    {
+      "key": "billing.addPlan.messages.error.editGeneric",
+      "foundInFile": "src/screens/partner/Plans/AddPlanScreen.tsx",
+      "matchPattern": "'billing.addPlan.messages.error.editGeneric'"
+    },
+    {
+      "key": "billing.addPlan.messages.error.validation",
+      "foundInFile": "src/screens/partner/Plans/AddPlanScreen.tsx",
+      "matchPattern": "'billing.addPlan.messages.error.validation'"
+    },
+    {
+      "key": "settings.title",
+      "foundInFile": "src/screens/partner/Settings/SettingsScreen.tsx",
+      "matchPattern": "'settings.title'"
+    },
+    {
+      "key": "settings.language.title",
+      "foundInFile": "src/screens/partner/Settings/SettingsScreen.tsx",
+      "matchPattern": "'settings.language.title'"
+    },
+    {
+      "key": "settings.language.current",
+      "foundInFile": "src/screens/partner/Settings/SettingsScreen.tsx",
+      "matchPattern": "'settings.language.current'"
+    },
+    {
+      "key": "settings.about.title",
+      "foundInFile": "src/screens/partner/Settings/SettingsScreen.tsx",
+      "matchPattern": "'settings.about.title'"
+    },
+    {
+      "key": "settings.version.title",
+      "foundInFile": "src/screens/partner/Settings/SettingsScreen.tsx",
+      "matchPattern": "'settings.version.title'"
+    },
+    {
+      "key": "settings.help.title",
+      "foundInFile": "src/screens/partner/Settings/SettingsScreen.tsx",
+      "matchPattern": "'settings.help.title'"
+    },
+    {
+      "key": "activity.createdBy",
+      "foundInFile": "src/screens/partner/ClientScreen/components/ActivityTimeline.tsx",
+      "matchPattern": "'activity.createdBy'"
+    },
+    {
+      "key": "subscription.expired.title",
+      "foundInFile": "src/screens/partner/TeamSubscriptionScreen/TeamSubscriptionScreen.tsx",
+      "matchPattern": "'subscription.expired.title'"
+    },
+    {
+      "key": "subscription.expired.subtitle",
+      "foundInFile": "src/screens/partner/TeamSubscriptionScreen/TeamSubscriptionScreen.tsx",
+      "matchPattern": "'subscription.expired.subtitle'"
+    },
+    {
+      "key": "subscription.expired.accessRestricted",
+      "foundInFile": "src/screens/partner/TeamSubscriptionScreen/TeamSubscriptionScreen.tsx",
+      "matchPattern": "'subscription.expired.accessRestricted'"
+    },
+    {
+      "key": "subscription.expired.accessRestrictedText",
+      "foundInFile": "src/screens/partner/TeamSubscriptionScreen/TeamSubscriptionScreen.tsx",
+      "matchPattern": "'subscription.expired.accessRestrictedText'"
+    },
+    {
+      "key": "subscription.expired.whatHappensNext",
+      "foundInFile": "src/screens/partner/TeamSubscriptionScreen/TeamSubscriptionScreen.tsx",
+      "matchPattern": "'subscription.expired.whatHappensNext'"
+    },
+    {
+      "key": "subscription.expired.steps.contactPartner",
+      "foundInFile": "src/screens/partner/TeamSubscriptionScreen/TeamSubscriptionScreen.tsx",
+      "matchPattern": "'subscription.expired.steps.contactPartner'"
+    },
+    {
+      "key": "subscription.expired.steps.requestRenewal",
+      "foundInFile": "src/screens/partner/TeamSubscriptionScreen/TeamSubscriptionScreen.tsx",
+      "matchPattern": "'subscription.expired.steps.requestRenewal'"
+    },
+    {
+      "key": "subscription.expired.steps.waitForRenewal",
+      "foundInFile": "src/screens/partner/TeamSubscriptionScreen/TeamSubscriptionScreen.tsx",
+      "matchPattern": "'subscription.expired.steps.waitForRenewal'"
+    },
+    {
+      "key": "subscription.expired.steps.refreshStatus",
+      "foundInFile": "src/screens/partner/TeamSubscriptionScreen/TeamSubscriptionScreen.tsx",
+      "matchPattern": "'subscription.expired.steps.refreshStatus'"
+    },
+    {
+      "key": "subscription.expired.checkStatus",
+      "foundInFile": "src/screens/partner/TeamSubscriptionScreen/TeamSubscriptionScreen.tsx",
+      "matchPattern": "'subscription.expired.checkStatus'"
+    },
+    {
+      "key": "transactions.title",
+      "foundInFile": "src/navigator/components/TransactionsStack.tsx",
+      "matchPattern": "t('transactions.title')"
+    },
+    {
+      "key": "transactions.loading",
+      "foundInFile": "src/screens/partner/TransactionsScreen/TransactionsScreen.tsx",
+      "matchPattern": "t('transactions.loading')"
+    },
+    {
+      "key": "transactions.loadingMore",
+      "foundInFile": "src/screens/partner/TransactionsScreen/TransactionsScreen.tsx",
+      "matchPattern": "t('transactions.loadingMore')"
+    },
+    {
+      "key": "transactions.noInternetConnection",
+      "foundInFile": "src/screens/partner/TransactionsScreen/TransactionsScreen.tsx",
+      "matchPattern": "t('transactions.noInternetConnection')"
+    },
+    {
+      "key": "transactions.connectionLost",
+      "foundInFile": "src/screens/partner/TransactionsScreen/TransactionsScreen.tsx",
+      "matchPattern": "t('transactions.connectionLost')"
+    },
+    {
+      "key": "transactions.connectionLostMessage",
+      "foundInFile": "src/screens/partner/TransactionsScreen/TransactionsScreen.tsx",
+      "matchPattern": "t('transactions.connectionLostMessage')"
+    },
+    {
+      "key": "transactions.noInternetLoadMessage",
+      "foundInFile": "src/screens/partner/TransactionsScreen/TransactionsScreen.tsx",
+      "matchPattern": "t('transactions.noInternetLoadMessage')"
+    },
+    {
+      "key": "transactions.noInternetFilterMessage",
+      "foundInFile": "src/screens/partner/TransactionsScreen/TransactionsScreen.tsx",
+      "matchPattern": "t('transactions.noInternetFilterMessage')"
+    },
+    {
+      "key": "transactions.noInternetApplyFiltersMessage",
+      "foundInFile": "src/screens/partner/TransactionsScreen/TransactionsScreen.tsx",
+      "matchPattern": "t('transactions.noInternetApplyFiltersMessage')"
+    },
+    {
+      "key": "transactions.failedToLoad",
+      "foundInFile": "src/screens/partner/TransactionsScreen/TransactionsScreen.tsx",
+      "matchPattern": "t('transactions.failedToLoad')"
+    },
+    {
+      "key": "transactions.failedToLoadMessage",
+      "foundInFile": "src/screens/partner/TransactionsScreen/TransactionsScreen.tsx",
+      "matchPattern": "t('transactions.failedToLoadMessage')"
+    },
+    {
+      "key": "transactions.connectionError",
+      "foundInFile": "src/screens/partner/TransactionsScreen/TransactionsScreen.tsx",
+      "matchPattern": "t('transactions.connectionError')"
+    },
+    {
+      "key": "transactions.connectionErrorMessage",
+      "foundInFile": "src/screens/partner/TransactionsScreen/TransactionsScreen.tsx",
+      "matchPattern": "t('transactions.connectionErrorMessage')"
+    },
+    {
+      "key": "transactions.error",
+      "foundInFile": "src/components/FilterOption.tsx",
+      "matchPattern": "partial: error"
+    },
+    {
+      "key": "transactions.errorMessage",
+      "foundInFile": "src/screens/partner/TransactionsScreen/TransactionsScreen.tsx",
+      "matchPattern": "t('transactions.errorMessage')"
+    },
+    {
+      "key": "transactions.loadMoreFailed",
+      "foundInFile": "src/screens/partner/TransactionsScreen/TransactionsScreen.tsx",
+      "matchPattern": "t('transactions.loadMoreFailed')"
+    },
+    {
+      "key": "transactions.loadMoreFailedMessage",
+      "foundInFile": "src/screens/partner/TransactionsScreen/TransactionsScreen.tsx",
+      "matchPattern": "t('transactions.loadMoreFailedMessage')"
+    },
+    {
+      "key": "transactions.dataRefreshed",
+      "foundInFile": "src/screens/partner/TransactionsScreen/TransactionsScreen.tsx",
+      "matchPattern": "t('transactions.dataRefreshed')"
+    },
+    {
+      "key": "transactions.dataRefreshedMessage",
+      "foundInFile": "src/screens/partner/TransactionsScreen/TransactionsScreen.tsx",
+      "matchPattern": "t('transactions.dataRefreshedMessage')"
+    },
+    {
+      "key": "transactions.filtersApplied",
+      "foundInFile": "src/screens/partner/TransactionsScreen/TransactionsScreen.tsx",
+      "matchPattern": "t('transactions.filtersApplied')"
+    },
+    {
+      "key": "transactions.filtersAppliedMessage",
+      "foundInFile": "src/screens/partner/TransactionsScreen/TransactionsScreen.tsx",
+      "matchPattern": "t('transactions.filtersAppliedMessage')"
+    },
+    {
+      "key": "transactions.filtersReset",
+      "foundInFile": "src/screens/partner/TransactionsScreen/TransactionsScreen.tsx",
+      "matchPattern": "t('transactions.filtersReset')"
+    },
+    {
+      "key": "transactions.filtersResetMessage",
+      "foundInFile": "src/screens/partner/TransactionsScreen/TransactionsScreen.tsx",
+      "matchPattern": "t('transactions.filtersResetMessage')"
+    },
+    {
+      "key": "transactions.noTransactionsFound",
+      "foundInFile": "src/screens/partner/TransactionsScreen/TransactionsScreen.tsx",
+      "matchPattern": "t('transactions.noTransactionsFound')"
+    },
+    {
+      "key": "transactions.noTransactionsFoundMessage",
+      "foundInFile": "src/screens/partner/TransactionsScreen/TransactionsScreen.tsx",
+      "matchPattern": "t('transactions.noTransactionsFoundMessage')"
+    },
+    {
+      "key": "transactions.adjustFiltersMessage",
+      "foundInFile": "src/screens/partner/TransactionsScreen/TransactionsScreen.tsx",
+      "matchPattern": "t('transactions.adjustFiltersMessage')"
+    },
+    {
+      "key": "transactions.summary.title",
+      "foundInFile": "src/screens/partner/TransactionsScreen/TransactionsScreen.tsx",
+      "matchPattern": "t('transactions.summary.title')"
+    },
+    {
+      "key": "transactions.summary.total",
+      "foundInFile": "src/screens/partner/TransactionsScreen/TransactionsScreen.tsx",
+      "matchPattern": "t('transactions.summary.total')"
+    },
+    {
+      "key": "transactions.summary.successful",
+      "foundInFile": "src/screens/partner/TransactionsScreen/TransactionsScreen.tsx",
+      "matchPattern": "t('transactions.summary.successful')"
+    },
+    {
+      "key": "transactions.summary.failed",
+      "foundInFile": "src/screens/partner/TransactionsScreen/TransactionsScreen.tsx",
+      "matchPattern": "t('transactions.summary.failed')"
+    },
+    {
+      "key": "transactions.summary.totalAmount",
+      "foundInFile": "src/screens/partner/TransactionsScreen/TransactionsScreen.tsx",
+      "matchPattern": "t('transactions.summary.totalAmount')"
+    },
+    {
+      "key": "transactions.filters.title",
+      "foundInFile": "src/screens/partner/TransactionsScreen/components/FilterModal.tsx",
+      "matchPattern": "t('transactions.filters.title')"
+    },
+    {
+      "key": "transactions.filters.reset",
+      "foundInFile": "src/screens/partner/TransactionsScreen/components/FilterModal.tsx",
+      "matchPattern": "t('transactions.filters.reset')"
+    },
+    {
+      "key": "transactions.filters.apply",
+      "foundInFile": "src/screens/partner/TransactionsScreen/components/FilterModal.tsx",
+      "matchPattern": "t('transactions.filters.apply')"
+    },
+    {
+      "key": "transactions.filters.search",
+      "foundInFile": "src/components/GetIcon.tsx",
+      "matchPattern": "partial: search"
+    },
+    {
+      "key": "transactions.filters.searchPlaceholder",
+      "foundInFile": "src/screens/partner/TransactionsScreen/components/FilterModal.tsx",
+      "matchPattern": "t('transactions.filters.searchPlaceholder')"
+    },
+    {
+      "key": "transactions.filters.status",
+      "foundInFile": "src/screens/partner/ListingsScreen/components/FilterModal.tsx",
+      "matchPattern": "partial: status"
+    },
+    {
+      "key": "transactions.filters.paymentMethod",
+      "foundInFile": "src/screens/partner/TransactionsScreen/components/FilterModal.tsx",
+      "matchPattern": "t('transactions.filters.paymentMethod')"
+    },
+    {
+      "key": "transactions.filters.sortBy",
+      "foundInFile": "src/screens/buyer/SearchProperties/hooks/useSearchProperties.ts",
+      "matchPattern": "partial: sortBy"
+    },
+    {
+      "key": "transactions.filters.sortOrder",
+      "foundInFile": "src/screens/partner/TransactionsScreen/TransactionsScreen.tsx",
+      "matchPattern": "partial: sortOrder"
+    },
+    {
+      "key": "transactions.filters.all",
+      "foundInFile": "src/screens/buyer/SearchProperties/components/PropertyTypeToggle.tsx",
+      "matchPattern": "partial: all"
+    },
+    {
+      "key": "transactions.filters.date",
+      "foundInFile": "src/screens/partner/ClientScreen/components/ScheduleFollowUpModal.tsx",
+      "matchPattern": "partial: date"
+    },
+    {
+      "key": "transactions.filters.amount",
+      "foundInFile": "src/screens/partner/TransactionsScreen/components/FilterModal.tsx",
+      "matchPattern": "t('transactions.filters.amount')"
+    },
+    {
+      "key": "transactions.filters.newestFirst",
+      "foundInFile": "src/screens/partner/TransactionsScreen/components/FilterModal.tsx",
+      "matchPattern": "t('transactions.filters.newestFirst')"
+    },
+    {
+      "key": "transactions.filters.oldestFirst",
+      "foundInFile": "src/screens/partner/TransactionsScreen/components/FilterModal.tsx",
+      "matchPattern": "t('transactions.filters.oldestFirst')"
+    },
+    {
+      "key": "transactions.status.captured",
+      "foundInFile": "src/screens/partner/TransactionsScreen/components/TransactionCard.tsx",
+      "matchPattern": "t('transactions.status.captured')"
+    },
+    {
+      "key": "transactions.status.completed",
+      "foundInFile": "src/screens/partner/TransactionsScreen/components/TransactionCard.tsx",
+      "matchPattern": "t('transactions.status.completed')"
+    },
+    {
+      "key": "transactions.status.failed",
+      "foundInFile": "src/screens/partner/TransactionsScreen/components/TransactionCard.tsx",
+      "matchPattern": "t('transactions.status.failed')"
+    },
+    {
+      "key": "transactions.status.cancelled",
+      "foundInFile": "src/screens/partner/TransactionsScreen/components/TransactionCard.tsx",
+      "matchPattern": "t('transactions.status.cancelled')"
+    },
+    {
+      "key": "transactions.status.pending",
+      "foundInFile": "src/components/EditProfileComponent.tsx",
+      "matchPattern": "partial: pending"
+    },
+    {
+      "key": "transactions.status.authorized",
+      "foundInFile": "src/screens/partner/TransactionsScreen/components/TransactionCard.tsx",
+      "matchPattern": "t('transactions.status.authorized')"
+    },
+    {
+      "key": "transactions.paymentMethods.upi",
+      "foundInFile": "src/screens/partner/TransactionsScreen/components/TransactionCard.tsx",
+      "matchPattern": "t('transactions.paymentMethods.upi')"
+    },
+    {
+      "key": "transactions.paymentMethods.card",
+      "foundInFile": "src/screens/partner/TransactionsScreen/components/TransactionCard.tsx",
+      "matchPattern": "t('transactions.paymentMethods.card')"
+    },
+    {
+      "key": "transactions.paymentMethods.netbanking",
+      "foundInFile": "src/screens/partner/TransactionsScreen/components/TransactionCard.tsx",
+      "matchPattern": "t('transactions.paymentMethods.netbanking')"
+    },
+    {
+      "key": "transactions.paymentMethods.wallet",
+      "foundInFile": "src/screens/partner/TransactionsScreen/components/TransactionCard.tsx",
+      "matchPattern": "t('transactions.paymentMethods.wallet')"
+    },
+    {
+      "key": "buyerProfile.welcome.back",
+      "foundInFile": "src/components/GetIcon.tsx",
+      "matchPattern": "partial: back"
+    },
+    {
+      "key": "buyerProfile.welcome.subtitle",
+      "foundInFile": "src/screens/buyer/BuyerProfileScreen.tsx",
+      "matchPattern": "t('buyerProfile.welcome.subtitle')"
+    },
+    {
+      "key": "buyerProfile.options.personal.title",
+      "foundInFile": "src/screens/buyer/BuyerProfileScreen.tsx",
+      "matchPattern": "t('buyerProfile.options.personal.title')"
+    },
+    {
+      "key": "buyerProfile.options.personal.subtitle",
+      "foundInFile": "src/screens/buyer/BuyerProfileScreen.tsx",
+      "matchPattern": "t('buyerProfile.options.personal.subtitle')"
+    },
+    {
+      "key": "buyerProfile.options.properties.title",
+      "foundInFile": "src/screens/buyer/BuyerProfileScreen.tsx",
+      "matchPattern": "t('buyerProfile.options.properties.title')"
+    },
+    {
+      "key": "buyerProfile.options.properties.subtitle",
+      "foundInFile": "src/screens/buyer/BuyerProfileScreen.tsx",
+      "matchPattern": "t('buyerProfile.options.properties.subtitle')"
+    },
+    {
+      "key": "buyerProfile.options.analytics.title",
+      "foundInFile": "src/screens/buyer/BuyerProfileScreen.tsx",
+      "matchPattern": "t('buyerProfile.options.analytics.title')"
+    },
+    {
+      "key": "buyerProfile.options.analytics.subtitle",
+      "foundInFile": "src/screens/buyer/BuyerProfileScreen.tsx",
+      "matchPattern": "t('buyerProfile.options.analytics.subtitle')"
+    },
+    {
+      "key": "buyerProfile.options.settings.title",
+      "foundInFile": "src/screens/buyer/BuyerProfileScreen.tsx",
+      "matchPattern": "t('buyerProfile.options.settings.title')"
+    },
+    {
+      "key": "buyerProfile.options.settings.subtitle",
+      "foundInFile": "src/screens/buyer/BuyerProfileScreen.tsx",
+      "matchPattern": "t('buyerProfile.options.settings.subtitle')"
+    },
+    {
+      "key": "buyerProfile.stats.totalProperties",
+      "foundInFile": "src/screens/buyer/BuyerProfileScreen.tsx",
+      "matchPattern": "t('buyerProfile.stats.totalProperties')"
+    },
+    {
+      "key": "buyerProfile.stats.activeListings",
+      "foundInFile": "src/screens/buyer/BuyerProfileScreen.tsx",
+      "matchPattern": "t('buyerProfile.stats.activeListings')"
+    },
+    {
+      "key": "buyerProfile.stats.totalEarnings",
+      "foundInFile": "src/screens/buyer/BuyerProfileScreen.tsx",
+      "matchPattern": "t('buyerProfile.stats.totalEarnings')"
+    },
+    {
+      "key": "contactUs.title",
+      "foundInFile": "src/screens/buyer/ContactUsScreen.tsx",
+      "matchPattern": "t('contactUs.title')"
+    },
+    {
+      "key": "contactUs.subtitle",
+      "foundInFile": "src/screens/buyer/ContactUsScreen.tsx",
+      "matchPattern": "t('contactUs.subtitle')"
+    },
+    {
+      "key": "contactUs.contactInfo.phone",
+      "foundInFile": "src/components/ContactScreen.tsx",
+      "matchPattern": "partial: phone"
+    },
+    {
+      "key": "contactUs.contactInfo.email",
+      "foundInFile": "src/components/ContactScreen.tsx",
+      "matchPattern": "partial: email"
+    },
+    {
+      "key": "contactUs.contactInfo.address",
+      "foundInFile": "src/screens/buyer/ContactUsScreen.tsx",
+      "matchPattern": "t('contactUs.contactInfo.address')"
+    },
+    {
+      "key": "contactUs.officeHours.mondayFriday",
+      "foundInFile": "src/screens/buyer/ContactUsScreen.tsx",
+      "matchPattern": "t('contactUs.officeHours.mondayFriday')"
+    },
+    {
+      "key": "contactUs.officeHours.saturday",
+      "foundInFile": "src/screens/buyer/ContactUsScreen.tsx",
+      "matchPattern": "t('contactUs.officeHours.saturday')"
+    },
+    {
+      "key": "contactUs.officeHours.sunday",
+      "foundInFile": "src/screens/buyer/ContactUsScreen.tsx",
+      "matchPattern": "t('contactUs.officeHours.sunday')"
+    },
+    {
+      "key": "contactUs.officeHours.hours.weekday",
+      "foundInFile": "src/screens/buyer/ContactUsScreen.tsx",
+      "matchPattern": "t('contactUs.officeHours.hours.weekday')"
+    },
+    {
+      "key": "contactUs.officeHours.hours.saturday",
+      "foundInFile": "src/screens/buyer/ContactUsScreen.tsx",
+      "matchPattern": "t('contactUs.officeHours.hours.saturday')"
+    },
+    {
+      "key": "contactUs.officeHours.hours.sunday",
+      "foundInFile": "src/screens/buyer/ContactUsScreen.tsx",
+      "matchPattern": "t('contactUs.officeHours.hours.sunday')"
+    },
+    {
+      "key": "contactUs.socialLinks.facebook",
+      "foundInFile": "src/screens/buyer/ContactUsScreen.tsx",
+      "matchPattern": "t('contactUs.socialLinks.facebook')"
+    },
+    {
+      "key": "contactUs.socialLinks.instagram",
+      "foundInFile": "src/screens/buyer/ContactUsScreen.tsx",
+      "matchPattern": "t('contactUs.socialLinks.instagram')"
+    },
+    {
+      "key": "contactUs.socialLinks.linkedin",
+      "foundInFile": "src/screens/buyer/ContactUsScreen.tsx",
+      "matchPattern": "t('contactUs.socialLinks.linkedin')"
+    },
+    {
+      "key": "contactUs.socialLinks.twitter",
+      "foundInFile": "src/screens/buyer/ContactUsScreen.tsx",
+      "matchPattern": "t('contactUs.socialLinks.twitter')"
+    },
+    {
+      "key": "contactUs.buttons.sendMessage",
+      "foundInFile": "src/screens/buyer/ContactUsScreen.tsx",
+      "matchPattern": "t('contactUs.buttons.sendMessage')"
+    }
+  ]
+}

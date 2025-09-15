@@ -1,0 +1,1433 @@
+{
+  "common": {
+    "actions": {
+      "submit": "सबमिट करें",
+      "cancel": "रद्द करें",
+      "save": "सेव करें",
+      "delete": "डिलीट करें",
+      "edit": "संपादित करें",
+      "add": "जोड़ें",
+      "addActivity": "गतिविधि जोड़ें",
+      "back": "वापस",
+      "next": "जारी रखें",
+      "search": "खोजें",
+      "filter": "फिल्टर करें",
+      "sort": "क्रमबद्ध करें",
+      "refresh": "रिफ्रेश करें",
+      "retry": "पुनः प्रयास करें",
+      "close": "बंद करें",
+      "confirm": "पुष्टि करें",
+      "ok": "ठीक है",
+      "yes": "हाँ",
+      "no": "नहीं",
+      "call": "कॉल करें"
+    },
+    "states": {
+      "loading": "लोड हो रहा है...",
+      "loadingMore": "और लोड हो रहा है...",
+      "searching": "खोज रहे हैं...",
+      "verifying": "सत्यापित कर रहे हैं...",
+      "sending": "भेज रहे हैं...",
+      "success": "सफलता",
+      "error": "त्रुटि",
+      "empty": "कोई डेटा उपलब्ध नहीं",
+      "refreshToLoad": "अपडेट के लिए नीचे खींचें",
+      "assigned": "सौंपा गया",
+      "unassigned": "असौंपित",
+      "loadingAssignments": "असाइनमेंट लोड हो रहे हैं..."
+    },
+    "success": {
+      "title": "सफलता"
+    },
+    "errors": {
+      "error": "त्रुटि"
+    },
+    "labels": {
+      "email": "ईमेल",
+      "name": "नाम",
+      "phone": "फोन",
+      "mobile": "मोबाइल",
+      "whatsapp": "व्हाट्सएप",
+      "address": "पता",
+      "description": "विवरण",
+      "groups": "समूह",
+      "notes": "नोट्स",
+      "showMore": "और दिखाएं",
+      "showLess": "कम दिखाएं",
+      "by": "द्वारा",
+      "at": "पर"
+    }
+  },
+  "errors": {
+    "network": "नेटवर्क कनेक्शन त्रुटि",
+    "validation": "कृपया अपना इनपुट जांचें",
+    "unauthorized": "सेशन समाप्त हो गया। कृपया पुनः लॉगिन करें",
+    "generic": "कुछ गलत हुआ। कृपया पुनः प्रयास करें",
+    "emailVerificationFailed": "ईमेल सत्यापन असफल",
+    "emailNotFound": "ईमेल नहीं मिला",
+    "unexpectedError": "एक अप्रत्याशित त्रुटि हुई",
+    "failedToSendOtp": "OTP भेजने में असफल। कृपया पुनः प्रयास करें",
+    "refreshError": "डेटा रिफ्रेश करने में त्रुटि"
+  },
+  "validation": {
+    "required": "यह फील्ड आवश्यक है",
+    "invalidEmail": "कृपया एक वैध ईमेल पता दर्ज करें",
+    "invalidOtp": "कृपया एक वैध 6-अंकीय OTP दर्ज करें",
+    "minLength": "न्यूनतम {{count}} अक्षर आवश्यक हैं"
+  },
+  "time": {
+    "today": "आज",
+    "overdue": "बकाया",
+    "upcoming": "आगामी",
+    "someday": "कभी न कभी",
+    "hoursLeft": "{{hours}} घंटे",
+    "minutesLeft": "{{minutes}} मिनट",
+    "oneDay": "1 दिन",
+    "multipleDays": "{{days}} दिन",
+    "am": "पूर्वाह्न",
+    "pm": "अपराह्न",
+    "timeFormat": "h:mm a"
+  },
+  "greetings": {
+    "welcome": "स्वागत है",
+    "welcomeBack": "वापस स्वागत है",
+    "welcomePartner": "पार्टनर का स्वागत है",
+    "hi": "नमस्ते",
+    "goodMorning": "सुप्रभात",
+    "goodAfternoon": "शुभ दोपहर",
+    "goodEvening": "शुभ संध्या",
+    "goodNight": "शुभ रात्रि"
+  },
+  "navigation": {
+    "groups": "समूह",
+    "drawer": {
+      "home": "होम",
+      "groups": "समूह",
+      "teams": "टीमें",
+      "content": "कंटेंट",
+      "settings": "सेटिंग्स",
+      "buyPremium": "प्रीमियम खरीदें",
+      "payments": "भुगतान",
+      "helpCenter": "सहायता केंद्र",
+      "chatWithUs": "हमसे चैट करें",
+      "logout": "लॉगआउट",
+      "logoutConfirmation": "क्या आप वाकई लॉगआउट करना चाहते हैं?",
+      "loggingOut": "लॉगआउट हो रहा है...",
+      "underDevelopment": "यह फीचर विकास के चरण में है"
+    },
+    "paymentTabs": {
+      "plans": "योजनाएं",
+      "transactions": "लेनदेन"
+    },
+    "bottomTab": {
+      "followUp": "फॉलो-अप्स",
+      "clients": "ग्राहक",
+      "add": "जोड़ें",
+      "listings": "लिस्टिंग्स",
+      "groups": "समूह",
+      "agentData": "एजेंट डेटा",
+      "dashboard": "डैशबोर्ड",
+      "contacted": "संपर्क किए गए",
+      "searchProperty": "खोजें",
+      "contactUs": "हमसे संपर्क करें",
+      "profile": "प्रोफ़ाइल"
+    }
+  },
+  "logout": {
+    "title": "लॉग आउट",
+    "confirm": "क्या आप वाकई लॉग आउट करना चाहते हैं?",
+    "action": "लॉग आउट"
+  },
+  "dashboard": {
+    "welcome": {
+      "back": "वापसी पर स्वागत है",
+      "subtitle": "अपना सपना घर खोजें"
+    },
+    "sections": {
+      "quickActions": "त्वरित कार्य",
+      "propertiesForSale": "बिक्री के लिए संपत्तियां",
+      "propertiesForRent": "किराए के लिए संपत्तियां",
+      "recentlyContacted": "हाल ही में संपर्क किए गए",
+      "featuredProperties": "विशेष संपत्तियां"
+    },
+    "actions": {
+      "seeAll": "सभी देखें",
+      "sendEnquiry": "पूछताछ भेजें",
+      "startSearching": "खोज शुरू करें"
+    },
+    "stats": {
+      "contactedProperties": "संपर्क की गई संपत्तियां",
+      "forSaleProperties": "बिक्री के लिए संपत्तियां",
+      "forRentProperties": "किराए के लिए संपत्तियां",
+      "featuredProperties": "विशेष संपत्तियां"
+    },
+    "quickActions": {
+      "searchProperties": "संपत्तियां खोजें",
+      "myContacts": "मेरे संपर्क",
+      "contactUs": "हमसे संपर्क करें"
+    },
+    "loading": {
+      "text": "आपका डैशबोर्ड लोड हो रहा है..."
+    },
+    "error": {
+      "retry": "पुनः प्रयास करें"
+    },
+    "emptyState": {
+      "title": "अपनी संपत्ति यात्रा शुरू करें",
+      "message": "संपत्तियों की खोज करें और अपनी व्यक्तिगत डैशबोर्ड बनाना शुरू करें"
+    },
+    "labels": {
+      "featured": "विशेष",
+      "unnamedProperty": "अनाम संपत्ति",
+      "locationNotSpecified": "स्थान निर्दिष्ट नहीं",
+      "priceNotAvailable": "मूल्य उपलब्ध नहीं"
+    }
+  },
+  "contactedProperties": {
+    "header": {
+      "title": "आपके संपर्क",
+      "subtitle": "संपर्क की गई संपत्तियां"
+    },
+    "stats": {
+      "totalContacts": "कुल संपर्क",
+      "forSale": "बिक्री के लिए",
+      "forRent": "किराए के लिए"
+    },
+    "sections": {
+      "recentContacts": "हाल के संपर्क"
+    },
+    "labels": {
+      "contacted": "संपर्क किया गया",
+      "contactedOn": "संपर्क किया गया",
+      "loadingMore": "अधिक संपत्तियां लोड हो रही हैं...",
+      "loadingProperties": "संपर्क की गई संपत्तियां लोड हो रही हैं...",
+      "noProperties": "कोई संपर्क की गई संपत्ति नहीं मिली",
+      "failedToLoad": "संपर्क की गई संपत्तियां लोड करने में विफल",
+      "tryAgain": "कृपया बाद में पुनः प्रयास करें।"
+    }
+  },
+  "searchProperties": {
+    "header": {
+      "title": "खोजें अपना",
+      "subtitle": "सपना घर"
+    },
+    "search": {
+      "placeholder": "संपत्तियां खोजें...",
+      "loading": "लोड हो रहा है...",
+      "properties": "संपत्तियां"
+    },
+    "messages": {
+      "loadingProperties": "संपत्तियां लोड हो रही हैं...",
+      "noProperties": "कोई संपत्ति नहीं मिली",
+      "loadingMore": "अधिक संपत्तियां लोड हो रही हैं...",
+      "loginRequired": "पूछताछ करने के लिए कृपया लॉगिन करें",
+      "enquirySuccess": "पूछताछ सफलतापूर्वक भेजी गई",
+      "enquirySuccessSub": "विक्रेता जल्द ही आपसे संपर्क करेगा।",
+      "enquiryError": "पूछताछ भेजने में विफल",
+      "enquiryErrorSub": "कृपया बाद में पुनः प्रयास करें।",
+      "enquiryFailed": "पूछताछ भेजने में विफल",
+      "propertiesCount": "{{count}} संपत्तियां"
+    }
+  },
+  "propertyCard": {
+    "propertyType": {
+      "forSale": "बिक्री के लिए",
+      "forRent": "किराए पर",
+      "others": "अन्य"
+    }
+  },
+  "filterModal": {
+    "labels": {
+      "propertyType": "संपत्ति प्रकार",
+      "bhkType": "BHK प्रकार",
+      "furnishing": "साज-सज्जा",
+      "city": "शहर"
+    },
+    "buttons": {
+      "clearAll": "सभी साफ करें",
+      "applyFilters": "फिल्टर लागू करें"
+    }
+  },
+  "sortModal": {
+    "options": {
+      "newestFirst": "नवीनतम पहले",
+      "priceLowToHigh": "मूल्य: कम से अधिक",
+      "priceHighToLow": "मूल्य: अधिक से कम",
+      "areaLowToHigh": "क्षेत्रफल: कम से अधिक",
+      "areaHighToLow": "क्षेत्रफल: अधिक से कम"
+    }
+  },
+  "propertyTypeToggle": {
+    "all": "सभी",
+    "forSale": "बिक्री के लिए",
+    "forRent": "किराए पर",
+    "others": "अन्य"
+  },
+  "propertyDetailModal": {
+    "videoTour": "वीडियो दौरा",
+    "propertyName": "संपत्ति का नाम",
+    "locationNotSpecified": "स्थान निर्दिष्ट नहीं",
+    "sections": {
+      "description": "विवरण",
+      "features": "विशेषताएं",
+      "specifications": "विनिर्देश",
+      "tags": "टैग",
+      "sellerInformation": "विक्रेता जानकारी"
+    },
+    "labels": {
+      "area": "क्षेत्रफल",
+      "facing": "दिशा",
+      "furnishing": "साज-सज्जा",
+      "floor": "मंजिल",
+      "propertyAge": "संपत्ति की आयु",
+      "sellerType": "विक्रेता प्रकार",
+      "sellerName": "विक्रेता का नाम",
+      "individual": "व्यक्तिगत",
+      "contactNotAvailable": "संपर्क उपलब्ध नहीं"
+    },
+    "features": {
+      "parking": "पार्किंग",
+      "lift": "लिफ्ट",
+      "security": "सुरक्षा",
+      "alarm": "अलार्म",
+      "readyToMove": "स्थानांतरण के लिए तैयार",
+      "constructionDone": "निर्माण पूरा",
+      "boundaryWall": "सीमा दीवार",
+      "surveillance": "निगरानी"
+    },
+    "buttons": {
+      "enquiryNow": "अभी पूछें"
+    }
+  },
+  "teams": {
+    "headers": {
+      "addMember": "टीम सदस्य जोड़ें",
+      "editMember": "टीम सदस्य संपादित करें"
+    },
+    "labels": {
+      "member": "सदस्य",
+      "members": "सदस्य",
+      "email": "ईमेल",
+      "phone": "फोन",
+      "role": "भूमिका",
+      "location": "स्थान",
+      "fullName": "पूरा नाम *",
+      "fullNameEdit": "पूरा नाम * (संपादित करें)",
+      "emailEdit": "ईमेल पता * (संपादित करें)",
+      "phoneEdit": "फोन नंबर * (संपादित करें)",
+      "locationEdit": "स्थान * (संपादित करें)"
+    },
+    "status": {
+      "active": "सक्रिय",
+      "inactive": "निष्क्रिय"
+    },
+    "messages": {
+      "noMembersFound": "कोई टीम सदस्य नहीं मिला।",
+      "memberAdded": "टीम सदस्य सफलतापूर्वक जोड़ा गया!",
+      "memberUpdated": "टीम सदस्य सफलतापूर्वक अपडेट किया गया!"
+    },
+    "states": {
+      "loadingMembers": "टीम सदस्य लोड हो रहे हैं..."
+    },
+    "errors": {
+      "userIdNotAvailable": "उपयोगकर्ता ID उपलब्ध नहीं है",
+      "fetchFailed": "टीम सदस्य प्राप्त करने में विफल",
+      "userIdRequired": "उपयोगकर्ता ID उपलब्ध नहीं है। कृपया फिर से लॉग इन करें।",
+      "updateFailed": "टीम सदस्य अपडेट करने में विफल। कृपया पुनः प्रयास करें।",
+      "addFailed": "टीम सदस्य जोड़ने में विफल। कृपया पुनः प्रयास करें।"
+    },
+    "modals": {
+      "deleteMember": {
+        "title": "टीम सदस्य हटाएं",
+        "message": "क्या आप वाकई {{name}} को हटाना चाहते हैं? यह कार्य पूर्ववत नहीं किया जा सकता।"
+      }
+    }
+  },
+  "auth": {
+    "signIn": {
+      "partner": "पार्टनर साइन इन",
+      "buyerSeller": "खरीदार/विक्रेता साइन इन",
+      "dashboard": "अपने डैशबोर्ड तक पहुंचने के लिए साइन इन करें",
+      "account": "अपने खाते में साइन इन करें",
+      "toAccess": "अपने {{resource}} तक पहुंचने के लिए साइन इन करें",
+      "continueToLogin": "लॉगिन पर जारी रखें",
+      "getStartedFree": "मुफ्त में शुरू करें",
+      "securePartnerAccess": "सुरक्षित एजेंट एक्सेस",
+      "prompt": "जारी रखने के लिए साइन इन करें"
+    },
+    "email": {
+      "enterEmailMessage": "जारी रखने के लिए अपना ईमेल पता दर्ज करें",
+      "placeholder": "अपना ईमेल पता दर्ज करें",
+      "enterToContinue": "जारी रखने के लिए अपना ईमेल पता दर्ज करें"
+    },
+    "otp": {
+      "title": "OTP सत्यापित करें",
+      "enter": "OTP दर्ज करें",
+      "sentMessage": "हमने आपके पंजीकृत ईमेल पते पर 6-अंकीय कोड भेजा है",
+      "verify": "OTP सत्यापित करें",
+      "didntReceive": "कोड प्राप्त नहीं हुआ?",
+      "resend": "OTP पुनः भेजें"
+    },
+    "switchAccount": {
+      "title": "खाता बदलें",
+      "confirmMessage": "क्या आप वाकई लॉगआउट करना चाहते हैं और एक अलग खाता इस्तेमाल करना चाहते हैं?",
+      "logout": "लॉगआउट"
+    },
+    "signUp": {
+      "title": "साइन अप",
+      "partner": {
+        "welcomeTitle": "अभी काम शुरू करें, मुफ्त साइन अप करें!",
+        "nameLabel": "नाम*",
+        "namePlaceholder": "अपना पूरा नाम दर्ज करें",
+        "emailLabel": "ईमेल*",
+        "emailPlaceholder": "अपना ईमेल दर्ज करें",
+        "phoneLabel": "फोन*",
+        "phonePlaceholder": "अपना फोन नंबर दर्ज करें",
+        "zoneLabel": "ज़ोन*:",
+        "signUpButton": "साइन अप",
+        "creatingAccount": "खाता बनाया जा रहा है...",
+        "alreadyHaveAccount": "पहले से खाता है?",
+        "logIn": "लॉग इन",
+        "trialModal": {
+          "title": "🎉 स्वागत है!",
+          "message": "स्वागत है! आपका ट्रायल खाता तैयार है—अभी ऐप का इस्तेमाल शुरू करें।",
+          "continue": "जारी रखें"
+        },
+        "errors": {
+          "accountExists": "आपका पहले से खाता है। कृपया अपने ईमेल से लॉग इन करने का प्रयास करें।",
+          "checkInput": "कृपया अपना इनपुट जांचें और पुनः प्रयास करें",
+          "generic": "कृपया अपना इनपुट जांचें और पुनः प्रयास करें"
+        }
+      }
+    },
+    "mainScreen": {
+      "headerTitle": "MT One",
+      "alreadyHaveAccount": "पहले से खाता है?",
+      "logIn": "लॉग इन",
+      "newHere": "नया है? खाता बनाएं!",
+      "signUpAsBuyer": "खरीदार के रूप में साइन अप करें",
+      "wantToListProperty": "अपनी संपत्ति सूचीबद्ध करना चाहते हैं?",
+      "signUpAsSeller": "विक्रेता के रूप में साइन अप करें",
+      "buyerSellerTab": "खरीदार/विक्रेता",
+      "partnerTab": "एजेंट",
+      "partnerLogin": "पार्टनर के रूप में लॉग इन करें",
+      "partnerSignup": "पार्टनर के रूप में साइन अप करें"
+    },
+    "accessDenied": "पहुंच अस्वीकृत",
+    "adminUnauthorized": "आपका ईमेल {email} व्यवस्थापक पहुंच के लिए अधिकृत नहीं है।",
+    "contactAdmin": "कृपया पहुंच के लिए व्यवस्थापक से संपर्क करें।",
+    "buyerAccess": "खरीदार पहुंच",
+    "buyerNotSupported": "खरीदार सुविधाएं इस संस्करण में अभी समर्थित नहीं हैं।",
+    "contactSupport": "कृपया सहायता से संपर्क करें।"
+  },
+  "followUp": {
+    "title": "फॉलो-अप्स",
+    "loadingFollowUp": "फॉलो-अप लोड हो रहा है...",
+    "toBeScheduledLater": "बाद में निर्धारित किया जाएगा",
+    "noDateSet": "कोई तारीख निर्धारित नहीं",
+    "status": {
+      "overdue": "फॉलो-अप बकाया",
+      "today": "आज फॉलो-अप",
+      "in": "{{timeLeft}} में फॉलो-अप",
+      "someday": "फॉलो-अप: कभी न कभी",
+      "noScheduled": "कोई फॉलो-अप निर्धारित नहीं"
+    },
+    "card": {
+      "followUp": "फॉलो-अप",
+      "assigned": "निर्दिष्ट:"
+    },
+    "overdue": {
+      "title": "बकाया फॉलो-अप्स",
+      "subtitle": "फॉलो-अप्स जो अपनी नियत तारीख से गुजर गए हैं",
+      "empty": "कोई बकाया फॉलो-अप्स नहीं हैं"
+    },
+    "upcoming": {
+      "title": "आगामी फॉलो-अप्स",
+      "subtitle": "अगले 7 दिनों के लिए निर्धारित फॉलो-अप्स",
+      "empty": "कोई आगामी फॉलो-अप्स नहीं हैं"
+    },
+    "today": {
+      "title": "आज के फॉलो-अप्स",
+      "empty": "आज के लिए कोई फॉलो-अप्स निर्धारित नहीं हैं"
+    },
+    "someday": {
+      "title": "भविष्य के फॉलो-अप्स",
+      "subtitle": "बाद की तारीखों के लिए निर्धारित फॉलो-अप्स",
+      "empty": "कोई भविष्य के फॉलो-अप्स निर्धारित नहीं हैं"
+    }
+  },
+  "clients": {
+    "title": "ग्राहक",
+    "add": "ग्राहक जोड़ें",
+    "search": "ग्राहकों की खोज करें...",
+    "noClientsFound": "कोई ग्राहक नहीं मिले",
+    "showingFrom": "यहाँ से ग्राहक दिखाए जा रहे हैं",
+    "selected": "चयनित",
+    "partner": "एजेंट",
+    "teamMember": "टीम सदस्य",
+    "activityAddedSuccess": "गतिविधि सफलतापूर्वक जोड़ी गई",
+    "failedToAddActivity": "गतिविधि जोड़ने में असफल",
+    "loading": "ग्राहक लोड हो रहे हैं...",
+    "searching": "ग्राहकों की खोज कर रहे हैं...",
+    "plural": "",
+    "edit": "संपादित करें",
+    "pullToRefresh": "रिफ्रेश करने के लिए नीचे खींचें",
+    "loadingMoreClients": "और ग्राहक लोड हो रहे हैं..."
+  },
+  "clientCard": {
+    "new": "नया",
+    "assigned": "निर्दिष्ट:"
+  },
+  "filterDrawer": {
+    "title": "क्रमबद्ध करें और फ़िल्टर करें",
+    "sortDirection": "क्रम दिशा",
+    "sortBy": "इसके अनुसार क्रमबद्ध करें",
+    "ascending": "आरोही",
+    "descending": "अवरोही",
+    "createdDate": "निर्माण तिथि",
+    "createdDateDescription": "ग्राहक जोड़े जाने के समय के अनुसार क्रमबद्ध करें",
+    "lastActivityDate": "अंतिम गतिविधि तिथि",
+    "lastActivityDateDescription": "सबसे हालिया गतिविधि के अनुसार क्रमबद्ध करें",
+    "cancel": "रद्द करें",
+    "apply": "लागू करें"
+  },
+  "language": {
+    "selectLanguage": "भाषा चुनें",
+    "choosePreferred": "ऐप के लिए अपनी पसंदीदा भाषा चुनें",
+    "current": "वर्तमान भाषा",
+    "change": "भाषा बदलें",
+    "switchTo": "{{languageName}} में बदलें?",
+    "rtlWarning": "इससे ऐप लेआउट दिशा बदल जाएगी और ऐप रीस्टार्ट होगा।"
+  },
+  "app": {
+    "title": "MT One: ऐप और CRM",
+    "restart": "ऐप को रीस्टार्ट करें"
+  },
+  "plurals": {
+    "client": {
+      "zero": "कोई ग्राहक नहीं",
+      "one": "{{count}} ग्राहक",
+      "other": "{{count}} ग्राहक"
+    },
+    "followUp": {
+      "zero": "कोई फॉलो-अप्स नहीं",
+      "one": "{{count}} फॉलो-अप",
+      "other": "{{count}} फॉलो-अप्स"
+    }
+  },
+  "addActivityModal": {
+    "addActivity": "गतिविधि जोड़ें",
+    "editActivity": "गतिविधि संपादित करें",
+    "selectActivityType": "गतिविधि प्रकार चुनें",
+    "deleteActivity": "गतिविधि हटाएं",
+    "deleteActivityConfirm": "क्या आप वाकई इस गतिविधि को हटाना चाहते हैं?"
+  },
+  "clientProfile": {
+    "title": "ग्राहक प्रोफ़ाइल",
+    "edit": "संपादित करें",
+    "delete": "हटाएं",
+    "sendQuickResponse": "त्वरित प्रतिक्रिया भेजें",
+    "duplicateClientFound": "डुप्लिकेट ग्राहक मिला",
+    "deleteClient": "ग्राहक हटाएं",
+    "deleteClientConfirm": "क्या आप वाकई इस ग्राहक को हटाना चाहते हैं?",
+    "activityDeleted": "गतिविधि सफलतापूर्वक हटा दी गई",
+    "clientDeleted": "ग्राहक सफलतापूर्वक हटा दिया गया",
+    "activityAddedRescheduled": "गतिविधि जोड़ी गई और फॉलो-अप को 1 दिन बाद के लिए पुनर्निर्धारित किया गया",
+    "activityAddedRescheduleFailed": "गतिविधि जोड़ी गई लेकिन फॉलो-अप को पुनर्निर्धारित नहीं किया जा सका",
+    "activityAddedCompleted": "गतिविधि जोड़ी गई और फॉलो-अप को पूरा के रूप में चिह्नित किया गया",
+    "activityAddedUpdateFailed": "गतिविधि जोड़ी गई लेकिन फॉलो-अप की स्थिति अपडेट नहीं की जा सकी",
+    "activityUpdated": "गतिविधि सफलतापूर्वक अपडेट की गई",
+    "activityAdded": "गतिविधि सफलतापूर्वक जोड़ी गई",
+    "followUpScheduled": "फॉलो-अप सफलतापूर्वक निर्धारित किया गया",
+    "followUpRemoved": "फॉलो-अप सफलतापूर्वक हटा दिया गया",
+    "fetchClientFailed": "ग्राहक डेटा प्राप्त करने में विफल",
+    "fetchFollowUpFailed": "फॉलो-अप तिथि प्राप्त करने में विफल",
+    "fetchAssignedUsersFailed": "निर्दिष्ट उपयोगकर्ताओं को प्राप्त करने में विफल",
+    "deleteActivityFailed": "गतिविधि हटाने में विफल",
+    "deleteClientFailed": "ग्राहक हटाने में विफल",
+    "scheduleFollowUpFailed": "फॉलो-अप निर्धारित करने में विफल",
+    "removeFollowUpFailed": "फॉलो-अप हटाने में विफल",
+    "assignedTo": "को सौंपा गया",
+    "noUsersAssigned": "कोई उपयोगकर्ता सौंपा नहीं गया",
+    "contactInformation": "संपर्क जानकारी",
+    "recentActivities": "हाल की गतिविधियाँ",
+    "noActivitiesYet": "अभी तक कोई गतिविधियाँ नहीं"
+  },
+  "clientAssignment": {
+    "title": "क्लाइंट असाइनमेंट",
+    "assignTeamMembers": "टीम सदस्यों को असाइन करें",
+    "selectTeamMembers": "इस क्लाइंट को असाइन करने के लिए टीम सदस्यों का चयन करें",
+    "usersSelected": "{{count}} उपयोगकर्ता चयनित",
+    "usersSelected_plural": "{{count}} उपयोगकर्ता चयनित",
+    "noTeamMembersFound": "कोई टीम सदस्य नहीं मिला",
+    "loadingTeamMembers": "टीम सदस्य लोड हो रहे हैं...",
+    "userEmailNotAvailable": "उपयोगकर्ता ईमेल उपलब्ध नहीं है",
+    "fetchTeamMembersFailed": "टीम सदस्यों को प्राप्त करने में विफल",
+    "errorLoadingTeamMembers": "टीम सदस्यों को लोड करने में त्रुटि",
+    "usersAssignedSuccessfully": "उपयोगकर्ता सफलतापूर्वक असाइन किए गए",
+    "assignUsersFailed": "उपयोगकर्ताओं को असाइन करने में विफल",
+    "errorAssigningUsers": "उपयोगकर्ताओं को असाइन करने में त्रुटि",
+    "assigning": "असाइन किया जा रहा है...",
+    "assignUsers": "{{count}} उपयोगकर्ता असाइन करें",
+    "assignUsers_plural": "{{count}} उपयोगकर्ता असाइन करें"
+  },
+  "addClient": {
+    "headers": {
+      "addClient": "क्लाइंट जोड़ें",
+      "editClient": "क्लाइंट संपादित करें"
+    },
+    "labels": {
+      "clientName": "क्लाइंट का नाम*",
+      "displayName": "प्रदर्शित नाम",
+      "mobileNumber": "मोबाइल नंबर",
+      "whatsappNumber": "व्हाट्सएप नंबर",
+      "email": "ईमेल",
+      "notes": "नोट्स"
+    },
+    "placeholders": {
+      "clientName": "उदा. राहुल कुमार",
+      "displayName": "उदा. राहुल कुमार",
+      "mobileNumber": "उदा. 1234567890",
+      "whatsappNumber": "उदा. 1234567890",
+      "email": "उदा. email@example.com",
+      "notes": "अतिरिक्त नोट्स जोड़ें"
+    },
+    "buttons": {
+      "submit": "सबमिट करें"
+    },
+    "errors": {
+      "clientNameRequired": "क्लाइंट का नाम आवश्यक है",
+      "provideValidClientName": "कृपया एक वैध क्लाइंट नाम प्रदान करें",
+      "addError": "क्लाइंट जोड़ने में त्रुटि",
+      "updateError": "क्लाइंट अपडेट करने में त्रुटि",
+      "unexpectedError": "एक अप्रत्याशित त्रुटि हुई"
+    },
+    "success": {
+      "clientAdded": "क्लाइंट सफलतापूर्वक जोड़ा गया",
+      "clientUpdated": "क्लाइंट सफलतापूर्वक अपडेट किया गया"
+    }
+  },
+  "groupsToggle": {
+    "labels": {
+      "selectGroups": "समूह चुनें"
+    },
+    "placeholders": {
+      "searchGroups": "समूह खोजें..."
+    },
+    "buttons": {
+      "addGroup": "समूह जोड़ें",
+      "more": "अधिक",
+      "showLess": "कम दिखाएं"
+    },
+    "errors": {
+      "groupNameRequired": "समूह का नाम आवश्यक है",
+      "addGroupFailed": "समूह जोड़ने में विफल",
+      "tryAgain": "कृपया पुनः प्रयास करें",
+      "unexpectedError": "एक अप्रत्याशित त्रुटि हुई"
+    },
+    "success": {
+      "groupAdded": "समूह सफलतापूर्वक जोड़ा गया"
+    }
+  },
+  "messagePreview": {
+    "headers": {
+      "messagePreview": "संदेश पूर्वावलोकन"
+    },
+    "labels": {
+      "messagePreview": "संदेश पूर्वावलोकन",
+      "sendingTo": "को भेजा जा रहा है",
+      "template": "टेम्प्लेट",
+      "messageContent": "संदेश सामग्री",
+      "recipientInformation": "प्राप्तकर्ता जानकारी",
+      "whatsapp": "व्हाट्सएप",
+      "email": "ईमेल",
+      "phone": "फोन"
+    },
+    "options": {
+      "sendViaWhatsapp": "व्हाट्सएप के माध्यम से भेजें",
+      "sendViaEmail": "ईमेल के माध्यम से भेजें",
+      "sendViaSms": "एसएमएस के माध्यम से भेजें"
+    },
+    "errors": {
+      "error": "त्रुटि",
+      "whatsappNotAvailable": "इस ग्राहक के लिए व्हाट्सएप नंबर उपलब्ध नहीं है।",
+      "whatsappOpenFailed": "व्हाट्सएप खोलने में विफल। कृपया सुनिश्चित करें कि व्हाट्सएप स्थापित है।",
+      "emailNotAvailable": "इस ग्राहक के लिए ईमेल पता उपलब्ध नहीं है।",
+      "emailOpenFailed": "ईमेल ऐप खोलने में विफल।",
+      "phoneNotAvailable": "इस ग्राहक के लिए फोन नंबर उपलब्ध नहीं है।",
+      "smsOpenFailed": "एसएमएस ऐप खोलने में विफल।",
+      "noWhatsappNumber": "कोई व्हाट्सएप नंबर उपलब्ध नहीं",
+      "noEmailAddress": "कोई ईमेल पता उपलब्ध नहीं",
+      "noPhoneNumber": "कोई फोन नंबर उपलब्ध नहीं"
+    },
+    "emailSubject": "एजेंट से संदेश"
+  },
+  "messageTemplate": {
+    "headers": {
+      "selectTemplate": "संदेश टेम्प्लेट चुनें"
+    },
+    "errors": {
+      "fetchFailed": "सामग्री टेम्प्लेट प्राप्त करने में विफल",
+      "loadingError": "सामग्री टेम्प्लेट लोड करने में त्रुटि"
+    }
+  },
+  "contentTemplate": {
+    "labels": {
+      "by": "द्वारा",
+      "created": "बनाया गया"
+    },
+    "status": {
+      "active": "सक्रिय",
+      "inactive": "निष्क्रिय",
+      "deleted": "हटाया गया"
+    },
+    "errors": {
+      "invalidDate": "अमान्य तारीख"
+    },
+    "emptyState": {
+      "title": "कोई सामग्री टेम्प्लेट नहीं",
+      "subtitle": "आपने अभी तक कोई सामग्री टेम्प्लेट नहीं बनाया है।"
+    },
+    "header": {
+      "templatesFound": "{{count}} टेम्प्लेट मिला",
+      "templatesFound_plural": "{{count}} टेम्प्लेट मिले"
+    },
+    "loading": {
+      "loadingTemplates": "सामग्री टेम्प्लेट लोड हो रहे हैं...",
+      "loadingMore": "अधिक लोड हो रहे हैं..."
+    }
+  },
+  "contentScreen": {
+    "headers": {
+      "contentTemplates": "सामग्री टेम्प्लेट",
+      "messageTemplates": "संदेश टेम्प्लेट"
+    },
+    "buttons": {
+      "addTemplate": "टेम्प्लेट जोड़ें"
+    },
+    "errors": {
+      "fetchFailed": "सामग्री टेम्प्लेट प्राप्त करने में विफल",
+      "loadingError": "सामग्री टेम्प्लेट लोड करने में त्रुटि"
+    }
+  },
+  "partnerFilter": {
+    "title": {
+      "partners": "एजेंट फ़िल्टर करें",
+      "teamMembers": "टीम सदस्य फ़िल्टर करें"
+    },
+    "accessDenied": {
+      "title": "पहुंच अस्वीकृत",
+      "message": "आपको इस पृष्ठ तक पहुंचने की अनुमति नहीं है।"
+    },
+    "buttons": {
+      "goBack": "वापस जाएं",
+      "selectAll": "सभी चुनें",
+      "deselectAll": "सभी अचयनित करें",
+      "applyFilter": "फ़िल्टर लागू करें"
+    },
+    "loading": {
+      "partners": "एजेंट लोड हो रहे हैं...",
+      "teamMembers": "टीम सदस्य लोड हो रहे हैं..."
+    },
+    "selection": {
+      "partners": "एजेंट",
+      "teamMembers": "टीम सदस्य",
+      "selected": "चयनित"
+    },
+    "empty": {
+      "partners": "कोई एजेंट नहीं मिला",
+      "teamMembers": "कोई टीम सदस्य नहीं मिला"
+    },
+    "toast": {
+      "filterCleared": "फ़िल्टर साफ़ किया गया",
+      "filterClearedMessage": "केवल आपके खाते के लिए ग्राहक दिखा रहा है।",
+      "filterApplied": "फ़िल्टर लागू किया गया",
+      "filterAppliedMessage": "{{formattedCount}} चयनित एजेंट के लिए ग्राहक दिखा रहा है",
+      "filterAppliedMessage_plural": "{{formattedCount}} चयनित एजेंट के लिए ग्राहक दिखा रहा है"
+    },
+    "errors": {
+      "fetchFailed": "{{type}} प्राप्त करने में विफल। कृपया पुनः प्रयास करें।",
+      "applyFailed": "फ़िल्टर लागू करने में विफल। कृपया पुनः प्रयास करें।"
+    },
+    "labels": {
+      "role": "भूमिका"
+    }
+  },
+  "partnerPropertyForm": {
+    "titles": {
+      "addProperty": "संपत्ति जोड़ें"
+    },
+    "steps": {
+      "basicInfo": "मूल जानकारी",
+      "propertyDetails": "संपत्ति विवरण",
+      "mediaAndSubmit": "मीडिया और सबमिट"
+    },
+    "buttons": {
+      "clear": "साफ़ करें"
+    },
+    "basicDetails": {
+      "labels": {
+        "propertyName": "संपत्ति का नाम*",
+        "sellerType": "विक्रेता प्रकार*",
+        "city": "शहर*",
+        "propertyFor": "संपत्ति के लिए*",
+        "propertyType": "संपत्ति प्रकार*",
+        "location": "स्थान*",
+        "price": "मूल्य*"
+      },
+      "placeholders": {
+        "propertyName": "संपत्ति का नाम दर्ज करें",
+        "location": "स्थान विवरण दर्ज करें",
+        "price": "संपत्ति का मूल्य दर्ज करें"
+      }
+    },
+    "mediaAndSubmit": {
+      "labels": {
+        "videoURL": "वीडियो URL",
+        "images": "छवियाँ",
+        "tags": "टैग",
+        "selectCategory": "श्रेणी चुनें"
+      },
+      "placeholders": {
+        "videoURL": "यूट्यूब या विमियो लिंक दर्ज करें",
+        "tags": "उदा., #लक्जरी",
+        "selectCategory": "श्रेणी चुनें"
+      },
+      "descriptions": {
+        "optionalStep": "यह कदम वैकल्पिक है। आप इन विवरणों को भरने के बिना आगे बढ़ सकते हैं।",
+        "imagesDescription": "अपनी संपत्ति की छवियाँ अपलोड करें। एक छवि को डिफ़ॉल्ट डिस्प्ले छवि के रूप में चुनें।",
+        "submitDescription": "अपनी संपत्ति की सूची सबमिट करने से पहले सभी विवरणों की सावधानीपूर्वक समीक्षा करें।",
+        "selectedImages": "चयनित छवियाँ ({{count}})"
+      },
+      "buttons": {
+        "selectImages": "छवियाँ चुनें",
+        "addTag": "जोड़ें"
+      }
+    },
+    "navigation": {
+      "next": "अगला",
+      "back": "वापस"
+    },
+    "propertyDetails": {
+      "optionalStepText": "यह कदम वैकल्पिक है। आप इन विवरणों को भरने के बिना आगे बढ़ सकते हैं।",
+      "noSelectionText": "कृपया पिछले कदम में संपत्ति प्रकार चुनें।",
+      "goBack": "वापस जाएं",
+      "fields": {
+        "propertyForType": {
+          "label": "संपत्ति श्रेणी"
+        },
+        "readyToMove": {
+          "label": "स्थानांतरण के लिए तैयार"
+        },
+        "lifts": {
+          "label": "लिफ्ट उपलब्ध"
+        },
+        "pantry": {
+          "label": "पैंट्री"
+        },
+        "floor": {
+          "label": "मंजिल",
+          "placeholder": "मंजिल संख्या दर्ज करें"
+        },
+        "furnishing": {
+          "label": "साज-सज्जा प्रकार"
+        },
+        "parking": {
+          "label": "कार पार्किंग"
+        },
+        "facing": {
+          "label": "सामना करने की दिशा"
+        },
+        "location": {
+          "label": "स्थान",
+          "placeholder": "संपत्ति का स्थान दर्ज करें"
+        },
+        "zipCode": {
+          "label": "पिन कोड",
+          "placeholder": "पिन कोड दर्ज करें"
+        },
+        "price": {
+          "label": "मूल्य",
+          "placeholder": "संपत्ति का मूल्य दर्ज करें"
+        },
+        "area": {
+          "label": "संपत्ति क्षेत्र",
+          "placeholder": "संपत्ति का क्षेत्र दर्ज करें"
+        },
+        "lmUnit": {
+          "label": "क्षेत्र इकाई"
+        },
+        "propertyAge": {
+          "label": "संपत्ति की आयु"
+        },
+        "gatedSecurity": {
+          "label": "गेटेड कम्युनिटी सुरक्षा"
+        },
+        "surveillanceCameras": {
+          "label": "निगरानी"
+        },
+        "alarmSystem": {
+          "label": "अलार्म सिस्टम"
+        },
+        "shortDescription": {
+          "label": "संक्षिप्त विवरण",
+          "placeholder": "एक संक्षिप्त विवरण दर्ज करें"
+        },
+        "longDescription": {
+          "label": "विस्तृत विवरण",
+          "placeholder": "एक विस्तृत विवरण दर्ज करें"
+        },
+        "bhkType": {
+          "label": "कॉन्फ़िगरेशन"
+        },
+        "ceilingHeight": {
+          "label": "छत की ऊंचाई",
+          "placeholder": "छत की ऊंचाई दर्ज करें"
+        },
+        "constructionDone": {
+          "label": "कोई निर्माण"
+        },
+        "boundaryWall": {
+          "label": "सीमा"
+        },
+        "openSide": {
+          "label": "खुले पक्ष की संख्या"
+        }
+      }
+    },
+    "success": {
+      "propertyUpdated": "संपत्ति सफलतापूर्वक अपडेट की गई",
+      "propertyAdded": "संपत्ति सफलतापूर्वक जोड़ी गई"
+    },
+    "errors": {
+      "updateFailed": "संपत्ति अपडेट करने में विफल",
+      "addFailed": "संपत्ति जोड़ने में विफल"
+    }
+  },
+  "listings": {
+    "titles": {
+      "propertyListings": "संपत्ति सूची",
+      "filterProperties": "संपत्तियाँ फ़िल्टर करें",
+      "deleteProperty": "संपत्ति हटाएँ",
+      "noPropertiesFound": "कोई संपत्तियाँ नहीं मिलीं"
+    },
+    "messages": {
+      "loadingMore": "अधिक संपत्तियाँ लोड हो रही हैं...",
+      "noProperties": "कोई संपत्तियाँ नहीं मिलीं।",
+      "deleteConfirmation": "क्या आप वाकई इस संपत्ति को हटाना चाहते हैं?",
+      "propertyDeleted": "संपत्ति सफलतापूर्वक हटा दी गई",
+      "deleteFailed": "संपत्ति हटाने में विफल",
+      "fetchFailed": "संपत्तियाँ प्राप्त करने में विफल",
+      "emptyState": "आपने अभी तक कोई संपत्तियाँ नहीं जोड़ी हैं। अपनी पहली संपत्ति जोड़कर शुरू करें।",
+      "loadingDetails": "संपत्ति विवरण लोड हो रहा है...",
+      "loadFailed": "संपत्ति विवरण लोड करने में विफल",
+      "errorLoading": "संपत्ति विवरण लोड करने में त्रुटि",
+      "propertyNotFound": "संपत्ति नहीं मिली"
+    },
+    "placeholders": {
+      "searchByName": "नाम से खोजें..."
+    },
+    "labels": {
+      "propertyFor": "संपत्ति के लिए",
+      "status": "स्थिति",
+      "city": "शहर",
+      "featured": "विशेष",
+      "notFeatured": "विशेष नहीं",
+      "deleted": "हटाया गया",
+      "unnamedProperty": "बेनाम संपत्ति",
+      "locationNotSpecified": "स्थान निर्दिष्ट नहीं",
+      "priceOnRequest": "मूल्य पर अनुरोध",
+      "forSale": "बिक्री के लिए",
+      "for": "के लिए",
+      "sale": "बिक्री",
+      "type": "प्रकार",
+      "category": "श्रेणी",
+      "notSpecified": "निर्दिष्ट नहीं",
+      "zipCode": "पिन कोड",
+      "sellerType": "विक्रेता प्रकार",
+      "configuration": "कॉन्फ़िगरेशन",
+      "area": "क्षेत्र",
+      "furnishing": "साज-सज्जा",
+      "facing": "सामना",
+      "seller": "विक्रेता",
+      "playVideo": "वीडियो चलाएं",
+      "videoTour": "वीडियो दौरा"
+    },
+    "buttons": {
+      "edit": "संपादित करें",
+      "delete": "हटाएँ",
+      "cancel": "रद्द करें",
+      "applyFilters": "फ़िल्टर लागू करें",
+      "clearAll": "सभी साफ़ करें",
+      "addProperty": "संपत्ति जोड़ें"
+    },
+    "accessibility": {
+      "propertyImage": "{{propertyName}} की छवि",
+      "propertyPlaceholder": "संपत्ति प्लेसहोल्डर छवि"
+    },
+    "sections": {
+      "propertyDetails": "संपत्ति विवरण",
+      "overview": "अवलोकन",
+      "description": "विवरण",
+      "features": "सुविधाएँ",
+      "specifications": "विशेषताएँ",
+      "tags": "टैग",
+      "contactInformation": "संपर्क जानकारी"
+    },
+    "features": {
+      "readyToMove": "स्थानांतरण के लिए तैयार",
+      "constructionDone": "निर्माण पूरा हुआ",
+      "boundaryWall": "सीमा दीवार",
+      "elevators": "लिफ्ट",
+      "alarmSystem": "अलार्म सिस्टम",
+      "securityCameras": "सुरक्षा कैमरे",
+      "gatedSecurity": "गेटेड सुरक्षा",
+      "pantry": "पैंट्री"
+    },
+    "specs": {
+      "floor": "मंजिल",
+      "parking": "पार्किंग",
+      "openSide": "खुला पक्ष",
+      "propertyAge": "संपत्ति की आयु",
+      "ceilingHeight": "छत की ऊँचाई",
+      "listedOn": "सूचीबद्ध"
+    },
+    "modals": {
+      "deleteProperty": {
+        "title": "संपत्ति हटाएँ",
+        "message": "क्या आप वाकई इस संपत्ति को हटाना चाहते हैं?"
+      }
+    }
+  },
+  "addContent": {
+    "headers": {
+      "newTemplate": "नया टेम्प्लेट",
+      "editTemplate": "टेम्प्लेट संपादित करें"
+    },
+    "labels": {
+      "templateName": "टेम्प्लेट का नाम",
+      "messageContent": "संदेश सामग्री",
+      "availableVariables": "उपलब्ध चर",
+      "preview": "पूर्वावलोकन"
+    },
+    "placeholders": {
+      "templateName": "टेम्प्लेट का नाम दर्ज करें",
+      "messageContent": "यहाँ अपना संदेश टेम्प्लेट टाइप करें...\n\nआप संदेशों को व्यक्तिगत बनाने के लिए {name}, {phone}, {email} जैसे चर का उपयोग कर सकते हैं।",
+      "preview": "आपका संदेश पूर्वावलोकन यहाँ दिखाई देगा..."
+    },
+    "helpers": {
+      "templateName": "अपने टेम्प्लेट को एक वर्णनात्मक नाम दें",
+      "variablesInfo": "संदेश भेजते समय घुंघराले ब्रेसिज़ में चर वास्तविक मूल्यों से बदल दिए जाएंगे।",
+      "variablesDescription": "अपने संदेश में कोई भी चर जोड़ने के लिए नीचे दिए गए किसी भी चर पर टैप करें",
+      "variablesAutoReplace": "संदेश भेजते समय ये चर स्वचालित रूप से बदल दिए जाएंगे"
+    },
+    "variables": {
+      "name": "क्लाइंट का नाम",
+      "phone": "फोन नंबर",
+      "whatsapp": "व्हाट्सएप नंबर",
+      "email": "ईमेल पता",
+      "senderName": "आपका नाम",
+      "senderEmail": "आपका ईमेल",
+      "senderAddress": "आपका पता",
+      "senderPhone": "आपका फोन"
+    },
+    "buttons": {
+      "cancel": "रद्द करें",
+      "saveTemplate": "टेम्प्लेट सहेजें",
+      "updateTemplate": "टेम्प्लेट अपडेट करें",
+      "saving": "सहेजा जा रहा है...",
+      "updating": "अपडेट हो रहा है..."
+    },
+    "errors": {
+      "templateNameRequired": "कृपया टेम्प्लेट का नाम दर्ज करें",
+      "contentRequired": "कृपया टेम्प्लेट सामग्री दर्ज करें",
+      "userNotFound": "उपयोगकर्ता नहीं मिला",
+      "createFailed": "टेम्प्लेट बनाने में विफल",
+      "updateFailed": "टेम्प्लेट अपडेट करने में विफल"
+    },
+    "success": {
+      "templateCreated": "टेम्प्लेट बनाया गया",
+      "templateUpdated": "टेम्प्लेट अपडेट किया गया",
+      "createMessage": "आपका संदेश टेम्प्लेट सफलतापूर्वक सहेजा गया है।",
+      "updateMessage": "आपका संदेश टेम्प्लेट सफलतापूर्वक अपडेट किया गया है।"
+    },
+    "alerts": {
+      "discardTitle": "परिवर्तनों को त्यागें",
+      "discardMessage": "क्या आप वाकई अपने परिवर्तनों को त्यागना चाहते हैं?",
+      "continueEditing": "संपादन जारी रखें",
+      "discard": "त्यागें"
+    }
+  },
+  "groups": {
+    "messages": {
+      "noGroupsAvailable": "कोई समूह उपलब्ध नहीं हैं। समूह तब दिखाई देंगे जब बनाए जाएंगे।",
+      "loadFailed": "समूह लोड करने में विफल",
+      "tryAgainLater": "कृपया बाद में पुनः प्रयास करें",
+      "groupCreated": "समूह सफलतापूर्वक बनाया गया",
+      "groupUpdated": "समूह सफलतापूर्वक अपडेट किया गया",
+      "groupDeleted": "समूह सफलतापूर्वक हटाया गया",
+      "saveFailed": "समूह सहेजने में विफल",
+      "saveError": "समूह सहेजने में त्रुटि",
+      "deleteFailed": "समूह हटाने में विफल",
+      "deleteError": "समूह हटाने में त्रुटि",
+      "noColorsAvailable": "कोई रंग उपलब्ध नहीं हैं"
+    },
+    "placeholders": {
+      "groupName": "समूह का नाम"
+    },
+    "labels": {
+      "selectColor": "रंग चुनें"
+    },
+    "buttons": {
+      "addGroup": "+ समूह जोड़ें"
+    },
+    "modals": {
+      "addGroup": "नया समूह जोड़ें",
+      "editGroup": "समूह संपादित करें",
+      "deleteGroup": {
+        "title": "समूह हटाएँ",
+        "message": "क्या आप वाकई इस समूह को हटाना चाहते हैं?"
+      }
+    }
+  },
+  "agentProperty": {
+    "titles": {
+      "addAgentProperty": "एजेंट की संपत्ति जोड़ें",
+      "editAgentProperty": "एजेंट की संपत्ति संपादित करें",
+      "agentProperty": "एजेंट की संपत्ति",
+      "deleteProperty": "संपत्ति हटाएं"
+    },
+    "labels": {
+      "agentName": "एजेंट का नाम*",
+      "agentContactNo": "एजेंट का संपर्क नंबर*",
+      "propertyLocation": "संपत्ति का स्थान*",
+      "propertyType": "संपत्ति प्रकार",
+      "bhkType": "BHK प्रकार",
+      "demandPrice": "मांग मूल्य",
+      "securityDepositAmount": "सुरक्षा जमा राशि",
+      "negotiable": "सौदेबाजी योग्य",
+      "fixedPrice": "निश्चित मूल्य",
+      "propertyNotes": "संपत्ति नोट्स",
+      "location": "स्थान",
+      "contactNo": "संपर्क नंबर",
+      "dateAdded": "जोड़ने की तारीख",
+      "notes": "नोट्स"
+    },
+    "placeholders": {
+      "agentName": "उदा. जॉन डो",
+      "agentContactNo": "उदा. 1234567890",
+      "propertyLocation": "उदा. नवी मुंबई, ठाणे, आदि।",
+      "demandPrice": "राशि दर्ज करें",
+      "securityDepositAmount": "जमा राशि दर्ज करें",
+      "propertyNotes": "अतिरिक्त विवरण जोड़ें",
+      "searchByName": "नाम से खोजें..."
+    },
+    "messages": {
+      "propertyUpdated": "संपत्ति सफलतापूर्वक अपडेट की गई",
+      "propertyAdded": "संपत्ति सफलतापूर्वक जोड़ी गई",
+      "updateFailed": "एजेंट संपत्ति अपडेट करने में विफल",
+      "validationError": "कृपया अपना इनपुट जांचें और पुनः प्रयास करें",
+      "noProperties": "कोई संपत्तियाँ उपलब्ध नहीं हैं",
+      "deleteSuccess": "संपत्ति सफलतापूर्वक हटा दी गई",
+      "deleteError": "संपत्ति हटाने में त्रुटि",
+      "notSpecified": "निर्दिष्ट नहीं",
+      "na": "लागू नहीं",
+      "deleteConfirmation": "यह कार्य पूर्ववत नहीं किया जा सकता। क्या आप वाकई इस संपत्ति को हटाना चाहते हैं?"
+    },
+    "buttons": {
+      "add": "जोड़ें",
+      "submit": "सबमिट करें",
+      "filterProperties": "संपत्तियाँ फ़िल्टर करें",
+      "clearAll": "सभी साफ़ करें",
+      "cancel": "रद्द करें",
+      "applyFilters": "फ़िल्टर लागू करें"
+    }
+  },
+  "billing": {
+    "title": "बिलिंग और भुगतान",
+    "subtitle": "अपनी सदस्यता और भुगतान इतिहास प्रबंधित करें",
+    "plans": {
+      "title": "भुगतान प्लान"
+    },
+    "switchPlanButton": "बिलिंग प्लान बदलें",
+    "success": {
+      "title": "भुगतान सफल",
+      "subtitle": "आपकी सदस्यता सफलतापूर्वक सक्रिय हो गई है!"
+    },
+    "errors": {
+      "loadFailed": "बिलिंग जानकारी लोड करने में विफल।",
+      "paymentFailed": "भुगतान विफल",
+      "generic": "कुछ गलत हो गया",
+      "loadPlansFailed": "बिलिंग प्लान लोड करने में विफल।"
+    },
+    "empty": {
+      "title": "अभी तक कोई प्लान नहीं",
+      "message": "शुरू करने के लिए अपना पहला भुगतान प्लान बनाएं",
+      "createButton": "प्लान बनाएं"
+    },
+    "delete": {
+      "title": "प्लान हटाएं",
+      "confirmMessage": "क्या आप वाकई \"{{planName}}\" प्लान को हटाना चाहते हैं?"
+    },
+    "nextBill": {
+      "title": "अगला बिल",
+      "billingCycle": "बिलिंग चक्र",
+      "duration": "अवधि",
+      "days": "दिन",
+      "billingPeriod": "बिलिंग अवधि",
+      "payNow": "अभी भुगतान करें",
+      "billingCycleValues": {
+        "Monthly": "मासिक",
+        "Yearly": "वार्षिक"
+      }
+    },
+    "paymentHistory": {
+      "title": "भुगतान इतिहास",
+      "status": {
+        "success": "सफल",
+        "failed": "विफल"
+      }
+    },
+    "paymentModal": {
+      "title": "भुगतान विवरण",
+      "subtitle": "अपने भुगतान विवरण की समीक्षा करें और पुष्टि करें",
+      "paymentSummary": "भुगतान सारांश",
+      "totalAmount": "कुल राशि",
+      "servicePeriod": "सेवा अवधि",
+      "confirmAndPay": "पुष्टि करें और भुगतान करें",
+      "securityText": "बैंक-स्तरीय एन्क्रिप्शन के साथ सुरक्षित"
+    },
+    "loading": {
+      "billingInfo": "बिलिंग जानकारी लोड हो रही है...",
+      "plans": "प्लान लोड हो रहे हैं..."
+    },
+    "retry": {
+      "tryAgain": "पुनः प्रयास करें"
+    },
+    "planSwitcher": {
+      "title": "बिलिंग प्लान बदलें",
+      "switchPlan": "प्लान बदलें",
+      "planSwitched": "प्लान बदल दिया गया!",
+      "planUpdated": "आपका बिलिंग प्लान अपडेट कर दिया गया है।",
+      "switchFailed": "प्लान बदलने में विफल।",
+      "selectPlan": "{{planName}} प्लान चुनें",
+      "submitChange": "प्लान बदलाव सबमिट करें",
+      "maxUsers": "अधिकतम उपयोगकर्ता:",
+      "trialPlan": "ट्रायल प्लान",
+      "perMonth": "/माह"
+    },
+    "paymentLoading": {
+      "creatingOrder": "भुगतान आदेश बनाया जा रहा है...",
+      "processingPayment": "भुगतान संसाधित किया जा रहा है...",
+      "verifyingPayment": "भुगतान सत्यापित किया जा रहा है...",
+      "loading": "लोड हो रहा है...",
+      "steps": {
+        "order": "आदेश",
+        "payment": "भुगतान",
+        "verify": "सत्यापित करें"
+      }
+    },
+    "planItem": {
+      "badge": {
+        "trial": "ट्रायल",
+        "premium": "प्रीमियम"
+      },
+      "features": {
+        "users": "उपयोगकर्ता",
+        "days": "दिन"
+      }
+    },
+    "addPlan": {
+      "title": {
+        "add": "प्लान जोड़ें",
+        "edit": "प्लान संपादित करें"
+      },
+      "form": {
+        "planName": "प्लान का नाम*",
+        "description": "विवरण",
+        "price": "मूल्य (₹)",
+        "billingCycle": "बिलिंग चक्र",
+        "duration": "अवधि (दिन)",
+        "maxUsers": "अधिकतम उपयोगकर्ता",
+        "isTrial": "क्या यह ट्रायल है?"
+      },
+      "placeholders": {
+        "planName": "उदा. प्रीमियम प्लान",
+        "description": "प्लान का वर्णन करें",
+        "price": "उदा. 999",
+        "duration": "उदा. 30",
+        "maxUsers": "उदा. 5"
+      },
+      "messages": {
+        "success": {
+          "add": "प्लान सफलतापूर्वक जोड़ा गया",
+          "edit": "प्लान सफलतापूर्वक अपडेट किया गया"
+        },
+        "error": {
+          "add": "प्लान जोड़ने में विफल",
+          "edit": "प्लान अपडेट करने में विफल",
+          "addGeneric": "प्लान सहेजते समय एक त्रुटि हुई",
+          "editGeneric": "प्लान अपडेट करते समय एक त्रुटि हुई",
+          "validation": "कृपया अपना इनपुट जांचें"
+        }
+      }
+    }
+  },
+  "settings": {
+    "title": "सेटिंग्स",
+    "language": {
+      "title": "भाषा",
+      "current": "वर्तमान भाषा"
+    },
+    "about": {
+      "title": "हमारे बारे में"
+    },
+    "version": {
+      "title": "ऐप संस्करण"
+    },
+    "help": {
+      "title": "सहायता और समर्थन"
+    }
+  },
+  "activity": {
+    "createdBy": "{{name}} द्वारा"
+  },
+  "subscription": {
+    "expired": {
+      "title": "सब्सक्रिप्शन समाप्त",
+      "subtitle": "आपकी टीम की सब्सक्रिप्शन समाप्त हो गई है और इसे आपके पार्टनर द्वारा नवीनीकृत करने की आवश्यकता है।",
+      "accessRestricted": "एक्सेस प्रतिबंधित",
+      "accessRestrictedText": "टीम के सदस्य के रूप में, आप सीधे सब्सक्रिप्शन खरीद या नवीनीकृत नहीं कर सकते। कृपया एक्सेस बहाल करने के लिए अपने पार्टनर से संपर्क करें।",
+      "whatHappensNext": "आगे क्या होता है?",
+      "steps": {
+        "contactPartner": "ऊपर दी गई जानकारी का उपयोग करके अपने पार्टनर से संपर्क करें",
+        "requestRenewal": "टीम एक्सेस के लिए सब्सक्रिप्शन नवीनीकरण का अनुरोध करें",
+        "waitForRenewal": "पार्टनर द्वारा नवीनीकरण प्रक्रिया पूरी होने तक प्रतीक्षा करें",
+        "refreshStatus": "अपनी एक्सेस स्थिति जांचने के लिए इस पेज को रिफ्रेश करें"
+      },
+      "checkStatus": "स्थिति फिर से जांचें"
+    }
+  },
+  "transactions": {
+    "title": "लेन-देन",
+    "loading": "लेन-देन लोड हो रहा है...",
+    "loadingMore": "और लोड हो रहा है...",
+    "noInternetConnection": "इंटरनेट कनेक्शन नहीं है",
+    "connectionLost": "कनेक्शन खो गया",
+    "connectionLostMessage": "कृपया अपना इंटरनेट कनेक्शन जांचें",
+    "noInternetLoadMessage": "कृपया अपना इंटरनेट कनेक्शन जांचें और रिफ्रेश करने के लिए नीचे खींचें।",
+    "noInternetFilterMessage": "इंटरनेट कनेक्शन के बिना अधिक डेटा लोड नहीं किया जा सकता।",
+    "noInternetApplyFiltersMessage": "फिल्टर लागू करने के लिए कृपया अपना इंटरनेट कनेक्शन जांचें।",
+    "failedToLoad": "लोड करने में विफल",
+    "failedToLoadMessage": "लेन-देन लोड नहीं किए जा सके। कृपया पुनः प्रयास करें।",
+    "connectionError": "कनेक्शन त्रुटि",
+    "connectionErrorMessage": "सर्वर से कनेक्ट नहीं हो सकता। कृपया अपना इंटरनेट कनेक्शन जांचें।",
+    "error": "त्रुटि",
+    "errorMessage": "लेन-देन लोड करने में त्रुटि। कृपया पुनः प्रयास करें।",
+    "loadMoreFailed": "अधिक लोड करने में विफल",
+    "loadMoreFailedMessage": "अधिक लेन-देन लोड नहीं किए जा सके।",
+    "dataRefreshed": "लेन-देन अपडेट किए गए",
+    "dataRefreshedMessage": "डेटा सफलतापूर्वक अपडेट किया गया है।",
+    "filtersApplied": "फिल्टर लागू किए गए",
+    "filtersAppliedMessage": "लेन-देन सफलतापूर्वक फिल्टर किए गए।",
+    "filtersReset": "फिल्टर रीसेट किए गए",
+    "filtersResetMessage": "सभी फिल्टर डिफ़ॉल्ट मानों पर रीसेट कर दिए गए हैं।",
+    "noTransactionsFound": "कोई लेन-देन नहीं मिला",
+    "noTransactionsFoundMessage": "एक बार जब उपयोगकर्ता भुगतान करेंगे तो लेन-देन यहां दिखाई देंगे",
+    "adjustFiltersMessage": "अधिक परिणाम देखने के लिए अपने फिल्टर समायोजित करने का प्रयास करें",
+    "summary": {
+      "title": "लेन-देन सारांश",
+      "total": "कुल",
+      "successful": "सफल",
+      "failed": "विफल",
+      "totalAmount": "कुल राशि"
+    },
+    "filters": {
+      "title": "लेन-देन फिल्टर करें",
+      "reset": "रीसेट",
+      "apply": "फिल्टर लागू करें",
+      "search": "खोजें",
+      "searchPlaceholder": "नाम, ईमेल या लेन-देन ID द्वारा खोजें",
+      "status": "स्थिति",
+      "paymentMethod": "भुगतान विधि",
+      "sortBy": "इसके अनुसार क्रमबद्ध करें",
+      "sortOrder": "क्रमबद्ध क्रम",
+      "all": "सभी",
+      "date": "तारीख",
+      "amount": "राशि",
+      "newestFirst": "नवीनतम पहले",
+      "oldestFirst": "सबसे पुराना पहले"
+    },
+    "status": {
+      "captured": "कैप्चर किया गया",
+      "completed": "पूर्ण",
+      "failed": "विफल",
+      "cancelled": "रद्द",
+      "pending": "लंबित",
+      "authorized": "अधिकृत"
+    },
+    "paymentMethods": {
+      "upi": "UPI",
+      "card": "कार्ड",
+      "netbanking": "नेट बैंकिंग",
+      "wallet": "वॉलेट"
+    }
+  },
+  "buyerProfile": {
+    "welcome": {
+      "back": "वापसी पर स्वागत है",
+      "subtitle": "उपयोगकर्ता प्रोफ़ाइल"
+    },
+    "options": {
+      "personal": {
+        "title": "व्यक्तिगत जानकारी",
+        "subtitle": "प्रोफ़ाइल संपादित करें"
+      },
+      "properties": {
+        "title": "मेरी संपत्तियां",
+        "subtitle": "सभी देखें"
+      },
+      "analytics": {
+        "title": "विश्लेषण",
+        "subtitle": "आंकड़े देखें"
+      },
+      "settings": {
+        "title": "सेटिंग्स",
+        "subtitle": "प्रबंधित करें"
+      }
+    },
+    "stats": {
+      "totalProperties": "कुल संपत्तियां",
+      "activeListings": "सक्रिय लिस्टिंग",
+      "totalEarnings": "कुल कमाई"
+    }
+  },
+  "contactUs": {
+    "title": "संपर्क करें",
+    "subtitle": "हमसे संपर्क करें",
+    "contactInfo": {
+      "phone": "फोन",
+      "email": "ईमेल",
+      "address": "पता"
+    },
+    "officeHours": {
+      "mondayFriday": "सोमवार - शुक्रवार",
+      "saturday": "शनिवार",
+      "sunday": "रविवार",
+      "hours": {
+        "weekday": "9:00 AM - 6:00 PM",
+        "saturday": "9:00 AM - 4:00 PM",
+        "sunday": "बंद"
+      }
+    },
+    "socialLinks": {
+      "facebook": "फेसबुक",
+      "instagram": "इंस्टाग्राम",
+      "linkedin": "लिंक्डइन",
+      "twitter": "ट्विटर"
+    },
+    "buttons": {
+      "sendMessage": "संदेश भेजें"
+    }
+  }
+}
