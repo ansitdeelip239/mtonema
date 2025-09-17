@@ -191,7 +191,10 @@ const PartnerSignUpScreen: React.FC<Props> = ({navigation}) => {
           await AuthService.otpVerification(formData.email);
 
           // Show trial modal
-          setShowTrialModal(true);
+
+          if (!isIOS) {
+            setShowTrialModal(true);
+          }
         } else {
           showError(response.message);
         }

@@ -3,7 +3,7 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {TeamMember} from '../../types';
 import {useTheme} from '../../context/ThemeProvider';
 import TeamsScreen from '../../screens/partner/TeamsScreen/TeamsScreen';
-import AddTeamScreen from '../../screens/partner/TeamsScreen/AddTeamScreen';
+import AddTeamScreen from '../../screens/partner/TeamsScreen/AddTeamScreen/AddTeamScreen';
 
 export type TeamStackParamList = {
   'Teams Screen': undefined;

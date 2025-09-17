@@ -125,7 +125,7 @@ const LanguageSelectionScreen: React.FC = () => {
         {/* Title Section */}
         <View style={styles.titleSection}>
           <Text style={styles.title}>
-            {t('language.welcome', 'Welcome to MTOneMA')}
+            {t('language.welcome', 'Welcome to MT One')}
           </Text>
           <Text style={styles.subtitle}>
             {t('language.selectLanguage', 'Please select your preferred language')}

@@ -11,24 +11,20 @@ import {
 } from 'react-native';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {Text, Card} from 'react-native-paper';
-import {TeamStackParamList} from '../../../navigator/components/TeamStack';
-import {MaterialTextInput} from '../../../components/MaterialTextInput';
-import Header from '../../../components/Header';
-import useForm from '../../../hooks/useForm';
-import PartnerService from '../../../services/PartnerService';
-import {
-  TeamMemberFormData,
-  validateTeamMemberForm,
-  teamMemberSchema,
-} from '../../../schema/TeamMemberSchema';
-import Toast from 'react-native-toast-message';
-import {useTheme} from '../../../context/ThemeProvider';
-import {usePartner} from '../../../context/PartnerProvider';
-import {useRazorpayPayment} from '../../../hooks/useRazorpayPayment';
-import { PaymentLoadingOverlay } from '../../../components/PaymentLoading';
-import Roles from '../../../constants/Roles';
 import { useTranslation } from 'react-i18next';
-import { useAuth } from '../../../context/AuthProvider';
+import { useAuth } from '../../../../context/AuthProvider';
+import { useTheme } from '../../../../context/ThemeProvider';
+import { usePartner } from '../../../../context/PartnerProvider';
+import { TeamStackParamList } from '../../../../navigator/components/TeamStack';
+import { TeamMemberFormData, teamMemberSchema, validateTeamMemberForm } from '../../../../schema/TeamMemberSchema';
+import { useRazorpayPayment } from '../../../../hooks/useRazorpayPayment';
+import Toast from 'react-native-toast-message';
+import PartnerService from '../../../../services/PartnerService';
+import Roles from '../../../../constants/Roles';
+import useForm from '../../../../hooks/useForm';
+import Header from '../../../../components/Header';
+import { MaterialTextInput } from '../../../../components/MaterialTextInput';
+import { PaymentLoadingOverlay } from '../../../../components/PaymentLoading';
 
 type Props = NativeStackScreenProps<TeamStackParamList, 'Add Teams Screen'>;
 
