@@ -8,6 +8,8 @@ import PartnerProfileScreen from '../screens/partner/ProfileScreen/ProfileScreen
 import {useDrawerStyles} from '../hooks/useDrawerStyles';
 import SettingsScreen from '../screens/partner/Settings/SettingsScreen';
 import {useTranslation} from 'react-i18next';
+import DrawerToggleButton from '../components/DrawerToggleButton';
+import HelpCenterScreen from '../screens/partner/HelpCenterScreen';
 
 const Drawer = createDrawerNavigator();
 
@@ -43,7 +45,10 @@ const BuyerNavigator = memo(() => {
           name="Settings"
           component={SettingsScreen}
           options={{
-            headerShown: false,
+            headerShown: isIOS,
+            // eslint-disable-next-line react/no-unstable-nested-components
+            headerLeft: () => <DrawerToggleButton />,
+            title: t('settings.title', 'Settings'),
             drawerLabel: t('navigation.drawer.settings'), // Add localized label
             // eslint-disable-next-line react/no-unstable-nested-components
             drawerIcon: ({color}) => (
@@ -56,6 +61,17 @@ const BuyerNavigator = memo(() => {
           component={PartnerProfileScreen}
           options={{
             headerShown: isIOS,
+            drawerItemStyle: {display: 'none'},
+          }}
+        />
+        <Drawer.Screen
+          name="Help Center"
+          component={HelpCenterScreen}
+          options={{
+            headerShown: isIOS,
+            // eslint-disable-next-line react/no-unstable-nested-components
+            headerLeft: () => <DrawerToggleButton />,
+            title: t('navigation.drawer.helpCenter', 'Help Center'),
             drawerItemStyle: {display: 'none'},
           }}
         />

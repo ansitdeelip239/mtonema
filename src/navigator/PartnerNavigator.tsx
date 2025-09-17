@@ -16,6 +16,7 @@ import SettingsScreen from '../screens/partner/Settings/SettingsScreen';
 import {useTranslation} from 'react-i18next';
 import {useDrawerStyles} from '../hooks/useDrawerStyles';
 import DrawerToggleButton from '../components/DrawerToggleButton';
+import HelpCenterScreen from '../screens/partner/HelpCenterScreen';
 
 const Drawer = createDrawerNavigator<PartnerDrawerParamList>();
 
@@ -106,6 +107,16 @@ const PartnerNavigator = () => {
           drawerIcon: ({color}) => (
             <GetIcon iconName="settings" color={color} size="25" />
           ),
+        }}
+      />
+      <Drawer.Screen
+        name="Help Center"
+        component={HelpCenterScreen}
+        options={{
+          headerShown: isIOS,
+          headerLeft: () => <DrawerToggleButton />,
+          title: t('navigation.drawer.helpCenter', 'Help Center'),
+          drawerItemStyle: {display: 'none'},
         }}
       />
       <Drawer.Screen

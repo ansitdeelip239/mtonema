@@ -1,4 +1,3 @@
-/* eslint-disable react/no-unstable-nested-components */
 import React, {useState, useEffect, useMemo} from 'react';
 import {
   View,
@@ -16,8 +15,6 @@ import {PropertyStackParamList} from '../../navigator/components/PropertyStack';
 import {SellerProperty} from '../../types';
 import Colors from '../../constants/Colors';
 import GetIcon from '../../components/GetIcon';
-import InlineHeader from '../../components/InlineHeader';
-import {Menu, Appbar} from 'react-native-paper';
 import ConfirmationModal from '../../components/ConfirmationModal';
 import Toast from 'react-native-toast-message';
 import YoutubeVideoPlayer from '../../components/YoutubeVideoPlayer';
@@ -37,7 +34,6 @@ const PropertyDetailScreen: React.FC<Props> = ({route, navigation}) => {
   const [_error, _setError] = useState<string | null>(null);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [isFeatured, setIsFeatured] = useState(false);
-  const [menuVisible, setMenuVisible] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const [activeVideoSlides, setActiveVideoSlides] = useState<{
@@ -79,10 +75,6 @@ const PropertyDetailScreen: React.FC<Props> = ({route, navigation}) => {
     }
   };
 
-  // Add menu handler functions
-  const openMenu = () => setMenuVisible(true);
-  const closeMenu = () => setMenuVisible(false);
-
   // Handle delete property
   const handleDeleteProperty = async () => {
     try {
@@ -115,15 +107,6 @@ const PropertyDetailScreen: React.FC<Props> = ({route, navigation}) => {
       setIsDeleting(false);
       setShowDeleteModal(false);
     }
-  };
-
-  // Handle edit property
-  const handleEditProperty = () => {
-    closeMenu();
-    // Navigate to edit property screen
-    console.log('Navigate to edit property screen for:', property.id);
-    // TODO: Implement navigation to edit property screen
-    // navigation.navigate('EditProperty', { propertyData: property });
   };
 
   useEffect(() => {
@@ -346,46 +329,6 @@ const PropertyDetailScreen: React.FC<Props> = ({route, navigation}) => {
 
   return (
     <View style={styles.container}>
-      {Platform.OS === 'android' && (
-        <InlineHeader
-          title={property?.propertyName || 'Property Details'}
-          backButton={true}
-          onBackPress={() => navigation.goBack()}>
-          {property && (
-            <Menu
-              visible={menuVisible}
-              onDismiss={closeMenu}
-              anchor={
-                <Appbar.Action
-                  icon={() => <GetIcon iconName="threeDots" color="black" />}
-                  onPress={openMenu}
-                  style={styles.threeDotsIcon}
-                />
-              }
-              contentStyle={styles.menuContent}>
-              <Menu.Item
-                onPress={() => {
-                  closeMenu();
-                  handleEditProperty();
-                }}
-                title="Edit"
-                titleStyle={styles.menuItemTitle}
-                leadingIcon={() => <GetIcon iconName="edit" />}
-              />
-              <Menu.Item
-                onPress={() => {
-                  closeMenu();
-                  setShowDeleteModal(true);
-                }}
-                title="Delete"
-                titleStyle={styles.menuItemTitle}
-                leadingIcon={() => <GetIcon iconName="delete" />}
-              />
-            </Menu>
-          )}
-        </InlineHeader>
-      )}
-
       {/* Content area */}
       <ScrollView
         style={styles.scrollView}

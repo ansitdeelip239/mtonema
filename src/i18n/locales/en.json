@@ -335,7 +335,7 @@
   },
   "auth": {
     "signIn": {
-      "partner": "Partner Sign In",
+      "partner": "Agent Sign In",
       "buyerSeller": "Buyer/Seller Sign In",
       "dashboard": "Sign in to access your dashboard",
       "continueToLogin": "Continue to Login",

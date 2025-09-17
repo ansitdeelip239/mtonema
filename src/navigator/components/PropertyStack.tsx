@@ -1,5 +1,6 @@
 import React from 'react';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import {Platform} from 'react-native';
 import PropertyListScreen from '../../screens/seller/PropertyListScreen';
 import PropertyDetailScreen from '../../screens/seller/PropertyDetailScreen';
 import {SellerProperty} from '../../types';
@@ -18,7 +19,15 @@ const PropertyStack: React.FC = () => {
         headerShown: false,
       }}>
       <Stack.Screen name="PropertyList" component={PropertyListScreen} />
-      <Stack.Screen name="PropertyDetail" component={PropertyDetailScreen} />
+      <Stack.Screen 
+        name="PropertyDetail" 
+        component={PropertyDetailScreen}
+        options={{
+          headerShown: Platform.OS === 'ios',
+          title: 'Property Details',
+          headerBackTitle: 'Back',
+        }}
+      />
     </Stack.Navigator>
   );
 };

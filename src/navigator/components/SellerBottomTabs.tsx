@@ -1,5 +1,6 @@
 import React, {memo} from 'react';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import {Platform} from 'react-native';
 import GetIcon from '../../components/GetIcon';
 import Colors from '../../constants/Colors';
 import {SellerBottomTabParamList} from '../../types/navigation';
@@ -12,6 +13,7 @@ import SellerContactScreen from '../../screens/seller/SellerContactScreen';
 import PostPropertyScreen from '../../screens/seller/PostPropertyScreen';
 import { useAuth } from '../../context/AuthProvider';
 import SellerProfileStack from './SellerProfileStack';
+import DrawerToggleButton from '../../components/DrawerToggleButton';
 
 const Tab = createBottomTabNavigator<SellerBottomTabParamList>();
 
@@ -65,6 +67,12 @@ const SellerBottomTabs = memo(() => {
             tabBarIcon: ({focused, color}) => (
               <GetIcon iconName={icon} color={focused ? Colors.MT_PRIMARY_1 : color} />
             ),
+            ...(name === 'AddProperty' && Platform.OS === 'ios' ? {
+              headerShown: true,
+              headerTintColor: '#000',
+              // eslint-disable-next-line react/no-unstable-nested-components
+              headerLeft: () => <DrawerToggleButton color='#000' />,
+            } : {}),
           }}
         />
       ))}

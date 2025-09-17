@@ -6,11 +6,15 @@ import {StatusBar} from 'react-native';
 import SellerBottomTabs from './components/SellerBottomTabs';
 import PartnerProfileScreen from '../screens/partner/ProfileScreen/ProfileScreen';
 import {useDrawerStyles} from '../hooks/useDrawerStyles';
+import {useTranslation} from 'react-i18next';
+import DrawerToggleButton from '../components/DrawerToggleButton';
+import HelpCenterScreen from '../screens/partner/HelpCenterScreen';
 
 const Drawer = createDrawerNavigator();
 
 const SellerNavigator = memo(() => {
   const {drawerStyles, isIOS} = useDrawerStyles();
+  const {t} = useTranslation();
 
   return (
     <>
@@ -52,6 +56,17 @@ const SellerNavigator = memo(() => {
           component={PartnerProfileScreen}
           options={{
             headerShown: isIOS,
+            drawerItemStyle: {display: 'none'},
+          }}
+        />
+        <Drawer.Screen
+          name="Help Center"
+          component={HelpCenterScreen}
+          options={{
+            headerShown: isIOS,
+            // eslint-disable-next-line react/no-unstable-nested-components
+            headerLeft: () => <DrawerToggleButton />,
+            title: t('navigation.drawer.helpCenter', 'Help Center'),
             drawerItemStyle: {display: 'none'},
           }}
         />

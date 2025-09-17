@@ -152,14 +152,14 @@ const CustomDrawerContent = (props: any) => {
         <CustomDrawerItem
           iconName="about"
           label={t('navigation.drawer.helpCenter', 'Help Center')}
-          onPress={() => setModalVisible(true)}
+          onPress={() => {
+            props.navigation.navigate('Help Center');
+            props.navigation.closeDrawer();
+          }}
+          isActive={currentRoute === 'Help Center'}
         />
 
-        <CustomDrawerItem
-          iconName="faq"
-          label={t('navigation.drawer.chatWithUs', 'Chat With Us')}
-          onPress={() => setModalVisible(true)}
-        />
+        {/* Chat with Us removed as requested */}
       </View>
 
       {/* Spacer to push logout button to bottom */}

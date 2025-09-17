@@ -4,7 +4,6 @@ import {
   View,
   Text,
   FlatList,
-  TouchableOpacity,
   Platform,
   RefreshControl,
   ActivityIndicator,
@@ -14,7 +13,6 @@ import BuyerSellerHeader from '../../components/BuyerSellerHeader';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {PropertyStackParamList} from '../../navigator/components/PropertyStack';
 import Colors from '../../constants/Colors';
-import GetIcon from '../../components/GetIcon';
 import {SellerProperty} from '../../types';
 import SellerPropertyCard from './components/SellerPropertyCard';
 import {usePropertyList} from './hooks/usePropertyList';
@@ -32,9 +30,13 @@ const PropertyListScreen: React.FC<Props> = ({navigation}) => {
     handleLoadMore,
   } = usePropertyList(12);
 
+
   const renderPropertyItem: ListRenderItem<SellerProperty> = ({item}) => (
     <View style={styles.propertyCardContainer}>
-      <SellerPropertyCard property={item} onPress={() => navigation.navigate('PropertyDetail', { property: item })} />
+      <SellerPropertyCard
+        property={item}
+        onPress={() => navigation.navigate('PropertyDetail', {property: item})}
+      />
     </View>
   );
 
@@ -70,7 +72,8 @@ const PropertyListScreen: React.FC<Props> = ({navigation}) => {
     <View>
       <BuyerSellerHeader
         title="Listed Properties"
-        subtitle="Manage your listings" />
+        subtitle="Manage your listings"
+      />
 
       <View style={styles.content}>
         <View style={styles.summaryContainer}>
@@ -101,17 +104,10 @@ const PropertyListScreen: React.FC<Props> = ({navigation}) => {
         ListEmptyComponent={renderEmptyComponent}
         ListFooterComponent={renderFooter}
         ListHeaderComponent={renderListHeader}
-        contentContainerStyle={properties.length === 0 ? styles.emptyListContent : styles.listContent}
+        contentContainerStyle={
+          properties.length === 0 ? styles.emptyListContent : styles.listContent
+        }
       />
-
-      <TouchableOpacity
-        style={styles.addButton}
-        activeOpacity={0.8}
-        onPress={() => navigation.getParent()?.navigate('AddProperty')}
-      >
-        <GetIcon iconName="plus" color="white" size="24" />
-        <Text style={styles.addButtonText}>Add New Property</Text>
-      </TouchableOpacity>
     </View>
   );
 };
