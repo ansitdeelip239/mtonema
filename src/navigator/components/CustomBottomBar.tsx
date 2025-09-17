@@ -189,7 +189,7 @@ export const CustomBottomBar = <T extends ParamListBase>({
 const styles = StyleSheet.create({
   bottomBarContainer: {
     position: 'absolute',
-    bottom: 20,
+    bottom: Platform.OS === 'ios' ? 16 : 0,
     left: 0,
     right: 0,
     paddingHorizontal: 16,
