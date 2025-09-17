@@ -70,19 +70,17 @@ const HelpCenterScreen = () => {
   const isIOS = Platform.OS === 'ios';
 
   const contactDetails = {
-    legalEntity: 'MUNA TECHNOLOGIES LLP',
-    registeredAddress:
-      'PLOT NO 114 & 115 KH. NO. 75/6, GROUND FLOOR, STREET NO.07, AJIT VIHAR, VILLAGE BURARI North Delhi DELHI 110084',
     operationalAddress:
       'C-116 GF, OfficeOn, Sector 2, Noida, Uttar Pradesh - 201301',
     phone: '+91 7303062845',
+    phone2: '+91 7303062845',
     email: 'info@mtone.in',
     youtubePlaylist:
       'https://www.youtube.com/playlist?list=PLZZbFV0TKtPaT2J2Cqyz-bglHSbqsabZt',
   };
 
-  const handlePhoneCall = () => {
-    Linking.openURL(`tel:${contactDetails.phone}`);
+  const handlePhoneCall = (phone: string) => {
+    Linking.openURL(`tel:${phone}`);
   };
 
   const handleEmail = () => {
@@ -109,22 +107,8 @@ const HelpCenterScreen = () => {
           </Text>
 
           <ContactItem
-            icon="home"
-            title="Legal Entity Name"
-            value={contactDetails.legalEntity}
-            theme={theme}
-          />
-
-          <ContactItem
             icon="locationPin"
-            title="Registered Address"
-            value={contactDetails.registeredAddress}
-            theme={theme}
-          />
-
-          <ContactItem
-            icon="locationPin"
-            title="Operational Address"
+            title="Address"
             value={contactDetails.operationalAddress}
             theme={theme}
           />
@@ -133,7 +117,16 @@ const HelpCenterScreen = () => {
             icon="phone"
             title="Phone"
             value={contactDetails.phone}
-            onPress={handlePhoneCall}
+            onPress={() => handlePhoneCall(contactDetails.phone)}
+            isLink={true}
+            theme={theme}
+          />
+
+          <ContactItem
+            icon="phone"
+            title="Phone"
+            value={contactDetails.phone2}
+            onPress={() => handlePhoneCall(contactDetails.phone2)}
             isLink={true}
             theme={theme}
           />
@@ -154,14 +147,15 @@ const HelpCenterScreen = () => {
             Tutorials & Resources
           </Text>
 
-          <ContactItem
-            icon="playButton"
-            title="YouTube Tutorial Playlist"
-            value="Watch our comprehensive tutorial series"
+          <TouchableOpacity
+            style={styles.youtubeButton}
             onPress={handleYouTube}
-            isLink={true}
-            theme={theme}
-          />
+            activeOpacity={0.8}>
+            <View style={styles.youtubeContent}>
+              <GetIcon iconName="playButton" color="white" size="32" />
+              <Text style={styles.youtubeText}>Watch Tutorial Videos</Text>
+            </View>
+          </TouchableOpacity>
 
           <View style={styles.infoContainer}>
             <Text style={[styles.infoText, {color: theme.textColor || '#666'}]}>
@@ -249,6 +243,32 @@ const styles = StyleSheet.create({
     fontSize: 14,
     lineHeight: 20,
     marginBottom: 8,
+  },
+  youtubeButton: {
+    backgroundColor: '#FF0000', // YouTube red
+    borderRadius: 12,
+    paddingVertical: 20,
+    paddingHorizontal: 16,
+    marginBottom: 16,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 4,
+    },
+    shadowOpacity: 0.2,
+    shadowRadius: 8,
+    elevation: 6,
+  },
+  youtubeContent: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  youtubeText: {
+    color: 'white',
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginLeft: 12,
   },
 });
 
