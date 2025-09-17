@@ -367,7 +367,7 @@
         "namePlaceholder": "Enter your full name",
         "emailLabel": "Email*",
         "emailPlaceholder": "Enter your email",
-        "phoneLabel": "Phone*",
+        "phoneLabel": "Phone",
         "phonePlaceholder": "Enter your phone number",
         "zoneLabel": "Zone*:",
         "signUpButton": "Sign Up",

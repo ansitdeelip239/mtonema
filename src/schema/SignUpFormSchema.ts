@@ -11,7 +11,6 @@ const SignUpFormSchema = z.object({
     .regex(/^[a-zA-Z\s]*$/, 'Name must contain only letters and spaces')
     .nonempty('Name is required'),
   email: z
-    .string()
     .email('Invalid email address')
     .nonempty('Email is required'),
   location: z.string().nonempty('Location is required'),
@@ -19,7 +18,7 @@ const SignUpFormSchema = z.object({
   phone: z
     .string()
     .regex(/^\d{10}$/, 'Mobile number must be exactly 10 digits')
-    .nonempty('Mobile Number is required'),
+    .optional(),
   acceptTerms: z.boolean().refine(val => val === true, 'You must accept the terms and conditions'),
 });
 

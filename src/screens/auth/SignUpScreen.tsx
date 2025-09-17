@@ -327,7 +327,7 @@ const SignUpScreen: React.FC<Props> = ({navigation, route}) => {
                 <View style={styles.inputSpacing} />
 
                 <MaterialTextInput<SignupFormType>
-                  label="Phone Number*"
+                  label="Phone Number"
                   field="phone"
                   formInput={formInput}
                   setFormInput={handleFieldChange}

@@ -175,7 +175,7 @@ const PartnerSignUpScreen: React.FC<Props> = ({navigation}) => {
                 message: `A new partner has signed up with email: ${formData.email}`,
                 email: formData.email,
                 name: formData.name,
-                phone: formData.phone,
+                phone: formData.phone || '',
                 domain: domain,
               });
             }
