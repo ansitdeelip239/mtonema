@@ -26,7 +26,7 @@ const url = {
       delete: '/property/removeProperty',
       listByUserId: (userId: number) => `/users/${userId}/properties`,
     },
-    getInTouch: '/contactProperty/GetinTouch',
+    getInTouch: '/properties/GetinTouch',
   },
   upload: {
     image: 'https://api.cloudinary.com/v1_1/dncrproperty-com/image/upload',
