@@ -18,7 +18,6 @@ import {BuyerBottomTabParamList} from '../../types/navigation';
 import BuyerSellerHeader from '../../components/BuyerSellerHeader';
 import {useAuth} from '../../context/AuthProvider';
 import BuyerService from '../../services/BuyerService';
-import Toast from 'react-native-toast-message';
 import {useTranslation} from 'react-i18next';
 import {
   formatPrice,
@@ -141,11 +140,11 @@ const ContactedProperties: React.FC<Props> = ({navigation: _navigation}) => {
         }
       } catch (error) {
         console.error('Error fetching contacted properties:', error);
-        Toast.show({
-          type: 'error',
-          text1: t('contactedProperties.labels.failedToLoad'),
-          text2: t('contactedProperties.labels.tryAgain'),
-        });
+        // Toast.show({
+        //   type: 'error',
+        //   text1: t('contactedProperties.labels.failedToLoad'),
+        //   text2: t('contactedProperties.labels.tryAgain'),
+        // });
         if (pageNum === 1) {
           setContactedProperties([]);
           setTotal(0);
@@ -156,7 +155,7 @@ const ContactedProperties: React.FC<Props> = ({navigation: _navigation}) => {
         setRefreshing(false);
       }
     },
-    [user?.id, t],
+    [user?.id],
   );
 
   // Initial load

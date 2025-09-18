@@ -11,18 +11,25 @@ const PartnerSignUpFormSchema = z.object({
     .regex(/^[a-zA-Z\s]*$/, 'Name must contain only letters and spaces')
     .nonempty('Name is required'),
   email: z
+    .string()
     .email('Invalid email address')
     .nonempty('Email is required'),
   phone: z
     .string()
-    .regex(/^\d{10}$/, 'Mobile number must be exactly 10 digits')
-    .optional(),
+    .transform(val => val || '')
+    .refine(
+      (val) => val === '' || /^\d{10}$/.test(val),
+      'Mobile number must be exactly 10 digits'
+    ),
   partnerZone: z.string().nonempty('Zone is required'),
 });
 
 const partnerSignupSubmissionSchema = (role: AllowedRoles, location: string) =>
   PartnerSignUpFormSchema.transform(data => ({
-    ...data,
+    name: data.name,
+    email: data.email,
+    phone: data.phone || '', // Ensure phone is always a string
+    partnerZone: data.partnerZone,
     role: AllowedRolesEnum.parse(role),
     location,
   }));

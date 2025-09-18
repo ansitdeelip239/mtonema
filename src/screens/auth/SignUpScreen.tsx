@@ -161,6 +161,12 @@ const SignUpScreen: React.FC<Props> = ({navigation, route}) => {
   };
 
   const validateField = (field: keyof SignupFormType, value: string) => {
+    // Skip validation for optional empty phone field
+    if (field === 'phone' && (!value || value.trim() === '')) {
+      setErrors(prev => ({...prev, [field]: undefined}));
+      return true;
+    }
+
     try {
       const fieldSchema = SignUpFormSchema.pick({[field]: true} as Record<
         typeof field,

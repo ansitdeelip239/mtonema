@@ -11,20 +11,29 @@ const SignUpFormSchema = z.object({
     .regex(/^[a-zA-Z\s]*$/, 'Name must contain only letters and spaces')
     .nonempty('Name is required'),
   email: z
+    .string()
     .email('Invalid email address')
     .nonempty('Email is required'),
   location: z.string().nonempty('Location is required'),
   placeId: z.string().optional(),
   phone: z
     .string()
-    .regex(/^\d{10}$/, 'Mobile number must be exactly 10 digits')
-    .optional(),
+    .transform(val => val || '')
+    .refine(
+      (val) => val === '' || /^\d{10}$/.test(val),
+      'Mobile number must be exactly 10 digits'
+    ),
   acceptTerms: z.boolean().refine(val => val === true, 'You must accept the terms and conditions'),
 });
 
 const signupSubmissionSchema = (role: AllowedRoles) =>
   SignUpFormSchema.transform(data => ({
-    ...data,
+    name: data.name,
+    email: data.email,
+    location: data.location,
+    placeId: data.placeId,
+    phone: data.phone || '', // Convert undefined to empty string
+    acceptTerms: data.acceptTerms,
     role: AllowedRolesEnum.parse(role),
   }));
 
