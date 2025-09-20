@@ -1,7 +1,6 @@
 /* eslint-disable react/no-unstable-nested-components */
 import React from 'react';
 import {createDrawerNavigator} from '@react-navigation/drawer';
-import {TouchableOpacity} from 'react-native';
 import CustomDrawerContent from '../components/CustomDrawerContent';
 import {PartnerDrawerParamList} from '../types/navigation';
 import PartnerBottomTabs from './components/PartnerBottomTabs';
@@ -58,32 +57,14 @@ const PartnerNavigator = () => {
       <Drawer.Screen
         name="Teams"
         component={TeamStack}
-        options={({navigation}) => ({
+        options={{
           headerShown: isIOS,
           headerLeft: () => <DrawerToggleButton />,
-          headerRight: isIOS ? () => (
-            <TouchableOpacity 
-              onPress={() => {
-                // Navigate to the nested screen in the TeamStack
-                const teamNavigation = navigation as any;
-                teamNavigation.navigate('Teams', {
-                  screen: 'Add Teams Screen'
-                });
-              }}
-              style={{ marginRight: 16 }}
-            >
-              <GetIcon 
-                iconName="plus" 
-                color="white" 
-                size={24} 
-              />
-            </TouchableOpacity>
-          ) : undefined,
           drawerLabel: t('navigation.drawer.teams'), // Add localized label
           drawerIcon: ({color}) => (
             <GetIcon iconName="partner" color={color} size="25" />
           ),
-        })}
+        }}
       />
 
       <Drawer.Screen

@@ -74,7 +74,7 @@ const SettingsScreen = () => {
               <Text style={styles.settingLabel}>
                 {t('settings.version.title', 'App Version')}
               </Text>
-              <Text style={styles.settingValue}>1.0.3</Text>
+              <Text style={styles.settingValue}>1.0.4</Text>
             </View>
           </TouchableOpacity>
 

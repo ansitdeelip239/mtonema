@@ -394,7 +394,8 @@
       "wantToListProperty": "تريد إدراج عقارك؟",
       "signUpAsSeller": "إنشاء حساب كبائع",
       "buyerSellerTab": "المشتري/البائع",
-      "partnerTab": "الوكيل"
+      "partnerTab": "الوكيل",
+      "iosAgentInfo": "الوصول إلى لوحة تحكم الوكيل مع أدوات متقدمة وتحليلات لإدارة أعمال العقارات."
     },
     "accessDenied": "تم رفض الوصول",
     "adminUnauthorized": "بريدك الإلكتروني {email} غير مصرح له بالوصول إلى الإدارة.",

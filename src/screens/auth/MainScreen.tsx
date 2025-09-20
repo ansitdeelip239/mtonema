@@ -229,21 +229,34 @@ export const MainScreen: React.FC<Props> = ({navigation}) => {
                       </View>
                     </TouchableOpacity>
                   </View>
-                  <View style={styles.section}>
-                    <Text style={styles.sectionTitle}>
-                      {t('auth.mainScreen.newHere')}
-                    </Text>
-                    <TouchableOpacity
-                      style={styles.secondaryButton}
-                      onPress={onPartnerSignup}
-                      activeOpacity={0.8}>
-                      <View style={styles.buttonContentRow}>
-                        <Text style={styles.secondaryButtonText}>
-                          {t('auth.signIn.getStartedFree')}
+                  
+                  {/* iOS specific content to fill the space */}
+                  {isIOS ? (
+                    <View style={styles.iosInfoSection}>
+                      <View style={styles.iosInfoCard}>
+                        <Text style={styles.iosInfoText}>
+                          {t('auth.mainScreen.iosAgentInfo')}
                         </Text>
                       </View>
-                    </TouchableOpacity>
-                  </View>
+                    </View>
+                  ) : (
+                    <View style={styles.section}>
+                      <Text style={styles.sectionTitle}>
+                        {t('auth.mainScreen.newHere')}
+                      </Text>
+                      <TouchableOpacity
+                        style={styles.secondaryButton}
+                        onPress={onPartnerSignup}
+                        activeOpacity={0.8}>
+                        <View style={styles.buttonContentRow}>
+                          <Text style={styles.secondaryButtonText}>
+                            {t('auth.signIn.getStartedFree')}
+                          </Text>
+                        </View>
+                      </TouchableOpacity>
+                    </View>
+                  )}
+                  
                   <View style={styles.infoContainer}>
                     <View style={styles.divider} />
                     <Text style={styles.infoText}>
@@ -330,7 +343,6 @@ export const MainScreen: React.FC<Props> = ({navigation}) => {
   );
 };
 
-// Styles remain the same
 const styles = StyleSheet.create({
   mainScreen: {
     flex: 1,
@@ -544,5 +556,22 @@ const styles = StyleSheet.create({
     height: 1,
     backgroundColor: Colors.MT_PRIMARY_2,
     opacity: 0.4,
+  },
+  // iOS specific styles for partner tab content
+  iosInfoSection: {
+    marginBottom: 20,
+  },
+  iosInfoCard: {
+    backgroundColor: 'rgba(83, 162, 14, 0.05)',
+    borderWidth: 1,
+    borderColor: 'rgba(83, 162, 14, 0.1)',
+    borderRadius: 16,
+    padding: 20,
+  },
+  iosInfoText: {
+    fontSize: 14,
+    color: '#555',
+    lineHeight: 20,
+    marginBottom: 16,
   },
 });

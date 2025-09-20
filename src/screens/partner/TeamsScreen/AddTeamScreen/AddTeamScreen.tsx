@@ -240,8 +240,6 @@ const AddTeamScreen: React.FC<Props> = ({navigation, route}) => {
     [errors],
   );
 
-  const isProcessing = loading || isPaying || isVerifying;
-
   return (
     <View style={styles.container}>
       {Platform.OS === 'android' && (
@@ -392,7 +390,7 @@ const AddTeamScreen: React.FC<Props> = ({navigation, route}) => {
         </ScrollView>
       </KeyboardAvoidingView>
       {/* Unified payment loading overlay */}
-      {isProcessing && (
+      {(isPaying || isVerifying) && (
         <PaymentLoadingOverlay
           isCreatingOrder={loading}
           isPaying={isPaying}

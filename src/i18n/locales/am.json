@@ -394,7 +394,8 @@
       "wantToListProperty": "ንጥልዎን መዝግብ ይፈልጋሉ?",
       "signUpAsSeller": "እንደ ሻጭ መመዝገብ",
       "buyerSellerTab": "ገዢ/ሻጭ",
-      "partnerTab": "ያዥ"
+      "partnerTab": "ያዥ",
+      "iosAgentInfo": "የሪል እስትይት ንግድዎን ለማስተያየት ከላቀ መሳሪያዎች እና አንሊቲክስ ጋር የያዥ ዳሽቦርድዎን ያስተያዩ።"
     },
     "accessDenied": "መለጠፍ አልተለየም",
     "adminUnauthorized": "ኢሜይልዎ {email} ለአድሚን መለጠፍ አልተለየም።",

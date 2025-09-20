@@ -394,7 +394,8 @@
       "wantToListProperty": "Quer listar sua propriedade?",
       "signUpAsSeller": "Cadastrar como Vendedor",
       "buyerSellerTab": "Comprador/Vendedor",
-      "partnerTab": "Agente"
+      "partnerTab": "Agente",
+      "iosAgentInfo": "Acesse seu painel de agente com ferramentas avançadas e análises para gerenciar seu negócio imobiliário."
     },
     "accessDenied": "Acesso Negado",
     "adminUnauthorized": "Seu e-mail {email} não está autorizado para acesso de administrador.",

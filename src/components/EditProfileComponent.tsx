@@ -225,7 +225,7 @@ const EditProfileComponent = () => {
             </View>
 
             {/* Subscription Status Section - Only for Partners and Team Members */}
-            {isPartnerOrTeam && (
+            {isPartnerOrTeam && Platform.OS !== 'ios' && (
               <View style={styles.subscriptionContainer}>
                 <Text style={styles.subscriptionTitle}>
                   Subscription Status

@@ -131,13 +131,15 @@ export default function AuthNavigator() {
           title: isIOS ? 'Sign Up' : '',
         }}
       />
-      <Stack.Screen
-        name="PartnerSignUpScreen"
-        component={PartnerSignUpScreen}
-        options={{
-          title: isIOS ? 'Sign Up' : '',
-        }}
-      />
+      {!isIOS && (
+        <Stack.Screen
+          name="PartnerSignUpScreen"
+          component={PartnerSignUpScreen}
+          options={{
+            title: isIOS ? 'Sign Up' : '',
+          }}
+        />
+      )}
       <Stack.Screen
         name="OtpScreen"
         component={OtpScreen}

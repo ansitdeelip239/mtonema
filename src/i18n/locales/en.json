@@ -394,7 +394,8 @@
       "wantToListProperty": "Want to list your property?",
       "signUpAsSeller": "Sign Up as Seller",
       "buyerSellerTab": "Buyer/Seller",
-      "partnerTab": "Agent"
+      "partnerTab": "Agent",
+      "iosAgentInfo": "Access your agent dashboard with advanced tools and analytics for managing your real estate business."
     },
     "accessDenied": "Access Denied",
     "adminUnauthorized": "Your email {email} is not authorized for admin access.",
