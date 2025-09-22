@@ -3,6 +3,7 @@ import {View, Text, StyleSheet} from 'react-native';
 import GetIcon from '../../../components/GetIcon';
 import Colors from '../../../constants/Colors';
 import {InsightCard} from './InsightCard';
+import {useTranslation} from 'react-i18next';
 
 type LocationInsights = [string, number][];
 
@@ -21,10 +22,11 @@ export const LocationStatus: React.FC<LocationStatusProps> = ({
   locationInsights,
   readyToMoveStats,
 }) => {
+  const {t} = useTranslation();
   return (
     <View style={styles.container}>
       <Text style={styles.sectionTitle}>
-        Location & Status
+        {t('seller.dashboard.locationStatus')}
       </Text>
 
       <View style={styles.sectionsContainer}>
@@ -35,7 +37,7 @@ export const LocationStatus: React.FC<LocationStatusProps> = ({
               <GetIcon iconName="locationPin" color="white" size="20" />
             </View>
             <Text style={styles.headerTitle}>
-              Top Locations
+              {t('seller.analytics.topLocations')}
             </Text>
           </View>
           {locationInsights && locationInsights.length > 0 ? (
@@ -52,7 +54,7 @@ export const LocationStatus: React.FC<LocationStatusProps> = ({
                       {location}
                     </Text>
                     <Text style={styles.locationCount}>
-                      {count} properties
+                      {count} {t('seller.status.properties')}
                     </Text>
                   </View>
                 </View>
@@ -62,7 +64,7 @@ export const LocationStatus: React.FC<LocationStatusProps> = ({
             <View style={styles.emptyContainer}>
               <GetIcon iconName="locationPin" color={Colors.MT_SECONDARY_2} size="20" />
               <Text style={styles.emptyText}>
-                No location data
+                {t('seller.status.noLocationData')}
               </Text>
             </View>
           )}
@@ -75,7 +77,7 @@ export const LocationStatus: React.FC<LocationStatusProps> = ({
               <GetIcon iconName="time" color="white" size="20" />
             </View>
             <Text style={styles.headerTitle}>
-              Property Status
+              {t('seller.status.propertyStatus')}
             </Text>
           </View>
           {readyToMoveStats ? (
@@ -83,7 +85,7 @@ export const LocationStatus: React.FC<LocationStatusProps> = ({
               <View style={styles.statusItem}>
                 <View style={styles.readyIndicator} />
                 <Text style={styles.statusLabel}>
-                  Ready
+                  {t('seller.status.ready')}
                 </Text>
                 <Text style={styles.statusCount}>
                   {readyToMoveStats.readyToMove}
@@ -92,7 +94,7 @@ export const LocationStatus: React.FC<LocationStatusProps> = ({
               <View style={styles.statusItem}>
                 <View style={styles.constructionIndicator} />
                 <Text style={styles.statusLabel}>
-                  Construction
+                  {t('seller.status.construction')}
                 </Text>
                 <Text style={styles.statusCount}>
                   {readyToMoveStats.underConstruction}
@@ -103,7 +105,7 @@ export const LocationStatus: React.FC<LocationStatusProps> = ({
             <View style={styles.emptyContainer}>
               <GetIcon iconName="time" color={Colors.MT_SECONDARY_2} size="20" />
               <Text style={styles.emptyText}>
-                No status data
+                {t('seller.status.noStatusData')}
               </Text>
             </View>
           )}

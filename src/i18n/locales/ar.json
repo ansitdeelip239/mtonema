@@ -90,11 +90,14 @@
       "buyPremium": "شراء النسخة المميزة",
       "payments": "المدفوعات",
       "helpCenter": "مركز المساعدة",
-      "chatWithUs": "تحدث معنا",
       "logout": "تسجيل الخروج",
       "logoutConfirmation": "هل أنت متأكد من تسجيل الخروج؟",
       "loggingOut": "جاري تسجيل الخروج...",
-      "underDevelopment": "هذه الميزة قيد التطوير"
+      "underDevelopment": "هذه الميزة قيد التطوير",
+      "sellerHome": "الرئيسية",
+      "sellerProfileScreen": "الملف الشخصي",
+      "sellerHelpCenter": "مركز المساعدة",
+      "sellerSettings": "الإعدادات"
     },
     "paymentTabs": {
       "plans": "الخطط",
@@ -111,7 +114,12 @@
       "contacted": "تم التواصل",
       "searchProperty": "البحث",
       "contactUs": "اتصل بنا",
-      "profile": "الملف الشخصي"
+      "profile": "الملف الشخصي",
+      "sellerDashboard": "لوحة التحكم",
+      "sellerProperty": "العقار",
+      "sellerAddProperty": "إضافة عقار",
+      "sellerContact": "التواصل",
+      "sellerProfile": "الملف الشخصي"
     }
   },
   "logout": {
@@ -482,18 +490,6 @@
   "app": {
     "title": "MT One: تطبيق ونظام إدارة العلاقات",
     "restart": "إعادة تشغيل التطبيق"
-  },
-  "plurals": {
-    "client": {
-      "two": "عميلان",
-      "few": "{{count}} عملاء",
-      "many": "{{count}} عميلاً"
-    },
-    "followUp": {
-      "two": "متابعتان",
-      "few": "{{count}} متابعات",
-      "many": "{{count}} متابعة"
-    }
   },
   "addActivityModal": {
     "addActivity": "إضافة نشاط",
@@ -1376,8 +1372,8 @@
     }
   },
   "contactUs": {
-    "title": "تواصل معنا",
-    "subtitle": "اتصل بنا",
+    "title": "اتصل بنا",
+    "subtitle": "تواصل معنا",
     "contactInfo": {
       "phone": "الهاتف",
       "email": "البريد الإلكتروني",
@@ -1401,6 +1397,141 @@
     },
     "buttons": {
       "sendMessage": "إرسال رسالة"
+    }
+  },
+  "seller": {
+    "profile": {
+      "title": "ملف المستخدم",
+      "subtitle": "إدارة حسابك",
+      "editProfile": "تعديل الملف الشخصي",
+      "myProperties": "عقاراتي",
+      "settings": "الإعدادات"
+    },
+    "dashboard": {
+      "portfolioOverview": "نظرة عامة على المحفظة",
+      "priceAnalytics": "تحليلات الأسعار",
+      "propertyInsights": "رؤى العقارات",
+      "locationStatus": "الموقع والحالة",
+      "recentActivity": "النشاط الأخير",
+      "furnishingDistribution": "توزيع الفرش",
+      "propertyDashboard": "لوحة تحكم العقارات",
+      "welcomeBack": "مرحباً بعودتك"
+    },
+    "portfolio": {
+      "totalValue": "إجمالي قيمة المحفظة",
+      "properties": "العقارات",
+      "active": "نشط",
+      "featured": "مميز",
+      "noProperties": "لا توجد عقارات بعد",
+      "emptyMessage": "ابدأ في بناء محفظتك بإضافة عقارك الأول"
+    },
+    "analytics": {
+      "average": "متوسط",
+      "highest": "الأعلى",
+      "lowest": "الأدنى",
+      "propertyTypes": "أنواع العقارات",
+      "topLocations": "أفضل المواقع",
+      "latestProperties": "أحدث العقارات",
+      "thisMonth": "هذا الشهر",
+      "growth": "النمو",
+      "bhkConfiguration": "تكوين BHK"
+    },
+    "status": {
+      "readyToMove": "جاهز للانتقال",
+      "propertyStatus": "حالة العقار",
+      "ready": "جاهز",
+      "construction": "إنشاء",
+      "properties": "عقارات",
+      "noLocationData": "لا توجد بيانات موقع",
+      "noStatusData": "لا توجد بيانات حالة"
+    },
+    "propertyList": {
+      "title": "العقارات المدرجة",
+      "subtitle": "إدارة قوائمك",
+      "totalProperties": "إجمالي العقارات",
+      "loading": "جاري تحميل العقارات...",
+      "noProperties": "لم يتم العثور على عقارات",
+      "loadingMore": "جاري تحميل المزيد من العقارات..."
+    },
+    "propertyDetail": {
+      "overview": "نظرة عامة على العقار",
+      "description": "الوصف",
+      "markAsFeatured": "وضع علامة مميز",
+      "featuredDescription": "تحصل العقارات المميزة على مزيد من الظهور",
+      "features": "المميزات",
+      "specifications": "المواصفات",
+      "tags": "العلامات",
+      "sellerInformation": "معلومات البائع",
+      "deleteProperty": "حذف العقار",
+      "deleteConfirmation": "هل أنت متأكد من أنك تريد حذف هذا العقار؟ لا يمكن التراجع عن هذا الإجراء.",
+      "parking": "موقف سيارات",
+      "lift": "مصعد",
+      "security": "أمان",
+      "alarm": "إنذار",
+      "readyToMove": "جاهز للانتقال",
+      "videoTour": "جولة فيديو",
+      "propertyName": "اسم العقار",
+      "locationNotSpecified": "الموقع غير محدد",
+      "priceNotAvailable": "السعر غير متوفر"
+    }
+  },
+  "contactScreen": {
+    "sections": {
+      "contactInformation": "معلومات التواصل",
+      "officeHours": "ساعات العمل",
+      "sendMessage": "أرسل لنا رسالة",
+      "followUs": "تابعنا",
+      "quickActions": "إجراءات سريعة"
+    },
+    "form": {
+      "labels": {
+        "fullName": "الاسم الكامل *",
+        "emailAddress": "عنوان البريد الإلكتروني *",
+        "phoneNumber": "رقم الهاتف",
+        "subject": "الموضوع",
+        "message": "الرسالة *"
+      },
+      "placeholders": {
+        "fullName": "أدخل اسمك الكامل",
+        "email": "أدخل بريدك الإلكتروني",
+        "phoneNumber": "أدخل رقم هاتفك",
+        "subject": "ما هذا بخصوص؟",
+        "message": "أخبرنا كيف يمكننا مساعدتك..."
+      },
+      "buttons": {
+        "sending": "جاري الإرسال...",
+        "sendMessage": "إرسال الرسالة"
+      }
+    },
+    "quickActions": {
+      "callNow": "اتصل الآن",
+      "whatsApp": "واتساب",
+      "visitUs": "زورنا"
+    },
+    "alerts": {
+      "error": "خطأ",
+      "fillRequiredFields": "يرجى ملء جميع الحقول المطلوبة",
+      "messageSent": "تم إرسال الرسالة!",
+      "messageSentMessage": "شكراً لتواصلك معنا. سنعود إليك خلال 24 ساعة.",
+      "ok": "موافق",
+      "sendFailed": "فشل في إرسال الرسالة",
+      "sendFailedRetry": "فشل في إرسال الرسالة. يرجى المحاولة مرة أخرى.",
+      "comingSoon": "قريباً",
+      "socialComingSoon": "صفحة {{socialName}} ستكون متاحة قريباً!"
+    }
+  },
+  "profileScreen": {
+    "loading": {
+      "loadingProfile": "جارٍ تحميل الملف الشخصي...",
+      "unableToLoad": "غير قادر على تحميل بيانات الملف الشخصي"
+    },
+    "sections": {
+      "accountOverview": "نظرة عامة على الحساب",
+      "accountSettings": "إعدادات الحساب",
+      "contactInformation": "معلومات الاتصال"
+    },
+    "membership": {
+      "memberSince": "عضو منذ"
     }
   }
 }

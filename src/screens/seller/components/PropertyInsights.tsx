@@ -4,6 +4,7 @@ import GetIcon from '../../../components/GetIcon';
 import Colors from '../../../constants/Colors';
 import {InsightCard} from './InsightCard';
 import {SellerProperty} from '../../../types';
+import {useTranslation} from 'react-i18next';
 
 type PropertyTypeAnalytics = [string, number][];
 type BHKAnalytics = [string, number][];
@@ -19,6 +20,7 @@ export const PropertyInsights: React.FC<PropertyInsightsProps> = ({
   bhkAnalytics,
   properties,
 }) => {
+  const {t} = useTranslation();
   const getPropertyTypeColor = (index: number): string => {
     return index === 0 ? '#10B981' : index === 1 ? '#F59E0B' : '#8B5CF6';
   };
@@ -26,7 +28,7 @@ export const PropertyInsights: React.FC<PropertyInsightsProps> = ({
   return (
     <View style={styles.container}>
       <Text style={styles.sectionTitle}>
-        Property Insights
+        {t('seller.dashboard.propertyInsights')}
       </Text>
 
       {/* Property Types */}
@@ -37,7 +39,7 @@ export const PropertyInsights: React.FC<PropertyInsightsProps> = ({
               <GetIcon iconName="realEstate" color="white" size="20" />
             </View>
             <Text style={styles.headerTitle}>
-              Property Types
+              {t('seller.analytics.propertyTypes')}
             </Text>
           </View>
           <View style={styles.list}>
@@ -71,7 +73,7 @@ export const PropertyInsights: React.FC<PropertyInsightsProps> = ({
               <GetIcon iconName="home" color="white" size="20" />
             </View>
             <Text style={styles.headerTitle}>
-              BHK Configuration
+              {t('seller.analytics.bhkConfiguration')}
             </Text>
           </View>
           <View style={styles.list}>

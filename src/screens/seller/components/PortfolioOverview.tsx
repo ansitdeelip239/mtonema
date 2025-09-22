@@ -6,6 +6,7 @@ import {formatPortfolioValue} from '../../../utils/currency';
 import {InsightCard} from './InsightCard';
 import { StatCard } from './StatCard';
 import {SellerProperty} from '../../../types';
+import {useTranslation} from 'react-i18next';
 
 interface MonthlyInsights {
   thisMonth: number;
@@ -30,11 +31,12 @@ export const PortfolioOverview: React.FC<PortfolioOverviewProps> = ({
   monthlyInsights,
   portfolioValue,
 }) => {
+  const {t} = useTranslation();
   if (properties.length === 0) {
     return (
       <View style={styles.emptyContainer}>
         <Text style={styles.sectionTitle}>
-          Portfolio Overview
+          {t('seller.dashboard.portfolioOverview')}
         </Text>
         <InsightCard>
           <View style={styles.emptyContent}>
@@ -42,10 +44,10 @@ export const PortfolioOverview: React.FC<PortfolioOverviewProps> = ({
               <GetIcon iconName="realEstate" color={Colors.MT_SECONDARY_2} size="32" />
             </View>
             <Text style={styles.emptyTitle}>
-              No Properties Yet
+              {t('seller.portfolio.noProperties')}
             </Text>
             <Text style={styles.emptySubtitle}>
-              Start building your portfolio by adding your first property
+              {t('seller.portfolio.emptyMessage')}
             </Text>
           </View>
         </InsightCard>
@@ -56,7 +58,7 @@ export const PortfolioOverview: React.FC<PortfolioOverviewProps> = ({
   return (
     <View style={styles.container}>
       <Text style={styles.sectionTitle}>
-        Portfolio Overview
+        {t('seller.dashboard.portfolioOverview')}
       </Text>
 
       {/* Portfolio Value Card */}
@@ -70,10 +72,10 @@ export const PortfolioOverview: React.FC<PortfolioOverviewProps> = ({
               {formatPortfolioValue(portfolioValue)}
             </Text>
             <Text style={styles.portfolioLabel}>
-              Total Portfolio Value
+              {t('seller.portfolio.totalValue')}
             </Text>
             <Text style={styles.portfolioSubLabel}>
-              {totalCount} Properties
+              {totalCount} {t('seller.portfolio.properties')}
             </Text>
           </View>
         </View>
@@ -84,28 +86,28 @@ export const PortfolioOverview: React.FC<PortfolioOverviewProps> = ({
         <StatCard
           icon="checkmark"
           value={activeProperties}
-          label="Active"
+          label={t('seller.portfolio.active')}
           color="#10B981"
           bgColor="#F0FDF4"
         />
         <StatCard
           icon="premium"
           value={featuredProperties}
-          label="Featured"
+          label={t('seller.portfolio.featured')}
           color="#F59E0B"
           bgColor="#FFFBEB"
         />
         <StatCard
           icon="calendar"
           value={monthlyInsights?.thisMonth || 0}
-          label="This Month"
+          label={t('seller.analytics.thisMonth')}
           color="#8B5CF6"
           bgColor="#FAF5FF"
         />
         <StatCard
           icon="growth"
           value={`${monthlyInsights?.growth && monthlyInsights.growth >= 0 ? '+' : ''}${monthlyInsights?.growth || 0}%`}
-          label="Growth"
+          label={t('seller.analytics.growth')}
           color={monthlyInsights?.growth ? (monthlyInsights.growth >= 0 ? '#10B981' : '#EF4444') : '#6B7280'}
           bgColor={monthlyInsights?.growth ? (monthlyInsights.growth >= 0 ? '#F0FDF4' : '#FEF2F2') : '#F9FAFB'}
         />

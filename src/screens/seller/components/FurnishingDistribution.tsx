@@ -4,6 +4,7 @@ import GetIcon from '../../../components/GetIcon';
 import Colors from '../../../constants/Colors';
 import {InsightCard} from './InsightCard';
 import {SellerProperty} from '../../../types';
+import {useTranslation} from 'react-i18next';
 
 type FurnishingStats = [string, number][];
 
@@ -16,6 +17,7 @@ export const FurnishingDistribution: React.FC<FurnishingDistributionProps> = ({
   furnishingStats,
   properties,
 }) => {
+  const {t} = useTranslation();
   if (!furnishingStats || furnishingStats.length === 0) {
     return null;
   }
@@ -23,7 +25,7 @@ export const FurnishingDistribution: React.FC<FurnishingDistributionProps> = ({
   return (
     <View style={styles.container}>
       <Text style={styles.sectionTitle}>
-        Furnishing Distribution
+        {t('seller.dashboard.furnishingDistribution')}
       </Text>
       <InsightCard style={styles.whiteCard}>
         <View style={styles.header}>
@@ -31,7 +33,7 @@ export const FurnishingDistribution: React.FC<FurnishingDistributionProps> = ({
             <GetIcon iconName="home" color="white" size="20" />
           </View>
           <Text style={styles.headerTitle}>
-            Furnishing Distribution
+            {t('seller.dashboard.furnishingDistribution')}
           </Text>
         </View>
         <View style={styles.list}>

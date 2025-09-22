@@ -94,7 +94,7 @@ function analyzeTranslationUsage() {
   console.log('🔍 Starting translation usage analysis...\n');
 
   // Read and parse en.json
-  const enJsonPath = path.join(__dirname, 'src', 'i18n', 'locales', 'en.json');
+  const enJsonPath = path.join(__dirname, '..', 'src', 'i18n', 'locales', 'en.json');
   
   if (!fs.existsSync(enJsonPath)) {
     console.error('❌ en.json file not found at:', enJsonPath);
@@ -116,7 +116,7 @@ function analyzeTranslationUsage() {
 
   // Find all TypeScript files
   console.log('🔎 Scanning TypeScript files...');
-  const srcDir = path.join(__dirname, 'src');
+  const srcDir = path.join(__dirname, '..', 'src');
   const tsFiles = findTSFiles(srcDir);
   console.log(`📁 Found ${tsFiles.length} TypeScript/JavaScript files to analyze`);
 
@@ -266,7 +266,7 @@ function removeKeysFromTranslation(filePath, keys) {
 }
 
 // Apply to all locale files
-const localesDir = path.join(__dirname, 'src', 'i18n', 'locales');
+const localesDir = path.join(__dirname, '..', 'src', 'i18n', 'locales');
 const localeFiles = fs.readdirSync(localesDir).filter(f => f.endsWith('.json'));
 
 localeFiles.forEach(file => {

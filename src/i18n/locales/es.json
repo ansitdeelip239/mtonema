@@ -90,11 +90,14 @@
       "buyPremium": "Comprar Premium",
       "payments": "Pagos",
       "helpCenter": "Centro de Ayuda",
-      "chatWithUs": "Chatea con Nosotros",
       "logout": "Cerrar Sesión",
       "logoutConfirmation": "¿Estás seguro de que quieres cerrar sesión?",
       "loggingOut": "Cerrando sesión...",
-      "underDevelopment": "Esta función está en desarrollo"
+      "underDevelopment": "Esta función está en desarrollo",
+      "sellerHome": "Inicio",
+      "sellerProfileScreen": "Perfil",
+      "sellerHelpCenter": "Centro de Ayuda",
+      "sellerSettings": "Configuración"
     },
     "paymentTabs": {
       "plans": "Planes",
@@ -111,7 +114,12 @@
       "contacted": "Contactados",
       "searchProperty": "Buscar",
       "contactUs": "Contáctanos",
-      "profile": "Perfil"
+      "profile": "Perfil",
+      "sellerDashboard": "Panel",
+      "sellerProperty": "Propiedad",
+      "sellerAddProperty": "Agregar Propiedad",
+      "sellerContact": "Contacto",
+      "sellerProfile": "Perfil"
     }
   },
   "logout": {
@@ -1368,8 +1376,8 @@
     }
   },
   "contactUs": {
-    "title": "Ponte en contacto",
-    "subtitle": "Contáctanos",
+    "title": "Contáctanos",
+    "subtitle": "Ponte en contacto con soporte",
     "contactInfo": {
       "phone": "Teléfono",
       "email": "Correo electrónico",
@@ -1393,6 +1401,141 @@
     },
     "buttons": {
       "sendMessage": "Enviar mensaje"
+    }
+  },
+  "seller": {
+    "profile": {
+      "title": "Perfil de usuario",
+      "subtitle": "Gestiona tu cuenta",
+      "editProfile": "Editar perfil",
+      "myProperties": "Mis propiedades",
+      "settings": "Configuración"
+    },
+    "dashboard": {
+      "portfolioOverview": "Resumen de cartera",
+      "priceAnalytics": "Análisis de precios",
+      "propertyInsights": "Información de propiedades",
+      "locationStatus": "Ubicación y estado",
+      "recentActivity": "Actividad reciente",
+      "furnishingDistribution": "Distribución de mobiliario",
+      "propertyDashboard": "Panel de propiedades",
+      "welcomeBack": "Bienvenido de vuelta"
+    },
+    "portfolio": {
+      "totalValue": "Valor total de la cartera",
+      "properties": "Propiedades",
+      "active": "Activo",
+      "featured": "Destacado",
+      "noProperties": "Aún no hay propiedades",
+      "emptyMessage": "Comienza a construir tu cartera agregando tu primera propiedad"
+    },
+    "analytics": {
+      "average": "Promedio",
+      "highest": "Más alto",
+      "lowest": "Más bajo",
+      "propertyTypes": "Tipos de propiedad",
+      "topLocations": "Mejores ubicaciones",
+      "latestProperties": "Últimas propiedades",
+      "thisMonth": "Este mes",
+      "growth": "Crecimiento",
+      "bhkConfiguration": "Configuración BHK"
+    },
+    "status": {
+      "readyToMove": "Listo para mudarse",
+      "propertyStatus": "Estado de la propiedad",
+      "ready": "Listo",
+      "construction": "Construcción",
+      "properties": "propiedades",
+      "noLocationData": "Sin datos de ubicación",
+      "noStatusData": "Sin datos de estado"
+    },
+    "propertyList": {
+      "title": "Propiedades listadas",
+      "subtitle": "Gestiona tus listados",
+      "totalProperties": "Total de propiedades",
+      "loading": "Cargando propiedades...",
+      "noProperties": "No se encontraron propiedades",
+      "loadingMore": "Cargando más propiedades..."
+    },
+    "propertyDetail": {
+      "overview": "Resumen de la propiedad",
+      "description": "Descripción",
+      "markAsFeatured": "Marcar como destacado",
+      "featuredDescription": "Las propiedades destacadas obtienen más visibilidad",
+      "features": "Características",
+      "specifications": "Especificaciones",
+      "tags": "Etiquetas",
+      "sellerInformation": "Información del vendedor",
+      "deleteProperty": "Eliminar propiedad",
+      "deleteConfirmation": "¿Estás seguro de que quieres eliminar esta propiedad? Esta acción no se puede deshacer.",
+      "parking": "Estacionamiento",
+      "lift": "Ascensor",
+      "security": "Seguridad",
+      "alarm": "Alarma",
+      "readyToMove": "Listo para mudarse",
+      "videoTour": "Tour virtual",
+      "propertyName": "Nombre de la propiedad",
+      "locationNotSpecified": "Ubicación no especificada",
+      "priceNotAvailable": "Precio no disponible"
+    }
+  },
+  "contactScreen": {
+    "sections": {
+      "contactInformation": "Información de contacto",
+      "officeHours": "Horario de oficina",
+      "sendMessage": "Envíanos un mensaje",
+      "followUs": "Síguenos",
+      "quickActions": "Acciones rápidas"
+    },
+    "form": {
+      "labels": {
+        "fullName": "Nombre completo *",
+        "emailAddress": "Dirección de correo electrónico *",
+        "phoneNumber": "Número de teléfono",
+        "subject": "Asunto",
+        "message": "Mensaje *"
+      },
+      "placeholders": {
+        "fullName": "Ingresa tu nombre completo",
+        "email": "Ingresa tu correo electrónico",
+        "phoneNumber": "Ingresa tu número de teléfono",
+        "subject": "¿De qué se trata?",
+        "message": "Cuéntanos cómo podemos ayudarte..."
+      },
+      "buttons": {
+        "sending": "Enviando...",
+        "sendMessage": "Enviar mensaje"
+      }
+    },
+    "quickActions": {
+      "callNow": "Llamar ahora",
+      "whatsApp": "WhatsApp",
+      "visitUs": "Visítanos"
+    },
+    "alerts": {
+      "error": "Error",
+      "fillRequiredFields": "Por favor completa todos los campos requeridos",
+      "messageSent": "¡Mensaje enviado!",
+      "messageSentMessage": "Gracias por contactarnos. Te responderemos dentro de 24 horas.",
+      "ok": "OK",
+      "sendFailed": "Error al enviar el mensaje",
+      "sendFailedRetry": "Error al enviar el mensaje. Por favor intenta de nuevo.",
+      "comingSoon": "Próximamente",
+      "socialComingSoon": "¡La página de {{socialName}} estará disponible pronto!"
+    }
+  },
+  "profileScreen": {
+    "loading": {
+      "loadingProfile": "Cargando perfil...",
+      "unableToLoad": "No se pudo cargar los datos del perfil"
+    },
+    "sections": {
+      "accountOverview": "Resumen de la cuenta",
+      "accountSettings": "Configuración de la cuenta",
+      "contactInformation": "Información de contacto"
+    },
+    "membership": {
+      "memberSince": "Miembro desde"
     }
   }
 }

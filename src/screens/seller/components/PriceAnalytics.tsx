@@ -3,6 +3,7 @@ import {View, Text, StyleSheet} from 'react-native';
 import GetIcon from '../../../components/GetIcon';
 import {formatCurrency} from '../../../utils/currency';
 import {InsightCard} from './InsightCard';
+import {useTranslation} from 'react-i18next';
 
 interface PriceAnalyticsData {
   avgPrice: number;
@@ -15,6 +16,7 @@ interface PriceAnalyticsProps {
 }
 
 export const PriceAnalytics: React.FC<PriceAnalyticsProps> = ({priceAnalytics}) => {
+  const {t} = useTranslation();
   if (!priceAnalytics) {
     return null;
   }
@@ -22,7 +24,7 @@ export const PriceAnalytics: React.FC<PriceAnalyticsProps> = ({priceAnalytics}) 
   return (
     <View style={styles.container}>
       <Text style={styles.sectionTitle}>
-        Price Analytics
+        {t('seller.dashboard.priceAnalytics')}
       </Text>
       <InsightCard>
         <View style={styles.content}>
@@ -31,7 +33,7 @@ export const PriceAnalytics: React.FC<PriceAnalyticsProps> = ({priceAnalytics}) 
               <GetIcon iconName="rupee" color="#3B82F6" size="16" />
             </View>
             <Text style={styles.metricLabel}>
-              Average
+              {t('seller.analytics.average')}
             </Text>
             <Text style={styles.metricValue} numberOfLines={1}>
               {formatCurrency(priceAnalytics.avgPrice)}
@@ -42,7 +44,7 @@ export const PriceAnalytics: React.FC<PriceAnalyticsProps> = ({priceAnalytics}) 
               <GetIcon iconName="ascending" color="#10B981" size="16" />
             </View>
             <Text style={styles.metricLabel}>
-              Highest
+              {t('seller.analytics.highest')}
             </Text>
             <Text style={styles.metricValue} numberOfLines={1}>
               {formatCurrency(priceAnalytics.maxPrice)}
@@ -53,7 +55,7 @@ export const PriceAnalytics: React.FC<PriceAnalyticsProps> = ({priceAnalytics}) 
               <GetIcon iconName="descending" color="#F59E0B" size="16" />
             </View>
             <Text style={styles.metricLabel}>
-              Lowest
+              {t('seller.analytics.lowest')}
             </Text>
             <Text style={styles.metricValue} numberOfLines={1}>
               {formatCurrency(priceAnalytics.minPrice)}

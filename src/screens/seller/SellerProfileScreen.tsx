@@ -4,11 +4,13 @@ import {SellerProfileStackParamList} from '../../navigator/components/SellerProf
 import ProfileScreen, {ProfileScreenConfig} from '../../components/ProfileScreen';
 import {IconEnum} from '../../components/GetIcon';
 import {useUserProfile} from './hooks/useUserProfile';
+import {useTranslation} from 'react-i18next';
 
 type Props = NativeStackScreenProps<SellerProfileStackParamList, 'SellerProfileScreen'>;
 
 const SellerProfileScreen: React.FC<Props> = ({navigation}) => {
   const {userData, loading, error, refetch} = useUserProfile();
+  const {t} = useTranslation();
 
   const handleRefresh = async () => {
     await refetch();
@@ -24,7 +26,7 @@ const SellerProfileScreen: React.FC<Props> = ({navigation}) => {
         navigation.getParent()?.navigate('Property');
         break;
       case 'settings':
-        // Handle settings navigation
+        navigation.getParent()?.navigate('Settings');
         break;
       default:
         break;
@@ -34,17 +36,17 @@ const SellerProfileScreen: React.FC<Props> = ({navigation}) => {
   const profileOptions = [
     {
       id: 'edit',
-      title: 'Edit Profile',
+      title: t('seller.profile.editProfile'),
       icon: 'user' as IconEnum,
     },
     {
       id: 'properties',
-      title: 'My Properties',
+      title: t('seller.profile.myProperties'),
       icon: 'home' as IconEnum,
     },
     {
       id: 'settings',
-      title: 'Settings',
+      title: t('seller.profile.settings'),
       icon: 'settings' as IconEnum,
     },
   ];
@@ -68,8 +70,8 @@ const SellerProfileScreen: React.FC<Props> = ({navigation}) => {
   ] : [];
 
   const config: ProfileScreenConfig = {
-    title: 'User Profile',
-    subtitle: 'Manage your account',
+    title: t('seller.profile.title'),
+    subtitle: t('seller.profile.subtitle'),
     userData: userData || undefined,
     profileOptions,
     contactItems,

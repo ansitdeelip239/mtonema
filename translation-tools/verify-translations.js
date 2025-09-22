@@ -92,7 +92,7 @@ function compareTranslations(enObj, targetObj, targetLang) {
 function verifyTranslationCompleteness() {
   console.log('🔍 Verifying translation completeness...\n');
 
-  const localesDir = path.join(__dirname, 'src', 'i18n', 'locales');
+  const localesDir = path.join(__dirname, '..', 'src', 'i18n', 'locales');
   const enPath = path.join(localesDir, 'en.json');
   const amPath = path.join(localesDir, 'am.json');
 
@@ -252,7 +252,7 @@ function verifyTranslationCompleteness() {
 function verifyAllLocales() {
   console.log('🌍 Verifying all locale files...\n');
 
-  const localesDir = path.join(__dirname, 'src', 'i18n', 'locales');
+  const localesDir = path.join(__dirname, '..', 'src', 'i18n', 'locales');
   const enPath = path.join(localesDir, 'en.json');
 
   if (!fs.existsSync(enPath)) {

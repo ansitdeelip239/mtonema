@@ -20,6 +20,7 @@ import Toast from 'react-native-toast-message';
 import YoutubeVideoPlayer from '../../components/YoutubeVideoPlayer';
 import {useAuth} from '../../context/AuthProvider';
 import { getYouTubeThumbnailUrl } from '../../utils/formUtils';
+import {useTranslation} from 'react-i18next';
 
 type Props = NativeStackScreenProps<PropertyStackParamList, 'PropertyDetail'>;
 
@@ -27,6 +28,7 @@ type Props = NativeStackScreenProps<PropertyStackParamList, 'PropertyDetail'>;
 const placeholderImage = require('../../assets/Images/dncr_black_logo.png');
 
 const PropertyDetailScreen: React.FC<Props> = ({route, navigation}) => {
+  const {t} = useTranslation();
   const {property: initialProperty} = route.params;
 
   const [property, setProperty] = useState<SellerProperty>(initialProperty);
@@ -356,11 +358,11 @@ const PropertyDetailScreen: React.FC<Props> = ({route, navigation}) => {
         {/* Property Title & Price Section */}
         <View style={styles.section}>
           <Text style={styles.propertyTitle}>
-            {property.propertyName || 'Property Name'}
+            {property.propertyName || t('seller.propertyDetail.propertyName')}
           </Text>
 
           <Text style={[styles.propertyPrice, {color: Colors.MT_PRIMARY_1}]}>
-            ₹{property.price?.toLocaleString() || 'Price not available'}
+            ₹{property.price?.toLocaleString() || t('seller.propertyDetail.priceNotAvailable')}
           </Text>
 
           <View style={styles.infoRow}>
@@ -370,7 +372,7 @@ const PropertyDetailScreen: React.FC<Props> = ({route, navigation}) => {
               color={Colors.MT_PRIMARY_1}
             />
             <Text style={styles.infoText}>
-              {property.location || 'Location not specified'},{' '}
+              {property.location || t('seller.propertyDetail.locationNotSpecified')},{' '}
               {property.city || ''}
             </Text>
           </View>
@@ -378,7 +380,7 @@ const PropertyDetailScreen: React.FC<Props> = ({route, navigation}) => {
 
         {/* Property Overview */}
         <View style={[styles.section, styles.overviewSection]}>
-          <Text style={styles.sectionTitle}>Property Overview</Text>
+          <Text style={styles.sectionTitle}>{t('seller.propertyDetail.overview')}</Text>
 
           <View style={styles.overviewGrid}>
             <View style={styles.overviewItem}>
@@ -452,7 +454,7 @@ const PropertyDetailScreen: React.FC<Props> = ({route, navigation}) => {
         {/* Description */}
         {(property.shortDescription || property.longDescription) && (
           <View style={styles.section}>
-            <Text style={styles.sectionTitle}>Description</Text>
+            <Text style={styles.sectionTitle}>{t('seller.propertyDetail.description')}</Text>
 
             {property.shortDescription && (
               <View style={styles.descriptionContainer}>
@@ -476,9 +478,9 @@ const PropertyDetailScreen: React.FC<Props> = ({route, navigation}) => {
         <View style={styles.section}>
           <View style={styles.featuredContainer}>
             <View style={styles.featuredTextContainer}>
-              <Text style={styles.featuredTitle}>Mark as Featured</Text>
+              <Text style={styles.featuredTitle}>{t('seller.propertyDetail.markAsFeatured')}</Text>
               <Text style={styles.infoText}>
-                Featured properties get more visibility
+                {t('seller.propertyDetail.featuredDescription')}
               </Text>
             </View>
             <TouchableOpacity
@@ -488,7 +490,7 @@ const PropertyDetailScreen: React.FC<Props> = ({route, navigation}) => {
                 {backgroundColor: isFeatured ? Colors.MT_PRIMARY_1 : '#ccc'},
               ]}>
               <Text style={styles.featuredToggleText}>
-                {isFeatured ? 'Featured' : 'Not Featured'}
+                {isFeatured ? t('listings.labels.featured') : t('listings.labels.notFeatured')}
               </Text>
             </TouchableOpacity>
           </View>
@@ -496,7 +498,7 @@ const PropertyDetailScreen: React.FC<Props> = ({route, navigation}) => {
 
         {/* Additional Features */}
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Features</Text>
+          <Text style={styles.sectionTitle}>{t('seller.propertyDetail.features')}</Text>
           <View style={styles.featuresGrid}>
             <View style={styles.featureItem}>
               <View
@@ -512,7 +514,7 @@ const PropertyDetailScreen: React.FC<Props> = ({route, navigation}) => {
                   color={property.parking ? 'white' : '#666'}
                 />
               </View>
-              <Text style={styles.featureText}>Parking</Text>
+              <Text style={styles.featureText}>{t('listings.features.parking')}</Text>
             </View>
 
             <View style={styles.featureItem}>
@@ -529,7 +531,7 @@ const PropertyDetailScreen: React.FC<Props> = ({route, navigation}) => {
                   color={property.lifts ? 'white' : '#666'}
                 />
               </View>
-              <Text style={styles.featureText}>Lift</Text>
+              <Text style={styles.featureText}>{t('seller.propertyDetail.lift')}</Text>
             </View>
 
             <View style={styles.featureItem}>
@@ -546,7 +548,7 @@ const PropertyDetailScreen: React.FC<Props> = ({route, navigation}) => {
                   color={property.gatedSecurity ? 'white' : '#666'}
                 />
               </View>
-              <Text style={styles.featureText}>Security</Text>
+              <Text style={styles.featureText}>{t('seller.propertyDetail.security')}</Text>
             </View>
 
             <View style={styles.featureItem}>
@@ -563,7 +565,7 @@ const PropertyDetailScreen: React.FC<Props> = ({route, navigation}) => {
                   color={property.alarmSystem ? 'white' : '#666'}
                 />
               </View>
-              <Text style={styles.featureText}>Alarm</Text>
+              <Text style={styles.featureText}>{t('seller.propertyDetail.alarm')}</Text>
             </View>
 
             <View style={styles.featureItem}>
@@ -580,7 +582,7 @@ const PropertyDetailScreen: React.FC<Props> = ({route, navigation}) => {
                   color={property.readyToMove ? 'white' : '#666'}
                 />
               </View>
-              <Text style={styles.featureText}>Ready to Move</Text>
+              <Text style={styles.featureText}>{t('seller.propertyDetail.readyToMove')}</Text>
             </View>
 
             <View style={styles.featureItem}>
@@ -597,7 +599,7 @@ const PropertyDetailScreen: React.FC<Props> = ({route, navigation}) => {
                   color={property.constructionDone ? 'white' : '#666'}
                 />
               </View>
-              <Text style={styles.featureText}>Construction Done</Text>
+              <Text style={styles.featureText}>{t('listings.features.constructionDone')}</Text>
             </View>
 
             <View style={styles.featureItem}>
@@ -614,7 +616,7 @@ const PropertyDetailScreen: React.FC<Props> = ({route, navigation}) => {
                   color={property.boundaryWall ? 'white' : '#666'}
                 />
               </View>
-              <Text style={styles.featureText}>Boundary Wall</Text>
+              <Text style={styles.featureText}>{t('listings.features.boundaryWall')}</Text>
             </View>
 
             <View style={styles.featureItem}>
@@ -638,7 +640,7 @@ const PropertyDetailScreen: React.FC<Props> = ({route, navigation}) => {
 
         {/* Property Specifications */}
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Specifications</Text>
+          <Text style={styles.sectionTitle}>{t('seller.propertyDetail.specifications')}</Text>
           <View style={styles.specsList}>
             <View style={styles.specItem}>
               <Text style={styles.specLabel}>Furnishing</Text>
@@ -666,7 +668,7 @@ const PropertyDetailScreen: React.FC<Props> = ({route, navigation}) => {
         {/* Tags */}
         {displayTags.length > 0 && (
           <View style={styles.section}>
-            <Text style={styles.sectionTitle}>Tags</Text>
+            <Text style={styles.sectionTitle}>{t('seller.propertyDetail.tags')}</Text>
             <View style={styles.tagsContainer}>
               {displayTags.map((tag: string, index: number) => (
                 <View key={index} style={styles.tag}>
@@ -679,7 +681,7 @@ const PropertyDetailScreen: React.FC<Props> = ({route, navigation}) => {
 
         {/* Seller Information */}
         <View style={[styles.section, styles.sellerSection]}>
-          <Text style={styles.sectionTitle}>Seller Information</Text>
+          <Text style={styles.sectionTitle}>{t('seller.propertyDetail.sellerInformation')}</Text>
           <View style={styles.sellerCard}>
             <View style={styles.sellerDetails}>
               <View style={styles.sellerIconContainer}>
@@ -708,8 +710,8 @@ const PropertyDetailScreen: React.FC<Props> = ({route, navigation}) => {
         {/* Delete Confirmation Modal */}
         <ConfirmationModal
           visible={showDeleteModal}
-          title="Delete Property"
-          message="Are you sure you want to delete this property? This action cannot be undone."
+          title={t('listings.modals.deleteProperty.title')}
+          message={`${t('listings.modals.deleteProperty.message')} ${t('seller.propertyDetail.deleteConfirmation').split('?')[1]}`}
           onConfirm={handleDeleteProperty}
           onCancel={() => setShowDeleteModal(false)}
           isLoading={isDeleting}

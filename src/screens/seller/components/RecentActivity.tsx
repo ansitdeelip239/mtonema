@@ -5,6 +5,7 @@ import Colors from '../../../constants/Colors';
 import {formatCompactPrice} from '../../../utils/currency';
 import {InsightCard} from './InsightCard';
 import {SellerProperty} from '../../../types';
+import {useTranslation} from 'react-i18next';
 
 interface RecentActivityProps {
   recentProperties: SellerProperty[];
@@ -15,6 +16,7 @@ export const RecentActivity: React.FC<RecentActivityProps> = ({
   recentProperties,
   onPropertyPress,
 }) => {
+  const {t} = useTranslation();
   if (recentProperties.length === 0) {
     return null;
   }
@@ -22,7 +24,7 @@ export const RecentActivity: React.FC<RecentActivityProps> = ({
   return (
     <View style={styles.container}>
       <Text style={styles.sectionTitle}>
-        Recent Activity
+        {t('seller.dashboard.recentActivity')}
       </Text>
       <InsightCard style={styles.whiteCard}>
         <View style={styles.header}>
@@ -30,7 +32,7 @@ export const RecentActivity: React.FC<RecentActivityProps> = ({
             <GetIcon iconName="time" color="white" size="20" />
           </View>
           <Text style={styles.headerTitle}>
-            Latest Properties
+            {t('seller.analytics.latestProperties')}
           </Text>
         </View>
         <View style={styles.list}>

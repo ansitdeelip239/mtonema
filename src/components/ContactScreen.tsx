@@ -15,6 +15,7 @@ import Colors from '../constants/Colors';
 import BuyerSellerHeader from './BuyerSellerHeader';
 import {useAuth} from '../context/AuthProvider';
 import AuthService from '../services/AuthService';
+import {useTranslation} from 'react-i18next';
 
 export interface ContactInfo {
   id: string;
@@ -62,6 +63,7 @@ interface ContactScreenProps {
 
 const ContactScreen: React.FC<ContactScreenProps> = ({config}) => {
   const {user} = useAuth();
+  const {t} = useTranslation();
 
   const getInitialFormData = () => {
     const formData: any = {};
@@ -109,7 +111,7 @@ const ContactScreen: React.FC<ContactScreenProps> = ({config}) => {
     const missingFields = requiredFields.filter(field => !formData[field]);
 
     if (missingFields.length > 0) {
-      Alert.alert('Error', 'Please fill in all required fields');
+      Alert.alert(t('contactScreen.alerts.error'), t('contactScreen.alerts.fillRequiredFields'));
       return;
     }
 
@@ -130,22 +132,22 @@ const ContactScreen: React.FC<ContactScreenProps> = ({config}) => {
 
         if (response.success) {
           Alert.alert(
-            'Message Sent!',
-            'Thank you for contacting us. We will get back to you within 24 hours.',
+            t('contactScreen.alerts.messageSent'),
+            t('contactScreen.alerts.messageSentMessage'),
             [
               {
-                text: 'OK',
+                text: t('contactScreen.alerts.ok'),
                 onPress: () => setFormData(getInitialFormData()),
               },
             ],
           );
         } else {
-          Alert.alert('Error', response.message || 'Failed to send message');
+          Alert.alert(t('contactScreen.alerts.error'), response.message || t('contactScreen.alerts.sendFailed'));
         }
       }
     } catch (error) {
       console.error('Error sending message:', error);
-      Alert.alert('Error', 'Failed to send message. Please try again.');
+      Alert.alert(t('contactScreen.alerts.error'), t('contactScreen.alerts.sendFailedRetry'));
     } finally {
       setIsSubmitting(false);
     }
@@ -180,7 +182,7 @@ const ContactScreen: React.FC<ContactScreenProps> = ({config}) => {
       key={social.name}
       style={[styles.socialButton, {backgroundColor: social.color}]}
       onPress={social.action || (() => {
-        Alert.alert('Coming Soon', `${social.name} page will be available soon!`);
+        Alert.alert(t('contactScreen.alerts.comingSoon'), t('contactScreen.alerts.socialComingSoon', {socialName: social.name}));
       })}>
       <GetIcon iconName={social.icon} size={20} color="white" />
     </TouchableOpacity>
@@ -196,14 +198,14 @@ const ContactScreen: React.FC<ContactScreenProps> = ({config}) => {
 
       {/* Contact Information */}
       <View style={styles.section}>
-        <Text style={styles.sectionTitle}>Contact Information</Text>
+        <Text style={styles.sectionTitle}>{t('contactScreen.sections.contactInformation')}</Text>
         {config.contactInfo.map(renderContactInfo)}
       </View>
 
       {/* Office Hours */}
       {config.showBusinessHours && config.officeHours && (
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Office Hours</Text>
+          <Text style={styles.sectionTitle}>{t('contactScreen.sections.officeHours')}</Text>
           <View style={styles.officeHoursContainer}>
             {config.officeHours.map(renderOfficeHour)}
           </View>
@@ -212,15 +214,15 @@ const ContactScreen: React.FC<ContactScreenProps> = ({config}) => {
 
       {/* Contact Form */}
       <View style={styles.section}>
-        <Text style={styles.sectionTitle}>Send us a Message</Text>
+        <Text style={styles.sectionTitle}>{t('contactScreen.sections.sendMessage')}</Text>
 
         <View style={styles.formContainer}>
           {config.formFields.name && (
             <View style={styles.inputGroup}>
-              <Text style={styles.inputLabel}>Full Name *</Text>
+              <Text style={styles.inputLabel}>{t('contactScreen.form.labels.fullName')}</Text>
               <TextInput
                 style={styles.textInput}
-                placeholder="Enter your full name"
+                placeholder={t('contactScreen.form.placeholders.fullName')}
                 value={formData.name}
                 onChangeText={(value) => handleInputChange('name', value)}
               />
@@ -229,10 +231,10 @@ const ContactScreen: React.FC<ContactScreenProps> = ({config}) => {
 
           {config.formFields.email && (
             <View style={styles.inputGroup}>
-              <Text style={styles.inputLabel}>Email Address *</Text>
+              <Text style={styles.inputLabel}>{t('contactScreen.form.labels.emailAddress')}</Text>
               <TextInput
                 style={styles.textInput}
-                placeholder="Enter your email"
+                placeholder={t('contactScreen.form.placeholders.email')}
                 keyboardType="email-address"
                 autoCapitalize="none"
                 value={formData.email}
@@ -243,10 +245,10 @@ const ContactScreen: React.FC<ContactScreenProps> = ({config}) => {
 
           {config.formFields.phone && (
             <View style={styles.inputGroup}>
-              <Text style={styles.inputLabel}>Phone Number</Text>
+              <Text style={styles.inputLabel}>{t('contactScreen.form.labels.phoneNumber')}</Text>
               <TextInput
                 style={styles.textInput}
-                placeholder="Enter your phone number"
+                placeholder={t('contactScreen.form.placeholders.phoneNumber')}
                 keyboardType="phone-pad"
                 value={formData.phone}
                 onChangeText={(value) => handleInputChange('phone', value)}
@@ -256,10 +258,10 @@ const ContactScreen: React.FC<ContactScreenProps> = ({config}) => {
 
           {config.formFields.subject && (
             <View style={styles.inputGroup}>
-              <Text style={styles.inputLabel}>Subject</Text>
+              <Text style={styles.inputLabel}>{t('contactScreen.form.labels.subject')}</Text>
               <TextInput
                 style={styles.textInput}
-                placeholder="What's this about?"
+                placeholder={t('contactScreen.form.placeholders.subject')}
                 value={formData.subject}
                 onChangeText={(value) => handleInputChange('subject', value)}
               />
@@ -268,10 +270,10 @@ const ContactScreen: React.FC<ContactScreenProps> = ({config}) => {
 
           {config.formFields.message && (
             <View style={styles.inputGroup}>
-              <Text style={styles.inputLabel}>Message *</Text>
+              <Text style={styles.inputLabel}>{t('contactScreen.form.labels.message')}</Text>
               <TextInput
                 style={[styles.textInput, styles.messageInput]}
-                placeholder="Tell us how we can help you..."
+                placeholder={t('contactScreen.form.placeholders.message')}
                 multiline
                 numberOfLines={4}
                 textAlignVertical="top"
@@ -286,7 +288,7 @@ const ContactScreen: React.FC<ContactScreenProps> = ({config}) => {
             onPress={handleSubmit}
             disabled={isSubmitting}>
             <Text style={styles.submitButtonText}>
-              {isSubmitting ? 'Sending...' : (config.submitButtonText || 'Send Message')}
+              {isSubmitting ? t('contactScreen.form.buttons.sending') : (config.submitButtonText || t('contactScreen.form.buttons.sendMessage'))}
             </Text>
           </TouchableOpacity>
         </View>
@@ -295,7 +297,7 @@ const ContactScreen: React.FC<ContactScreenProps> = ({config}) => {
       {/* Social Media */}
       {config.showSocialMedia && config.socialLinks && (
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Follow Us</Text>
+          <Text style={styles.sectionTitle}>{t('contactScreen.sections.followUs')}</Text>
           <View style={styles.socialContainer}>
             {config.socialLinks.map(renderSocialLink)}
           </View>
@@ -305,13 +307,13 @@ const ContactScreen: React.FC<ContactScreenProps> = ({config}) => {
       {/* Quick Actions */}
       {config.showQuickActions && (
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Quick Actions</Text>
+          <Text style={styles.sectionTitle}>{t('contactScreen.sections.quickActions')}</Text>
           <View style={styles.quickActions}>
             <TouchableOpacity
               style={styles.quickAction}
               onPress={() => Linking.openURL('tel:+917303062845')}>
               <GetIcon iconName="phone" size={24} color={Colors.MT_PRIMARY_1} />
-              <Text style={styles.quickActionText}>Call Now</Text>
+              <Text style={styles.quickActionText}>{t('contactScreen.quickActions.callNow')}</Text>
             </TouchableOpacity>
             <TouchableOpacity
               style={styles.quickAction}
@@ -320,7 +322,7 @@ const ContactScreen: React.FC<ContactScreenProps> = ({config}) => {
                 Linking.openURL(whatsappUrl);
               }}>
               <GetIcon iconName="message" size={24} color="#4CAF50" />
-              <Text style={styles.quickActionText}>WhatsApp</Text>
+              <Text style={styles.quickActionText}>{t('contactScreen.quickActions.whatsApp')}</Text>
             </TouchableOpacity>
             <TouchableOpacity
               style={styles.quickAction}
@@ -335,7 +337,7 @@ const ContactScreen: React.FC<ContactScreenProps> = ({config}) => {
                 }
               }}>
               <GetIcon iconName="locationPin" size={24} color="#FF9800" />
-              <Text style={styles.quickActionText}>Visit Us</Text>
+              <Text style={styles.quickActionText}>{t('contactScreen.quickActions.visitUs')}</Text>
             </TouchableOpacity>
           </View>
         </View>

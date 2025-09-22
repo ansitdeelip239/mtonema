@@ -16,10 +16,12 @@ import Colors from '../../constants/Colors';
 import {SellerProperty} from '../../types';
 import SellerPropertyCard from './components/SellerPropertyCard';
 import {usePropertyList} from './hooks/usePropertyList';
+import {useTranslation} from 'react-i18next';
 
 type Props = NativeStackScreenProps<PropertyStackParamList, 'PropertyList'>;
 
 const PropertyListScreen: React.FC<Props> = ({navigation}) => {
+  const {t} = useTranslation();
   const {
     properties,
     isLoading,
@@ -45,7 +47,7 @@ const PropertyListScreen: React.FC<Props> = ({navigation}) => {
       return (
         <View style={styles.loadingFooter}>
           <ActivityIndicator size="small" color={Colors.primary} />
-          <Text style={styles.loadingMoreText}>Loading more properties...</Text>
+          <Text style={styles.loadingMoreText}>{t('seller.propertyList.loadingMore')}</Text>
         </View>
       );
     }
@@ -57,13 +59,13 @@ const PropertyListScreen: React.FC<Props> = ({navigation}) => {
       return (
         <View style={styles.emptyContainer}>
           <ActivityIndicator size="large" color={Colors.primary} />
-          <Text style={styles.loadingEmptyText}>Loading properties...</Text>
+          <Text style={styles.loadingEmptyText}>{t('seller.propertyList.loading')}</Text>
         </View>
       );
     }
     return (
       <View style={styles.emptyContainer}>
-        <Text style={styles.emptyText}>No properties found</Text>
+        <Text style={styles.emptyText}>{t('seller.propertyList.noProperties')}</Text>
       </View>
     );
   };
@@ -71,14 +73,14 @@ const PropertyListScreen: React.FC<Props> = ({navigation}) => {
   const renderListHeader = () => (
     <View>
       <BuyerSellerHeader
-        title="Listed Properties"
-        subtitle="Manage your listings"
+        title={t('seller.propertyList.title')}
+        subtitle={t('seller.propertyList.subtitle')}
       />
 
       <View style={styles.content}>
         <View style={styles.summaryContainer}>
           <Text style={styles.summaryText}>
-            Total Properties: {isLoading ? 'Loading...' : totalCount}
+            {t('seller.propertyList.totalProperties')}: {isLoading ? t('seller.propertyList.loading') : totalCount}
           </Text>
         </View>
       </View>

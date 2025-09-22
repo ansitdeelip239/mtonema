@@ -5,50 +5,8 @@ const fs = require('fs');
 const path = require('path');
 
 const keysToRemove = [
-  "common.actions.add",
-  "common.actions.sort",
-  "common.actions.refresh",
-  "common.actions.retry",
-  "common.actions.close",
-  "common.actions.confirm",
-  "common.actions.yes",
-  "common.actions.no",
-  "common.states.searching",
-  "common.states.empty",
-  "common.states.refreshToLoad",
-  "errors.validation",
-  "errors.unauthorized",
-  "errors.generic",
-  "validation.required",
-  "validation.invalidEmail",
-  "validation.minLength",
-  "time.timeFormat",
-  "greetings.welcome",
-  "searchProperties.search.loading",
-  "auth.signIn.account",
-  "auth.signIn.toAccess",
-  "auth.signIn.prompt",
-  "auth.email.enterEmailMessage",
-  "auth.mainScreen.headerTitle",
-  "auth.mainScreen.partnerLogin",
-  "auth.mainScreen.partnerSignup",
-  "followUp.loadingFollowUp",
-  "followUp.someday.empty",
-  "language.choosePreferred",
-  "language.current",
-  "plurals.client.zero",
-  "plurals.client.one",
-  "plurals.client.other",
-  "plurals.followUp.zero",
-  "plurals.followUp.one",
-  "plurals.followUp.other",
-  "clientAssignment.usersSelected_plural",
-  "clientAssignment.assignUsers_plural",
-  "partnerFilter.toast.filterAppliedMessage_plural",
-  "contentTemplate.header.templatesFound_plural",
-  "contentScreen.headers.messageTemplates",
-  "listings.messages.fetchFailed",
-  "billing.planSwitcher.perMonth"
+  "navigation.drawer.chatWithUs",
+  "seller.status.underConstruction"
 ];
 
 function removeKeysFromTranslation(filePath, keys) {
@@ -77,7 +35,7 @@ function removeKeysFromTranslation(filePath, keys) {
 }
 
 // Apply to all locale files
-const localesDir = path.join(__dirname, 'src', 'i18n', 'locales');
+const localesDir = path.join(__dirname, '..', 'src', 'i18n', 'locales');
 const localeFiles = fs.readdirSync(localesDir).filter(f => f.endsWith('.json'));
 
 localeFiles.forEach(file => {

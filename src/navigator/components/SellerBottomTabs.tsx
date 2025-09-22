@@ -14,39 +14,42 @@ import PostPropertyScreen from '../../screens/seller/PostPropertyScreen';
 import { useAuth } from '../../context/AuthProvider';
 import SellerProfileStack from './SellerProfileStack';
 import DrawerToggleButton from '../../components/DrawerToggleButton';
+import {useTranslation} from 'react-i18next';
 
 const Tab = createBottomTabNavigator<SellerBottomTabParamList>();
 
-const tabScreens: Array<TabScreen<SellerBottomTabParamList>> = [
-  {
-    name: 'Dashboard',
-    component: SellerDashboard,
-    icon: 'home',
-  },
-  {
-    name: 'Property',
-    component: PropertyStack,
-    icon: 'realEstate',
-  },
-  {
-    name: 'AddProperty',
-    component: PostPropertyScreen,
-    icon: 'listproperty',
-  },
-  {
-    name: 'Contact',
-    component: SellerContactScreen,
-    icon: 'client',
-  },
-  {
-    name: 'Profile',
-    component: SellerProfileStack,
-    icon: 'user',
-  },
-];
-
 const SellerBottomTabs = memo(() => {
   const {navigateToPostProperty} = useAuth();
+  const {t} = useTranslation();
+
+  const tabScreens: Array<TabScreen<SellerBottomTabParamList>> = [
+    {
+      name: 'Dashboard',
+      component: SellerDashboard,
+      icon: 'home',
+    },
+    {
+      name: 'Property',
+      component: PropertyStack,
+      icon: 'realEstate',
+    },
+    {
+      name: 'AddProperty',
+      component: PostPropertyScreen,
+      icon: 'listproperty',
+    },
+    {
+      name: 'Contact',
+      component: SellerContactScreen,
+      icon: 'client',
+    },
+    {
+      name: 'Profile',
+      component: SellerProfileStack,
+      icon: 'user',
+    },
+  ];
+
   return (
     <Tab.Navigator
       screenOptions={{
@@ -62,7 +65,7 @@ const SellerBottomTabs = memo(() => {
           name={name}
           component={component}
           options={{
-            tabBarLabel: name,
+            tabBarLabel: t(`navigation.bottomTab.seller${name}`),
             // eslint-disable-next-line react/no-unstable-nested-components
             tabBarIcon: ({focused, color}) => (
               <GetIcon iconName={icon} color={focused ? Colors.MT_PRIMARY_1 : color} />

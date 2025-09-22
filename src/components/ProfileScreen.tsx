@@ -11,6 +11,7 @@ import {
 import Colors from '../constants/Colors';
 import GetIcon, {IconEnum} from './GetIcon';
 import BuyerSellerHeader from './BuyerSellerHeader';
+import {useTranslation} from 'react-i18next';
 
 export interface ProfileOption {
   id: string;
@@ -63,6 +64,7 @@ interface ProfileScreenProps {
 
 const ProfileScreen: React.FC<ProfileScreenProps> = ({config}) => {
   const [refreshing, setRefreshing] = React.useState(false);
+  const {t} = useTranslation();
 
   const handleRefresh = async () => {
     if (config.onRefresh) {
@@ -91,7 +93,7 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({config}) => {
           </BuyerSellerHeader>
         </View>
         <View style={styles.loadingContainer}>
-          <Text style={styles.loadingText}>Loading profile...</Text>
+          <Text style={styles.loadingText}>{t('profileScreen.loading.loadingProfile')}</Text>
         </View>
       </View>
     );
@@ -109,7 +111,7 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({config}) => {
           </BuyerSellerHeader>
         </View>
         <View style={styles.errorContainer}>
-          <Text style={styles.errorText}>{config.error || 'Unable to load profile data'}</Text>
+          <Text style={styles.errorText}>{config.error || t('profileScreen.loading.unableToLoad')}</Text>
         </View>
       </View>
     );
@@ -165,7 +167,7 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({config}) => {
         {/* Stats Section */}
         {config.showStats && config.stats && config.stats.length > 0 && (
           <View style={styles.statsSection}>
-            <Text style={styles.sectionTitle}>Account Overview</Text>
+            <Text style={styles.sectionTitle}>{t('profileScreen.sections.accountOverview')}</Text>
             <View style={styles.statsGrid}>
               {config.stats.map(stat => (
                 <View key={stat.id} style={styles.statCard}>
@@ -179,7 +181,7 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({config}) => {
 
         {/* Profile Options */}
         <View style={styles.optionsSection}>
-          <Text style={styles.sectionTitle}>Account Settings</Text>
+          <Text style={styles.sectionTitle}>{t('profileScreen.sections.accountSettings')}</Text>
           {config.profileOptions.map(option => (
             <TouchableOpacity
               key={option.id}
@@ -213,7 +215,7 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({config}) => {
         {/* Contact Information */}
         {config.showContactInfo && config.contactItems && config.contactItems.length > 0 && (
           <View style={styles.contactSection}>
-            <Text style={styles.sectionTitle}>Contact Information</Text>
+            <Text style={styles.sectionTitle}>{t('profileScreen.sections.contactInformation')}</Text>
             <View style={styles.contactCard}>
               {config.contactItems.map(item => (
                 <View key={item.id} style={styles.contactItem}>
@@ -233,7 +235,7 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({config}) => {
         {config.showMembership && (userData.createdOn || userData.joinDate) && (
           <View style={styles.membershipSection}>
             <Text style={styles.membershipText}>
-              Member since {userData.createdOn
+              {t('profileScreen.membership.memberSince')} {userData.createdOn
                 ? new Date(userData.createdOn).toLocaleDateString('en-US', { year: 'numeric', month: 'long' })
                 : userData.joinDate}
             </Text>

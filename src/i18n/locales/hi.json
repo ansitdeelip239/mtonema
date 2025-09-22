@@ -90,11 +90,14 @@
       "buyPremium": "प्रीमियम खरीदें",
       "payments": "भुगतान",
       "helpCenter": "सहायता केंद्र",
-      "chatWithUs": "हमसे चैट करें",
       "logout": "लॉगआउट",
       "logoutConfirmation": "क्या आप वाकई लॉगआउट करना चाहते हैं?",
       "loggingOut": "लॉगआउट हो रहा है...",
-      "underDevelopment": "यह फीचर विकास के चरण में है"
+      "underDevelopment": "यह फीचर विकास के चरण में है",
+      "sellerHome": "होम",
+      "sellerProfileScreen": "प्रोफ़ाइल",
+      "sellerHelpCenter": "सहायता केंद्र",
+      "sellerSettings": "सेटिंग्स"
     },
     "paymentTabs": {
       "plans": "योजनाएं",
@@ -111,7 +114,12 @@
       "contacted": "संपर्क किए गए",
       "searchProperty": "खोजें",
       "contactUs": "हमसे संपर्क करें",
-      "profile": "प्रोफ़ाइल"
+      "profile": "प्रोफ़ाइल",
+      "sellerDashboard": "डैशबोर्ड",
+      "sellerProperty": "संपत्ति",
+      "sellerAddProperty": "संपत्ति जोड़ें",
+      "sellerContact": "संपर्क",
+      "sellerProfile": "प्रोफ़ाइल"
     }
   },
   "logout": {
@@ -451,7 +459,7 @@
     "failedToAddActivity": "गतिविधि जोड़ने में असफल",
     "loading": "ग्राहक लोड हो रहे हैं...",
     "searching": "ग्राहकों की खोज कर रहे हैं...",
-    "plural": "",
+    "plural": "s",
     "edit": "संपादित करें",
     "pullToRefresh": "रिफ्रेश करने के लिए नीचे खींचें",
     "loadingMoreClients": "और ग्राहक लोड हो रहे हैं..."
@@ -1368,8 +1376,8 @@
     }
   },
   "contactUs": {
-    "title": "संपर्क करें",
-    "subtitle": "हमसे संपर्क करें",
+    "title": "हमसे संपर्क करें",
+    "subtitle": "सहायता से संपर्क करें",
     "contactInfo": {
       "phone": "फोन",
       "email": "ईमेल",
@@ -1393,6 +1401,141 @@
     },
     "buttons": {
       "sendMessage": "संदेश भेजें"
+    }
+  },
+  "seller": {
+    "profile": {
+      "title": "उपयोगकर्ता प्रोफ़ाइल",
+      "subtitle": "अपने खाते का प्रबंधन करें",
+      "editProfile": "प्रोफ़ाइल संपादित करें",
+      "myProperties": "मेरी संपत्तियां",
+      "settings": "सेटिंग्स"
+    },
+    "dashboard": {
+      "portfolioOverview": "पोर्टफोलियो अवलोकन",
+      "priceAnalytics": "मूल्य विश्लेषण",
+      "propertyInsights": "संपत्ति अंतर्दृष्टि",
+      "locationStatus": "स्थान और स्थिति",
+      "recentActivity": "हाल की गतिविधि",
+      "furnishingDistribution": "फर्निशिंग वितरण",
+      "propertyDashboard": "संपत्ति डैशबोर्ड",
+      "welcomeBack": "वापसी पर स्वागत है"
+    },
+    "portfolio": {
+      "totalValue": "कुल पोर्टफोलियो मूल्य",
+      "properties": "संपत्तियां",
+      "active": "सक्रिय",
+      "featured": "विशेष रुप से प्रदर्शित",
+      "noProperties": "अभी तक कोई संपत्ति नहीं",
+      "emptyMessage": "अपनी पहली संपत्ति जोड़कर अपना पोर्टफोलियो बनाने शुरू करें"
+    },
+    "analytics": {
+      "average": "औसत",
+      "highest": "सर्वोच्च",
+      "lowest": "निम्नतम",
+      "propertyTypes": "संपत्ति प्रकार",
+      "topLocations": "शीर्ष स्थान",
+      "latestProperties": "नवीनतम संपत्तियां",
+      "thisMonth": "इस महीने",
+      "growth": "वृद्धि",
+      "bhkConfiguration": "BHK कॉन्फ़िगरेशन"
+    },
+    "status": {
+      "readyToMove": "स्थानांतरण के लिए तैयार",
+      "propertyStatus": "संपत्ति स्थिति",
+      "ready": "तैयार",
+      "construction": "निर्माण",
+      "properties": "संपत्तियां",
+      "noLocationData": "कोई स्थान डेटा नहीं",
+      "noStatusData": "कोई स्थिति डेटा नहीं"
+    },
+    "propertyList": {
+      "title": "सूचीबद्ध संपत्तियां",
+      "subtitle": "अपनी लिस्टिंग प्रबंधित करें",
+      "totalProperties": "कुल संपत्तियां",
+      "loading": "संपत्तियां लोड हो रही हैं...",
+      "noProperties": "कोई संपत्तियां नहीं मिलीं",
+      "loadingMore": "और संपत्तियां लोड हो रही हैं..."
+    },
+    "propertyDetail": {
+      "overview": "संपत्ति अवलोकन",
+      "description": "विवरण",
+      "markAsFeatured": "विशेष के रूप में चिह्नित करें",
+      "featuredDescription": "विशेष संपत्तियां अधिक दृश्यता प्राप्त करती हैं",
+      "features": "सुविधाएं",
+      "specifications": "विशेषताएं",
+      "tags": "टैग",
+      "sellerInformation": "विक्रेता जानकारी",
+      "deleteProperty": "संपत्ति हटाएं",
+      "deleteConfirmation": "क्या आप वाकई इस संपत्ति को हटाना चाहते हैं? इस कार्य को वापस नहीं किया जा सकता।",
+      "parking": "पार्किंग",
+      "lift": "लिफ्ट",
+      "security": "सुरक्षा",
+      "alarm": "अलार्म",
+      "readyToMove": "स्थानांतरण के लिए तैयार",
+      "videoTour": "वीडियो दौरा",
+      "propertyName": "संपत्ति का नाम",
+      "locationNotSpecified": "स्थान निर्दिष्ट नहीं",
+      "priceNotAvailable": "मूल्य उपलब्ध नहीं"
+    }
+  },
+  "contactScreen": {
+    "sections": {
+      "contactInformation": "संपर्क जानकारी",
+      "officeHours": "कार्यालय समय",
+      "sendMessage": "हमें संदेश भेजें",
+      "followUs": "हमारे साथ जुड़ें",
+      "quickActions": "त्वरित कार्य"
+    },
+    "form": {
+      "labels": {
+        "fullName": "पूरा नाम *",
+        "emailAddress": "ईमेल पता *",
+        "phoneNumber": "फोन नंबर",
+        "subject": "विषय",
+        "message": "संदेश *"
+      },
+      "placeholders": {
+        "fullName": "अपना पूरा नाम दर्ज करें",
+        "email": "अपना ईमेल दर्ज करें",
+        "phoneNumber": "अपना फोन नंबर दर्ज करें",
+        "subject": "यह किस बारे में है?",
+        "message": "हमें बताएं कि हम आपकी कैसे मदद कर सकते हैं..."
+      },
+      "buttons": {
+        "sending": "भेजा जा रहा है...",
+        "sendMessage": "संदेश भेजें"
+      }
+    },
+    "quickActions": {
+      "callNow": "अभी कॉल करें",
+      "whatsApp": "व्हाट्सएप",
+      "visitUs": "हमसे मिलें"
+    },
+    "alerts": {
+      "error": "त्रुटि",
+      "fillRequiredFields": "कृपया सभी आवश्यक फ़ील्ड भरें",
+      "messageSent": "संदेश भेजा गया!",
+      "messageSentMessage": "हमसे संपर्क करने के लिए धन्यवाद। हम 24 घंटे के भीतर जवाब देंगे।",
+      "ok": "ठीक है",
+      "sendFailed": "संदेश भेजने में त्रुटि",
+      "sendFailedRetry": "संदेश भेजने में त्रुटि। कृपया पुनः प्रयास करें।",
+      "comingSoon": "जल्द आ रहा है",
+      "socialComingSoon": "{{socialName}} पेज जल्द ही उपलब्ध होगा!"
+    }
+  },
+  "profileScreen": {
+    "loading": {
+      "loadingProfile": "प्रोफ़ाइल लोड हो रही है...",
+      "unableToLoad": "प्रोफ़ाइल डेटा लोड करने में असमर्थ"
+    },
+    "sections": {
+      "accountOverview": "खाता अवलोकन",
+      "accountSettings": "खाता सेटिंग्स",
+      "contactInformation": "संपर्क जानकारी"
+    },
+    "membership": {
+      "memberSince": "सदस्य बनने की तारीख"
     }
   }
 }

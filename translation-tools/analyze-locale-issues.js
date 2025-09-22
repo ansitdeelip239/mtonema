@@ -78,7 +78,7 @@ function getNestedValue(obj, keyPath) {
 function analyzeLocaleIssues() {
   console.log('🔍 Analyzing specific locale issues...\n');
 
-  const localesDir = path.join(__dirname, 'src', 'i18n', 'locales');
+  const localesDir = path.join(__dirname, '..', 'src', 'i18n', 'locales');
   const enPath = path.join(localesDir, 'en.json');
 
   // Read English translations

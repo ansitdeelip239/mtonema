@@ -9,6 +9,7 @@ import {useDrawerStyles} from '../hooks/useDrawerStyles';
 import {useTranslation} from 'react-i18next';
 import DrawerToggleButton from '../components/DrawerToggleButton';
 import HelpCenterScreen from '../screens/partner/HelpCenterScreen';
+import SettingsScreen from '../screens/partner/Settings/SettingsScreen';
 
 const Drawer = createDrawerNavigator();
 
@@ -31,6 +32,7 @@ const SellerNavigator = memo(() => {
           component={SellerBottomTabs}
           options={{
             headerShown: false,
+            drawerLabel: t('navigation.drawer.sellerHome'),
             // eslint-disable-next-line react/no-unstable-nested-components
             drawerIcon: ({color}) => (
               <GetIcon iconName="home" color={color} size="23" /> // Use GetIcon here
@@ -56,6 +58,7 @@ const SellerNavigator = memo(() => {
           component={PartnerProfileScreen}
           options={{
             headerShown: isIOS,
+            drawerLabel: t('navigation.drawer.sellerProfileScreen'),
             drawerItemStyle: {display: 'none'},
           }}
         />
@@ -66,8 +69,24 @@ const SellerNavigator = memo(() => {
             headerShown: isIOS,
             // eslint-disable-next-line react/no-unstable-nested-components
             headerLeft: () => <DrawerToggleButton />,
-            title: t('navigation.drawer.helpCenter', 'Help Center'),
+            title: t('navigation.drawer.sellerHelpCenter'),
+            drawerLabel: t('navigation.drawer.sellerHelpCenter'),
             drawerItemStyle: {display: 'none'},
+          }}
+        />
+        <Drawer.Screen
+          name="Settings"
+          component={SettingsScreen}
+          options={{
+            headerShown: isIOS,
+            // eslint-disable-next-line react/no-unstable-nested-components
+            headerLeft: () => <DrawerToggleButton />,
+            title: t('settings.title', 'Settings'),
+            drawerLabel: t('navigation.drawer.sellerSettings'),
+            // eslint-disable-next-line react/no-unstable-nested-components
+            drawerIcon: ({color}) => (
+              <GetIcon iconName="settings" color={color} size="23" />
+            ),
           }}
         />
       </Drawer.Navigator>

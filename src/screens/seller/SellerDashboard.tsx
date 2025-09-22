@@ -13,6 +13,7 @@ import {useDashboardAnalytics} from './hooks/useDashboardAnalytics';
 import {useNavigation} from '@react-navigation/native';
 import {SellerBottomTabParamList} from '../../types/navigation';
 import {BottomTabNavigationProp} from '@react-navigation/bottom-tabs';
+import {useTranslation} from 'react-i18next';
 
 import {PortfolioOverview} from './components/PortfolioOverview';
 import {PriceAnalytics} from './components/PriceAnalytics';
@@ -55,6 +56,7 @@ type NavigationProp = BottomTabNavigationProp<SellerBottomTabParamList>;
 
 const SellerDashboard: React.FC = () => {
   const {user} = useAuth();
+  const {t} = useTranslation();
   const {
     totalCount,
     refreshing,
@@ -108,8 +110,8 @@ const SellerDashboard: React.FC = () => {
         {/* Header */}
         <View style={styles.headerContainer}>
           <BuyerSellerHeader
-            title={`Welcome back, ${user?.name?.split(' ')[0] || 'User'}!`}
-            subtitle="Property Dashboard" />
+            title={`${t('seller.dashboard.welcomeBack')}, ${user?.name?.split(' ')[0] || 'User'}!`}
+            subtitle={t('seller.dashboard.propertyDashboard')} />
         </View>
 
         {/* Portfolio Overview */}

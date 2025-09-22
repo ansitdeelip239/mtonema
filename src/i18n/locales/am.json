@@ -90,11 +90,14 @@
       "buyPremium": "ፕሪሚየም ይግዙ",
       "payments": "ክፍያዎች",
       "helpCenter": "የእርዳታ ማእከል",
-      "chatWithUs": "ከእኛ ጋር ያልቅ",
       "logout": "ውጣ",
       "logoutConfirmation": "እርግጠኛ ነዎት መውጣት ይፈልጋሉ?",
       "loggingOut": "በመውጣት ላይ...",
-      "underDevelopment": "ይህ ባህሪ በልምዱ ላይ ነው"
+      "underDevelopment": "ይህ ባህሪ በልምዱ ላይ ነው",
+      "sellerHome": "መነሻ",
+      "sellerProfileScreen": "መገለጫ",
+      "sellerHelpCenter": "የእርዳታ ማእከል",
+      "sellerSettings": "ማስተካከያዎች"
     },
     "paymentTabs": {
       "plans": "እቅዶች",
@@ -111,7 +114,12 @@
       "contacted": "ተገናኙ",
       "searchProperty": "ፈልግ",
       "contactUs": "ከእኛ ጋር ያልቅ",
-      "profile": "መገለጫ"
+      "profile": "መገለጫ",
+      "sellerDashboard": "ዳሽቦርድ",
+      "sellerProperty": "ንብረት",
+      "sellerAddProperty": "ንብረት አክል",
+      "sellerContact": "ተገናኝ",
+      "sellerProfile": "መገለጫ"
     }
   },
   "logout": {
@@ -1369,7 +1377,7 @@
   },
   "contactUs": {
     "title": "ከእኛ ጋር ያልቅ",
-    "subtitle": "ከእኛ ጋር ያልቅ",
+    "subtitle": "ከድጋፍ ጋር ያልቅ",
     "contactInfo": {
       "phone": "ስልክ",
       "email": "ኢሜይል",
@@ -1393,6 +1401,141 @@
     },
     "buttons": {
       "sendMessage": "መልክ ላክ"
+    }
+  },
+  "seller": {
+    "profile": {
+      "title": "የተጠቃሚ መገለጫ",
+      "subtitle": "መለያዎን ያስተያዩ",
+      "editProfile": "መገለጫ ያርትዑ",
+      "myProperties": "ንጥል አካባቢዎቼ",
+      "settings": "ማስተካከያዎች"
+    },
+    "dashboard": {
+      "portfolioOverview": "የንጥል አካባቢ አጠቃላይ እይታ",
+      "priceAnalytics": "የዋጋ ትንታኔ",
+      "propertyInsights": "የንጥል አካባቢ ገጽታዎች",
+      "locationStatus": "አድራሻ እና ሁኔታ",
+      "recentActivity": "ያለፈው ተግባር",
+      "furnishingDistribution": "የእንጨት ስርጭት",
+      "propertyDashboard": "የንጥል አካባቢ ዳሽቦርድ",
+      "welcomeBack": "እንደገና እንኳን ደህና መጡ"
+    },
+    "portfolio": {
+      "totalValue": "አጠቃላይ የንጥል አካባቢ ዋጋ",
+      "properties": "ንጥል አካባቢዎች",
+      "active": "ንቁ",
+      "featured": "የተለየ",
+      "noProperties": "እስካሁን ምንም ንጥል አካባቢ የለም",
+      "emptyMessage": "የመጀመሪያ ንጥል አካባቢዎን በመጨመር ንጥል አካባቢዎን መስራት ይጀምሩ"
+    },
+    "analytics": {
+      "average": "አማካይ",
+      "highest": "ከፍተኛ",
+      "lowest": "ዝቅተኛ",
+      "propertyTypes": "የንጥል አካባቢ አይነቶች",
+      "topLocations": "ከፍተኛ አድራሻዎች",
+      "latestProperties": "ያለፉት ንጥል አካባቢዎች",
+      "thisMonth": "በዚህ ወር",
+      "growth": "እድገት",
+      "bhkConfiguration": "BHK የሆነ ማስተካከያ"
+    },
+    "status": {
+      "readyToMove": "ለማሳደድ የሆነ",
+      "propertyStatus": "የንጥል አካባቢ ሁኔታ",
+      "ready": "የሆነ",
+      "construction": "ስራ",
+      "properties": "ንጥል አካባቢዎች",
+      "noLocationData": "የምንጭ አድራሻ ያልሆነ መረጃ",
+      "noStatusData": "የምንጭ ሁኔታ ያልሆነ መረጃ"
+    },
+    "propertyList": {
+      "title": "የተዘረዘሩ ንጥል አካባቢዎች",
+      "subtitle": "ዝርዝሮችዎን ያስተያዩ",
+      "totalProperties": "አጠቃላይ ንጥል አካባቢዎች",
+      "loading": "ንጥል አካባቢዎች በመስቀል ላይ...",
+      "noProperties": "ምንም ንጥል አካባቢዎች አልተለመዱም",
+      "loadingMore": "ተጨማሪ ንጥል አካባቢዎች በመስቀል ላይ..."
+    },
+    "propertyDetail": {
+      "overview": "የንጥል አካባቢ አጠቃላይ እይታ",
+      "description": "መግለጫ",
+      "markAsFeatured": "እንደ ልዩ ምልክት ለማድረግ",
+      "featuredDescription": "የተለዩ ንጥል አካባቢዎች ተጨማሪ ተያይነት ያገኛሉ",
+      "features": "ባህሪያት",
+      "specifications": "የተወሰኑ መረጃዎች",
+      "tags": "መለያዎች",
+      "sellerInformation": "የሻጭ መረጃ",
+      "deleteProperty": "ንጥል አካባቢ ለመሰረዝ",
+      "deleteConfirmation": "እርግጠኛ ነዎት ይህን ንጥል አካባቢ መሰረዝ ይፈልጋሉ? ይህ ተግባር ሊቀለበስ አይችልም።",
+      "parking": "መራቂያ ቦታ",
+      "lift": "ሊፍት",
+      "security": "የደህንነት አስተያየት",
+      "alarm": "ማንቂያ",
+      "readyToMove": "ለማሳደድ የሆነ",
+      "videoTour": "የቪዲዮ ጉብኝት",
+      "propertyName": "የንጥል አካባቢ ስም",
+      "locationNotSpecified": "አድራሻ አልተወሰነም",
+      "priceNotAvailable": "ዋጋ አይገኝም"
+    }
+  },
+  "contactScreen": {
+    "sections": {
+      "contactInformation": "የተገናኛ መረጃ",
+      "officeHours": "የቢሮ ሰዓታት",
+      "sendMessage": "መልእክት ላክልን",
+      "followUs": "ተከተሉን",
+      "quickActions": "ፈጣን ተግባራት"
+    },
+    "form": {
+      "labels": {
+        "fullName": "ሙሉ ስም *",
+        "emailAddress": "የኢሜይል አድራሻ *",
+        "phoneNumber": "ስልክ ቁጥር",
+        "subject": "ርዕስ",
+        "message": "መልእክት *"
+      },
+      "placeholders": {
+        "fullName": "ሙሉ ስምዎን ያስገቡ",
+        "email": "ኢሜይልዎን ያስገቡ",
+        "phoneNumber": "ስልክ ቁጥርዎን ያስገቡ",
+        "subject": "ስለ ምን ነው?",
+        "message": "እንዴት መርዳት እንችላለን ያስተላልፉን..."
+      },
+      "buttons": {
+        "sending": "በመላክ ላይ...",
+        "sendMessage": "መልእክት ላክ"
+      }
+    },
+    "quickActions": {
+      "callNow": "አሁን ደውል",
+      "whatsApp": "ዋትስአፕ",
+      "visitUs": "እኛን ይጎብኙ"
+    },
+    "alerts": {
+      "error": "ስህተት",
+      "fillRequiredFields": "እባክዎ ሁሉንም የሚያስፈልጉ ቦታዎች ያስገቡ",
+      "messageSent": "መልእክት ተልኳል!",
+      "messageSentMessage": "እኛን ለማግናኘት እናመሰግናለን። በ24 ሰዓታት ውስጥ እንመልሳለን።",
+      "ok": "እሺ",
+      "sendFailed": "መልእክት መላክ አልተሳካም",
+      "sendFailedRetry": "መልእክት መላክ አልተሳካም። እባክዎ እንደገና ይሞክሩ።",
+      "comingSoon": "በቅርቡ ይመጣል",
+      "socialComingSoon": "{{socialName}} ገጽ በቅርቡ ይገኛል!"
+    }
+  },
+  "profileScreen": {
+    "loading": {
+      "loadingProfile": "መገለጫ በመጫን ላይ...",
+      "unableToLoad": "የመገለጫ ውሂብ መጫን አልተሳካም"
+    },
+    "sections": {
+      "accountOverview": "የመለያ አጠቃላይ እይታ",
+      "accountSettings": "የመለያ ቅንብሮች",
+      "contactInformation": "የመገናኛ መረጃ"
+    },
+    "membership": {
+      "memberSince": "አባል ከ"
     }
   }
 }
