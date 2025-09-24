@@ -8,6 +8,7 @@ import {
   Platform,
 } from 'react-native';
 import {useTranslation} from 'react-i18next';
+import {useNavigation} from '@react-navigation/native';
 import Header from '../../../components/Header';
 import LanguageSelector from '../../../components/LanguageSelector';
 import Colors from '../../../constants/Colors';
@@ -15,6 +16,7 @@ import {getSupportedLanguages} from '../../../i18n';
 
 const SettingsScreen = () => {
   const {t, i18n} = useTranslation();
+  const navigation = useNavigation();
   const [showLanguageSelector, setShowLanguageSelector] = useState(false);
   const isIOS = Platform.OS === 'ios';
 
@@ -30,6 +32,10 @@ const SettingsScreen = () => {
 
   const openLanguageSelector = () => {
     setShowLanguageSelector(true);
+  };
+
+  const handleHelpSupportPress = () => {
+    navigation.navigate('Help Center' as never);
   };
 
   return (
@@ -78,7 +84,10 @@ const SettingsScreen = () => {
             </View>
           </TouchableOpacity>
 
-          <TouchableOpacity style={styles.settingRow} activeOpacity={0.7}>
+          <TouchableOpacity 
+            style={styles.settingRow} 
+            activeOpacity={0.7}
+            onPress={handleHelpSupportPress}>
             <View style={styles.settingInfo}>
               <Text style={styles.settingLabel}>
                 {t('settings.help.title', 'Help & Support')}

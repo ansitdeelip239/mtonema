@@ -1537,5 +1537,22 @@
     "membership": {
       "memberSince": "Member since"
     }
+  },
+  "helpCenter": {
+    "title": "Help Center",
+    "sections": {
+      "contactDetails": "Contact Details",
+      "tutorials": "Tutorials & Resources"
+    },
+    "contact": {
+      "address": "Address",
+      "phone": "Phone",
+      "email": "Email"
+    },
+    "tutorials": {
+      "watchVideos": "Watch Tutorial Videos",
+      "description": "Our YouTube playlist contains step-by-step tutorials to help you get the most out of MT One.",
+      "support": "For immediate assistance, feel free to call us or send an email."
+    }
   }
 }

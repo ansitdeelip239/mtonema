@@ -1537,5 +1537,22 @@
     "membership": {
       "memberSince": "Miembro desde"
     }
+  },
+  "helpCenter": {
+    "title": "Centro de Ayuda",
+    "sections": {
+      "contactDetails": "Detalles de Contacto",
+      "tutorials": "Tutoriales y Recursos"
+    },
+    "contact": {
+      "address": "Dirección",
+      "phone": "Teléfono",
+      "email": "Correo Electrónico"
+    },
+    "tutorials": {
+      "watchVideos": "Ver Videos Tutoriales",
+      "description": "Nuestra lista de reproducción de YouTube contiene tutoriales paso a paso para ayudarte a aprovechar al máximo MT One.",
+      "support": "Para asistencia inmediata, no dudes en llamarnos o enviarnos un correo electrónico."
+    }
   }
 }

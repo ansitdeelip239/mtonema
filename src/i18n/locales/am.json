@@ -1537,5 +1537,22 @@
     "membership": {
       "memberSince": "አባል ከ"
     }
+  },
+  "helpCenter": {
+    "title": "የእርዳታ ማዕከል",
+    "sections": {
+      "contactDetails": "የመገናኛ መረጃዎች",
+      "tutorials": "ትምህርቶች እና ምንጮች"
+    },
+    "contact": {
+      "address": "አድራሻ",
+      "phone": "ስልክ",
+      "email": "ኢሜይል"
+    },
+    "tutorials": {
+      "watchVideos": "የትምህርት ቪዲዮችን ይመልከቱ",
+      "description": "የእኛ የዩቲዩብ ዝርዝር በMT One ከፍተኛ ጥቅም ለማግኘት የሚረዱ የእጅ በእጅ ትምህርቶች አሉት።",
+      "support": "ለአስቸኳዊ እርዳታ እባክዎ ያናግሩን ወይም ኢሜይል ያስተላልፉልን።"
+    }
   }
 }

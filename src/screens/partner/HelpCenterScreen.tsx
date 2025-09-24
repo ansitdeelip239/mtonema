@@ -8,6 +8,7 @@ import {
   Linking,
   Platform,
 } from 'react-native';
+import {useTranslation} from 'react-i18next';
 import {useTheme} from '../../context/ThemeProvider';
 import GetIcon, {IconEnum} from '../../components/GetIcon';
 import Colors from '../../constants/Colors';
@@ -67,6 +68,7 @@ const ContactItem = ({
 
 const HelpCenterScreen = () => {
   const {theme} = useTheme();
+  const {t} = useTranslation();
   const isIOS = Platform.OS === 'ios';
 
   const contactDetails = {
@@ -93,7 +95,7 @@ const HelpCenterScreen = () => {
 
   return (
     <View style={styles.container}>
-      {!isIOS && <Header title={'Help Center'} />}
+      {!isIOS && <Header title={t('helpCenter.title')} />}
       <ScrollView
         style={[
           styles.scrollView,
@@ -103,19 +105,19 @@ const HelpCenterScreen = () => {
         <View style={styles.content}>
           <Text
             style={[styles.sectionTitle, {color: theme.textColor || '#333'}]}>
-            Contact Details
+            {t('helpCenter.sections.contactDetails')}
           </Text>
 
           <ContactItem
             icon="locationPin"
-            title="Address"
+            title={t('helpCenter.contact.address')}
             value={contactDetails.operationalAddress}
             theme={theme}
           />
 
           <ContactItem
             icon="phone"
-            title="Phone"
+            title={t('helpCenter.contact.phone')}
             value={contactDetails.phone}
             onPress={() => handlePhoneCall(contactDetails.phone)}
             isLink={true}
@@ -124,7 +126,7 @@ const HelpCenterScreen = () => {
 
           <ContactItem
             icon="phone"
-            title="Phone"
+            title={t('helpCenter.contact.phone')}
             value={contactDetails.phone2}
             onPress={() => handlePhoneCall(contactDetails.phone2)}
             isLink={true}
@@ -133,7 +135,7 @@ const HelpCenterScreen = () => {
 
           <ContactItem
             icon="email"
-            title="Email"
+            title={t('helpCenter.contact.email')}
             value={contactDetails.email}
             onPress={handleEmail}
             isLink={true}
@@ -144,7 +146,7 @@ const HelpCenterScreen = () => {
 
           <Text
             style={[styles.sectionTitle, {color: theme.textColor || '#333'}]}>
-            Tutorials & Resources
+            {t('helpCenter.sections.tutorials')}
           </Text>
 
           <TouchableOpacity
@@ -153,18 +155,16 @@ const HelpCenterScreen = () => {
             activeOpacity={0.8}>
             <View style={styles.youtubeContent}>
               <GetIcon iconName="playButton" color="white" size="32" />
-              <Text style={styles.youtubeText}>Watch Tutorial Videos</Text>
+              <Text style={styles.youtubeText}>{t('helpCenter.tutorials.watchVideos')}</Text>
             </View>
           </TouchableOpacity>
 
           <View style={styles.infoContainer}>
             <Text style={[styles.infoText, {color: theme.textColor || '#666'}]}>
-              📚 Our YouTube playlist contains step-by-step tutorials to help
-              you get the most out of MT One.
+              📚 {t('helpCenter.tutorials.description')}
             </Text>
             <Text style={[styles.infoText, {color: theme.textColor || '#666'}]}>
-              📞 For immediate assistance, feel free to call us or send an
-              email.
+              📞 {t('helpCenter.tutorials.support')}
             </Text>
           </View>
         </View>
