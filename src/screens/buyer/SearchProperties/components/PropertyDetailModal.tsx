@@ -18,6 +18,7 @@ import {formatPrice, parseImageUrl} from '../utils/helpers';
 import {PropertyFor} from '../../../../constants/MasterDetails';
 import YoutubeVideoPlayer from '../../../../components/YoutubeVideoPlayer';
 import Images from '../../../../constants/Images';
+import {stripHtmlTags} from '../../../../utils/formUtils';
 import {useTranslation} from 'react-i18next';
 
 interface PropertyDetailModalProps {
@@ -462,7 +463,7 @@ const PropertyDetailModal: React.FC<PropertyDetailModalProps> = ({
               {property.shortDescription && (
                 <View style={styles.descriptionContainer}>
                   <Text style={styles.descriptionText}>
-                    {property.shortDescription}
+                    {stripHtmlTags(property.shortDescription)}
                   </Text>
                 </View>
               )}
@@ -470,7 +471,7 @@ const PropertyDetailModal: React.FC<PropertyDetailModalProps> = ({
               {property.longDescription && (
                 <View style={styles.descriptionContainer}>
                   <Text style={styles.descriptionText}>
-                    {property.longDescription}
+                    {stripHtmlTags(property.longDescription)}
                   </Text>
                 </View>
               )}

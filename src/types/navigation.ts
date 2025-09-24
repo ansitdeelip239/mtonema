@@ -40,7 +40,7 @@ export type PaymentBottomTabParamList = {
 export type SellerBottomTabParamList = {
   'Dashboard': undefined;
   Property: NavigatorScreenParams<PropertyStackParamList>;
-  AddProperty: undefined;
+  'Add Property': undefined;
   Contact: undefined;
   Profile: undefined;
 };

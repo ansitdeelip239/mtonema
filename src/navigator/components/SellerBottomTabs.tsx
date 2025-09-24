@@ -34,7 +34,7 @@ const SellerBottomTabs = memo(() => {
       icon: 'realEstate',
     },
     {
-      name: 'AddProperty',
+      name: 'Add Property',
       component: PostPropertyScreen,
       icon: 'listproperty',
     },
@@ -56,7 +56,7 @@ const SellerBottomTabs = memo(() => {
         headerShown: false,
         tabBarHideOnKeyboard: true,
       }}
-      initialRouteName={navigateToPostProperty ? 'AddProperty' : 'Dashboard'}
+      initialRouteName={navigateToPostProperty ? 'Add Property' : 'Dashboard'}
       // eslint-disable-next-line react/no-unstable-nested-components
       tabBar={props => <CustomBottomBar {...props} tabScreens={tabScreens} />}>
       {tabScreens.map(({name, component, icon}) => (
@@ -70,7 +70,7 @@ const SellerBottomTabs = memo(() => {
             tabBarIcon: ({focused, color}) => (
               <GetIcon iconName={icon} color={focused ? Colors.MT_PRIMARY_1 : color} />
             ),
-            ...(name === 'AddProperty' && Platform.OS === 'ios' ? {
+            ...(name === 'Add Property' && Platform.OS === 'ios' ? {
               headerShown: true,
               headerTintColor: '#000',
               // eslint-disable-next-line react/no-unstable-nested-components

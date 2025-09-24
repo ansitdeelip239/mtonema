@@ -4,7 +4,7 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { SellerBottomTabParamList } from '../../types/navigation';
 import { useTranslation } from 'react-i18next';
 
-type Props = NativeStackScreenProps<SellerBottomTabParamList, 'AddProperty'>;
+type Props = NativeStackScreenProps<SellerBottomTabParamList, 'Add Property'>;
 
 const PostPropertyScreen: React.FC<Props> = ({navigation}) => {
   const { t } = useTranslation();
