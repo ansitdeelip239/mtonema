@@ -2,6 +2,7 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import EmailScreen from '../screens/auth/EmailScreen';
 import { MainScreen } from '../screens/auth/MainScreen';
+import MainScreenIOS from '../screens/auth/MainScreenIOS';
 import OtpScreen from '../screens/auth/OtpScreen';
 import PartnerZoneScreen from '../screens/auth/PartnerZoneScreen';
 import { MasterDetailModel } from '../types';
@@ -98,7 +99,7 @@ export default function AuthNavigator() {
       /> */}
       <Stack.Screen
         name="MainScreen"
-        component={MainScreen}
+        component={isIOS ? MainScreenIOS : MainScreen}
         options={{
           title: isIOS ? t('app.title', 'MT One: App & CRM') : '',
         }}
