@@ -71,30 +71,42 @@ const PropertyCard: React.FC<PropertyCardProps> = ({property, onPress}) => {
       </View>
 
       <View style={styles.propertyInfo}>
-        <Text style={styles.propertyTitle} numberOfLines={1}>
-          {property.propertyName}
-        </Text>
-        <Text style={styles.propertyLocation} numberOfLines={1}>
-          <GetIcon iconName="locationPin" size={12} color="#666" />
-          {' ' + property.locationAddress}
-        </Text>
-        <Text style={styles.propertyPrice}>{formatPrice(property.price, property.propertyFor as typeof PropertyFor.SALE | typeof PropertyFor.RENT | typeof PropertyFor.OTHERS)}</Text>
+        {property.propertyName && (
+          <Text style={styles.propertyTitle} numberOfLines={1}>
+            {property.propertyName}
+          </Text>
+        )}
+        {property.locationAddress && (
+          <Text style={styles.propertyLocation} numberOfLines={1}>
+            <GetIcon iconName="locationPin" size={12} color="#666" />
+            {' ' + property.locationAddress}
+          </Text>
+        )}
+        {property.price && (
+          <Text style={styles.propertyPrice}>
+            {formatPrice(property.price, property.propertyFor as typeof PropertyFor.SALE | typeof PropertyFor.RENT | typeof PropertyFor.OTHERS)}
+          </Text>
+        )}
 
         <View style={styles.propertyDetails}>
-          <Text style={styles.propertyDetail}>
-            <GetIcon iconName="area" size={12} color="#666" />
-            {' ' + property.area} {property.lmUnit}
-          </Text>
+          {property.area && property.lmUnit && (
+            <Text style={styles.propertyDetail}>
+              <GetIcon iconName="area" size={12} color="#666" />
+              {' ' + property.area} {property.lmUnit}
+            </Text>
+          )}
           {property.bhkType && (
             <Text style={styles.propertyDetail}>
               <GetIcon iconName="doubleBed" size={12} color="#666" />
               {' ' + property.bhkType}
             </Text>
           )}
-          <Text style={styles.propertyDetail}>
-            <GetIcon iconName="home" size={12} color="#666" />
-            {' ' + property.propertyType}
-          </Text>
+          {property.propertyType && (
+            <Text style={styles.propertyDetail}>
+              <GetIcon iconName="home" size={12} color="#666" />
+              {' ' + property.propertyType}
+            </Text>
+          )}
         </View>
       </View>
     </TouchableOpacity>

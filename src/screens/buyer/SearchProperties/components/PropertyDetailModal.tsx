@@ -341,103 +341,118 @@ const PropertyDetailModal: React.FC<PropertyDetailModalProps> = ({
 
           {/* Property Title & Price Section */}
           <View style={styles.section}>
-            <Text style={styles.propertyTitle}>
-              {property.propertyName || t('propertyDetailModal.propertyName')}
-            </Text>
-
-            <Text style={[styles.propertyPrice, {color: Colors.MT_PRIMARY_1}]}>
-              {formatPrice(
-                property.price,
-                property.propertyFor as
-                  | typeof PropertyFor.SALE
-                  | typeof PropertyFor.RENT
-                  | typeof PropertyFor.OTHERS,
-              )}
-            </Text>
-
-            <View style={styles.infoRow}>
-              <GetIcon
-                iconName="locationPin"
-                size={18}
-                color={Colors.MT_PRIMARY_1}
-              />
-              <Text style={styles.infoText}>
-                {property.locationAddress || t('propertyDetailModal.locationNotSpecified')},{' '}
-                {property.city || ''}
+            {property.propertyName && (
+              <Text style={styles.propertyTitle}>
+                {property.propertyName}
               </Text>
-            </View>
+            )}
+
+            {property.price && (
+              <Text style={[styles.propertyPrice, {color: Colors.MT_PRIMARY_1}]}>
+                {formatPrice(
+                  property.price,
+                  property.propertyFor as
+                    | typeof PropertyFor.SALE
+                    | typeof PropertyFor.RENT
+                    | typeof PropertyFor.OTHERS,
+                )}
+              </Text>
+            )}
+
+            {property.locationAddress && (
+              <View style={styles.infoRow}>
+                <GetIcon
+                  iconName="locationPin"
+                  size={18}
+                  color={Colors.MT_PRIMARY_1}
+                />
+                <Text style={styles.infoText}>
+                  {property.locationAddress}{property.city ? `, ${property.city}` : ''}
+                </Text>
+              </View>
+            )}
           </View>
 
           {/* Property Overview */}
-          <View style={[styles.section, styles.overviewSection]}>
-            <Text style={styles.sectionTitle}>Property Overview</Text>
+          {(property.propertyType || property.bhkType || (property.area && property.lmUnit) || property.facing) && (
+            <View style={[styles.section, styles.overviewSection]}>
+              <Text style={styles.sectionTitle}>Property Overview</Text>
 
-            <View style={styles.overviewGrid}>
-              <View style={styles.overviewItem}>
-                <View style={styles.overviewIconWrapper}>
-                  <GetIcon
-                    iconName="home"
-                    size={16}
-                    color={Colors.MT_PRIMARY_1}
-                  />
-                </View>
-                <View style={styles.overviewTextContainer}>
-                  <Text style={styles.overviewLabel}>Type</Text>
-                  <Text style={styles.overviewValue}>
-                    {property.propertyType || t('propertyDetailModal.labels.na')}
-                  </Text>
-                </View>
-              </View>
+              <View style={styles.overviewGrid}>
+                {property.propertyType && (
+                  <View style={styles.overviewItem}>
+                    <View style={styles.overviewIconWrapper}>
+                      <GetIcon
+                        iconName="home"
+                        size={16}
+                        color={Colors.MT_PRIMARY_1}
+                      />
+                    </View>
+                    <View style={styles.overviewTextContainer}>
+                      <Text style={styles.overviewLabel}>Type</Text>
+                      <Text style={styles.overviewValue}>
+                        {property.propertyType}
+                      </Text>
+                    </View>
+                  </View>
+                )}
 
-              <View style={styles.overviewItem}>
-                <View style={styles.overviewIconWrapper}>
-                  <GetIcon
-                    iconName="doubleBed"
-                    size={16}
-                    color={Colors.MT_PRIMARY_1}
-                  />
-                </View>
-                <View style={styles.overviewTextContainer}>
-                  <Text style={styles.overviewLabel}>BHK</Text>
-                  <Text style={styles.overviewValue}>
-                    {property.bhkType || 'N/A'}
-                  </Text>
-                </View>
-              </View>
+                {property.bhkType && (
+                  <View style={styles.overviewItem}>
+                    <View style={styles.overviewIconWrapper}>
+                      <GetIcon
+                        iconName="doubleBed"
+                        size={16}
+                        color={Colors.MT_PRIMARY_1}
+                      />
+                    </View>
+                    <View style={styles.overviewTextContainer}>
+                      <Text style={styles.overviewLabel}>BHK</Text>
+                      <Text style={styles.overviewValue}>
+                        {property.bhkType}
+                      </Text>
+                    </View>
+                  </View>
+                )}
 
-              <View style={styles.overviewItem}>
-                <View style={styles.overviewIconWrapper}>
-                  <GetIcon
-                    iconName="area"
-                    size={16}
-                    color={Colors.MT_PRIMARY_1}
-                  />
-                </View>
-                <View style={styles.overviewTextContainer}>
-                  <Text style={styles.overviewLabel}>Area</Text>
-                  <Text style={styles.overviewValue}>
-                    {property.area} {property.lmUnit}
-                  </Text>
-                </View>
-              </View>
+                {(property.area && property.lmUnit) && (
+                  <View style={styles.overviewItem}>
+                    <View style={styles.overviewIconWrapper}>
+                      <GetIcon
+                        iconName="area"
+                        size={16}
+                        color={Colors.MT_PRIMARY_1}
+                      />
+                    </View>
+                    <View style={styles.overviewTextContainer}>
+                      <Text style={styles.overviewLabel}>Area</Text>
+                      <Text style={styles.overviewValue}>
+                        {property.area} {property.lmUnit}
+                      </Text>
+                    </View>
+                  </View>
+                )}
 
-              <View style={styles.overviewItem}>
-                <View style={styles.overviewIconWrapper}>
-                  <GetIcon
-                    iconName="compass"
-                    size={16}
-                    color={Colors.MT_PRIMARY_1}
-                  />
-                </View>
-                <View style={styles.overviewTextContainer}>
-                  <Text style={styles.overviewLabel}>Facing</Text>
-                  <Text style={styles.overviewValue}>
-                    {property.facing || 'N/A'}
-                  </Text>
-                </View>
+                {property.facing && (
+                  <View style={styles.overviewItem}>
+                    <View style={styles.overviewIconWrapper}>
+                      <GetIcon
+                        iconName="compass"
+                        size={16}
+                        color={Colors.MT_PRIMARY_1}
+                      />
+                    </View>
+                    <View style={styles.overviewTextContainer}>
+                      <Text style={styles.overviewLabel}>Facing</Text>
+                      <Text style={styles.overviewValue}>
+                        {property.facing}
+                      </Text>
+                    </View>
+                  </View>
+                )}
               </View>
             </View>
-          </View>
+          )}
 
           {/* Description */}
           {(property.shortDescription || property.longDescription) && (
@@ -605,33 +620,43 @@ const PropertyDetailModal: React.FC<PropertyDetailModalProps> = ({
           </View>
 
           {/* Property Specifications */}
-          <View style={styles.section}>
-            <Text style={styles.sectionTitle}>{t('propertyDetailModal.sections.specifications')}</Text>
-            <View style={styles.specsList}>
-              <View style={styles.specItem}>
-                <Text style={styles.specLabel}>{t('propertyDetailModal.labels.furnishing')}</Text>
-                <Text style={styles.specValue}>
-                  {property.furnishing || 'N/A'}
-                </Text>
-              </View>
-              <View style={styles.specItem}>
-                <Text style={styles.specLabel}>{t('propertyDetailModal.labels.floor')}</Text>
-                <Text style={styles.specValue}>{property.floor || 'N/A'}</Text>
-              </View>
-              <View style={styles.specItem}>
-                <Text style={styles.specLabel}>{t('propertyDetailModal.labels.propertyAge')}</Text>
-                <Text style={styles.specValue}>
-                  {property.propertyAge || 'N/A'}
-                </Text>
-              </View>
-              <View style={styles.specItem}>
-                <Text style={styles.specLabel}>{t('propertyDetailModal.labels.sellerType')}</Text>
-                <Text style={styles.specValue}>
-                  {property.sellerType || 'N/A'}
-                </Text>
+          {(property.furnishing || property.floor || property.propertyAge || property.sellerType) && (
+            <View style={styles.section}>
+              <Text style={styles.sectionTitle}>{t('propertyDetailModal.sections.specifications')}</Text>
+              <View style={styles.specsList}>
+                {property.furnishing && (
+                  <View style={styles.specItem}>
+                    <Text style={styles.specLabel}>{t('propertyDetailModal.labels.furnishing')}</Text>
+                    <Text style={styles.specValue}>
+                      {property.furnishing}
+                    </Text>
+                  </View>
+                )}
+                {property.floor && (
+                  <View style={styles.specItem}>
+                    <Text style={styles.specLabel}>{t('propertyDetailModal.labels.floor')}</Text>
+                    <Text style={styles.specValue}>{property.floor}</Text>
+                  </View>
+                )}
+                {property.propertyAge && (
+                  <View style={styles.specItem}>
+                    <Text style={styles.specLabel}>{t('propertyDetailModal.labels.propertyAge')}</Text>
+                    <Text style={styles.specValue}>
+                      {property.propertyAge}
+                    </Text>
+                  </View>
+                )}
+                {property.sellerType && (
+                  <View style={styles.specItem}>
+                    <Text style={styles.specLabel}>{t('propertyDetailModal.labels.sellerType')}</Text>
+                    <Text style={styles.specValue}>
+                      {property.sellerType}
+                    </Text>
+                  </View>
+                )}
               </View>
             </View>
-          </View>
+          )}
 
           {/* Tags */}
           {displayTags.length > 0 && (
@@ -648,27 +673,35 @@ const PropertyDetailModal: React.FC<PropertyDetailModalProps> = ({
           )}
 
           {/* Seller Information */}
-          <View style={[styles.section, styles.sellerSection]}>
-            <Text style={styles.sectionTitle}>{t('propertyDetailModal.sections.sellerInformation')}</Text>
-            <View style={styles.sellerCard}>
-              <View style={styles.sellerDetails}>
-                <View style={styles.sellerIconContainer}>
-                  <GetIcon iconName="user" size={24} color="#666" />
-                </View>
-                <View style={styles.sellerInfo}>
-                  <Text style={styles.sellerName}>
-                    {property.name || t('propertyDetailModal.labels.sellerName')}
-                  </Text>
-                  <Text style={styles.sellerType}>
-                    {property.sellerType || t('propertyDetailModal.labels.individual')}
-                  </Text>
-                  <Text style={styles.sellerEmail}>
-                    {property.sellerPhone || t('propertyDetailModal.labels.contactNotAvailable')}
-                  </Text>
+          {(property.name || property.sellerType || property.sellerPhone) && (
+            <View style={[styles.section, styles.sellerSection]}>
+              <Text style={styles.sectionTitle}>{t('propertyDetailModal.sections.sellerInformation')}</Text>
+              <View style={styles.sellerCard}>
+                <View style={styles.sellerDetails}>
+                  <View style={styles.sellerIconContainer}>
+                    <GetIcon iconName="user" size={24} color="#666" />
+                  </View>
+                  <View style={styles.sellerInfo}>
+                    {property.name && (
+                      <Text style={styles.sellerName}>
+                        {property.name}
+                      </Text>
+                    )}
+                    {property.sellerType && (
+                      <Text style={styles.sellerType}>
+                        {property.sellerType}
+                      </Text>
+                    )}
+                    {property.sellerPhone && (
+                      <Text style={styles.sellerEmail}>
+                        {property.sellerPhone}
+                      </Text>
+                    )}
+                  </View>
                 </View>
               </View>
             </View>
-          </View>
+          )}
 
           {/* Bottom Spacing */}
           <View style={styles.bottomSpacing} />
