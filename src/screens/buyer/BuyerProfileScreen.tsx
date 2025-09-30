@@ -19,20 +19,16 @@ const BuyerProfileScreen: React.FC<Props> = ({navigation}) => {
   const handleOptionPress = (optionId: string) => {
     switch (optionId) {
       case 'personal':
-        // Navigate to edit profile or settings
-        navigation.navigate('Dashboard'); // Placeholder navigation
+        // Navigate to edit profile
+        navigation.getParent()?.navigate('Profile Screen');
         break;
       case 'properties':
         // Navigate to properties section
         navigation.navigate('Contacted'); // Navigate to contacted properties
         break;
-      case 'analytics':
-        // Navigate to analytics
-        navigation.navigate('Dashboard'); // Placeholder navigation
-        break;
       case 'settings':
         // Handle settings navigation
-        navigation.navigate('Dashboard'); // Placeholder navigation
+        navigation.getParent()?.navigate('Settings');
         break;
       default:
         break;
@@ -51,12 +47,6 @@ const BuyerProfileScreen: React.FC<Props> = ({navigation}) => {
       title: t('buyerProfile.options.properties.title'),
       icon: 'home' as IconEnum,
       subtitle: t('buyerProfile.options.properties.subtitle'),
-    },
-    {
-      id: 'analytics',
-      title: t('buyerProfile.options.analytics.title'),
-      icon: 'bill' as IconEnum,
-      subtitle: t('buyerProfile.options.analytics.subtitle'),
     },
     {
       id: 'settings',

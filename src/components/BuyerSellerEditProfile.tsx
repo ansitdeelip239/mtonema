@@ -1,12 +1,6 @@
-import BuyerSellerHeader from './BuyerSellerHeader';
 import EditProfileComponent from './EditProfileComponent';
 
 const BuyerSellerEditProfile = () => {
-  return (
-    <>
-      <BuyerSellerHeader title="Edit Profile" />
-      <EditProfileComponent />
-    </>
-  );
+  return <EditProfileComponent />;
 };
 export default BuyerSellerEditProfile;

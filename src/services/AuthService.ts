@@ -84,7 +84,10 @@ class AuthService {
     domain: string;
   }): Promise<Response<GetInTouchResponse>> {
     try {
-      const response = await api.post<GetInTouchResponse>(url.seller.getInTouch, body);
+      const response = await api.post<GetInTouchResponse>(
+        url.seller.getInTouch,
+        body,
+      );
       return response;
     } catch (error) {
       throw error;
@@ -116,6 +119,15 @@ class AuthService {
   static async getUserByToken(token: string) {
     try {
       const response = await api.get<User>(`${url.users.list}?token=${token}`);
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  static async deleteUser(userId: number) {
+    try {
+      const response = await api.delete<void>(`${url.users.delete}/${userId}`);
       return response;
     } catch (error) {
       throw error;

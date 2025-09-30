@@ -8,7 +8,7 @@ const url = {
   users: {
     list: '/users',
     updateProfile: '/User/UpdateUser',
-    delete: '/User/DeleteUserByUserId',
+    delete: '/users',
   },
   property: {
     filterSearch: '/property/filterProperty',

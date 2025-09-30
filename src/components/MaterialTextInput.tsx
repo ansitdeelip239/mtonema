@@ -42,7 +42,7 @@ export const MaterialTextInput = <T,>({
 }: MaterialTextInputProps<T>) => {
   const suggestionTimeoutRef = useRef<number | null>(null);
   const inputRef = useRef<View>(null);
-  const [isFocused, setIsFocused] = useState(false); // Add focus state
+  const [isFocused, setIsFocused] = useState(false);
 
   const CrossButton = useCallback(() => {
     return (
@@ -66,17 +66,22 @@ export const MaterialTextInput = <T,>({
   };
 
   const renderRight = () => {
+    // Priority 1: Loading indicator
     if (loading) {
-      // eslint-disable-next-line react/no-unstable-nested-components
       return <TextInput.Icon icon={() => <ActivityIndicator size={20} />} />;
     }
+    
+    // Priority 2: Custom rightComponent (like edit button)
+    // This should always be shown when provided, regardless of field value
     if (rightComponent) {
-      return <TextInput.Affix text={rightComponent as string} />;
+      return <TextInput.Icon icon={() => rightComponent} />;
     }
+    
+    // Priority 3: Default cross button (only when field has value and no custom rightComponent)
     if (formInput[field]) {
-      // eslint-disable-next-line react/no-unstable-nested-components
       return <TextInput.Icon icon={() => <CrossButton />} />;
     }
+    
     return null;
   };
 
@@ -95,10 +100,8 @@ export const MaterialTextInput = <T,>({
     [onSuggestionSelect],
   );
 
-  // Determine if suggestions should be shown
   const showSuggestions = isFocused && suggestions && suggestions.length > 0;
 
-  // Dynamically adjust outerContainer style
   const outerContainerStyle = [
     styles.outerContainer,
     {
@@ -118,8 +121,8 @@ export const MaterialTextInput = <T,>({
           right={renderRight()}
           outlineStyle={styles.textInput}
           error={!!errorMessage}
-          onFocus={() => setIsFocused(true)} // Set focus state
-          onBlur={() => setIsFocused(false)} // Reset focus state
+          onFocus={() => setIsFocused(true)}
+          onBlur={() => setIsFocused(false)}
           contentStyle={{
             minHeight: props.multiline ? 100 : undefined,
             color: 'black',
@@ -149,7 +152,6 @@ export const MaterialTextInput = <T,>({
           </HelperText>
         )}
 
-        {/* Render suggestions only when focused and suggestions exist */}
         {showSuggestions && (
           <View style={styles.suggestionsContainer}>
             <ScrollView
@@ -181,7 +183,6 @@ export const MaterialTextInput = <T,>({
   );
 };
 
-// Styles remain unchanged
 const styles = StyleSheet.create({
   outerContainer: {
     zIndex: 100,

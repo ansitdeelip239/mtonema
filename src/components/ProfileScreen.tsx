@@ -152,9 +152,9 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({config}) => {
             <View style={styles.avatar}>
               <GetIcon iconName="user" color={Colors.MT_PRIMARY_1} size="40" />
             </View>
-            <TouchableOpacity style={styles.editAvatarButton}>
+            {/* <TouchableOpacity style={styles.editAvatarButton}>
               <GetIcon iconName="edit" color="white" size="16" />
-            </TouchableOpacity>
+            </TouchableOpacity> */}
           </View>
 
           <Text style={styles.userName}>{userData.name}</Text>
