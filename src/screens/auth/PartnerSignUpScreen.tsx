@@ -190,10 +190,12 @@ const PartnerSignUpScreen: React.FC<Props> = ({navigation}) => {
           // Call OTP verification
           await AuthService.otpVerification(formData.email);
 
-          // Show trial modal
-
+          // Show trial modal for Android, directly proceed for iOS
           if (!isIOS) {
             setShowTrialModal(true);
+          } else {
+            // For iOS, directly navigate to OTP screen
+            navigation.navigate('OtpScreen', {email: userEmail});
           }
         } else {
           showError(response.message);

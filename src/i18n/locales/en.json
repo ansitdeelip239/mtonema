@@ -348,7 +348,7 @@
       "dashboard": "Sign in to access your dashboard",
       "continueToLogin": "Continue to Login",
       "getStartedFree": "Get started for FREE",
-      "securePartnerAccess": "Secure Agent Access"
+      "securePartnerAccess": "Secure Agent/Builder Access"
     },
     "email": {
       "placeholder": "Enter your email address",
@@ -378,7 +378,7 @@
         "phoneLabel": "Phone",
         "phonePlaceholder": "Enter your phone number",
         "zoneLabel": "Zone*:",
-        "signUpButton": "Sign Up",
+        "signUpButton": "Next",
         "creatingAccount": "Creating Account...",
         "alreadyHaveAccount": "Already have an account?",
         "logIn": "Log In",
@@ -400,10 +400,10 @@
       "newHere": "New here? Create an account!",
       "signUpAsBuyer": "Sign Up as Buyer",
       "wantToListProperty": "Want to list your property?",
-      "signUpAsSeller": "Sign Up as Seller",
+      "signUpAsSeller": "List Property for FREE",
       "buyerSellerTab": "Buyer/Seller",
-      "partnerTab": "Agent",
-      "iosAgentInfo": "Access your agent dashboard with advanced tools and analytics for managing your real estate business."
+      "partnerTab": "Agent/Builder",
+      "iosAgentInfo": "Access your agent/builder dashboard with advanced tools and analytics for managing your real estate business."
     },
     "accessDenied": "Access Denied",
     "adminUnauthorized": "Your email {email} is not authorized for admin access.",
@@ -453,7 +453,7 @@
     "noClientsFound": "No Clients Found",
     "showingFrom": "Showing clients from",
     "selected": "selected",
-    "partner": "agent",
+    "partner": "agent/builder",
     "teamMember": "team member",
     "activityAddedSuccess": "Activity added successfully",
     "failedToAddActivity": "Failed to add activity",
@@ -638,11 +638,11 @@
       "noEmailAddress": "No email address available",
       "noPhoneNumber": "No phone number available"
     },
-    "emailSubject": "Message from Agent"
+    "emailSubject": "Message from Agent/Builder"
   },
   "partnerFilter": {
     "title": {
-      "partners": "Filter Agents",
+      "partners": "Filter Agents/Builders",
       "teamMembers": "Filter Team Members"
     },
     "accessDenied": {
@@ -656,23 +656,23 @@
       "applyFilter": "Apply Filter"
     },
     "loading": {
-      "partners": "Loading agents...",
+      "partners": "Loading agents/builders...",
       "teamMembers": "Loading team members..."
     },
     "selection": {
-      "partners": "agents",
+      "partners": "agents/builders",
       "teamMembers": "team members",
       "selected": "selected"
     },
     "empty": {
-      "partners": "No agents found",
+      "partners": "No agents/builders found",
       "teamMembers": "No team members found"
     },
     "toast": {
       "filterCleared": "Filter Cleared",
       "filterClearedMessage": "Showing clients for your account only.",
       "filterApplied": "Filter Applied",
-      "filterAppliedMessage": "Showing clients for {{formattedCount}} selected agent"
+      "filterAppliedMessage": "Showing clients for {{formattedCount}} selected agent/builder"
     },
     "errors": {
       "fetchFailed": "Failed to fetch {{type}}. Please try again.",

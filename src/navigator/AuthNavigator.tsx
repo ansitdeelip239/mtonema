@@ -1,16 +1,15 @@
 // import React, {useState} from 'react';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import EmailScreen from '../screens/auth/EmailScreen';
-import { MainScreen } from '../screens/auth/MainScreen';
-import MainScreenIOS from '../screens/auth/MainScreenIOS';
+import {MainScreen} from '../screens/auth/MainScreen';
 import OtpScreen from '../screens/auth/OtpScreen';
 import PartnerZoneScreen from '../screens/auth/PartnerZoneScreen';
-import { MasterDetailModel } from '../types';
+import {MasterDetailModel} from '../types';
 import PartnerLoginScreen from '../screens/auth/PartnerLoginScreen';
-import { Platform } from 'react-native';
+import {Platform} from 'react-native';
 import PartnerSignUpScreen from '../screens/auth/PartnerSignUpScreen';
 import SignUpScreen from '../screens/auth/SignUpScreen';
-import { useTranslation } from 'react-i18next';
+import {useTranslation} from 'react-i18next';
 // import UserTypeSelectionScreen from '../screens/auth/UserTypeSelectionScreen';
 // import AsyncStorage from '@react-native-async-storage/async-storage';
 // import storageKeys from '../constants/storageKeys';
@@ -20,21 +19,21 @@ import { useTranslation } from 'react-i18next';
 // import OtpModel from '../components/OtpModel';
 
 export type AuthStackParamList = {
-  EmailScreen: { role: string[]; location: MasterDetailModel | null };
+  EmailScreen: {role: string[]; location: MasterDetailModel | null};
   PartnerLoginScreen: undefined;
   PartnerZoneScreen: undefined;
-  SignUpScreen: { role: string };
-  PartnerSignUpScreen: { role: string };
+  SignUpScreen: {role: string};
+  PartnerSignUpScreen: {role: string};
   MainScreen: undefined;
   // ChangePasswordScreen: undefined;
-  PasswordScreen: { email: string };
+  PasswordScreen: {email: string};
   OtpScreen: {
     email: string;
     isForgetPassword?: boolean;
     logoUrl?: string;
     location?: MasterDetailModel;
   };
-  OtpModel: { email: string };
+  OtpModel: {email: string};
   UserTypeSelectionScreen: undefined;
   // ForgetPassword: undefined;
 };
@@ -80,16 +79,14 @@ export default function AuthNavigator() {
   // }
   const {t} = useTranslation();
   const isIOS = Platform.OS === 'ios';
-  
 
   return (
     <Stack.Navigator
       screenOptions={{
         headerShown: isIOS,
-        headerTitleStyle: { color: 'black' },
+        headerTitleStyle: {color: 'black'},
       }}
-      initialRouteName="MainScreen"
-    >
+      initialRouteName="MainScreen">
       {/* <Stack.Screen
       name="UserTypeSelectionScreen"
       component={UserTypeSelectionScreen}
@@ -99,7 +96,7 @@ export default function AuthNavigator() {
       /> */}
       <Stack.Screen
         name="MainScreen"
-        component={isIOS ? MainScreenIOS : MainScreen}
+        component={MainScreen}
         options={{
           title: isIOS ? t('app.title', 'MT One: App & CRM') : '',
         }}
@@ -132,15 +129,13 @@ export default function AuthNavigator() {
           title: isIOS ? 'Sign Up' : '',
         }}
       />
-      {!isIOS && (
-        <Stack.Screen
-          name="PartnerSignUpScreen"
-          component={PartnerSignUpScreen}
-          options={{
-            title: isIOS ? 'Sign Up' : '',
-          }}
-        />
-      )}
+      <Stack.Screen
+        name="PartnerSignUpScreen"
+        component={PartnerSignUpScreen}
+        options={{
+          title: isIOS ? 'Sign Up' : '',
+        }}
+      />
       <Stack.Screen
         name="OtpScreen"
         component={OtpScreen}

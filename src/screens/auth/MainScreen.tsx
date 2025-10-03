@@ -30,12 +30,12 @@ type Props = NativeStackScreenProps<AuthStackParamList, 'MainScreen'>;
 export const MainScreen: React.FC<Props> = ({navigation}) => {
   const {masterData} = useMaster();
   const {t} = useTranslation();
-  const [activeTab, setActiveTab] = useState<'buyerSeller' | 'partner'>(
-    'partner',
-  );
-  const slideAnimation = useRef(new Animated.Value(0)).current;
   const isRTL = isCurrentLanguageRTL();
   const isIOS = Platform.OS === 'ios';
+  const [activeTab, setActiveTab] = useState<'buyerSeller' | 'partner'>(
+    isIOS ? 'buyerSeller' : 'partner',
+  );
+  const slideAnimation = useRef(new Animated.Value(0)).current;
 
   const onBuyerSellerLogin = () => {
     const individualLocation = masterData?.PartnerLocation?.find(
@@ -75,8 +75,15 @@ export const MainScreen: React.FC<Props> = ({navigation}) => {
       return;
     }
 
-    // Fixed animation logic for proper indicator positioning
-    const toValue = tab === 'buyerSeller' ? 1 : 0;
+    // Animation logic based on platform-specific tab ordering
+    let toValue: number;
+    if (isIOS) {
+      // iOS: buyerSeller (0), partner (1)
+      toValue = tab === 'buyerSeller' ? 0 : 1;
+    } else {
+      // Android: partner (0), buyerSeller (1)
+      toValue = tab === 'partner' ? 0 : 1;
+    }
 
     Animated.timing(slideAnimation, {
       toValue,
@@ -104,242 +111,292 @@ export const MainScreen: React.FC<Props> = ({navigation}) => {
     }
   };
 
-  // Fixed content transform for RTL
+  // Fixed content transform for RTL and platform-specific tab ordering
   const getBuyerSellerContentTransform = () => {
-    if (isRTL) {
-      return slideAnimation.interpolate({
-        inputRange: [0, 1],
-        outputRange: [-width, 0],
-      });
+    if (isIOS) {
+      // iOS: buyerSeller is first tab (position 0) - visible at 0, slides left to -width
+      if (isRTL) {
+        return slideAnimation.interpolate({
+          inputRange: [0, 1],
+          outputRange: [0, width],
+        });
+      } else {
+        return slideAnimation.interpolate({
+          inputRange: [0, 1],
+          outputRange: [0, -width],
+        });
+      }
     } else {
-      return slideAnimation.interpolate({
-        inputRange: [0, 1],
-        outputRange: [width, 0],
-      });
+      // Android: buyerSeller is second tab (position 1) - off-screen at width, slides left to 0
+      if (isRTL) {
+        return slideAnimation.interpolate({
+          inputRange: [0, 1],
+          outputRange: [-width, 0],
+        });
+      } else {
+        return slideAnimation.interpolate({
+          inputRange: [0, 1],
+          outputRange: [width, 0],
+        });
+      }
     }
   };
 
   const getPartnerContentTransform = () => {
-    if (isRTL) {
-      return slideAnimation.interpolate({
-        inputRange: [0, 1],
-        outputRange: [0, width],
-      });
+    if (isIOS) {
+      // iOS: partner is second tab (position 1) - off-screen at width, slides left to 0
+      if (isRTL) {
+        return slideAnimation.interpolate({
+          inputRange: [0, 1],
+          outputRange: [-width, 0],
+        });
+      } else {
+        return slideAnimation.interpolate({
+          inputRange: [0, 1],
+          outputRange: [width, 0],
+        });
+      }
     } else {
-      return slideAnimation.interpolate({
-        inputRange: [0, 1],
-        outputRange: [0, -width],
-      });
+      // Android: partner is first tab (position 0) - visible at 0, slides left to -width
+      if (isRTL) {
+        return slideAnimation.interpolate({
+          inputRange: [0, 1],
+          outputRange: [0, width],
+        });
+      } else {
+        return slideAnimation.interpolate({
+          inputRange: [0, 1],
+          outputRange: [0, -width],
+        });
+      }
     }
   };
 
   return (
-      <View style={styles.mainScreen}>
-        {!isIOS && (
-          <HeaderComponent title={t('app.title')} showBackButton={false} />
-        )}
-        <View style={styles.languageSwitcherContainer}>
-          <LanguageSwitcherButton textColor={Colors.MT_PRIMARY_1} />
-        </View>
-        <ScrollView
-          contentContainerStyle={styles.scrollContent}
-          showsVerticalScrollIndicator={false}>
-          <View style={styles.logoContainer}>
-            <Image
-              source={Images.MTESTATES_LOGO}
-              style={styles.image}
-              resizeMode="contain"
-            />
-          </View>
-          <View style={styles.cardContainer}>
-            {/* Modern Tab Selector */}
-            <View style={styles.tabSelectorContainer}>
-              <View
-                style={[
-                  styles.tabSelector,
-                  isRTL && {flexDirection: 'row-reverse'},
-                ]}>
-                <Animated.View
-                  style={[
-                    styles.tabIndicator,
-                    {
-                      transform: [
-                        {
-                          translateX: getIndicatorTransform(),
-                        },
-                      ],
-                    },
-                  ]}
-                />
-                <TouchableOpacity
-                  style={styles.tabButton}
-                  onPress={() => switchTab('partner')}>
-                  <Text
-                    style={[
-                      styles.tabText,
-                      activeTab === 'partner' && styles.activeTabText,
-                    ]}>
-                    {t('auth.mainScreen.partnerTab')}
-                  </Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  style={styles.tabButton}
-                  onPress={() => switchTab('buyerSeller')}>
-                  <Text
-                    style={[
-                      styles.tabText,
-                      activeTab === 'buyerSeller' && styles.activeTabText,
-                    ]}>
-                    {t('auth.mainScreen.buyerSellerTab')}
-                  </Text>
-                </TouchableOpacity>
-              </View>
-            </View>
-            <View style={styles.card}>
-              <View style={styles.tabContentContainer}>
-                {/* Partner Content */}
-                <Animated.View
-                  style={[
-                    styles.partnerTabContent,
-                    {
-                      transform: [
-                        {
-                          translateX: getPartnerContentTransform(),
-                        },
-                      ],
-                    },
-                  ]}>
-                  <View style={styles.section}>
-                    <Text style={styles.sectionTitle}>
-                      {t('auth.mainScreen.alreadyHaveAccount')}
-                    </Text>
-                    <TouchableOpacity
-                      style={styles.primaryButton}
-                      onPress={onPartnerLogin}
-                      activeOpacity={0.8}>
-                      <View
-                        style={[
-                          styles.buttonContentRow,
-                          isRTL && {flexDirection: 'row-reverse'},
-                        ]}>
-                        <GetIcon iconName="partner3" color="white" size="20" />
-                        <Text style={styles.buttonText}>
-                          {t('auth.signIn.continueToLogin')}
-                        </Text>
-                      </View>
-                    </TouchableOpacity>
-                  </View>
-                  
-                  {/* iOS specific content to fill the space */}
-                  {isIOS ? (
-                    <View style={styles.iosInfoSection}>
-                      <View style={styles.iosInfoCard}>
-                        <Text style={styles.iosInfoText}>
-                          {t('auth.mainScreen.iosAgentInfo')}
-                        </Text>
-                      </View>
-                    </View>
-                  ) : (
-                    <View style={styles.section}>
-                      <Text style={styles.sectionTitle}>
-                        {t('auth.mainScreen.newHere')}
-                      </Text>
-                      <TouchableOpacity
-                        style={styles.secondaryButton}
-                        onPress={onPartnerSignup}
-                        activeOpacity={0.8}>
-                        <View style={styles.buttonContentRow}>
-                          <Text style={styles.secondaryButtonText}>
-                            {t('auth.signIn.getStartedFree')}
-                          </Text>
-                        </View>
-                      </TouchableOpacity>
-                    </View>
-                  )}
-                  
-                  <View style={styles.infoContainer}>
-                    <View style={styles.divider} />
-                    <Text style={styles.infoText}>
-                      {t('auth.signIn.securePartnerAccess')}
-                    </Text>
-                    <View style={styles.divider} />
-                  </View>
-                </Animated.View>
-                {/* Buyer/Seller Content */}
-                <Animated.View
-                  style={[
-                    styles.tabContent,
-                    {
-                      transform: [
-                        {
-                          translateX: getBuyerSellerContentTransform(),
-                        },
-                      ],
-                    },
-                  ]}>
-                  <View style={styles.section}>
-                    <Text style={styles.sectionTitle}>
-                      {t('auth.mainScreen.alreadyHaveAccount')}
-                    </Text>
-                    <TouchableOpacity
-                      style={styles.primaryButton}
-                      onPress={onBuyerSellerLogin}
-                      activeOpacity={0.8}>
-                      <Text style={styles.buttonText}>
-                        {t('auth.mainScreen.logIn')}
-                      </Text>
-                    </TouchableOpacity>
-                  </View>
-                  <View style={styles.section}>
-                    <Text style={styles.sectionTitle}>
-                      {t('auth.mainScreen.newHere')}
-                    </Text>
-                    <TouchableOpacity
-                      style={styles.primaryButton}
-                      onPress={onBuyerSignup}
-                      activeOpacity={0.8}>
-                      <View
-                        style={[
-                          styles.buttonContentRow,
-                          isRTL && {flexDirection: 'row-reverse'},
-                        ]}>
-                        <Text style={styles.buttonText}>
-                          {t('auth.mainScreen.signUpAsBuyer')}
-                        </Text>
-                        <GetIcon iconName="home" color="white" size="18" />
-                      </View>
-                    </TouchableOpacity>
-                  </View>
-                  <View style={styles.section}>
-                    <Text style={styles.sectionTitle}>
-                      {t('auth.mainScreen.wantToListProperty')}
-                    </Text>
-                    <TouchableOpacity
-                      style={styles.secondaryButton}
-                      onPress={onSellerSignup}
-                      activeOpacity={0.8}>
-                      <View
-                        style={[
-                          styles.buttonContentRow,
-                          isRTL && {flexDirection: 'row-reverse'},
-                        ]}>
-                        <GetIcon
-                          iconName="property"
-                          color={Colors.MT_PRIMARY_1}
-                          size="18"
-                        />
-                        <Text style={styles.secondaryButtonText}>
-                          {t('auth.mainScreen.signUpAsSeller')}
-                        </Text>
-                      </View>
-                    </TouchableOpacity>
-                  </View>
-                </Animated.View>
-              </View>
-            </View>
-          </View>
-        </ScrollView>
+    <View style={styles.mainScreen}>
+      {!isIOS && (
+        <HeaderComponent title={t('app.title')} showBackButton={false} />
+      )}
+      <View style={styles.languageSwitcherContainer}>
+        <LanguageSwitcherButton textColor={Colors.MT_PRIMARY_1} />
       </View>
+      <ScrollView
+        contentContainerStyle={styles.scrollContent}
+        showsVerticalScrollIndicator={false}>
+        <View style={styles.logoContainer}>
+          <Image
+            source={Images.MTESTATES_LOGO}
+            style={styles.image}
+            resizeMode="contain"
+          />
+        </View>
+        <View style={styles.cardContainer}>
+          {/* Modern Tab Selector */}
+          <View style={styles.tabSelectorContainer}>
+            <View
+              style={[
+                styles.tabSelector,
+                isRTL && {flexDirection: 'row-reverse'},
+              ]}>
+              <Animated.View
+                style={[
+                  styles.tabIndicator,
+                  {
+                    transform: [
+                      {
+                        translateX: getIndicatorTransform(),
+                      },
+                    ],
+                  },
+                ]}
+              />
+              {isIOS ? (
+                <>
+                  <TouchableOpacity
+                    style={styles.tabButton}
+                    onPress={() => switchTab('buyerSeller')}>
+                    <Text
+                      style={[
+                        styles.tabText,
+                        activeTab === 'buyerSeller' && styles.activeTabText,
+                      ]}>
+                      {t('auth.mainScreen.buyerSellerTab')}
+                    </Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    style={styles.tabButton}
+                    onPress={() => switchTab('partner')}>
+                    <Text
+                      style={[
+                        styles.tabText,
+                        activeTab === 'partner' && styles.activeTabText,
+                      ]}>
+                      {t('auth.mainScreen.partnerTab')}
+                    </Text>
+                  </TouchableOpacity>
+                </>
+              ) : (
+                <>
+                  <TouchableOpacity
+                    style={styles.tabButton}
+                    onPress={() => switchTab('partner')}>
+                    <Text
+                      style={[
+                        styles.tabText,
+                        activeTab === 'partner' && styles.activeTabText,
+                      ]}>
+                      {t('auth.mainScreen.partnerTab')}
+                    </Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    style={styles.tabButton}
+                    onPress={() => switchTab('buyerSeller')}>
+                    <Text
+                      style={[
+                        styles.tabText,
+                        activeTab === 'buyerSeller' && styles.activeTabText,
+                      ]}>
+                      {t('auth.mainScreen.buyerSellerTab')}
+                    </Text>
+                  </TouchableOpacity>
+                </>
+              )}
+            </View>
+          </View>
+          <View style={styles.card}>
+            <View style={styles.tabContentContainer}>
+              {/* Partner Content */}
+              <Animated.View
+                style={[
+                  styles.partnerTabContent,
+                  {
+                    transform: [
+                      {
+                        translateX: getPartnerContentTransform(),
+                      },
+                    ],
+                  },
+                ]}>
+                <View style={styles.section}>
+                  <Text style={styles.sectionTitle}>
+                    {t('auth.mainScreen.alreadyHaveAccount')}
+                  </Text>
+                  <TouchableOpacity
+                    style={styles.primaryButton}
+                    onPress={onPartnerLogin}
+                    activeOpacity={0.8}>
+                    <View
+                      style={[
+                        styles.buttonContentRow,
+                        isRTL && {flexDirection: 'row-reverse'},
+                      ]}>
+                      <GetIcon iconName="partner3" color="white" size="20" />
+                      <Text style={styles.buttonText}>
+                        {t('auth.signIn.continueToLogin')}
+                      </Text>
+                    </View>
+                  </TouchableOpacity>
+                </View>
+
+                <View style={styles.section}>
+                  <Text style={styles.sectionTitle}>
+                    {t('auth.mainScreen.newHere')}
+                  </Text>
+                  <TouchableOpacity
+                    style={styles.secondaryButton}
+                    onPress={onPartnerSignup}
+                    activeOpacity={0.8}>
+                    <View style={styles.buttonContentRow}>
+                      <Text style={styles.secondaryButtonText}>
+                        {t('auth.signIn.getStartedFree')}
+                      </Text>
+                    </View>
+                  </TouchableOpacity>
+                </View>
+
+                <View style={styles.infoContainer}>
+                  <View style={styles.divider} />
+                  <Text style={styles.infoText}>
+                    {t('auth.signIn.securePartnerAccess')}
+                  </Text>
+                  <View style={styles.divider} />
+                </View>
+              </Animated.View>
+              {/* Buyer/Seller Content */}
+              <Animated.View
+                style={[
+                  styles.tabContent,
+                  {
+                    transform: [
+                      {
+                        translateX: getBuyerSellerContentTransform(),
+                      },
+                    ],
+                  },
+                ]}>
+                <View style={styles.section}>
+                  <Text style={styles.sectionTitle}>
+                    {t('auth.mainScreen.alreadyHaveAccount')}
+                  </Text>
+                  <TouchableOpacity
+                    style={styles.primaryButton}
+                    onPress={onBuyerSellerLogin}
+                    activeOpacity={0.8}>
+                    <Text style={styles.buttonText}>
+                      {t('auth.mainScreen.logIn')}
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+                <View style={styles.section}>
+                  <Text style={styles.sectionTitle}>
+                    {t('auth.mainScreen.newHere')}
+                  </Text>
+                  <TouchableOpacity
+                    style={styles.primaryButton}
+                    onPress={onBuyerSignup}
+                    activeOpacity={0.8}>
+                    <View
+                      style={[
+                        styles.buttonContentRow,
+                        isRTL && {flexDirection: 'row-reverse'},
+                      ]}>
+                      <Text style={styles.buttonText}>
+                        {t('auth.mainScreen.signUpAsBuyer')}
+                      </Text>
+                      <GetIcon iconName="home" color="white" size="18" />
+                    </View>
+                  </TouchableOpacity>
+                </View>
+                <View style={styles.section}>
+                  <Text style={styles.sectionTitle}>
+                    {t('auth.mainScreen.wantToListProperty')}
+                  </Text>
+                  <TouchableOpacity
+                    style={styles.secondaryButton}
+                    onPress={onSellerSignup}
+                    activeOpacity={0.8}>
+                    <View
+                      style={[
+                        styles.buttonContentRow,
+                        isRTL && {flexDirection: 'row-reverse'},
+                      ]}>
+                      <GetIcon
+                        iconName="property"
+                        color={Colors.MT_PRIMARY_1}
+                        size="18"
+                      />
+                      <Text style={styles.secondaryButtonText}>
+                        {t('auth.mainScreen.signUpAsSeller')}
+                      </Text>
+                    </View>
+                  </TouchableOpacity>
+                </View>
+              </Animated.View>
+            </View>
+          </View>
+        </View>
+      </ScrollView>
+    </View>
   );
 };
 

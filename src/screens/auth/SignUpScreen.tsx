@@ -397,7 +397,7 @@ const SignUpScreen: React.FC<Props> = ({navigation, route}) => {
                         ]}>
                         {isLoading || loading
                           ? 'Creating Account...'
-                          : 'Sign Up'}
+                          : 'Next'}
                       </Text>
                       {!isLoading && !loading && (
                         <GetIcon
