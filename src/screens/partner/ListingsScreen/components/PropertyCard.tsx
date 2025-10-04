@@ -12,9 +12,7 @@ import {formatCurrency} from '../../../../utils/currency';
 import GetIcon from '../../../../components/GetIcon';
 import { useTheme } from '../../../../context/ThemeProvider';
 import { useTranslation } from 'react-i18next';
-
-// Default placeholder image for when no images are available
-const placeholderImage = require('../../../../assets/Images/dncr_black_logo.png');
+import Images from '../../../../constants/Images';
 
 interface PropertyCardProps {
   property: Property;
@@ -95,7 +93,7 @@ const PropertyCard = memo(
                 />
               ) : (
                 <Image
-                  source={placeholderImage}
+                  source={{uri: Images.MT_ONE_LOGO}}
                   style={styles.image}
                   resizeMode="contain"
                   accessible={true}

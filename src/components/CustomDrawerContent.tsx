@@ -8,6 +8,7 @@ import {
   ActivityIndicator,
   Image,
   Modal,
+  Platform,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -119,8 +120,8 @@ const CustomDrawerContent = (props: any) => {
 
       {/* Custom About and FAQ Items */}
       <View style={styles.customItemsContainer}>
-        {/* Buy Premium Button - Only show for trial users */}
-        {isPartnerOrTeam && isInTrial && (
+        {/* Buy Premium Button - Only show for trial users on Android */}
+        {isPartnerOrTeam && isInTrial && Platform.OS !== 'ios' && (
           <TouchableOpacity
             style={[
               styles.premiumDrawerItem,
