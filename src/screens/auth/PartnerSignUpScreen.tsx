@@ -195,7 +195,7 @@ const PartnerSignUpScreen: React.FC<Props> = ({navigation}) => {
             setShowTrialModal(true);
           } else {
             // For iOS, directly navigate to OTP screen
-            navigation.navigate('OtpScreen', {email: userEmail});
+            navigation.navigate('OtpScreen', {email: formData.email});
           }
         } else {
           showError(response.message);

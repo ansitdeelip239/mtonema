@@ -9,6 +9,7 @@ import {
   TouchableOpacity,
   Text,
   RefreshControl,
+  Platform,
 } from 'react-native';
 import NetInfo, {NetInfoState} from '@react-native-community/netinfo';
 import Toast from 'react-native-toast-message'; // Add this package
@@ -55,7 +56,7 @@ interface TransactionsScreenState {
   filters: TransactionFilters;
 }
 
-const TransactionsScreen = () => {
+const TransactionsScreen = ({navigation}: any) => {
   const {t} = useTranslation();
   // State management
   const [state, setState] = useState<TransactionsScreenState>({
@@ -144,6 +145,34 @@ const TransactionsScreen = () => {
       return false;
     }
   }, [updateState]);
+
+  // Expose filter modal function for iOS header button
+  React.useEffect(() => {
+    if (navigation && Platform.OS === 'ios') {
+      navigation.setOptions({
+        // eslint-disable-next-line react/no-unstable-nested-components
+        headerRight: () => (
+          <TouchableOpacity
+            style={{
+              width: 44,
+              height: 44,
+              borderRadius: 22,
+              backgroundColor: 'rgba(255, 255, 255, 0.2)',
+              justifyContent: 'center',
+              alignItems: 'center',
+              marginRight: 8,
+            }}
+            onPress={() => updateState({filterModalVisible: true})}
+            activeOpacity={0.8}
+            accessible={true}
+            accessibilityLabel="Open filters"
+            accessibilityRole="button">
+            <GetIcon iconName="filter" size={20} color="#fff" />
+          </TouchableOpacity>
+        ),
+      });
+    }
+  }, [navigation, updateState]);
 
   // Show toast notifications
   const showToast = useCallback(
@@ -481,24 +510,29 @@ const TransactionsScreen = () => {
     // Add navigation or modal logic here
   }, []);
 
-  // Memoized header component
+  // Memoized header component - only for Android
   const headerComponent = useMemo(
-    () => (
-      <Header
-        title={t('transactions.title')}
-        children={
-          <TouchableOpacity
-            style={styles.filterButton}
-            onPress={() => updateState({filterModalVisible: true})}
-            activeOpacity={0.8}
-            accessible={true}
-            accessibilityLabel="Open filters"
-            accessibilityRole="button">
-            <GetIcon iconName="filter" size={20} color="#fff" />
-          </TouchableOpacity>
-        }
-      />
-    ),
+    () => {
+      if (Platform.OS === 'ios') {
+        return null;
+      }
+      return (
+        <Header
+          title={t('transactions.title')}
+          children={
+            <TouchableOpacity
+              style={styles.filterButton}
+              onPress={() => updateState({filterModalVisible: true})}
+              activeOpacity={0.8}
+              accessible={true}
+              accessibilityLabel="Open filters"
+              accessibilityRole="button">
+              <GetIcon iconName="filter" size={20} color="#fff" />
+            </TouchableOpacity>
+          }
+        />
+      );
+    },
     [updateState, t],
   );
 

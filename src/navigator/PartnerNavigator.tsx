@@ -16,12 +16,15 @@ import {useTranslation} from 'react-i18next';
 import {useDrawerStyles} from '../hooks/useDrawerStyles';
 import DrawerToggleButton from '../components/DrawerToggleButton';
 import HelpCenterScreen from '../screens/partner/HelpCenterScreen';
+import {useAuth} from '../context/AuthProvider';
+import Roles from '../constants/Roles';
 
 const Drawer = createDrawerNavigator<PartnerDrawerParamList>();
 
 const PartnerNavigator = () => {
   const {t} = useTranslation();
   const {drawerStyles, isIOS} = useDrawerStyles();
+  const {user} = useAuth();
 
   return (
     <Drawer.Navigator
@@ -54,18 +57,20 @@ const PartnerNavigator = () => {
         }}
       />
 
-      <Drawer.Screen
-        name="Teams"
-        component={TeamStack}
-        options={{
-          headerShown: isIOS,
-          headerLeft: () => <DrawerToggleButton />,
-          drawerLabel: t('navigation.drawer.teams'), // Add localized label
-          drawerIcon: ({color}) => (
-            <GetIcon iconName="partner" color={color} size="25" />
-          ),
-        }}
-      />
+      {user?.role !== Roles.TEAM && (
+        <Drawer.Screen
+          name="Teams"
+          component={TeamStack}
+          options={{
+            headerShown: isIOS,
+            headerLeft: () => <DrawerToggleButton />,
+            drawerLabel: t('navigation.drawer.teams'), // Add localized label
+            drawerIcon: ({color}) => (
+              <GetIcon iconName="partner" color={color} size="25" />
+            ),
+          }}
+        />
+      )}
 
       <Drawer.Screen
         name="Content"
