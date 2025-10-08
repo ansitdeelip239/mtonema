@@ -18,6 +18,7 @@ import DrawerToggleButton from '../components/DrawerToggleButton';
 import HelpCenterScreen from '../screens/partner/HelpCenterScreen';
 import {useAuth} from '../context/AuthProvider';
 import Roles from '../constants/Roles';
+import UsersScreen from '../screens/partner/UsersScreen/UsersScreen';
 
 const Drawer = createDrawerNavigator<PartnerDrawerParamList>();
 
@@ -83,6 +84,23 @@ const PartnerNavigator = () => {
           ),
         }}
       />
+
+      {/* users screen - only for admin */}
+      {user?.role === Roles.ADMIN && (
+        <Drawer.Screen
+          name="Users"
+          component={UsersScreen}
+          options={{
+            headerShown: isIOS,
+            headerLeft: () => <DrawerToggleButton />,
+            drawerLabel: t('navigation.drawer.users', 'Users'), // Add localized label
+            drawerIcon: ({color}) => (
+              <GetIcon iconName="user" color={color} size="25" />
+            ),
+          }}
+        />
+      )}
+      
       <Drawer.Screen
         name="Settings"
         component={SettingsScreen}
@@ -133,6 +151,7 @@ const PartnerNavigator = () => {
           drawerItemStyle: {display: 'none'},
         }}
       />
+
     </Drawer.Navigator>
   );
 };

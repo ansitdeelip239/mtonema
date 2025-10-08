@@ -90,6 +90,7 @@
       "buyPremium": "Comprar Premium",
       "payments": "Pagos",
       "helpCenter": "Centro de Ayuda",
+      "users": "Usuarios",
       "logout": "Cerrar Sesión",
       "logoutConfirmation": "¿Estás seguro de que quieres cerrar sesión?",
       "loggingOut": "Cerrando sesión...",
@@ -1553,6 +1554,26 @@
       "watchVideos": "Ver Videos Tutoriales",
       "description": "Nuestra lista de reproducción de YouTube contiene tutoriales paso a paso para ayudarte a aprovechar al máximo MT One.",
       "support": "Para asistencia inmediata, no dudes en llamarnos o enviarnos un correo electrónico."
+    }
+  },
+  "users": {
+    "labels": {
+      "user": "usuario",
+      "users": "usuarios",
+      "email": "Correo electrónico",
+      "phone": "Teléfono",
+      "role": "Rol",
+      "location": "Ubicación",
+      "listedProperties": "Propiedades listadas",
+      "createdOn": "Creado el",
+      "platform": "Plataforma",
+      "notSpecified": "No especificado"
+    },
+    "roleSelector": {
+      "selectRole": "Seleccionar Rol",
+      "buyer": "Comprador",
+      "seller": "Vendedor",
+      "partner": "Socio"
     }
   }
 }

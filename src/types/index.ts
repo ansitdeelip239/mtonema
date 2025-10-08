@@ -28,8 +28,10 @@ export interface User {
   createdBy: string;
   updatedOn: string;
   updatedBy: string;
-  recordStatus: number;
+  recordStatus: string;
   partnerLocation?: number;
+  platform: string;
+  listedProperty?: number;
 }
 
 export interface Response<T> {

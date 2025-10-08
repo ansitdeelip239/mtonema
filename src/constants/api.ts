@@ -90,7 +90,6 @@ const url = {
   },
   admin: {
     properties: '/property/getAllProperty',
-    users: '/User/GetAllUser',
     visitors: '/User/GetVisitor',
     contacts: '/contactProperty/getAllContact',
   },

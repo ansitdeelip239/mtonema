@@ -125,6 +125,28 @@ class AuthService {
     }
   }
 
+  static async getUserByRole(
+    role: string,
+    pageNumber?: number,
+    pageSize?: number,
+  ) {
+    try {
+      const params = new URLSearchParams({role});
+      if (pageNumber !== undefined) {
+        params.append('pageNumber', pageNumber.toString());
+      }
+      if (pageSize !== undefined) {
+        params.append('pageSize', pageSize.toString());
+      }
+      const queryString = params.toString();
+      const urlWithParams = `${url.users.list}?${queryString}`;
+      const response = await api.get<User[]>(urlWithParams);
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  }
+
   static async deleteUser(userId: number) {
     try {
       const response = await api.delete<void>(`${url.users.delete}/${userId}`);
